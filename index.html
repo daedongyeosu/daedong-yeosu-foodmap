@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>대동여수음식지도 광고 배너</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      background: transparent;
+      overflow: hidden;
+      font-family: Arial, "Noto Sans KR", sans-serif;
+    }
+
+    .banner-wrap {
+      position: relative;
+      width: 100%;
+      max-width: 1200px;
+      aspect-ratio: 12 / 7;
+      margin: 0 auto;
+      overflow: hidden;
+      background: #111;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.8s ease;
+      pointer-events: none;
+    }
+
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .slide a {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #fff;
+    }
+
+    .nav-button {
+      position: absolute;
+      top: 50%;
+      z-index: 20;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 56px;
+      border: 0;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.35);
+      color: #fff;
+      font-size: 30px;
+      cursor: pointer;
+    }
+
+    .nav-button:hover {
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .prev {
+      left: 8px;
+    }
+
+    .next {
+      right: 8px;
+    }
+
+    .dots {
+      position: absolute;
+      left: 50%;
+      bottom: 10px;
+      z-index: 20;
+      display: flex;
+      gap: 6px;
+      transform: translateX(-50%);
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 90%;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.55);
+      cursor: pointer;
+    }
+
+    .dot.active {
+      background: #fff;
+      transform: scale(1.3);
+    }
+
+    @media (max-width: 600px) {
+      .nav-button {
+        width: 30px;
+        height: 44px;
+        font-size: 22px;
+      }
+
+      .prev {
+        left: 4px;
+      }
+
+      .next {
+        right: 4px;
+      }
+
+      .dots {
+        bottom: 6px;
+        gap: 4px;
+      }
+
+      .dot {
+        width: 6px;
+        height: 6px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="banner-wrap" id="banner">
+
+    <div class="slide active">
+      <a href="https://bit.ly/order-domino" target="_blank" rel="noopener noreferrer">
+        <img src="images/01.png" alt="도미노피자" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/백년족발" target="_blank" rel="noopener noreferrer">
+        <img src="images/02.png" alt="백년족발" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/컴포즈커피여수문수광장점" target="_blank" rel="noopener noreferrer">
+        <img src="images/03.png" alt="컴포즈커피 여수문수광장점" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/족팔계왕족발" target="_blank" rel="noopener noreferrer">
+        <img src="images/04.png" alt="족팔계왕족발" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/탕화쿵푸마라탕여서점" target="_blank" rel="noopener noreferrer">
+        <img src="images/05.png" alt="탕화쿵푸마라탕 여서점" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/요거트월드여서점" target="_blank" rel="noopener noreferrer">
+        <img src="images/06.png" alt="요거트월드 여서점" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/아주커둔덕점" target="_blank" rel="noopener noreferrer">
+        <img src="images/07.png" alt="아주커 둔덕점" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/lotte-jungang" target="_blank" rel="noopener noreferrer">
+        <img src="images/08.png" alt="롯데리아 중앙점" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/조선밀면냉면여수여서점" target="_blank" rel="noopener noreferrer">
+        <img src="images/09.png" alt="조선밀면냉면 여수여서점" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/외계인피자여수점" target="_blank" rel="noopener noreferrer">
+        <img src="images/10.png" alt="외계인피자 여수점" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/왕창돼지두루치기여서점" target="_blank" rel="noopener noreferrer">
+        <img src="images/11.png" alt="왕창돼지두루치기 여서점" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/린차이나" target="_blank" rel="noopener noreferrer">
+        <img src="images/12.png" alt="린차이나" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/김종구식맛치킨전기바베큐옛날통닭여수여서점" target="_blank" rel="noopener noreferrer">
+        <img src="images/13.png" alt="김종구식맛치킨 전기바베큐 옛날통닭 여수여서점" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/맘스터치문수점" target="_blank" rel="noopener noreferrer">
+        <img src="images/14.png" alt="맘스터치 문수점" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/콩산소" target="_blank" rel="noopener noreferrer">
+        <img src="images/15.png" alt="콩산소" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/surasanggung" target="_blank" rel="noopener noreferrer">
+        <img src="images/16.png" alt="수라상궁 조선국밥" />
+      </a>
+    </div>
+
+    <div class="slide">
+      <a href="https://bit.ly/바오탕수여서점" target="_blank" rel="noopener noreferrer">
+        <img src="images/17.png" alt="바오탕수 여서점" />
+      </a>
+    </div>
+
+    <button class="nav-button prev" type="button" aria-label="이전 광고">‹</button>
+    <button class="nav-button next" type="button" aria-label="다음 광고">›</button>
+
+    <div class="dots" id="dots" aria-label="광고 페이지 선택"></div>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const dotsContainer = document.getElementById("dots");
+    const prevButton = document.querySelector(".prev");
+    const nextButton = document.querySelector(".next");
+    const banner = document.getElementById("banner");
+
+    let current = 0;
+    let timer = null;
+    const delay = 4000;
+
+    slides.forEach((_, index) => {
+      const button = document.createElement("button");
+      button.className = "dot";
+      button.type = "button";
+      button.setAttribute("aria-label", `${index + 1}번 광고 보기`);
+
+      button.addEventListener("click", () => {
+        showSlide(index);
+        restartTimer();
+      });
+
+      dotsContainer.appendChild(button);
+    });
+
+    const dots = Array.from(document.querySelectorAll(".dot"));
+
+    function showSlide(index) {
+      slides[current].classList.remove("active");
+      dots[current].classList.remove("active");
+
+      current = (index + slides.length) % slides.length;
+
+      slides[current].classList.add("active");
+      dots[current].classList.add("active");
+    }
+
+    function nextSlide() {
+      showSlide(current + 1);
+    }
+
+    function prevSlide() {
+      showSlide(current - 1);
+    }
+
+    function startTimer() {
+      stopTimer();
+      timer = setInterval(nextSlide, delay);
+    }
+
+    function stopTimer() {
+      if (timer !== null) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    function restartTimer() {
+      startTimer();
+    }
+
+    nextButton.addEventListener("click", () => {
+      nextSlide();
+      restartTimer();
+    });
+
+    prevButton.addEventListener("click", () => {
+      prevSlide();
+      restartTimer();
+    });
+
+    banner.addEventListener("mouseenter", stopTimer);
+    banner.addEventListener("mouseleave", startTimer);
+
+    let touchStartX = 0;
+
+    banner.addEventListener("touchstart", (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+      stopTimer();
+    }, { passive: true });
+
+    banner.addEventListener("touchend", (event) => {
+      const touchEndX = event.changedTouches[0].screenX;
+      const distance = touchEndX - touchStartX;
+
+      if (Math.abs(distance) > 50) {
+        if (distance < 0) {
+          nextSlide();
+        } else {
+          prevSlide();
+        }
+      }
+
+      startTimer();
+    }, { passive: true });
+
+    showSlide(0);
+    startTimer();
+  </script>
+</body>
+</html>

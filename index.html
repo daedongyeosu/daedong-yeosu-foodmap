@@ -34,14 +34,15 @@
       inset: 0;
       opacity: 0;
       pointer-events: none;
-      transition: opacity .55s ease;
+      transition: opacity .5s ease;
       background: #111;
+      overflow: hidden;
     }
     .slide::before {
       content: "";
       position: absolute;
       inset: -28px;
-      z-index: -2;
+      z-index: 0;
       background-image: var(--bg);
       background-position: center;
       background-size: cover;
@@ -52,7 +53,7 @@
       content: "";
       position: absolute;
       inset: 0;
-      z-index: -1;
+      z-index: 1;
       background: rgba(0,0,0,.12);
     }
     .slide.active {
@@ -60,11 +61,14 @@
       pointer-events: auto;
     }
     .slide a {
+      position: relative;
+      z-index: 2;
       display: flex;
       width: 100%;
       height: 100%;
       align-items: center;
       justify-content: center;
+      -webkit-tap-highlight-color: transparent;
     }
     .slide img {
       display: block;
@@ -104,42 +108,36 @@
       top: 50%;
       z-index: 20;
       transform: translateY(-50%);
-      width: 34px;
-      height: 48px;
+      width: 42px;
+      height: 58px;
       border: 0;
-      border-radius: 6px;
-      background: rgba(0,0,0,.34);
+      border-radius: 9px;
+      background: rgba(0,0,0,.42);
       color: #fff;
-      font-size: 26px;
+      font-size: 32px;
       line-height: 1;
       cursor: pointer;
       touch-action: manipulation;
     }
     .prev { left: 5px; }
     .next { right: 5px; }
-    .dots {
+    .counter {
       position: absolute;
       left: 50%;
       bottom: max(8px, env(safe-area-inset-bottom));
       z-index: 20;
-      display: flex;
-      max-width: 92%;
-      gap: 5px;
-      justify-content: center;
-      flex-wrap: wrap;
       transform: translateX(-50%);
-    }
-    .dot {
-      width: 7px;
-      height: 7px;
-      padding: 0;
-      border: 0;
-      border-radius: 50%;
-      background: rgba(255,255,255,.5);
-    }
-    .dot.active {
-      background: #fff;
-      transform: scale(1.25);
+      min-width: 54px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.48);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1;
+      text-align: center;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
     }
     @media (min-width: 900px) {
       .banner {
@@ -159,105 +157,106 @@
   </style>
 </head>
 <body>
+  <!-- 대동여수음식지도 광고 배너 3.0: Notion direct, mobile-first, WebP optimized -->
   <main class="banner" id="banner" aria-label="대동여수음식지도 광고">
     <div class="loader" id="loader" aria-label="광고 이미지 불러오는 중">
       <div class="spinner"></div>
     </div>
     <section class="slide active" data-index="0" data-bg="images/01-m.webp">
-      <a href="https://bit.ly/order-domino" target="_blank" rel="noopener noreferrer" aria-label="도미노피자 주문 페이지 열기">
+      <a href="https://app.notion.com/p/2eada158dd2a80518569cfdb0e2f6404?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="도미노피자 주문 페이지 열기">
         <img src="images/01-m.webp" srcset="images/01-m.webp 900w, images/01.webp 1200w" sizes="100vw" fetchpriority="high" loading="eager" decoding="async" alt="도미노피자">
       </a>
     </section>
     <section class="slide" data-index="1" data-bg="images/02-m.webp">
-      <a href="https://bit.ly/백년족발" target="_blank" rel="noopener noreferrer" aria-label="백년족발 주문 페이지 열기">
+      <a href="https://app.notion.com/p/33cda158dd2a8041bf7acb4e513dfc34?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="백년족발 주문 페이지 열기">
         <img data-src="images/02-m.webp" data-srcset="images/02-m.webp 900w, images/02.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="백년족발">
       </a>
     </section>
     <section class="slide" data-index="2" data-bg="images/03-m.webp">
-      <a href="https://bit.ly/컴포즈커피여수문수광장점" target="_blank" rel="noopener noreferrer" aria-label="컴포즈커피 여수문수광장점 주문 페이지 열기">
+      <a href="https://app.notion.com/p/324da158dd2a801493cced68d6e4bb5f?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="컴포즈커피 여수문수광장점 주문 페이지 열기">
         <img data-src="images/03-m.webp" data-srcset="images/03-m.webp 900w, images/03.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="컴포즈커피 여수문수광장점">
       </a>
     </section>
     <section class="slide" data-index="3" data-bg="images/04-m.webp">
-      <a href="https://bit.ly/족팔계왕족발" target="_blank" rel="noopener noreferrer" aria-label="족팔계왕족발 주문 페이지 열기">
+      <a href="https://app.notion.com/p/303da158dd2a80f686dffa92a6fae9e3?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="족팔계왕족발 주문 페이지 열기">
         <img data-src="images/04-m.webp" data-srcset="images/04-m.webp 900w, images/04.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="족팔계왕족발">
       </a>
     </section>
     <section class="slide" data-index="4" data-bg="images/05-m.webp">
-      <a href="https://bit.ly/탕화쿵푸마라탕여서점" target="_blank" rel="noopener noreferrer" aria-label="탕화쿵푸마라탕 여서점 주문 페이지 열기">
+      <a href="https://app.notion.com/p/2e9da158dd2a8052bda7fd6e1c435ace?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="탕화쿵푸마라탕 여서점 주문 페이지 열기">
         <img data-src="images/05-m.webp" data-srcset="images/05-m.webp 900w, images/05.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="탕화쿵푸마라탕 여서점">
       </a>
     </section>
     <section class="slide" data-index="5" data-bg="images/06-m.webp">
-      <a href="https://bit.ly/요거트월드여서점" target="_blank" rel="noopener noreferrer" aria-label="요거트월드 여서점 주문 페이지 열기">
+      <a href="https://app.notion.com/p/2ebda158dd2a804cb5b5d68b6877984b?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="요거트월드 여서점 주문 페이지 열기">
         <img data-src="images/06-m.webp" data-srcset="images/06-m.webp 900w, images/06.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="요거트월드 여서점">
       </a>
     </section>
     <section class="slide" data-index="6" data-bg="images/07-m.webp">
-      <a href="https://bit.ly/아주커둔덕점" target="_blank" rel="noopener noreferrer" aria-label="아주커 둔덕점 주문 페이지 열기">
+      <a href="https://app.notion.com/p/2e4da158dd2a80a0b157fe0c61a9861f?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="아주커 둔덕점 주문 페이지 열기">
         <img data-src="images/07-m.webp" data-srcset="images/07-m.webp 900w, images/07.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="아주커 둔덕점">
       </a>
     </section>
     <section class="slide" data-index="7" data-bg="images/08-m.webp">
-      <a href="https://bit.ly/lotte-jungang" target="_blank" rel="noopener noreferrer" aria-label="롯데리아 중앙점 주문 페이지 열기">
+      <a href="https://app.notion.com/p/2e6da158dd2a80f4bd73dd5a5c762fef?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="롯데리아 중앙점 주문 페이지 열기">
         <img data-src="images/08-m.webp" data-srcset="images/08-m.webp 900w, images/08.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="롯데리아 중앙점">
       </a>
     </section>
     <section class="slide" data-index="8" data-bg="images/09-m.webp">
-      <a href="https://bit.ly/조선밀면냉면여수여서점" target="_blank" rel="noopener noreferrer" aria-label="조선밀면냉면 여수여서점 주문 페이지 열기">
+      <a href="https://app.notion.com/p/315da158dd2a8047906cc5c3c4c51e69?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="조선밀면냉면 여수여서점 주문 페이지 열기">
         <img data-src="images/09-m.webp" data-srcset="images/09-m.webp 900w, images/09.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="조선밀면냉면 여수여서점">
       </a>
     </section>
     <section class="slide" data-index="9" data-bg="images/10-m.webp">
-      <a href="https://bit.ly/외계인피자여수점" target="_blank" rel="noopener noreferrer" aria-label="외계인피자 여수점 주문 페이지 열기">
+      <a href="https://app.notion.com/p/2ebda158dd2a80259bdfe256ddd5e46c?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="외계인피자 여수점 주문 페이지 열기">
         <img data-src="images/10-m.webp" data-srcset="images/10-m.webp 900w, images/10.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="외계인피자 여수점">
       </a>
     </section>
     <section class="slide" data-index="10" data-bg="images/11-m.webp">
-      <a href="https://bit.ly/왕창돼지두루치기여서점" target="_blank" rel="noopener noreferrer" aria-label="왕창돼지두루치기 여서점 주문 페이지 열기">
+      <a href="https://app.notion.com/p/c51da158dd2a8203a5d781428baa1f9d?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="왕창돼지두루치기 여서점 주문 페이지 열기">
         <img data-src="images/11-m.webp" data-srcset="images/11-m.webp 900w, images/11.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="왕창돼지두루치기 여서점">
       </a>
     </section>
     <section class="slide" data-index="11" data-bg="images/12-m.webp">
-      <a href="https://bit.ly/린차이나" target="_blank" rel="noopener noreferrer" aria-label="린차이나 주문 페이지 열기">
+      <a href="https://app.notion.com/p/323da158dd2a801ca3a6fe9161851afe?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="린차이나 주문 페이지 열기">
         <img data-src="images/12-m.webp" data-srcset="images/12-m.webp 900w, images/12.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="린차이나">
       </a>
     </section>
     <section class="slide" data-index="12" data-bg="images/13-m.webp">
-      <a href="https://bit.ly/김종구식맛치킨전기바베큐옛날통닭여수여서점" target="_blank" rel="noopener noreferrer" aria-label="김종구식맛치킨 여수여서점 주문 페이지 열기">
+      <a href="https://app.notion.com/p/34bda158dd2a801a9f9ef1379ac363d0?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="김종구식맛치킨 여수여서점 주문 페이지 열기">
         <img data-src="images/13-m.webp" data-srcset="images/13-m.webp 900w, images/13.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="김종구식맛치킨 여수여서점">
       </a>
     </section>
     <section class="slide" data-index="13" data-bg="images/14-m.webp">
-      <a href="https://bit.ly/맘스터치문수점" target="_blank" rel="noopener noreferrer" aria-label="맘스터치 문수점 주문 페이지 열기">
+      <a href="https://app.notion.com/p/2ebda158dd2a8015b97ec8a11e9af6ab?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="맘스터치 문수점 주문 페이지 열기">
         <img data-src="images/14-m.webp" data-srcset="images/14-m.webp 900w, images/14.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="맘스터치 문수점">
       </a>
     </section>
     <section class="slide" data-index="14" data-bg="images/15-m.webp">
-      <a href="https://bit.ly/콩산소" target="_blank" rel="noopener noreferrer" aria-label="콩산소 주문 페이지 열기">
+      <a href="https://app.notion.com/p/33bda158dd2a80508ffbc6cc093d1ad3?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="콩산소 주문 페이지 열기">
         <img data-src="images/15-m.webp" data-srcset="images/15-m.webp 900w, images/15.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="콩산소">
       </a>
     </section>
     <section class="slide" data-index="15" data-bg="images/16-m.webp">
-      <a href="https://bit.ly/surasanggung" target="_blank" rel="noopener noreferrer" aria-label="수라상궁 조선국밥 주문 페이지 열기">
+      <a href="https://app.notion.com/p/2ddda158dd2a809c8aa9d22fc48d38b7?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="수라상궁 조선국밥 주문 페이지 열기">
         <img data-src="images/16-m.webp" data-srcset="images/16-m.webp 900w, images/16.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="수라상궁 조선국밥">
       </a>
     </section>
     <section class="slide" data-index="16" data-bg="images/17-m.webp">
-      <a href="https://bit.ly/바오탕수여서점" target="_blank" rel="noopener noreferrer" aria-label="바오탕수 여서점 주문 페이지 열기">
+      <a href="https://app.notion.com/p/2eada158dd2a80aa83f0d14acd3d04be?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="바오탕수 여서점 주문 페이지 열기">
         <img data-src="images/17-m.webp" data-srcset="images/17-m.webp 900w, images/17.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="바오탕수 여서점">
       </a>
     </section>
     <button class="nav prev" type="button" aria-label="이전 광고">‹</button>
     <button class="nav next" type="button" aria-label="다음 광고">›</button>
-    <div class="dots" id="dots" aria-label="광고 선택"></div>
+    <div class="counter" id="counter" aria-live="polite">1 / 17</div>
   </main>
 
   <script>
     const slides = [...document.querySelectorAll(".slide")];
     const banner = document.getElementById("banner");
     const loader = document.getElementById("loader");
-    const dotsWrap = document.getElementById("dots");
+    const counter = document.getElementById("counter");
     const prevBtn = document.querySelector(".prev");
     const nextBtn = document.querySelector(".next");
     const delay = 4500;
@@ -265,20 +264,9 @@
     let timer = null;
     let startX = 0;
 
-    slides.forEach((slide, index) => {
+    slides.forEach((slide) => {
       slide.style.setProperty("--bg", `url("${slide.dataset.bg}")`);
-      const dot = document.createElement("button");
-      dot.className = "dot" + (index === 0 ? " active" : "");
-      dot.type = "button";
-      dot.setAttribute("aria-label", `${index + 1}번 광고`);
-      dot.addEventListener("click", () => {
-        show(index);
-        restart();
-      });
-      dotsWrap.appendChild(dot);
     });
-
-    const dots = [...document.querySelectorAll(".dot")];
 
     function activateImage(index) {
       const img = slides[index].querySelector("img");
@@ -302,11 +290,10 @@
 
     function show(index) {
       slides[current].classList.remove("active");
-      dots[current].classList.remove("active");
       current = (index + slides.length) % slides.length;
       activateImage(current);
       slides[current].classList.add("active");
-      dots[current].classList.add("active");
+      counter.textContent = `${current + 1} / ${slides.length}`;
       preload(current + 1);
       preload(current + 2);
     }
@@ -325,6 +312,10 @@
 
     prevBtn.addEventListener("click", () => { prev(); restart(); });
     nextBtn.addEventListener("click", () => { next(); restart(); });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowLeft") { prev(); restart(); }
+      if (event.key === "ArrowRight") { next(); restart(); }
+    });
 
     banner.addEventListener("touchstart", e => {
       startX = e.changedTouches[0].clientX;

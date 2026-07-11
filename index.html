@@ -1,354 +1,358 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111111">
   <title>대동여수음식지도 광고 배너</title>
-
+  <link rel="preload" as="image"
+        href="images/01-m.webp"
+        imagesrcset="images/01-m.webp 900w, images/01.webp 1200w"
+        imagesizes="100vw">
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html,
-    body {
+    * { box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
       margin: 0;
       padding: 0;
-      width: 100%;
-      background: transparent;
-      overflow: hidden;
-      font-family: Arial, "Noto Sans KR", sans-serif;
-    }
-
-    .banner-wrap {
-      position: relative;
-      width: 100%;
-      max-width: 1200px;
-      aspect-ratio: 12 / 7;
-      margin: 0 auto;
       overflow: hidden;
       background: #111;
+      font-family: Arial, "Noto Sans KR", sans-serif;
     }
-
+    .banner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 220px;
+      overflow: hidden;
+      background: #111;
+      isolation: isolate;
+    }
     .slide {
       position: absolute;
       inset: 0;
       opacity: 0;
-      transition: opacity 0.8s ease;
       pointer-events: none;
+      transition: opacity .55s ease;
+      background: #111;
     }
-
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: -28px;
+      z-index: -2;
+      background-image: var(--bg);
+      background-position: center;
+      background-size: cover;
+      filter: blur(22px) brightness(.38);
+      transform: scale(1.08);
+    }
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: rgba(0,0,0,.12);
+    }
     .slide.active {
       opacity: 1;
       pointer-events: auto;
     }
-
     .slide a {
-      display: block;
+      display: flex;
       width: 100%;
       height: 100%;
+      align-items: center;
+      justify-content: center;
     }
-
     .slide img {
       display: block;
       width: 100%;
       height: 100%;
       object-fit: contain;
-      background: #fff;
+      object-position: center;
+      user-select: none;
+      -webkit-user-drag: none;
     }
-
-    .nav-button {
+    .loader {
+      position: absolute;
+      inset: 0;
+      z-index: 30;
+      display: grid;
+      place-items: center;
+      background: #111;
+      color: #fff;
+      transition: opacity .25s ease, visibility .25s ease;
+    }
+    .loader.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    .spinner {
+      width: 34px;
+      height: 34px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .nav {
       position: absolute;
       top: 50%;
       z-index: 20;
       transform: translateY(-50%);
-      width: 40px;
-      height: 56px;
+      width: 34px;
+      height: 48px;
       border: 0;
-      border-radius: 4px;
-      background: rgba(0, 0, 0, 0.35);
+      border-radius: 6px;
+      background: rgba(0,0,0,.34);
       color: #fff;
-      font-size: 30px;
+      font-size: 26px;
+      line-height: 1;
       cursor: pointer;
+      touch-action: manipulation;
     }
-
-    .nav-button:hover {
-      background: rgba(0, 0, 0, 0.55);
-    }
-
-    .prev {
-      left: 8px;
-    }
-
-    .next {
-      right: 8px;
-    }
-
+    .prev { left: 5px; }
+    .next { right: 5px; }
     .dots {
       position: absolute;
       left: 50%;
-      bottom: 10px;
+      bottom: max(8px, env(safe-area-inset-bottom));
       z-index: 20;
       display: flex;
-      gap: 6px;
-      transform: translateX(-50%);
-      flex-wrap: wrap;
+      max-width: 92%;
+      gap: 5px;
       justify-content: center;
-      max-width: 90%;
+      flex-wrap: wrap;
+      transform: translateX(-50%);
     }
-
     .dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       padding: 0;
       border: 0;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.55);
-      cursor: pointer;
+      background: rgba(255,255,255,.5);
     }
-
     .dot.active {
       background: #fff;
-      transform: scale(1.3);
+      transform: scale(1.25);
     }
-
-    @media (max-width: 600px) {
-      .nav-button {
-        width: 30px;
-        height: 44px;
-        font-size: 22px;
+    @media (min-width: 900px) {
+      .banner {
+        max-width: 1200px;
+        height: min(100vh, 700px);
+        margin: 0 auto;
       }
-
-      .prev {
-        left: 4px;
-      }
-
-      .next {
-        right: 4px;
-      }
-
-      .dots {
-        bottom: 6px;
-        gap: 4px;
-      }
-
-      .dot {
-        width: 6px;
-        height: 6px;
-      }
+      .nav { width: 40px; height: 56px; font-size: 30px; }
+      .prev { left: 8px; }
+      .next { right: 8px; }
+      .dot { width: 8px; height: 8px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .slide { transition: none; }
+      .spinner { animation: none; }
     }
   </style>
 </head>
-
 <body>
-  <div class="banner-wrap" id="banner">
-
-    <div class="slide active">
-      <a href="https://bit.ly/order-domino" target="_blank" rel="noopener noreferrer">
-        <img src="images/01.png" alt="도미노피자" />
-      </a>
+  <main class="banner" id="banner" aria-label="대동여수음식지도 광고">
+    <div class="loader" id="loader" aria-label="광고 이미지 불러오는 중">
+      <div class="spinner"></div>
     </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/백년족발" target="_blank" rel="noopener noreferrer">
-        <img src="images/02.png" alt="백년족발" />
+    <section class="slide active" data-index="0" data-bg="images/01-m.webp">
+      <a href="https://bit.ly/order-domino" target="_blank" rel="noopener noreferrer" aria-label="도미노피자 주문 페이지 열기">
+        <img src="images/01-m.webp" srcset="images/01-m.webp 900w, images/01.webp 1200w" sizes="100vw" fetchpriority="high" loading="eager" decoding="async" alt="도미노피자">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/컴포즈커피여수문수광장점" target="_blank" rel="noopener noreferrer">
-        <img src="images/03.png" alt="컴포즈커피 여수문수광장점" />
+    </section>
+    <section class="slide" data-index="1" data-bg="images/02-m.webp">
+      <a href="https://bit.ly/백년족발" target="_blank" rel="noopener noreferrer" aria-label="백년족발 주문 페이지 열기">
+        <img data-src="images/02-m.webp" data-srcset="images/02-m.webp 900w, images/02.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="백년족발">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/족팔계왕족발" target="_blank" rel="noopener noreferrer">
-        <img src="images/04.png" alt="족팔계왕족발" />
+    </section>
+    <section class="slide" data-index="2" data-bg="images/03-m.webp">
+      <a href="https://bit.ly/컴포즈커피여수문수광장점" target="_blank" rel="noopener noreferrer" aria-label="컴포즈커피 여수문수광장점 주문 페이지 열기">
+        <img data-src="images/03-m.webp" data-srcset="images/03-m.webp 900w, images/03.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="컴포즈커피 여수문수광장점">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/탕화쿵푸마라탕여서점" target="_blank" rel="noopener noreferrer">
-        <img src="images/05.png" alt="탕화쿵푸마라탕 여서점" />
+    </section>
+    <section class="slide" data-index="3" data-bg="images/04-m.webp">
+      <a href="https://bit.ly/족팔계왕족발" target="_blank" rel="noopener noreferrer" aria-label="족팔계왕족발 주문 페이지 열기">
+        <img data-src="images/04-m.webp" data-srcset="images/04-m.webp 900w, images/04.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="족팔계왕족발">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/요거트월드여서점" target="_blank" rel="noopener noreferrer">
-        <img src="images/06.png" alt="요거트월드 여서점" />
+    </section>
+    <section class="slide" data-index="4" data-bg="images/05-m.webp">
+      <a href="https://bit.ly/탕화쿵푸마라탕여서점" target="_blank" rel="noopener noreferrer" aria-label="탕화쿵푸마라탕 여서점 주문 페이지 열기">
+        <img data-src="images/05-m.webp" data-srcset="images/05-m.webp 900w, images/05.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="탕화쿵푸마라탕 여서점">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/아주커둔덕점" target="_blank" rel="noopener noreferrer">
-        <img src="images/07.png" alt="아주커 둔덕점" />
+    </section>
+    <section class="slide" data-index="5" data-bg="images/06-m.webp">
+      <a href="https://bit.ly/요거트월드여서점" target="_blank" rel="noopener noreferrer" aria-label="요거트월드 여서점 주문 페이지 열기">
+        <img data-src="images/06-m.webp" data-srcset="images/06-m.webp 900w, images/06.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="요거트월드 여서점">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/lotte-jungang" target="_blank" rel="noopener noreferrer">
-        <img src="images/08.png" alt="롯데리아 중앙점" />
+    </section>
+    <section class="slide" data-index="6" data-bg="images/07-m.webp">
+      <a href="https://bit.ly/아주커둔덕점" target="_blank" rel="noopener noreferrer" aria-label="아주커 둔덕점 주문 페이지 열기">
+        <img data-src="images/07-m.webp" data-srcset="images/07-m.webp 900w, images/07.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="아주커 둔덕점">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/조선밀면냉면여수여서점" target="_blank" rel="noopener noreferrer">
-        <img src="images/09.png" alt="조선밀면냉면 여수여서점" />
+    </section>
+    <section class="slide" data-index="7" data-bg="images/08-m.webp">
+      <a href="https://bit.ly/lotte-jungang" target="_blank" rel="noopener noreferrer" aria-label="롯데리아 중앙점 주문 페이지 열기">
+        <img data-src="images/08-m.webp" data-srcset="images/08-m.webp 900w, images/08.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="롯데리아 중앙점">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/외계인피자여수점" target="_blank" rel="noopener noreferrer">
-        <img src="images/10.png" alt="외계인피자 여수점" />
+    </section>
+    <section class="slide" data-index="8" data-bg="images/09-m.webp">
+      <a href="https://bit.ly/조선밀면냉면여수여서점" target="_blank" rel="noopener noreferrer" aria-label="조선밀면냉면 여수여서점 주문 페이지 열기">
+        <img data-src="images/09-m.webp" data-srcset="images/09-m.webp 900w, images/09.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="조선밀면냉면 여수여서점">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/왕창돼지두루치기여서점" target="_blank" rel="noopener noreferrer">
-        <img src="images/11.png" alt="왕창돼지두루치기 여서점" />
+    </section>
+    <section class="slide" data-index="9" data-bg="images/10-m.webp">
+      <a href="https://bit.ly/외계인피자여수점" target="_blank" rel="noopener noreferrer" aria-label="외계인피자 여수점 주문 페이지 열기">
+        <img data-src="images/10-m.webp" data-srcset="images/10-m.webp 900w, images/10.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="외계인피자 여수점">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/린차이나" target="_blank" rel="noopener noreferrer">
-        <img src="images/12.png" alt="린차이나" />
+    </section>
+    <section class="slide" data-index="10" data-bg="images/11-m.webp">
+      <a href="https://bit.ly/왕창돼지두루치기여서점" target="_blank" rel="noopener noreferrer" aria-label="왕창돼지두루치기 여서점 주문 페이지 열기">
+        <img data-src="images/11-m.webp" data-srcset="images/11-m.webp 900w, images/11.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="왕창돼지두루치기 여서점">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/김종구식맛치킨전기바베큐옛날통닭여수여서점" target="_blank" rel="noopener noreferrer">
-        <img src="images/13.png" alt="김종구식맛치킨 전기바베큐 옛날통닭 여수여서점" />
+    </section>
+    <section class="slide" data-index="11" data-bg="images/12-m.webp">
+      <a href="https://bit.ly/린차이나" target="_blank" rel="noopener noreferrer" aria-label="린차이나 주문 페이지 열기">
+        <img data-src="images/12-m.webp" data-srcset="images/12-m.webp 900w, images/12.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="린차이나">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/맘스터치문수점" target="_blank" rel="noopener noreferrer">
-        <img src="images/14.png" alt="맘스터치 문수점" />
+    </section>
+    <section class="slide" data-index="12" data-bg="images/13-m.webp">
+      <a href="https://bit.ly/김종구식맛치킨전기바베큐옛날통닭여수여서점" target="_blank" rel="noopener noreferrer" aria-label="김종구식맛치킨 여수여서점 주문 페이지 열기">
+        <img data-src="images/13-m.webp" data-srcset="images/13-m.webp 900w, images/13.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="김종구식맛치킨 여수여서점">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/콩산소" target="_blank" rel="noopener noreferrer">
-        <img src="images/15.png" alt="콩산소" />
+    </section>
+    <section class="slide" data-index="13" data-bg="images/14-m.webp">
+      <a href="https://bit.ly/맘스터치문수점" target="_blank" rel="noopener noreferrer" aria-label="맘스터치 문수점 주문 페이지 열기">
+        <img data-src="images/14-m.webp" data-srcset="images/14-m.webp 900w, images/14.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="맘스터치 문수점">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/surasanggung" target="_blank" rel="noopener noreferrer">
-        <img src="images/16.png" alt="수라상궁 조선국밥" />
+    </section>
+    <section class="slide" data-index="14" data-bg="images/15-m.webp">
+      <a href="https://bit.ly/콩산소" target="_blank" rel="noopener noreferrer" aria-label="콩산소 주문 페이지 열기">
+        <img data-src="images/15-m.webp" data-srcset="images/15-m.webp 900w, images/15.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="콩산소">
       </a>
-    </div>
-
-    <div class="slide">
-      <a href="https://bit.ly/바오탕수여서점" target="_blank" rel="noopener noreferrer">
-        <img src="images/17.png" alt="바오탕수 여서점" />
+    </section>
+    <section class="slide" data-index="15" data-bg="images/16-m.webp">
+      <a href="https://bit.ly/surasanggung" target="_blank" rel="noopener noreferrer" aria-label="수라상궁 조선국밥 주문 페이지 열기">
+        <img data-src="images/16-m.webp" data-srcset="images/16-m.webp 900w, images/16.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="수라상궁 조선국밥">
       </a>
-    </div>
-
-    <button class="nav-button prev" type="button" aria-label="이전 광고">‹</button>
-    <button class="nav-button next" type="button" aria-label="다음 광고">›</button>
-
-    <div class="dots" id="dots" aria-label="광고 페이지 선택"></div>
-  </div>
+    </section>
+    <section class="slide" data-index="16" data-bg="images/17-m.webp">
+      <a href="https://bit.ly/바오탕수여서점" target="_blank" rel="noopener noreferrer" aria-label="바오탕수 여서점 주문 페이지 열기">
+        <img data-src="images/17-m.webp" data-srcset="images/17-m.webp 900w, images/17.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="바오탕수 여서점">
+      </a>
+    </section>
+    <button class="nav prev" type="button" aria-label="이전 광고">‹</button>
+    <button class="nav next" type="button" aria-label="다음 광고">›</button>
+    <div class="dots" id="dots" aria-label="광고 선택"></div>
+  </main>
 
   <script>
-    const slides = Array.from(document.querySelectorAll(".slide"));
-    const dotsContainer = document.getElementById("dots");
-    const prevButton = document.querySelector(".prev");
-    const nextButton = document.querySelector(".next");
+    const slides = [...document.querySelectorAll(".slide")];
     const banner = document.getElementById("banner");
-
+    const loader = document.getElementById("loader");
+    const dotsWrap = document.getElementById("dots");
+    const prevBtn = document.querySelector(".prev");
+    const nextBtn = document.querySelector(".next");
+    const delay = 4500;
     let current = 0;
     let timer = null;
-    const delay = 4000;
+    let startX = 0;
 
-    slides.forEach((_, index) => {
-      const button = document.createElement("button");
-      button.className = "dot";
-      button.type = "button";
-      button.setAttribute("aria-label", `${index + 1}번 광고 보기`);
-
-      button.addEventListener("click", () => {
-        showSlide(index);
-        restartTimer();
+    slides.forEach((slide, index) => {
+      slide.style.setProperty("--bg", `url("${slide.dataset.bg}")`);
+      const dot = document.createElement("button");
+      dot.className = "dot" + (index === 0 ? " active" : "");
+      dot.type = "button";
+      dot.setAttribute("aria-label", `${index + 1}번 광고`);
+      dot.addEventListener("click", () => {
+        show(index);
+        restart();
       });
-
-      dotsContainer.appendChild(button);
+      dotsWrap.appendChild(dot);
     });
 
-    const dots = Array.from(document.querySelectorAll(".dot"));
+    const dots = [...document.querySelectorAll(".dot")];
 
-    function showSlide(index) {
+    function activateImage(index) {
+      const img = slides[index].querySelector("img");
+      if (!img.getAttribute("src") && img.dataset.src) {
+        img.src = img.dataset.src;
+        img.srcset = img.dataset.srcset;
+      }
+    }
+
+    function preload(index) {
+      const real = (index + slides.length) % slides.length;
+      activateImage(real);
+      const img = slides[real].querySelector("img");
+      if (img.src) {
+        const pre = new Image();
+        pre.srcset = img.srcset || "";
+        pre.sizes = "100vw";
+        pre.src = img.src;
+      }
+    }
+
+    function show(index) {
       slides[current].classList.remove("active");
       dots[current].classList.remove("active");
-
       current = (index + slides.length) % slides.length;
-
+      activateImage(current);
       slides[current].classList.add("active");
       dots[current].classList.add("active");
+      preload(current + 1);
+      preload(current + 2);
     }
 
-    function nextSlide() {
-      showSlide(current + 1);
+    function next() { show(current + 1); }
+    function prev() { show(current - 1); }
+    function stop() {
+      if (timer) clearInterval(timer);
+      timer = null;
     }
-
-    function prevSlide() {
-      showSlide(current - 1);
+    function start() {
+      stop();
+      timer = setInterval(next, delay);
     }
+    function restart() { start(); }
 
-    function startTimer() {
-      stopTimer();
-      timer = setInterval(nextSlide, delay);
-    }
+    prevBtn.addEventListener("click", () => { prev(); restart(); });
+    nextBtn.addEventListener("click", () => { next(); restart(); });
 
-    function stopTimer() {
-      if (timer !== null) {
-        clearInterval(timer);
-        timer = null;
-      }
-    }
-
-    function restartTimer() {
-      startTimer();
-    }
-
-    nextButton.addEventListener("click", () => {
-      nextSlide();
-      restartTimer();
-    });
-
-    prevButton.addEventListener("click", () => {
-      prevSlide();
-      restartTimer();
-    });
-
-    banner.addEventListener("mouseenter", stopTimer);
-    banner.addEventListener("mouseleave", startTimer);
-
-    let touchStartX = 0;
-
-    banner.addEventListener("touchstart", (event) => {
-      touchStartX = event.changedTouches[0].screenX;
-      stopTimer();
+    banner.addEventListener("touchstart", e => {
+      startX = e.changedTouches[0].clientX;
+      stop();
     }, { passive: true });
 
-    banner.addEventListener("touchend", (event) => {
-      const touchEndX = event.changedTouches[0].screenX;
-      const distance = touchEndX - touchStartX;
-
-      if (Math.abs(distance) > 50) {
-        if (distance < 0) {
-          nextSlide();
-        } else {
-          prevSlide();
-        }
-      }
-
-      startTimer();
+    banner.addEventListener("touchend", e => {
+      const dx = e.changedTouches[0].clientX - startX;
+      if (Math.abs(dx) > 45) dx < 0 ? next() : prev();
+      start();
     }, { passive: true });
 
-    showSlide(0);
-    startTimer();
+    const first = slides[0].querySelector("img");
+    const ready = () => {
+      loader.classList.add("hidden");
+      preload(1);
+      preload(2);
+      start();
+    };
+    if (first.complete && first.naturalWidth) ready();
+    else {
+      first.addEventListener("load", ready, { once: true });
+      first.addEventListener("error", ready, { once: true });
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      document.hidden ? stop() : start();
+    });
   </script>
 </body>
 </html>

@@ -43,16 +43,41 @@ jobs:
           node tools/notion-sync.mjs
           node tools/link-quality.mjs
 
+      - name: Show report summary
+        if: always()
+        run: |
+          if [ -f data/notion-sync-report.json ]; then
+            node -e "const r=require('./data/notion-sync-report.json'); console.log({pagesScanned:r.pagesScanned,matchedCount:r.matchedCount,unmatchedCount:r.unmatchedCount,errorCount:r.errorCount});"
+          else
+            echo "notion-sync-report.json was not created"
+          fi
+
+      - name: Upload preview reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: notion-sync-reports
+          if-no-files-found: warn
+          path: |
+            data/notion-sync-report.json
+            data/link-quality-report.json
+
       - name: Commit reports only
         if: ${{ !inputs.apply_changes }}
         run: |
-          if git diff --quiet -- data/notion-sync-report.json; then
+          if [ ! -f data/notion-sync-report.json ]; then
+            echo "No report file"
+            exit 1
+          fi
+          if git diff --quiet -- data/notion-sync-report.json && ! git ls-files --error-unmatch data/notion-sync-report.json >/dev/null 2>&1; then
+            echo "New report will be committed"
+          elif git diff --quiet -- data/notion-sync-report.json; then
             echo "No report changes"
             exit 0
           fi
           git config user.name "daedong-notion-sync"
           git config user.email "actions@users.noreply.github.com"
-          git add data/notion-sync-report.json
+          git add -f data/notion-sync-report.json
           git commit -m "노션 안전 시험 보고서 갱신"
           git push origin HEAD:fix/load-stores-db790
 
@@ -65,6 +90,6 @@ jobs:
           fi
           git config user.name "daedong-notion-sync"
           git config user.email "actions@users.noreply.github.com"
-          git add data/stores.json data/notion-sync-report.json data/link-quality-report.json
+          git add -f data/stores.json data/notion-sync-report.json data/link-quality-report.json
           git commit -m "노션 주문정보 자동 동기화"
           git push origin HEAD:fix/load-stores-db790

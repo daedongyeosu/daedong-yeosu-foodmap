@@ -1,0 +1,41 @@
+name: Notion store sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '10 18 * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: fix/load-stores-db790
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Sync Notion order links
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
+        run: node tools/notion-sync.mjs
+
+      - name: Commit changed data
+        run: |
+          if git diff --quiet -- data/stores.json data/notion-sync-report.json; then
+            echo "No changes"
+            exit 0
+          fi
+          git config user.name "daedong-notion-sync"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/stores.json data/notion-sync-report.json
+          git commit -m "노션 주문링크 자동 동기화"
+          git push

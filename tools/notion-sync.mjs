@@ -31,6 +31,17 @@ const AUTHORITATIVE_ROUTE_KEYS = new Set([
   'direct', 'mukkebi', 'ddangyo', 'yogiyo', 'coupang', 'baemin', 'chak', 'phone'
 ]);
 
+const NOISE_WORDS = [
+  '가게바로주문준비중입니다', '가게바로주문', '자동주문준비중입니다',
+  '자동주문', '전화주문', '전화', '메인페이지', '주문페이지'
+];
+
+function compactName(value) {
+  let out = norm(value);
+  for (const word of NOISE_WORDS) out = out.replaceAll(norm(word), '');
+  return out;
+}
+
 function titleFromPage(page) {
   const props = page?.properties || {};
   for (const value of Object.values(props)) {
@@ -166,12 +177,10 @@ function phoneFromLink(label, url, context = '') {
 function extractNotionData(lines) {
   const found = new Map();
   let phone = '';
-
   for (const line of lines) {
     for (const link of line.links) {
       const classified = classifyLink(link.label, link.url, line.plain);
       if (!classified) continue;
-
       if (!found.has(classified.key)) {
         found.set(classified.key, {
           key: classified.key,
@@ -181,34 +190,43 @@ function extractNotionData(lines) {
           source: 'notion'
         });
       }
-
       if (classified.key === 'phone' && !phone) {
         phone = phoneFromLink(link.label, link.url, line.plain);
       }
     }
-
     if (!phone && /(전화|통화)/i.test(line.plain)) {
       const match = line.plain.match(/(?:061[-\s]?\d{3,4}[-\s]?\d{4}|01\d[-\s]?\d{3,4}[-\s]?\d{4})/);
       if (match) phone = normalizePhone(match[0]);
     }
   }
-
   return {routes: [...found.values()], phone};
 }
 
 function storeKeys(store) {
   return [store.name, store.realBusinessName, ...(store.shopInShopNames || [])]
-    .map(norm).filter(Boolean);
+    .map(compactName).filter(Boolean);
 }
 
 function pageKeys(title) {
-  const base = norm(title);
-  return [
-    base,
-    base.replace(/가게바로주문준비중입니다/g, ''),
-    base.replace(/가게바로주문/g, ''),
-    base.replace(/전화주문/g, '')
-  ].filter(Boolean);
+  const base = compactName(title);
+  return [base].filter(Boolean);
+}
+
+function bigrams(value) {
+  const s = compactName(value);
+  if (s.length < 2) return new Set([s]);
+  const out = new Set();
+  for (let i = 0; i < s.length - 1; i += 1) out.add(s.slice(i, i + 2));
+  return out;
+}
+
+function diceSimilarity(a, b) {
+  const A = bigrams(a);
+  const B = bigrams(b);
+  if (!A.size || !B.size) return 0;
+  let common = 0;
+  for (const token of A) if (B.has(token)) common += 1;
+  return (2 * common) / (A.size + B.size);
 }
 
 function matchScore(store, title) {
@@ -217,13 +235,19 @@ function matchScore(store, title) {
   let best = 0;
   for (const s of sKeys) {
     for (const p of pKeys) {
+      if (!s || !p) continue;
       if (s === p) best = Math.max(best, 100);
       else if (s.length >= 4 && p.length >= 4 && (s.includes(p) || p.includes(s))) {
-        best = Math.max(best, 80);
+        const ratio = Math.min(s.length, p.length) / Math.max(s.length, p.length);
+        best = Math.max(best, 82 + Math.round(ratio * 12));
+      } else {
+        const similarity = diceSimilarity(s, p);
+        if (similarity >= 0.82) best = Math.max(best, 78 + Math.round(similarity * 20));
+        else if (similarity >= 0.70) best = Math.max(best, 70 + Math.round(similarity * 10));
       }
     }
   }
-  return best;
+  return Math.min(best, 100);
 }
 
 function routeKey(route) {
@@ -235,7 +259,6 @@ function replaceAuthoritativeRoutes(oldRoutes = [], notionRoutes = []) {
     const key = routeKey(route);
     return !key || !AUTHORITATIVE_ROUTE_KEYS.has(key);
   });
-
   const deduped = new Map();
   for (const route of notionRoutes) {
     if (route.key && route.url) {
@@ -263,36 +286,46 @@ async function main() {
       routeAuthority: 'notion-main-page',
       phonePriority: 'notion-then-existing',
       appTextWithoutUrl: 'hidden',
-      photoAuthority: 'external-photo-folders'
+      photoAuthority: 'external-photo-folders',
+      matching: 'exact-contained-dice',
+      rootPageIdConfigured: Boolean(ROOT_PAGE_ID)
     },
     pagesScanned: candidates.length,
     matched: [],
+    ambiguous: [],
     unmatched: [],
     errors: []
   };
 
-  for (let i = 0; i < stores.length; i += 1) {
-    const store = stores[i];
-    let best = null;
+  for (const store of stores) {
+    const ranked = candidates
+      .map(candidate => ({...candidate, score: matchScore(store, candidate.title)}))
+      .filter(candidate => candidate.score >= 72)
+      .sort((a, b) => b.score - a.score);
 
-    for (const candidate of candidates) {
-      if (ROOT_PAGE_ID && candidate.page.parent?.page_id !== ROOT_PAGE_ID && candidate.page.id !== ROOT_PAGE_ID) continue;
-      const score = matchScore(store, candidate.title);
-      if (!best || score > best.score) best = {...candidate, score};
+    const best = ranked[0];
+    const second = ranked[1];
+    if (!best || best.score < 80) {
+      report.unmatched.push({
+        store: store.name,
+        bestCandidate: best ? {title: best.title, score: best.score} : null
+      });
+      continue;
     }
 
-    if (!best || best.score < 80) {
-      report.unmatched.push({store: store.name});
+    if (second && best.score < 95 && best.score - second.score < 5) {
+      report.ambiguous.push({
+        store: store.name,
+        candidates: ranked.slice(0, 3).map(x => ({title: x.title, score: x.score}))
+      });
       continue;
     }
 
     try {
       const lines = await flattenPage(best.page.id);
       const notionData = extractNotionData(lines);
-
       store.routes = replaceAuthoritativeRoutes(store.routes, notionData.routes);
       if (notionData.phone) store.phone = notionData.phone;
-
       store.notionPageId = best.page.id;
       store.notionUrl = best.page.url;
       store.notionSyncedAt = new Date().toISOString();
@@ -306,7 +339,6 @@ async function main() {
         phone: notionData.phone || null,
         missingRoutes: [...AUTHORITATIVE_ROUTE_KEYS].filter(key => !routeKeys.includes(key))
       });
-
       await sleep(120);
     } catch (error) {
       report.errors.push({store: store.name, notionTitle: best.title, error: error.message});
@@ -316,12 +348,13 @@ async function main() {
   await fs.writeFile(DB_PATH, `${JSON.stringify(stores, null, 2)}\n`, 'utf8');
   report.finishedAt = new Date().toISOString();
   report.matchedCount = report.matched.length;
+  report.ambiguousCount = report.ambiguous.length;
   report.unmatchedCount = report.unmatched.length;
   report.errorCount = report.errors.length;
 
   await fs.mkdir(path.dirname(REPORT_PATH), {recursive: true});
   await fs.writeFile(REPORT_PATH, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
-  console.log(`노션 동기화 완료: 매칭 ${report.matchedCount}, 미매칭 ${report.unmatchedCount}, 오류 ${report.errorCount}`);
+  console.log(`노션 동기화 완료: 매칭 ${report.matchedCount}, 보류 ${report.ambiguousCount}, 미매칭 ${report.unmatchedCount}, 오류 ${report.errorCount}`);
 }
 
 main().catch(error => {

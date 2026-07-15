@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-07-15T22:05:18.473Z",
+  "startedAt": "2026-07-15T22:17:35.847Z",
   "rules": {
     "routeAuthority": "notion-main-page",
     "phonePriority": "notion-then-existing",
@@ -7520,7 +7520,7 @@
     }
   ],
   "errors": [],
-  "finishedAt": "2026-07-15T22:09:47.324Z",
+  "finishedAt": "2026-07-15T22:22:06.504Z",
   "matchedCount": 429,
   "ambiguousCount": 1,
   "unmatchedCount": 1,
@@ -7532,7 +7532,7 @@
     "errors": [
       {
         "store": "귀한김치찜 국동봉산점",
-        "error": "/blocks/396da158-dd2a-80d3-8373-c1f1e7cfc541/children?page_size=100 실패: 404 {\"object\":\"error\",\"status\":404,\"code\":\"object_not_found\",\"message\":\"Could not find block with ID: 396da158-dd2a-80d3-8373-c1f1e7cfc541. Make sure the relevant pages and databases are shared with your integration \\\"대동여수음식지도\\\".\",\"additional_data\":{\"integration_id\":\"39eda158-dd2a-8130-b85a-00277ac1f40c\"},\"request_id\":\"e7ef2eb4-cdee-47cf-bc14-6487395476e9\"}"
+        "error": "/blocks/396da158-dd2a-80d3-8373-c1f1e7cfc541/children?page_size=100 실패: 404 {\"object\":\"error\",\"status\":404,\"code\":\"object_not_found\",\"message\":\"Could not find block with ID: 396da158-dd2a-80d3-8373-c1f1e7cfc541. Make sure the relevant pages and databases are shared with your integration \\\"대동여수음식지도\\\".\",\"additional_data\":{\"integration_id\":\"39eda158-dd2a-8130-b85a-00277ac1f40c\"},\"request_id\":\"ced7a06e-f66c-40d7-87b0-c9b7e8f2d122\"}"
       }
     ],
     "errorCount": 1

@@ -7,16 +7,20 @@ const REPORT = process.env.NOTION_REPORT_PATH || 'data/notion-sync-report.json';
 
 await fs.copyFile(SOURCE, TEMP);
 
-const child = spawn(process.execPath, ['tools/notion-sync.mjs'], {
-  stdio: 'inherit',
-  env: {
-    ...process.env,
-    STORES_PATH: TEMP,
-    NOTION_REPORT_PATH: REPORT
-  }
-});
+async function run(script) {
+  const child = spawn(process.execPath, [script], {
+    stdio: 'inherit',
+    env: {
+      ...process.env,
+      STORES_PATH: TEMP,
+      NOTION_REPORT_PATH: REPORT
+    }
+  });
+  return new Promise(resolve => child.on('exit', code => resolve(code ?? 1)));
+}
 
-const exitCode = await new Promise(resolve => child.on('exit', code => resolve(code ?? 1)));
+let exitCode = await run('tools/notion-sync.mjs');
+if (exitCode === 0) exitCode = await run('tools/notion-phone-enrich.mjs');
 
 try {
   await fs.unlink(TEMP);

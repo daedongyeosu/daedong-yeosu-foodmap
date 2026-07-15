@@ -31,14 +31,16 @@ jobs:
         if: ${{ !inputs.apply_changes }}
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
+          # 연결 권한 자체가 최상위 페이지와 모든 하위 페이지로 제한됩니다.
+          # Notion API의 parent 값은 중첩 페이지에서 최상위 ID가 아니므로 별도 필터를 사용하지 않습니다.
+          NOTION_ROOT_PAGE_ID: ''
         run: node tools/notion-sync-dry-run.mjs
 
       - name: Run Notion sync and link quality check
         if: ${{ inputs.apply_changes }}
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
+          NOTION_ROOT_PAGE_ID: ''
         run: |
           node tools/notion-sync.mjs
           node tools/link-quality.mjs

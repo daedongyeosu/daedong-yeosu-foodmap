@@ -1,349 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#111111">
-  <title>대동여수음식지도 광고 배너</title>
-  <link rel="preload" as="image"
-        href="images/01-m.webp"
-        imagesrcset="images/01-m.webp 900w, images/01.webp 1200w"
-        imagesizes="100vw">
-  <style>
-    * { box-sizing: border-box; }
-    html, body {
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      overflow: hidden;
-      background: #111;
-      font-family: Arial, "Noto Sans KR", sans-serif;
-    }
-    .banner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      min-height: 220px;
-      overflow: hidden;
-      background: #111;
-      isolation: isolate;
-    }
-    .slide {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .5s ease;
-      background: #111;
-      overflow: hidden;
-    }
-    .slide::before {
-      content: "";
-      position: absolute;
-      inset: -28px;
-      z-index: 0;
-      background-image: var(--bg);
-      background-position: center;
-      background-size: cover;
-      filter: blur(22px) brightness(.38);
-      transform: scale(1.08);
-    }
-    .slide::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      background: rgba(0,0,0,.12);
-    }
-    .slide.active {
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .slide a {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      width: 100%;
-      height: 100%;
-      align-items: center;
-      justify-content: center;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .slide img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      object-position: center;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-    .loader {
-      position: absolute;
-      inset: 0;
-      z-index: 30;
-      display: grid;
-      place-items: center;
-      background: #111;
-      color: #fff;
-      transition: opacity .25s ease, visibility .25s ease;
-    }
-    .loader.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    .spinner {
-      width: 34px;
-      height: 34px;
-      border: 3px solid rgba(255,255,255,.3);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .nav {
-      position: absolute;
-      top: 50%;
-      z-index: 20;
-      transform: translateY(-50%);
-      width: 42px;
-      height: 58px;
-      border: 0;
-      border-radius: 9px;
-      background: rgba(0,0,0,.42);
-      color: #fff;
-      font-size: 32px;
-      line-height: 1;
-      cursor: pointer;
-      touch-action: manipulation;
-    }
-    .prev { left: 5px; }
-    .next { right: 5px; }
-    .counter {
-      position: absolute;
-      left: 50%;
-      bottom: max(8px, env(safe-area-inset-bottom));
-      z-index: 20;
-      transform: translateX(-50%);
-      min-width: 54px;
-      padding: 5px 10px;
-      border-radius: 999px;
-      background: rgba(0,0,0,.48);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 700;
-      line-height: 1;
-      text-align: center;
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-    }
-    @media (min-width: 900px) {
-      .banner {
-        max-width: 1200px;
-        height: min(100vh, 700px);
-        margin: 0 auto;
-      }
-      .nav { width: 40px; height: 56px; font-size: 30px; }
-      .prev { left: 8px; }
-      .next { right: 8px; }
-      .dot { width: 8px; height: 8px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      .slide { transition: none; }
-      .spinner { animation: none; }
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<meta name="theme-color" content="#ff5a1f" />
+<title>대동여수음식지도</title>
+<link rel="stylesheet" href="styles-v7.css?v=7" />
 </head>
 <body>
-  <!-- 대동여수음식지도 광고 배너 3.0: Notion direct, mobile-first, WebP optimized -->
-  <main class="banner" id="banner" aria-label="대동여수음식지도 광고">
-    <div class="loader" id="loader" aria-label="광고 이미지 불러오는 중">
-      <div class="spinner"></div>
+<div id="app">
+<header class="topbar">
+  <button id="locationBtn" class="location-chip" aria-label="지역 선택">📍 <span id="locationText">여수시 전체</span>⌄</button>
+  <div class="top-actions"><button id="noticeBtn" class="icon-btn" aria-label="알림">🔔<b class="badge">2</b></button></div>
+</header>
+<section class="brand"><img src="assets/logo.png" alt="대동여수음식지도"></section>
+<section class="hero" aria-label="메인 광고"><div id="heroTrack" class="hero-track"></div><div id="heroDots" class="hero-dots"></div></section>
+<section class="search-row main-search-row">
+  <div class="searchbox"><span>⌕</span><input id="mainSearch" placeholder="메뉴, 가게명, 동네 검색" autocomplete="off"><button id="clearMainSearch" class="input-clear" aria-label="검색어 지우기" hidden>×</button></div>
+  <button id="searchBtn" class="primary-btn">검색</button>
+</section>
+<section class="section order-section">
+  <div class="section-head"><h2>모든 주문방법을 한곳에서</h2><button class="text-btn" data-open="guide">주문방법이란? ›</button></div>
+  <div class="order-grid">
+    <a class="order-item first" href="#direct"><span class="order-icon storefront">🏪</span><strong>가게바로주문</strong></a>
+    <a class="order-item" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=mukkebi.user.app.android"><img src="assets/mukkebi-v7.png" alt="먹깨비"><strong>먹깨비</strong></a>
+    <a class="order-item" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.shinhan.o2o"><img src="assets/ddangyo-v7.png" alt="땡겨요"><strong>땡겨요</strong></a>
+    <a class="order-item" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=kr.co.kncsol.ondongne"><img src="assets/ondongne.png" alt="온동네"><strong>온동네</strong></a>
+    <button class="order-item" data-open="brands"><span class="order-icon green">B</span><strong>브랜드앱</strong></button>
+    <button class="order-item" data-open="phone"><span class="order-icon purple">☎</span><strong>전화주문</strong></button>
+    <button id="moreAppsBtn" class="order-item more-apps"><strong>다른 주문앱 보기</strong><span>›</span></button>
+  </div>
+  <div id="moreAppsPopover" class="popover" hidden>
+    <button class="popover-close" aria-label="닫기">×</button><h3>다른 주문앱 보기</h3>
+    <div class="external-apps">
+      <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.fineapp.yogiyo"><img src="assets/yogiyo.jpg"><span>요기요</span></a>
+      <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.coupang.mobile.eats"><img src="assets/coupang-eats.jpg"><span>쿠팡이츠</span></a>
+      <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.sampleapp"><img src="assets/baemin.jpg"><span>배달의민족</span></a>
     </div>
-    <section class="slide active" data-index="0" data-bg="images/01-m.webp">
-      <a href="https://app.notion.com/p/2eada158dd2a80518569cfdb0e2f6404?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="도미노피자 주문 페이지 열기">
-        <img src="images/01-m.webp" srcset="images/01-m.webp 900w, images/01.webp 1200w" sizes="100vw" fetchpriority="high" loading="eager" decoding="async" alt="도미노피자">
-      </a>
-    </section>
-    <section class="slide" data-index="1" data-bg="images/02-m.webp">
-      <a href="https://app.notion.com/p/33cda158dd2a8041bf7acb4e513dfc34?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="백년족발 주문 페이지 열기">
-        <img data-src="images/02-m.webp" data-srcset="images/02-m.webp 900w, images/02.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="백년족발">
-      </a>
-    </section>
-    <section class="slide" data-index="2" data-bg="images/03-m.webp">
-      <a href="https://app.notion.com/p/324da158dd2a801493cced68d6e4bb5f?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="컴포즈커피 여수문수광장점 주문 페이지 열기">
-        <img data-src="images/03-m.webp" data-srcset="images/03-m.webp 900w, images/03.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="컴포즈커피 여수문수광장점">
-      </a>
-    </section>
-    <section class="slide" data-index="3" data-bg="images/04-m.webp">
-      <a href="https://app.notion.com/p/303da158dd2a80f686dffa92a6fae9e3?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="족팔계왕족발 주문 페이지 열기">
-        <img data-src="images/04-m.webp" data-srcset="images/04-m.webp 900w, images/04.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="족팔계왕족발">
-      </a>
-    </section>
-    <section class="slide" data-index="4" data-bg="images/05-m.webp">
-      <a href="https://app.notion.com/p/2e9da158dd2a8052bda7fd6e1c435ace?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="탕화쿵푸마라탕 여서점 주문 페이지 열기">
-        <img data-src="images/05-m.webp" data-srcset="images/05-m.webp 900w, images/05.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="탕화쿵푸마라탕 여서점">
-      </a>
-    </section>
-    <section class="slide" data-index="5" data-bg="images/06-m.webp">
-      <a href="https://app.notion.com/p/2ebda158dd2a804cb5b5d68b6877984b?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="요거트월드 여서점 주문 페이지 열기">
-        <img data-src="images/06-m.webp" data-srcset="images/06-m.webp 900w, images/06.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="요거트월드 여서점">
-      </a>
-    </section>
-    <section class="slide" data-index="6" data-bg="images/07-m.webp">
-      <a href="https://app.notion.com/p/2e4da158dd2a80a0b157fe0c61a9861f?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="아주커 둔덕점 주문 페이지 열기">
-        <img data-src="images/07-m.webp" data-srcset="images/07-m.webp 900w, images/07.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="아주커 둔덕점">
-      </a>
-    </section>
-    <section class="slide" data-index="7" data-bg="images/08-m.webp">
-      <a href="https://app.notion.com/p/2e6da158dd2a80f4bd73dd5a5c762fef?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="롯데리아 중앙점 주문 페이지 열기">
-        <img data-src="images/08-m.webp" data-srcset="images/08-m.webp 900w, images/08.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="롯데리아 중앙점">
-      </a>
-    </section>
-    <section class="slide" data-index="8" data-bg="images/09-m.webp">
-      <a href="https://app.notion.com/p/315da158dd2a8047906cc5c3c4c51e69?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="조선밀면냉면 여수여서점 주문 페이지 열기">
-        <img data-src="images/09-m.webp" data-srcset="images/09-m.webp 900w, images/09.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="조선밀면냉면 여수여서점">
-      </a>
-    </section>
-    <section class="slide" data-index="9" data-bg="images/10-m.webp">
-      <a href="https://app.notion.com/p/2ebda158dd2a80259bdfe256ddd5e46c?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="외계인피자 여수점 주문 페이지 열기">
-        <img data-src="images/10-m.webp" data-srcset="images/10-m.webp 900w, images/10.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="외계인피자 여수점">
-      </a>
-    </section>
-    <section class="slide" data-index="10" data-bg="images/11-m.webp">
-      <a href="https://app.notion.com/p/c51da158dd2a8203a5d781428baa1f9d?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="왕창돼지두루치기 여서점 주문 페이지 열기">
-        <img data-src="images/11-m.webp" data-srcset="images/11-m.webp 900w, images/11.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="왕창돼지두루치기 여서점">
-      </a>
-    </section>
-    <section class="slide" data-index="11" data-bg="images/12-m.webp">
-      <a href="https://app.notion.com/p/323da158dd2a801ca3a6fe9161851afe?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="린차이나 주문 페이지 열기">
-        <img data-src="images/12-m.webp" data-srcset="images/12-m.webp 900w, images/12.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="린차이나">
-      </a>
-    </section>
-    <section class="slide" data-index="12" data-bg="images/13-m.webp">
-      <a href="https://app.notion.com/p/34bda158dd2a801a9f9ef1379ac363d0?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="김종구식맛치킨 여수여서점 주문 페이지 열기">
-        <img data-src="images/13-m.webp" data-srcset="images/13-m.webp 900w, images/13.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="김종구식맛치킨 여수여서점">
-      </a>
-    </section>
-    <section class="slide" data-index="13" data-bg="images/14-m.webp">
-      <a href="https://app.notion.com/p/2ebda158dd2a8015b97ec8a11e9af6ab?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="맘스터치 문수점 주문 페이지 열기">
-        <img data-src="images/14-m.webp" data-srcset="images/14-m.webp 900w, images/14.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="맘스터치 문수점">
-      </a>
-    </section>
-    <section class="slide" data-index="14" data-bg="images/15-m.webp">
-      <a href="https://app.notion.com/p/33bda158dd2a80508ffbc6cc093d1ad3?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="콩산소 주문 페이지 열기">
-        <img data-src="images/15-m.webp" data-srcset="images/15-m.webp 900w, images/15.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="콩산소">
-      </a>
-    </section>
-    <section class="slide" data-index="15" data-bg="images/16-m.webp">
-      <a href="https://app.notion.com/p/2ddda158dd2a809c8aa9d22fc48d38b7?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="수라상궁 조선국밥 주문 페이지 열기">
-        <img data-src="images/16-m.webp" data-srcset="images/16-m.webp 900w, images/16.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="수라상궁 조선국밥">
-      </a>
-    </section>
-    <section class="slide" data-index="16" data-bg="images/17-m.webp">
-      <a href="https://app.notion.com/p/2eada158dd2a80aa83f0d14acd3d04be?source=copy_link" target="_blank" rel="noopener noreferrer" aria-label="바오탕수 여서점 주문 페이지 열기">
-        <img data-src="images/17-m.webp" data-srcset="images/17-m.webp 900w, images/17.webp 1200w" sizes="100vw" loading="lazy" decoding="async" alt="바오탕수 여서점">
-      </a>
-    </section>
-    <button class="nav prev" type="button" aria-label="이전 광고">‹</button>
-    <button class="nav next" type="button" aria-label="다음 광고">›</button>
-    <div class="counter" id="counter" aria-live="polite">1 / 17</div>
-  </main>
-
-  <script>
-    const slides = [...document.querySelectorAll(".slide")];
-    const banner = document.getElementById("banner");
-    const loader = document.getElementById("loader");
-    const counter = document.getElementById("counter");
-    const prevBtn = document.querySelector(".prev");
-    const nextBtn = document.querySelector(".next");
-    const delay = 3500;
-    let current = 0;
-    let timer = null;
-    let startX = 0;
-
-    slides.forEach((slide) => {
-      slide.style.setProperty("--bg", `url("${slide.dataset.bg}")`);
-    });
-
-    function activateImage(index) {
-      const img = slides[index].querySelector("img");
-      if (!img.getAttribute("src") && img.dataset.src) {
-        img.src = img.dataset.src;
-        img.srcset = img.dataset.srcset;
-      }
-    }
-
-    function preload(index) {
-      const real = (index + slides.length) % slides.length;
-      activateImage(real);
-      const img = slides[real].querySelector("img");
-      if (img.src) {
-        const pre = new Image();
-        pre.srcset = img.srcset || "";
-        pre.sizes = "100vw";
-        pre.src = img.src;
-      }
-    }
-
-    function show(index) {
-      slides[current].classList.remove("active");
-      current = (index + slides.length) % slides.length;
-      activateImage(current);
-      slides[current].classList.add("active");
-      counter.textContent = `${current + 1} / ${slides.length}`;
-      preload(current + 1);
-      preload(current + 2);
-    }
-
-    function next() { show(current + 1); }
-    function prev() { show(current - 1); }
-    function stop() {
-      if (timer) clearInterval(timer);
-      timer = null;
-    }
-    function start() {
-      stop();
-      timer = setInterval(next, delay);
-    }
-    function restart() { start(); }
-
-    prevBtn.addEventListener("click", () => { prev(); restart(); });
-    nextBtn.addEventListener("click", () => { next(); restart(); });
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "ArrowLeft") { prev(); restart(); }
-      if (event.key === "ArrowRight") { next(); restart(); }
-    });
-
-    banner.addEventListener("touchstart", e => {
-      startX = e.changedTouches[0].clientX;
-      stop();
-    }, { passive: true });
-
-    banner.addEventListener("touchend", e => {
-      const dx = e.changedTouches[0].clientX - startX;
-      if (Math.abs(dx) > 45) dx < 0 ? next() : prev();
-      start();
-    }, { passive: true });
-
-    const first = slides[0].querySelector("img");
-    const ready = () => {
-      loader.classList.add("hidden");
-      preload(1);
-      preload(2);
-      start();
-    };
-    if (first.complete && first.naturalWidth) ready();
-    else {
-      first.addEventListener("load", ready, { once: true });
-      first.addEventListener("error", ready, { once: true });
-    }
-
-    document.addEventListener("visibilitychange", () => {
-      document.hidden ? stop() : start();
-    });
-  </script>
-</body>
-</html>
+  </div>
+</section>
+<section class="section category-section">
+ <div class="section-head"><h2>원하는 음식 종류를 선택하세요</h2><button id="allCategoryBtn" class="text-btn">전체보기 ›</button></div>
+ <div id="categoryGrid" class="category-grid"></div>
+</section>
+<section id="searchSummary" class="search-summary" hidden></section>
+<section id="recommendSection" class="section"><div class="section-head"><h2>오늘의 추천</h2><button id="resetCategoryBtn" class="text-btn" hidden>전체 추천 보기 ›</button></div><div id="storeGrid" class="store-grid"></div></section>
+<section class="ad-feed section">
+ <article class="recruit-ad rider"><b>배송기사 모집</b><span>여수 지역 베테랑 기사님을 기다립니다.</span><button>자세히 보기</button></article>
+ <article class="recruit-ad store"><b>배달대행 가맹점 모집</b><span>배달대행을 찾는 가게 사장님을 위한 안내</span><button>상담 신청</button></article>
+ <article class="recruit-ad join"><b>먹깨비·땡겨요·온동네 가입 안내</b><span>저수수료 주문경로를 한 번에 연결하세요.</span><button>가입 문의</button></article>
+</section>
+<footer class="legal"><button data-open="guide">이용안내</button><button>개인정보처리방침</button><button>정보 수정 제안</button><button>광고 문의</button></footer>
+</div>
+<nav class="bottom-nav"><button data-tab="home" class="active">⌂<span>홈</span></button><button data-tab="search">⌕<span>검색</span></button><button data-tab="favorite">♡<span>찜한가게</span></button><button data-tab="recent">◷<span>최근방문가게</span></button><button data-tab="mypage">♙<span>마이페이지</span></button></nav>
+<div id="overlay" class="overlay" hidden></div>
+<div id="modal" class="modal" hidden role="dialog" aria-modal="true"><div class="modal-card"><button class="modal-close" aria-label="닫기">×</button><div id="modalContent"></div></div></div>
+<div id="startupAd" class="startup-ad" hidden><div class="startup-card"><button class="startup-close" aria-label="닫기">×</button><small>대동여수음식지도 안내</small><h2>배달기사·가맹점 모집</h2><p>기사 모집, 가게 모집, 주문앱 가입 권유, 신규 오픈 가게와 소상공인협회 공지를 이곳에서 알립니다.</p><div class="startup-actions"><button id="startupDetails" class="primary-btn">자세히 보기</button><button id="hideToday">오늘 그만 보기</button></div></div></div>
+<script src="app-v7.js?v=7"></script>
+<div class="build-mark">build v7</div>
+</body></html>

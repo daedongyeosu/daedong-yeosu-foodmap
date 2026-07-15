@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>대동여수음식지도 관리자</title>
+<link rel="icon" href="images/logo.png"><link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="admin-page">
+<div id="loginView" class="login-wrap">
+  <form id="loginForm" class="login-card">
+    <img src="images/logo.png" alt="">
+    <h1>관리자 로그인</h1>
+    <input id="loginId" placeholder="아이디" value="admin">
+    <input id="loginPw" type="password" placeholder="비밀번호" value="1234">
+    <label><input type="checkbox" id="rememberId"> 아이디 기억하기</label>
+    <label><input type="checkbox" id="keepLogin"> 로그인 상태 유지</label>
+    <button>로그인</button>
+    <p class="login-links">아이디 찾기 · 비밀번호 재설정</p>
+    <small>시험판 계정: admin / 1234<br>정식 운영 전 서버 인증·2단계 인증으로 교체됩니다.</small>
+  </form>
+</div>
+
+<div id="adminView" class="hidden">
+<header class="admin-top"><img src="images/logo.png"><strong>본사 관리자</strong><button id="logoutBtn">로그아웃</button></header>
+<main class="admin-main">
+<section class="admin-summary">
+  <div><b id="totalStores">0</b><span>전체 가게</span></div>
+  <div><b id="managedCount">0</b><span>우리 관리</span></div>
+  <div><b id="sharedCount">0</b><span>공유대표</span></div>
+  <div><b id="localRouteCount">0</b><span>지역경로 보유</span></div>
+</section>
+
+<section class="policy-card">
+  <h2>추천가게 랜덤 노출 비율</h2>
+  <div class="weight-row"><label>우리 관리 <input id="wManaged" type="number" min="0" max="100"></label>
+  <label>공유대표 <input id="wShared" type="number" min="0" max="100"></label>
+  <label>일반 <input id="wGeneral" type="number" min="0" max="100"></label>
+  <button id="saveWeights">저장</button></div>
+  <p>합계가 100%가 되도록 설정합니다. 큰 슬라이드 고정가게는 이 비율의 영향을 받지 않습니다.</p>
+</section>
+
+<section class="policy-card">
+  <h2>전단 최우선 노출</h2>
+  <div class="campaign-row">
+    <input id="flyerStoreSearch" placeholder="가게명 검색">
+    <select id="flyerStoreSelect"><option value="">전단 최우선 가게 없음</option></select>
+    <button id="saveFlyerStore">적용</button>
+    <button id="clearFlyerStore">해제</button>
+  </div>
+  <p>선택한 가게는 관리자가 바꾸기 전까지 추천가게 첫 번째에 계속 고정됩니다. 같은 샵인샵 그룹은 그 다음 영역에서 더 자주 순환 노출됩니다.</p>
+</section>
+
+<section class="policy-card">
+  <h2>우천 모드</h2>
+  <div class="rain-controls">
+    <label><input type="radio" name="rainMode" value="0"> 평상시</label>
+    <label><input type="radio" name="rainMode" value="1"> 1단계 · 일반가게 30% 추가</label>
+    <label><input type="radio" name="rainMode" value="2"> 2단계 · 일반가게 6배 가중</label>
+    <label><input type="radio" name="rainMode" value="3"> 3단계 · 일반가게 최우선</label>
+    <button id="saveRainMode">적용</button>
+  </div>
+  <p>비 오는 날 타 배달대행 관리 일반가게를 더 많이 노출하여 일반배달 오더를 확보하는 운영 모드입니다.</p>
+</section>
+
+<section class="admin-toolbar">
+  <input id="adminSearch" placeholder="가게명·전화번호 검색">
+  <select id="adminFilter">
+    <option value="">전체</option><option value="managed">우리 관리</option><option value="shared">공유대표</option>
+    <option value="general">일반</option><option value="majorOnly">대형앱 전용</option>
+  </select>
+  <button id="exportCsv">목록 CSV 다운로드</button>
+</section>
+
+<div id="adminList" class="admin-list"></div>
+</main>
+</div>
+<script src="js/admin.js"></script>
+</body></html>

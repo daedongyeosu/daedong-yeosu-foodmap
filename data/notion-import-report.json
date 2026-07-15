@@ -1,0 +1,19 @@
+{
+  "html_files_scanned": 586,
+  "unique_stores": 431,
+  "stores_with_images": 331,
+  "stores_with_phone": 32,
+  "stores_with_naver_map": 322,
+  "route_counts": {
+    "가게바로주문": 430,
+    "먹깨비": 381,
+    "CHAK 지역상품권": 430,
+    "전화주문": 429,
+    "쿠팡이츠": 386,
+    "배달의민족": 411,
+    "땡겨요": 338,
+    "요기요": 333,
+    "브랜드앱": 1
+  },
+  "image_files_found_in_export": 381
+}

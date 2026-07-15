@@ -1,1 +1,0 @@
-# daedong-yeosu-foodmap

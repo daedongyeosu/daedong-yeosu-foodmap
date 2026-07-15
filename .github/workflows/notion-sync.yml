@@ -28,14 +28,17 @@ jobs:
           NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
         run: node tools/notion-sync.mjs
 
+      - name: Check order-link quality
+        run: node tools/link-quality.mjs
+
       - name: Commit changed data
         run: |
-          if git diff --quiet -- data/stores.json data/notion-sync-report.json; then
+          if git diff --quiet -- data/stores.json data/notion-sync-report.json data/link-quality-report.json; then
             echo "No changes"
             exit 0
           fi
           git config user.name "daedong-notion-sync"
           git config user.email "actions@users.noreply.github.com"
-          git add data/stores.json data/notion-sync-report.json
-          git commit -m "노션 주문링크 자동 동기화"
+          git add data/stores.json data/notion-sync-report.json data/link-quality-report.json
+          git commit -m "노션 주문링크 자동 동기화 및 품질검사"
           git push

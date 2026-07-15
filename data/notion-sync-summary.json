@@ -1,0 +1,53 @@
+{
+  "generatedAt": "2026-07-15T21:41:58.194Z",
+  "pagesScanned": 586,
+  "matchedCount": 429,
+  "ambiguousCount": 1,
+  "unmatchedCount": 1,
+  "errorCount": 0,
+  "scoreCounts": {
+    "exact100": 428,
+    "high95to99": 0,
+    "accepted80to94": 1
+  },
+  "routeCounts": {
+    "direct": 429,
+    "mukkebi": 381,
+    "chak": 429,
+    "phone": 428,
+    "coupang": 386,
+    "baemin": 409,
+    "ddangyo": 338,
+    "yogiyo": 333
+  },
+  "missingRouteCounts": {
+    "ddangyo": 91,
+    "yogiyo": 96,
+    "coupang": 43,
+    "mukkebi": 48,
+    "baemin": 20,
+    "phone": 1
+  },
+  "ambiguousSamples": [
+    {
+      "store": "귀한김치찜 국동봉산점",
+      "candidates": [
+        {
+          "title": "귀한김치찜 국동봉산점 (2)",
+          "score": 93
+        },
+        {
+          "title": "귀한김치찜 국동봉산점 (1)",
+          "score": 93
+        }
+      ]
+    }
+  ],
+  "unmatchedSamples": [
+    {
+      "store": "제목 없음",
+      "bestCandidate": null
+    }
+  ],
+  "errorSamples": []
+}

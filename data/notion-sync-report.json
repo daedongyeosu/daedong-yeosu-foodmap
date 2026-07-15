@@ -1,10 +1,12 @@
 {
-  "startedAt": "2026-07-15T21:12:30.635Z",
+  "startedAt": "2026-07-15T21:24:27.435Z",
   "rules": {
     "routeAuthority": "notion-main-page",
     "phonePriority": "notion-then-existing",
     "appTextWithoutUrl": "hidden",
-    "photoAuthority": "external-photo-folders"
+    "photoAuthority": "external-photo-folders",
+    "matching": "exact-contained-dice",
+    "rootPageIdConfigured": false
   },
   "pagesScanned": 586,
   "matched": [
@@ -1238,24 +1240,6 @@
       ],
       "phone": null,
       "missingRoutes": []
-    },
-    {
-      "store": "귀한김치찜 국동봉산점",
-      "notionTitle": "귀한김치찜 국동봉산점 (2)",
-      "score": 80,
-      "routes": [
-        "direct",
-        "baemin",
-        "chak",
-        "phone"
-      ],
-      "phone": null,
-      "missingRoutes": [
-        "mukkebi",
-        "ddangyo",
-        "yogiyo",
-        "coupang"
-      ]
     },
     {
       "store": "그루브 여서점",
@@ -5735,7 +5719,7 @@
     {
       "store": "조선제일 감자탕&뼈해장국 여서점",
       "notionTitle": "조선제일 감자탕&뼈해장국 여서점 (1)",
-      "score": 80,
+      "score": 93,
       "routes": [
         "direct",
         "ddangyo",
@@ -7514,14 +7498,31 @@
       "missingRoutes": []
     }
   ],
+  "ambiguous": [
+    {
+      "store": "귀한김치찜 국동봉산점",
+      "candidates": [
+        {
+          "title": "귀한김치찜 국동봉산점 (2)",
+          "score": 93
+        },
+        {
+          "title": "귀한김치찜 국동봉산점 (1)",
+          "score": 93
+        }
+      ]
+    }
+  ],
   "unmatched": [
     {
-      "store": "제목 없음"
+      "store": "제목 없음",
+      "bestCandidate": null
     }
   ],
   "errors": [],
-  "finishedAt": "2026-07-15T21:16:28.449Z",
-  "matchedCount": 430,
+  "finishedAt": "2026-07-15T21:28:48.814Z",
+  "matchedCount": 429,
+  "ambiguousCount": 1,
   "unmatchedCount": 1,
   "errorCount": 0
 }

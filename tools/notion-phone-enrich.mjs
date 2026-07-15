@@ -68,8 +68,13 @@ function normalizePhone(value) {
 }
 
 function phoneFromText(text) {
-  const match = clean(text).match(/(?:061[-\s.)]*(?:\d[-\s.)]*){6,8}|01\d[-\s.)]*(?:\d[-\s.)]*){7,8}/);
-  return match ? normalizePhone(match[0]) : '';
+  const source = clean(text);
+  const candidates = source.match(/(?:061|01\d)(?:[^0-9]*\d){6,8}/g) || [];
+  for (const candidate of candidates) {
+    const phone = normalizePhone(candidate);
+    if (phone) return phone;
+  }
+  return '';
 }
 
 function textFromBlock(block) {

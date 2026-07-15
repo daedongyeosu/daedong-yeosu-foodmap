@@ -1,0 +1,52 @@
+/* DB790 mobile UI refinements */
+.hero-card{height:245px!important}
+.hero-card h2{font-size:25px;line-height:1.25}
+.hero-card p{font-size:15px}
+
+.miniapps{display:flex;align-items:center;gap:3px;min-height:32px;overflow:hidden;flex-wrap:nowrap}
+.miniapp-icon{width:30px!important;height:30px!important;border-radius:9px!important;padding:1px!important;flex:0 0 30px;object-fit:contain!important;background:#fff!important;border:1px solid #e7eaf0}
+.brand-app-icon.miniapp-icon{display:grid!important;place-items:center;background:#087c4c!important;color:#fff!important;font-weight:900;font-size:19px!important;line-height:1}
+.store-info{padding-bottom:8px}
+
+.modal{align-items:center;padding:14px}
+.modal-card{width:min(500px,100%);max-height:78vh!important;overflow:auto!important;padding:18px;border-radius:22px}
+.modal-close{width:42px;height:42px;right:7px;top:4px;z-index:20;background:#fff;border-radius:50%}
+.store-detail-head{padding-right:42px}
+.store-detail-head h2{font-size:22px;line-height:1.25;margin:2px 0 12px;word-break:keep-all}
+.detail-photo{max-height:270px!important;aspect-ratio:1.45;object-fit:cover}
+.detail-meta{margin:12px 0;font-size:16px}
+.detail-routes{gap:8px}
+.detail-route{min-height:52px;padding:7px 12px;grid-template-columns:38px minmax(0,1fr) auto}
+.detail-route-icon{width:36px!important;height:36px!important}
+.other-label{white-space:nowrap;writing-mode:horizontal-tb!important;word-break:keep-all!important;line-height:1.2}
+.other-inline-icons{gap:3px}
+.other-inline-icon{width:30px!important;height:30px!important;flex:0 0 30px}
+.store-other-popover{bottom:calc(100% + 6px);grid-template-columns:repeat(3,1fr);padding:10px;gap:5px}
+.store-other-icon{width:40px!important;height:40px!important}
+.store-other-close{position:absolute;right:3px;top:1px;width:30px;height:30px;border:0;background:#fff;border-radius:50%;font-size:22px;z-index:2}
+
+.all-category-list{max-height:58vh;overflow:auto}
+
+@media(max-width:520px){
+  .brand img{height:62px}
+  .brand{padding-bottom:6px}
+  .hero{padding:0 12px}
+  .hero-card{height:220px!important;border-radius:21px;padding:20px}
+  .hero-card h2{font-size:23px}
+  .hero-dots{padding:6px}
+  .miniapp-icon{width:31px!important;height:31px!important;flex-basis:31px}
+  .miniapps{gap:2px}
+  .modal{padding:10px}
+  .modal-card{max-height:76vh!important;padding:15px}
+  .detail-photo{max-height:235px!important}
+  .detail-route{min-height:49px}
+  .store-other-popover{position:fixed;left:18px;right:18px;bottom:92px;width:auto;grid-template-columns:repeat(3,1fr)}
+  .store-other-popover:after{display:none}
+}
+
+@media(max-width:390px){
+  .hero-card{height:205px!important}
+  .miniapp-icon{width:28px!important;height:28px!important;flex-basis:28px}
+  .modal-card{max-height:74vh!important}
+  .detail-photo{max-height:210px!important}
+}

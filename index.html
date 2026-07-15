@@ -8,11 +8,12 @@
 <link rel="stylesheet" href="styles-v7.css?v=7" />
 <link rel="stylesheet" href="search-v2.css?v=1" />
 <link rel="stylesheet" href="ui-fixes-v8.css?v=1" />
+<link rel="stylesheet" href="gps-v1.css?v=1" />
 </head>
 <body>
 <div id="app">
 <header class="topbar">
-  <button id="locationBtn" class="location-chip" aria-label="지역 선택">📍 <span id="locationText">여수시 전체</span>⌄</button>
+  <button id="locationBtn" class="location-chip" aria-label="현재 위치에서 가까운 가게 보기">📍 <span id="locationText">여수시 전체</span>⌄</button>
   <div class="top-actions"><button id="noticeBtn" class="icon-btn" aria-label="알림">🔔<b class="badge">2</b></button></div>
 </header>
 <section class="brand"><img src="assets/logo.png" alt="대동여수음식지도"></section>
@@ -58,7 +59,8 @@
 <div id="overlay" class="overlay" hidden></div>
 <div id="modal" class="modal" hidden role="dialog" aria-modal="true"><div class="modal-card"><button class="modal-close" aria-label="닫기">×</button><div id="modalContent"></div></div></div>
 <div id="startupAd" class="startup-ad" hidden><div class="startup-card"><button class="startup-close" aria-label="닫기">×</button><small>대동여수음식지도 안내</small><h2>배달기사·가맹점 모집</h2><p>기사 모집, 가게 모집, 주문앱 가입 권유, 신규 오픈 가게와 소상공인협회 공지를 이곳에서 알립니다.</p><div class="startup-actions"><button id="startupDetails" class="primary-btn">자세히 보기</button><button id="hideToday">오늘 그만 보기</button></div></div></div>
-<script src="app-db790.js?v=8"></script>
+<script src="app-db790.js?v=9"></script>
+<script src="gps-v1.js?v=1"></script>
 <script src="search-v2.js?v=1"></script>
-<div class="build-mark">build DB790-ui8</div>
+<div class="build-mark">build DB790-gps1</div>
 </body></html>

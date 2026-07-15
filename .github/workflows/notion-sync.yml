@@ -34,13 +34,14 @@ jobs:
           NOTION_ROOT_PAGE_ID: ''
         run: node tools/notion-sync-dry-run.mjs
 
-      - name: Run Notion sync and link quality check
+      - name: Run Notion sync, phone enrichment and link quality check
         if: ${{ inputs.apply_changes }}
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_ROOT_PAGE_ID: ''
         run: |
           node tools/notion-sync.mjs
+          node tools/notion-phone-enrich.mjs
           node tools/link-quality.mjs
 
       - name: Create compact summary

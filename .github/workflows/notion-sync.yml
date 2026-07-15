@@ -25,14 +25,12 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Run safe Notion sync preview
         if: ${{ !inputs.apply_changes }}
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          # 연결 권한 자체가 최상위 페이지와 모든 하위 페이지로 제한됩니다.
-          # Notion API의 parent 값은 중첩 페이지에서 최상위 ID가 아니므로 별도 필터를 사용하지 않습니다.
           NOTION_ROOT_PAGE_ID: ''
         run: node tools/notion-sync-dry-run.mjs
 
@@ -45,13 +43,14 @@ jobs:
           node tools/notion-sync.mjs
           node tools/link-quality.mjs
 
-      - name: Show report summary
+      - name: Create compact summary
         if: always()
         run: |
           if [ -f data/notion-sync-report.json ]; then
-            node -e "const r=require('./data/notion-sync-report.json'); console.log({pagesScanned:r.pagesScanned,matchedCount:r.matchedCount,unmatchedCount:r.unmatchedCount,errorCount:r.errorCount});"
+            node tools/summarize-notion-report.mjs
           else
             echo "notion-sync-report.json was not created"
+            exit 1
           fi
 
       - name: Upload preview reports
@@ -59,39 +58,34 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: notion-sync-reports
-          if-no-files-found: warn
+          if-no-files-found: error
           path: |
             data/notion-sync-report.json
+            data/notion-sync-summary.json
             data/link-quality-report.json
 
       - name: Commit reports only
         if: ${{ !inputs.apply_changes }}
         run: |
-          if [ ! -f data/notion-sync-report.json ]; then
-            echo "No report file"
-            exit 1
-          fi
-          if git diff --quiet -- data/notion-sync-report.json && ! git ls-files --error-unmatch data/notion-sync-report.json >/dev/null 2>&1; then
-            echo "New report will be committed"
-          elif git diff --quiet -- data/notion-sync-report.json; then
+          git config user.name "daedong-notion-sync"
+          git config user.email "actions@users.noreply.github.com"
+          git add -f data/notion-sync-report.json data/notion-sync-summary.json
+          if git diff --cached --quiet; then
             echo "No report changes"
             exit 0
           fi
-          git config user.name "daedong-notion-sync"
-          git config user.email "actions@users.noreply.github.com"
-          git add -f data/notion-sync-report.json
-          git commit -m "노션 안전 시험 보고서 갱신"
+          git commit -m "노션 안전 시험 보고서와 요약 갱신"
           git push origin HEAD:fix/load-stores-db790
 
       - name: Commit synchronized data
         if: ${{ inputs.apply_changes }}
         run: |
-          if git diff --quiet -- data/stores.json data/notion-sync-report.json data/link-quality-report.json; then
+          git config user.name "daedong-notion-sync"
+          git config user.email "actions@users.noreply.github.com"
+          git add -f data/stores.json data/notion-sync-report.json data/notion-sync-summary.json data/link-quality-report.json
+          if git diff --cached --quiet; then
             echo "No changes"
             exit 0
           fi
-          git config user.name "daedong-notion-sync"
-          git config user.email "actions@users.noreply.github.com"
-          git add -f data/stores.json data/notion-sync-report.json data/link-quality-report.json
           git commit -m "노션 주문정보 자동 동기화"
           git push origin HEAD:fix/load-stores-db790

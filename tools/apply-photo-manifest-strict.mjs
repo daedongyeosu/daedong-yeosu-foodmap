@@ -6,7 +6,7 @@ const MANIFEST_PATH = process.env.PHOTO_MANIFEST_PATH || 'data/photo-manifest.js
 const REPORT_PATH = process.env.PHOTO_APPLY_REPORT_PATH || 'data/photo-apply-report.json';
 const BACKUP_PATH = process.env.PHOTO_APPLY_BACKUP_PATH || 'data/stores.before-photo-apply.json';
 
-const clean = value => String(value ?? '').trim();
+const clean = value => String(value ?? '').normalize('NFKC').trim();
 const unique = values => [...new Set(values.flat(Infinity).map(clean).filter(Boolean))];
 
 function stripNoise(value) {
@@ -16,6 +16,7 @@ function stripNoise(value) {
     .replace(/\s*(?:[-_–—]\s*)?(?:복사본|사본|copy)(?:\s*\d+)?\s*$/iu, '')
     .replace(/(?:가게|매장)?\s*사진(?:모음|파일)?/gi, ' ')
     .replace(/배달\s*(?:전문점?|전문)/g, ' ')
+    .replace(/공산소/gi, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }
@@ -28,15 +29,25 @@ function normalize(value) {
     .replace(/\s+/g, '');
 }
 
+function titleTokens(value) {
+  return stripNoise(value)
+    .toLowerCase()
+    .replace(/여수시|여수/g, ' ')
+    .replace(/[()（）\[\]{}<>·ㆍ,.!?\'"`~@#$%^&*_+=|\\/:;\-–—]/g, ' ')
+    .split(/\s+/)
+    .map(token => token.trim())
+    .filter(token => token.length >= 2 && !['점','본점','가게','매장','사진','음식'].includes(token));
+}
+
 const LOCATION_ALIASES = [
   ['여서','여서동'], ['문수','문수동'], ['미평','미평동'], ['국동'], ['봉산','봉산동'],
-  ['웅천','웅천동'], ['학동'], ['신기','신기동'], ['무선','선원','화장'], ['죽림'],
+  ['웅천','웅천동'], ['학동'], ['신기','신기동'], ['무선','선원','화장','화장동'], ['죽림'],
   ['돌산'], ['교동'], ['중앙','중앙동'], ['충무','충무동'], ['공화','공화동'],
   ['덕충','덕충동','엑스포'], ['소호','소호동'], ['둔덕','둔덕동'], ['봉계','봉계동'],
   ['율촌'], ['여천'], ['오림','오림동'], ['서교','서교동'], ['광무','광무동'],
   ['고소','고소동'], ['종화','종화동'], ['신월','신월동'], ['월호','월호동'],
   ['안산','안산동'], ['관문','관문동'], ['남산','남산동'], ['연등','연등동'],
-  ['동문','동문동'], ['만흥','만흥동'], ['주삼','주삼동'], ['삼일','삼일동']
+  ['동문','동문동'], ['만흥','만흥동'], ['주삼','주삼동'], ['삼일','삼일동'], ['봉강','봉강동']
 ];
 
 function locationTokens(value) {
@@ -71,43 +82,55 @@ function brandOf(value) {
   return '';
 }
 
-function primaryAliases(store) {
-  return unique([store.name, store.realBusinessName, ...(store.shopInShopNames || [])]);
+// 사진 매칭은 오직 노션에서 가져온 고객 표시 가게명(store.name)만 사용한다.
+// 실제 사업자명, 숍인숍 관계, 관리 가게 목록, 검색용 별칭은 절대 사진 매칭 근거로 쓰지 않는다.
+function displayTitle(store) {
+  return clean(store?.name);
 }
 
 function locationCompatible(folderName, store) {
   const folderLocations = locationTokens(folderName);
-  const storeLocations = locationTokens([store.name, store.realBusinessName, store.district, store.area].join(' '));
-  if (!folderLocations.size) return true;
-  if (!storeLocations.size) return false;
-  return [...folderLocations].some(token => storeLocations.has(token));
+  const titleLocations = locationTokens(displayTitle(store));
+  if (!folderLocations.size || !titleLocations.size) return true;
+  return [...folderLocations].some(token => titleLocations.has(token));
+}
+
+function tokenOverlapScore(leftRaw, rightRaw) {
+  const left = new Set(titleTokens(leftRaw));
+  const right = new Set(titleTokens(rightRaw));
+  if (!left.size || !right.size) return 0;
+  const common = [...left].filter(token => right.has(token)).length;
+  return common / Math.max(left.size, right.size);
 }
 
 function strictNameScore(folderName, store) {
   const folder = normalize(folderName);
-  if (!folder || folder.length < 4) return 0;
-  const folderBrand = brandOf(folderName);
-  const storeBrand = brandOf([store.name, store.realBusinessName].join(' '));
-  if (folderBrand || storeBrand) {
-    if (!folderBrand || !storeBrand || folderBrand !== storeBrand) return 0;
-    if (!locationCompatible(folderName, store)) return 0;
-  }
+  const titleRaw = displayTitle(store);
+  const title = normalize(titleRaw);
+  if (!folder || !title || folder.length < 3 || title.length < 3) return 0;
 
-  let best = 0;
-  for (const aliasRaw of primaryAliases(store)) {
-    const alias = normalize(aliasRaw);
-    if (!alias || alias.length < 4) continue;
-    if (folder === alias) best = Math.max(best, 100);
-    else if (folder.startsWith(alias) || folder.endsWith(alias) || alias.startsWith(folder) || alias.endsWith(folder)) {
-      const ratio = Math.min(folder.length, alias.length) / Math.max(folder.length, alias.length);
-      if (Math.min(folder.length, alias.length) >= 6 && ratio >= 0.68) best = Math.max(best, 90 + ratio * 8);
-    } else if (folder.includes(alias) || alias.includes(folder)) {
-      const ratio = Math.min(folder.length, alias.length) / Math.max(folder.length, alias.length);
-      if (Math.min(folder.length, alias.length) >= 7 && ratio >= 0.78) best = Math.max(best, 88 + ratio * 7);
-    }
+  const folderBrand = brandOf(folderName);
+  const titleBrand = brandOf(titleRaw);
+  if (folderBrand || titleBrand) {
+    if (!folderBrand || !titleBrand || folderBrand !== titleBrand) return 0;
   }
   if (!locationCompatible(folderName, store)) return 0;
-  return Math.round(best * 10) / 10;
+
+  if (folder === title) return 100;
+
+  const shorter = Math.min(folder.length, title.length);
+  const longer = Math.max(folder.length, title.length);
+  const ratio = shorter / Math.max(1, longer);
+  if ((folder.startsWith(title) || folder.endsWith(title) || title.startsWith(folder) || title.endsWith(folder)) && shorter >= 5 && ratio >= 0.64) {
+    return Math.round((90 + ratio * 8) * 10) / 10;
+  }
+  if ((folder.includes(title) || title.includes(folder)) && shorter >= 6 && ratio >= 0.72) {
+    return Math.round((87 + ratio * 8) * 10) / 10;
+  }
+
+  const overlap = tokenOverlapScore(folderName, titleRaw);
+  if (overlap >= 0.66) return Math.round((80 + overlap * 12) * 10) / 10;
+  return 0;
 }
 
 function normalizeImages(folder) {
@@ -133,7 +156,18 @@ async function main() {
   const stores = JSON.parse(await fs.readFile(STORES_PATH, 'utf8'));
   const manifestData = JSON.parse(await fs.readFile(MANIFEST_PATH, 'utf8'));
   const folders = Array.isArray(manifestData) ? manifestData : (manifestData.folders || []);
-  const report = {startedAt: new Date().toISOString(), policy: 'strict-primary-name-and-branch-only', storeCount: stores.length, manifestFolderCount: folders.length, exactMatches: [], brandPools: [], ambiguousFolders: [], unmatchedFolders: [], updatedStores: [], unchangedStores: []};
+  const report = {
+    startedAt: new Date().toISOString(),
+    policy: 'notion-display-title-to-photo-folder-only',
+    storeCount: stores.length,
+    manifestFolderCount: folders.length,
+    exactMatches: [],
+    brandPools: [],
+    ambiguousFolders: [],
+    unmatchedFolders: [],
+    updatedStores: [],
+    unchangedStores: []
+  };
 
   const directByStoreId = new Map();
   const brandPools = new Map();
@@ -144,6 +178,7 @@ async function main() {
     const folderBrand = brandOf(folder.folderName);
     const folderLocations = locationTokens(folder.folderName);
 
+    // 지점명이 없는 순수 프랜차이즈 사진 묶음만 같은 브랜드 지점들에 나눠 쓴다.
     if (folderBrand && !folderLocations.size) {
       brandPools.set(folderBrand, [...(brandPools.get(folderBrand) || []), ...images]);
       continue;
@@ -151,18 +186,24 @@ async function main() {
 
     const ranked = stores
       .map(store => ({store, score: strictNameScore(folder.folderName, store)}))
-      .filter(item => item.score >= 90)
+      .filter(item => item.score >= 84)
       .sort((a,b) => b.score - a.score || clean(a.store.name).localeCompare(clean(b.store.name), 'ko'));
     const best = ranked[0];
     const second = ranked[1];
+
     if (!best) {
-      report.unmatchedFolders.push({folderName: folder.folderName});
+      report.unmatchedFolders.push({folderName: folder.folderName, imageCount: images.length});
       continue;
     }
-    if (second && best.score - second.score < 4) {
-      report.ambiguousFolders.push({folderName: folder.folderName, candidates: ranked.slice(0,3).map(item => ({store: item.store.name, score: item.score}))});
+    if (second && best.score - second.score < 5) {
+      report.ambiguousFolders.push({
+        folderName: folder.folderName,
+        imageCount: images.length,
+        candidates: ranked.slice(0,3).map(item => ({store: item.store.name, score: item.score}))
+      });
       continue;
     }
+
     directByStoreId.set(String(best.store.id), [...(directByStoreId.get(String(best.store.id)) || []), ...images]);
     report.exactMatches.push({folderName: folder.folderName, store: best.store.name, score: best.score, imageCount: images.length});
   }
@@ -170,35 +211,48 @@ async function main() {
   for (const [brand, imagesRaw] of brandPools) {
     const seen = new Set();
     const images = imagesRaw.filter(image => image.card && !seen.has(image.card) && seen.add(image.card)).slice(0,18);
-    const brandStores = stores.filter(store => brandOf([store.name, store.realBusinessName].join(' ')) === brand);
+    const brandStores = stores.filter(store => brandOf(displayTitle(store)) === brand);
     if (!images.length || brandStores.length < 2) continue;
     brandStores.sort((a,b) => clean(a.id || a.name).localeCompare(clean(b.id || b.name), 'ko'));
     brandStores.forEach((store,index) => {
-      store.images = rotate(images, index);
+      if (directByStoreId.has(String(store.id))) return;
+      store.images = rotate(images, index).slice(0, Math.min(6, images.length));
       store.image = store.images[0]?.card || '';
       store.img = store.image;
       store.photoGroup = `brand:${brand}`;
-      store.photoSource = 'strict-shared-franchise-pool';
+      store.photoSource = 'notion-title-brand-pool';
     });
     report.brandPools.push({brand, storeCount: brandStores.length, imageCount: images.length, stores: brandStores.map(store => store.name)});
   }
 
   const pooled = new Set(report.brandPools.map(item => item.brand));
   for (const store of stores) {
-    const storeBrand = brandOf([store.name, store.realBusinessName].join(' '));
-    if (!pooled.has(storeBrand)) {
-      const direct = directByStoreId.get(String(store.id));
-      if (direct?.length) {
-        const seen = new Set();
-        const images = direct.filter(image => image.card && !seen.has(image.card) && seen.add(image.card)).slice(0,6);
-        const offset = stableHash(`${store.id}|${store.name}`) % images.length;
-        store.images = rotate(images, offset);
-        store.image = store.images[0]?.card || '';
-        store.img = store.image;
-        store.photoGroup = `store:${store.id}`;
-        store.photoSource = 'strict-matched-photo-folder';
+    const storeBrand = brandOf(displayTitle(store));
+    const direct = directByStoreId.get(String(store.id));
+    if (direct?.length) {
+      const seen = new Set();
+      const images = direct.filter(image => image.card && !seen.has(image.card) && seen.add(image.card)).slice(0,8);
+      const offset = stableHash(`${store.id}|${store.name}`) % images.length;
+      store.images = rotate(images, offset);
+      store.image = store.images[0]?.card || '';
+      store.img = store.image;
+      store.photoGroup = `store:${store.id}`;
+      store.photoSource = 'notion-title-photo-folder-match';
+    } else if (!pooled.has(storeBrand)) {
+      // 이전 오매칭 사진이 남지 않도록, 이번 규칙에서 매칭되지 않은 자동사진은 제거한다.
+      const autoPhoto = String(store.photoSource || '').includes('photo') || String(store.photoSource || '').includes('match') || String(store.photoGroup || '').startsWith('store:');
+      if (autoPhoto) {
+        delete store.images;
+        delete store.photoPool;
+        delete store.imagePool;
+        delete store.gallery;
+        delete store.photoGroup;
+        delete store.photoSource;
+        store.image = '';
+        store.img = '';
       }
     }
+
     if (Array.isArray(store.images) && store.images.length) report.updatedStores.push({store: store.name, imageCount: store.images.length, photoGroup: store.photoGroup || ''});
     else report.unchangedStores.push(store.name);
   }
@@ -209,12 +263,13 @@ async function main() {
   report.brandPoolCount = report.brandPools.length;
   report.ambiguousFolderCount = report.ambiguousFolders.length;
   report.unmatchedFolderCount = report.unmatchedFolders.length;
+  report.coverageRate = stores.length ? Math.round((report.updatedStoreCount / stores.length) * 1000) / 10 : 0;
 
   await fs.mkdir(path.dirname(REPORT_PATH), {recursive: true});
   await fs.copyFile(STORES_PATH, BACKUP_PATH);
   await fs.writeFile(STORES_PATH, `${JSON.stringify(stores, null, 2)}\n`, 'utf8');
   await fs.writeFile(REPORT_PATH, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
-  console.log(JSON.stringify({stores: stores.length, updatedStores: report.updatedStoreCount, directMatches: report.exactMatchCount, brandPools: report.brandPoolCount, ambiguousFolders: report.ambiguousFolderCount, unmatchedFolders: report.unmatchedFolderCount}, null, 2));
+  console.log(JSON.stringify({stores: stores.length, updatedStores: report.updatedStoreCount, coverageRate: report.coverageRate, directMatches: report.exactMatchCount, brandPools: report.brandPoolCount, ambiguousFolders: report.ambiguousFolderCount, unmatchedFolders: report.unmatchedFolderCount}, null, 2));
 }
 
 main().catch(error => { console.error(error); process.exit(1); });

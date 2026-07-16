@@ -1,14 +1,8 @@
 {
   "phase": "post",
-  "at": "2026-07-16T22:14:57.987Z",
-  "removedUnsafeMatchCount": 118,
+  "at": "2026-07-16T22:44:22.247Z",
+  "removedUnsafeMatchCount": 112,
   "removed": [
-    {
-      "folderName": "1980밀면회관&냉면 여수문수점 공산소",
-      "store": "1980밀면회관&냉면 문수점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
     {
       "folderName": "79대포",
       "store": "79대포 여서점",
@@ -106,12 +100,6 @@
       "removedImageCount": 2
     },
     {
-      "folderName": "닭곰탕 백숙 보약한첩 문수점 정담푸드",
-      "store": "닭곰탕 백숙 보약한첩 문수점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
       "folderName": "닭씨네 닭강정 여수점",
       "store": "닭씨네 닭강정 여수점(문수동)",
       "reason": "name-not-certain",
@@ -144,12 +132,6 @@
     {
       "folderName": "땅스부대찌개",
       "store": "땅스부대찌개 여서점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "떡순이 알찬만두 문수점 떡순이두마리치킨",
-      "store": "떡순이 알찬만두 문수점",
       "reason": "name-not-certain",
       "removedImageCount": 2
     },
@@ -268,18 +250,6 @@
       "removedImageCount": 2
     },
     {
-      "folderName": "왕창 돼지두루치기 여서점 맛집콜",
-      "store": "왕창 돼지두루치기 여서점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "위대한 닭뽀끼&짜파구리 여서점 투키드치킨",
-      "store": "위대한 닭뽀끼&짜파구리 여서점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
       "folderName": "이가네 나주곰탕 왕가네",
       "store": "이가네 나주곰탕&설렁탕 교동점",
       "reason": "name-not-certain",
@@ -342,12 +312,6 @@
     {
       "folderName": "참숯이면돼지 쏘니",
       "store": "참숯이면돼지 문수점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "청송삼계탕&닭칼국수 문수점 정담푸드",
-      "store": "청송삼계탕&닭칼국수 문수점",
       "reason": "name-not-certain",
       "removedImageCount": 2
     },

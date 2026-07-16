@@ -1,15 +1,15 @@
 {
-  "createdAt": "2026-07-16T22:14:57.897Z",
+  "createdAt": "2026-07-16T22:44:22.165Z",
   "rule": "사진은 노션 고객표시 가게명(store.name)과 사진 폴더명만 비교합니다. 사업자명과 숍인숍 관계는 사용하지 않습니다.",
   "summary": {
     "stores": 473,
     "photoFolders": 673,
-    "storesWithPhotos": 307,
-    "coverageRate": 64.9,
-    "automaticMatches": 275,
+    "storesWithPhotos": 319,
+    "coverageRate": 67.4,
+    "automaticMatches": 287,
     "ambiguousFolders": 12,
-    "unmatchedFolders": 363,
-    "storesWithoutPhotos": 166
+    "unmatchedFolders": 351,
+    "storesWithoutPhotos": 154
   },
   "notionActions": [
     {
@@ -1379,16 +1379,6 @@
       "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
     },
     {
-      "folderName": "구운돼지 문수점 영미푸드",
-      "candidates": [
-        {
-          "store": "구운돼지 문수점",
-          "score": 54.5
-        }
-      ],
-      "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
-    },
-    {
       "folderName": "국동 서희국밥",
       "candidates": [
         {
@@ -1404,16 +1394,6 @@
         {
           "store": "국빈 중화요리전문점(여서동)",
           "score": 50
-        }
-      ],
-      "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
-    },
-    {
-      "folderName": "귀한김치찜 국동봉산점 바싹족발",
-      "candidates": [
-        {
-          "store": "귀한김치찜 국동봉산점",
-          "score": 61.5
         }
       ],
       "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
@@ -1473,55 +1453,11 @@
       "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
     },
     {
-      "folderName": "땅스즉석떡볶이 여서점 땅스부대찌개",
-      "candidates": [
-        {
-          "store": "땅스즉석떡볶이 여서점",
-          "score": 63.2
-        },
-        {
-          "store": "땅스부대찌개 여서점",
-          "score": 55.6
-        }
-      ],
-      "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
-    },
-    {
       "folderName": "마라월드",
       "candidates": [
         {
           "store": "마라월드 마라탕&마라상궈 여수문수점",
           "score": 46.2
-        }
-      ],
-      "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
-    },
-    {
-      "folderName": "마포매운쌀떡볶이 문수점 하루끼우동",
-      "candidates": [
-        {
-          "store": "마포매운쌀떡볶이 문수점",
-          "score": 70
-        }
-      ],
-      "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
-    },
-    {
-      "folderName": "막국수파는집 문수본점 돈쌈푸드스토리",
-      "candidates": [
-        {
-          "store": "막국수파는집 문수본점",
-          "score": 60
-        }
-      ],
-      "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
-    },
-    {
-      "folderName": "맛조은 미평점 조은식당",
-      "candidates": [
-        {
-          "store": "맛조은 미평점",
-          "score": 50
         }
       ],
       "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
@@ -1631,16 +1567,6 @@
       "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
     },
     {
-      "folderName": "뿅가야채곱창 문수점 딜리버리&테이크아웃",
-      "candidates": [
-        {
-          "store": "뿅가야채곱창 문수점",
-          "score": 50
-        }
-      ],
-      "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
-    },
-    {
       "folderName": "삼첩분식",
       "candidates": [
         {
@@ -1666,16 +1592,6 @@
         {
           "store": "속초냉면&직화제육 교동점",
           "score": 50
-        }
-      ],
-      "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
-    },
-    {
-      "folderName": "손수끓인육개장 문수점 정담푸드",
-      "candidates": [
-        {
-          "store": "손수끓인육개장 문수점",
-          "score": 70.6
         }
       ],
       "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
@@ -1726,16 +1642,6 @@
         {
           "store": "신전떡볶이 문수점",
           "score": 50
-        }
-      ],
-      "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
-    },
-    {
-      "folderName": "이라이타코야끼&카페1리터 여문점 떡순이두마리치킨,호아커피앤디저트",
-      "candidates": [
-        {
-          "store": "이라이타코야끼&카페1리터 여문점",
-          "score": 60.5
         }
       ],
       "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
@@ -1991,16 +1897,6 @@
       "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
     },
     {
-      "folderName": "파파핫도그 여서점 카페,라떼",
-      "candidates": [
-        {
-          "store": "파파핫도그 여서점",
-          "score": 61.5
-        }
-      ],
-      "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
-    },
-    {
       "folderName": "피자 프렌드",
       "candidates": [
         {
@@ -2022,26 +1918,6 @@
         {
           "store": "굽네치킨&피자 여서점",
           "score": 50
-        }
-      ],
-      "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
-    },
-    {
-      "folderName": "피피마켓 종화동점 흐뭇",
-      "candidates": [
-        {
-          "store": "피피마켓 종화동점",
-          "score": 66.7
-        }
-      ],
-      "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
-    },
-    {
-      "folderName": "하루빙수 여서점 카페,라떼",
-      "candidates": [
-        {
-          "store": "하루빙수 여서점",
-          "score": 54.5
         }
       ],
       "instruction": "후보가 같은 가게라면 photo-match-overrides.json에 연결을 저장하고, 아니면 노션 표시 가게명 또는 사진 폴더명을 확인하세요."
@@ -2317,7 +2193,6 @@
     "교촌치킨 여서점",
     "교촌치킨 웅천점",
     "교촌치킨 죽림무선점",
-    "구운돼지 문수점",
     "국빈 중화요리전문점(여서동)",
     "국수나무 여수엑스포점",
     "굽네치킨&피자 관문점",
@@ -2328,7 +2203,6 @@
     "굽네치킨&피자 여천점(신기동)",
     "굽네치킨&피자 웅천점",
     "굽네치킨&피자 죽림점",
-    "귀한김치찜 국동봉산점",
     "기영이숯불두마리치킨 여천점(안산동)",
     "김밥나라 관문점",
     "김종구식 맛치킨 전기바베큐 옛날통닭 학동점",
@@ -2350,12 +2224,9 @@
     "닥엔돈스 쪽갈비 여천점(신기동)",
     "던킨 여수롯데마트점",
     "도미노피자 여천점(학동)",
-    "땅스즉석떡볶이 여서점",
     "뚜레쥬르 여수돌산점",
     "뚜레쥬르 여수엑스포타운점",
     "마라월드 마라탕&마라상궈 여수문수점",
-    "마포매운쌀떡볶이 문수점",
-    "막국수파는집 문수본점",
     "맘스터치 무선점",
     "맘스터치 여천 학동점",
     "맘스터치 웅천점",
@@ -2393,7 +2264,6 @@
     "비비큐 여수학동점",
     "서희국밥&족발 국동본점",
     "속초냉면&직화제육 교동점",
-    "손수끓인육개장 문수점",
     "스텔라떡볶이 웅천점",
     "시장불닭발 문수점",
     "쌀쌀맞은닭 여천점(신기동)",
@@ -2411,7 +2281,6 @@
     "여수족발 엑스포점",
     "여수족발(신기동)",
     "오꾸닭 학동점",
-    "이라이타코야끼&카페1리터 여문점",
     "임꺽정 갈비탕 봉산점",
     "전골의법칙 얼큰한곱창전골 문수점",
     "제목 없음",
@@ -2439,10 +2308,7 @@
     "파리바게뜨 여수국동점",
     "파리바게뜨 여수엑스포점",
     "파리바게뜨 여수중앙점",
-    "파파핫도그 여서점",
     "피자알볼로 여수엑스포점(수정동)",
-    "피피마켓 종화동점",
-    "하루빙수 여서점",
     "한국식중화요리 미몽 여서점",
     "호(HO)분식 미평점",
     "이화수 전통 육개장",
@@ -2452,8 +2318,6 @@
     "모두의 죽 교동점(영업시간06시~02시까지)",
     "맘스터치 엑스포점",
     "맘스터치 중앙점",
-    "맛조은 미평점",
-    "뿅가야채곱창 문수점",
     "대동여수음식지도 신규가게 등록함"
   ],
   "overrideExample": {

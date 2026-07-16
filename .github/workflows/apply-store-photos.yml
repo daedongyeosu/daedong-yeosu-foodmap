@@ -7,9 +7,10 @@ on:
     paths:
       - 'assets/store-photos/**'
       - 'data/photo-manifest.json'
+      - 'data/photo-match-overrides.json'
       - 'tools/filter-menu-photos.py'
       - 'tools/filter-food-only-v2.py'
-      - 'tools/apply-photo-manifest-smart.mjs'
+      - 'tools/apply-photo-manifest-strict.mjs'
       - 'tools/photo-match-safety.mjs'
       - '.github/workflows/apply-store-photos.yml'
   workflow_dispatch:
@@ -55,9 +56,10 @@ jobs:
         run: |
           test -f data/photo-manifest.json || { echo "data/photo-manifest.json이 없습니다."; exit 1; }
           test -d assets/store-photos || { echo "assets/store-photos 폴더가 없습니다."; exit 1; }
+          test -f data/photo-match-overrides.json || { echo "data/photo-match-overrides.json이 없습니다."; exit 1; }
           git cat-file -e 0bdd7d6a2e12a685c247323cc2f47aba4f0751f3:data/photo-manifest.json
 
-      - name: Restore safe food photos and smart-match stores
+      - name: Restore safe food photos and match Notion display names
         env:
           APPLY_CHANGES: 'true'
           PHOTO_SOURCE_COMMIT: 0bdd7d6a2e12a685c247323cc2f47aba4f0751f3
@@ -69,7 +71,7 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
 
           for attempt in 1 2 3 4 5; do
-            echo "음식사진 스마트 재매칭 시도 ${attempt}/5"
+            echo "노션 가게명 기준 사진 재매칭 시도 ${attempt}/5"
             git fetch origin fix/load-stores-db790
             git reset --hard origin/fix/load-stores-db790
 
@@ -80,20 +82,20 @@ jobs:
 
             PHOTO_SAFETY_PHASE=pre node tools/photo-match-safety.mjs
             python tools/filter-food-only-v2.py
-            node tools/apply-photo-manifest-smart.mjs
+            node tools/apply-photo-manifest-strict.mjs
             PHOTO_SAFETY_PHASE=post node tools/photo-match-safety.mjs
 
-            git add -A assets/store-photos data/photo-manifest.json data/stores.json data/photo-apply-report.json data/photo-filter-report.json data/photo-match-safety-report.json data/photo-match-review.json data/stores.before-photo-apply.json
+            git add -A assets/store-photos data/photo-manifest.json data/stores.json data/photo-apply-report.json data/photo-filter-report.json data/photo-match-safety-report.json data/photo-match-action-report.json data/photo-match-overrides.json data/stores.before-photo-apply.json
 
             if git diff --cached --quiet; then
               echo "사진 데이터 변경 없음"
               exit 0
             fi
 
-            git commit -m "안전 음식사진 복구와 스마트 가게 재매칭"
+            git commit -m "노션 표시 가게명 기준 사진 재매칭과 검토목록 갱신"
             git fetch origin fix/load-stores-db790
             if git rebase origin/fix/load-stores-db790 && git push origin HEAD:fix/load-stores-db790; then
-              echo "스마트 사진 재매칭 반영 완료"
+              echo "사진 재매칭과 검토목록 반영 완료"
               exit 0
             fi
 
@@ -104,3 +106,16 @@ jobs:
 
           echo "다섯 번 재시도했지만 사진 데이터를 저장하지 못했습니다."
           exit 1
+
+      - name: Upload photo matching review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: photo-matching-review
+          path: |
+            data/photo-apply-report.json
+            data/photo-match-action-report.json
+            data/photo-filter-report.json
+            data/photo-match-safety-report.json
+          if-no-files-found: warn
+          retention-days: 14

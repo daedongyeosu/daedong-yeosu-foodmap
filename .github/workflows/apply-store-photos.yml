@@ -12,6 +12,7 @@ on:
       - 'tools/filter-food-only-v2.py'
       - 'tools/photo-prefix-overrides.mjs'
       - 'tools/apply-photo-manifest-strict.mjs'
+      - 'tools/photo-coverage-report.mjs'
       - 'tools/photo-match-safety.mjs'
       - '.github/workflows/apply-store-photos.yml'
   workflow_dispatch:
@@ -86,16 +87,17 @@ jobs:
             python tools/filter-food-only-v2.py
             node tools/photo-prefix-overrides.mjs
             node tools/apply-photo-manifest-strict.mjs
+            node tools/photo-coverage-report.mjs
             PHOTO_SAFETY_PHASE=post node tools/photo-match-safety.mjs
 
-            git add -A assets/store-photos data/photo-manifest.json data/stores.json data/photo-apply-report.json data/photo-filter-report.json data/photo-match-safety-report.json data/photo-match-action-report.json data/photo-prefix-match-report.json data/photo-match-overrides.json data/stores.before-photo-apply.json
+            git add -A assets/store-photos data/photo-manifest.json data/stores.json data/photo-apply-report.json data/photo-filter-report.json data/photo-match-safety-report.json data/photo-match-action-report.json data/photo-prefix-match-report.json data/photo-coverage-resolution.json data/photo-match-overrides.json data/stores.before-photo-apply.json
 
             if git diff --cached --quiet; then
               echo "사진 데이터 변경 없음"
               exit 0
             fi
 
-            git commit -m "앞부분 가게명 기준 사진 재매칭과 검토목록 갱신"
+            git commit -m "앞부분 가게명 기준 사진 재매칭과 미매칭 원인 분류"
             if git push origin HEAD:fix/load-stores-db790; then
               echo "사진 재매칭과 검토목록 반영 완료"
               exit 0
@@ -117,6 +119,7 @@ jobs:
             data/photo-apply-report.json
             data/photo-match-action-report.json
             data/photo-prefix-match-report.json
+            data/photo-coverage-resolution.json
             data/photo-filter-report.json
             data/photo-match-safety-report.json
           if-no-files-found: warn

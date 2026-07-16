@@ -122,7 +122,7 @@
       <span class="community-order-kicker">💚 여수에 힘이 되는 주문</span>
       <h2>오늘의 한 끼,<br>여수에 남는 주문으로</h2>
       <p class="community-order-lead">같은 음식을 주문해도 어떤 방법으로 주문하느냐에 따라 가게가 부담하는 비용은 달라질 수 있습니다.</p>
-      <p class="community-order-emphasis">가능하다면 가게바로주문 · 먹깨비 · 땡겨요 · 브랜드앱 · 전화주문을 먼저 살펴봐 주세요.</p>
+      <p class="community-order-emphasis">가능하다면 가게바로주문 · 먹깨비 · 땡겨요 · 온동네 · 브랜드앱 · 전화주문을 먼저 살펴봐 주세요.</p>
       <p class="community-order-lead">고객님의 한 번의 선택이 여수의 가게와 일자리, 우리 동네 경제에 힘이 됩니다.</p>
       <div class="community-order-actions"><button class="community-order-primary" data-community-scroll>여수에 남는 주문 보기</button><button class="community-order-secondary" data-community-close>모든 주문방법 보기</button></div>
       <p class="community-order-note">주문방법은 자유롭게 선택하실 수 있습니다. 대동여수음식지도는 가게 부담이 적은 주문방법을 먼저 안내합니다.</p>

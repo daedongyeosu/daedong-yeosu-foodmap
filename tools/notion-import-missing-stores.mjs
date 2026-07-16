@@ -6,6 +6,9 @@ const DB_PATH = process.env.STORES_PATH || 'data/stores.json';
 const REPORT_PATH = process.env.NOTION_IMPORT_REPORT_PATH || 'data/notion-import-missing-report.json';
 const API = 'https://api.notion.com/v1';
 const NOTION_VERSION = '2022-06-28';
+const APPLY_CHANGES = /^(1|true|yes)$/i.test(String(process.env.APPLY_CHANGES || 'false'));
+const DIAGNOSTIC_KEYWORDS = String(process.env.DIAGNOSTIC_KEYWORDS || '오워래,해인이네,수라상궁,바로탕수,바오탕수')
+  .split(',').map(value => value.trim()).filter(Boolean);
 
 if (!TOKEN) throw new Error('NOTION_TOKEN 환경변수가 필요합니다.');
 
@@ -32,7 +35,9 @@ async function notion(endpoint, options = {}) {
       await sleep(700 * (attempt + 1));
       continue;
     }
-    throw new Error(`${endpoint} 실패: ${response.status} ${await response.text()}`);
+    const error = new Error(`${endpoint} 실패: ${response.status} ${await response.text()}`);
+    error.status = response.status;
+    throw error;
   }
   throw new Error(`${endpoint} 재시도 초과`);
 }
@@ -74,9 +79,11 @@ async function childBlocks(blockId) {
 
 async function flattenPage(pageId) {
   const lines = [];
+  let blockCount = 0;
   async function walk(parentId, depth = 0) {
     if (depth > 6) return;
     for (const block of await childBlocks(parentId)) {
+      blockCount += 1;
       const value = block?.[block.type];
       const richText = Array.isArray(value?.rich_text) ? value.rich_text : [];
       const plain = richText.map(item => item.plain_text || '').join(' ').trim();
@@ -89,7 +96,7 @@ async function flattenPage(pageId) {
     }
   }
   await walk(pageId);
-  return lines;
+  return {lines, blockCount};
 }
 
 function classify(label, url, context = '') {
@@ -110,15 +117,17 @@ function classify(label, url, context = '') {
 
 function extractRoutes(lines) {
   const routes = new Map();
+  let rawLinkCount = 0;
   for (const line of lines) {
     for (const link of line.links) {
+      rawLinkCount += 1;
       const result = classify(link.label, link.url, line.plain);
       if (!result) continue;
       const [key, name] = result;
       if (!routes.has(key)) routes.set(key, {name, url: link.url, enabled: true, source: 'notion'});
     }
   }
-  return [...routes.values()];
+  return {routes: [...routes.values()], rawLinkCount};
 }
 
 function existingKeys(store) {
@@ -138,68 +147,127 @@ function makeId(pageId) {
   return crypto.createHash('sha1').update(pageId).digest('hex').slice(0, 16);
 }
 
+function keywordMatches(title) {
+  const normalizedTitle = norm(title);
+  return DIAGNOSTIC_KEYWORDS.filter(keyword => normalizedTitle.includes(norm(keyword)) || norm(keyword).includes(normalizedTitle));
+}
+
 async function main() {
   const stores = JSON.parse(await fs.readFile(DB_PATH, 'utf8'));
   const known = new Set(stores.flatMap(existingKeys));
   const pages = await searchPages();
-  const report = {startedAt: new Date().toISOString(), pagesScanned: pages.length, added: [], skipped: [], errors: []};
+  const report = {
+    startedAt: new Date().toISOString(),
+    mode: APPLY_CHANGES ? 'apply' : 'diagnostic-only',
+    explanation: '이 보고서에 제목이 전혀 나타나지 않는 페이지는 현재 Notion API 연결이 발견하지 못한 페이지일 가능성이 큽니다.',
+    diagnosticKeywords: DIAGNOSTIC_KEYWORDS,
+    pagesVisibleToIntegration: pages.length,
+    added: [], existing: [], skipped: [], errors: [], pageDiagnostics: [], targetDiagnostics: []
+  };
+
+  const visibleTitles = pages.map(page => titleFromPage(page)).filter(Boolean);
+  for (const keyword of DIAGNOSTIC_KEYWORDS) {
+    const matches = visibleTitles.filter(title => norm(title).includes(norm(keyword)) || norm(keyword).includes(norm(title)));
+    report.targetDiagnostics.push({
+      keyword,
+      visibleToIntegration: matches.length > 0,
+      matchedTitles: matches,
+      conclusion: matches.length ? 'API 검색에서 발견됨. 아래 pageDiagnostics에서 처리 결과 확인.' : 'API 검색에서 발견되지 않음. 해당 페이지 또는 상위 페이지의 연결 권한을 확인해야 함.'
+    });
+  }
 
   for (const page of pages) {
     const title = titleFromPage(page);
     const key = norm(title);
-    if (!looksLikeStoreTitle(title) || !key || known.has(key)) continue;
+    const diagnostic = {
+      title,
+      pageId: page.id,
+      pageUrl: page.url,
+      keywordMatches: keywordMatches(title),
+      titleAccepted: false,
+      existingInStores: false,
+      bodyReadable: false,
+      blockCount: 0,
+      rawLinkCount: 0,
+      routes: [],
+      result: '',
+      reason: ''
+    };
+
+    if (!looksLikeStoreTitle(title) || !key) {
+      diagnostic.result = 'excluded';
+      diagnostic.reason = '가게 제목 규칙에 맞지 않음';
+      if (diagnostic.keywordMatches.length) report.pageDiagnostics.push(diagnostic);
+      continue;
+    }
+    diagnostic.titleAccepted = true;
+
+    if (known.has(key)) {
+      diagnostic.existingInStores = true;
+      diagnostic.result = 'existing';
+      diagnostic.reason = '이미 stores.json에 존재';
+      report.existing.push({title, pageId: page.id});
+      if (diagnostic.keywordMatches.length) report.pageDiagnostics.push(diagnostic);
+      continue;
+    }
+
     try {
-      const lines = await flattenPage(page.id);
-      const routes = extractRoutes(lines);
-      const orderKeys = routes.map(route => classify(route.name, route.url)?.[0]).filter(Boolean);
+      const flattened = await flattenPage(page.id);
+      diagnostic.bodyReadable = true;
+      diagnostic.blockCount = flattened.blockCount;
+      const extracted = extractRoutes(flattened.lines);
+      diagnostic.rawLinkCount = extracted.rawLinkCount;
+      diagnostic.routes = extracted.routes.map(route => route.name);
+      const orderKeys = extracted.routes.map(route => classify(route.name, route.url)?.[0]).filter(Boolean);
       const hasOrderSignal = orderKeys.some(routeKey => ['direct','brand','mukkebi','ddangyo','yogiyo','coupang','baemin'].includes(routeKey));
+
       if (!hasOrderSignal) {
-        report.skipped.push({title, reason: '주문 링크 없음'});
+        diagnostic.result = 'skipped';
+        diagnostic.reason = `주문 링크 없음(전체 링크 ${diagnostic.rawLinkCount}개, 분류 경로 ${diagnostic.routes.length}개)`;
+        report.skipped.push({title, pageId: page.id, reason: diagnostic.reason, routes: diagnostic.routes});
+        report.pageDiagnostics.push(diagnostic);
         continue;
       }
+
       const searchTerms = [...new Set([title, title.replace(/\s+/g, ''), ...title.split(/\s+/).filter(word => word.length >= 2)])];
       const store = {
-        id: makeId(page.id),
-        name: title,
-        realBusinessName: title,
-        shopInShopNames: [],
-        district: '여수',
-        category: '음식점',
-        address: '',
-        phone: '',
-        naverMap: '',
-        image: '',
-        routes,
-        events: [],
-        managed: false,
-        sharedManaged: false,
-        managementStatus: 'unconfirmed',
-        pinPosition: null,
-        forceBottom: false,
-        searchTerms,
-        categories: ['음식점'],
-        notionPageId: page.id,
-        notionUrl: page.url,
-        notionSyncedAt: new Date().toISOString(),
-        importedFromNotion: true
+        id: makeId(page.id), name: title, realBusinessName: title, shopInShopNames: [],
+        district: '여수', category: '음식점', address: '', phone: '', naverMap: '', image: '',
+        routes: extracted.routes, events: [], managed: false, sharedManaged: false,
+        managementStatus: 'unconfirmed', pinPosition: null, forceBottom: false,
+        searchTerms, categories: ['음식점'], notionPageId: page.id, notionUrl: page.url,
+        notionSyncedAt: new Date().toISOString(), importedFromNotion: true
       };
       stores.push(store);
       known.add(key);
-      report.added.push({title, routes: orderKeys});
+      diagnostic.result = APPLY_CHANGES ? 'added' : 'would-add';
+      diagnostic.reason = `주문 경로 ${orderKeys.length}개 발견`;
+      report.added.push({title, pageId: page.id, result: diagnostic.result, routes: orderKeys});
+      report.pageDiagnostics.push(diagnostic);
       await sleep(120);
     } catch (error) {
-      report.errors.push({title, error: error.message});
+      diagnostic.result = 'error';
+      diagnostic.reason = error.message;
+      report.errors.push({title, pageId: page.id, status: error.status || null, error: error.message});
+      report.pageDiagnostics.push(diagnostic);
     }
   }
 
-  await fs.writeFile(DB_PATH, `${JSON.stringify(stores, null, 2)}\n`, 'utf8');
+  if (APPLY_CHANGES) {
+    await fs.writeFile(DB_PATH, `${JSON.stringify(stores, null, 2)}\n`, 'utf8');
+  }
   report.finishedAt = new Date().toISOString();
   report.addedCount = report.added.length;
+  report.existingCount = report.existing.length;
   report.skippedCount = report.skipped.length;
   report.errorCount = report.errors.length;
-  report.totalStores = stores.length;
+  report.totalStoresAfterRun = stores.length;
   await fs.writeFile(REPORT_PATH, `${JSON.stringify(report, null, 2)}\n`, 'utf8');
-  console.log(`노션 누락 가게 추가 완료: 신규 ${report.addedCount}, 전체 ${report.totalStores}, 오류 ${report.errorCount}`);
+
+  console.log(`노션 정밀 진단 완료: API 노출 ${pages.length}, ${APPLY_CHANGES ? '신규 추가' : '추가 예정'} ${report.addedCount}, 제외 ${report.skippedCount}, 오류 ${report.errorCount}`);
+  for (const target of report.targetDiagnostics) {
+    console.log(`[진단] ${target.keyword}: ${target.conclusion} ${target.matchedTitles.join(', ')}`);
+  }
 }
 
 main().catch(error => {

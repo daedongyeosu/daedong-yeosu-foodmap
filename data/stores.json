@@ -6012,6 +6012,7 @@
       "dd9b79599b4764b9",
       "8d22aa94b4396bff"
     ],
+    "img": "assets/store-photos/e9a5c21867284b/02.webp",
     "images": [
       {
         "card": "assets/store-photos/e9a5c21867284b/02.webp",
@@ -6022,7 +6023,6 @@
         "detail": "assets/store-photos/e9a5c21867284b/01.webp"
       }
     ],
-    "img": "assets/store-photos/e9a5c21867284b/02.webp",
     "photoGroup": "store:aed649ea91b727b8",
     "photoSource": "notion-title-photo-folder-match"
   },
@@ -19564,6 +19564,7 @@
     "deduplicatedFrom": [
       "7203656eda530ef1"
     ],
+    "img": "assets/store-photos/db3ad730b6c75e/01.webp",
     "images": [
       {
         "card": "assets/store-photos/db3ad730b6c75e/01.webp",
@@ -19574,7 +19575,6 @@
         "detail": "assets/store-photos/db3ad730b6c75e/02.webp"
       }
     ],
-    "img": "assets/store-photos/db3ad730b6c75e/01.webp",
     "photoGroup": "store:779bc5453215d9c5",
     "photoSource": "notion-title-photo-folder-match"
   },
@@ -33279,6 +33279,7 @@
     "deduplicatedFrom": [
       "e54434c678abbc69"
     ],
+    "img": "assets/store-photos/c02535dafa223d/01.webp",
     "images": [
       {
         "card": "assets/store-photos/c02535dafa223d/01.webp",
@@ -33289,7 +33290,6 @@
         "detail": "assets/store-photos/c02535dafa223d/02.webp"
       }
     ],
-    "img": "assets/store-photos/c02535dafa223d/01.webp",
     "photoGroup": "store:83f635e7ea7d737e",
     "photoSource": "notion-title-photo-folder-match"
   },
@@ -34528,6 +34528,7 @@
       "2dba72a48d263250",
       "bbedd612e3b2a284"
     ],
+    "img": "assets/store-photos/76833e0d1db62a/01.webp",
     "images": [
       {
         "card": "assets/store-photos/76833e0d1db62a/01.webp",
@@ -34538,7 +34539,6 @@
         "detail": "assets/store-photos/76833e0d1db62a/02.webp"
       }
     ],
-    "img": "assets/store-photos/76833e0d1db62a/01.webp",
     "photoGroup": "store:bf15349639417d6b",
     "photoSource": "notion-title-photo-folder-match"
   },

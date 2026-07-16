@@ -5516,7 +5516,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/27d8332b2b39.jpg",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -5575,7 +5575,8 @@
     "deduplicatedFrom": [
       "dd9b79599b4764b9",
       "8d22aa94b4396bff"
-    ]
+    ],
+    "img": "assets/store1.jpg"
   },
   {
     "id": "c0bab6826b36d95f",
@@ -18104,7 +18105,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/2009c5be6cf4.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -18182,7 +18183,8 @@
     "deduplicatedAt": "2026-07-16T22:43:30.554Z",
     "deduplicatedFrom": [
       "7203656eda530ef1"
-    ]
+    ],
+    "img": "assets/store1.jpg"
   },
   {
     "id": "11e1973f448ef7a6",
@@ -30708,7 +30710,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/ba372763f731.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -30792,7 +30794,8 @@
     "deduplicatedAt": "2026-07-16T22:43:30.563Z",
     "deduplicatedFrom": [
       "e54434c678abbc69"
-    ]
+    ],
+    "img": "assets/store1.jpg"
   },
   {
     "id": "6b13f2db6e79b4eb",
@@ -31769,7 +31772,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/ac898e0b0652.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -31856,7 +31859,8 @@
     "deduplicatedFrom": [
       "2dba72a48d263250",
       "bbedd612e3b2a284"
-    ]
+    ],
+    "img": "assets/store1.jpg"
   },
   {
     "id": "7af7ffc2da561850",

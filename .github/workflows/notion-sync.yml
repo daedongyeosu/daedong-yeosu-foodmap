@@ -8,6 +8,12 @@ on:
         required: true
         default: false
         type: boolean
+  push:
+    branches:
+      - fix/load-stores-db790
+    paths:
+      - 'tools/notion-import-missing-stores.mjs'
+      - '.github/workflows/notion-sync.yml'
 
 permissions:
   contents: write
@@ -36,24 +42,31 @@ jobs:
           fi
 
       - name: Preview Notion sync safely
-        if: ${{ inputs.apply_changes == false }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_changes == false }}
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
         run: node tools/notion-sync-dry-run.mjs
 
       - name: Apply Notion sync
-        if: ${{ inputs.apply_changes == true }}
+        if: ${{ github.event_name == 'push' || inputs.apply_changes == true }}
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
         run: node tools/notion-sync.mjs
 
+      - name: Import missing Notion stores
+        if: ${{ github.event_name == 'push' || inputs.apply_changes == true }}
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
+        run: node tools/notion-import-missing-stores.mjs
+
       - name: Check order-link quality
         run: node tools/link-quality.mjs
 
       - name: Commit reports only
-        if: ${{ inputs.apply_changes == false }}
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_changes == false }}
         run: |
           git config user.name "daedong-notion-sync"
           git config user.email "actions@users.noreply.github.com"
@@ -66,14 +79,14 @@ jobs:
           git push
 
       - name: Commit applied data and reports
-        if: ${{ inputs.apply_changes == true }}
+        if: ${{ github.event_name == 'push' || inputs.apply_changes == true }}
         run: |
           git config user.name "daedong-notion-sync"
           git config user.email "actions@users.noreply.github.com"
-          git add data/stores.json data/notion-sync-report.json data/link-quality-report.json
+          git add data/stores.json data/notion-sync-report.json data/notion-import-missing-report.json data/link-quality-report.json
           if git diff --cached --quiet; then
             echo "No changes"
             exit 0
           fi
-          git commit -m "노션 주문링크 자동 동기화"
+          git commit -m "노션 누락 가게와 주문링크 자동 동기화"
           git push

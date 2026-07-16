@@ -1,8 +1,8 @@
 {
-  "startedAt": "2026-07-16T18:11:27.054Z",
+  "startedAt": "2026-07-16T18:40:41.554Z",
   "mode": "apply",
   "storeCount": 622,
-  "manifestFolderCount": 692,
+  "manifestFolderCount": 685,
   "exactMatches": [
     {
       "folderName": "1980밀면회관&냉면 여수문수점 공산소",
@@ -3182,10 +3182,6 @@
       "best": null
     },
     {
-      "folderName": "CHATGPT대화사진",
-      "best": null
-    },
-    {
       "folderName": "Café purplemint 오림점 바이킹오토바이",
       "best": null
     },
@@ -3195,10 +3191,6 @@
         "store": "RIB&TABLE 바베큐립 전문점(미평동)",
         "score": 86.6
       }
-    },
-    {
-      "folderName": "가게별 QR게이트 화면",
-      "best": null
     },
     {
       "folderName": "고기밥상 문수점",
@@ -3628,10 +3620,6 @@
       "best": null
     },
     {
-      "folderName": "소상공인연합회 여수가게홍보",
-      "best": null
-    },
-    {
       "folderName": "수라상조선국밥",
       "best": null
     },
@@ -3721,10 +3709,6 @@
       }
     },
     {
-      "folderName": "엑셀 명함사진 셋팅",
-      "best": null
-    },
-    {
       "folderName": "여서 향미진짬뽕",
       "best": null
     },
@@ -3741,10 +3725,6 @@
     },
     {
       "folderName": "여수숯불창고",
-      "best": null
-    },
-    {
-      "folderName": "여천 외계인피자",
       "best": null
     },
     {
@@ -4280,13 +4260,6 @@
       }
     },
     {
-      "folderName": "피자나라치킨공주 여서점",
-      "best": {
-        "store": "조선제일 감자탕&뼈해장국 여서점 (1)",
-        "score": 86.8
-      }
-    },
-    {
       "folderName": "하나옛날통닭",
       "best": null
     },
@@ -4326,10 +4299,6 @@
         "store": "걸작떡볶이치킨 여수중앙점",
         "score": 87.7
       }
-    },
-    {
-      "folderName": "형님 인터넷광고",
-      "best": null
     },
     {
       "folderName": "호식이두마리치킨 국동점",
@@ -6846,10 +6815,10 @@
     "모두의 죽 교동점(영업시간06시~02시까지)",
     "배가네왕족보 여문본점"
   ],
-  "finishedAt": "2026-07-16T18:12:13.790Z",
+  "finishedAt": "2026-07-16T18:41:28.436Z",
   "updatedStoreCount": 347,
   "exactMatchCount": 185,
   "brandPoolCount": 48,
   "ambiguousFolderCount": 99,
-  "unmatchedFolderCount": 367
+  "unmatchedFolderCount": 360
 }

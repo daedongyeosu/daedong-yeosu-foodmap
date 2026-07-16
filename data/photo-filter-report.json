@@ -1,0 +1,252 @@
+{
+  "folderCountBefore": 692,
+  "folderCountAfter": 685,
+  "imageCountAfter": 1560,
+  "blockedImageCount": 16,
+  "cleanedStoreCount": 6,
+  "blocked": [
+    {
+      "folderName": "CHATGPT대화사진",
+      "src": "assets/store-photos/b1a44d29932600/01.webp",
+      "reason": "non-store-screen-folder",
+      "width": 800,
+      "height": 640,
+      "ratio": 1.25,
+      "whiteRatio": 0.0,
+      "grayTextRatio": 0.7618719362745098,
+      "colorRatio": 0.0022212009803921568,
+      "edgeRatio": 0.03523684413878371,
+      "score": 3
+    },
+    {
+      "folderName": "CHATGPT대화사진",
+      "src": "assets/store-photos/b1a44d29932600/02.webp",
+      "reason": "non-store-screen-folder",
+      "width": 800,
+      "height": 640,
+      "ratio": 1.25,
+      "whiteRatio": 0.0,
+      "grayTextRatio": 0.36833639705882354,
+      "colorRatio": 0.006510416666666667,
+      "edgeRatio": 0.03322772583262499,
+      "score": 3
+    },
+    {
+      "folderName": "CHATGPT대화사진",
+      "reason": "folder-dropped-all-images",
+      "count": 2
+    },
+    {
+      "folderName": "가게별 QR게이트 화면",
+      "src": "assets/store-photos/c7618630349b92/01.webp",
+      "reason": "non-store-screen-folder",
+      "width": 800,
+      "height": 640,
+      "ratio": 1.25,
+      "whiteRatio": 0.0,
+      "grayTextRatio": 0.47579656862745096,
+      "colorRatio": 0.061887254901960786,
+      "edgeRatio": 0.11799706359632177,
+      "score": 5
+    },
+    {
+      "folderName": "가게별 QR게이트 화면",
+      "src": "assets/store-photos/c7618630349b92/02.webp",
+      "reason": "non-store-screen-folder",
+      "width": 720,
+      "height": 576,
+      "ratio": 1.25,
+      "whiteRatio": 0.0,
+      "grayTextRatio": 0.1756280637254902,
+      "colorRatio": 0.0430453431372549,
+      "edgeRatio": 0.10003090951240244,
+      "score": 4
+    },
+    {
+      "folderName": "가게별 QR게이트 화면",
+      "reason": "folder-dropped-all-images",
+      "count": 2
+    },
+    {
+      "folderName": "동영상제작",
+      "src": "assets/store-photos/e4a3aa6f530881/02.webp",
+      "reason": "menu-or-price-screen-likely",
+      "width": 800,
+      "height": 640,
+      "ratio": 1.25,
+      "whiteRatio": 0.4482230392156863,
+      "grayTextRatio": 0.12982536764705882,
+      "colorRatio": 0.07988664215686274,
+      "edgeRatio": 0.19221853025268526,
+      "score": 8
+    },
+    {
+      "folderName": "소상공인연합회 여수가게홍보",
+      "src": "assets/store-photos/a768564e88392d/01.webp",
+      "reason": "menu-or-price-screen-likely",
+      "width": 800,
+      "height": 640,
+      "ratio": 1.25,
+      "whiteRatio": 0.47671568627450983,
+      "grayTextRatio": 0.2035845588235294,
+      "colorRatio": 0.15004595588235295,
+      "edgeRatio": 0.2678695618576617,
+      "score": 9
+    },
+    {
+      "folderName": "소상공인연합회 여수가게홍보",
+      "reason": "folder-dropped-all-images",
+      "count": 1
+    },
+    {
+      "folderName": "아흐 논문양식",
+      "src": "assets/store-photos/ea01fe750a2636/02.webp",
+      "reason": "menu-or-price-screen-likely",
+      "width": 590,
+      "height": 472,
+      "ratio": 1.25,
+      "whiteRatio": 0.7562806372549019,
+      "grayTextRatio": 0.05966605392156863,
+      "colorRatio": 0.0,
+      "edgeRatio": 0.11892434896839503,
+      "score": 7
+    },
+    {
+      "folderName": "엑셀 명함사진 셋팅",
+      "src": "assets/store-photos/c1dc1f3900e2cb/01.webp",
+      "reason": "non-store-screen-folder",
+      "width": 800,
+      "height": 640,
+      "ratio": 1.25,
+      "whiteRatio": 0.8596047794117647,
+      "grayTextRatio": 0.005208333333333333,
+      "colorRatio": 0.003216911764705882,
+      "edgeRatio": 0.011281972026891275,
+      "score": 4
+    },
+    {
+      "folderName": "엑셀 명함사진 셋팅",
+      "reason": "folder-dropped-all-images",
+      "count": 1
+    },
+    {
+      "folderName": "여천 외계인피자",
+      "src": "assets/store-photos/73647fa9678800/01.webp",
+      "reason": "menu-or-price-screen-likely",
+      "width": 588,
+      "height": 470,
+      "ratio": 1.251063829787234,
+      "whiteRatio": 0.4144454656862745,
+      "grayTextRatio": 0.2025122549019608,
+      "colorRatio": 0.0,
+      "edgeRatio": 0.30890193957190326,
+      "score": 8
+    },
+    {
+      "folderName": "여천 외계인피자",
+      "reason": "folder-dropped-all-images",
+      "count": 1
+    },
+    {
+      "folderName": "인프라 가마치통닭",
+      "src": "assets/store-photos/95af7e89219bce/02.webp",
+      "reason": "menu-or-price-screen-likely",
+      "width": 800,
+      "height": 640,
+      "ratio": 1.25,
+      "whiteRatio": 0.6803002450980392,
+      "grayTextRatio": 0.09214154411764706,
+      "colorRatio": 0.09214154411764706,
+      "edgeRatio": 0.12247894289467584,
+      "score": 8
+    },
+    {
+      "folderName": "인프라 미치게",
+      "src": "assets/store-photos/b827596c296a2f/02.webp",
+      "reason": "menu-or-price-screen-likely",
+      "width": 562,
+      "height": 450,
+      "ratio": 1.248888888888889,
+      "whiteRatio": 0.5052083333333334,
+      "grayTextRatio": 0.4178921568627451,
+      "colorRatio": 0.0,
+      "edgeRatio": 0.07839425083069315,
+      "score": 7
+    },
+    {
+      "folderName": "인프라 북촌손만두",
+      "src": "assets/store-photos/9658cb10497e4e/02.webp",
+      "reason": "menu-or-price-screen-likely",
+      "width": 800,
+      "height": 640,
+      "ratio": 1.25,
+      "whiteRatio": 0.8061427696078431,
+      "grayTextRatio": 0.06556372549019608,
+      "colorRatio": 0.0,
+      "edgeRatio": 0.10725600803647323,
+      "score": 7
+    },
+    {
+      "folderName": "인프라 원할머니",
+      "src": "assets/store-photos/3e750d59dbebb2/02.webp",
+      "reason": "menu-or-price-screen-likely",
+      "width": 800,
+      "height": 640,
+      "ratio": 1.25,
+      "whiteRatio": 0.7520680147058824,
+      "grayTextRatio": 0.07942708333333333,
+      "colorRatio": 0.07743566176470588,
+      "edgeRatio": 0.13990418051155243,
+      "score": 7
+    },
+    {
+      "folderName": "인프라 푸라닭",
+      "src": "assets/store-photos/aa1b3120820bd3/02.webp",
+      "reason": "menu-or-price-screen-likely",
+      "width": 800,
+      "height": 640,
+      "ratio": 1.25,
+      "whiteRatio": 0.811734068627451,
+      "grayTextRatio": 0.09574142156862746,
+      "colorRatio": 0.0,
+      "edgeRatio": 0.12788810756510316,
+      "score": 8
+    },
+    {
+      "folderName": "피자나라치킨공주 여서점",
+      "src": "assets/store-photos/cba37dbe149d89/01.webp",
+      "reason": "menu-or-price-screen-likely",
+      "width": 800,
+      "height": 640,
+      "ratio": 1.25,
+      "whiteRatio": 0.40058210784313725,
+      "grayTextRatio": 0.41390931372549017,
+      "colorRatio": 0.09474571078431372,
+      "edgeRatio": 0.13673595549030215,
+      "score": 7
+    },
+    {
+      "folderName": "피자나라치킨공주 여서점",
+      "reason": "folder-dropped-all-images",
+      "count": 1
+    },
+    {
+      "folderName": "형님 인터넷광고",
+      "src": "assets/store-photos/47c1d975dc962c/01.webp",
+      "reason": "menu-or-price-screen-likely",
+      "width": 800,
+      "height": 640,
+      "ratio": 1.25,
+      "whiteRatio": 0.6838235294117647,
+      "grayTextRatio": 0.08693321078431372,
+      "colorRatio": 0.0234375,
+      "edgeRatio": 0.1478633799551812,
+      "score": 8
+    },
+    {
+      "folderName": "형님 인터넷광고",
+      "reason": "folder-dropped-all-images",
+      "count": 1
+    }
+  ]
+}

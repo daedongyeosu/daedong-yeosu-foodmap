@@ -8,7 +8,7 @@ on:
       - 'assets/store-photos/**'
       - 'data/photo-manifest.json'
       - 'tools/filter-menu-photos.py'
-      - 'tools/apply-photo-manifest.mjs'
+      - 'tools/apply-photo-manifest-strict.mjs'
       - 'tools/photo-match-safety.mjs'
       - '.github/workflows/apply-store-photos.yml'
   workflow_dispatch:
@@ -49,7 +49,7 @@ jobs:
           test -f data/photo-manifest.json || { echo "data/photo-manifest.json이 없습니다."; exit 1; }
           test -d assets/store-photos || { echo "assets/store-photos 폴더가 없습니다."; exit 1; }
 
-      - name: Remove sensitive files, rematch safely and push
+      - name: Remove unsafe photos, rematch strictly and push
         env:
           APPLY_CHANGES: 'true'
         shell: bash
@@ -58,14 +58,14 @@ jobs:
           git config user.name "daedong-photo-sync"
           git config user.email "actions@users.noreply.github.com"
 
-          for attempt in 1 2 3; do
-            echo "민감사진 제거와 안전매칭 시도 ${attempt}/3"
+          for attempt in 1 2 3 4 5; do
+            echo "엄격 사진 재매칭 시도 ${attempt}/5"
             git fetch origin fix/load-stores-db790
             git reset --hard origin/fix/load-stores-db790
 
             PHOTO_SAFETY_PHASE=pre node tools/photo-match-safety.mjs
             python tools/filter-menu-photos.py
-            node tools/apply-photo-manifest.mjs
+            node tools/apply-photo-manifest-strict.mjs
             PHOTO_SAFETY_PHASE=post node tools/photo-match-safety.mjs
 
             git add -A assets/store-photos data/photo-manifest.json data/stores.json data/photo-apply-report.json data/photo-filter-report.json data/photo-match-safety-report.json data/stores.before-photo-apply.json
@@ -75,15 +75,17 @@ jobs:
               exit 0
             fi
 
-            git commit -m "민감서류 완전 격리와 음식사진 안전 재매칭"
-            if git push origin HEAD:fix/load-stores-db790; then
-              echo "민감사진 제거와 안전 사진매칭 반영 완료"
+            git commit -m "반복 기본사진 제거와 엄격 가게사진 재매칭"
+            git fetch origin fix/load-stores-db790
+            if git rebase origin/fix/load-stores-db790 && git push origin HEAD:fix/load-stores-db790; then
+              echo "엄격 사진 재매칭 반영 완료"
               exit 0
             fi
 
-            echo "다른 작업이 먼저 저장되어 최신 데이터로 다시 계산합니다."
-            sleep 5
+            echo "다른 작업과 충돌하여 최신 데이터로 다시 계산합니다."
+            git rebase --abort 2>/dev/null || true
+            sleep 6
           done
 
-          echo "세 번 재시도했지만 사진 데이터를 저장하지 못했습니다."
+          echo "다섯 번 재시도했지만 사진 데이터를 저장하지 못했습니다."
           exit 1

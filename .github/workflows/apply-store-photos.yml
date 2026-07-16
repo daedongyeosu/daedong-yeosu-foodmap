@@ -9,6 +9,7 @@ on:
       - 'data/photo-manifest.json'
       - 'tools/filter-menu-photos.py'
       - 'tools/apply-photo-manifest.mjs'
+      - 'tools/photo-match-safety.mjs'
       - '.github/workflows/apply-store-photos.yml'
   workflow_dispatch:
 
@@ -22,7 +23,7 @@ concurrency:
 jobs:
   apply:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 35
     steps:
       - name: Checkout working branch
         uses: actions/checkout@v4
@@ -48,7 +49,7 @@ jobs:
           test -f data/photo-manifest.json || { echo "data/photo-manifest.json이 없습니다."; exit 1; }
           test -d assets/store-photos || { echo "assets/store-photos 폴더가 없습니다."; exit 1; }
 
-      - name: Filter menu screens, match photos and push safely
+      - name: Remove sensitive files, rematch safely and push
         env:
           APPLY_CHANGES: 'true'
         shell: bash
@@ -58,22 +59,25 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
 
           for attempt in 1 2 3; do
-            echo "사진 적용 시도 ${attempt}/3"
+            echo "민감사진 제거와 안전매칭 시도 ${attempt}/3"
             git fetch origin fix/load-stores-db790
             git reset --hard origin/fix/load-stores-db790
 
+            PHOTO_SAFETY_PHASE=pre node tools/photo-match-safety.mjs
             python tools/filter-menu-photos.py
             node tools/apply-photo-manifest.mjs
-            git add -f data/stores.json data/photo-apply-report.json data/photo-filter-report.json data/stores.before-photo-apply.json
+            PHOTO_SAFETY_PHASE=post node tools/photo-match-safety.mjs
+
+            git add -A assets/store-photos data/photo-manifest.json data/stores.json data/photo-apply-report.json data/photo-filter-report.json data/photo-match-safety-report.json data/stores.before-photo-apply.json
 
             if git diff --cached --quiet; then
               echo "사진 데이터 변경 없음"
               exit 0
             fi
 
-            git commit -m "메뉴 가격화면 제외와 가게사진 매칭 보강"
+            git commit -m "민감서류 완전 격리와 음식사진 안전 재매칭"
             if git push origin HEAD:fix/load-stores-db790; then
-              echo "사진 데이터 반영 완료"
+              echo "민감사진 제거와 안전 사진매칭 반영 완료"
               exit 0
             fi
 

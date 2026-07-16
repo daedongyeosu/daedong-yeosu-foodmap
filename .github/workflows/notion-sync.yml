@@ -22,21 +22,23 @@ on:
       - 'tools/notion-complete-import.mjs'
       - 'tools/notion-import-missing-stores.mjs'
       - 'tools/notion-sync-dry-run.mjs'
+      - 'tools/notion-sync.mjs'
       - 'tools/dedupe-stores.mjs'
-      - 'tools/apply-photo-manifest-smart.mjs'
+      - 'tools/apply-photo-manifest-strict.mjs'
       - '.github/workflows/notion-sync.yml'
 
 permissions:
   contents: write
 
+# 노션·사진·고객신고가 같은 stores.json을 동시에 수정하지 못하게 한다.
 concurrency:
-  group: notion-store-sync
+  group: daedong-data-writer
   cancel-in-progress: false
 
 jobs:
   sync:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 90
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -63,52 +65,64 @@ jobs:
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
-        run: node tools/notion-sync-dry-run.mjs
-
-      - name: Import every accessible Notion store
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.apply_changes == true }}
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
-        run: node tools/notion-complete-import.mjs
-
-      - name: Apply Notion route sync
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.apply_changes == true }}
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
-        run: node tools/notion-sync.mjs
-
-      - name: Diagnose and import missing Notion stores
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-          NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
-          APPLY_CHANGES: ${{ github.event_name != 'workflow_dispatch' || inputs.apply_changes == true }}
-          DIAGNOSTIC_KEYWORDS: ${{ github.event_name == 'workflow_dispatch' && inputs.diagnostic_keywords || '아구회관,아도쿄,오워래,해인이네,수라상궁,바로탕수,바오탕수' }}
-        run: node tools/notion-import-missing-stores.mjs
-
-      - name: Merge duplicate copied stores
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.apply_changes == true }}
-        env:
-          APPLY_CHANGES: 'true'
-        run: node tools/dedupe-stores.mjs
-
-      - name: Match photos again after adding Notion stores
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.apply_changes == true }}
+          APPLY_CHANGES: 'false'
+          DIAGNOSTIC_KEYWORDS: ${{ inputs.diagnostic_keywords }}
         shell: bash
         run: |
           set -euo pipefail
-          test -f data/photo-manifest.json || { echo "사진 매니페스트가 없어 사진 재매칭을 건너뜁니다."; exit 0; }
-          PHOTO_SAFETY_PHASE=pre node tools/photo-match-safety.mjs
-          node tools/apply-photo-manifest-smart.mjs
-          PHOTO_SAFETY_PHASE=post node tools/photo-match-safety.mjs
+          node tools/notion-sync-dry-run.mjs
+          node tools/notion-import-missing-stores.mjs
+          node tools/link-quality.mjs
 
-      - name: Check order-link quality
-        run: node tools/link-quality.mjs
-
-      - name: Show diagnosis summary
+      - name: Recalculate latest Notion and photo data, then save
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.apply_changes == true }}
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
+          DIAGNOSTIC_KEYWORDS: ${{ github.event_name == 'workflow_dispatch' && inputs.diagnostic_keywords || '아구회관,아도쿄,오워래,해인이네,수라상궁,바로탕수,바오탕수' }}
+        shell: bash
         run: |
-          node -e "const fs=require('fs'); const files=['data/notion-complete-import-report.json','data/notion-import-missing-report.json','data/store-dedup-report.json','data/photo-apply-report.json']; for(const f of files){if(fs.existsSync(f)){const r=require('./'+f); console.log(f, JSON.stringify({accessiblePages:r.accessiblePages||r.pagesVisibleToIntegration,addedCount:r.addedCount,excludedCount:r.excludedCount,skippedCount:r.skippedCount,errorCount:r.errorCount,duplicateGroupCount:r.duplicateGroupCount,removedCount:r.removedCount,totalBefore:r.totalBefore,totalAfter:r.totalAfter,updatedStoreCount:r.updatedStoreCount,coverageRate:r.coverageRate,reviewNeededCount:r.reviewNeededCount},null,2));}}"
+          set -euo pipefail
+          git config user.name "daedong-notion-sync"
+          git config user.email "actions@users.noreply.github.com"
+
+          for attempt in 1 2 3; do
+            echo "최신 데이터 기준 노션 동기화 시도 ${attempt}/3"
+            git fetch origin fix/load-stores-db790
+            git reset --hard origin/fix/load-stores-db790
+
+            node tools/notion-complete-import.mjs
+            node tools/notion-sync.mjs
+            APPLY_CHANGES=true node tools/notion-import-missing-stores.mjs
+            APPLY_CHANGES=true node tools/dedupe-stores.mjs
+
+            if [ -f data/photo-manifest.json ] && [ -d assets/store-photos ]; then
+              PHOTO_SAFETY_PHASE=pre node tools/photo-match-safety.mjs
+              node tools/apply-photo-manifest-strict.mjs
+              PHOTO_SAFETY_PHASE=post node tools/photo-match-safety.mjs
+            fi
+
+            node tools/link-quality.mjs
+
+            git add -f data/stores.json data/notion-complete-import-report.json data/notion-sync-report.json data/notion-import-missing-report.json data/store-dedup-report.json data/stores.before-dedup.json data/link-quality-report.json data/photo-apply-report.json data/photo-match-action-report.json data/photo-match-safety-report.json data/stores.before-photo-apply.json
+
+            if git diff --cached --quiet; then
+              echo "노션 동기화 변경 없음"
+              exit 0
+            fi
+
+            git commit -m "노션 가게 동기화와 가게명 기준 사진 재매칭"
+            if git push origin HEAD:fix/load-stores-db790; then
+              echo "노션 동기화와 사진 재매칭 저장 완료"
+              exit 0
+            fi
+
+            echo "다른 변경이 먼저 저장되어 최신 데이터로 다시 계산합니다."
+            sleep 8
+          done
+
+          echo "세 번 다시 계산했지만 저장하지 못했습니다."
+          exit 1
 
       - name: Upload sync and diagnosis reports
         if: always()
@@ -123,48 +137,7 @@ jobs:
             data/stores.before-dedup.json
             data/link-quality-report.json
             data/photo-apply-report.json
-            data/photo-match-review.json
+            data/photo-match-action-report.json
+            data/photo-match-safety-report.json
           if-no-files-found: warn
           retention-days: 14
-
-      - name: Commit reports only
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_changes == false }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "daedong-notion-sync"
-          git config user.email "actions@users.noreply.github.com"
-          git add -f data/notion-complete-import-report.json data/notion-sync-report.json data/notion-import-missing-report.json data/link-quality-report.json
-          if git diff --cached --quiet; then
-            echo "No report changes"
-            exit 0
-          fi
-          git commit -m "노션 전체 가게 완전 동기화 진단 보고서"
-          git fetch origin fix/load-stores-db790
-          git rebase origin/fix/load-stores-db790
-          git push origin HEAD:fix/load-stores-db790
-
-      - name: Commit applied data and reports safely
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.apply_changes == true }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "daedong-notion-sync"
-          git config user.email "actions@users.noreply.github.com"
-          git add -f data/stores.json data/notion-complete-import-report.json data/notion-sync-report.json data/notion-import-missing-report.json data/store-dedup-report.json data/link-quality-report.json data/photo-apply-report.json data/photo-match-review.json data/photo-match-safety-report.json data/stores.before-photo-apply.json
-          if git diff --cached --quiet; then
-            echo "No changes"
-            exit 0
-          fi
-          git commit -m "노션 가게 동기화와 스마트 사진 재매칭"
-          for attempt in 1 2 3 4 5; do
-            git fetch origin fix/load-stores-db790
-            if git rebase origin/fix/load-stores-db790 && git push origin HEAD:fix/load-stores-db790; then
-              echo "노션 동기화와 사진 재매칭 저장 완료"
-              exit 0
-            fi
-            git rebase --abort 2>/dev/null || true
-            sleep 6
-          done
-          echo "다른 작업과 충돌하여 저장하지 못했습니다."
-          exit 1

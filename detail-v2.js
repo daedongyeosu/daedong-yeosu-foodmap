@@ -1,15 +1,16 @@
 (()=>{
-  const originalDetail=detail;
+  const CATEGORY_EMOJI={'한식':'🍲','치킨':'🍗','피자':'🍕','중식':'🍜','분식':'🍢','족발·보쌈':'🥩','회·해산물':'🐟','햄버거':'🍔','고기·구이':'🥓','찜·탕':'🥘','도시락':'🍱','야식·주점':'🌙','마라탕·양꼬치':'🌶️','반찬':'🥗','카페·디저트':'☕','샐러드':'🥬','양식':'🍝','아시안':'🍛','음식점':'🍽️'};
   const escAttr=value=>esc(value);
 
   function galleryPhotos(store){
-    const photos=window.DaedongPhotoDisplay?.candidates?.(store)||[];
-    return photos.length?photos:[{card:store.img||store.image||'assets/store1.jpg',detail:store.img||store.image||'assets/store1.jpg'}];
+    return window.DaedongPhotoDisplay?.candidates?.(store)||[];
   }
 
   function galleryMarkup(store){
     const photos=galleryPhotos(store);
-    const slides=photos.map((photo,index)=>`<figure class="detail-gallery-slide" data-gallery-index="${index}"><img src="${escAttr(photo.detail||photo.card)}" alt="${esc(store.name)} 사진 ${index+1}" loading="${index===0?'eager':'lazy'}" decoding="async" width="960" height="720" onerror="this.src='assets/store1.jpg'"></figure>`).join('');
+    const category=String(store.cat||store.category||'음식점').trim()||'음식점';
+    if(!photos.length)return `<div class="detail-photo-placeholder"><span>${CATEGORY_EMOJI[category]||'🍽️'}</span><b>검증된 음식사진을 준비 중입니다</b></div>`;
+    const slides=photos.map((photo,index)=>`<figure class="detail-gallery-slide" data-gallery-index="${index}"><img src="${escAttr(photo.detail||photo.card)}" alt="${esc(store.name)} 사진 ${index+1}" loading="${index===0?'eager':'lazy'}" decoding="async" width="960" height="720" onerror="this.closest('.detail-gallery-slide').innerHTML='<div class=&quot;detail-photo-placeholder&quot;><span>${CATEGORY_EMOJI[category]||'🍽️'}</span><b>사진 준비 중</b></div>'"></figure>`).join('');
     const dots=photos.length>1?`<div class="detail-gallery-dots">${photos.map((_,index)=>`<button type="button" data-gallery-dot="${index}" class="${index===0?'active':''}" aria-label="사진 ${index+1}"></button>`).join('')}</div>`:'';
     const arrows=photos.length>1?`<button type="button" class="detail-gallery-arrow prev" data-gallery-move="-1" aria-label="이전 사진">‹</button><button type="button" class="detail-gallery-arrow next" data-gallery-move="1" aria-label="다음 사진">›</button>`:'';
     const count=photos.length>1?`<span class="detail-gallery-count"><b data-gallery-current>1</b> / ${photos.length}</span>`:'';
@@ -42,18 +43,9 @@
 
   document.addEventListener('click',event=>{
     const move=event.target.closest('[data-gallery-move]');
-    if(move){
-      event.preventDefault();event.stopPropagation();
-      const gallery=move.closest('[data-detail-gallery]');
-      const current=Number(gallery?.dataset.index||0);
-      setGalleryIndex(gallery,current+Number(move.dataset.galleryMove));
-      return;
-    }
+    if(move){event.preventDefault();event.stopPropagation();const gallery=move.closest('[data-detail-gallery]');const current=Number(gallery?.dataset.index||0);setGalleryIndex(gallery,current+Number(move.dataset.galleryMove));return;}
     const dot=event.target.closest('[data-gallery-dot]');
-    if(dot){
-      event.preventDefault();event.stopPropagation();
-      setGalleryIndex(dot.closest('[data-detail-gallery]'),Number(dot.dataset.galleryDot));
-    }
+    if(dot){event.preventDefault();event.stopPropagation();setGalleryIndex(dot.closest('[data-detail-gallery]'),Number(dot.dataset.galleryDot));}
   });
 
   document.addEventListener('scroll',event=>{
@@ -63,10 +55,7 @@
     const slides=[...track.querySelectorAll('.detail-gallery-slide')];
     if(!slides.length)return;
     let best=0,bestDistance=Infinity;
-    slides.forEach((slide,index)=>{
-      const distance=Math.abs(track.scrollLeft-slide.offsetLeft);
-      if(distance<bestDistance){bestDistance=distance;best=index;}
-    });
+    slides.forEach((slide,index)=>{const distance=Math.abs(track.scrollLeft-slide.offsetLeft);if(distance<bestDistance){bestDistance=distance;best=index;}});
     gallery.dataset.index=String(best);
     gallery.querySelectorAll('[data-gallery-dot]').forEach((dot,index)=>dot.classList.toggle('active',index===best));
     const current=gallery.querySelector('[data-gallery-current]');

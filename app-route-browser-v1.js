@@ -10,10 +10,12 @@
     baemin: {label: '배달의민족', icon: 'assets/baemin.jpg', installUrl: 'https://play.google.com/store/search?q=%EB%B0%B0%EB%8B%AC%EC%9D%98%EB%AF%BC%EC%A1%B1&c=apps'},
     phone: {label: '전화주문', icon: '☎', installUrl: ''}
   };
-  const CATEGORY_ORDER = ['한식','치킨','피자','중식','분식','족발·보쌈','회·해산물','햄버거','고기·구이','야식·주점','마라탕·양꼬치','반찬','카페·디저트','음식점'];
+  const CATEGORY_ORDER = ['한식','치킨','피자','중식','분식','족발·보쌈','회·해산물','햄버거','고기·구이','찜·탕','도시락','야식·주점','마라탕·양꼬치','반찬','카페·디저트','샐러드','양식','아시안','음식점'];
+  const CATEGORY_EMOJI = {'한식':'🍲','치킨':'🍗','피자':'🍕','중식':'🍜','분식':'🍢','족발·보쌈':'🥩','회·해산물':'🐟','햄버거':'🍔','고기·구이':'🥓','찜·탕':'🥘','도시락':'🍱','야식·주점':'🌙','마라탕·양꼬치':'🌶️','반찬':'🥗','카페·디저트':'☕','샐러드':'🥬','양식':'🍝','아시안':'🍛','음식점':'🍽️'};
   const cleanText = value => String(value ?? '').trim();
   const compact = value => cleanText(value).toLowerCase().replace(/\s+/g, '');
   const escapeHtml = value => cleanText(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const genericPhotos = new Set(['assets/store1.jpg','assets/store2.jpg','assets/store3.jpg','assets/store4.jpg']);
 
   function routeNameKey(name = '') {
     const value = compact(name);
@@ -73,58 +75,107 @@
     return `<span class="app-browser-emoji">${escapeHtml(meta.icon)}</span>`;
   }
 
-  function browserCard(store, key, meta, index = 0) {
+  function categoryOf(store) {
+    return cleanText(store.cat || store.category || '음식점') || '음식점';
+  }
+
+  function photoChoice(store, usedPhotos) {
+    const candidates = window.DaedongPhotoDisplay?.candidates?.(store) || [];
+    for (const photo of candidates) {
+      const src = cleanText(photo.card || photo.detail);
+      if (!src || genericPhotos.has(src) || usedPhotos.has(src)) continue;
+      usedPhotos.add(src);
+      return {src, loading: usedPhotos.size > 5 ? 'lazy' : 'eager'};
+    }
+    const first = candidates.map(photo => cleanText(photo.card || photo.detail)).find(src => src && !genericPhotos.has(src));
+    if (first && !usedPhotos.has(first)) {
+      usedPhotos.add(first);
+      return {src: first, loading: usedPhotos.size > 5 ? 'lazy' : 'eager'};
+    }
+    return null;
+  }
+
+  function browserCard(store, key, meta, index = 0, usedPhotos = new Set()) {
     const url = routeFor(store, key);
     const external = /^https?:/i.test(url);
     const target = external ? ' target="_blank" rel="noopener"' : '';
-    const photo = window.DaedongPhotoDisplay?.attributes(store, 'card', index) || {src: store.img || store.image || 'assets/store1.jpg', loading: index >= 4 ? 'lazy' : 'eager'};
     const area = store.area || store.district || '여수';
-    const category = store.cat || store.category || '음식점';
+    const category = categoryOf(store);
     const distance = Number.isFinite(store.distanceKm) ? `<em>${store.distanceKm < 1 ? `${Math.round(store.distanceKm * 1000)}m` : `${store.distanceKm.toFixed(1)}km`}</em>` : '';
+    const photo = photoChoice(store, usedPhotos);
+    const visual = photo
+      ? `<img class="app-browser-photo" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)}" loading="${photo.loading}" decoding="async" width="72" height="64" onerror="this.outerHTML='<span class=&quot;app-browser-photo-placeholder&quot;>${CATEGORY_EMOJI[category] || '🍽️'}</span>'">`
+      : `<span class="app-browser-photo-placeholder" aria-label="${escapeHtml(category)}">${CATEGORY_EMOJI[category] || '🍽️'}</span>`;
     return `<a class="app-browser-card" data-store-id="${escapeHtml(store.id)}" href="${escapeHtml(url)}"${target}>
-      <img class="app-browser-photo" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)}" loading="${photo.loading}" decoding="async" width="72" height="64" onerror="this.src='assets/store1.jpg'">
+      ${visual}
       <div class="app-browser-info"><strong>${escapeHtml(store.name)}</strong><small>${escapeHtml(area)} · ${escapeHtml(category)} ${distance}</small><span class="app-browser-only-icon" aria-label="${escapeHtml(meta.label)}">${browserIcon(meta)}</span></div>
       <b class="app-browser-arrow">›</b>
     </a>`;
   }
 
-  function categorySections(ordered, key, meta) {
-    const ranks = preferenceRanks(key);
-    const recent = ordered.filter(store => ranks.has(String(store.id))).slice(0, 8);
-    const recentIds = new Set(recent.map(store => String(store.id)));
-    const groups = new Map();
-    for (const store of ordered) {
-      if (recentIds.has(String(store.id))) continue;
-      const category = cleanText(store.cat || store.category || '음식점');
-      if (!groups.has(category)) groups.set(category, []);
-      groups.get(category).push(store);
-    }
-    const sections = [];
-    if (recent.length) sections.push(`<section class="app-browser-category preferred"><h3>이전에 이용한 가게</h3>${recent.map((store, index) => browserCard(store, key, meta, index)).join('')}</section>`);
-    const categories = [...groups.keys()].sort((a, b) => {
+  function sortedCategories(groups) {
+    return [...groups.keys()].sort((a, b) => {
       const ai = CATEGORY_ORDER.indexOf(a), bi = CATEGORY_ORDER.indexOf(b);
       return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi) || a.localeCompare(b, 'ko');
     });
+  }
+
+  function categoryChips(categories, selected) {
+    return `<nav class="app-browser-category-chips" aria-label="음식 카테고리"><button type="button" data-app-category="추천" class="${selected === '추천' ? 'active' : ''}">추천</button>${categories.map(category => `<button type="button" data-app-category="${escapeHtml(category)}" class="${selected === category ? 'active' : ''}">${CATEGORY_EMOJI[category] || '🍽️'} ${escapeHtml(category)}</button>`).join('')}</nav>`;
+  }
+
+  function categoryContent(ordered, key, meta, selected = '추천') {
+    const groups = new Map();
+    for (const store of ordered) {
+      const category = categoryOf(store);
+      if (!groups.has(category)) groups.set(category, []);
+      groups.get(category).push(store);
+    }
+    const categories = sortedCategories(groups);
+    const usedPhotos = new Set();
+    const ranks = preferenceRanks(key);
+    const recent = ordered.filter(store => ranks.has(String(store.id))).slice(0, 5);
+    const sections = [categoryChips(categories, selected)];
+
+    if (selected !== '추천') {
+      const list = groups.get(selected) || [];
+      sections.push(`<section class="app-browser-category"><h3>${CATEGORY_EMOJI[selected] || '🍽️'} ${escapeHtml(selected)} · 가까운 순</h3>${list.map((store, index) => browserCard(store, key, meta, index, usedPhotos)).join('') || '<p class="app-browser-empty">해당 카테고리의 가게가 없습니다.</p>'}</section>`);
+      return sections.join('');
+    }
+
+    if (recent.length) {
+      sections.push(`<section class="app-browser-category preferred"><h3>최근 이용·방문 가게</h3>${recent.map((store, index) => browserCard(store, key, meta, index, usedPhotos)).join('')}</section>`);
+    }
+
     for (const category of categories) {
-      const list = groups.get(category);
-      sections.push(`<section class="app-browser-category"><h3>${escapeHtml(category)}</h3>${list.map((store, index) => browserCard(store, key, meta, index + recent.length)).join('')}</section>`);
+      const list = (groups.get(category) || []).filter(store => !recent.includes(store)).slice(0, 3);
+      if (!list.length) continue;
+      sections.push(`<section class="app-browser-category"><h3>${CATEGORY_EMOJI[category] || '🍽️'} ${escapeHtml(category)} · 가까운 추천</h3>${list.map((store, index) => browserCard(store, key, meta, index + recent.length, usedPhotos)).join('')}</section>`);
     }
     return sections.join('');
   }
 
-  function openAppBrowser(key) {
+  function openAppBrowser(key, selected = '추천') {
     const meta = APP_BROWSER_META[key];
     if (!meta || typeof openModal !== 'function') return;
-    const available = (Array.isArray(stores) ? stores : []).filter(store => Boolean(routeFor(store, key)));
+    const available = (Array.isArray(stores) ? stores : []).filter(store => Boolean(routeFor(store, key)) && store.visibility !== 'hidden');
     const ordered = orderedForApp(available, key);
     const installButton = meta.installUrl ? `<a class="app-browser-install" href="${escapeHtml(meta.installUrl)}" target="_blank" rel="noopener">앱 설치</a>` : '';
-    const content = ordered.length ? categorySections(ordered, key, meta) : `<div class="app-browser-empty">현재 ${escapeHtml(meta.label)} 주문 링크가 등록된 가게가 없습니다.</div>`;
-    openModal(`<section class="app-browser" data-app="${escapeHtml(key)}"><header class="app-browser-head"><span class="app-browser-head-icon">${browserIcon(meta)}</span><div><h2>${escapeHtml(meta.label)} 주문 가능 가게</h2><p>가까운 가게와 이전 이용 가게를 먼저 보여드립니다.</p></div>${installButton}</header><div class="app-browser-list">${content}</div></section>`);
+    const content = ordered.length ? categoryContent(ordered, key, meta, selected) : `<div class="app-browser-empty">현재 ${escapeHtml(meta.label)} 주문 링크가 등록된 가게가 없습니다.</div>`;
+    openModal(`<section class="app-browser" data-app="${escapeHtml(key)}"><header class="app-browser-head"><span class="app-browser-head-icon">${browserIcon(meta)}</span><div><h2>${escapeHtml(meta.label)} 주문 가능 가게</h2><p>카테고리별로 가까운 가게를 먼저 추천합니다.</p></div>${installButton}</header><div class="app-browser-list">${content}</div></section>`);
   }
 
   window.DaedongAppBrowser = {open: openAppBrowser, routeFor};
 
   document.addEventListener('click', event => {
+    const categoryButton = event.target.closest('[data-app-category]');
+    if (categoryButton) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const sheet = categoryButton.closest('.app-browser');
+      if (sheet?.dataset.app) openAppBrowser(sheet.dataset.app, categoryButton.dataset.appCategory);
+      return;
+    }
     const launcher = event.target.closest('.order-grid .order-item, #moreAppsPopover .external-apps a');
     if (!launcher) return;
     const key = keyFromLauncher(launcher);

@@ -92,7 +92,7 @@ const STATIC_BRANDS = [
   ['신전떡볶이',['신전떡볶이']], ['엽기떡볶이',['동대문엽기떡볶이','엽기떡볶이']],
   ['홍콩반점',['홍콩반점']], ['탕화쿵푸마라탕',['탕화쿵푸마라탕','탕화쿵푸']],
   ['공차',['공차']], ['더벤티',['더벤티']], ['요아정',['카페요아정','요아정']], ['던킨',['던킨']], ['두찜',['두마리찜닭두찜','두찜']],
-  ['여수강촌토종닭숯불구이',['여수강촌토종닭숯불구이','강촌토종닭숯불구이']], ['여수족발',['여수족발']]
+  ['여수강촌토종닭숯불구이',['여수강촌토종닭숯불구이','강촌토종닭숯불구이']]
 ].map(([key, aliases]) => ({key, aliases: aliases.map(normalize).sort((a,b) => b.length-a.length)}));
 
 function staticBrand(value) {
@@ -232,7 +232,6 @@ async function main() {
     if (!images.length || brandStores.length < 2) continue;
     brandStores.sort((a,b) => clean(a.id || a.name).localeCompare(clean(b.id || b.name), 'ko'));
     brandStores.forEach((store, index) => {
-      // Every branch shares one cacheable pool; the front end picks a stable different index per branch.
       store.images = images;
       store.photoGroup = `brand:${brand}`;
       store.image = images[index % images.length]?.card || store.image;

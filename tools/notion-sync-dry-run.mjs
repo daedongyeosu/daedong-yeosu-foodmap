@@ -19,7 +19,8 @@ async function run(script) {
   return new Promise(resolve => child.on('exit', code => resolve(code ?? 1)));
 }
 
-let exitCode = await run('tools/notion-sync.mjs');
+let exitCode = await run('tools/notion-complete-import.mjs');
+if (exitCode === 0) exitCode = await run('tools/notion-sync.mjs');
 if (exitCode === 0) exitCode = await run('tools/notion-phone-enrich.mjs');
 
 try {

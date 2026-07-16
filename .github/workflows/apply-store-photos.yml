@@ -8,6 +8,7 @@ on:
       - 'assets/store-photos/**'
       - 'data/photo-manifest.json'
       - 'tools/filter-menu-photos.py'
+      - 'tools/filter-food-only-v2.py'
       - 'tools/apply-photo-manifest-strict.mjs'
       - 'tools/photo-match-safety.mjs'
       - '.github/workflows/apply-store-photos.yml'
@@ -23,7 +24,7 @@ concurrency:
 jobs:
   apply:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     steps:
       - name: Checkout working branch
         uses: actions/checkout@v4
@@ -44,14 +45,15 @@ jobs:
       - name: Install image filter dependency
         run: python -m pip install --disable-pip-version-check pillow
 
-      - name: Validate photo package
+      - name: Validate recovery source
         run: |
-          test -f data/photo-manifest.json || { echo "data/photo-manifest.json이 없습니다."; exit 1; }
-          test -d assets/store-photos || { echo "assets/store-photos 폴더가 없습니다."; exit 1; }
+          git cat-file -e 0bdd7d6a2e12a685c247323cc2f47aba4f0751f3:data/photo-manifest.json
+          git cat-file -e 0bdd7d6a2e12a685c247323cc2f47aba4f0751f3:assets/store-photos
 
-      - name: Remove unsafe photos, rematch strictly and push
+      - name: Restore food photos, block documents individually and rematch
         env:
           APPLY_CHANGES: 'true'
+          PHOTO_SOURCE_COMMIT: 0bdd7d6a2e12a685c247323cc2f47aba4f0751f3
         shell: bash
         run: |
           set -euo pipefail
@@ -59,12 +61,16 @@ jobs:
           git config user.email "actions@users.noreply.github.com"
 
           for attempt in 1 2 3 4 5; do
-            echo "엄격 사진 재매칭 시도 ${attempt}/5"
+            echo "음식사진 복구와 안전 재매칭 시도 ${attempt}/5"
             git fetch origin fix/load-stores-db790
             git reset --hard origin/fix/load-stores-db790
 
+            # 과도한 필터링 전 원본 사진 묶음을 작업공간에만 복원한다.
+            # 민감서류와 비음식사진을 제거한 결과만 GitHub에 저장한다.
+            git checkout "$PHOTO_SOURCE_COMMIT" -- assets/store-photos data/photo-manifest.json
+
             PHOTO_SAFETY_PHASE=pre node tools/photo-match-safety.mjs
-            python tools/filter-menu-photos.py
+            python tools/filter-food-only-v2.py
             node tools/apply-photo-manifest-strict.mjs
             PHOTO_SAFETY_PHASE=post node tools/photo-match-safety.mjs
 
@@ -75,10 +81,10 @@ jobs:
               exit 0
             fi
 
-            git commit -m "반복 기본사진 제거와 엄격 가게사진 재매칭"
+            git commit -m "안전한 음식사진 복구와 정확한 가게 재매칭"
             git fetch origin fix/load-stores-db790
             if git rebase origin/fix/load-stores-db790 && git push origin HEAD:fix/load-stores-db790; then
-              echo "엄격 사진 재매칭 반영 완료"
+              echo "음식사진 복구와 재매칭 반영 완료"
               exit 0
             fi
 

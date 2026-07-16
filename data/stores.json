@@ -276,7 +276,7 @@
     "notionPageId": "6e0da158-dd2a-826b-8727-01e8f0597110",
     "notionUrl": "https://app.notion.com/p/1-6e0da158dd2a826b872701e8f0597110",
     "notionSyncedAt": "2026-07-16T13:46:27.412Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/7fc32df8d18053/02.webp",
     "images": [
       {
         "card": "assets/store-photos/7fc32df8d18053/02.webp",
@@ -288,7 +288,7 @@
       }
     ],
     "photoGroup": "store:360b32bc2f5a850c",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "275f52997bdd2755",
@@ -427,20 +427,8 @@
     "notionPageId": "c55da158-dd2a-8389-851e-01cfdf3bd544",
     "notionUrl": "https://app.notion.com/p/60-c55da158dd2a8389851e01cfdf3bd544",
     "notionSyncedAt": "2026-07-16T13:46:28.554Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/af8b15c5b69a94/04.webp",
     "images": [
-      {
-        "card": "assets/store-photos/af8b15c5b69a94/01.webp",
-        "detail": "assets/store-photos/af8b15c5b69a94/01.webp"
-      },
-      {
-        "card": "assets/store-photos/af8b15c5b69a94/02.webp",
-        "detail": "assets/store-photos/af8b15c5b69a94/02.webp"
-      },
-      {
-        "card": "assets/store-photos/af8b15c5b69a94/03.webp",
-        "detail": "assets/store-photos/af8b15c5b69a94/03.webp"
-      },
       {
         "card": "assets/store-photos/af8b15c5b69a94/04.webp",
         "detail": "assets/store-photos/af8b15c5b69a94/04.webp"
@@ -452,10 +440,22 @@
       {
         "card": "assets/store-photos/af8b15c5b69a94/06.webp",
         "detail": "assets/store-photos/af8b15c5b69a94/06.webp"
+      },
+      {
+        "card": "assets/store-photos/af8b15c5b69a94/01.webp",
+        "detail": "assets/store-photos/af8b15c5b69a94/01.webp"
+      },
+      {
+        "card": "assets/store-photos/af8b15c5b69a94/02.webp",
+        "detail": "assets/store-photos/af8b15c5b69a94/02.webp"
+      },
+      {
+        "card": "assets/store-photos/af8b15c5b69a94/03.webp",
+        "detail": "assets/store-photos/af8b15c5b69a94/03.webp"
       }
     ],
     "photoGroup": "brand:60계치킨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "e53db0006339f439",
@@ -531,16 +531,8 @@
     "notionPageId": "28eda158-dd2a-8311-a610-81e4929ebcc7",
     "notionUrl": "https://app.notion.com/p/60-28eda158dd2a8311a61081e4929ebcc7",
     "notionSyncedAt": "2026-07-16T13:46:29.095Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/af8b15c5b69a94/03.webp",
     "images": [
-      {
-        "card": "assets/store-photos/af8b15c5b69a94/01.webp",
-        "detail": "assets/store-photos/af8b15c5b69a94/01.webp"
-      },
-      {
-        "card": "assets/store-photos/af8b15c5b69a94/02.webp",
-        "detail": "assets/store-photos/af8b15c5b69a94/02.webp"
-      },
       {
         "card": "assets/store-photos/af8b15c5b69a94/03.webp",
         "detail": "assets/store-photos/af8b15c5b69a94/03.webp"
@@ -556,10 +548,18 @@
       {
         "card": "assets/store-photos/af8b15c5b69a94/06.webp",
         "detail": "assets/store-photos/af8b15c5b69a94/06.webp"
+      },
+      {
+        "card": "assets/store-photos/af8b15c5b69a94/01.webp",
+        "detail": "assets/store-photos/af8b15c5b69a94/01.webp"
+      },
+      {
+        "card": "assets/store-photos/af8b15c5b69a94/02.webp",
+        "detail": "assets/store-photos/af8b15c5b69a94/02.webp"
       }
     ],
     "photoGroup": "brand:60계치킨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "87fd57845e1c58b5",
@@ -635,7 +635,7 @@
     "notionPageId": "0a5da158-dd2a-8222-8000-812d72b532e1",
     "notionUrl": "https://app.notion.com/p/60-0a5da158dd2a82228000812d72b532e1",
     "notionSyncedAt": "2026-07-16T13:46:29.771Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/af8b15c5b69a94/01.webp",
     "images": [
       {
         "card": "assets/store-photos/af8b15c5b69a94/01.webp",
@@ -663,7 +663,7 @@
       }
     ],
     "photoGroup": "brand:60계치킨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "d7674e8acedd94b2",
@@ -739,12 +739,8 @@
     "notionPageId": "27cda158-dd2a-83bd-abe8-014583e5f483",
     "notionUrl": "https://app.notion.com/p/60-27cda158dd2a83bdabe8014583e5f483",
     "notionSyncedAt": "2026-07-16T13:46:30.350Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/af8b15c5b69a94/02.webp",
     "images": [
-      {
-        "card": "assets/store-photos/af8b15c5b69a94/01.webp",
-        "detail": "assets/store-photos/af8b15c5b69a94/01.webp"
-      },
       {
         "card": "assets/store-photos/af8b15c5b69a94/02.webp",
         "detail": "assets/store-photos/af8b15c5b69a94/02.webp"
@@ -764,10 +760,14 @@
       {
         "card": "assets/store-photos/af8b15c5b69a94/06.webp",
         "detail": "assets/store-photos/af8b15c5b69a94/06.webp"
+      },
+      {
+        "card": "assets/store-photos/af8b15c5b69a94/01.webp",
+        "detail": "assets/store-photos/af8b15c5b69a94/01.webp"
       }
     ],
     "photoGroup": "brand:60계치킨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "b1beeb518c437d02",
@@ -2471,7 +2471,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/xgNJic9H",
-    "image": "assets/store-photos/f49be82e2aae6f/04.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -2523,19 +2523,7 @@
     "notionPageId": "12cda158-dd2a-83f7-bc34-81d9ef66c9c2",
     "notionUrl": "https://app.notion.com/p/12cda158dd2a83f7bc3481d9ef66c9c2",
     "notionSyncedAt": "2026-07-16T13:46:45.255Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/f49be82e2aae6f/03.webp",
-        "detail": "assets/store-photos/f49be82e2aae6f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/f49be82e2aae6f/04.webp",
-        "detail": "assets/store-photos/f49be82e2aae6f/04.webp"
-      }
-    ],
-    "photoGroup": "brand:가장맛있는족발",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "dc67f48b1278de3b",
@@ -2547,7 +2535,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5Ag1a99G",
-    "image": "assets/store-photos/f49be82e2aae6f/03.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -2605,19 +2593,7 @@
     "notionPageId": "90ada158-dd2a-829a-a69f-81698497b3c4",
     "notionUrl": "https://app.notion.com/p/90ada158dd2a829aa69f81698497b3c4",
     "notionSyncedAt": "2026-07-16T13:46:46.263Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/f49be82e2aae6f/03.webp",
-        "detail": "assets/store-photos/f49be82e2aae6f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/f49be82e2aae6f/04.webp",
-        "detail": "assets/store-photos/f49be82e2aae6f/04.webp"
-      }
-    ],
-    "photoGroup": "brand:가장맛있는족발",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "718031989449bc32",
@@ -2629,7 +2605,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/xAAquxSv",
-    "image": "assets/store-photos/f49be82e2aae6f/04.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -2663,19 +2639,7 @@
     "notionPageId": "624da158-dd2a-821f-83ed-819fcc5b3896",
     "notionUrl": "https://app.notion.com/p/624da158dd2a821f83ed819fcc5b3896",
     "notionSyncedAt": "2026-07-16T13:46:46.909Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/f49be82e2aae6f/03.webp",
-        "detail": "assets/store-photos/f49be82e2aae6f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/f49be82e2aae6f/04.webp",
-        "detail": "assets/store-photos/f49be82e2aae6f/04.webp"
-      }
-    ],
-    "photoGroup": "brand:가장맛있는족발",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "005382cbb06108d3",
@@ -2687,7 +2651,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/GzEDf6CC",
-    "image": "assets/store-photos/f49be82e2aae6f/03.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -2751,19 +2715,7 @@
     "notionPageId": "824da158-dd2a-82b6-8415-0145f34bde26",
     "notionUrl": "https://app.notion.com/p/824da158dd2a82b684150145f34bde26",
     "notionSyncedAt": "2026-07-16T13:46:47.521Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/f49be82e2aae6f/03.webp",
-        "detail": "assets/store-photos/f49be82e2aae6f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/f49be82e2aae6f/04.webp",
-        "detail": "assets/store-photos/f49be82e2aae6f/04.webp"
-      }
-    ],
-    "photoGroup": "brand:가장맛있는족발",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "52f5738519110900",
@@ -2775,7 +2727,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FqWgCgQq",
-    "image": "assets/store-photos/f49be82e2aae6f/03.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -2839,19 +2791,7 @@
     "notionPageId": "174da158-dd2a-8270-8a17-8178c90fcebc",
     "notionUrl": "https://app.notion.com/p/174da158dd2a82708a178178c90fcebc",
     "notionSyncedAt": "2026-07-16T13:46:48.121Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/f49be82e2aae6f/03.webp",
-        "detail": "assets/store-photos/f49be82e2aae6f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/f49be82e2aae6f/04.webp",
-        "detail": "assets/store-photos/f49be82e2aae6f/04.webp"
-      }
-    ],
-    "photoGroup": "brand:가장맛있는족발",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "1e7308d1e28fe49e",
@@ -2921,7 +2861,7 @@
     "notionPageId": "989da158-dd2a-82de-9d49-81513ab4a8b2",
     "notionUrl": "https://app.notion.com/p/989da158dd2a82de9d4981513ab4a8b2",
     "notionSyncedAt": "2026-07-16T13:46:48.953Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/62413356a0b1da/02.webp",
     "images": [
       {
         "card": "assets/store-photos/62413356a0b1da/02.webp",
@@ -2933,7 +2873,7 @@
       }
     ],
     "photoGroup": "store:1e7308d1e28fe49e",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "539d762fe299233d",
@@ -3512,7 +3452,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/xsZhKoci",
-    "image": "assets/store-photos/0601ce584a820b/01.webp",
+    "image": "assets/store-photos/10477446ce7e90/01.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -3576,20 +3516,8 @@
     "notionPageId": "a46da158-dd2a-83b3-913b-811c1b81aaa3",
     "notionUrl": "https://app.notion.com/p/a46da158dd2a83b3913b811c1b81aaa3",
     "notionSyncedAt": "2026-07-16T13:46:55.472Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/10477446ce7e90/01.webp",
     "images": [
-      {
-        "card": "assets/store-photos/0601ce584a820b/01.webp",
-        "detail": "assets/store-photos/0601ce584a820b/01.webp"
-      },
-      {
-        "card": "assets/store-photos/0601ce584a820b/02.webp",
-        "detail": "assets/store-photos/0601ce584a820b/02.webp"
-      },
-      {
-        "card": "assets/store-photos/0601ce584a820b/03.webp",
-        "detail": "assets/store-photos/0601ce584a820b/03.webp"
-      },
       {
         "card": "assets/store-photos/10477446ce7e90/01.webp",
         "detail": "assets/store-photos/10477446ce7e90/01.webp"
@@ -3612,7 +3540,7 @@
       }
     ],
     "photoGroup": "brand:공차",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "72747cfe04586176",
@@ -3624,7 +3552,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/x4FEI8em",
-    "image": "assets/store-photos/0601ce584a820b/02.webp",
+    "image": "assets/store-photos/10477446ce7e90/02.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -3682,24 +3610,8 @@
     "notionPageId": "fcada158-dd2a-82cc-aa41-0177b2b9b199",
     "notionUrl": "https://app.notion.com/p/fcada158dd2a82ccaa410177b2b9b199",
     "notionSyncedAt": "2026-07-16T13:46:56.037Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/10477446ce7e90/02.webp",
     "images": [
-      {
-        "card": "assets/store-photos/0601ce584a820b/01.webp",
-        "detail": "assets/store-photos/0601ce584a820b/01.webp"
-      },
-      {
-        "card": "assets/store-photos/0601ce584a820b/02.webp",
-        "detail": "assets/store-photos/0601ce584a820b/02.webp"
-      },
-      {
-        "card": "assets/store-photos/0601ce584a820b/03.webp",
-        "detail": "assets/store-photos/0601ce584a820b/03.webp"
-      },
-      {
-        "card": "assets/store-photos/10477446ce7e90/01.webp",
-        "detail": "assets/store-photos/10477446ce7e90/01.webp"
-      },
       {
         "card": "assets/store-photos/10477446ce7e90/02.webp",
         "detail": "assets/store-photos/10477446ce7e90/02.webp"
@@ -3715,10 +3627,14 @@
       {
         "card": "assets/store-photos/10477446ce7e90/05.webp",
         "detail": "assets/store-photos/10477446ce7e90/05.webp"
+      },
+      {
+        "card": "assets/store-photos/10477446ce7e90/01.webp",
+        "detail": "assets/store-photos/10477446ce7e90/01.webp"
       }
     ],
     "photoGroup": "brand:공차",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "d0400d97c15c0a02",
@@ -3730,7 +3646,7 @@
     "address": "",
     "phone": "019-9275-8696",
     "naverMap": "https://naver.me/GVVTjCDZ",
-    "image": "assets/store-photos/0601ce584a820b/03.webp",
+    "image": "assets/store-photos/10477446ce7e90/03.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -3789,28 +3705,8 @@
     "notionUrl": "https://app.notion.com/p/ca8da158dd2a838a9a0401e8eddb5368",
     "notionSyncedAt": "2026-07-16T13:46:56.611Z",
     "phoneSource": "notion",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/10477446ce7e90/03.webp",
     "images": [
-      {
-        "card": "assets/store-photos/0601ce584a820b/01.webp",
-        "detail": "assets/store-photos/0601ce584a820b/01.webp"
-      },
-      {
-        "card": "assets/store-photos/0601ce584a820b/02.webp",
-        "detail": "assets/store-photos/0601ce584a820b/02.webp"
-      },
-      {
-        "card": "assets/store-photos/0601ce584a820b/03.webp",
-        "detail": "assets/store-photos/0601ce584a820b/03.webp"
-      },
-      {
-        "card": "assets/store-photos/10477446ce7e90/01.webp",
-        "detail": "assets/store-photos/10477446ce7e90/01.webp"
-      },
-      {
-        "card": "assets/store-photos/10477446ce7e90/02.webp",
-        "detail": "assets/store-photos/10477446ce7e90/02.webp"
-      },
       {
         "card": "assets/store-photos/10477446ce7e90/03.webp",
         "detail": "assets/store-photos/10477446ce7e90/03.webp"
@@ -3822,10 +3718,18 @@
       {
         "card": "assets/store-photos/10477446ce7e90/05.webp",
         "detail": "assets/store-photos/10477446ce7e90/05.webp"
+      },
+      {
+        "card": "assets/store-photos/10477446ce7e90/01.webp",
+        "detail": "assets/store-photos/10477446ce7e90/01.webp"
+      },
+      {
+        "card": "assets/store-photos/10477446ce7e90/02.webp",
+        "detail": "assets/store-photos/10477446ce7e90/02.webp"
       }
     ],
     "photoGroup": "brand:공차",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "59785990d2abe3e2",
@@ -3900,7 +3804,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://bit.ly/4dSPtS5",
-    "image": "assets/store-photos/a33edf2b01cbce/03.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -3964,35 +3868,7 @@
     "notionPageId": "f21da158-dd2a-82c8-a4bf-0170e14cc3a0",
     "notionUrl": "https://app.notion.com/p/f21da158dd2a82c8a4bf0170e14cc3a0",
     "notionSyncedAt": "2026-07-16T13:46:57.844Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/01.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/01.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/02.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/02.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/03.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/03.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/04.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/04.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/05.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/05.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/06.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/06.webp"
-      }
-    ],
-    "photoGroup": "brand:교촌치킨",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "b115c4e54c35d82e",
@@ -4004,7 +3880,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://naver.me/F5Cvz5au",
-    "image": "assets/store-photos/a33edf2b01cbce/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4068,35 +3944,7 @@
     "notionPageId": "cafda158-dd2a-83eb-85e1-814b25f142e1",
     "notionUrl": "https://app.notion.com/p/cafda158dd2a83eb85e1814b25f142e1",
     "notionSyncedAt": "2026-07-16T13:46:58.569Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/01.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/01.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/02.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/02.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/03.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/03.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/04.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/04.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/05.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/05.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/06.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/06.webp"
-      }
-    ],
-    "photoGroup": "brand:교촌치킨",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "4e2bf615062e7234",
@@ -4108,7 +3956,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://naver.me/FEdFcQWs",
-    "image": "assets/store-photos/a33edf2b01cbce/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4166,35 +4014,7 @@
     "notionPageId": "9e6da158-dd2a-8218-8453-018b3e4d6958",
     "notionUrl": "https://app.notion.com/p/9e6da158dd2a82188453018b3e4d6958",
     "notionSyncedAt": "2026-07-16T13:46:59.078Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/01.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/01.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/02.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/02.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/03.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/03.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/04.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/04.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/05.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/05.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/06.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/06.webp"
-      }
-    ],
-    "photoGroup": "brand:교촌치킨",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "c97c66bc78a649ea",
@@ -4206,7 +4026,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://bit.ly/4q7OiCv",
-    "image": "assets/store-photos/a33edf2b01cbce/02.webp",
+    "image": "assets/store-photos/a33edf2b01cbce/05.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4270,8 +4090,16 @@
     "notionPageId": "643da158-dd2a-835b-8582-01cf0d84f0ae",
     "notionUrl": "https://app.notion.com/p/643da158dd2a835b858201cf0d84f0ae",
     "notionSyncedAt": "2026-07-16T13:46:59.805Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/a33edf2b01cbce/05.webp",
     "images": [
+      {
+        "card": "assets/store-photos/a33edf2b01cbce/05.webp",
+        "detail": "assets/store-photos/a33edf2b01cbce/05.webp"
+      },
+      {
+        "card": "assets/store-photos/a33edf2b01cbce/06.webp",
+        "detail": "assets/store-photos/a33edf2b01cbce/06.webp"
+      },
       {
         "card": "assets/store-photos/a33edf2b01cbce/01.webp",
         "detail": "assets/store-photos/a33edf2b01cbce/01.webp"
@@ -4287,18 +4115,10 @@
       {
         "card": "assets/store-photos/a33edf2b01cbce/04.webp",
         "detail": "assets/store-photos/a33edf2b01cbce/04.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/05.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/05.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/06.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/06.webp"
       }
     ],
-    "photoGroup": "brand:교촌치킨",
-    "photoSource": "shared-franchise-pool"
+    "photoGroup": "store:c97c66bc78a649ea",
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "84fc553896d0b051",
@@ -4310,7 +4130,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://bit.ly/4u4Ypd8",
-    "image": "assets/store-photos/a33edf2b01cbce/04.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4374,35 +4194,7 @@
     "notionPageId": "1f8da158-dd2a-8393-aba6-011f0fdd0aa8",
     "notionUrl": "https://app.notion.com/p/1f8da158dd2a8393aba6011f0fdd0aa8",
     "notionSyncedAt": "2026-07-16T13:47:00.584Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/01.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/01.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/02.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/02.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/03.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/03.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/04.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/04.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/05.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/05.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/06.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/06.webp"
-      }
-    ],
-    "photoGroup": "brand:교촌치킨",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "04ae2e96e82f63ef",
@@ -4414,7 +4206,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://naver.me/xD6yIxam",
-    "image": "assets/store-photos/a33edf2b01cbce/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4478,35 +4270,7 @@
     "notionPageId": "befda158-dd2a-8390-81c7-81f36c804b1d",
     "notionUrl": "https://app.notion.com/p/befda158dd2a839081c781f36c804b1d",
     "notionSyncedAt": "2026-07-16T13:47:02.637Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/01.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/01.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/02.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/02.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/03.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/03.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/04.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/04.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/05.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/05.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/06.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/06.webp"
-      }
-    ],
-    "photoGroup": "brand:교촌치킨",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "dfb50765a5f3a8ab",
@@ -4518,7 +4282,7 @@
     "address": "",
     "phone": "0129587233",
     "naverMap": "https://naver.me/59NT2rFu",
-    "image": "assets/store-photos/a33edf2b01cbce/04.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4583,35 +4347,7 @@
     "notionUrl": "https://app.notion.com/p/5d0da158dd2a82fab797019de13d61db",
     "notionSyncedAt": "2026-07-16T13:47:03.235Z",
     "phoneSource": "notion",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/01.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/01.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/02.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/02.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/03.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/03.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/04.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/04.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/05.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/05.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/06.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/06.webp"
-      }
-    ],
-    "photoGroup": "brand:교촌치킨",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "99ade7376cceea13",
@@ -4623,7 +4359,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://bit.ly/3PUnmtY",
-    "image": "assets/store-photos/a33edf2b01cbce/06.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4687,35 +4423,7 @@
     "notionPageId": "0ebda158-dd2a-83f5-bca8-81fc475de129",
     "notionUrl": "https://app.notion.com/p/0ebda158dd2a83f5bca881fc475de129",
     "notionSyncedAt": "2026-07-16T13:47:03.795Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/01.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/01.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/02.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/02.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/03.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/03.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/04.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/04.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/05.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/05.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/06.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/06.webp"
-      }
-    ],
-    "photoGroup": "brand:교촌치킨",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "6126fa948ce536e6",
@@ -4727,7 +4435,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://naver.me/5XDCPHHT",
-    "image": "assets/store-photos/a33edf2b01cbce/03.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4791,35 +4499,7 @@
     "notionPageId": "ee2da158-dd2a-83b6-a2b3-818fbd64e521",
     "notionUrl": "https://app.notion.com/p/ee2da158dd2a83b6a2b3818fbd64e521",
     "notionSyncedAt": "2026-07-16T13:47:04.403Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/01.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/01.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/02.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/02.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/03.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/03.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/04.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/04.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/05.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/05.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/06.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/06.webp"
-      }
-    ],
-    "photoGroup": "brand:교촌치킨",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "8e930495e2e94c21",
@@ -4831,7 +4511,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://naver.me/50ebVwN4",
-    "image": "assets/store-photos/a33edf2b01cbce/05.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4889,35 +4569,7 @@
     "notionPageId": "931da158-dd2a-82d0-b08f-812ec5876322",
     "notionUrl": "https://app.notion.com/p/931da158dd2a82d0b08f812ec5876322",
     "notionSyncedAt": "2026-07-16T13:47:04.973Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/01.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/01.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/02.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/02.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/03.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/03.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/04.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/04.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/05.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/05.webp"
-      },
-      {
-        "card": "assets/store-photos/a33edf2b01cbce/06.webp",
-        "detail": "assets/store-photos/a33edf2b01cbce/06.webp"
-      }
-    ],
-    "photoGroup": "brand:교촌치킨",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "57bb58bd63f0de94",
@@ -7868,7 +7520,7 @@
     "notionPageId": "a4eda158-dd2a-8281-8478-81e47b435a9c",
     "notionUrl": "https://app.notion.com/p/a4eda158dd2a8281847881e47b435a9c",
     "notionSyncedAt": "2026-07-16T13:47:31.474Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/fc1989c2023fb4/02.webp",
     "images": [
       {
         "card": "assets/store-photos/fc1989c2023fb4/02.webp",
@@ -7880,7 +7532,7 @@
       }
     ],
     "photoGroup": "store:dc42166bad88a929",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "b8267998349b16e1",
@@ -9929,7 +9581,7 @@
     "notionPageId": "ae2da158-dd2a-825a-b1a0-01c7607c8846",
     "notionUrl": "https://app.notion.com/p/ae2da158dd2a825ab1a001c7607c8846",
     "notionSyncedAt": "2026-07-16T13:47:48.919Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/effe2bada0c801/01.webp",
     "images": [
       {
         "card": "assets/store-photos/effe2bada0c801/01.webp",
@@ -9941,7 +9593,7 @@
       }
     ],
     "photoGroup": "store:149224e8ca5281d9",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "2e2afe0788acce6a",
@@ -11862,7 +11514,7 @@
     "notionUrl": "https://app.notion.com/p/371da158dd2a8276a3b7817247bcf66b",
     "notionSyncedAt": "2026-07-16T13:48:06.172Z",
     "phoneSource": "notion",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/e4d7494465bab3/01.webp",
     "images": [
       {
         "card": "assets/store-photos/e4d7494465bab3/01.webp",
@@ -11874,7 +11526,7 @@
       }
     ],
     "photoGroup": "store:e9753bad89c254a3",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "1fe48c8f1857b4d2",
@@ -11886,7 +11538,7 @@
     "address": "",
     "phone": "010-6789-0336",
     "naverMap": "",
-    "image": "assets/store-photos/e86268c8011ece/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -11951,19 +11603,7 @@
     "notionUrl": "https://app.notion.com/p/360da158dd2a833892e2018f36965d6d",
     "notionSyncedAt": "2026-07-16T13:48:06.790Z",
     "phoneSource": "notion",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/e86268c8011ece/01.webp",
-        "detail": "assets/store-photos/e86268c8011ece/01.webp"
-      },
-      {
-        "card": "assets/store-photos/e86268c8011ece/02.webp",
-        "detail": "assets/store-photos/e86268c8011ece/02.webp"
-      }
-    ],
-    "photoGroup": "brand:맛있는 전시회",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "5bc1cef8362365a5",
@@ -12554,7 +12194,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/xXDvU72N",
-    "image": "assets/store-photos/cf3a23c449e58c/04.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -12606,31 +12246,7 @@
     "notionPageId": "b48da158-dd2a-8398-8b4f-8153c6abac94",
     "notionUrl": "https://app.notion.com/p/MGC-b48da158dd2a83988b4f8153c6abac94",
     "notionSyncedAt": "2026-07-16T13:48:13.422Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/01.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/01.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/02.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/02.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/03.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/03.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/04.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/04.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/05.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/05.webp"
-      }
-    ],
-    "photoGroup": "brand:메가MGC커피",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "9999f4db1009d483",
@@ -12642,7 +12258,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FfW12Yk9",
-    "image": "assets/store-photos/cf3a23c449e58c/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -12688,31 +12304,7 @@
     "notionPageId": "81dda158-dd2a-8390-8772-816c738fd3f0",
     "notionUrl": "https://app.notion.com/p/MGC-81dda158dd2a83908772816c738fd3f0",
     "notionSyncedAt": "2026-07-16T13:48:13.975Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/01.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/01.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/02.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/02.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/03.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/03.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/04.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/04.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/05.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/05.webp"
-      }
-    ],
-    "photoGroup": "brand:메가MGC커피",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "4289ad6217815b70",
@@ -12724,7 +12316,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/xs3sPGsV",
-    "image": "assets/store-photos/cf3a23c449e58c/03.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -12764,31 +12356,7 @@
     "notionPageId": "e0bda158-dd2a-8349-8345-01b5ac775b73",
     "notionUrl": "https://app.notion.com/p/MGC-e0bda158dd2a8349834501b5ac775b73",
     "notionSyncedAt": "2026-07-16T13:48:14.551Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/01.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/01.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/02.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/02.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/03.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/03.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/04.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/04.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/05.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/05.webp"
-      }
-    ],
-    "photoGroup": "brand:메가MGC커피",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "d14f1e6669383a88",
@@ -12800,7 +12368,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/Gu0vdPVE",
-    "image": "assets/store-photos/cf3a23c449e58c/04.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -12858,31 +12426,7 @@
     "notionPageId": "c1cda158-dd2a-82ca-8482-01947f6f2861",
     "notionUrl": "https://app.notion.com/p/MGC-c1cda158dd2a82ca848201947f6f2861",
     "notionSyncedAt": "2026-07-16T13:48:15.115Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/01.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/01.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/02.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/02.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/03.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/03.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/04.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/04.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/05.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/05.webp"
-      }
-    ],
-    "photoGroup": "brand:메가MGC커피",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "d5ab6e067ab79cb9",
@@ -12894,7 +12438,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/xSNjvfew",
-    "image": "assets/store-photos/cf3a23c449e58c/05.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -12940,31 +12484,7 @@
     "notionPageId": "b54da158-dd2a-83a7-b0c4-8158a09d1351",
     "notionUrl": "https://app.notion.com/p/MGC-b54da158dd2a83a7b0c48158a09d1351",
     "notionSyncedAt": "2026-07-16T13:48:16.563Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/01.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/01.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/02.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/02.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/03.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/03.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/04.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/04.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/05.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/05.webp"
-      }
-    ],
-    "photoGroup": "brand:메가MGC커피",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "9d7d7e2f99658a9c",
@@ -12976,7 +12496,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/Ge5tha0m",
-    "image": "assets/store-photos/cf3a23c449e58c/03.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -13016,31 +12536,7 @@
     "notionPageId": "bceda158-dd2a-838d-9c13-0153f74b72d7",
     "notionUrl": "https://app.notion.com/p/MGC-bceda158dd2a838d9c130153f74b72d7",
     "notionSyncedAt": "2026-07-16T13:48:17.208Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/01.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/01.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/02.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/02.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/03.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/03.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/04.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/04.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/05.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/05.webp"
-      }
-    ],
-    "photoGroup": "brand:메가MGC커피",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "3a60142ebc07e295",
@@ -13052,7 +12548,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FOhkWois",
-    "image": "assets/store-photos/cf3a23c449e58c/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -13104,31 +12600,7 @@
     "notionPageId": "c6bda158-dd2a-823c-898c-81acc7c35773",
     "notionUrl": "https://app.notion.com/p/MGC-c6bda158dd2a823c898c81acc7c35773",
     "notionSyncedAt": "2026-07-16T13:48:17.848Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/01.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/01.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/02.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/02.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/03.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/03.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/04.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/04.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/05.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/05.webp"
-      }
-    ],
-    "photoGroup": "brand:메가MGC커피",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "08eecf0379470865",
@@ -13140,7 +12612,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/xxo1j6KB",
-    "image": "assets/store-photos/cf3a23c449e58c/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -13192,31 +12664,7 @@
     "notionPageId": "57eda158-dd2a-82d9-92d5-81b7107707ab",
     "notionUrl": "https://app.notion.com/p/MGC-57eda158dd2a82d992d581b7107707ab",
     "notionSyncedAt": "2026-07-16T13:48:18.400Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/01.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/01.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/02.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/02.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/03.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/03.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/04.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/04.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/05.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/05.webp"
-      }
-    ],
-    "photoGroup": "brand:메가MGC커피",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "62cd152fab8dc42e",
@@ -13228,7 +12676,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FIcJ35aq",
-    "image": "assets/store-photos/cf3a23c449e58c/05.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -13274,31 +12722,7 @@
     "notionPageId": "c20da158-dd2a-82ed-954a-818b1f1b74c8",
     "notionUrl": "https://app.notion.com/p/MGC-c20da158dd2a82ed954a818b1f1b74c8",
     "notionSyncedAt": "2026-07-16T13:48:18.957Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/01.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/01.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/02.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/02.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/03.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/03.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/04.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/04.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/05.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/05.webp"
-      }
-    ],
-    "photoGroup": "brand:메가MGC커피",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "9a4e8ea87951b54e",
@@ -13310,7 +12734,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FVbsepq8",
-    "image": "assets/store-photos/cf3a23c449e58c/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -13356,31 +12780,7 @@
     "notionPageId": "e24da158-dd2a-822e-b204-81067745d2e3",
     "notionUrl": "https://app.notion.com/p/MGC-e24da158dd2a822eb20481067745d2e3",
     "notionSyncedAt": "2026-07-16T13:48:19.489Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/01.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/01.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/02.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/02.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/03.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/03.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/04.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/04.webp"
-      },
-      {
-        "card": "assets/store-photos/cf3a23c449e58c/05.webp",
-        "detail": "assets/store-photos/cf3a23c449e58c/05.webp"
-      }
-    ],
-    "photoGroup": "brand:메가MGC커피",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "f25d8111c5d1b135",
@@ -14550,7 +13950,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/GGGGiO93",
-    "image": "assets/store-photos/34258bb5662337/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -14608,19 +14008,7 @@
     "notionPageId": "08fda158-dd2a-82d1-8d94-81515e93f8bd",
     "notionUrl": "https://app.notion.com/p/1990-08fda158dd2a82d18d9481515e93f8bd",
     "notionSyncedAt": "2026-07-16T13:48:30.466Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/34258bb5662337/01.webp",
-        "detail": "assets/store-photos/34258bb5662337/01.webp"
-      },
-      {
-        "card": "assets/store-photos/34258bb5662337/02.webp",
-        "detail": "assets/store-photos/34258bb5662337/02.webp"
-      }
-    ],
-    "photoGroup": "brand:바른보쌈1990",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "2b78b30bde243ae6",
@@ -14632,7 +14020,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5SKKOwax",
-    "image": "assets/store-photos/34258bb5662337/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -14696,19 +14084,7 @@
     "notionPageId": "9c8da158-dd2a-82d2-9d08-01efbc4c8359",
     "notionUrl": "https://app.notion.com/p/1990-9c8da158dd2a82d29d0801efbc4c8359",
     "notionSyncedAt": "2026-07-16T13:48:30.988Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/34258bb5662337/01.webp",
-        "detail": "assets/store-photos/34258bb5662337/01.webp"
-      },
-      {
-        "card": "assets/store-photos/34258bb5662337/02.webp",
-        "detail": "assets/store-photos/34258bb5662337/02.webp"
-      }
-    ],
-    "photoGroup": "brand:바른보쌈1990",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "51ed482a660b8247",
@@ -15499,7 +14875,7 @@
     "notionPageId": "37fda158-dd2a-83e4-84ba-81e55aed0209",
     "notionUrl": "https://app.notion.com/p/37fda158dd2a83e484ba81e55aed0209",
     "notionSyncedAt": "2026-07-16T13:48:37.329Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/e7959d1e8832a8/01.webp",
     "images": [
       {
         "card": "assets/store-photos/e7959d1e8832a8/01.webp",
@@ -15507,7 +14883,7 @@
       }
     ],
     "photoGroup": "store:7b80f8d10b67089e",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "74914ff35d06477d",
@@ -15653,7 +15029,7 @@
     "notionPageId": "5e4da158-dd2a-8241-a9eb-01ecdbb0a45c",
     "notionUrl": "https://app.notion.com/p/5e4da158dd2a8241a9eb01ecdbb0a45c",
     "notionSyncedAt": "2026-07-16T13:48:38.566Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/56ce12fd5a705a/01.webp",
     "images": [
       {
         "card": "assets/store-photos/56ce12fd5a705a/01.webp",
@@ -15665,7 +15041,7 @@
       }
     ],
     "photoGroup": "store:4c6d5dcf82e3e56b",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "db28774d00c0d9ba",
@@ -15742,7 +15118,7 @@
     "notionUrl": "https://app.notion.com/p/88ada158dd2a83159d6381bb832d1774",
     "notionSyncedAt": "2026-07-16T13:48:39.139Z",
     "phoneSource": "notion",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/403e8af41f1ef1/01.webp",
     "images": [
       {
         "card": "assets/store-photos/403e8af41f1ef1/01.webp",
@@ -15754,7 +15130,7 @@
       }
     ],
     "photoGroup": "store:db28774d00c0d9ba",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "30fff2720e2ce0c9",
@@ -16373,7 +15749,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://bit.ly/4vgrK5k",
-    "image": "assets/store-photos/32ffc1cf36bd0f/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -16437,43 +15813,7 @@
     "notionPageId": "b24da158-dd2a-833a-ba73-81f2184248a4",
     "notionUrl": "https://app.notion.com/p/b24da158dd2a833aba7381f2184248a4",
     "notionSyncedAt": "2026-07-16T13:48:44.952Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/01.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/01.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/02.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/02.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/03.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/04.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/04.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/06.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/06.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/01.webp",
-        "detail": "assets/store-photos/485a846f6445df/01.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/02.webp",
-        "detail": "assets/store-photos/485a846f6445df/02.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/03.webp",
-        "detail": "assets/store-photos/485a846f6445df/03.webp"
-      }
-    ],
-    "photoGroup": "brand:BBQ",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "4059491d8dbb4159",
@@ -16485,7 +15825,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://bit.ly/4dYDWRt",
-    "image": "assets/store-photos/32ffc1cf36bd0f/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -16549,43 +15889,7 @@
     "notionPageId": "177da158-dd2a-838e-ab9f-01de1e31e367",
     "notionUrl": "https://app.notion.com/p/177da158dd2a838eab9f01de1e31e367",
     "notionSyncedAt": "2026-07-16T13:48:46.879Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/01.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/01.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/02.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/02.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/03.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/04.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/04.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/06.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/06.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/01.webp",
-        "detail": "assets/store-photos/485a846f6445df/01.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/02.webp",
-        "detail": "assets/store-photos/485a846f6445df/02.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/03.webp",
-        "detail": "assets/store-photos/485a846f6445df/03.webp"
-      }
-    ],
-    "photoGroup": "brand:BBQ",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "572e4a658f762cbe",
@@ -16597,7 +15901,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://bit.ly/4uLBhSg",
-    "image": "assets/store-photos/32ffc1cf36bd0f/03.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -16661,43 +15965,7 @@
     "notionPageId": "02bda158-dd2a-82c7-95ad-81dec39b25a8",
     "notionUrl": "https://app.notion.com/p/02bda158dd2a82c795ad81dec39b25a8",
     "notionSyncedAt": "2026-07-16T13:48:47.493Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/01.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/01.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/02.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/02.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/03.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/04.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/04.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/06.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/06.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/01.webp",
-        "detail": "assets/store-photos/485a846f6445df/01.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/02.webp",
-        "detail": "assets/store-photos/485a846f6445df/02.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/03.webp",
-        "detail": "assets/store-photos/485a846f6445df/03.webp"
-      }
-    ],
-    "photoGroup": "brand:BBQ",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "e2645d79ef555a24",
@@ -16709,7 +15977,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://bit.ly/4uFDs9Q",
-    "image": "assets/store-photos/485a846f6445df/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -16773,43 +16041,7 @@
     "notionPageId": "27cda158-dd2a-82fa-8127-8138901f7260",
     "notionUrl": "https://app.notion.com/p/27cda158dd2a82fa81278138901f7260",
     "notionSyncedAt": "2026-07-16T13:48:48.118Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/01.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/01.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/02.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/02.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/03.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/04.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/04.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/06.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/06.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/01.webp",
-        "detail": "assets/store-photos/485a846f6445df/01.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/02.webp",
-        "detail": "assets/store-photos/485a846f6445df/02.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/03.webp",
-        "detail": "assets/store-photos/485a846f6445df/03.webp"
-      }
-    ],
-    "photoGroup": "brand:BBQ",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "b73ca9b4a41f7502",
@@ -16821,7 +16053,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://bit.ly/3Qbpaif",
-    "image": "assets/store-photos/32ffc1cf36bd0f/06.webp",
+    "image": "assets/store-photos/485a846f6445df/02.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -16885,32 +16117,8 @@
     "notionPageId": "883da158-dd2a-826f-8942-01ae1595306c",
     "notionUrl": "https://app.notion.com/p/883da158dd2a826f894201ae1595306c",
     "notionSyncedAt": "2026-07-16T13:48:48.721Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/485a846f6445df/02.webp",
     "images": [
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/01.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/01.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/02.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/02.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/03.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/04.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/04.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/06.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/06.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/01.webp",
-        "detail": "assets/store-photos/485a846f6445df/01.webp"
-      },
       {
         "card": "assets/store-photos/485a846f6445df/02.webp",
         "detail": "assets/store-photos/485a846f6445df/02.webp"
@@ -16918,10 +16126,14 @@
       {
         "card": "assets/store-photos/485a846f6445df/03.webp",
         "detail": "assets/store-photos/485a846f6445df/03.webp"
+      },
+      {
+        "card": "assets/store-photos/485a846f6445df/01.webp",
+        "detail": "assets/store-photos/485a846f6445df/01.webp"
       }
     ],
-    "photoGroup": "brand:BBQ",
-    "photoSource": "shared-franchise-pool"
+    "photoGroup": "store:b73ca9b4a41f7502",
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "c1df1c34732d2757",
@@ -16933,7 +16145,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://bit.ly/4uBfhta",
-    "image": "assets/store-photos/485a846f6445df/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -16997,43 +16209,7 @@
     "notionPageId": "c6fda158-dd2a-826f-8eeb-0121746dc262",
     "notionUrl": "https://app.notion.com/p/c6fda158dd2a826f8eeb0121746dc262",
     "notionSyncedAt": "2026-07-16T13:48:49.300Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/01.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/01.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/02.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/02.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/03.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/04.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/04.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/06.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/06.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/01.webp",
-        "detail": "assets/store-photos/485a846f6445df/01.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/02.webp",
-        "detail": "assets/store-photos/485a846f6445df/02.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/03.webp",
-        "detail": "assets/store-photos/485a846f6445df/03.webp"
-      }
-    ],
-    "photoGroup": "brand:BBQ",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "e32f28eff787161a",
@@ -17045,7 +16221,7 @@
     "address": "",
     "phone": "",
     "naverMap": "%EB%B9%84%EB%B9%84%ED%81%90%20%EC%97%AC%EC%88%98%EC%B6%A9%EB%AC%B4%EC%A0%90%20b4ada158dd2a82baa05201e3dfc68105.md",
-    "image": "assets/store-photos/485a846f6445df/03.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -17097,43 +16273,7 @@
     "notionPageId": "b4ada158-dd2a-82ba-a052-01e3dfc68105",
     "notionUrl": "https://app.notion.com/p/b4ada158dd2a82baa05201e3dfc68105",
     "notionSyncedAt": "2026-07-16T13:48:49.827Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/01.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/01.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/02.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/02.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/03.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/04.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/04.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/06.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/06.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/01.webp",
-        "detail": "assets/store-photos/485a846f6445df/01.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/02.webp",
-        "detail": "assets/store-photos/485a846f6445df/02.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/03.webp",
-        "detail": "assets/store-photos/485a846f6445df/03.webp"
-      }
-    ],
-    "photoGroup": "brand:BBQ",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "9cba7b46fed409a9",
@@ -17145,7 +16285,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://bit.ly/4o0NVKA",
-    "image": "assets/store-photos/32ffc1cf36bd0f/04.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -17209,43 +16349,7 @@
     "notionPageId": "055da158-dd2a-82bf-8af4-01b9ad4f5169",
     "notionUrl": "https://app.notion.com/p/055da158dd2a82bf8af401b9ad4f5169",
     "notionSyncedAt": "2026-07-16T13:48:50.575Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/01.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/01.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/02.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/02.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/03.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/03.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/04.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/04.webp"
-      },
-      {
-        "card": "assets/store-photos/32ffc1cf36bd0f/06.webp",
-        "detail": "assets/store-photos/32ffc1cf36bd0f/06.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/01.webp",
-        "detail": "assets/store-photos/485a846f6445df/01.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/02.webp",
-        "detail": "assets/store-photos/485a846f6445df/02.webp"
-      },
-      {
-        "card": "assets/store-photos/485a846f6445df/03.webp",
-        "detail": "assets/store-photos/485a846f6445df/03.webp"
-      }
-    ],
-    "photoGroup": "brand:BBQ",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "43384f472418faec",
@@ -17315,7 +16419,7 @@
     "notionPageId": "8c9da158-dd2a-82a1-a262-814e46b19627",
     "notionUrl": "https://app.notion.com/p/8c9da158dd2a82a1a262814e46b19627",
     "notionSyncedAt": "2026-07-16T13:48:51.221Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/87c82590ea6e99/01.webp",
     "images": [
       {
         "card": "assets/store-photos/87c82590ea6e99/01.webp",
@@ -17327,7 +16431,7 @@
       }
     ],
     "photoGroup": "store:43384f472418faec",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "adcbd0b7f13946a4",
@@ -17409,7 +16513,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FDchD67F",
-    "image": "images/notion-stores/17fba5c0b042.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -17460,7 +16564,8 @@
     },
     "notionPageId": "a30da158-dd2a-825a-a5f4-01fb18b02da6",
     "notionUrl": "https://app.notion.com/p/a30da158dd2a825aa5f401fb18b02da6",
-    "notionSyncedAt": "2026-07-16T13:48:52.514Z"
+    "notionSyncedAt": "2026-07-16T13:48:52.514Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "67d28f42d21c125f",
@@ -17820,7 +16925,7 @@
     "notionPageId": "204da158-dd2a-8375-b23e-014c923593ef",
     "notionUrl": "https://app.notion.com/p/204da158dd2a8375b23e014c923593ef",
     "notionSyncedAt": "2026-07-16T13:48:55.663Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/45ede3e14b361c/02.webp",
     "images": [
       {
         "card": "assets/store-photos/45ede3e14b361c/02.webp",
@@ -17828,7 +16933,7 @@
       }
     ],
     "photoGroup": "store:03809451afc7b09b",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "de5f7fd077422974",
@@ -17978,7 +17083,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5QsrkeBm",
-    "image": "assets/store-photos/076942c6eac9f1/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -18042,15 +17147,7 @@
     "notionPageId": "6d7da158-dd2a-8282-85bf-8197a4ce6129",
     "notionUrl": "https://app.notion.com/p/6d7da158dd2a828285bf8197a4ce6129",
     "notionSyncedAt": "2026-07-16T13:48:57.593Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/076942c6eac9f1/02.webp",
-        "detail": "assets/store-photos/076942c6eac9f1/02.webp"
-      }
-    ],
-    "photoGroup": "brand:손수김밥",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "779bc5453215d9c5",
@@ -18549,7 +17646,7 @@
     "notionPageId": "7e5da158-dd2a-826a-9d48-01e7c1d7bad7",
     "notionUrl": "https://app.notion.com/p/7e5da158dd2a826a9d4801e7c1d7bad7",
     "notionSyncedAt": "2026-07-16T13:49:01.841Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/72763f75c0d854/01.webp",
     "images": [
       {
         "card": "assets/store-photos/72763f75c0d854/01.webp",
@@ -18561,7 +17658,7 @@
       }
     ],
     "photoGroup": "store:0104c356b7c6428c",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "14d4b7be316bc8e7",
@@ -19001,7 +18098,7 @@
     "notionPageId": "f05da158-dd2a-826f-b3ae-813cb317ccf9",
     "notionUrl": "https://app.notion.com/p/f05da158dd2a826fb3ae813cb317ccf9",
     "notionSyncedAt": "2026-07-16T13:49:05.457Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/4b39c979033d52/01.webp",
     "images": [
       {
         "card": "assets/store-photos/4b39c979033d52/01.webp",
@@ -19013,7 +18110,7 @@
       }
     ],
     "photoGroup": "store:b218c9f269d44fa8",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "3a743fd9484606d1",
@@ -19718,7 +18815,7 @@
     "notionPageId": "ebbda158-dd2a-82c3-9a31-01b18e9ca727",
     "notionUrl": "https://app.notion.com/p/ebbda158dd2a82c39a3101b18e9ca727",
     "notionSyncedAt": "2026-07-16T13:49:11.629Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/40c2d322cc4960/02.webp",
     "images": [
       {
         "card": "assets/store-photos/40c2d322cc4960/02.webp",
@@ -19730,7 +18827,7 @@
       }
     ],
     "photoGroup": "store:e7be983ffc863971",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "31d479a979a700cf",
@@ -19817,7 +18914,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/GSQzpTz9",
-    "image": "assets/store-photos/d7cfe746f0f46a/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -19881,19 +18978,7 @@
     "notionPageId": "d9ada158-dd2a-83cb-96bf-81932f515f54",
     "notionUrl": "https://app.notion.com/p/d9ada158dd2a83cb96bf81932f515f54",
     "notionSyncedAt": "2026-07-16T13:49:12.742Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/d7cfe746f0f46a/01.webp",
-        "detail": "assets/store-photos/d7cfe746f0f46a/01.webp"
-      },
-      {
-        "card": "assets/store-photos/d7cfe746f0f46a/02.webp",
-        "detail": "assets/store-photos/d7cfe746f0f46a/02.webp"
-      }
-    ],
-    "photoGroup": "brand:아이커 버거&치킨",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "3733c57e37212005",
@@ -21203,7 +20288,7 @@
     "notionPageId": "2bbda158-dd2a-82a8-a3a9-017a191bc36e",
     "notionUrl": "https://app.notion.com/p/2bbda158dd2a82a8a3a9017a191bc36e",
     "notionSyncedAt": "2026-07-16T13:49:27.573Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/81fa6e2a84d162/02.webp",
     "images": [
       {
         "card": "assets/store-photos/81fa6e2a84d162/02.webp",
@@ -21215,7 +20300,7 @@
       }
     ],
     "photoGroup": "store:fe356412007caf0c",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "61791dbea82168f1",
@@ -21336,7 +20421,7 @@
     "notionPageId": "6dada158-dd2a-83eb-b13f-8142c2f69d3f",
     "notionUrl": "https://app.notion.com/p/6dada158dd2a83ebb13f8142c2f69d3f",
     "notionSyncedAt": "2026-07-16T13:49:28.682Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/cbeecca1d69621/01.webp",
     "images": [
       {
         "card": "assets/store-photos/cbeecca1d69621/01.webp",
@@ -21348,7 +20433,7 @@
       }
     ],
     "photoGroup": "store:69f92930ea1e00c4",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "75f31fc5eb51073b",
@@ -21971,7 +21056,7 @@
     "notionPageId": "b5fda158-dd2a-82e6-81bd-01f62c72e77a",
     "notionUrl": "https://app.notion.com/p/b5fda158dd2a82e681bd01f62c72e77a",
     "notionSyncedAt": "2026-07-16T13:49:34.858Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/e7f1470821d785/01.webp",
     "images": [
       {
         "card": "assets/store-photos/e7f1470821d785/01.webp",
@@ -21979,7 +21064,7 @@
       }
     ],
     "photoGroup": "store:34817ff59a6bc66d",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "0e6d7a1000b1c53b",
@@ -22524,7 +21609,7 @@
     "notionPageId": "09cda158-dd2a-82f3-9c6f-81636da9a03d",
     "notionUrl": "https://app.notion.com/p/Your-Moon-09cda158dd2a82f39c6f81636da9a03d",
     "notionSyncedAt": "2026-07-16T13:49:40.344Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/dab75a32442ed4/02.webp",
     "images": [
       {
         "card": "assets/store-photos/dab75a32442ed4/02.webp",
@@ -22536,7 +21621,7 @@
       }
     ],
     "photoGroup": "store:0199534cac937a52",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "65c908d7b367de45",
@@ -22902,7 +21987,7 @@
     "notionPageId": "b4fda158-dd2a-8339-b0c5-81fec457f9a4",
     "notionUrl": "https://app.notion.com/p/b4fda158dd2a8339b0c581fec457f9a4",
     "notionSyncedAt": "2026-07-16T13:49:43.363Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/330bf81fa8c3d9/02.webp",
     "images": [
       {
         "card": "assets/store-photos/330bf81fa8c3d9/02.webp",
@@ -22910,7 +21995,7 @@
       }
     ],
     "photoGroup": "store:382dd89b36993ff8",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "7a91bd1d1f218c97",
@@ -23138,7 +22223,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "assets/store-photos/8c75a7adc473a5/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -23202,27 +22287,7 @@
     "notionPageId": "396da158-dd2a-8085-a4d1-e44fec1bdb65",
     "notionUrl": "https://app.notion.com/p/396da158dd2a8085a4d1e44fec1bdb65",
     "notionSyncedAt": "2026-07-16T13:49:46.574Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/8c75a7adc473a5/01.webp",
-        "detail": "assets/store-photos/8c75a7adc473a5/01.webp"
-      },
-      {
-        "card": "assets/store-photos/8c75a7adc473a5/02.webp",
-        "detail": "assets/store-photos/8c75a7adc473a5/02.webp"
-      },
-      {
-        "card": "assets/store-photos/b2246e68422b60/01.webp",
-        "detail": "assets/store-photos/b2246e68422b60/01.webp"
-      },
-      {
-        "card": "assets/store-photos/b2246e68422b60/02.webp",
-        "detail": "assets/store-photos/b2246e68422b60/02.webp"
-      }
-    ],
-    "photoGroup": "brand:이라이타코야끼",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "90fed609e43aafb2",
@@ -23234,7 +22299,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "assets/store-photos/8c75a7adc473a5/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -23298,27 +22363,7 @@
     "notionPageId": "400da158-dd2a-8216-b60e-01db8c2dff2f",
     "notionUrl": "https://app.notion.com/p/1-400da158dd2a8216b60e01db8c2dff2f",
     "notionSyncedAt": "2026-07-16T13:49:47.465Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/8c75a7adc473a5/01.webp",
-        "detail": "assets/store-photos/8c75a7adc473a5/01.webp"
-      },
-      {
-        "card": "assets/store-photos/8c75a7adc473a5/02.webp",
-        "detail": "assets/store-photos/8c75a7adc473a5/02.webp"
-      },
-      {
-        "card": "assets/store-photos/b2246e68422b60/01.webp",
-        "detail": "assets/store-photos/b2246e68422b60/01.webp"
-      },
-      {
-        "card": "assets/store-photos/b2246e68422b60/02.webp",
-        "detail": "assets/store-photos/b2246e68422b60/02.webp"
-      }
-    ],
-    "photoGroup": "brand:이라이타코야끼",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "424a3dadd34b19fa",
@@ -23755,8 +22800,16 @@
     "notionPageId": "1c7da158-dd2a-828d-a0c8-01b0e755a396",
     "notionUrl": "https://app.notion.com/p/1c7da158dd2a828da0c801b0e755a396",
     "notionSyncedAt": "2026-07-16T13:49:50.937Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/f1a516c0cb516a/05.webp",
     "images": [
+      {
+        "card": "assets/store-photos/f1a516c0cb516a/05.webp",
+        "detail": "assets/store-photos/f1a516c0cb516a/05.webp"
+      },
+      {
+        "card": "assets/store-photos/f1a516c0cb516a/06.webp",
+        "detail": "assets/store-photos/f1a516c0cb516a/06.webp"
+      },
       {
         "card": "assets/store-photos/f1a516c0cb516a/01.webp",
         "detail": "assets/store-photos/f1a516c0cb516a/01.webp"
@@ -23768,34 +22821,10 @@
       {
         "card": "assets/store-photos/f1a516c0cb516a/04.webp",
         "detail": "assets/store-photos/f1a516c0cb516a/04.webp"
-      },
-      {
-        "card": "assets/store-photos/f1a516c0cb516a/05.webp",
-        "detail": "assets/store-photos/f1a516c0cb516a/05.webp"
-      },
-      {
-        "card": "assets/store-photos/f1a516c0cb516a/06.webp",
-        "detail": "assets/store-photos/f1a516c0cb516a/06.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/03.webp",
-        "detail": "assets/store-photos/116859dc1e4734/03.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/04.webp",
-        "detail": "assets/store-photos/116859dc1e4734/04.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/05.webp",
-        "detail": "assets/store-photos/116859dc1e4734/05.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/06.webp",
-        "detail": "assets/store-photos/116859dc1e4734/06.webp"
       }
     ],
     "photoGroup": "brand:자담치킨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "4ae622b733f163c7",
@@ -23871,12 +22900,8 @@
     "notionPageId": "550da158-dd2a-82eb-b5c0-0139813c69a0",
     "notionUrl": "https://app.notion.com/p/550da158dd2a82ebb5c00139813c69a0",
     "notionSyncedAt": "2026-07-16T13:49:51.505Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/f1a516c0cb516a/03.webp",
     "images": [
-      {
-        "card": "assets/store-photos/f1a516c0cb516a/01.webp",
-        "detail": "assets/store-photos/f1a516c0cb516a/01.webp"
-      },
       {
         "card": "assets/store-photos/f1a516c0cb516a/03.webp",
         "detail": "assets/store-photos/f1a516c0cb516a/03.webp"
@@ -23894,24 +22919,12 @@
         "detail": "assets/store-photos/f1a516c0cb516a/06.webp"
       },
       {
-        "card": "assets/store-photos/116859dc1e4734/03.webp",
-        "detail": "assets/store-photos/116859dc1e4734/03.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/04.webp",
-        "detail": "assets/store-photos/116859dc1e4734/04.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/05.webp",
-        "detail": "assets/store-photos/116859dc1e4734/05.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/06.webp",
-        "detail": "assets/store-photos/116859dc1e4734/06.webp"
+        "card": "assets/store-photos/f1a516c0cb516a/01.webp",
+        "detail": "assets/store-photos/f1a516c0cb516a/01.webp"
       }
     ],
     "photoGroup": "brand:자담치킨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "58228e47bba2b29c",
@@ -23987,16 +23000,8 @@
     "notionPageId": "817da158-dd2a-8211-92e9-811017268fbe",
     "notionUrl": "https://app.notion.com/p/817da158dd2a821192e9811017268fbe",
     "notionSyncedAt": "2026-07-16T13:49:52.131Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/f1a516c0cb516a/04.webp",
     "images": [
-      {
-        "card": "assets/store-photos/f1a516c0cb516a/01.webp",
-        "detail": "assets/store-photos/f1a516c0cb516a/01.webp"
-      },
-      {
-        "card": "assets/store-photos/f1a516c0cb516a/03.webp",
-        "detail": "assets/store-photos/f1a516c0cb516a/03.webp"
-      },
       {
         "card": "assets/store-photos/f1a516c0cb516a/04.webp",
         "detail": "assets/store-photos/f1a516c0cb516a/04.webp"
@@ -24010,24 +23015,16 @@
         "detail": "assets/store-photos/f1a516c0cb516a/06.webp"
       },
       {
-        "card": "assets/store-photos/116859dc1e4734/03.webp",
-        "detail": "assets/store-photos/116859dc1e4734/03.webp"
+        "card": "assets/store-photos/f1a516c0cb516a/01.webp",
+        "detail": "assets/store-photos/f1a516c0cb516a/01.webp"
       },
       {
-        "card": "assets/store-photos/116859dc1e4734/04.webp",
-        "detail": "assets/store-photos/116859dc1e4734/04.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/05.webp",
-        "detail": "assets/store-photos/116859dc1e4734/05.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/06.webp",
-        "detail": "assets/store-photos/116859dc1e4734/06.webp"
+        "card": "assets/store-photos/f1a516c0cb516a/03.webp",
+        "detail": "assets/store-photos/f1a516c0cb516a/03.webp"
       }
     ],
     "photoGroup": "brand:자담치킨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "c6b947813051ac38",
@@ -24103,8 +23100,12 @@
     "notionPageId": "73ada158-dd2a-83d9-ae11-81beb061d762",
     "notionUrl": "https://app.notion.com/p/73ada158dd2a83d9ae1181beb061d762",
     "notionSyncedAt": "2026-07-16T13:49:52.767Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/f1a516c0cb516a/06.webp",
     "images": [
+      {
+        "card": "assets/store-photos/f1a516c0cb516a/06.webp",
+        "detail": "assets/store-photos/f1a516c0cb516a/06.webp"
+      },
       {
         "card": "assets/store-photos/f1a516c0cb516a/01.webp",
         "detail": "assets/store-photos/f1a516c0cb516a/01.webp"
@@ -24120,30 +23121,10 @@
       {
         "card": "assets/store-photos/f1a516c0cb516a/05.webp",
         "detail": "assets/store-photos/f1a516c0cb516a/05.webp"
-      },
-      {
-        "card": "assets/store-photos/f1a516c0cb516a/06.webp",
-        "detail": "assets/store-photos/f1a516c0cb516a/06.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/03.webp",
-        "detail": "assets/store-photos/116859dc1e4734/03.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/04.webp",
-        "detail": "assets/store-photos/116859dc1e4734/04.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/05.webp",
-        "detail": "assets/store-photos/116859dc1e4734/05.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/06.webp",
-        "detail": "assets/store-photos/116859dc1e4734/06.webp"
       }
     ],
     "photoGroup": "brand:자담치킨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "1894da97ed277235",
@@ -24207,7 +23188,7 @@
     "notionPageId": "75dda158-dd2a-82a3-809c-81c1dc55ee66",
     "notionUrl": "https://app.notion.com/p/75dda158dd2a82a3809c81c1dc55ee66",
     "notionSyncedAt": "2026-07-16T13:49:53.660Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/f1a516c0cb516a/01.webp",
     "images": [
       {
         "card": "assets/store-photos/f1a516c0cb516a/01.webp",
@@ -24228,26 +23209,10 @@
       {
         "card": "assets/store-photos/f1a516c0cb516a/06.webp",
         "detail": "assets/store-photos/f1a516c0cb516a/06.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/03.webp",
-        "detail": "assets/store-photos/116859dc1e4734/03.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/04.webp",
-        "detail": "assets/store-photos/116859dc1e4734/04.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/05.webp",
-        "detail": "assets/store-photos/116859dc1e4734/05.webp"
-      },
-      {
-        "card": "assets/store-photos/116859dc1e4734/06.webp",
-        "detail": "assets/store-photos/116859dc1e4734/06.webp"
       }
     ],
     "photoGroup": "brand:자담치킨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "401e4210d0416b54",
@@ -24844,7 +23809,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FdqOyAdk",
-    "image": "assets/store-photos/6f4748e6cfa021/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -24896,19 +23861,7 @@
     "notionPageId": "9bbda158-dd2a-82b2-a543-8173ec42477f",
     "notionUrl": "https://app.notion.com/p/9bbda158dd2a82b2a5438173ec42477f",
     "notionSyncedAt": "2026-07-16T13:49:59.956Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/6f4748e6cfa021/01.webp",
-        "detail": "assets/store-photos/6f4748e6cfa021/01.webp"
-      },
-      {
-        "card": "assets/store-photos/6f4748e6cfa021/02.webp",
-        "detail": "assets/store-photos/6f4748e6cfa021/02.webp"
-      }
-    ],
-    "photoGroup": "brand:조선다방",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "bef7f3b6456df7fd",
@@ -24920,7 +23873,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5DDNoNdr",
-    "image": "assets/store-photos/6f4748e6cfa021/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -24978,19 +23931,7 @@
     "notionPageId": "4c8da158-dd2a-82b4-afbc-8149e8996559",
     "notionUrl": "https://app.notion.com/p/4c8da158dd2a82b4afbc8149e8996559",
     "notionSyncedAt": "2026-07-16T13:50:00.515Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/6f4748e6cfa021/01.webp",
-        "detail": "assets/store-photos/6f4748e6cfa021/01.webp"
-      },
-      {
-        "card": "assets/store-photos/6f4748e6cfa021/02.webp",
-        "detail": "assets/store-photos/6f4748e6cfa021/02.webp"
-      }
-    ],
-    "photoGroup": "brand:조선다방",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "cfd74ce112f2b187",
@@ -25002,7 +23943,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5hojInHC",
-    "image": "assets/store-photos/6f4748e6cfa021/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -25060,19 +24001,7 @@
     "notionPageId": "e10da158-dd2a-839f-99cb-0171ca8429ce",
     "notionUrl": "https://app.notion.com/p/e10da158dd2a839f99cb0171ca8429ce",
     "notionSyncedAt": "2026-07-16T13:50:01.529Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/6f4748e6cfa021/01.webp",
-        "detail": "assets/store-photos/6f4748e6cfa021/01.webp"
-      },
-      {
-        "card": "assets/store-photos/6f4748e6cfa021/02.webp",
-        "detail": "assets/store-photos/6f4748e6cfa021/02.webp"
-      }
-    ],
-    "photoGroup": "brand:조선다방",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "5768a9d8a72502ef",
@@ -25211,7 +24140,7 @@
     "notionPageId": "d5fda158-dd2a-82b9-9f31-0118a2303226",
     "notionUrl": "https://app.notion.com/p/d5fda158dd2a82b99f310118a2303226",
     "notionSyncedAt": "2026-07-16T13:50:03.836Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/e57fe2c599ad62/01.webp",
     "images": [
       {
         "card": "assets/store-photos/e57fe2c599ad62/01.webp",
@@ -25223,7 +24152,7 @@
       }
     ],
     "photoGroup": "store:82fb6c389b7aced5",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "44a0e464d6d22c38",
@@ -25356,7 +24285,7 @@
     "notionPageId": "edcda158-dd2a-82c3-b283-01532df553f7",
     "notionUrl": "https://app.notion.com/p/edcda158dd2a82c3b28301532df553f7",
     "notionSyncedAt": "2026-07-16T13:50:05.052Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/68734f9ad23eda/01.webp",
     "images": [
       {
         "card": "assets/store-photos/68734f9ad23eda/01.webp",
@@ -25368,7 +24297,7 @@
       }
     ],
     "photoGroup": "store:4e43f1180007c10f",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "501b2c5aaa6005f2",
@@ -26079,7 +25008,7 @@
     "address": "",
     "phone": "014-1788-7275",
     "naverMap": "",
-    "image": "assets/store-photos/c421a35106ba5b/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -26144,27 +25073,7 @@
     "notionUrl": "https://app.notion.com/p/512da158dd2a82f9895d814f52a6c455",
     "notionSyncedAt": "2026-07-16T13:50:15.637Z",
     "phoneSource": "notion",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/c421a35106ba5b/01.webp",
-        "detail": "assets/store-photos/c421a35106ba5b/01.webp"
-      },
-      {
-        "card": "assets/store-photos/c421a35106ba5b/02.webp",
-        "detail": "assets/store-photos/c421a35106ba5b/02.webp"
-      },
-      {
-        "card": "assets/store-photos/1953f2b21fd31f/01.webp",
-        "detail": "assets/store-photos/1953f2b21fd31f/01.webp"
-      },
-      {
-        "card": "assets/store-photos/1953f2b21fd31f/02.webp",
-        "detail": "assets/store-photos/1953f2b21fd31f/02.webp"
-      }
-    ],
-    "photoGroup": "brand:찜스틸러 갈비찜",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "102347a538ed090c",
@@ -27550,7 +26459,7 @@
     "notionPageId": "353da158-dd2a-8327-96ad-810b53773559",
     "notionUrl": "https://app.notion.com/p/353da158dd2a832796ad810b53773559",
     "notionSyncedAt": "2026-07-16T13:50:30.387Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/fd94085abc85dd/01.webp",
     "images": [
       {
         "card": "assets/store-photos/fd94085abc85dd/01.webp",
@@ -27562,7 +26471,7 @@
       }
     ],
     "photoGroup": "store:2857b7140087f6ab",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "5ada4cec81d04ced",
@@ -29206,7 +28115,7 @@
     "notionPageId": "1e1da158-dd2a-83f5-bde3-81341706c446",
     "notionUrl": "https://app.notion.com/p/1e1da158dd2a83f5bde381341706c446",
     "notionSyncedAt": "2026-07-16T13:50:46.775Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/11e6aaa85b05c5/01.webp",
     "images": [
       {
         "card": "assets/store-photos/11e6aaa85b05c5/01.webp",
@@ -29218,7 +28127,7 @@
       }
     ],
     "photoGroup": "store:92f4faa988a87728",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "ddfe30e801fed73f",
@@ -30225,7 +29134,7 @@
     "notionPageId": "cb1da158-dd2a-835f-aaee-014fa1b313cd",
     "notionUrl": "https://app.notion.com/p/cb1da158dd2a835faaee014fa1b313cd",
     "notionSyncedAt": "2026-07-16T13:50:56.015Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/2b115c33e0e2cf/01.webp",
     "images": [
       {
         "card": "assets/store-photos/2b115c33e0e2cf/01.webp",
@@ -30237,7 +29146,7 @@
       }
     ],
     "photoGroup": "store:20c107a437ec483e",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "5deb911df92c645a",
@@ -30395,7 +29304,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5wNj8Cmp",
-    "image": "assets/store-photos/4bc2b473e2349b/03.webp",
+    "image": "assets/store-photos/792d516a6cac41/02.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -30459,52 +29368,8 @@
     "notionPageId": "c59da158-dd2a-831c-b032-81fc366a56a3",
     "notionUrl": "https://app.notion.com/p/c59da158dd2a831cb03281fc366a56a3",
     "notionSyncedAt": "2026-07-16T13:50:57.813Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/792d516a6cac41/02.webp",
     "images": [
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/03.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/03.webp"
-      },
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/04.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/04.webp"
-      },
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/05.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/05.webp"
-      },
-      {
-        "card": "assets/store-photos/6c5e62f6be3896/04.webp",
-        "detail": "assets/store-photos/6c5e62f6be3896/04.webp"
-      },
-      {
-        "card": "assets/store-photos/6c5e62f6be3896/05.webp",
-        "detail": "assets/store-photos/6c5e62f6be3896/05.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/01.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/01.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/02.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/02.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/03.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/03.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/04.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/04.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/05.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/05.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/06.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/06.webp"
-      },
       {
         "card": "assets/store-photos/792d516a6cac41/02.webp",
         "detail": "assets/store-photos/792d516a6cac41/02.webp"
@@ -30515,7 +29380,7 @@
       }
     ],
     "photoGroup": "brand:피자스쿨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "ef2eacdbb6233f97",
@@ -30527,7 +29392,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FeX477Lh",
-    "image": "assets/store-photos/8d2e04ad1dc824/01.webp",
+    "image": "assets/store-photos/792d516a6cac41/03.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -30591,63 +29456,19 @@
     "notionPageId": "0d4da158-dd2a-82b5-9d37-01b461d2ed22",
     "notionUrl": "https://app.notion.com/p/0d4da158dd2a82b59d3701b461d2ed22",
     "notionSyncedAt": "2026-07-16T13:50:58.366Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/792d516a6cac41/03.webp",
     "images": [
       {
-        "card": "assets/store-photos/4bc2b473e2349b/03.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/03.webp"
-      },
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/04.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/04.webp"
-      },
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/05.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/05.webp"
-      },
-      {
-        "card": "assets/store-photos/6c5e62f6be3896/04.webp",
-        "detail": "assets/store-photos/6c5e62f6be3896/04.webp"
-      },
-      {
-        "card": "assets/store-photos/6c5e62f6be3896/05.webp",
-        "detail": "assets/store-photos/6c5e62f6be3896/05.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/01.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/01.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/02.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/02.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/03.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/03.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/04.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/04.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/05.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/05.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/06.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/06.webp"
+        "card": "assets/store-photos/792d516a6cac41/03.webp",
+        "detail": "assets/store-photos/792d516a6cac41/03.webp"
       },
       {
         "card": "assets/store-photos/792d516a6cac41/02.webp",
         "detail": "assets/store-photos/792d516a6cac41/02.webp"
-      },
-      {
-        "card": "assets/store-photos/792d516a6cac41/03.webp",
-        "detail": "assets/store-photos/792d516a6cac41/03.webp"
       }
     ],
     "photoGroup": "brand:피자스쿨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "da66e7ae0cdf1907",
@@ -30659,7 +29480,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/xFLGuyjm",
-    "image": "assets/store-photos/6c5e62f6be3896/05.webp",
+    "image": "assets/store-photos/792d516a6cac41/02.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -30711,52 +29532,8 @@
     "notionPageId": "539da158-dd2a-82af-9ba1-819508f7eff7",
     "notionUrl": "https://app.notion.com/p/539da158dd2a82af9ba1819508f7eff7",
     "notionSyncedAt": "2026-07-16T13:50:59.101Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/792d516a6cac41/02.webp",
     "images": [
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/03.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/03.webp"
-      },
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/04.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/04.webp"
-      },
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/05.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/05.webp"
-      },
-      {
-        "card": "assets/store-photos/6c5e62f6be3896/04.webp",
-        "detail": "assets/store-photos/6c5e62f6be3896/04.webp"
-      },
-      {
-        "card": "assets/store-photos/6c5e62f6be3896/05.webp",
-        "detail": "assets/store-photos/6c5e62f6be3896/05.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/01.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/01.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/02.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/02.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/03.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/03.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/04.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/04.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/05.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/05.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/06.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/06.webp"
-      },
       {
         "card": "assets/store-photos/792d516a6cac41/02.webp",
         "detail": "assets/store-photos/792d516a6cac41/02.webp"
@@ -30767,7 +29544,7 @@
       }
     ],
     "photoGroup": "brand:피자스쿨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "793ce4c7d0f32994",
@@ -30779,7 +29556,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FHODfOCh",
-    "image": "assets/store-photos/6c5e62f6be3896/04.webp",
+    "image": "assets/store-photos/792d516a6cac41/03.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -30843,63 +29620,19 @@
     "notionPageId": "d0bda158-dd2a-8233-b8ca-81da49da0d5a",
     "notionUrl": "https://app.notion.com/p/d0bda158dd2a8233b8ca81da49da0d5a",
     "notionSyncedAt": "2026-07-16T13:50:59.638Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/792d516a6cac41/03.webp",
     "images": [
       {
-        "card": "assets/store-photos/4bc2b473e2349b/03.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/03.webp"
-      },
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/04.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/04.webp"
-      },
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/05.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/05.webp"
-      },
-      {
-        "card": "assets/store-photos/6c5e62f6be3896/04.webp",
-        "detail": "assets/store-photos/6c5e62f6be3896/04.webp"
-      },
-      {
-        "card": "assets/store-photos/6c5e62f6be3896/05.webp",
-        "detail": "assets/store-photos/6c5e62f6be3896/05.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/01.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/01.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/02.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/02.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/03.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/03.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/04.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/04.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/05.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/05.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/06.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/06.webp"
+        "card": "assets/store-photos/792d516a6cac41/03.webp",
+        "detail": "assets/store-photos/792d516a6cac41/03.webp"
       },
       {
         "card": "assets/store-photos/792d516a6cac41/02.webp",
         "detail": "assets/store-photos/792d516a6cac41/02.webp"
-      },
-      {
-        "card": "assets/store-photos/792d516a6cac41/03.webp",
-        "detail": "assets/store-photos/792d516a6cac41/03.webp"
       }
     ],
     "photoGroup": "brand:피자스쿨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "5d4e5d274ebd1b7c",
@@ -30911,7 +29644,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5reGDJfs",
-    "image": "assets/store-photos/4bc2b473e2349b/05.webp",
+    "image": "assets/store-photos/792d516a6cac41/02.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -30975,52 +29708,8 @@
     "notionPageId": "033da158-dd2a-820a-91a4-0140545abb80",
     "notionUrl": "https://app.notion.com/p/033da158dd2a820a91a40140545abb80",
     "notionSyncedAt": "2026-07-16T13:51:00.163Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/792d516a6cac41/02.webp",
     "images": [
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/03.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/03.webp"
-      },
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/04.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/04.webp"
-      },
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/05.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/05.webp"
-      },
-      {
-        "card": "assets/store-photos/6c5e62f6be3896/04.webp",
-        "detail": "assets/store-photos/6c5e62f6be3896/04.webp"
-      },
-      {
-        "card": "assets/store-photos/6c5e62f6be3896/05.webp",
-        "detail": "assets/store-photos/6c5e62f6be3896/05.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/01.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/01.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/02.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/02.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/03.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/03.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/04.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/04.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/05.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/05.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/06.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/06.webp"
-      },
       {
         "card": "assets/store-photos/792d516a6cac41/02.webp",
         "detail": "assets/store-photos/792d516a6cac41/02.webp"
@@ -31031,7 +29720,7 @@
       }
     ],
     "photoGroup": "brand:피자스쿨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "4526a5114ecaef34",
@@ -31043,7 +29732,7 @@
     "address": "",
     "phone": "019-8991-7081",
     "naverMap": "https://naver.me/GDQwSQz4",
-    "image": "assets/store-photos/4bc2b473e2349b/04.webp",
+    "image": "assets/store-photos/792d516a6cac41/03.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -31108,63 +29797,19 @@
     "notionUrl": "https://app.notion.com/p/92cda158dd2a83fc81e08100479c85ad",
     "notionSyncedAt": "2026-07-16T13:51:02.046Z",
     "phoneSource": "notion",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/792d516a6cac41/03.webp",
     "images": [
       {
-        "card": "assets/store-photos/4bc2b473e2349b/03.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/03.webp"
-      },
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/04.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/04.webp"
-      },
-      {
-        "card": "assets/store-photos/4bc2b473e2349b/05.webp",
-        "detail": "assets/store-photos/4bc2b473e2349b/05.webp"
-      },
-      {
-        "card": "assets/store-photos/6c5e62f6be3896/04.webp",
-        "detail": "assets/store-photos/6c5e62f6be3896/04.webp"
-      },
-      {
-        "card": "assets/store-photos/6c5e62f6be3896/05.webp",
-        "detail": "assets/store-photos/6c5e62f6be3896/05.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/01.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/01.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/02.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/02.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/03.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/03.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/04.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/04.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/05.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/05.webp"
-      },
-      {
-        "card": "assets/store-photos/8d2e04ad1dc824/06.webp",
-        "detail": "assets/store-photos/8d2e04ad1dc824/06.webp"
+        "card": "assets/store-photos/792d516a6cac41/03.webp",
+        "detail": "assets/store-photos/792d516a6cac41/03.webp"
       },
       {
         "card": "assets/store-photos/792d516a6cac41/02.webp",
         "detail": "assets/store-photos/792d516a6cac41/02.webp"
-      },
-      {
-        "card": "assets/store-photos/792d516a6cac41/03.webp",
-        "detail": "assets/store-photos/792d516a6cac41/03.webp"
       }
     ],
     "photoGroup": "brand:피자스쿨",
-    "photoSource": "shared-franchise-pool"
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "e16359de9292f582",
@@ -32204,7 +30849,7 @@
     "notionPageId": "b2bda158-dd2a-82ce-af3f-817811d37ba2",
     "notionUrl": "https://app.notion.com/p/b2bda158dd2a82ceaf3f817811d37ba2",
     "notionSyncedAt": "2026-07-16T13:51:09.989Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/8acca14dbc50a3/01.webp",
     "images": [
       {
         "card": "assets/store-photos/8acca14dbc50a3/01.webp",
@@ -32216,7 +30861,7 @@
       }
     ],
     "photoGroup": "store:6047251f50214125",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "b8c2dcaa9ef57af5",
@@ -34862,7 +33507,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "assets/store-photos/e86268c8011ece/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -34933,19 +33578,7 @@
     "notionPageId": "ec3da158-dd2a-82ff-b1bb-01bd670c39c4",
     "notionUrl": "https://app.notion.com/p/2-ec3da158dd2a82ffb1bb01bd670c39c4",
     "notionSyncedAt": "2026-07-16T13:57:56.828Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/e86268c8011ece/01.webp",
-        "detail": "assets/store-photos/e86268c8011ece/01.webp"
-      },
-      {
-        "card": "assets/store-photos/e86268c8011ece/02.webp",
-        "detail": "assets/store-photos/e86268c8011ece/02.webp"
-      }
-    ],
-    "photoGroup": "brand:맛있는 전시회",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "c9bd99f6063b7a7e",
@@ -35561,7 +34194,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/GSQzpTz9",
-    "image": "assets/store-photos/d7cfe746f0f46a/01.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -35632,19 +34265,7 @@
     "notionPageId": "076da158-dd2a-839a-8a6c-819941c9102a",
     "notionUrl": "https://app.notion.com/p/1-076da158dd2a839a8a6c819941c9102a",
     "notionSyncedAt": "2026-07-16T13:58:01.508Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/d7cfe746f0f46a/01.webp",
-        "detail": "assets/store-photos/d7cfe746f0f46a/01.webp"
-      },
-      {
-        "card": "assets/store-photos/d7cfe746f0f46a/02.webp",
-        "detail": "assets/store-photos/d7cfe746f0f46a/02.webp"
-      }
-    ],
-    "photoGroup": "brand:아이커 버거&치킨",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "05f6c85afa7bb069",
@@ -36660,7 +35281,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5QsrkeBm",
-    "image": "assets/store-photos/076942c6eac9f1/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -36731,15 +35352,7 @@
     "notionPageId": "06cda158-dd2a-826c-9d77-01b448e3f0bd",
     "notionUrl": "https://app.notion.com/p/2-06cda158dd2a826c9d7701b448e3f0bd",
     "notionSyncedAt": "2026-07-16T13:58:09.607Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/076942c6eac9f1/02.webp",
-        "detail": "assets/store-photos/076942c6eac9f1/02.webp"
-      }
-    ],
-    "photoGroup": "brand:손수김밥",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "9e06aee2bfa7d347",
@@ -41096,7 +39709,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "assets/store-photos/c421a35106ba5b/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -41167,27 +39780,7 @@
     "notionPageId": "71eda158-dd2a-83d0-b99b-017d9a3ea505",
     "notionUrl": "https://app.notion.com/p/1-71eda158dd2a83d0b99b017d9a3ea505",
     "notionSyncedAt": "2026-07-16T13:58:45.579Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/c421a35106ba5b/01.webp",
-        "detail": "assets/store-photos/c421a35106ba5b/01.webp"
-      },
-      {
-        "card": "assets/store-photos/c421a35106ba5b/02.webp",
-        "detail": "assets/store-photos/c421a35106ba5b/02.webp"
-      },
-      {
-        "card": "assets/store-photos/1953f2b21fd31f/01.webp",
-        "detail": "assets/store-photos/1953f2b21fd31f/01.webp"
-      },
-      {
-        "card": "assets/store-photos/1953f2b21fd31f/02.webp",
-        "detail": "assets/store-photos/1953f2b21fd31f/02.webp"
-      }
-    ],
-    "photoGroup": "brand:찜스틸러 갈비찜",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "7ed26d6d9bcf7280",
@@ -43973,7 +42566,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "assets/store-photos/e86268c8011ece/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -44044,19 +42637,7 @@
     "notionPageId": "e45da158-dd2a-83f3-a25c-01d7a343d4bf",
     "notionUrl": "https://app.notion.com/p/1-e45da158dd2a83f3a25c01d7a343d4bf",
     "notionSyncedAt": "2026-07-16T13:59:07.334Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/e86268c8011ece/01.webp",
-        "detail": "assets/store-photos/e86268c8011ece/01.webp"
-      },
-      {
-        "card": "assets/store-photos/e86268c8011ece/02.webp",
-        "detail": "assets/store-photos/e86268c8011ece/02.webp"
-      }
-    ],
-    "photoGroup": "brand:맛있는 전시회",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "3dfaa76e3a83b440",
@@ -44215,7 +42796,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5QsrkeBm",
-    "image": "assets/store-photos/076942c6eac9f1/02.webp",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -44286,15 +42867,7 @@
     "notionPageId": "eebda158-dd2a-823d-a4b0-81a82019e1da",
     "notionUrl": "https://app.notion.com/p/1-eebda158dd2a823da4b081a82019e1da",
     "notionSyncedAt": "2026-07-16T13:59:09.063Z",
-    "img": "assets/store1.jpg",
-    "images": [
-      {
-        "card": "assets/store-photos/076942c6eac9f1/02.webp",
-        "detail": "assets/store-photos/076942c6eac9f1/02.webp"
-      }
-    ],
-    "photoGroup": "brand:손수김밥",
-    "photoSource": "shared-franchise-pool"
+    "img": "assets/store1.jpg"
   },
   {
     "id": "bd5b75fb8e8aa97f",
@@ -45118,12 +43691,8 @@
     "notionPageId": "2f7da158-dd2a-8017-af39-c3ad77e59708",
     "notionUrl": "https://app.notion.com/p/2f7da158dd2a8017af39c3ad77e59708",
     "notionSyncedAt": "2026-07-16T13:59:14.938Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/22feb7c3e44120/02.webp",
     "images": [
-      {
-        "card": "assets/store-photos/22feb7c3e44120/01.webp",
-        "detail": "assets/store-photos/22feb7c3e44120/01.webp"
-      },
       {
         "card": "assets/store-photos/22feb7c3e44120/02.webp",
         "detail": "assets/store-photos/22feb7c3e44120/02.webp"
@@ -45139,10 +43708,14 @@
       {
         "card": "assets/store-photos/22feb7c3e44120/05.webp",
         "detail": "assets/store-photos/22feb7c3e44120/05.webp"
+      },
+      {
+        "card": "assets/store-photos/22feb7c3e44120/01.webp",
+        "detail": "assets/store-photos/22feb7c3e44120/01.webp"
       }
     ],
-    "photoGroup": "brand:본죽&비빔밥",
-    "photoSource": "shared-franchise-pool"
+    "photoGroup": "brand:본죽",
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "ddc27f852308889a",
@@ -45154,7 +43727,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://bit.ly/4ruoYI3",
-    "image": "assets/store1.jpg",
+    "image": "assets/store-photos/22feb7c3e44120/03.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -45219,7 +43792,31 @@
     "notionPageId": "2fcda158-dd2a-80bc-bbac-e019c5b119c9",
     "notionUrl": "https://app.notion.com/p/2fcda158dd2a80bcbbace019c5b119c9",
     "notionSyncedAt": "2026-07-16T13:59:15.403Z",
-    "img": "assets/store1.jpg"
+    "img": "assets/store-photos/22feb7c3e44120/03.webp",
+    "images": [
+      {
+        "card": "assets/store-photos/22feb7c3e44120/03.webp",
+        "detail": "assets/store-photos/22feb7c3e44120/03.webp"
+      },
+      {
+        "card": "assets/store-photos/22feb7c3e44120/04.webp",
+        "detail": "assets/store-photos/22feb7c3e44120/04.webp"
+      },
+      {
+        "card": "assets/store-photos/22feb7c3e44120/05.webp",
+        "detail": "assets/store-photos/22feb7c3e44120/05.webp"
+      },
+      {
+        "card": "assets/store-photos/22feb7c3e44120/01.webp",
+        "detail": "assets/store-photos/22feb7c3e44120/01.webp"
+      },
+      {
+        "card": "assets/store-photos/22feb7c3e44120/02.webp",
+        "detail": "assets/store-photos/22feb7c3e44120/02.webp"
+      }
+    ],
+    "photoGroup": "brand:본죽",
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "1921d1d5c7710872",
@@ -46462,7 +45059,7 @@
     "notionPageId": "394da158-dd2a-8068-8ca6-d42ec38b9a42",
     "notionUrl": "https://app.notion.com/p/394da158dd2a80688ca6d42ec38b9a42",
     "notionSyncedAt": "2026-07-16T13:59:23.728Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/22feb7c3e44120/01.webp",
     "images": [
       {
         "card": "assets/store-photos/22feb7c3e44120/01.webp",
@@ -46485,8 +45082,8 @@
         "detail": "assets/store-photos/22feb7c3e44120/05.webp"
       }
     ],
-    "photoGroup": "brand:본죽&비빔밥",
-    "photoSource": "shared-franchise-pool"
+    "photoGroup": "brand:본죽",
+    "photoSource": "strict-shared-franchise-pool"
   },
   {
     "id": "8dc7782b3cb4bdcf",
@@ -46948,7 +45545,7 @@
     "notionPageId": "39cda158-dd2a-8011-ad77-cb9bae2ff09f",
     "notionUrl": "https://app.notion.com/p/39cda158dd2a8011ad77cb9bae2ff09f",
     "notionSyncedAt": "2026-07-16T13:59:26.977Z",
-    "img": "assets/store1.jpg",
+    "img": "assets/store-photos/e9009ab5f334d1/02.webp",
     "images": [
       {
         "card": "assets/store-photos/e9009ab5f334d1/02.webp",
@@ -46960,7 +45557,7 @@
       }
     ],
     "photoGroup": "store:02bed6e23cbbf188",
-    "photoSource": "matched-photo-folder"
+    "photoSource": "strict-matched-photo-folder"
   },
   {
     "id": "925f6f828599eb4f",

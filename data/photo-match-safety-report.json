@@ -1,7 +1,7 @@
 {
   "phase": "post",
-  "at": "2026-07-16T19:57:29.443Z",
-  "removedUnsafeMatchCount": 31,
+  "at": "2026-07-16T20:32:01.127Z",
+  "removedUnsafeMatchCount": 9,
   "removed": [
     {
       "folderName": "1980밀면회관&냉면 여수문수점 공산소",
@@ -16,58 +16,16 @@
       "removedImageCount": 1
     },
     {
-      "folderName": "노브랜드버거",
-      "store": "노브랜드버거 여수여서점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "떡순이 알찬만두 문수점 떡순이두마리치킨",
-      "store": "떡순이 알찬만두 문수점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
       "folderName": "마포매운쌀떡볶이 문수점 하루끼우동",
       "store": "마포매운쌀떡볶이 문수점",
       "reason": "name-not-certain",
       "removedImageCount": 2
     },
     {
-      "folderName": "맛조은 미평점 조은식당",
-      "store": "맛조은 미평점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "미평동 피자스쿨",
-      "store": "RIB&TABLE 바베큐립 전문점(미평동) (1)",
-      "reason": "brand-conflict",
-      "removedImageCount": 6
-    },
-    {
-      "folderName": "바다양푼이동태탕 문수점",
-      "store": "바다양푼이동태탕/찜 문수점(1)",
+      "folderName": "생생치킨 무선점",
+      "store": "생생치킨 무선점(선원동)",
       "reason": "name-not-certain",
       "removedImageCount": 1
-    },
-    {
-      "folderName": "바오탕수",
-      "store": "바오탕수 여서점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "아성짬뽕 여서점",
-      "store": "조선제일 감자탕&뼈해장국 여서점 (1)",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "예원닭강정",
-      "store": "예원닭강정 여수1호점(문수동)",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
     },
     {
       "folderName": "정성이가득찬",
@@ -82,110 +40,20 @@
       "removedImageCount": 1
     },
     {
-      "folderName": "금도령찜닭",
-      "store": "금도령찜닭 여수봉강점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "까페빈",
-      "store": "까페빈 봉산점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
       "folderName": "마라시대 마라탕",
       "store": "마라시대 마라탕 봉산점",
       "reason": "name-not-certain",
       "removedImageCount": 2
     },
     {
-      "folderName": "맵도리닭",
-      "store": "맵도리닭 봉산점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "멜로우",
-      "store": "멜로우 국동점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "모노데일리",
-      "store": "모노데일리 남산점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "별별김밥",
-      "store": "별별김밥 봉산점",
-      "reason": "name-not-certain",
-      "removedImageCount": 1
-    },
-    {
-      "folderName": "뵈르뵈르",
-      "store": "뵈르뵈르 여수봉산점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "삼해수산마차",
-      "store": "삼해수산마차 국동점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "원할머니보쌈",
-      "store": "원할머니보쌈족발 여수여천점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "이조삼계탕",
-      "store": "이조삼계탕 충무점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "초밥처럼",
-      "store": "초밥처럼 봉산점",
-      "reason": "name-not-certain",
-      "removedImageCount": 1
-    },
-    {
-      "folderName": "카레상",
-      "store": "카레상 봉산점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "피자알볼로",
-      "store": "피자알볼로 여수엑스포점(수정동)",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "하이오커피",
-      "store": "하이오커피 여수신월국동항점",
+      "folderName": "이라이타코야끼",
+      "store": "이라이타코야끼 봉산점",
       "reason": "name-not-certain",
       "removedImageCount": 2
     },
     {
       "folderName": "한끼국밥&갈비찜",
       "store": "한끼국밥&갈비찜 국동점",
-      "reason": "name-not-certain",
-      "removedImageCount": 2
-    },
-    {
-      "folderName": "핵떡",
-      "store": "핵떡 여수봉산점",
-      "reason": "name-not-certain",
-      "removedImageCount": 1
-    },
-    {
-      "folderName": "홍紅 곱도리탕",
-      "store": "홍紅 곱도리탕 봉강점",
       "reason": "name-not-certain",
       "removedImageCount": 2
     }

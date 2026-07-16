@@ -38,19 +38,37 @@ jobs:
           test -f data/photo-manifest.json || { echo "data/photo-manifest.json이 없습니다."; exit 1; }
           test -d assets/store-photos || { echo "assets/store-photos 폴더가 없습니다."; exit 1; }
 
-      - name: Match photos to stores and distribute franchise pools
+      - name: Match, commit and push latest photo data safely
         env:
           APPLY_CHANGES: 'true'
-        run: node tools/apply-photo-manifest.mjs
-
-      - name: Commit applied photo data
+        shell: bash
         run: |
+          set -euo pipefail
           git config user.name "daedong-photo-sync"
           git config user.email "actions@users.noreply.github.com"
-          git add -f data/stores.json data/photo-apply-report.json data/stores.before-photo-apply.json
-          if git diff --cached --quiet; then
-            echo "No photo data changes"
-            exit 0
-          fi
-          git commit -m "가게사진 자동매칭과 프랜차이즈 사진 다양화"
-          git push origin HEAD:fix/load-stores-db790
+
+          for attempt in 1 2 3; do
+            echo "사진 적용 시도 ${attempt}/3"
+            git fetch origin fix/load-stores-db790
+            git reset --hard origin/fix/load-stores-db790
+
+            node tools/apply-photo-manifest.mjs
+            git add -f data/stores.json data/photo-apply-report.json data/stores.before-photo-apply.json
+
+            if git diff --cached --quiet; then
+              echo "사진 데이터 변경 없음"
+              exit 0
+            fi
+
+            git commit -m "가게사진 자동매칭과 프랜차이즈 사진 다양화"
+            if git push origin HEAD:fix/load-stores-db790; then
+              echo "사진 데이터 반영 완료"
+              exit 0
+            fi
+
+            echo "다른 작업이 먼저 저장되어 최신 데이터로 다시 계산합니다."
+            sleep 5
+          done
+
+          echo "세 번 재시도했지만 사진 데이터를 저장하지 못했습니다."
+          exit 1

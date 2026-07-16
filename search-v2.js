@@ -1,7 +1,6 @@
 (()=>{
   const $=s=>document.querySelector(s);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const norm=v=>String(v??'').trim().toLowerCase().replace(/\s+/g,'');
   const recentKey='recentSearches';
 
   function getRecent(){try{return JSON.parse(localStorage.getItem(recentKey)||'[]');}catch{return[];}}
@@ -12,30 +11,20 @@
     if(rain===0)return status==='mine'?0:status==='partner'?1:2;
     return status==='normal'?0:status==='partner'?1:2;
   }
-  function score(s,q){
-    q=norm(q);if(!q)return 0;
-    const name=norm(s.name), terms=(s.tags||[]).map(norm);
-    if(name===q)return 100;
-    if(name.startsWith(q))return 90;
-    if(name.includes(q))return 80;
-    if(terms.includes(q))return 70;
-    if(terms.some(t=>t.includes(q)||q.includes(t)))return 60;
-    if(norm(s.cat).includes(q)||norm(s.area).includes(q))return 50;
-    return norm([s.name,s.area,s.cat,...terms].join(' ')).includes(q)?40:0;
-  }
+  function searchScore(s,q){return window.daedongSearch?.score(s,q)??relevance(s,q);}
   function matches(q){
-    return stores.map(s=>({s,score:score(s,q),rank:statusRank(s)}))
+    return stores.map((s,index)=>({s,index,score:searchScore(s,q),rank:statusRank(s)}))
       .filter(x=>x.score>0)
-      .sort((a,b)=>b.score-a.score||a.rank-b.rank||a.s.name.localeCompare(b.s.name,'ko'))
-      .slice(0,60).map(x=>x.s);
+      .sort((a,b)=>b.score-a.score||a.rank-b.rank||a.index-b.index)
+      .slice(0,80).map(x=>x.s);
   }
   function icons(s){
-    return ['mukkebi','ddangyo','yogiyo','coupang','baemin'].filter(k=>s.links?.[k]).map(k=>appIcon(k,'search-mini-icon')).join('');
+    return ['brand','mukkebi','ddangyo','baemin','coupang','yogiyo'].filter(k=>s.links?.[k]).map(k=>appIcon(k,'search-mini-icon')).join('');
   }
   function row(s){return `<button class="search-result-item" data-search-store="${esc(s.id)}"><img src="${esc(s.img)}" alt="" onerror="this.src='assets/store1.jpg'"><span><b>${esc(s.name)}</b><small>${esc(s.area)} · ${esc(s.cat)}</small><i>${icons(s)}</i></span><strong>›</strong></button>`;}
   function ensure(){
     if($('#searchLayer'))return;
-    document.body.insertAdjacentHTML('beforeend',`<section id="searchLayer" class="search-layer" hidden><header><button id="searchBack" aria-label="뒤로가기">←</button><div><input id="searchLayerInput" placeholder="가게명이나 메뉴를 검색하세요" autocomplete="off"><button id="searchLayerClear" aria-label="지우기" hidden>×</button></div></header><main id="searchLayerBody"></main></section>`);
+    document.body.insertAdjacentHTML('beforeend',`<section id="searchLayer" class="search-layer" hidden><header><button id="searchBack" aria-label="뒤로가기">←</button><div><input id="searchLayerInput" placeholder="가게명, 메뉴, 동네를 검색하세요" autocomplete="off"><button id="searchLayerClear" aria-label="지우기" hidden>×</button></div></header><main id="searchLayerBody"></main></section>`);
   }
   function renderRecent(){
     const recent=getRecent();
@@ -43,7 +32,12 @@
   }
   function renderResults(q){
     const list=matches(q);
-    $('#searchLayerBody').innerHTML=`<div class="live-result-head"><h2>검색 결과</h2><span>${list.length}곳</span></div><div class="search-result-list">${list.length?list.map(row).join(''):'<p class="search-empty">검색 결과가 없습니다.</p>'}</div>`;
+    let empty='<p class="search-empty">검색 결과가 없습니다.</p>';
+    if(!list.length&&window.daedongSearch){
+      const suggestions=window.daedongSearch.suggestions(stores,q,5);
+      if(suggestions.length)empty=`<div class="search-suggestion"><p><b>비슷한 가게명</b>을 확인해 보세요.</p>${suggestions.map(row).join('')}</div>`;
+    }
+    $('#searchLayerBody').innerHTML=`<div class="live-result-head"><h2>검색 결과</h2><span>${list.length}곳</span></div><div class="search-result-list">${list.length?list.map(row).join(''):empty}</div>`;
   }
   function open(initial=''){
     ensure();const layer=$('#searchLayer'),input=$('#searchLayerInput'),clear=$('#searchLayerClear');

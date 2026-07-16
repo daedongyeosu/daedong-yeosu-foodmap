@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-07-16T09:44:05.342Z",
+  "startedAt": "2026-07-16T12:36:33.830Z",
   "mode": "apply",
   "explanation": "이 보고서에 제목이 전혀 나타나지 않는 페이지는 현재 Notion API 연결이 발견하지 못한 페이지일 가능성이 큽니다.",
   "diagnosticKeywords": [
@@ -10,22 +10,7 @@
     "바오탕수"
   ],
   "pagesVisibleToIntegration": 594,
-  "added": [
-    {
-      "title": "조선제일 감자탕&뼈해장국 여서점 (1)",
-      "pageId": "a80da158-dd2a-83e8-88ee-81416777e3da",
-      "result": "added",
-      "routes": [
-        "direct",
-        "ddangyo",
-        "chak",
-        "naver",
-        "phone",
-        "coupang",
-        "baemin"
-      ]
-    }
-  ],
+  "added": [],
   "existing": [
     {
       "title": "와쭈 본점",
@@ -1856,6 +1841,10 @@
       "pageId": "a7ada158-dd2a-83cf-a42d-01ede874ee22"
     },
     {
+      "title": "조선제일 감자탕&뼈해장국 여서점 (1)",
+      "pageId": "a80da158-dd2a-83e8-88ee-81416777e3da"
+    },
+    {
       "title": "미친 짜글이 서교점 (1)",
       "pageId": "ac8da158-dd2a-8389-bca1-8188c318a4f0"
     },
@@ -2432,28 +2421,6 @@
       "reason": "이미 stores.json에 존재"
     },
     {
-      "title": "조선제일 감자탕&뼈해장국 여서점 (1)",
-      "pageId": "a80da158-dd2a-83e8-88ee-81416777e3da",
-      "pageUrl": "https://app.notion.com/p/1-a80da158dd2a83e888ee81416777e3da",
-      "keywordMatches": [],
-      "titleAccepted": true,
-      "existingInStores": false,
-      "bodyReadable": true,
-      "blockCount": 16,
-      "rawLinkCount": 10,
-      "routes": [
-        "가게바로주문",
-        "땡겨요",
-        "CHAK",
-        "네이버지도",
-        "전화",
-        "쿠팡이츠",
-        "배달의민족"
-      ],
-      "result": "added",
-      "reason": "주문 경로 7개 발견"
-    },
-    {
       "title": "",
       "pageId": "d47da158-dd2a-82df-ad0e-01db9188c847",
       "pageUrl": "https://app.notion.com/p/d47da158dd2a82dfad0e01db9188c847",
@@ -2510,9 +2477,9 @@
       "conclusion": "API 검색에서 발견되지 않음. 해당 페이지 또는 상위 페이지의 연결 권한을 확인해야 함."
     }
   ],
-  "finishedAt": "2026-07-16T09:44:05.943Z",
-  "addedCount": 1,
-  "existingCount": 592,
+  "finishedAt": "2026-07-16T12:36:33.854Z",
+  "addedCount": 0,
+  "existingCount": 593,
   "skippedCount": 0,
   "errorCount": 0,
   "totalStoresAfterRun": 590

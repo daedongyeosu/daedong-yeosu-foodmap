@@ -232,10 +232,10 @@ async function main() {
     if (!images.length || brandStores.length < 2) continue;
     brandStores.sort((a,b) => clean(a.id || a.name).localeCompare(clean(b.id || b.name), 'ko'));
     brandStores.forEach((store, index) => {
-      const rotated = rotate(images, index % images.length);
-      store.images = rotated;
+      // Every branch shares one cacheable pool; the front end picks a stable different index per branch.
+      store.images = images;
       store.photoGroup = `brand:${brand}`;
-      store.image = rotated[0]?.card || store.image;
+      store.image = images[index % images.length]?.card || store.image;
       store.photoSource = 'shared-franchise-pool';
     });
     report.brandPools.push({brand, storeCount: brandStores.length, imageCount: images.length, stores: brandStores.map(store => store.name)});

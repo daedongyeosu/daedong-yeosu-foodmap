@@ -66,21 +66,20 @@
     return candidates[stableHash(seed) % candidates.length];
   }
 
-  function photoImgAttributes(store, usage, index = 0) {
+  function attributes(store, usage = 'card', index = 0) {
     const photo = selectedPhoto(store);
-    const src = usage === 'detail' ? photo.detail : photo.card;
-    const loading = usage === 'card' && index >= 4 ? 'lazy' : 'eager';
-    const priority = usage === 'card' && index < 4 ? 'auto' : 'low';
     return {
-      src,
-      loading,
-      priority
+      src: usage === 'detail' ? photo.detail : photo.card,
+      loading: usage === 'card' && index >= 4 ? 'lazy' : 'eager',
+      priority: usage === 'card' && index < 4 ? 'auto' : 'low'
     };
   }
 
+  window.DaedongPhotoDisplay = {selectedPhoto, attributes, candidates: photoCandidates};
+
   storeCard = function storeCardWithOptimizedPhoto(store, index = 0) {
     const keys = APP_ICON_ORDER.filter(key => store.links[key]);
-    const photo = photoImgAttributes(store, 'card', index);
+    const photo = attributes(store, 'card', index);
     return `<article class="store-card" data-id="${esc(store.id)}">
       <img src="${esc(photo.src)}" alt="${esc(store.name)}" loading="${photo.loading}" decoding="async" fetchpriority="${photo.priority}" width="640" height="512" onerror="this.src='assets/store1.jpg'">
       <div class="store-info">
@@ -90,15 +89,5 @@
       </div>
       <button class="order-open">주문방법 보기</button>
     </article>`;
-  };
-
-  detail = function detailWithOptimizedPhoto(store) {
-    const visible = APP_ICON_ORDER.filter(key => store.links[key]);
-    const primaryKeys = visible.filter(key => ['direct','brand','mukkebi','ddangyo'].includes(key));
-    const otherKeys = visible.filter(key => !primaryKeys.includes(key));
-    const primary = primaryKeys.map(key => `<a class="detail-route" href="${esc(store.links[key])}" ${String(store.links[key]).startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>${appIcon(key,'detail-route-icon')}<span>${APP_META[key].label}</span><b>›</b></a>`).join('');
-    const others = otherKeys.length ? `<div class="store-other-wrap"><button class="detail-route store-other-toggle"><span class="other-label">다른 주문방법 보기</span><span class="other-inline-icons">${otherKeys.map(key => appIcon(key,'other-inline-icon')).join('')}</span><b>›</b></button><div class="store-other-popover" hidden><button class="store-other-close" aria-label="닫기">×</button>${otherKeys.map(key => `<a href="${esc(store.links[key])}" ${String(store.links[key]).startsWith('http') ? 'target="_blank" rel="noopener"' : ''}>${appIcon(key,'store-other-icon')}<span>${APP_META[key].label}</span></a>`).join('')}</div></div>` : '';
-    const photo = photoImgAttributes(store, 'detail');
-    openModal(`<div class="store-detail-head"><h2>${esc(store.name)}</h2></div><img src="${esc(photo.src)}" class="detail-photo" alt="${esc(store.name)}" loading="eager" decoding="async" width="960" height="720" onerror="this.src='assets/store1.jpg'"><p class="detail-meta">${esc(store.area)} · ${esc(store.cat)}</p><div class="detail-routes">${primary}${others}</div>`);
   };
 })();

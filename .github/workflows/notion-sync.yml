@@ -20,14 +20,20 @@ on:
       - 'tools/notion-complete-import.mjs'
       - 'tools/notion-import-missing-stores.mjs'
       - 'tools/notion-sync-dry-run.mjs'
+      - 'tools/dedupe-stores.mjs'
       - '.github/workflows/notion-sync.yml'
 
 permissions:
   contents: write
 
+concurrency:
+  group: notion-store-sync
+  cancel-in-progress: false
+
 jobs:
   sync:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -77,12 +83,18 @@ jobs:
           DIAGNOSTIC_KEYWORDS: ${{ github.event_name == 'workflow_dispatch' && inputs.diagnostic_keywords || '오워래,해인이네,수라상궁,바로탕수,바오탕수' }}
         run: node tools/notion-import-missing-stores.mjs
 
+      - name: Merge duplicate copied stores
+        if: ${{ github.event_name == 'push' || inputs.apply_changes == true }}
+        env:
+          APPLY_CHANGES: 'true'
+        run: node tools/dedupe-stores.mjs
+
       - name: Check order-link quality
         run: node tools/link-quality.mjs
 
       - name: Show diagnosis summary
         run: |
-          node -e "const fs=require('fs'); const files=['data/notion-complete-import-report.json','data/notion-import-missing-report.json']; for(const f of files){if(fs.existsSync(f)){const r=require('./'+f); console.log(f, JSON.stringify({accessiblePages:r.accessiblePages||r.pagesVisibleToIntegration,addedCount:r.addedCount,excludedCount:r.excludedCount,skippedCount:r.skippedCount,errorCount:r.errorCount},null,2));}}"
+          node -e "const fs=require('fs'); const files=['data/notion-complete-import-report.json','data/notion-import-missing-report.json','data/store-dedup-report.json']; for(const f of files){if(fs.existsSync(f)){const r=require('./'+f); console.log(f, JSON.stringify({accessiblePages:r.accessiblePages||r.pagesVisibleToIntegration,addedCount:r.addedCount,excludedCount:r.excludedCount,skippedCount:r.skippedCount,errorCount:r.errorCount,duplicateGroupCount:r.duplicateGroupCount,removedCount:r.removedCount,totalBefore:r.totalBefore,totalAfter:r.totalAfter},null,2));}}"
 
       - name: Upload sync and diagnosis reports
         if: always()
@@ -93,6 +105,8 @@ jobs:
             data/notion-complete-import-report.json
             data/notion-sync-report.json
             data/notion-import-missing-report.json
+            data/store-dedup-report.json
+            data/stores.before-dedup.json
             data/link-quality-report.json
           if-no-files-found: warn
           retention-days: 14
@@ -115,10 +129,10 @@ jobs:
         run: |
           git config user.name "daedong-notion-sync"
           git config user.email "actions@users.noreply.github.com"
-          git add -f data/stores.json data/notion-complete-import-report.json data/notion-sync-report.json data/notion-import-missing-report.json data/link-quality-report.json
+          git add -f data/stores.json data/notion-complete-import-report.json data/notion-sync-report.json data/notion-import-missing-report.json data/store-dedup-report.json data/link-quality-report.json
           if git diff --cached --quiet; then
             echo "No changes"
             exit 0
           fi
-          git commit -m "노션 등록 가게 전체 자동 동기화"
+          git commit -m "노션 가게 동기화 및 복사본 자동 통합"
           git push

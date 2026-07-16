@@ -1,0 +1,64 @@
+name: Install store photo package
+
+on:
+  push:
+    branches:
+      - fix/load-stores-db790
+    paths:
+      - '대동여수음식지도_가게사진자동적용.zip'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: install-store-photo-package
+  cancel-in-progress: false
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout working branch
+        uses: actions/checkout@v4
+        with:
+          ref: fix/load-stores-db790
+          fetch-depth: 0
+
+      - name: Check package
+        id: package
+        shell: bash
+        run: |
+          file='대동여수음식지도_가게사진자동적용.zip'
+          if [ ! -f "$file" ]; then
+            echo '가게사진 압축파일이 없습니다.'
+            echo 'found=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo 'found=true' >> "$GITHUB_OUTPUT"
+
+      - name: Extract optimized photos
+        if: steps.package.outputs.found == 'true'
+        shell: bash
+        run: |
+          file='대동여수음식지도_가게사진자동적용.zip'
+          unzip -oq "$file" -d .
+          test -f data/photo-manifest.json || { echo '사진 매니페스트가 없습니다.'; exit 1; }
+          test -d assets/store-photos || { echo '가게사진 폴더가 없습니다.'; exit 1; }
+          rm -f "$file"
+
+      - name: Commit extracted photos
+        if: steps.package.outputs.found == 'true'
+        shell: bash
+        run: |
+          file='대동여수음식지도_가게사진자동적용.zip'
+          git config user.name 'daedong-photo-install'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A -- assets/store-photos data/photo-manifest.json "$file"
+          if git diff --cached --quiet; then
+            echo '새로 반영할 사진이 없습니다.'
+            exit 0
+          fi
+          git commit -m '가게사진 패키지 압축 해제 및 반영 준비'
+          git push origin HEAD:fix/load-stores-db790

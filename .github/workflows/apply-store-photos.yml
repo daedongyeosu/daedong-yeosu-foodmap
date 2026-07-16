@@ -24,8 +24,9 @@ on:
 permissions:
   contents: write
 
+# 노션 동기화·고객신고와 stores.json 저장이 겹치지 않게 한다.
 concurrency:
-  group: apply-store-photos
+  group: daedong-data-writer
   cancel-in-progress: false
 
 jobs:
@@ -93,14 +94,12 @@ jobs:
             fi
 
             git commit -m "노션 표시 가게명 기준 사진 재매칭과 검토목록 갱신"
-            git fetch origin fix/load-stores-db790
-            if git rebase origin/fix/load-stores-db790 && git push origin HEAD:fix/load-stores-db790; then
+            if git push origin HEAD:fix/load-stores-db790; then
               echo "사진 재매칭과 검토목록 반영 완료"
               exit 0
             fi
 
-            echo "다른 작업과 충돌하여 최신 데이터로 다시 계산합니다."
-            git rebase --abort 2>/dev/null || true
+            echo "다른 작업이 먼저 저장되어 최신 데이터로 다시 계산합니다."
             sleep 6
           done
 

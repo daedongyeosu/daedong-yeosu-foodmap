@@ -14,8 +14,9 @@ on:
 permissions:
   contents: write
 
+# 노션·사진 작업과 같은 stores.json을 동시에 수정하지 않는다.
 concurrency:
-  group: customer-feedback-sync
+  group: daedong-data-writer
   cancel-in-progress: false
 
 jobs:

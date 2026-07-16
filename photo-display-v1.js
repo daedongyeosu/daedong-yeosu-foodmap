@@ -80,8 +80,10 @@
   storeCard = function storeCardWithOptimizedPhoto(store, index = 0) {
     const keys = APP_ICON_ORDER.filter(key => store.links[key]);
     const photo = attributes(store, 'card', index);
+    const photoCount = photoCandidates(store).length;
+    const countBadge = photoCount > 1 ? `<span class="store-photo-count" aria-label="사진 ${photoCount}장">▣ ${photoCount}</span>` : '';
     return `<article class="store-card" data-id="${esc(store.id)}">
-      <img src="${esc(photo.src)}" alt="${esc(store.name)}" loading="${photo.loading}" decoding="async" fetchpriority="${photo.priority}" width="640" height="512" onerror="this.src='assets/store1.jpg'">
+      <div class="store-card-photo-wrap"><img src="${esc(photo.src)}" alt="${esc(store.name)}" loading="${photo.loading}" decoding="async" fetchpriority="${photo.priority}" width="640" height="512" onerror="this.src='assets/store1.jpg'">${countBadge}</div>
       <div class="store-info">
         <h3>${esc(store.name)}</h3>
         <p>${esc(store.area)} · ${esc(store.cat)}</p>

@@ -1,6 +1,529 @@
 {
   "phase": "post",
-  "at": "2026-07-16T21:05:43.404Z",
-  "removedUnsafeMatchCount": 0,
-  "removed": []
+  "at": "2026-07-16T21:31:15.833Z",
+  "removedUnsafeMatchCount": 87,
+  "removed": [
+    {
+      "folderName": "1980밀면회관&냉면 여수문수점 공산소",
+      "store": "1980밀면회관&냉면 문수점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "강대진 베트남쌀국수123 ZO",
+      "store": "베트남쌀국수 123 ZO",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "국동 조선다방",
+      "store": "조선다방 국동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "깻잎두마리치킨",
+      "store": "코리엔탈깻잎두마리치킨 선원점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "꾸브라꼬 숯불치킨",
+      "store": "꾸브라꼬 숯불치킨 여천 신기동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "노브랜드버거",
+      "store": "노브랜드버거 여수여서점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "다기야",
+      "store": "다기야 엑스포점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "닭씨네 닭강정 여수점",
+      "store": "닭씨네 닭강정 여수점(문수동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "덕충점 역전할머니맥주",
+      "store": "역전할머니맥주 덕충점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "돌산텃밭김치 교동점",
+      "store": "돌산텃밭김치·반찬 교동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "드피치피자,치킨",
+      "store": "드피치 피자&치킨 선원동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "땅스부대찌개",
+      "store": "땅스부대찌개 여서점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "떡순이 알찬만두 문수점 떡순이두마리치킨",
+      "store": "떡순이 알찬만두 문수점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "맥도날드 미평점",
+      "store": "맥도날드 여수미평DT점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "바오탕수",
+      "store": "바오탕수 여서점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "배가네왕족보 문수점",
+      "store": "배가네왕족보 여문본점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "별별 김밥",
+      "store": "별별김밥 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "부어치킨 소호점",
+      "store": "부어치킨&버거 여수소호점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "생생치킨 무선점",
+      "store": "생생치킨 무선점(선원동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "수원왕갈비통닭 여수점",
+      "store": "수원왕갈비통닭 여서점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "순살 참잘튀기는집",
+      "store": "순살 참잘튀기는집 여수점(여서동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "슬기로운김치찜(문수동",
+      "store": "슬기로운 김치찜/제육대패",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "여수오리날개튀김",
+      "store": "여수 오리날개 튀김 여천점(신기동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "연변양꼬치구이",
+      "store": "연변양꼬치구이&마라탕 여서점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "예원닭강정",
+      "store": "예원닭강정 여수1호점(문수동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "와쭈",
+      "store": "와쭈 본점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "위대한 닭뽀끼&짜파구리 여서점 투키드치킨",
+      "store": "위대한 닭뽀끼&짜파구리 여서점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "인프라 라홍방마라탕",
+      "store": "라홍방마라탕 웅천점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "인프라 맛있는반찬",
+      "store": "맛있는 반찬",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "인프라 보드람치킨",
+      "store": "보드람치킨 여서점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "인프라 쑝쑝돈까스",
+      "store": "쑝쑝돈까스 문수점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "전가복",
+      "store": "전가복 웅천점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "정성이가득찬",
+      "store": "정성이 가득찬 반찬",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "짜장왕 왕서방 치킨의달인",
+      "store": "짜장왕 왕서방 여서점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "치킨마루",
+      "store": "치킨마루 여수봉계점",
+      "reason": "name-not-certain",
+      "removedImageCount": 3
+    },
+    {
+      "folderName": "큰손닭강정 여수본점",
+      "store": "큰손닭강정 여수본점(학동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "킹짬뽕 여서본점",
+      "store": "킹짬뽕 본점(여서동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "포우머그",
+      "store": "포우머그 문수점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "1989마라탕",
+      "store": "1989마라탕 봉강점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "곱도리辛 낙곱새",
+      "store": "곱도리辛 낙곱새 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "금도령찜닭",
+      "store": "금도령찜닭 여수봉강점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "김밥세상",
+      "store": "김밥세상 광무점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "김치찜참잘하는집",
+      "store": "여수 김치찜 참 잘하는집 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "까페빈",
+      "store": "까페빈 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "냠냠치킨",
+      "store": "냠냠치킨 국동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "도도닭발&오돌뼈",
+      "store": "도도닭발&오돌뼈 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "도야족발 여수죽림점",
+      "store": "도야족발 여수여천점(죽림)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "동백",
+      "store": "동백 봉강점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "동서울왕족발",
+      "store": "동서울왕족발(신기동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "둥이식당",
+      "store": "둥이식당 봉강점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "라인반점",
+      "store": "라인반점 국동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "마라시대 마라탕",
+      "store": "마라시대 마라탕 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "맵도리닭",
+      "store": "맵도리닭 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "멜로우",
+      "store": "멜로우 국동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "모노데일리",
+      "store": "모노데일리 남산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "별별김밥",
+      "store": "별별김밥 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "뵈르뵈르",
+      "store": "뵈르뵈르 여수봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "불족대가",
+      "store": "불족대가 미평점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "삼해수산마차",
+      "store": "삼해수산마차 국동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "선비칼국수",
+      "store": "선비칼국수 여수국동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "수육보쌈 25시포차",
+      "store": "수육보쌈 25시포차(여서동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "여수언니",
+      "store": "여수언니 교동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "영화루",
+      "store": "영화루 국동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "오늘은카레",
+      "store": "오늘은카레 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "온앤",
+      "store": "온앤 신월점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "우가족발",
+      "store": "우가족발 여수점(충무동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "원할머니보쌈",
+      "store": "원할머니보쌈족발 여수여천점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "이라이타코야끼",
+      "store": "이라이타코야끼 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "이조삼계탕",
+      "store": "이조삼계탕 충무점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "인생냉면",
+      "store": "인생냉면 국동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "잇텐스시",
+      "store": "잇텐스시 국동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "자연산오징어회",
+      "store": "자연산오징어회 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "중앙돈까스",
+      "store": "중앙돈까스 국동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "참 맛있는 족발",
+      "store": "참 맛있는 족발 여수본점(신기동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "청춘꼬마김밥",
+      "store": "청춘꼬마김밥 여수국동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "초밥처럼",
+      "store": "초밥처럼 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "치킨갱스터",
+      "store": "치킨갱스터 국동유탑점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "카레상",
+      "store": "카레상 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "키로족발",
+      "store": "키로족발 여수점(여서동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "킹스타피자",
+      "store": "킹스타피자 관문점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "포슈아 쌀국수배달전문",
+      "store": "포슈아 쌀국수배달전문 서교점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "하이오커피",
+      "store": "하이오커피 여수신월국동항점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "한끼국밥&갈비찜",
+      "store": "한끼국밥&갈비찜 국동점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "항아리치킨",
+      "store": "항아리치킨&깐풍기 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "핵떡",
+      "store": "핵떡 여수봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "홍紅 곱도리탕",
+      "store": "홍紅 곱도리탕 봉강점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "황실육회",
+      "store": "황실육회 봉산점(1)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    }
+  ]
 }

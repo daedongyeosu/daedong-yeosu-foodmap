@@ -73,7 +73,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/5fdf685349dc.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -130,7 +130,8 @@
     },
     "notionPageId": "a00da158-dd2a-83fb-8dd2-813e80e9c042",
     "notionUrl": "https://app.notion.com/p/1988-a00da158dd2a83fb8dd2813e80e9c042",
-    "notionSyncedAt": "2026-07-16T13:46:26.308Z"
+    "notionSyncedAt": "2026-07-16T13:46:26.308Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "d09fa15da80ff88e",
@@ -288,7 +289,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5Mvx6a5u",
-    "image": "images/notion-stores/612535542fe2.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -339,7 +340,8 @@
     },
     "notionPageId": "109da158-dd2a-82d4-aafa-01c7b878a1e4",
     "notionUrl": "https://app.notion.com/p/30-109da158dd2a82d4aafa01c7b878a1e4",
-    "notionSyncedAt": "2026-07-16T13:46:27.973Z"
+    "notionSyncedAt": "2026-07-16T13:46:27.973Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "fa836f4f328cb34f",
@@ -1688,7 +1690,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FYrP1fWJ",
-    "image": "images/notion-stores/a1acd9504643.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -1751,7 +1753,8 @@
     },
     "notionPageId": "40cda158-dd2a-8208-948a-01e5adea86ad",
     "notionUrl": "https://app.notion.com/p/LA-40cda158dd2a8208948a01e5adea86ad",
-    "notionSyncedAt": "2026-07-16T13:46:39.487Z"
+    "notionSyncedAt": "2026-07-16T13:46:39.487Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "adf7b4ab161ec9d2",
@@ -2749,7 +2752,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/x8kj1QQL",
-    "image": "images/notion-stores/c1c813937aa8.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -2794,7 +2797,8 @@
     },
     "notionPageId": "71cda158-dd2a-8247-a4d9-012ec1449b0e",
     "notionUrl": "https://app.notion.com/p/71cda158dd2a8247a4d9012ec1449b0e",
-    "notionSyncedAt": "2026-07-16T13:46:50.673Z"
+    "notionSyncedAt": "2026-07-16T13:46:50.673Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "815c0895b7dcfaa8",
@@ -2956,7 +2960,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/1cee0ec9ae90.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -3013,7 +3017,8 @@
     },
     "notionPageId": "be6da158-dd2a-8377-a73a-8167bad76f6f",
     "notionUrl": "https://app.notion.com/p/be6da158dd2a8377a73a8167bad76f6f",
-    "notionSyncedAt": "2026-07-16T13:46:52.613Z"
+    "notionSyncedAt": "2026-07-16T13:46:52.613Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "5caf409776519dd6",
@@ -3025,7 +3030,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/48e7bed094fd.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -3088,7 +3093,8 @@
     },
     "notionPageId": "14cda158-dd2a-830d-84a1-018c520921c0",
     "notionUrl": "https://app.notion.com/p/14cda158dd2a830d84a1018c520921c0",
-    "notionSyncedAt": "2026-07-16T13:46:53.208Z"
+    "notionSyncedAt": "2026-07-16T13:46:53.208Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "2f939a1b44f5f7ec",
@@ -5286,7 +5292,7 @@
     "address": "",
     "phone": "061-9990-0802",
     "naverMap": "https://naver.me/5mvUxmyD",
-    "image": "images/notion-stores/a9ea17a30aba.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -5350,7 +5356,8 @@
     "notionPageId": "c4eda158-dd2a-832b-b279-8141e9efc304",
     "notionUrl": "https://app.notion.com/p/c4eda158dd2a832bb2798141e9efc304",
     "notionSyncedAt": "2026-07-16T13:47:15.434Z",
-    "phoneSource": "notion"
+    "phoneSource": "notion",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "1a9ef3c649eefc17",
@@ -5565,7 +5572,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/I5wfwYLm",
-    "image": "images/notion-stores/376a2d335c37.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -5628,7 +5635,8 @@
     },
     "notionPageId": "132da158-dd2a-827f-a736-81784234a1e2",
     "notionUrl": "https://app.notion.com/p/132da158dd2a827fa73681784234a1e2",
-    "notionSyncedAt": "2026-07-16T13:47:17.935Z"
+    "notionSyncedAt": "2026-07-16T13:47:17.935Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "665953a0453afc52",
@@ -5829,7 +5837,7 @@
     "address": "",
     "phone": "0169906213",
     "naverMap": "",
-    "image": "images/notion-stores/4c0b2bc58770.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -5893,7 +5901,8 @@
     "notionPageId": "dd6da158-dd2a-82c9-9fa3-816b4ccf9bc9",
     "notionUrl": "https://app.notion.com/p/dd6da158dd2a82c99fa3816b4ccf9bc9",
     "notionSyncedAt": "2026-07-16T13:47:20.368Z",
-    "phoneSource": "notion"
+    "phoneSource": "notion",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "4fd2d6fdd67f0db8",
@@ -5905,7 +5914,7 @@
     "address": "",
     "phone": "06693874227",
     "naverMap": "",
-    "image": "images/notion-stores/87e1220bd619.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -5962,7 +5971,8 @@
     },
     "notionPageId": "dd5da158-dd2a-82f4-8349-81a1d4a28244",
     "notionUrl": "https://app.notion.com/p/dd5da158dd2a82f4834981a1d4a28244",
-    "notionSyncedAt": "2026-07-16T13:47:20.882Z"
+    "notionSyncedAt": "2026-07-16T13:47:20.882Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "d60f32bbdaa13cf5",
@@ -6197,7 +6207,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FvTsYwa4",
-    "image": "images/notion-stores/0655a5da0696.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -6254,7 +6264,8 @@
     },
     "notionPageId": "7e0da158-dd2a-824c-a835-81953fab0ffa",
     "notionUrl": "https://app.notion.com/p/7e0da158dd2a824ca83581953fab0ffa",
-    "notionSyncedAt": "2026-07-16T13:47:23.297Z"
+    "notionSyncedAt": "2026-07-16T13:47:23.297Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "f0b4ebfd7df44a75",
@@ -6266,7 +6277,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/xSBqzsoE",
-    "image": "images/notion-stores/1f58e588889b.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -6329,7 +6340,8 @@
     },
     "notionPageId": "ae0da158-dd2a-82b5-8752-8188b1b66527",
     "notionUrl": "https://app.notion.com/p/ae0da158dd2a82b587528188b1b66527",
-    "notionSyncedAt": "2026-07-16T13:47:23.969Z"
+    "notionSyncedAt": "2026-07-16T13:47:23.969Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "da59f19c1590082f",
@@ -6625,7 +6637,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5qcRS6jP",
-    "image": "images/notion-stores/d191db621517.jpg",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -6688,7 +6700,8 @@
     },
     "notionPageId": "842da158-dd2a-8268-aeb3-81be4aec06a6",
     "notionUrl": "https://app.notion.com/p/842da158dd2a8268aeb381be4aec06a6",
-    "notionSyncedAt": "2026-07-16T13:47:27.070Z"
+    "notionSyncedAt": "2026-07-16T13:47:27.070Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "119e21e06f1471b6",
@@ -8098,7 +8111,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/51039fe5f0cd.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -8149,7 +8162,8 @@
     },
     "notionPageId": "c3eda158-dd2a-8292-9bf4-81aaa16f0b54",
     "notionUrl": "https://app.notion.com/p/c3eda158dd2a82929bf481aaa16f0b54",
-    "notionSyncedAt": "2026-07-16T13:47:38.592Z"
+    "notionSyncedAt": "2026-07-16T13:47:38.592Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "d86fa53d88c8d127",
@@ -8231,7 +8245,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/6e2eb69c9225.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -8294,7 +8308,8 @@
     },
     "notionPageId": "a7ada158-dd2a-83d6-8fc6-0103f8e16e0b",
     "notionUrl": "https://app.notion.com/p/a7ada158dd2a83d68fc60103f8e16e0b",
-    "notionSyncedAt": "2026-07-16T13:47:39.661Z"
+    "notionSyncedAt": "2026-07-16T13:47:39.661Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "f0c36824f150a779",
@@ -9085,7 +9100,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/fe1d9b47dcac.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -9130,7 +9145,8 @@
     },
     "notionPageId": "75bda158-dd2a-8248-91ad-016c6a1e6a7a",
     "notionUrl": "https://app.notion.com/p/75bda158dd2a824891ad016c6a1e6a7a",
-    "notionSyncedAt": "2026-07-16T13:47:46.709Z"
+    "notionSyncedAt": "2026-07-16T13:47:46.709Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "20c4d1a484e47732",
@@ -9142,7 +9158,7 @@
     "address": "",
     "phone": "013-8095-5238",
     "naverMap": "https://naver.me/F3EN7IyU",
-    "image": "images/notion-stores/81872a50489b.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -9206,7 +9222,8 @@
     "notionPageId": "312da158-dd2a-83cb-beec-0177457d3983",
     "notionUrl": "https://app.notion.com/p/312da158dd2a83cbbeec0177457d3983",
     "notionSyncedAt": "2026-07-16T13:47:47.407Z",
-    "phoneSource": "notion"
+    "phoneSource": "notion",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "3bb130edaf8e75fe",
@@ -9707,7 +9724,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FM9db0jN",
-    "image": "images/notion-stores/94714dda3efe.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -9770,7 +9787,8 @@
     },
     "notionPageId": "b57da158-dd2a-833d-99dd-01cf3be85a6a",
     "notionUrl": "https://app.notion.com/p/b57da158dd2a833d99dd01cf3be85a6a",
-    "notionSyncedAt": "2026-07-16T13:47:52.246Z"
+    "notionSyncedAt": "2026-07-16T13:47:52.246Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "16669581b8dc378d",
@@ -10075,7 +10093,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5yhQvniP",
-    "image": "images/notion-stores/d53f992e8cf8.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -10132,7 +10150,8 @@
     },
     "notionPageId": "06ada158-dd2a-832f-9b88-013142e06e6d",
     "notionUrl": "https://app.notion.com/p/06ada158dd2a832f9b88013142e06e6d",
-    "notionSyncedAt": "2026-07-16T13:47:55.950Z"
+    "notionSyncedAt": "2026-07-16T13:47:55.950Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "a2939cd769593c56",
@@ -10588,7 +10607,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/88717fc81611.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -10651,7 +10670,8 @@
     },
     "notionPageId": "abada158-dd2a-832e-a192-819b914efaca",
     "notionUrl": "https://app.notion.com/p/abada158dd2a832ea192819b914efaca",
-    "notionSyncedAt": "2026-07-16T13:48:00.009Z"
+    "notionSyncedAt": "2026-07-16T13:48:00.009Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "e74e79529019bad1",
@@ -10885,7 +10905,7 @@
     "address": "",
     "phone": "015-9553-9167",
     "naverMap": "https://naver.me/5YoqLBqY",
-    "image": "images/notion-stores/ff7225ed16f4.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -10949,7 +10969,8 @@
     "notionPageId": "4ceda158-dd2a-82a5-b0da-816fcef69796",
     "notionUrl": "https://app.notion.com/p/4ceda158dd2a82a5b0da816fcef69796",
     "notionSyncedAt": "2026-07-16T13:48:02.771Z",
-    "phoneSource": "notion"
+    "phoneSource": "notion",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "11161bd0b4783703",
@@ -11343,7 +11364,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5OlRlN7R",
-    "image": "images/notion-stores/6cfce35b1813.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -11406,7 +11427,8 @@
     },
     "notionPageId": "ef3da158-dd2a-8397-a0c4-8175bdacf134",
     "notionUrl": "https://app.notion.com/p/ef3da158dd2a8397a0c48175bdacf134",
-    "notionSyncedAt": "2026-07-16T13:48:07.492Z"
+    "notionSyncedAt": "2026-07-16T13:48:07.492Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "88b98e5ecb968c2c",
@@ -13256,7 +13278,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/7fd35ab10224.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -13313,7 +13335,8 @@
     },
     "notionPageId": "fb9da158-dd2a-8308-aecd-015e36b8eb47",
     "notionUrl": "https://app.notion.com/p/fb9da158dd2a8308aecd015e36b8eb47",
-    "notionSyncedAt": "2026-07-16T13:48:27.044Z"
+    "notionSyncedAt": "2026-07-16T13:48:27.044Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "315dee55700b0a02",
@@ -13477,7 +13500,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/298e57fd444b.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -13534,7 +13557,8 @@
     },
     "notionPageId": "6eeda158-dd2a-82fc-8744-0109f4a6e6b5",
     "notionUrl": "https://app.notion.com/p/6eeda158dd2a82fc87440109f4a6e6b5",
-    "notionSyncedAt": "2026-07-16T13:48:28.849Z"
+    "notionSyncedAt": "2026-07-16T13:48:28.849Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "4674f8f434b1796a",
@@ -13609,7 +13633,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FetDt6ia",
-    "image": "images/notion-stores/1fb64b22554e.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -13666,7 +13690,8 @@
     },
     "notionPageId": "481da158-dd2a-82f9-a859-813e38baa674",
     "notionUrl": "https://app.notion.com/p/481da158dd2a82f9a859813e38baa674",
-    "notionSyncedAt": "2026-07-16T13:48:29.926Z"
+    "notionSyncedAt": "2026-07-16T13:48:29.926Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "1ddcb01bb576c2e3",
@@ -13824,7 +13849,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/7b845b5f1a2d.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -13881,7 +13906,8 @@
     },
     "notionPageId": "bf4da158-dd2a-8343-8c07-81cb57cb1b58",
     "notionUrl": "https://app.notion.com/p/bf4da158dd2a83438c0781cb57cb1b58",
-    "notionSyncedAt": "2026-07-16T13:48:31.571Z"
+    "notionSyncedAt": "2026-07-16T13:48:31.571Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "4b5980481e1d5f41",
@@ -14185,7 +14211,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/639d51f9cf4e.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -14248,7 +14274,8 @@
     },
     "notionPageId": "bdbda158-dd2a-83c0-a452-0132d11f11d3",
     "notionUrl": "https://app.notion.com/p/bdbda158dd2a83c0a4520132d11f11d3",
-    "notionSyncedAt": "2026-07-16T13:48:34.401Z"
+    "notionSyncedAt": "2026-07-16T13:48:34.401Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "91806c266ead3108",
@@ -14838,7 +14865,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/fb3891ff574c.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -14901,7 +14928,8 @@
     },
     "notionPageId": "165da158-dd2a-82d9-94ba-814cb4a5cf47",
     "notionUrl": "https://app.notion.com/p/165da158dd2a82d994ba814cb4a5cf47",
-    "notionSyncedAt": "2026-07-16T13:48:39.692Z"
+    "notionSyncedAt": "2026-07-16T13:48:39.692Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "81d552a2ffdcf486",
@@ -15198,7 +15226,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/83729edd76e5.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -15249,7 +15277,8 @@
     },
     "notionPageId": "ffada158-dd2a-82de-b526-01c2d3dc2f72",
     "notionUrl": "https://app.notion.com/p/ffada158dd2a82deb52601c2d3dc2f72",
-    "notionSyncedAt": "2026-07-16T13:48:42.565Z"
+    "notionSyncedAt": "2026-07-16T13:48:42.565Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "09de7c8235046632",
@@ -16460,7 +16489,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/50Br7kQS",
-    "image": "images/notion-stores/f18f1d5b4a59.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -16517,7 +16546,8 @@
     },
     "notionPageId": "160da158-dd2a-8225-9aa8-01a0a6caa8f8",
     "notionUrl": "https://app.notion.com/p/160da158dd2a82259aa801a0a6caa8f8",
-    "notionSyncedAt": "2026-07-16T13:48:55.120Z"
+    "notionSyncedAt": "2026-07-16T13:48:55.120Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "03809451afc7b09b",
@@ -16605,7 +16635,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/GjyhC8EL",
-    "image": "images/notion-stores/53c1de95ff1e.jpg",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -16662,7 +16692,8 @@
     },
     "notionPageId": "0a8da158-dd2a-8218-a46d-8192b81b0a0e",
     "notionUrl": "https://app.notion.com/p/0a8da158dd2a8218a46d8192b81b0a0e",
-    "notionSyncedAt": "2026-07-16T13:48:56.217Z"
+    "notionSyncedAt": "2026-07-16T13:48:56.217Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "72f43b13ec8436f7",
@@ -16964,7 +16995,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/Gi0zo5pY",
-    "image": "images/notion-stores/484f8755c2c3.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -17021,7 +17052,8 @@
     },
     "notionPageId": "034da158-dd2a-82c3-a174-8165f2227444",
     "notionUrl": "https://app.notion.com/p/034da158dd2a82c3a1748165f2227444",
-    "notionSyncedAt": "2026-07-16T13:48:59.222Z"
+    "notionSyncedAt": "2026-07-16T13:48:59.222Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "9407e6bd4e71b539",
@@ -17318,7 +17350,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/xYNGj6wF",
-    "image": "images/notion-stores/9ed690b31cb3.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -17375,7 +17407,8 @@
     },
     "notionPageId": "9eeda158-dd2a-83fd-bcdf-0172919b86a1",
     "notionUrl": "https://app.notion.com/p/9eeda158dd2a83fdbcdf0172919b86a1",
-    "notionSyncedAt": "2026-07-16T13:49:02.367Z"
+    "notionSyncedAt": "2026-07-16T13:49:02.367Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "3de8202985e65f35",
@@ -17462,7 +17495,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/6ab34d27fef6.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -17525,7 +17558,8 @@
     },
     "notionPageId": "327da158-dd2a-825e-b29c-810d0bbe9034",
     "notionUrl": "https://app.notion.com/p/327da158dd2a825eb29c810d0bbe9034",
-    "notionSyncedAt": "2026-07-16T13:49:03.769Z"
+    "notionSyncedAt": "2026-07-16T13:49:03.769Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "85e4327fdf0e8dda",
@@ -17758,7 +17792,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/3b7e5e26a801.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -17809,7 +17843,8 @@
     },
     "notionPageId": "da5da158-dd2a-8324-9fe0-810d15f5482e",
     "notionUrl": "https://app.notion.com/p/da5da158dd2a83249fe0810d15f5482e",
-    "notionSyncedAt": "2026-07-16T13:49:06.026Z"
+    "notionSyncedAt": "2026-07-16T13:49:06.026Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "2909b3dc166a5ee7",
@@ -17821,7 +17856,7 @@
     "address": "",
     "phone": "015-9794-7950",
     "naverMap": "",
-    "image": "images/notion-stores/0961b0caf9d3.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -17873,7 +17908,8 @@
     "notionPageId": "26eda158-dd2a-82fd-bc38-814fe7be2eec",
     "notionUrl": "https://app.notion.com/p/26eda158dd2a82fdbc38814fe7be2eec",
     "notionSyncedAt": "2026-07-16T13:49:06.633Z",
-    "phoneSource": "notion"
+    "phoneSource": "notion",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "e81c1980fff43a29",
@@ -18312,7 +18348,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/F3EkSRQN",
-    "image": "images/notion-stores/95392ddca034.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -18375,7 +18411,8 @@
     },
     "notionPageId": "347da158-dd2a-8320-8ada-01614a95ca68",
     "notionUrl": "https://app.notion.com/p/347da158dd2a83208ada01614a95ca68",
-    "notionSyncedAt": "2026-07-16T13:49:11.108Z"
+    "notionSyncedAt": "2026-07-16T13:49:11.108Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "e7be983ffc863971",
@@ -19134,7 +19171,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/Ix0EJ65k",
-    "image": "images/notion-stores/95f33257f258.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -19197,7 +19234,8 @@
     },
     "notionPageId": "777da158-dd2a-83ac-80a7-81a3974ca70d",
     "notionUrl": "https://app.notion.com/p/777da158dd2a83ac80a781a3974ca70d",
-    "notionSyncedAt": "2026-07-16T13:49:20.721Z"
+    "notionSyncedAt": "2026-07-16T13:49:20.721Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "c34a81ea7ed1d578",
@@ -19553,7 +19591,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/G3vwxmdQ",
-    "image": "images/notion-stores/e0dfe25659d8.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -19616,7 +19654,8 @@
     },
     "notionPageId": "1e8da158-dd2a-8355-b6db-010567ebabcf",
     "notionUrl": "https://app.notion.com/p/1e8da158dd2a8355b6db010567ebabcf",
-    "notionSyncedAt": "2026-07-16T13:49:25.250Z"
+    "notionSyncedAt": "2026-07-16T13:49:25.250Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "732120ab53b3f457",
@@ -19924,7 +19963,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/xG0AjwsH",
-    "image": "images/notion-stores/2641ac7974e1.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -19981,7 +20020,8 @@
     },
     "notionPageId": "29dda158-dd2a-82ec-970a-8184b91bf48c",
     "notionUrl": "https://app.notion.com/p/29dda158dd2a82ec970a8184b91bf48c",
-    "notionSyncedAt": "2026-07-16T13:49:28.110Z"
+    "notionSyncedAt": "2026-07-16T13:49:28.110Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "69f92930ea1e00c4",
@@ -20191,7 +20231,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/GkI0xXz5",
-    "image": "images/notion-stores/7838390edfa8.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -20254,7 +20294,8 @@
     },
     "notionPageId": "85dda158-dd2a-83df-8a7d-01e60bf5d1dd",
     "notionUrl": "https://app.notion.com/p/85dda158dd2a83df8a7d01e60bf5d1dd",
-    "notionSyncedAt": "2026-07-16T13:49:30.570Z"
+    "notionSyncedAt": "2026-07-16T13:49:30.570Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "90e006413bc79cbc",
@@ -20668,7 +20709,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5qLvAuT5",
-    "image": "images/notion-stores/f725b6a80339.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -20719,7 +20760,8 @@
     },
     "notionPageId": "52dda158-dd2a-83fb-937c-01625a9bc632",
     "notionUrl": "https://app.notion.com/p/52dda158dd2a83fb937c01625a9bc632",
-    "notionSyncedAt": "2026-07-16T13:49:35.857Z"
+    "notionSyncedAt": "2026-07-16T13:49:35.857Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "39b2241021f9616c",
@@ -20731,7 +20773,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5B0M3Ypi",
-    "image": "images/notion-stores/9b6489c2eb2f.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -20788,7 +20830,8 @@
     },
     "notionPageId": "723da158-dd2a-82f3-b76a-81aef14b8614",
     "notionUrl": "https://app.notion.com/p/723da158dd2a82f3b76a81aef14b8614",
-    "notionSyncedAt": "2026-07-16T13:49:36.454Z"
+    "notionSyncedAt": "2026-07-16T13:49:36.454Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "e6339c85e31322fa",
@@ -20800,7 +20843,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/7bacdc1482b6.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -20851,7 +20894,8 @@
     },
     "notionPageId": "aebda158-dd2a-83aa-9099-8123a32b2eaa",
     "notionUrl": "https://app.notion.com/p/aebda158dd2a83aa90998123a32b2eaa",
-    "notionSyncedAt": "2026-07-16T13:49:37.179Z"
+    "notionSyncedAt": "2026-07-16T13:49:37.179Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "571770a25990ba97",
@@ -21213,7 +21257,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FKG4nFhZ",
-    "image": "images/notion-stores/c9b1b8c5fc0c.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -21276,7 +21320,8 @@
     },
     "notionPageId": "f9bda158-dd2a-8283-88c0-01f96dac52d4",
     "notionUrl": "https://app.notion.com/p/f9bda158dd2a828388c001f96dac52d4",
-    "notionSyncedAt": "2026-07-16T13:49:40.853Z"
+    "notionSyncedAt": "2026-07-16T13:49:40.853Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "fb28167259749571",
@@ -23465,7 +23510,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://bit.ly/네이버지도-조선제일감자탕뼈해장국여서점",
-    "image": "images/notion-stores/761697887810.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -23516,7 +23561,8 @@
     },
     "notionPageId": "a80da158-dd2a-83e8-88ee-81416777e3da",
     "notionUrl": "https://app.notion.com/p/1-a80da158dd2a83e888ee81416777e3da",
-    "notionSyncedAt": "2026-07-16T13:50:03.037Z"
+    "notionSyncedAt": "2026-07-16T13:50:03.037Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "82fb6c389b7aced5",
@@ -23604,7 +23650,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5XcB326N",
-    "image": "images/notion-stores/190549701220.jpg",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -23667,7 +23713,8 @@
     },
     "notionPageId": "498da158-dd2a-8200-bfb2-81e71df63def",
     "notionUrl": "https://app.notion.com/p/498da158dd2a8200bfb281e71df63def",
-    "notionSyncedAt": "2026-07-16T13:50:04.427Z"
+    "notionSyncedAt": "2026-07-16T13:50:04.427Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "4e43f1180007c10f",
@@ -23812,7 +23859,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/x7eLPgGN",
-    "image": "images/notion-stores/71ce594b1e4e.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -23869,7 +23916,8 @@
     },
     "notionPageId": "df3da158-dd2a-83f8-9076-01bce41f87a5",
     "notionUrl": "https://app.notion.com/p/df3da158dd2a83f8907601bce41f87a5",
-    "notionSyncedAt": "2026-07-16T13:50:07.690Z"
+    "notionSyncedAt": "2026-07-16T13:50:07.690Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "27fc5651d1d3feb0",
@@ -23881,7 +23929,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5xgdTPhI",
-    "image": "images/notion-stores/41b194321413.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -23938,7 +23986,8 @@
     },
     "notionPageId": "c10da158-dd2a-832d-a1b5-018e0968fb35",
     "notionUrl": "https://app.notion.com/p/c10da158dd2a832da1b5018e0968fb35",
-    "notionSyncedAt": "2026-07-16T13:50:08.193Z"
+    "notionSyncedAt": "2026-07-16T13:50:08.193Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "5d45d58855f0c602",
@@ -24014,7 +24063,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/65e87e1e6969.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -24077,7 +24126,8 @@
     },
     "notionPageId": "72ada158-dd2a-8366-87b1-01baad0ce3e9",
     "notionUrl": "https://app.notion.com/p/72ada158dd2a836687b101baad0ce3e9",
-    "notionSyncedAt": "2026-07-16T13:50:09.377Z"
+    "notionSyncedAt": "2026-07-16T13:50:09.377Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "a4ba6805e73e7e76",
@@ -24222,7 +24272,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/cf4d9df7977a.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -24279,7 +24329,8 @@
     },
     "notionPageId": "defda158-dd2a-83b9-aac6-0122f9e93c81",
     "notionUrl": "https://app.notion.com/p/defda158dd2a83b9aac60122f9e93c81",
-    "notionSyncedAt": "2026-07-16T13:50:13.070Z"
+    "notionSyncedAt": "2026-07-16T13:50:13.070Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "77b1600313d1d6d4",
@@ -24367,7 +24418,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/a35de1eae3a8.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -24424,7 +24475,8 @@
     },
     "notionPageId": "494da158-dd2a-83ca-a718-8170f2dd7951",
     "notionUrl": "https://app.notion.com/p/494da158dd2a83caa7188170f2dd7951",
-    "notionSyncedAt": "2026-07-16T13:50:14.721Z"
+    "notionSyncedAt": "2026-07-16T13:50:14.721Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "9b2419177903b1d8",
@@ -24728,7 +24780,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/09eded0a2b58.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -24785,7 +24837,8 @@
     },
     "notionPageId": "05eda158-dd2a-838e-be8b-815873ff4f08",
     "notionUrl": "https://app.notion.com/p/05eda158dd2a838ebe8b815873ff4f08",
-    "notionSyncedAt": "2026-07-16T13:50:20.323Z"
+    "notionSyncedAt": "2026-07-16T13:50:20.323Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "8c8ee85a0bc3b219",
@@ -25065,7 +25118,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5AuVkSXV",
-    "image": "images/notion-stores/82d73d4a79f5.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -25110,7 +25163,8 @@
     },
     "notionPageId": "06eda158-dd2a-8213-92d2-01119e7eca89",
     "notionUrl": "https://app.notion.com/p/06eda158dd2a821392d201119e7eca89",
-    "notionSyncedAt": "2026-07-16T13:50:23.410Z"
+    "notionSyncedAt": "2026-07-16T13:50:23.410Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "bb9aef1788a685c6",
@@ -25122,7 +25176,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/cc0fa943703d.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -25179,7 +25233,8 @@
     },
     "notionPageId": "c0eda158-dd2a-82ee-a366-01827474e6a1",
     "notionUrl": "https://app.notion.com/p/c0eda158dd2a82eea36601827474e6a1",
-    "notionSyncedAt": "2026-07-16T13:50:23.908Z"
+    "notionSyncedAt": "2026-07-16T13:50:23.908Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "7d656b9342aabd94",
@@ -25191,7 +25246,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/e7f99806405c.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -25254,7 +25309,8 @@
     },
     "notionPageId": "570da158-dd2a-82cf-ae81-81079b33970f",
     "notionUrl": "https://app.notion.com/p/570da158dd2a82cfae8181079b33970f",
-    "notionSyncedAt": "2026-07-16T13:50:24.538Z"
+    "notionSyncedAt": "2026-07-16T13:50:24.538Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "8df8f77db6d9a205",
@@ -25266,7 +25322,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/a4a39d6e9cc1.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -25329,7 +25385,8 @@
     },
     "notionPageId": "2f9da158-dd2a-83f1-aeb0-813edf3b7179",
     "notionUrl": "https://app.notion.com/p/2f9da158dd2a83f1aeb0813edf3b7179",
-    "notionSyncedAt": "2026-07-16T13:50:25.081Z"
+    "notionSyncedAt": "2026-07-16T13:50:25.081Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "4663ccf86e9128fa",
@@ -25684,7 +25741,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/GfrOhZ1L",
-    "image": "images/notion-stores/eea1af7c3651.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -25735,7 +25792,8 @@
     },
     "notionPageId": "8a5da158-dd2a-83fe-8625-01711aa30a88",
     "notionUrl": "https://app.notion.com/p/8a5da158dd2a83fe862501711aa30a88",
-    "notionSyncedAt": "2026-07-16T13:50:29.171Z"
+    "notionSyncedAt": "2026-07-16T13:50:29.171Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "9acc51c50813ce03",
@@ -25899,7 +25957,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/Gia0yzdR",
-    "image": "images/notion-stores/d08a39b984f1.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -25950,7 +26008,8 @@
     },
     "notionPageId": "317da158-dd2a-82a5-b472-81388f55fdea",
     "notionUrl": "https://app.notion.com/p/317da158dd2a82a5b47281388f55fdea",
-    "notionSyncedAt": "2026-07-16T13:50:30.923Z"
+    "notionSyncedAt": "2026-07-16T13:50:30.923Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "58063b75a96362b4",
@@ -26628,7 +26687,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5c8mPF1f",
-    "image": "images/notion-stores/d39188e9fa62.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -26685,7 +26744,8 @@
     },
     "notionPageId": "28bda158-dd2a-83c1-bc17-01f8d455b533",
     "notionUrl": "https://app.notion.com/p/28bda158dd2a83c1bc1701f8d455b533",
-    "notionSyncedAt": "2026-07-16T13:50:38.591Z"
+    "notionSyncedAt": "2026-07-16T13:50:38.591Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "9abb1d4db21758ad",
@@ -26836,7 +26896,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/09c625ae2dc7.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -26893,7 +26953,8 @@
     },
     "notionPageId": "ed5da158-dd2a-8259-b83d-81635c469ffb",
     "notionUrl": "https://app.notion.com/p/ed5da158dd2a8259b83d81635c469ffb",
-    "notionSyncedAt": "2026-07-16T13:50:40.476Z"
+    "notionSyncedAt": "2026-07-16T13:50:40.476Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "66f78262c4f9aa55",
@@ -26905,7 +26966,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/eeda66eb6693.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -26962,7 +27023,8 @@
     },
     "notionPageId": "cd5da158-dd2a-83e3-874c-011a1693a4be",
     "notionUrl": "https://app.notion.com/p/cd5da158dd2a83e3874c011a1693a4be",
-    "notionSyncedAt": "2026-07-16T13:50:41.040Z"
+    "notionSyncedAt": "2026-07-16T13:50:41.040Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "f3cb61dd45ba9b8b",
@@ -27025,7 +27087,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FnsziNwS",
-    "image": "images/notion-stores/3afb314e1160.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -27088,7 +27150,8 @@
     },
     "notionPageId": "0d9da158-dd2a-82e8-a062-810aaaabfc5a",
     "notionUrl": "https://app.notion.com/p/0d9da158dd2a82e8a062810aaaabfc5a",
-    "notionSyncedAt": "2026-07-16T13:50:42.601Z"
+    "notionSyncedAt": "2026-07-16T13:50:42.601Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "420af240943ff849",
@@ -27404,7 +27467,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://bit.ly/네이버지도-타코아찌타코야끼전문점문수점",
-    "image": "images/notion-stores/5b4be2010e54.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -27461,7 +27524,8 @@
     },
     "notionPageId": "25fda158-dd2a-82da-996d-012b1b48b796",
     "notionUrl": "https://app.notion.com/p/25fda158dd2a82da996d012b1b48b796",
-    "notionSyncedAt": "2026-07-16T13:50:46.240Z"
+    "notionSyncedAt": "2026-07-16T13:50:46.240Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "92f4faa988a87728",
@@ -27681,7 +27745,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/a83507c87582.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -27744,7 +27808,8 @@
     },
     "notionPageId": "74ada158-dd2a-830f-9b7a-810c973ceee0",
     "notionUrl": "https://app.notion.com/p/74ada158dd2a830f9b7a810c973ceee0",
-    "notionSyncedAt": "2026-07-16T13:50:48.715Z"
+    "notionSyncedAt": "2026-07-16T13:50:48.715Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "a6f3cc0da6d5c044",
@@ -27826,7 +27891,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/2d963ca30b9b.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -27883,7 +27948,8 @@
     },
     "notionPageId": "e78da158-dd2a-833a-8a67-81410c65711a",
     "notionUrl": "https://app.notion.com/p/e78da158dd2a833a8a6781410c65711a",
-    "notionSyncedAt": "2026-07-16T13:50:49.855Z"
+    "notionSyncedAt": "2026-07-16T13:50:49.855Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "6fcebc9381432d73",
@@ -29438,7 +29504,7 @@
     "address": "",
     "phone": "",
     "naverMap": "",
-    "image": "images/notion-stores/11b217b205b4.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -29501,7 +29567,8 @@
     },
     "notionPageId": "051da158-dd2a-82c5-891d-81188e3fe442",
     "notionUrl": "https://app.notion.com/p/051da158dd2a82c5891d81188e3fe442",
-    "notionSyncedAt": "2026-07-16T13:51:05.074Z"
+    "notionSyncedAt": "2026-07-16T13:51:05.074Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "7b221aa6623bd0a2",
@@ -29589,7 +29656,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5GcaO56K",
-    "image": "images/notion-stores/9a3a0926b100.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -29646,7 +29713,8 @@
     },
     "notionPageId": "427da158-dd2a-837f-b1d7-81e54c5f09bf",
     "notionUrl": "https://app.notion.com/p/427da158dd2a837fb1d781e54c5f09bf",
-    "notionSyncedAt": "2026-07-16T13:51:06.260Z"
+    "notionSyncedAt": "2026-07-16T13:51:06.260Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "4391cea41df014b3",
@@ -29884,7 +29952,7 @@
     "address": "",
     "phone": "019-9867-9837",
     "naverMap": "https://naver.me/GfCnCeGf",
-    "image": "images/notion-stores/9458ffd18034.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -29942,7 +30010,8 @@
     "notionPageId": "44dda158-dd2a-8253-be25-0100cfb288ba",
     "notionUrl": "https://app.notion.com/p/44dda158dd2a8253be250100cfb288ba",
     "notionSyncedAt": "2026-07-16T13:51:08.432Z",
-    "phoneSource": "notion"
+    "phoneSource": "notion",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "9b760748be6ee430",
@@ -29954,7 +30023,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5yheaD3O",
-    "image": "images/notion-stores/c9546394e73b.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -30017,7 +30086,8 @@
     },
     "notionPageId": "c70da158-dd2a-833b-ade7-81a1f20ce842",
     "notionUrl": "https://app.notion.com/p/c70da158dd2a833bade781a1f20ce842",
-    "notionSyncedAt": "2026-07-16T13:51:08.940Z"
+    "notionSyncedAt": "2026-07-16T13:51:08.940Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "43780265104bccba",
@@ -30257,7 +30327,7 @@
     "address": "",
     "phone": "011-6898-0408",
     "naverMap": "",
-    "image": "images/notion-stores/669f1902aacd.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -30321,7 +30391,8 @@
     "notionPageId": "257da158-dd2a-822c-b484-0106519c832d",
     "notionUrl": "https://app.notion.com/p/257da158dd2a822cb4840106519c832d",
     "notionSyncedAt": "2026-07-16T13:51:10.991Z",
-    "phoneSource": "notion"
+    "phoneSource": "notion",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "abd3c4c1fae55d22",
@@ -30472,7 +30543,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/GHLWNBwA",
-    "image": "images/notion-stores/61fddf8d76ea.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -30535,7 +30606,8 @@
     },
     "notionPageId": "ec7da158-dd2a-8263-a09f-81e9b3884257",
     "notionUrl": "https://app.notion.com/p/ec7da158dd2a8263a09f81e9b3884257",
-    "notionSyncedAt": "2026-07-16T13:51:12.691Z"
+    "notionSyncedAt": "2026-07-16T13:51:12.691Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "9586eb46ca401707",
@@ -30624,7 +30696,7 @@
     "address": "",
     "phone": "0175038473",
     "naverMap": "https://naver.me/FpwoeW7G",
-    "image": "images/notion-stores/81b0749d615e.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -30682,7 +30754,8 @@
     "notionPageId": "6c6da158-dd2a-83da-8c3e-01e4819115be",
     "notionUrl": "https://app.notion.com/p/6c6da158dd2a83da8c3e01e4819115be",
     "notionSyncedAt": "2026-07-16T13:51:13.723Z",
-    "phoneSource": "notion"
+    "phoneSource": "notion",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "35613e179e0c318b",
@@ -30694,7 +30767,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FEgWkaeQ",
-    "image": "images/notion-stores/5806bf2637de.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -30757,7 +30830,8 @@
     },
     "notionPageId": "f7ada158-dd2a-8313-b82e-813a04fd3b3b",
     "notionUrl": "https://app.notion.com/p/f7ada158dd2a8313b82e813a04fd3b3b",
-    "notionSyncedAt": "2026-07-16T13:51:14.604Z"
+    "notionSyncedAt": "2026-07-16T13:51:14.604Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "a0e873ce4d21b431",

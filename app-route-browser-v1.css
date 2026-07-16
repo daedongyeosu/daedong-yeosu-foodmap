@@ -1,0 +1,29 @@
+.app-browser{min-width:0}
+.app-browser-head{display:grid;grid-template-columns:54px minmax(0,1fr) auto;gap:12px;align-items:center;padding-right:34px}
+.app-browser-head-icon{width:54px;height:54px;border:1px solid var(--line);border-radius:15px;display:grid;place-items:center;background:#fff;overflow:hidden}
+.app-browser-head-icon img{width:100%;height:100%;object-fit:cover}
+.app-browser-head-icon .app-browser-emoji{font-size:28px}
+.app-browser-head h2{font-size:20px;margin:0 0 4px;word-break:keep-all}
+.app-browser-head p{margin:0;color:var(--muted);font-size:13px}
+.app-browser-install{display:grid;place-items:center;min-width:68px;height:38px;padding:0 11px;border-radius:11px;background:#eef3ff;color:#174ea6;text-decoration:none;font-size:13px;font-weight:800;white-space:nowrap}
+.app-browser-guide{margin:14px 0 10px;color:var(--muted);font-size:13px;line-height:1.45}
+.app-browser-list{display:grid;gap:8px}
+.app-browser-card{display:grid;grid-template-columns:72px minmax(0,1fr) 18px;gap:11px;align-items:center;border:1px solid var(--line);border-radius:15px;padding:9px;color:#17191f;text-decoration:none;background:#fff}
+.app-browser-card:active{background:#fff7f2;border-color:#ffb499}
+.app-browser-photo{width:72px;height:64px;object-fit:cover;border-radius:11px;background:#f1f2f5}
+.app-browser-info{min-width:0;display:flex;flex-direction:column;gap:4px}
+.app-browser-info strong{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.app-browser-info small{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.app-browser-only-icon{width:25px;height:25px;border-radius:7px;display:grid;place-items:center;overflow:hidden;border:1px solid #edf0f4;background:#fff;margin-top:2px}
+.app-browser-only-icon img{width:100%;height:100%;object-fit:cover}
+.app-browser-only-icon .app-browser-emoji{font-size:16px;font-weight:900}
+.app-browser-arrow{font-size:24px;font-weight:500;color:#555}
+.app-browser-empty{padding:44px 12px;text-align:center;color:var(--muted);line-height:1.5}
+@media(max-width:420px){
+  .app-browser-head{grid-template-columns:48px minmax(0,1fr) auto;gap:9px;padding-right:28px}
+  .app-browser-head-icon{width:48px;height:48px;border-radius:13px}
+  .app-browser-head h2{font-size:18px}
+  .app-browser-install{min-width:60px;padding:0 9px}
+  .app-browser-card{grid-template-columns:64px minmax(0,1fr) 16px;padding:8px;gap:9px}
+  .app-browser-photo{width:64px;height:58px}
+}

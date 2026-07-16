@@ -6,6 +6,13 @@ function getSavedAddress(){try{return JSON.parse(localStorage.getItem(ADDRESS_KE
 function getAddressBook(){try{return JSON.parse(localStorage.getItem(ADDRESS_BOOK_KEY)||'[]');}catch{return[];}}
 function saveAddressBook(list){localStorage.setItem(ADDRESS_BOOK_KEY,JSON.stringify(list.slice(0,12)));}
 function shortAddress(text=''){const clean=String(text).trim();if(!clean)return'여수시 전체';return clean.length>18?`${clean.slice(0,18)}…`:clean;}
+function normalizeYeosuAddressQuery(text=''){
+  let query=String(text).trim().replace(/\s+/g,' ');
+  if(!query)return'';
+  query=query.replace(/([로길동읍면가])(\d)/g,'$1 $2');
+  if(!/(전라남도|전남|여수시|여수\s)/.test(query))query=`여수시 ${query}`;
+  return query;
+}
 
 function showAddressToast(address){
   let toast=document.querySelector('#addressConfirmToast');
@@ -44,8 +51,9 @@ function openAddressSetup(){
   const saved=getSavedAddress();
   const book=getAddressBook();
   openModal(`<div class="address-sheet">
-    <div class="address-sheet-head"><h2>배달 주소 설정</h2><p>배달받을 주소를 검색하거나 현재 위치를 선택해 주세요.</p></div>
-    <div class="address-search-box"><span>⌕</span><input id="addressSearchInput" placeholder="도로명, 건물명, 지번을 검색하세요" autocomplete="street-address"><button id="addressSearchSave">주소 검색</button></div>
+    <div class="address-sheet-head"><h2>배달 주소 설정</h2><p>주소를 한 번만 입력하면 바로 검색 결과를 보여드립니다.</p></div>
+    <div class="address-search-box"><span>⌕</span><input id="addressSearchInput" placeholder="예: 여서2로 38, 여서동 123-4, 웅천동 아파트명" autocomplete="street-address"><button id="addressSearchSave">주소 검색</button></div>
+    <p id="addressSearchHint" class="address-search-hint">여수 주소 일부만 입력해도 됩니다. 예: 쌍봉로 368</p>
     <button id="useCurrentLocation" class="current-location-btn">⌖ <span>현재 위치로 주소 설정하기</span></button>
     ${saved?`<div class="current-address-card"><small>현재 설정된 주소</small><b>${esc(saved.label||saved.address)}</b><span>${esc(saved.address||'')}</span></div>`:''}
     <div class="address-recent"><div class="address-section-title"><h3>최근 주소</h3><span>최대 12개 저장</span></div>${book.length?book.map(addressRow).join(''):'<p class="address-empty">아직 저장된 주소가 없습니다.</p>'}</div>
@@ -53,12 +61,20 @@ function openAddressSetup(){
   setTimeout(()=>document.querySelector('#addressSearchInput')?.focus(),120);
 }
 
-function openPostcodeSearch(){
+function openPostcodeSearch(rawQuery=''){
   if(!window.kakao?.Postcode){
     openModal('<h2>주소 검색</h2><p>주소 검색 서비스를 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 다시 시도해 주세요.</p>');
     return;
   }
-  openModal(`<div class="postcode-sheet"><div class="postcode-head"><button type="button" data-postcode-back>←</button><h2>주소 검색</h2></div><div id="postcodeEmbed" class="postcode-embed"></div></div>`);
+  const query=normalizeYeosuAddressQuery(rawQuery);
+  if(!query){
+    const input=document.querySelector('#addressSearchInput');
+    const hint=document.querySelector('#addressSearchHint');
+    if(hint){hint.textContent='주소를 먼저 입력해 주세요. 예: 여서2로 38';hint.classList.add('error');}
+    input?.focus();
+    return;
+  }
+  openModal(`<div class="postcode-sheet"><div class="postcode-head"><button type="button" data-postcode-back>←</button><div><h2>주소 검색 결과</h2><p class="postcode-query">${esc(query)}</p></div></div><div id="postcodeEmbed" class="postcode-embed"></div></div>`);
   const target=document.querySelector('#postcodeEmbed');
   new kakao.Postcode({
     width:'100%',height:'100%',maxSuggestItems:7,
@@ -68,7 +84,7 @@ function openPostcodeSearch(){
       pendingAddress={type:'recent',address:base,roadAddress:data.roadAddress||'',jibunAddress:data.jibunAddress||'',zonecode:data.zonecode||'',buildingName:building,createdAt:new Date().toISOString()};
       openAddressDetail();
     }
-  }).embed(target,{autoClose:false});
+  }).embed(target,{autoClose:false,q:query});
 }
 
 function openAddressDetail(){
@@ -95,7 +111,7 @@ function saveSelectedAddress(type='recent'){
 }
 
 function useCurrentLocation(){
-  if(!window.isSecureContext && location.hostname!=='localhost' && location.hostname!=='127.0.0.1'){
+  if(!window.isSecureContext&&location.hostname!=='localhost'&&location.hostname!=='127.0.0.1'){
     openModal('<h2>현재 위치</h2><p>휴대전화에서 현재 위치를 사용하려면 HTTPS 주소가 필요합니다.</p><p>지금처럼 <b>192.168.x.x</b> 형태의 개발용 주소에서는 브라우저가 위치 기능을 차단할 수 있습니다. 공개된 HTTPS 홈페이지에서는 정상적으로 위치 권한을 요청합니다.</p>');
     return;
   }
@@ -115,9 +131,9 @@ function useCurrentLocation(){
 
 document.addEventListener('click',event=>{
   if(event.target.closest('#locationBtn')){event.preventDefault();event.stopPropagation();openAddressSetup();return;}
-  if(event.target.closest('#addressSearchSave')){openPostcodeSearch();return;}
+  if(event.target.closest('#addressSearchSave')){openPostcodeSearch(document.querySelector('#addressSearchInput')?.value||'');return;}
   if(event.target.closest('[data-postcode-back]')){openAddressSetup();return;}
-  if(event.target.closest('[data-address-search-again]')){openPostcodeSearch();return;}
+  if(event.target.closest('[data-address-search-again]')){openAddressSetup();return;}
   const saveButton=event.target.closest('[data-save-selected]');
   if(saveButton){saveSelectedAddress(saveButton.dataset.saveSelected);return;}
   if(event.target.closest('#useCurrentLocation')){useCurrentLocation();return;}
@@ -127,7 +143,7 @@ document.addEventListener('click',event=>{
   if(event.target.closest('[data-address-change]')){document.querySelector('#addressConfirmToast').hidden=true;openAddressSetup();}
 });
 
-document.addEventListener('keydown',event=>{if(event.key==='Enter'&&event.target?.id==='addressSearchInput')openPostcodeSearch();if(event.key==='Enter'&&event.target?.id==='addressDetailInput')saveSelectedAddress('recent');});
+document.addEventListener('keydown',event=>{if(event.key==='Enter'&&event.target?.id==='addressSearchInput'){event.preventDefault();openPostcodeSearch(event.target.value);}if(event.key==='Enter'&&event.target?.id==='addressDetailInput')saveSelectedAddress('recent');});
 
 document.addEventListener('DOMContentLoaded',()=>{
   const saved=getSavedAddress();

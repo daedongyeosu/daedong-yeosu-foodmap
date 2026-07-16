@@ -1,0 +1,28 @@
+/* Mobile store-card photo ratio lock */
+.store-card > img:first-child{
+  display:block!important;
+  width:100%!important;
+  height:clamp(150px,32vw,270px)!important;
+  min-height:150px!important;
+  max-height:270px!important;
+  aspect-ratio:5 / 4!important;
+  object-fit:cover!important;
+  object-position:center!important;
+  flex:0 0 auto!important;
+}
+
+@media(max-width:520px){
+  .store-card > img:first-child{
+    height:clamp(145px,39vw,190px)!important;
+    min-height:145px!important;
+    max-height:190px!important;
+  }
+}
+
+@media(max-width:390px){
+  .store-card > img:first-child{
+    height:145px!important;
+    min-height:145px!important;
+    max-height:145px!important;
+  }
+}

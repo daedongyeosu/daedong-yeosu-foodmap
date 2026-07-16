@@ -1,0 +1,4978 @@
+[
+  {
+    "id": "3f441930b8d18783",
+    "name": "1980밀면회관&냉면 문수점",
+    "realBusinessName": "1980밀면회관&냉면 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "면요리"
+  },
+  {
+    "id": "a75505094208bb61",
+    "name": "1988응답하라추억의옛날도시락 고소동점",
+    "realBusinessName": "1988응답하라추억의옛날도시락 고소동점",
+    "shopInShopNames": [],
+    "district": "고소동",
+    "category": "한식"
+  },
+  {
+    "id": "d09fa15da80ff88e",
+    "name": "1989마라탕 봉강점",
+    "realBusinessName": "1989마라탕 봉강점",
+    "shopInShopNames": [],
+    "district": "봉강동",
+    "category": "마라탕/양꼬치"
+  },
+  {
+    "id": "360b32bc2f5a850c",
+    "name": "1키로 오리스타 여서점",
+    "realBusinessName": "1키로 오리스타 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "고기/구이"
+  },
+  {
+    "id": "275f52997bdd2755",
+    "name": "30년전통 할매손곰탕 문수점",
+    "realBusinessName": "30년전통 할매손곰탕 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "fa836f4f328cb34f",
+    "name": "60계치킨 돌산점",
+    "realBusinessName": "60계치킨 돌산점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "치킨"
+  },
+  {
+    "id": "e53db0006339f439",
+    "name": "60계치킨 웅천점",
+    "realBusinessName": "60계치킨 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "치킨"
+  },
+  {
+    "id": "87fd57845e1c58b5",
+    "name": "60계치킨 죽림점",
+    "realBusinessName": "60계치킨 죽림점",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "치킨"
+  },
+  {
+    "id": "d7674e8acedd94b2",
+    "name": "60계치킨 충무점",
+    "realBusinessName": "60계치킨 충무점",
+    "shopInShopNames": [],
+    "district": "충무동",
+    "category": "치킨"
+  },
+  {
+    "id": "b1beeb518c437d02",
+    "name": "60일숙성 명품김치찜&김치찌개&쌈밥 교동점",
+    "realBusinessName": "60일숙성 명품김치찜&김치찌개&쌈밥 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "a0f6eb8bcf768489",
+    "name": "79대포 여서점",
+    "realBusinessName": "79대포 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "53300b03ac188a38",
+    "name": "BHC 돌산점",
+    "realBusinessName": "BHC 돌산점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "치킨"
+  },
+  {
+    "id": "ecff9d7b88d1c8fb",
+    "name": "BHC 여수국동점",
+    "realBusinessName": "BHC 여수국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "치킨"
+  },
+  {
+    "id": "043d814d4c3c1e13",
+    "name": "BHC 여수문수점",
+    "realBusinessName": "BHC 여수문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "치킨"
+  },
+  {
+    "id": "b373a08350017273",
+    "name": "BHC 여수미평점",
+    "realBusinessName": "BHC 여수미평점",
+    "shopInShopNames": [],
+    "district": "미평동",
+    "category": "치킨"
+  },
+  {
+    "id": "5f9d2fdf4666eb73",
+    "name": "BHC 여수봉계둔덕점",
+    "realBusinessName": "BHC 여수봉계둔덕점",
+    "shopInShopNames": [],
+    "district": "봉계동",
+    "category": "치킨"
+  },
+  {
+    "id": "b285c40f90621c5c",
+    "name": "BHC 여수소호점",
+    "realBusinessName": "BHC 여수소호점",
+    "shopInShopNames": [],
+    "district": "소호동",
+    "category": "치킨"
+  },
+  {
+    "id": "08c9054aa0115345",
+    "name": "BHC 여수엑스포광장점",
+    "realBusinessName": "BHC 여수엑스포광장점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "치킨"
+  },
+  {
+    "id": "fb3ad6747507444d",
+    "name": "BHC 여수여서점",
+    "realBusinessName": "BHC 여수여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "800e9f2ab3c24e8f",
+    "name": "BHC 여수웅천점",
+    "realBusinessName": "BHC 여수웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "치킨"
+  },
+  {
+    "id": "c9df0658ace5336b",
+    "name": "BHC 여수죽림무선점",
+    "realBusinessName": "BHC 여수죽림무선점",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "치킨"
+  },
+  {
+    "id": "4152cf5c2c0c2dab",
+    "name": "BHC 여수학동점",
+    "realBusinessName": "BHC 여수학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "치킨"
+  },
+  {
+    "id": "55ef78aa24e1eac6",
+    "name": "Boss짬뽕 직화제육 미평점",
+    "realBusinessName": "Boss짬뽕 직화제육 미평점",
+    "shopInShopNames": [],
+    "district": "미평동",
+    "category": "중식"
+  },
+  {
+    "id": "c443f150b874d4d2",
+    "name": "LA통닭&포차 여서본점",
+    "realBusinessName": "LA통닭&포차 여서본점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "adf7b4ab161ec9d2",
+    "name": "RIB&TABLE 바베큐립 전문점(미평동)",
+    "realBusinessName": "RIB&TABLE 바베큐립 전문점(미평동)",
+    "shopInShopNames": [],
+    "district": "미평동",
+    "category": "치킨"
+  },
+  {
+    "id": "9cb90900e5057c72",
+    "name": "가마솥 볶음밥 여서점",
+    "realBusinessName": "가마솥 볶음밥 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "2ce5b80012bc506a",
+    "name": "가마치통닭 무선점",
+    "realBusinessName": "가마치통닭 무선점",
+    "shopInShopNames": [],
+    "district": "선원동",
+    "category": "치킨"
+  },
+  {
+    "id": "07a25456cf8c91c4",
+    "name": "가마치통닭 문수점",
+    "realBusinessName": "가마치통닭 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "치킨"
+  },
+  {
+    "id": "1d6b92bb000bbc08",
+    "name": "가마치통닭 소호점",
+    "realBusinessName": "가마치통닭 소호점",
+    "shopInShopNames": [],
+    "district": "소호동",
+    "category": "치킨"
+  },
+  {
+    "id": "1956f41dd81e8568",
+    "name": "가마치통닭 신기점",
+    "realBusinessName": "가마치통닭 신기점",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "724adc8d9593fe05",
+    "name": "가마치통닭 죽림점",
+    "realBusinessName": "가마치통닭 죽림점",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "치킨"
+  },
+  {
+    "id": "1f8db0d628436011",
+    "name": "가마치통닭 학동점",
+    "realBusinessName": "가마치통닭 학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "치킨"
+  },
+  {
+    "id": "31716733c2083fed",
+    "name": "가장맛있는족발 여수돌산점",
+    "realBusinessName": "가장맛있는족발 여수돌산점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "dc67f48b1278de3b",
+    "name": "가장맛있는족발 여수신월점",
+    "realBusinessName": "가장맛있는족발 여수신월점",
+    "shopInShopNames": [],
+    "district": "신월동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "718031989449bc32",
+    "name": "가장맛있는족발 여수여서점",
+    "realBusinessName": "가장맛있는족발 여수여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "005382cbb06108d3",
+    "name": "가장맛있는족발 여수웅천점",
+    "realBusinessName": "가장맛있는족발 여수웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "52f5738519110900",
+    "name": "가장맛있는족발 여수죽림점",
+    "realBusinessName": "가장맛있는족발 여수죽림점",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "1e7308d1e28fe49e",
+    "name": "갈비냉면 문수점",
+    "realBusinessName": "갈비냉면 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "면요리"
+  },
+  {
+    "id": "539d762fe299233d",
+    "name": "강남국밥 돌산점",
+    "realBusinessName": "강남국밥 돌산점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "한식"
+  },
+  {
+    "id": "815c0895b7dcfaa8",
+    "name": "계동치킨 덕충점",
+    "realBusinessName": "계동치킨 덕충점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "치킨"
+  },
+  {
+    "id": "aa035789f77b304d",
+    "name": "계동치킨 봉산점",
+    "realBusinessName": "계동치킨 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "치킨"
+  },
+  {
+    "id": "91cc31c37aa68d62",
+    "name": "고궁 갈비탕&갈비찜&육개장 문수점",
+    "realBusinessName": "고궁 갈비탕&갈비찜&육개장 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "5caf409776519dd6",
+    "name": "고기듬뿍 국물두루치기 문수점",
+    "realBusinessName": "고기듬뿍 국물두루치기 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "2f939a1b44f5f7ec",
+    "name": "골목낙곱새 1977 봉강점",
+    "realBusinessName": "골목낙곱새 1977 봉강점",
+    "shopInShopNames": [],
+    "district": "봉강동",
+    "category": "한식"
+  },
+  {
+    "id": "4b8ea4cbc481a3ee",
+    "name": "골목짬뽕 여서점",
+    "realBusinessName": "골목짬뽕 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "중식"
+  },
+  {
+    "id": "f68c9f29515c518e",
+    "name": "곱도리辛 낙곱새 봉산점",
+    "realBusinessName": "곱도리辛 낙곱새 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "687febad1f2bf0dd",
+    "name": "공차 여서점",
+    "realBusinessName": "공차 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "72747cfe04586176",
+    "name": "공차 여수해양공원점",
+    "realBusinessName": "공차 여수해양공원점",
+    "shopInShopNames": [],
+    "district": "교동, 중앙동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "d0400d97c15c0a02",
+    "name": "공차 웅천점",
+    "realBusinessName": "공차 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "59785990d2abe3e2",
+    "name": "교동야식 교동점",
+    "realBusinessName": "교동야식 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "dc01f52e24fc6b2b",
+    "name": "교촌치킨 국동점",
+    "realBusinessName": "교촌치킨 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "치킨"
+  },
+  {
+    "id": "b115c4e54c35d82e",
+    "name": "교촌치킨 덕충점",
+    "realBusinessName": "교촌치킨 덕충점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "치킨"
+  },
+  {
+    "id": "4e2bf615062e7234",
+    "name": "교촌치킨 돌산점",
+    "realBusinessName": "교촌치킨 돌산점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "치킨"
+  },
+  {
+    "id": "c97c66bc78a649ea",
+    "name": "교촌치킨 둔덕점",
+    "realBusinessName": "교촌치킨 둔덕점",
+    "shopInShopNames": [],
+    "district": "미평/ 둔덕",
+    "category": "치킨"
+  },
+  {
+    "id": "84fc553896d0b051",
+    "name": "교촌치킨 문수점",
+    "realBusinessName": "교촌치킨 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "치킨"
+  },
+  {
+    "id": "04ae2e96e82f63ef",
+    "name": "교촌치킨 신기점",
+    "realBusinessName": "교촌치킨 신기점",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "dfb50765a5f3a8ab",
+    "name": "교촌치킨 안산점",
+    "realBusinessName": "교촌치킨 안산점",
+    "shopInShopNames": [],
+    "district": "안산동",
+    "category": "치킨"
+  },
+  {
+    "id": "99ade7376cceea13",
+    "name": "교촌치킨 여서점",
+    "realBusinessName": "교촌치킨 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "6126fa948ce536e6",
+    "name": "교촌치킨 웅천점",
+    "realBusinessName": "교촌치킨 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "치킨"
+  },
+  {
+    "id": "8e930495e2e94c21",
+    "name": "교촌치킨 죽림무선점",
+    "realBusinessName": "교촌치킨 죽림무선점",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "치킨"
+  },
+  {
+    "id": "57bb58bd63f0de94",
+    "name": "구운돼지 문수점",
+    "realBusinessName": "구운돼지 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "고기/구이"
+  },
+  {
+    "id": "116a9f7b45941e78",
+    "name": "국빈 중화요리전문점(여서동)",
+    "realBusinessName": "국빈 중화요리전문점(여서동)",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "중식"
+  },
+  {
+    "id": "ef6e7bfe76e0dbd1",
+    "name": "국수나무 여수엑스포점",
+    "realBusinessName": "국수나무 여수엑스포점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "면요리"
+  },
+  {
+    "id": "0df58cf68356ebff",
+    "name": "굽네치킨&피자 관문점",
+    "realBusinessName": "굽네치킨&피자 관문점",
+    "shopInShopNames": [],
+    "district": "관문동",
+    "category": "치킨"
+  },
+  {
+    "id": "32f005992963d474",
+    "name": "굽네치킨&피자 돌산점",
+    "realBusinessName": "굽네치킨&피자 돌산점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "치킨"
+  },
+  {
+    "id": "c194972cb20f2229",
+    "name": "굽네치킨&피자 무선점(화장동)",
+    "realBusinessName": "굽네치킨&피자 무선점(화장동)",
+    "shopInShopNames": [],
+    "district": "화장동",
+    "category": "피자"
+  },
+  {
+    "id": "d556f1478e479e75",
+    "name": "굽네치킨&피자 봉산국동점",
+    "realBusinessName": "굽네치킨&피자 봉산국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "치킨"
+  },
+  {
+    "id": "6fd217d22e3ad371",
+    "name": "굽네치킨&피자 여서점",
+    "realBusinessName": "굽네치킨&피자 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "33558e3cc2ad9dbd",
+    "name": "굽네치킨&피자 여천점(신기동)",
+    "realBusinessName": "굽네치킨&피자 여천점(신기동)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "피자"
+  },
+  {
+    "id": "33c73743521674c6",
+    "name": "굽네치킨&피자 웅천점",
+    "realBusinessName": "굽네치킨&피자 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "피자"
+  },
+  {
+    "id": "72e0104c30277686",
+    "name": "굽네치킨&피자 죽림점",
+    "realBusinessName": "굽네치킨&피자 죽림점",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "피자"
+  },
+  {
+    "id": "aed649ea91b727b8",
+    "name": "귀한김치찜 국동봉산점",
+    "realBusinessName": "귀한김치찜 국동봉산점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "한식"
+  },
+  {
+    "id": "c0bab6826b36d95f",
+    "name": "그루브 여서점",
+    "realBusinessName": "그루브 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "피자"
+  },
+  {
+    "id": "8f3251e2788d4931",
+    "name": "금마차 여서점",
+    "realBusinessName": "금마차 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "1a9ef3c649eefc17",
+    "name": "기영이숯불두마리치킨 여천점(안산동)",
+    "realBusinessName": "기영이숯불두마리치킨 여천점(안산동)",
+    "shopInShopNames": [],
+    "district": "안산동",
+    "category": "치킨"
+  },
+  {
+    "id": "cc5b3b36c8737601",
+    "name": "김밥나라 관문점",
+    "realBusinessName": "김밥나라 관문점",
+    "shopInShopNames": [],
+    "district": "관문동",
+    "category": "한식"
+  },
+  {
+    "id": "fb32c4e0939b5468",
+    "name": "김밥나라 국동점",
+    "realBusinessName": "김밥나라 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "한식"
+  },
+  {
+    "id": "404f1649d53b97eb",
+    "name": "김밥천국 국동점",
+    "realBusinessName": "김밥천국 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "한식"
+  },
+  {
+    "id": "665953a0453afc52",
+    "name": "김사장 국밥 문수점",
+    "realBusinessName": "김사장 국밥 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "7ed65c8f086f11f2",
+    "name": "김사장 대박난 국수집 문수점",
+    "realBusinessName": "김사장 대박난 국수집 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "5535998cfac3846a",
+    "name": "김종구식 맛치킨 전기바베큐 옛날통닭 학동점",
+    "realBusinessName": "김종구식 맛치킨 전기바베큐 옛날통닭 학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "치킨"
+  },
+  {
+    "id": "67f5b4a369c1c6d9",
+    "name": "김치찌개참잘하는집 여서점",
+    "realBusinessName": "김치찌개참잘하는집 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "4fd2d6fdd67f0db8",
+    "name": "김치찜팝니다 서교점",
+    "realBusinessName": "김치찜팝니다 서교점",
+    "shopInShopNames": [],
+    "district": "서교동",
+    "category": "한식"
+  },
+  {
+    "id": "d60f32bbdaa13cf5",
+    "name": "까페빈 봉산점",
+    "realBusinessName": "까페빈 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "b717d583801d3f04",
+    "name": "깐깐한족발 여수문수점",
+    "realBusinessName": "깐깐한족발 여수문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "f20eb017620ccc33",
+    "name": "깐깐한족발 여수학동점",
+    "realBusinessName": "깐깐한족발 여수학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "4e44728a4ea3bcef",
+    "name": "꽃게장&갈치조림 전문점 늘푸른식당 봉산점",
+    "realBusinessName": "꽃게장&갈치조림 전문점 늘푸른식당 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "f0b4ebfd7df44a75",
+    "name": "꾸브라꼬 숯불치킨 여천 신기동점",
+    "realBusinessName": "꾸브라꼬 숯불치킨 여천 신기동점",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "da59f19c1590082f",
+    "name": "나능이 능이버섯백숙 봉산점",
+    "realBusinessName": "나능이 능이버섯백숙 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "4e877826c5a4b649",
+    "name": "낙지천국 문수점",
+    "realBusinessName": "낙지천국 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "b91093385f1baa6a",
+    "name": "내가 끓였찌 여서점",
+    "realBusinessName": "내가 끓였찌 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "국밥/찜/탕/찌개/조림"
+  },
+  {
+    "id": "f5f72c3d9bbf39b6",
+    "name": "내조국 국밥 봉산점",
+    "realBusinessName": "내조국 국밥 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "711596e9d930aab0",
+    "name": "냠냠치킨 국동점",
+    "realBusinessName": "냠냠치킨 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "치킨"
+  },
+  {
+    "id": "119e21e06f1471b6",
+    "name": "네네치킨 국동점",
+    "realBusinessName": "네네치킨 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "치킨"
+  },
+  {
+    "id": "2875fb8206bbf1a6",
+    "name": "네네치킨 무선지구점(선원동)",
+    "realBusinessName": "네네치킨 무선지구점(선원동)",
+    "shopInShopNames": [],
+    "district": "선원동",
+    "category": "치킨"
+  },
+  {
+    "id": "190c9c9cea69da3b",
+    "name": "네네치킨 신기점",
+    "realBusinessName": "네네치킨 신기점",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "54a0c1a2addb92d6",
+    "name": "네네치킨 안산,소호점",
+    "realBusinessName": "네네치킨 안산,소호점",
+    "shopInShopNames": [],
+    "district": "안산동",
+    "category": "치킨"
+  },
+  {
+    "id": "f63bbae9b9a80813",
+    "name": "네네치킨 엑스포점",
+    "realBusinessName": "네네치킨 엑스포점",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "치킨"
+  },
+  {
+    "id": "4cacbf0f8d535667",
+    "name": "네네치킨 여서문수점",
+    "realBusinessName": "네네치킨 여서문수점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "3a5417b7d9525787",
+    "name": "노랑고래 찹쌀꽈배기 여수여서직영점",
+    "realBusinessName": "노랑고래 찹쌀꽈배기 여수여서직영점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "dc42166bad88a929",
+    "name": "노랑고래 찹쌀꽈배기 중앙점",
+    "realBusinessName": "노랑고래 찹쌀꽈배기 중앙점",
+    "shopInShopNames": [],
+    "district": "중앙동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "b8267998349b16e1",
+    "name": "노랑통닭 여서문수점",
+    "realBusinessName": "노랑통닭 여서문수점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "40673a86169d791f",
+    "name": "노랑통닭 여수밤바다점(중앙동)",
+    "realBusinessName": "노랑통닭 여수밤바다점(중앙동)",
+    "shopInShopNames": [],
+    "district": "중앙동",
+    "category": "치킨"
+  },
+  {
+    "id": "aea70baec8c61d25",
+    "name": "노랑통닭 웅천점",
+    "realBusinessName": "노랑통닭 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "치킨"
+  },
+  {
+    "id": "ce40f493bcd2ca2b",
+    "name": "노랑통닭 죽림점",
+    "realBusinessName": "노랑통닭 죽림점",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "치킨"
+  },
+  {
+    "id": "f0804947cebd20cc",
+    "name": "노브랜드버거 여수여서점",
+    "realBusinessName": "노브랜드버거 여수여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "햄버거/샌드위치/토스트/핫도그"
+  },
+  {
+    "id": "759915faca1feb20",
+    "name": "다기야 엑스포점",
+    "realBusinessName": "다기야 엑스포점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "치킨"
+  },
+  {
+    "id": "a5916a5a02aab661",
+    "name": "닥엔돈스 쪽갈비 봉강점",
+    "realBusinessName": "닥엔돈스 쪽갈비 봉강점",
+    "shopInShopNames": [],
+    "district": "봉강동",
+    "category": "치킨"
+  },
+  {
+    "id": "b9ea332bb64a02e8",
+    "name": "닥엔돈스 쪽갈비 여천점(신기동)",
+    "realBusinessName": "닥엔돈스 쪽갈비 여천점(신기동)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "ac2e0e2021267315",
+    "name": "닭곰탕 백숙 보약한첩 문수점",
+    "realBusinessName": "닭곰탕 백숙 보약한첩 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "36d31c0f01bd0e9a",
+    "name": "닭씨네 닭강정 여수점(문수동)",
+    "realBusinessName": "닭씨네 닭강정 여수점(문수동)",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "치킨"
+  },
+  {
+    "id": "f1b6def61b82cc48",
+    "name": "담분식 서교점",
+    "realBusinessName": "담분식 서교점",
+    "shopInShopNames": [],
+    "district": "서교동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "187287f22433bfcf",
+    "name": "더 진한 소한마리탕&국밥 엑스포점",
+    "realBusinessName": "더 진한 소한마리탕&국밥 엑스포점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "한식"
+  },
+  {
+    "id": "d86fa53d88c8d127",
+    "name": "더리터 문수점",
+    "realBusinessName": "더리터 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "248fb06bce3aa6e4",
+    "name": "더바른 정국밥 미평점",
+    "realBusinessName": "더바른 정국밥 미평점",
+    "shopInShopNames": [],
+    "district": "미평동",
+    "category": "한식"
+  },
+  {
+    "id": "f0c36824f150a779",
+    "name": "더벤티 여수국동서희스타힐스점",
+    "realBusinessName": "더벤티 여수국동서희스타힐스점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "aa29edc20eb6da8b",
+    "name": "더벤티 여수돌산점",
+    "realBusinessName": "더벤티 여수돌산점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "8d6b7abaf3f7f596",
+    "name": "더벤티 여수수산시장점(교동)",
+    "realBusinessName": "더벤티 여수수산시장점(교동)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "aae3c781ba45f8a3",
+    "name": "더벤티 여수이순신광장점(중앙동)",
+    "realBusinessName": "더벤티 여수이순신광장점(중앙동)",
+    "shopInShopNames": [],
+    "district": "중앙동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "4990a1c1dc208fce",
+    "name": "더벤티 여수해양공원점(중앙동)",
+    "realBusinessName": "더벤티 여수해양공원점(중앙동)",
+    "shopInShopNames": [],
+    "district": "중앙동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "afe9497576e46e1e",
+    "name": "던킨 여수롯데마트점",
+    "realBusinessName": "던킨 여수롯데마트점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "d1c9de66c95c1d46",
+    "name": "덮밥전문점 고기그릇 공화동점",
+    "realBusinessName": "덮밥전문점 고기그릇 공화동점",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "한식"
+  },
+  {
+    "id": "86df23f2e79b3bb8",
+    "name": "도담식당 충무동점",
+    "realBusinessName": "도담식당 충무동점",
+    "shopInShopNames": [],
+    "district": "충무동",
+    "category": "한식"
+  },
+  {
+    "id": "634cd6c2572df494",
+    "name": "도도닭발&오돌뼈 봉산점",
+    "realBusinessName": "도도닭발&오돌뼈 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "야식/주점"
+  },
+  {
+    "id": "2f4c3cfb0866c4a4",
+    "name": "도미노피자 여천점(학동)",
+    "realBusinessName": "도미노피자 여천점(학동)",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "피자"
+  },
+  {
+    "id": "7249484d1a76ce44",
+    "name": "도야족발 여수여천점(죽림)",
+    "realBusinessName": "도야족발 여수여천점(죽림)",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "950ba1c64e791621",
+    "name": "돈도니밥도둑짜글이 국동점",
+    "realBusinessName": "돈도니밥도둑짜글이 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "한식"
+  },
+  {
+    "id": "20c4d1a484e47732",
+    "name": "돈쌈대패 문수점",
+    "realBusinessName": "돈쌈대패 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "3bb130edaf8e75fe",
+    "name": "돌산텃밭김치·반찬 교동점",
+    "realBusinessName": "돌산텃밭김치·반찬 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "반찬"
+  },
+  {
+    "id": "149224e8ca5281d9",
+    "name": "동대문엽기떡볶이 문수점",
+    "realBusinessName": "동대문엽기떡볶이 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "2e2afe0788acce6a",
+    "name": "동서울왕족발(신기동)",
+    "realBusinessName": "동서울왕족발(신기동)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "68ba9ebef219905e",
+    "name": "두마리찜닭 두찜 여수문수점",
+    "realBusinessName": "두마리찜닭 두찜 여수문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "국밥/찜/탕/찌개/조림"
+  },
+  {
+    "id": "720324ed8ea3a46e",
+    "name": "두마리찜닭 두찜 여수엑스포점",
+    "realBusinessName": "두마리찜닭 두찜 여수엑스포점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "국밥/찜/탕/찌개/조림"
+  },
+  {
+    "id": "d9a3b065f1cd0cf8",
+    "name": "두마리찜닭 두찜 여수웅천점",
+    "realBusinessName": "두마리찜닭 두찜 여수웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "국밥/찜/탕/찌개/조림"
+  },
+  {
+    "id": "1ae0c16d309d1556",
+    "name": "둥이식당 봉강점",
+    "realBusinessName": "둥이식당 봉강점",
+    "shopInShopNames": [],
+    "district": "봉강동",
+    "category": "한식"
+  },
+  {
+    "id": "d6e14895fe474fb3",
+    "name": "드피치 피자&치킨 선원동점",
+    "realBusinessName": "드피치 피자&치킨 선원동점",
+    "shopInShopNames": [],
+    "district": "선원동",
+    "category": "치킨"
+  },
+  {
+    "id": "16669581b8dc378d",
+    "name": "땅스부대찌개 여서점",
+    "realBusinessName": "땅스부대찌개 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "fd8d24a45e887938",
+    "name": "땅스즉석떡볶이 여서점",
+    "realBusinessName": "땅스즉석떡볶이 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "e334f4707bd1046f",
+    "name": "떡순이 알찬만두 문수점",
+    "realBusinessName": "떡순이 알찬만두 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "c05575dae26cfbae",
+    "name": "또래김밥 문수점",
+    "realBusinessName": "또래김밥 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "47b56ab22cab7ce0",
+    "name": "또바기 여서점",
+    "realBusinessName": "또바기 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "a2939cd769593c56",
+    "name": "뚜레쥬르 여수돌산점",
+    "realBusinessName": "뚜레쥬르 여수돌산점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "03f6d7c59d6d1a45",
+    "name": "뚜레쥬르 여수엑스포타운점",
+    "realBusinessName": "뚜레쥬르 여수엑스포타운점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "bee72f182a400ed4",
+    "name": "뚱땡이숯불두마리치킨 직영점(학동)",
+    "realBusinessName": "뚱땡이숯불두마리치킨 직영점(학동)",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "치킨"
+  },
+  {
+    "id": "24420dd7743c89a6",
+    "name": "라인반점 국동점",
+    "realBusinessName": "라인반점 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "중식"
+  },
+  {
+    "id": "cc97a2338805f0c2",
+    "name": "라홍방마라탕 웅천점",
+    "realBusinessName": "라홍방마라탕 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "마라탕/양꼬치"
+  },
+  {
+    "id": "dedded076c21a785",
+    "name": "마라시대 마라탕 봉산점",
+    "realBusinessName": "마라시대 마라탕 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "마라탕/양꼬치"
+  },
+  {
+    "id": "9c7b5c85a8c79a6a",
+    "name": "마라월드 마라탕&마라상궈 여수문수점",
+    "realBusinessName": "마라월드 마라탕&마라상궈 여수문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "마라탕/양꼬치"
+  },
+  {
+    "id": "e74e79529019bad1",
+    "name": "마포매운쌀떡볶이 문수점",
+    "realBusinessName": "마포매운쌀떡볶이 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "a3297f2e48bf9793",
+    "name": "마형제 족발보쌈 학동점",
+    "realBusinessName": "마형제 족발보쌈 학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "f57b6ed2e480011d",
+    "name": "막국수파는집 문수본점",
+    "realBusinessName": "막국수파는집 문수본점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "면요리"
+  },
+  {
+    "id": "c99ad2ba715a5abb",
+    "name": "만석군 봉산점",
+    "realBusinessName": "만석군 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "11161bd0b4783703",
+    "name": "맘스터치 무선점",
+    "realBusinessName": "맘스터치 무선점",
+    "shopInShopNames": [],
+    "district": "무선",
+    "category": "햄버거/샌드위치/토스트/핫도그"
+  },
+  {
+    "id": "a7d0d397991605ec",
+    "name": "맘스터치 여천 학동점",
+    "realBusinessName": "맘스터치 여천 학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "햄버거/샌드위치/토스트/핫도그"
+  },
+  {
+    "id": "3b07bfa30f252db8",
+    "name": "맘스터치 웅천점",
+    "realBusinessName": "맘스터치 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "햄버거/샌드위치/토스트/핫도그"
+  },
+  {
+    "id": "e9753bad89c254a3",
+    "name": "맛나감자탕 여서점",
+    "realBusinessName": "맛나감자탕 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "국밥/찜/탕/찌개/조림"
+  },
+  {
+    "id": "1fe48c8f1857b4d2",
+    "name": "맛있는 전시회 국동점",
+    "realBusinessName": "맛있는 전시회 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "한식"
+  },
+  {
+    "id": "5bc1cef8362365a5",
+    "name": "매운맛 땡길때 밥장인 엑스포점",
+    "realBusinessName": "매운맛 땡길때 밥장인 엑스포점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "한식"
+  },
+  {
+    "id": "88b98e5ecb968c2c",
+    "name": "맥도날드 여수미평DT점",
+    "realBusinessName": "맥도날드 여수미평DT점",
+    "shopInShopNames": [],
+    "district": "미평동",
+    "category": "햄버거/샌드위치/토스트/핫도그"
+  },
+  {
+    "id": "8dfdc5de41e3eca9",
+    "name": "맥도날드 여수학동DT점",
+    "realBusinessName": "맥도날드 여수학동DT점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "햄버거/샌드위치/토스트/핫도그"
+  },
+  {
+    "id": "4c16d7a9aafcf6fd",
+    "name": "맥시칸치킨 공화관문점",
+    "realBusinessName": "맥시칸치킨 공화관문점",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "치킨"
+  },
+  {
+    "id": "4ff23be15f0664ae",
+    "name": "맥시칸치킨 돌산점",
+    "realBusinessName": "맥시칸치킨 돌산점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "치킨"
+  },
+  {
+    "id": "173d62e7132f3370",
+    "name": "맥시칸치킨 무선점",
+    "realBusinessName": "맥시칸치킨 무선점",
+    "shopInShopNames": [],
+    "district": "화장동",
+    "category": "치킨"
+  },
+  {
+    "id": "b5e31af3d61fc8fe",
+    "name": "맥시칸치킨 미평점",
+    "realBusinessName": "맥시칸치킨 미평점",
+    "shopInShopNames": [],
+    "district": "미평동",
+    "category": "치킨"
+  },
+  {
+    "id": "dfa033316cfcecf7",
+    "name": "맵도리닭 봉산점",
+    "realBusinessName": "맵도리닭 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "48113ac49e27c620",
+    "name": "메가MGC커피 문수점",
+    "realBusinessName": "메가MGC커피 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "9999f4db1009d483",
+    "name": "메가MGC커피 미평점",
+    "realBusinessName": "메가MGC커피 미평점",
+    "shopInShopNames": [],
+    "district": "미평동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "4289ad6217815b70",
+    "name": "메가MGC커피 여서사거리점",
+    "realBusinessName": "메가MGC커피 여서사거리점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "d14f1e6669383a88",
+    "name": "메가MGC커피 여수교동점",
+    "realBusinessName": "메가MGC커피 여수교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "d5ab6e067ab79cb9",
+    "name": "메가MGC커피 여수신기점",
+    "realBusinessName": "메가MGC커피 여수신기점",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "9d7d7e2f99658a9c",
+    "name": "메가MGC커피 여수엑스포점",
+    "realBusinessName": "메가MGC커피 여수엑스포점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "3a60142ebc07e295",
+    "name": "메가MGC커피 여수웅천점",
+    "realBusinessName": "메가MGC커피 여수웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "08eecf0379470865",
+    "name": "메가MGC커피 여수진남시장점(학동)",
+    "realBusinessName": "메가MGC커피 여수진남시장점(학동)",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "62cd152fab8dc42e",
+    "name": "메가MGC커피 여수진남주유소점(봉계동)",
+    "realBusinessName": "메가MGC커피 여수진남주유소점(봉계동)",
+    "shopInShopNames": [],
+    "district": "봉계동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "9a4e8ea87951b54e",
+    "name": "메가MGC커피 여천점(학동)",
+    "realBusinessName": "메가MGC커피 여천점(학동)",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "f25d8111c5d1b135",
+    "name": "멕시카나치킨 국동점",
+    "realBusinessName": "멕시카나치킨 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "치킨"
+  },
+  {
+    "id": "183a9d859fd9518d",
+    "name": "멕시카나치킨 무선죽림점",
+    "realBusinessName": "멕시카나치킨 무선죽림점",
+    "shopInShopNames": [],
+    "district": "선원동",
+    "category": "치킨"
+  },
+  {
+    "id": "e313a8628fc0916a",
+    "name": "멕시카나치킨 신기점",
+    "realBusinessName": "멕시카나치킨 신기점",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "aef73537733e9387",
+    "name": "멕시카나치킨 여서점",
+    "realBusinessName": "멕시카나치킨 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "486bad289ae76e54",
+    "name": "멕시칸치킨 학동점",
+    "realBusinessName": "멕시칸치킨 학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "치킨"
+  },
+  {
+    "id": "0a5ea9fd4c080ed0",
+    "name": "멜로우 국동점",
+    "realBusinessName": "멜로우 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "e1089d6ba40ec342",
+    "name": "명품1인도시락&시원냉면밀면(국동)",
+    "realBusinessName": "명품1인도시락&시원냉면밀면(국동)",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "한식"
+  },
+  {
+    "id": "fbf90dcb8bf85a24",
+    "name": "명품육회 오림동점",
+    "realBusinessName": "명품육회 오림동점",
+    "shopInShopNames": [],
+    "district": "오림동",
+    "category": "회/초밥/선어/해산물"
+  },
+  {
+    "id": "dd932b154f9ea0e6",
+    "name": "모도리보쌈족발 여수본점(봉산동)",
+    "realBusinessName": "모도리보쌈족발 여수본점(봉산동)",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "9dcbffc6c6a5ba77",
+    "name": "모도리보쌈족발 여수직영점(신기동)",
+    "realBusinessName": "모도리보쌈족발 여수직영점(신기동)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "576a1f68d57eaf29",
+    "name": "몬스터탕수육 여수학동점",
+    "realBusinessName": "몬스터탕수육 여수학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "중식"
+  },
+  {
+    "id": "315dee55700b0a02",
+    "name": "못말리는파닭 덕충점",
+    "realBusinessName": "못말리는파닭 덕충점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "치킨"
+  },
+  {
+    "id": "6a7625bd1d16ac3b",
+    "name": "미스터피자 웅천점",
+    "realBusinessName": "미스터피자 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "피자"
+  },
+  {
+    "id": "876cb9bc8fa15d8e",
+    "name": "미친 짜글이 서교점",
+    "realBusinessName": "미친 짜글이 서교점",
+    "shopInShopNames": [],
+    "district": "서교동",
+    "category": "한식"
+  },
+  {
+    "id": "4674f8f434b1796a",
+    "name": "바다양푼이동태탕/찜 문수점",
+    "realBusinessName": "바다양푼이동태탕/찜 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "3a09685a7db0f853",
+    "name": "바르다김선생 여서점",
+    "realBusinessName": "바르다김선생 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "1ddcb01bb576c2e3",
+    "name": "바른보쌈1990 문수점",
+    "realBusinessName": "바른보쌈1990 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "2b78b30bde243ae6",
+    "name": "바른보쌈1990 여수웅천점",
+    "realBusinessName": "바른보쌈1990 여수웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "51ed482a660b8247",
+    "name": "바삭한 휴게소 여서점",
+    "realBusinessName": "바삭한 휴게소 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "4b5980481e1d5f41",
+    "name": "박스터지는 두마리치킨 여수문수점",
+    "realBusinessName": "박스터지는 두마리치킨 여수문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "치킨"
+  },
+  {
+    "id": "a16ab5b99748d6a2",
+    "name": "반반한족발닭발 학동점",
+    "realBusinessName": "반반한족발닭발 학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "e4707894d7a253d7",
+    "name": "반올림피자 여수3호점피자(교동)",
+    "realBusinessName": "반올림피자 여수3호점피자(교동)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "피자"
+  },
+  {
+    "id": "a43b83f3f712fc43",
+    "name": "반올림피자 여수점(신기동)",
+    "realBusinessName": "반올림피자 여수점(신기동)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "피자"
+  },
+  {
+    "id": "cf169d6bbf8830f8",
+    "name": "밥앤동 볶음밥&우동 충무점",
+    "realBusinessName": "밥앤동 볶음밥&우동 충무점",
+    "shopInShopNames": [],
+    "district": "충무동",
+    "category": "한식"
+  },
+  {
+    "id": "91806c266ead3108",
+    "name": "배불이 순대국&돼지국밥 교동점",
+    "realBusinessName": "배불이 순대국&돼지국밥 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "10f225b9ca817dc4",
+    "name": "배스킨라빈스 여수국동점",
+    "realBusinessName": "배스킨라빈스 여수국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "989fc2e054bb87c9",
+    "name": "배스킨라빈스 여수충무점",
+    "realBusinessName": "배스킨라빈스 여수충무점",
+    "shopInShopNames": [],
+    "district": "충무동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "2ec1cf195195db03",
+    "name": "버거리 웅천점",
+    "realBusinessName": "버거리 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "햄버거/샌드위치/토스트/핫도그"
+  },
+  {
+    "id": "7b80f8d10b67089e",
+    "name": "버거킹 웅천점",
+    "realBusinessName": "버거킹 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "햄버거/샌드위치/토스트/핫도그"
+  },
+  {
+    "id": "74914ff35d06477d",
+    "name": "별별김밥 봉산점",
+    "realBusinessName": "별별김밥 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "4c6d5dcf82e3e56b",
+    "name": "보드람치킨 여서점",
+    "realBusinessName": "보드람치킨 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "db28774d00c0d9ba",
+    "name": "보배반점 여수여서점",
+    "realBusinessName": "보배반점 여수여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "중식"
+  },
+  {
+    "id": "30fff2720e2ce0c9",
+    "name": "봉명가닭도리탕 국동점",
+    "realBusinessName": "봉명가닭도리탕 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "한식"
+  },
+  {
+    "id": "81d552a2ffdcf486",
+    "name": "뵈르뵈르 여수봉산점",
+    "realBusinessName": "뵈르뵈르 여수봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "6721d86f9ff6f74b",
+    "name": "부리나 바베큐 치킨 여문점",
+    "realBusinessName": "부리나 바베큐 치킨 여문점",
+    "shopInShopNames": [],
+    "district": "여서/ 문수",
+    "category": "치킨"
+  },
+  {
+    "id": "b978240417a18e51",
+    "name": "부어치킨 여수학동점",
+    "realBusinessName": "부어치킨 여수학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "치킨"
+  },
+  {
+    "id": "16b4130f35ec93ae",
+    "name": "부어치킨&버거 여수소호점",
+    "realBusinessName": "부어치킨&버거 여수소호점",
+    "shopInShopNames": [],
+    "district": "소호동",
+    "category": "치킨"
+  },
+  {
+    "id": "de00a38f4c4fe9d4",
+    "name": "불의제육 여서점",
+    "realBusinessName": "불의제육 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "09de7c8235046632",
+    "name": "불족대가 미평점",
+    "realBusinessName": "불족대가 미평점",
+    "shopInShopNames": [],
+    "district": "미평동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "75cd8af6d0da1b98",
+    "name": "붕붕먹거리 교동점",
+    "realBusinessName": "붕붕먹거리 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "374ad657608d7b20",
+    "name": "브라더한정식도시락 여수점(문수동)",
+    "realBusinessName": "브라더한정식도시락 여수점(문수동)",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "066197a9443c3145",
+    "name": "비비큐 여수돌산점",
+    "realBusinessName": "비비큐 여수돌산점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "치킨"
+  },
+  {
+    "id": "4059491d8dbb4159",
+    "name": "비비큐 여수무선점",
+    "realBusinessName": "비비큐 여수무선점",
+    "shopInShopNames": [],
+    "district": "화장동",
+    "category": "치킨"
+  },
+  {
+    "id": "572e4a658f762cbe",
+    "name": "비비큐 여수신기행운점",
+    "realBusinessName": "비비큐 여수신기행운점",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "e2645d79ef555a24",
+    "name": "비비큐 여수엑스포점",
+    "realBusinessName": "비비큐 여수엑스포점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "치킨"
+  },
+  {
+    "id": "b73ca9b4a41f7502",
+    "name": "비비큐 여수웅천점",
+    "realBusinessName": "비비큐 여수웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "치킨"
+  },
+  {
+    "id": "c1df1c34732d2757",
+    "name": "비비큐 여수죽림점",
+    "realBusinessName": "비비큐 여수죽림점",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "치킨"
+  },
+  {
+    "id": "e32f28eff787161a",
+    "name": "비비큐 여수충무점",
+    "realBusinessName": "비비큐 여수충무점",
+    "shopInShopNames": [],
+    "district": "충무동",
+    "category": "치킨"
+  },
+  {
+    "id": "9cba7b46fed409a9",
+    "name": "비비큐 여수학동점",
+    "realBusinessName": "비비큐 여수학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "치킨"
+  },
+  {
+    "id": "43384f472418faec",
+    "name": "삼마 문수점",
+    "realBusinessName": "삼마 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "adcbd0b7f13946a4",
+    "name": "삼해수산마차 국동점",
+    "realBusinessName": "삼해수산마차 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "회/초밥/선어/해산물"
+  },
+  {
+    "id": "030d45b86234bb7b",
+    "name": "생생치킨 무선점(선원동)",
+    "realBusinessName": "생생치킨 무선점(선원동)",
+    "shopInShopNames": [],
+    "district": "선원동",
+    "category": "치킨"
+  },
+  {
+    "id": "67d28f42d21c125f",
+    "name": "서희국밥&족발 국동본점",
+    "realBusinessName": "서희국밥&족발 국동본점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "한식"
+  },
+  {
+    "id": "8608c923097a2adc",
+    "name": "선비칼국수 여수국동점",
+    "realBusinessName": "선비칼국수 여수국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "면요리"
+  },
+  {
+    "id": "2723324111f200b8",
+    "name": "설악칡냉면 여문점",
+    "realBusinessName": "설악칡냉면 여문점",
+    "shopInShopNames": [],
+    "district": "여서/ 문수",
+    "category": "면요리"
+  },
+  {
+    "id": "8d23a7a6daaa7c6d",
+    "name": "소녹 종화동점",
+    "realBusinessName": "소녹 종화동점",
+    "shopInShopNames": [],
+    "district": "종화동",
+    "category": "한식"
+  },
+  {
+    "id": "03809451afc7b09b",
+    "name": "소유 커피&디저트 웅천점",
+    "realBusinessName": "소유 커피&디저트 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "de5f7fd077422974",
+    "name": "소코아 웅천점",
+    "realBusinessName": "소코아 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "면요리"
+  },
+  {
+    "id": "72f43b13ec8436f7",
+    "name": "속초냉면&직화제육 교동점",
+    "realBusinessName": "속초냉면&직화제육 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "3b0b23248891aa0e",
+    "name": "손수김밥 여서점",
+    "realBusinessName": "손수김밥 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "779bc5453215d9c5",
+    "name": "손수끓인육개장 문수점",
+    "realBusinessName": "손수끓인육개장 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "11e1973f448ef7a6",
+    "name": "송촌꼬마김밥 여문점",
+    "realBusinessName": "송촌꼬마김밥 여문점",
+    "shopInShopNames": [],
+    "district": "여서,문수",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "421fc97caaddfbc5",
+    "name": "수시아 김밥전문 공화동점",
+    "realBusinessName": "수시아 김밥전문 공화동점",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "한식"
+  },
+  {
+    "id": "9407e6bd4e71b539",
+    "name": "수원왕갈비통닭 여서점",
+    "realBusinessName": "수원왕갈비통닭 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "3a33f3bc732c6bae",
+    "name": "수육보쌈 25시포차(여서동)",
+    "realBusinessName": "수육보쌈 25시포차(여서동)",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "19ae04f80e0e3ba6",
+    "name": "순살 참잘튀기는집 여수점(여서동)",
+    "realBusinessName": "순살 참잘튀기는집 여수점(여서동)",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "0104c356b7c6428c",
+    "name": "순살만공격 여수여서점",
+    "realBusinessName": "순살만공격 여수여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "14d4b7be316bc8e7",
+    "name": "쉐프의수제요리 야미야미 여서점",
+    "realBusinessName": "쉐프의수제요리 야미야미 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "국밥/찜/탕/찌개/조림"
+  },
+  {
+    "id": "3de8202985e65f35",
+    "name": "스텔라떡볶이 웅천점",
+    "realBusinessName": "스텔라떡볶이 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "94fd76dc2861933c",
+    "name": "스팸많이주는부대찌개 여서점",
+    "realBusinessName": "스팸많이주는부대찌개 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "85e4327fdf0e8dda",
+    "name": "슬기로운 김치찜/제육대패",
+    "realBusinessName": "슬기로운 김치찜/제육대패",
+    "shopInShopNames": [],
+    "district": "여서,문수",
+    "category": "한식"
+  },
+  {
+    "id": "49814996a90d2a3d",
+    "name": "슬기로운돼지생활(문수동)",
+    "realBusinessName": "슬기로운돼지생활(문수동)",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "b218c9f269d44fa8",
+    "name": "시니롱 웅천점",
+    "realBusinessName": "시니롱 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "3a743fd9484606d1",
+    "name": "시민감자탕 문수점",
+    "realBusinessName": "시민감자탕 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "2909b3dc166a5ee7",
+    "name": "시우푸드 봉산점",
+    "realBusinessName": "시우푸드 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "e81c1980fff43a29",
+    "name": "시장불닭발 문수점",
+    "realBusinessName": "시장불닭발 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "야식/주점"
+  },
+  {
+    "id": "e6ac7de74abcd1d9",
+    "name": "신전떡볶이 문수점",
+    "realBusinessName": "신전떡볶이 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "5c881a3751b1c6cf",
+    "name": "쌀쌀맞은닭 여천점(신기동)",
+    "realBusinessName": "쌀쌀맞은닭 여천점(신기동)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "6706deb8a748599b",
+    "name": "쌀통닭 무선점",
+    "realBusinessName": "쌀통닭 무선점",
+    "shopInShopNames": [],
+    "district": "화장동",
+    "category": "치킨"
+  },
+  {
+    "id": "561cc726687ccd61",
+    "name": "쌀통닭 여문점",
+    "realBusinessName": "쌀통닭 여문점",
+    "shopInShopNames": [],
+    "district": "여서/ 문수",
+    "category": "치킨"
+  },
+  {
+    "id": "cdf241640091abac",
+    "name": "쑝쑝돈까스 문수점",
+    "realBusinessName": "쑝쑝돈까스 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "돈까스/일식"
+  },
+  {
+    "id": "c30f3543d3d24747",
+    "name": "아구찜&장어탕명가 조롱박 교동점",
+    "realBusinessName": "아구찜&장어탕명가 조롱박 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "e7be983ffc863971",
+    "name": "아담만두 문수점",
+    "realBusinessName": "아담만두 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "31d479a979a700cf",
+    "name": "아성짬뽕 직화맛집 여서점",
+    "realBusinessName": "아성짬뽕 직화맛집 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "중식"
+  },
+  {
+    "id": "b77500c258104b51",
+    "name": "아이커 버거&치킨 여천점(신기동)",
+    "realBusinessName": "아이커 버거&치킨 여천점(신기동)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "햄버거/샌드위치/토스트/핫도그"
+  },
+  {
+    "id": "3733c57e37212005",
+    "name": "아주커치킨 관문점",
+    "realBusinessName": "아주커치킨 관문점",
+    "shopInShopNames": [],
+    "district": "관문동",
+    "category": "치킨"
+  },
+  {
+    "id": "b25a59f2207a9e10",
+    "name": "아주커치킨 무선점",
+    "realBusinessName": "아주커치킨 무선점",
+    "shopInShopNames": [],
+    "district": "화장동",
+    "category": "치킨"
+  },
+  {
+    "id": "cef7263a330f4e0f",
+    "name": "아주커치킨 여수국동점",
+    "realBusinessName": "아주커치킨 여수국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "치킨"
+  },
+  {
+    "id": "7d9f7e5be4bb49db",
+    "name": "아주커치킨 여수돌산대교점",
+    "realBusinessName": "아주커치킨 여수돌산대교점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "치킨"
+  },
+  {
+    "id": "9a94c05bdeca2d9e",
+    "name": "아주커치킨 학동점",
+    "realBusinessName": "아주커치킨 학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "치킨"
+  },
+  {
+    "id": "86976639259e5d7f",
+    "name": "얌샘김밥 웅천점",
+    "realBusinessName": "얌샘김밥 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "6772d4141d54e74d",
+    "name": "엄마미안 김치찜 공화동점",
+    "realBusinessName": "엄마미안 김치찜 공화동점",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "한식"
+  },
+  {
+    "id": "38f4e2e9e89a61b9",
+    "name": "여서 육감 문수점",
+    "realBusinessName": "여서 육감 문수점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "c34a81ea7ed1d578",
+    "name": "여수 김치찜 참 잘하는집 봉산점",
+    "realBusinessName": "여수 김치찜 참 잘하는집 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "d0c01cd4ef9821c3",
+    "name": "여수 오리날개 튀김 여천점(신기동)",
+    "realBusinessName": "여수 오리날개 튀김 여천점(신기동)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "035938bab3de179c",
+    "name": "여수강촌토종닭숯불구이 봉산직영점",
+    "realBusinessName": "여수강촌토종닭숯불구이 봉산직영점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "치킨"
+  },
+  {
+    "id": "d3dbc3f83e7b9aed",
+    "name": "여수강촌토종닭숯불구이 웅천본점",
+    "realBusinessName": "여수강촌토종닭숯불구이 웅천본점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "치킨"
+  },
+  {
+    "id": "51b657cc3416c67d",
+    "name": "여수강촌토종닭숯불구이 죽림직영점",
+    "realBusinessName": "여수강촌토종닭숯불구이 죽림직영점",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "치킨"
+  },
+  {
+    "id": "2a1bd22a9b5f938e",
+    "name": "여수다복 교동점",
+    "realBusinessName": "여수다복 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "732120ab53b3f457",
+    "name": "여수분식 문수점",
+    "realBusinessName": "여수분식 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "485ad1139b230bcf",
+    "name": "여수족발 엑스포점",
+    "realBusinessName": "여수족발 엑스포점",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "0a4aaf8ee1103e4f",
+    "name": "여수족발(신기동)",
+    "realBusinessName": "여수족발(신기동)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "fe356412007caf0c",
+    "name": "여수튀김 국동점",
+    "realBusinessName": "여수튀김 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "61791dbea82168f1",
+    "name": "역전할머니맥주 덕충점",
+    "realBusinessName": "역전할머니맥주 덕충점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "야식/주점"
+  },
+  {
+    "id": "69f92930ea1e00c4",
+    "name": "연변양꼬치구이&마라탕 여서점",
+    "realBusinessName": "연변양꼬치구이&마라탕 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "마라탕/양꼬치"
+  },
+  {
+    "id": "75f31fc5eb51073b",
+    "name": "영화루 국동점",
+    "realBusinessName": "영화루 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "중식"
+  },
+  {
+    "id": "b2b796461ee30ef2",
+    "name": "예원닭강정 여수1호점(문수동)",
+    "realBusinessName": "예원닭강정 여수1호점(문수동)",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "치킨"
+  },
+  {
+    "id": "2cd9e5b3f51e62e6",
+    "name": "예향정 여서점",
+    "realBusinessName": "예향정 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "90e006413bc79cbc",
+    "name": "오꾸닭 학동점",
+    "realBusinessName": "오꾸닭 학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "치킨"
+  },
+  {
+    "id": "f78b89beff94fd0e",
+    "name": "오늘은카레 봉산점",
+    "realBusinessName": "오늘은카레 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "9bb804e004dff7d8",
+    "name": "온앤 신월점",
+    "realBusinessName": "온앤 신월점",
+    "shopInShopNames": [],
+    "district": "신월동",
+    "category": "피자"
+  },
+  {
+    "id": "0cc943f6a58888d0",
+    "name": "왕창 돼지두루치기 여서점",
+    "realBusinessName": "왕창 돼지두루치기 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "656eff52d5fce811",
+    "name": "우가족발 여수점(충무동)",
+    "realBusinessName": "우가족발 여수점(충무동)",
+    "shopInShopNames": [],
+    "district": "충무동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "34817ff59a6bc66d",
+    "name": "우리할매떡볶이 여서점",
+    "realBusinessName": "우리할매떡볶이 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "0e6d7a1000b1c53b",
+    "name": "우사골설렁탕 여서동본점",
+    "realBusinessName": "우사골설렁탕 여서동본점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "39b2241021f9616c",
+    "name": "우주호떡 여서점",
+    "realBusinessName": "우주호떡 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "e6339c85e31322fa",
+    "name": "울엄마 김치찜 갈비찜 중앙점",
+    "realBusinessName": "울엄마 김치찜 갈비찜 중앙점",
+    "shopInShopNames": [],
+    "district": "중앙동",
+    "category": "한식"
+  },
+  {
+    "id": "571770a25990ba97",
+    "name": "웅천횟집",
+    "realBusinessName": "웅천횟집",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "회/초밥/선어/해산물"
+  },
+  {
+    "id": "d322f9f9a91b0bdb",
+    "name": "원할머니보쌈족발 여수여천점",
+    "realBusinessName": "원할머니보쌈족발 여수여천점",
+    "shopInShopNames": [],
+    "district": "여천동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "c8633f33e72e2e0a",
+    "name": "웡김밥 여서점",
+    "realBusinessName": "웡김밥 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "df16b7312c25da31",
+    "name": "위대한 닭뽀끼&짜파구리 여서점",
+    "realBusinessName": "위대한 닭뽀끼&짜파구리 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "0199534cac937a52",
+    "name": "유어문 Your Moon 둔덕점",
+    "realBusinessName": "유어문 Your Moon 둔덕점",
+    "shopInShopNames": [],
+    "district": "미평, 둔덕동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "65c908d7b367de45",
+    "name": "육식사관학교 여서점",
+    "realBusinessName": "육식사관학교 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "fb28167259749571",
+    "name": "육회밤바다 여서점",
+    "realBusinessName": "육회밤바다 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "회/초밥/선어/해산물"
+  },
+  {
+    "id": "3c3819748a5c2d63",
+    "name": "윤김밥 문수점",
+    "realBusinessName": "윤김밥 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "9edba048ff8c3b2e",
+    "name": "이가네 나주곰탕&설렁탕 교동점",
+    "realBusinessName": "이가네 나주곰탕&설렁탕 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "382dd89b36993ff8",
+    "name": "이동천 시원냉면 여서점",
+    "realBusinessName": "이동천 시원냉면 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "면요리"
+  },
+  {
+    "id": "7a91bd1d1f218c97",
+    "name": "이디야 여수대교동점",
+    "realBusinessName": "이디야 여수대교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "0fcde82a0f46ee28",
+    "name": "이디야커피 여수돌산우두리점",
+    "realBusinessName": "이디야커피 여수돌산우두리점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "43b4908cf2161b80",
+    "name": "이디야커피 여수연등메트하임점",
+    "realBusinessName": "이디야커피 여수연등메트하임점",
+    "shopInShopNames": [],
+    "district": "연등동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "31ffaa41b54a57aa",
+    "name": "이라이타코야끼 봉산점",
+    "realBusinessName": "이라이타코야끼 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "90fed609e43aafb2",
+    "name": "이라이타코야끼&카페1리터 여문점",
+    "realBusinessName": "이라이타코야끼&카페1리터 여문점",
+    "shopInShopNames": [],
+    "district": "여서,문수",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "424a3dadd34b19fa",
+    "name": "이모네분식 봉산점",
+    "realBusinessName": "이모네분식 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "b22e961a2bed3729",
+    "name": "인생냉면 가야밀면 여서점",
+    "realBusinessName": "인생냉면 가야밀면 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "de1d344e8798f0dd",
+    "name": "인생냉면 국동점",
+    "realBusinessName": "인생냉면 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "면요리"
+  },
+  {
+    "id": "a638ac9c079a28c0",
+    "name": "임꺽정 갈비탕 봉산점",
+    "realBusinessName": "임꺽정 갈비탕 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "7c1c77a3d0c35a43",
+    "name": "잇텐스시 국동점",
+    "realBusinessName": "잇텐스시 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "회/초밥/선어/해산물"
+  },
+  {
+    "id": "c68d21da9b32f1eb",
+    "name": "자담치킨 여수엑스포점",
+    "realBusinessName": "자담치킨 여수엑스포점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "치킨"
+  },
+  {
+    "id": "4ae622b733f163c7",
+    "name": "자담치킨 여수여서점",
+    "realBusinessName": "자담치킨 여수여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "58228e47bba2b29c",
+    "name": "자담치킨 여수웅천점",
+    "realBusinessName": "자담치킨 여수웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "치킨"
+  },
+  {
+    "id": "c6b947813051ac38",
+    "name": "자담치킨 여수죽림점",
+    "realBusinessName": "자담치킨 여수죽림점",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "치킨"
+  },
+  {
+    "id": "1894da97ed277235",
+    "name": "자담치킨 여수학동점",
+    "realBusinessName": "자담치킨 여수학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "치킨"
+  },
+  {
+    "id": "401e4210d0416b54",
+    "name": "자연산오징어회 봉산점",
+    "realBusinessName": "자연산오징어회 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "회/초밥/선어/해산물"
+  },
+  {
+    "id": "802d4c09e4ee1ae9",
+    "name": "장터순대국 교동점",
+    "realBusinessName": "장터순대국 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "f3f6088916279991",
+    "name": "전가복 웅천점",
+    "realBusinessName": "전가복 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "중식"
+  },
+  {
+    "id": "bc6152833cd076f5",
+    "name": "전골의법칙 얼큰한곱창전골 문수점",
+    "realBusinessName": "전골의법칙 얼큰한곱창전골 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "f58bf8f877dcacd5",
+    "name": "정담오리바베큐 여수엑스포점",
+    "realBusinessName": "정담오리바베큐 여수엑스포점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "고기/구이"
+  },
+  {
+    "id": "21a676f860851a5a",
+    "name": "정말 맛있는 김치찌개 문수점",
+    "realBusinessName": "정말 맛있는 김치찌개 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "국밥/찜/탕/찌개/조림"
+  },
+  {
+    "id": "fd823ad16136c904",
+    "name": "제목 없음",
+    "realBusinessName": "제목 없음",
+    "shopInShopNames": [],
+    "district": "여수시",
+    "category": "기타"
+  },
+  {
+    "id": "98779281080288d1",
+    "name": "제복이네 짜글이&제육쌈밥&두루치기 교동점",
+    "realBusinessName": "제복이네 짜글이&제육쌈밥&두루치기 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "0df36c0ba138ac89",
+    "name": "제육대패 문수점",
+    "realBusinessName": "제육대패 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "고기/구이"
+  },
+  {
+    "id": "82b2cd167c1e053b",
+    "name": "조선다방 국동점",
+    "realBusinessName": "조선다방 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "bef7f3b6456df7fd",
+    "name": "조선다방 돌산점",
+    "realBusinessName": "조선다방 돌산점",
+    "shopInShopNames": [],
+    "district": "돌산",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "cfd74ce112f2b187",
+    "name": "조선다방 엑스포점",
+    "realBusinessName": "조선다방 엑스포점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "5768a9d8a72502ef",
+    "name": "조선제일 감자탕&뼈해장국 여서점",
+    "realBusinessName": "조선제일 감자탕&뼈해장국 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "국밥/찜/탕/찌개/조림"
+  },
+  {
+    "id": "82fb6c389b7aced5",
+    "name": "종가찜 문수점",
+    "realBusinessName": "종가찜 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "국밥/찜/탕/찌개/조림"
+  },
+  {
+    "id": "44a0e464d6d22c38",
+    "name": "중앙돈까스 국동점",
+    "realBusinessName": "중앙돈까스 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "돈까스/일식"
+  },
+  {
+    "id": "4e43f1180007c10f",
+    "name": "쥬씨차얌 여서점",
+    "realBusinessName": "쥬씨차얌 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "501b2c5aaa6005f2",
+    "name": "지코바숯불양념치킨 여천점(신기동)",
+    "realBusinessName": "지코바숯불양념치킨 여천점(신기동)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "0b952604bdf47c31",
+    "name": "진남컵밥 중앙점",
+    "realBusinessName": "진남컵밥 중앙점",
+    "shopInShopNames": [],
+    "district": "중앙동",
+    "category": "한식"
+  },
+  {
+    "id": "27fc5651d1d3feb0",
+    "name": "진통뼈사랑 봉산점",
+    "realBusinessName": "진통뼈사랑 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "5d45d58855f0c602",
+    "name": "진한설렁탕 문수점",
+    "realBusinessName": "진한설렁탕 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "54fd901a0b754ee1",
+    "name": "집으로 삼겹구이 문수점",
+    "realBusinessName": "집으로 삼겹구이 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "a4ba6805e73e7e76",
+    "name": "짜장왕 왕서방 여서점",
+    "realBusinessName": "짜장왕 왕서방 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "중식"
+  },
+  {
+    "id": "36856e4f20cae7d0",
+    "name": "짱구김밥 문수점",
+    "realBusinessName": "짱구김밥 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "09dc33ce2f8f08d3",
+    "name": "쭈꾸미닭 공화점",
+    "realBusinessName": "쭈꾸미닭 공화점",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "한식"
+  },
+  {
+    "id": "77b1600313d1d6d4",
+    "name": "쭈신쭈왕 문수점",
+    "realBusinessName": "쭈신쭈왕 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "2524c5a9954d4ba8",
+    "name": "찌개랑갈비랑 여서점",
+    "realBusinessName": "찌개랑갈비랑 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "9b2419177903b1d8",
+    "name": "찜스틸러갈비찜 봉산점",
+    "realBusinessName": "찜스틸러갈비찜 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "102347a538ed090c",
+    "name": "차이난짬뽕 여서점",
+    "realBusinessName": "차이난짬뽕 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "중식"
+  },
+  {
+    "id": "83a409add1950550",
+    "name": "참 맛있는 족발 여수본점(신기동)",
+    "realBusinessName": "참 맛있는 족발 여수본점(신기동)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "3c62ab40bf66608e",
+    "name": "참숯이면돼지 문수점",
+    "realBusinessName": "참숯이면돼지 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "215d025987786df2",
+    "name": "찹쌀품은 삼계탕 문수점",
+    "realBusinessName": "찹쌀품은 삼계탕 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "8c8ee85a0bc3b219",
+    "name": "처갓집양념치킨 무선점",
+    "realBusinessName": "처갓집양념치킨 무선점",
+    "shopInShopNames": [],
+    "district": "화장동",
+    "category": "치킨"
+  },
+  {
+    "id": "b6c5400a34504bc0",
+    "name": "처갓집양념치킨 문수점",
+    "realBusinessName": "처갓집양념치킨 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "치킨"
+  },
+  {
+    "id": "96f341e2aced2187",
+    "name": "처갓집양념치킨 신기점",
+    "realBusinessName": "처갓집양념치킨 신기점",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "ad437cdcefd55447",
+    "name": "처갓집양념치킨 웅천점",
+    "realBusinessName": "처갓집양념치킨 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "치킨"
+  },
+  {
+    "id": "23e36eb3741524aa",
+    "name": "철웅이네 입큰 붕어빵 문수점",
+    "realBusinessName": "철웅이네 입큰 붕어빵 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "bb9aef1788a685c6",
+    "name": "청년뚝배기 덕충점",
+    "realBusinessName": "청년뚝배기 덕충점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "한식"
+  },
+  {
+    "id": "7d656b9342aabd94",
+    "name": "청담곱떡 고소동점",
+    "realBusinessName": "청담곱떡 고소동점",
+    "shopInShopNames": [],
+    "district": "고소동",
+    "category": "국밥/찜/탕/찌개/조림"
+  },
+  {
+    "id": "8df8f77db6d9a205",
+    "name": "청담낙곱새 고소동점",
+    "realBusinessName": "청담낙곱새 고소동점",
+    "shopInShopNames": [],
+    "district": "고소동",
+    "category": "한식"
+  },
+  {
+    "id": "4663ccf86e9128fa",
+    "name": "청담피자 여수웅천",
+    "realBusinessName": "청담피자 여수웅천",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "피자"
+  },
+  {
+    "id": "b88f6b8e8fd14ad3",
+    "name": "청담피자 여수죽림점",
+    "realBusinessName": "청담피자 여수죽림점",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "피자"
+  },
+  {
+    "id": "37f1a033eac82aa2",
+    "name": "청송삼계탕&닭칼국수 문수점",
+    "realBusinessName": "청송삼계탕&닭칼국수 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "b6e9f49b01144bc8",
+    "name": "청정게장촌 봉산점",
+    "realBusinessName": "청정게장촌 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "cd2ecfcd707cd2c7",
+    "name": "청춘꼬마김밥 여수국동점",
+    "realBusinessName": "청춘꼬마김밥 여수국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "b9501772f0f6b1fb",
+    "name": "청하대 영빈관 여서점",
+    "realBusinessName": "청하대 영빈관 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "한식"
+  },
+  {
+    "id": "9acc51c50813ce03",
+    "name": "초밥처럼 봉산점",
+    "realBusinessName": "초밥처럼 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "회/초밥/선어/해산물"
+  },
+  {
+    "id": "2857b7140087f6ab",
+    "name": "치코두마리파닭 여서점",
+    "realBusinessName": "치코두마리파닭 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "치킨"
+  },
+  {
+    "id": "5ada4cec81d04ced",
+    "name": "치킨갱스터 국동유탑점",
+    "realBusinessName": "치킨갱스터 국동유탑점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "치킨"
+  },
+  {
+    "id": "58063b75a96362b4",
+    "name": "치킨마루 무선호수공원점(화장동)",
+    "realBusinessName": "치킨마루 무선호수공원점(화장동)",
+    "shopInShopNames": [],
+    "district": "화장동",
+    "category": "치킨"
+  },
+  {
+    "id": "f65edfe1927ef379",
+    "name": "치킨마루 여수봉계점",
+    "realBusinessName": "치킨마루 여수봉계점",
+    "shopInShopNames": [],
+    "district": "봉계동",
+    "category": "치킨"
+  },
+  {
+    "id": "f1fa55a4b8c7c428",
+    "name": "치킨아이 국동점",
+    "realBusinessName": "치킨아이 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "치킨"
+  },
+  {
+    "id": "0173191ff3ddab64",
+    "name": "치킨아이 둔덕점",
+    "realBusinessName": "치킨아이 둔덕점",
+    "shopInShopNames": [],
+    "district": "미평/ 둔덕",
+    "category": "치킨"
+  },
+  {
+    "id": "25ebed742b1238d5",
+    "name": "치킨아이 무선점",
+    "realBusinessName": "치킨아이 무선점",
+    "shopInShopNames": [],
+    "district": "선원동",
+    "category": "치킨"
+  },
+  {
+    "id": "9a8243a043f3735c",
+    "name": "치킨아이 문수점",
+    "realBusinessName": "치킨아이 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "치킨"
+  },
+  {
+    "id": "4cd9573bfca48b92",
+    "name": "치킨아이 소호점",
+    "realBusinessName": "치킨아이 소호점",
+    "shopInShopNames": [],
+    "district": "소호동",
+    "category": "치킨"
+  },
+  {
+    "id": "bc89627508bf7a16",
+    "name": "치킨아이 신기점",
+    "realBusinessName": "치킨아이 신기점",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "b6fa10980521859b",
+    "name": "치킨아이 학동점",
+    "realBusinessName": "치킨아이 학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "치킨"
+  },
+  {
+    "id": "da81c19f4ce50220",
+    "name": "치폴리니 여서점",
+    "realBusinessName": "치폴리니 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "9abb1d4db21758ad",
+    "name": "카레상 봉산점",
+    "realBusinessName": "카레상 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "돈까스/일식"
+  },
+  {
+    "id": "9ab837d6e24d69df",
+    "name": "카페요아정 여수엑스포점",
+    "realBusinessName": "카페요아정 여수엑스포점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "60dbbe5071a2ebe6",
+    "name": "코리안 찌개 타운 서교점",
+    "realBusinessName": "코리안 찌개 타운 서교점",
+    "shopInShopNames": [],
+    "district": "서교동",
+    "category": "한식"
+  },
+  {
+    "id": "66f78262c4f9aa55",
+    "name": "코리엔탈깻잎두마리치킨 선원점",
+    "realBusinessName": "코리엔탈깻잎두마리치킨 선원점",
+    "shopInShopNames": [],
+    "district": "선원동",
+    "category": "치킨"
+  },
+  {
+    "id": "f3cb61dd45ba9b8b",
+    "name": "콩담은 콩나물 국밥 문수점",
+    "realBusinessName": "콩담은 콩나물 국밥 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "7ec91a7f6e875069",
+    "name": "크라운닭발 문수점",
+    "realBusinessName": "크라운닭발 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "야식/주점"
+  },
+  {
+    "id": "420af240943ff849",
+    "name": "큰손닭강정 여수본점(학동)",
+    "realBusinessName": "큰손닭강정 여수본점(학동)",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "치킨"
+  },
+  {
+    "id": "f17f729605bb5945",
+    "name": "키로족발 여수점(여서동)",
+    "realBusinessName": "키로족발 여수점(여서동)",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "87dcf0c9a9804bd2",
+    "name": "킹스타피자 관문점",
+    "realBusinessName": "킹스타피자 관문점",
+    "shopInShopNames": [],
+    "district": "관문동",
+    "category": "피자"
+  },
+  {
+    "id": "852b5da8f5e3e3dc",
+    "name": "킹짬뽕 본점(여서동)",
+    "realBusinessName": "킹짬뽕 본점(여서동)",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "중식"
+  },
+  {
+    "id": "0eea4a740e820fd3",
+    "name": "타코아찌 타코야끼전문점 문수점",
+    "realBusinessName": "타코아찌 타코야끼전문점 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "야식/주점"
+  },
+  {
+    "id": "92f4faa988a87728",
+    "name": "타코이찌 타코야끼전문점 문수점",
+    "realBusinessName": "타코이찌 타코야끼전문점 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "ddfe30e801fed73f",
+    "name": "탕참 탕수육참잘하는집 여수점(여서동)",
+    "realBusinessName": "탕참 탕수육참잘하는집 여수점(여서동)",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "중식"
+  },
+  {
+    "id": "a1e8130ec540e37f",
+    "name": "토담 민속주점 문수점",
+    "realBusinessName": "토담 민속주점 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "f9a6f0eb9fba0696",
+    "name": "통뼈감자탕 문수점",
+    "realBusinessName": "통뼈감자탕 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "한식"
+  },
+  {
+    "id": "a6f3cc0da6d5c044",
+    "name": "통큰두마리찜닭 여서점",
+    "realBusinessName": "통큰두마리찜닭 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "국밥/찜/탕/찌개/조림"
+  },
+  {
+    "id": "217d38b37c2b4d5b",
+    "name": "통큰한방삼계탕 공화점",
+    "realBusinessName": "통큰한방삼계탕 공화점",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "한식"
+  },
+  {
+    "id": "6fcebc9381432d73",
+    "name": "투썸플레이스 웅천점",
+    "realBusinessName": "투썸플레이스 웅천점",
+    "shopInShopNames": [],
+    "district": "웅천동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "728262018f22a2cc",
+    "name": "투썸플레이스 한재사거리점",
+    "realBusinessName": "투썸플레이스 한재사거리점",
+    "shopInShopNames": [],
+    "district": "광무동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "b17cdef5234b021b",
+    "name": "파리바게뜨 여수교동점",
+    "realBusinessName": "파리바게뜨 여수교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "e9dc60119d9cdfb5",
+    "name": "파리바게뜨 여수국동점",
+    "realBusinessName": "파리바게뜨 여수국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "6059e7ea81c9f4d1",
+    "name": "파리바게뜨 여수엑스포점",
+    "realBusinessName": "파리바게뜨 여수엑스포점",
+    "shopInShopNames": [],
+    "district": "덕충동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "1bdc59414a5c8b64",
+    "name": "파리바게뜨 여수중앙점",
+    "realBusinessName": "파리바게뜨 여수중앙점",
+    "shopInShopNames": [],
+    "district": "중앙동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "83f635e7ea7d737e",
+    "name": "파파핫도그 여서점",
+    "realBusinessName": "파파핫도그 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "6b13f2db6e79b4eb",
+    "name": "평양보쌈왕족발",
+    "realBusinessName": "평양보쌈왕족발",
+    "shopInShopNames": [],
+    "district": "신월동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "20c107a437ec483e",
+    "name": "포슬포슬꼬마김밥 문수점",
+    "realBusinessName": "포슬포슬꼬마김밥 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "5deb911df92c645a",
+    "name": "포우머그 문수점",
+    "realBusinessName": "포우머그 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "3d91b86995f619d6",
+    "name": "프랭크버거 여수여서점",
+    "realBusinessName": "프랭크버거 여수여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "햄버거/샌드위치/토스트/핫도그"
+  },
+  {
+    "id": "2d1d2bf163bd7e3f",
+    "name": "피자스쿨 여수교동점",
+    "realBusinessName": "피자스쿨 여수교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "피자"
+  },
+  {
+    "id": "ef2eacdbb6233f97",
+    "name": "피자스쿨 여수국동점",
+    "realBusinessName": "피자스쿨 여수국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "피자"
+  },
+  {
+    "id": "da66e7ae0cdf1907",
+    "name": "피자스쿨 여수무선점",
+    "realBusinessName": "피자스쿨 여수무선점",
+    "shopInShopNames": [],
+    "district": "선원동",
+    "category": "피자"
+  },
+  {
+    "id": "793ce4c7d0f32994",
+    "name": "피자스쿨 여수신기점",
+    "realBusinessName": "피자스쿨 여수신기점",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "피자"
+  },
+  {
+    "id": "5d4e5d274ebd1b7c",
+    "name": "피자스쿨 여수죽림점",
+    "realBusinessName": "피자스쿨 여수죽림점",
+    "shopInShopNames": [],
+    "district": "죽림",
+    "category": "피자"
+  },
+  {
+    "id": "4526a5114ecaef34",
+    "name": "피자스쿨 여수학동점",
+    "realBusinessName": "피자스쿨 여수학동점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "피자"
+  },
+  {
+    "id": "e16359de9292f582",
+    "name": "피자알볼로 여수엑스포점(수정동)",
+    "realBusinessName": "피자알볼로 여수엑스포점(수정동)",
+    "shopInShopNames": [],
+    "district": "수정동",
+    "category": "피자"
+  },
+  {
+    "id": "afb901f3a32de6e8",
+    "name": "피자헛 여수문수점",
+    "realBusinessName": "피자헛 여수문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "피자"
+  },
+  {
+    "id": "05634c81541f6bda",
+    "name": "피자헛 여수시청점",
+    "realBusinessName": "피자헛 여수시청점",
+    "shopInShopNames": [],
+    "district": "학동",
+    "category": "피자"
+  },
+  {
+    "id": "bf15349639417d6b",
+    "name": "피피마켓 종화동점",
+    "realBusinessName": "피피마켓 종화동점",
+    "shopInShopNames": [],
+    "district": "종화동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "7af7ffc2da561850",
+    "name": "하루빙수 여서점",
+    "realBusinessName": "하루빙수 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "7b221aa6623bd0a2",
+    "name": "하이오커피 여수신월국동항점",
+    "realBusinessName": "하이오커피 여수신월국동항점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "4621df767ea3905a",
+    "name": "한국식중화요리 미몽 여서점",
+    "realBusinessName": "한국식중화요리 미몽 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "중식"
+  },
+  {
+    "id": "4391cea41df014b3",
+    "name": "한국전통춘천닭갈비 공화동점",
+    "realBusinessName": "한국전통춘천닭갈비 공화동점",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "한식"
+  },
+  {
+    "id": "06f2a251304b0a51",
+    "name": "한끼국밥&갈비찜 국동점",
+    "realBusinessName": "한끼국밥&갈비찜 국동점",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "한식"
+  },
+  {
+    "id": "53bfb32926455221",
+    "name": "한식전문 혼밥대장 공화동점",
+    "realBusinessName": "한식전문 혼밥대장 공화동점",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "한식"
+  },
+  {
+    "id": "8f8486e4cd5aaec3",
+    "name": "항아리치킨&깐풍기 봉산점",
+    "realBusinessName": "항아리치킨&깐풍기 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "치킨"
+  },
+  {
+    "id": "9b760748be6ee430",
+    "name": "해룡옥수수찐빵 문수점",
+    "realBusinessName": "해룡옥수수찐빵 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "카페/디저트/베이커리/아이스크림/빙수"
+  },
+  {
+    "id": "43780265104bccba",
+    "name": "핵떡 여수봉산점",
+    "realBusinessName": "핵떡 여수봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "6047251f50214125",
+    "name": "햄토피아토스트 여서점",
+    "realBusinessName": "햄토피아토스트 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "햄버거/샌드위치/토스트/핫도그"
+  },
+  {
+    "id": "b8c2dcaa9ef57af5",
+    "name": "행복분식 문수점",
+    "realBusinessName": "행복분식 문수점",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "d19810627d63e95c",
+    "name": "허참봉 곰탕&갈비탕 봉산점",
+    "realBusinessName": "허참봉 곰탕&갈비탕 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "abd3c4c1fae55d22",
+    "name": "호(HO)분식 미평점",
+    "realBusinessName": "호(HO)분식 미평점",
+    "shopInShopNames": [],
+    "district": "미평동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "18503945dc9c16c8",
+    "name": "홍紅 곱도리탕 봉강점",
+    "realBusinessName": "홍紅 곱도리탕 봉강점",
+    "shopInShopNames": [],
+    "district": "봉강동",
+    "category": "국밥/찜/탕/찌개/조림"
+  },
+  {
+    "id": "a6ff0bcfc0afe5b6",
+    "name": "화끈하게매운 핫불닭발&오돌뼈 여서점",
+    "realBusinessName": "화끈하게매운 핫불닭발&오돌뼈 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "야식/주점"
+  },
+  {
+    "id": "9586eb46ca401707",
+    "name": "화란 중화요리",
+    "realBusinessName": "화란 중화요리",
+    "shopInShopNames": [],
+    "district": "여서,문수",
+    "category": "중식"
+  },
+  {
+    "id": "7777fc7f051bf178",
+    "name": "황금코다리 봉산점",
+    "realBusinessName": "황금코다리 봉산점",
+    "shopInShopNames": [],
+    "district": "봉산동",
+    "category": "한식"
+  },
+  {
+    "id": "35613e179e0c318b",
+    "name": "효자오리바베큐 여서점",
+    "realBusinessName": "효자오리바베큐 여서점",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "분식/도시락"
+  },
+  {
+    "id": "a0e873ce4d21b431",
+    "name": "와쭈 본점",
+    "realBusinessName": "와쭈 본점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "5aa4432158274a35",
+    "name": "이화수 전통 육개장",
+    "realBusinessName": "이화수 전통 육개장",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "bb036844c501c40a",
+    "name": "콩시루 여서점",
+    "realBusinessName": "콩시루 여서점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "a037743d0ee273e2",
+    "name": "정성집밥",
+    "realBusinessName": "정성집밥",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "cfde2617224f33a0",
+    "name": "콩산소 (음식 연구소)",
+    "realBusinessName": "콩산소 (음식 연구소)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "고기/구이"
+  },
+  {
+    "id": "7bc7239e6b509c44",
+    "name": "수라상궁 조선국밥 여서점",
+    "realBusinessName": "수라상궁 조선국밥 여서점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "04910f606ba038a6",
+    "name": "오워래 수제 돈까스",
+    "realBusinessName": "오워래 수제 돈까스",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "돈까스"
+  },
+  {
+    "id": "60094b47c386db99",
+    "name": "대동여수음식지도(지속업데이트중)",
+    "realBusinessName": "대동여수음식지도(지속업데이트중)",
+    "shopInShopNames": [],
+    "district": "대동",
+    "category": "치킨"
+  },
+  {
+    "id": "84eaaaf768498e4f",
+    "name": "효자오리바베큐 여서점(1)",
+    "realBusinessName": "효자오리바베큐 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "c3927392f05124d4",
+    "name": "RIB&TABLE 바베큐립 전문점(미평동) (1)",
+    "realBusinessName": "RIB&TABLE 바베큐립 전문점(미평동) (1)",
+    "shopInShopNames": [],
+    "district": "미평동",
+    "category": "면요리"
+  },
+  {
+    "id": "3c6ea21609edb311",
+    "name": "참숯이면돼지 문수점(1)",
+    "realBusinessName": "참숯이면돼지 문수점(1)",
+    "shopInShopNames": [],
+    "district": "참숯이면",
+    "category": "면요리"
+  },
+  {
+    "id": "4fb036cbdea0c6e1",
+    "name": "또바기 여서점(2)",
+    "realBusinessName": "또바기 여서점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "cd410ac1628bd2d5",
+    "name": "집으로 삼겹구이 문수점 (1)",
+    "realBusinessName": "집으로 삼겹구이 문수점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "고기/구이"
+  },
+  {
+    "id": "c5a7e487413d7199",
+    "name": "크라운닭발 문수점(1)",
+    "realBusinessName": "크라운닭발 문수점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "168e831d9754aeee",
+    "name": "낙지천국 문수점(3)",
+    "realBusinessName": "낙지천국 문수점(3)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "195cff88db37b676",
+    "name": "육식사관학교 여서점(2)",
+    "realBusinessName": "육식사관학교 여서점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "7f8f25d9f8860418",
+    "name": "시장불닭발 문수점(1)",
+    "realBusinessName": "시장불닭발 문수점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "200562b38e37fb18",
+    "name": "인생냉면 가야밀면 여서점(2)",
+    "realBusinessName": "인생냉면 가야밀면 여서점(2)",
+    "shopInShopNames": [],
+    "district": "인생냉면",
+    "category": "면요리"
+  },
+  {
+    "id": "d87e3b32b38a272b",
+    "name": "화끈하게매운 핫불닭발&오돌뼈 여서점(1)",
+    "realBusinessName": "화끈하게매운 핫불닭발&오돌뼈 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "c9594621963a81b5",
+    "name": "79대포 여서점(3)",
+    "realBusinessName": "79대포 여서점(3)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "ee3ff842eb029c8e",
+    "name": "왕창 돼지두루치기 여서점(3)",
+    "realBusinessName": "왕창 돼지두루치기 여서점(3)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "2eb414dbc832157b",
+    "name": "교동야식 교동점(2)",
+    "realBusinessName": "교동야식 교동점(2)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "면요리"
+  },
+  {
+    "id": "7ed85df98ff00979",
+    "name": "토담 민속주점 문수점(3)",
+    "realBusinessName": "토담 민속주점 문수점(3)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "b0bbc9b79630cac3",
+    "name": "그루브 여서점(3)",
+    "realBusinessName": "그루브 여서점(3)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "a602eba3c430c4a0",
+    "name": "79대포 여서점(2)",
+    "realBusinessName": "79대포 여서점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "5308f50be41c66bc",
+    "name": "LA통닭&포차 여서본점 (1)",
+    "realBusinessName": "LA통닭&포차 여서본점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "치킨"
+  },
+  {
+    "id": "39549f0543e363b3",
+    "name": "왕창 돼지두루치기 여서점(2)",
+    "realBusinessName": "왕창 돼지두루치기 여서점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "bfe6c52b7bcf5cd0",
+    "name": "맛있는 전시회 국동점(2)",
+    "realBusinessName": "맛있는 전시회 국동점(2)",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "회/해산물"
+  },
+  {
+    "id": "c9bd99f6063b7a7e",
+    "name": "김사장 대박난 국수집 문수점(2)",
+    "realBusinessName": "김사장 대박난 국수집 문수점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "bd90a1033cc9f5ff",
+    "name": "낙지천국 문수점(2)",
+    "realBusinessName": "낙지천국 문수점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "63448d2746b695e8",
+    "name": "토담 민속주점 문수점(2)",
+    "realBusinessName": "토담 민속주점 문수점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "2dba72a48d263250",
+    "name": "피피마켓 종화동점(1)",
+    "realBusinessName": "피피마켓 종화동점(1)",
+    "shopInShopNames": [],
+    "district": "종화동",
+    "category": "면요리"
+  },
+  {
+    "id": "63932e4fbec79e97",
+    "name": "여서 육감 문수점(2)",
+    "realBusinessName": "여서 육감 문수점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "5c6756dceb5ce51d",
+    "name": "명품1인도시락&시원냉면밀면(국동) (1)",
+    "realBusinessName": "명품1인도시락&시원냉면밀면(국동) (1)",
+    "shopInShopNames": [],
+    "district": "시원냉면밀면",
+    "category": "면요리"
+  },
+  {
+    "id": "434dcb7194a860c1",
+    "name": "돈쌈대패 문수점 (1)",
+    "realBusinessName": "돈쌈대패 문수점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "ee3aa2f29b39f7c8",
+    "name": "그루브 여서점 (1)",
+    "realBusinessName": "그루브 여서점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "0479825cfb86c3dd",
+    "name": "아이커 버거&치킨 여천점(신기동)(1)",
+    "realBusinessName": "아이커 버거&치킨 여천점(신기동)(1)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "05f6c85afa7bb069",
+    "name": "그루브 여서점(2)",
+    "realBusinessName": "그루브 여서점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "8c308a0a39055940",
+    "name": "해룡옥수수찐빵 문수점 (1)",
+    "realBusinessName": "해룡옥수수찐빵 문수점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "f22d45feee8cb1a4",
+    "name": "철웅이네 입큰 붕어빵 문수점 (1)",
+    "realBusinessName": "철웅이네 입큰 붕어빵 문수점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "cb1348828127637c",
+    "name": "치폴리니 여서점 (1)",
+    "realBusinessName": "치폴리니 여서점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "e54434c678abbc69",
+    "name": "파파핫도그 여서점(1)",
+    "realBusinessName": "파파핫도그 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "cfafec340642099f",
+    "name": "우주호떡 여서점 (1)",
+    "realBusinessName": "우주호떡 여서점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "e08ad39fd7136cdd",
+    "name": "타코아찌 타코야끼전문점 문수점 (1)",
+    "realBusinessName": "타코아찌 타코야끼전문점 문수점 (1)",
+    "shopInShopNames": [],
+    "district": "저장해두시면",
+    "category": "면요리"
+  },
+  {
+    "id": "5f6043643041686d",
+    "name": "굽네치킨&피자 무선점(화장동)(1)",
+    "realBusinessName": "굽네치킨&피자 무선점(화장동)(1)",
+    "shopInShopNames": [],
+    "district": "화장동",
+    "category": "치킨"
+  },
+  {
+    "id": "5327bf3141540bff",
+    "name": "굽네치킨&피자 웅천점(1)",
+    "realBusinessName": "굽네치킨&피자 웅천점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "치킨"
+  },
+  {
+    "id": "1305137a9e5d4f92",
+    "name": "굽네치킨&피자 여천점(신기동)(1)",
+    "realBusinessName": "굽네치킨&피자 여천점(신기동)(1)",
+    "shopInShopNames": [],
+    "district": "신기동",
+    "category": "치킨"
+  },
+  {
+    "id": "64cd705f8a8ad3b7",
+    "name": "굽네치킨&피자 죽림점(1)",
+    "realBusinessName": "굽네치킨&피자 죽림점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "치킨"
+  },
+  {
+    "id": "ea384c54d81a362c",
+    "name": "쉐프의수제요리 야미야미 여서점 (1)",
+    "realBusinessName": "쉐프의수제요리 야미야미 여서점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "d572b9fd40f5cc55",
+    "name": "콩담은 콩나물 국밥 문수점(2)",
+    "realBusinessName": "콩담은 콩나물 국밥 문수점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "37e3c480fbc47541",
+    "name": "손수김밥 여서점(2)",
+    "realBusinessName": "손수김밥 여서점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "분식"
+  },
+  {
+    "id": "9e06aee2bfa7d347",
+    "name": "1988응답하라추억의옛날도시락 고소동점 (1)",
+    "realBusinessName": "1988응답하라추억의옛날도시락 고소동점 (1)",
+    "shopInShopNames": [],
+    "district": "고소동",
+    "category": "면요리"
+  },
+  {
+    "id": "7ed02fe55d44704f",
+    "name": "왕창 돼지두루치기 여서점 (1)",
+    "realBusinessName": "왕창 돼지두루치기 여서점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "6d133581cb9df8fc",
+    "name": "수시아 김밥전문 공화동점 (1)",
+    "realBusinessName": "수시아 김밥전문 공화동점 (1)",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "분식"
+  },
+  {
+    "id": "5e873641af44308c",
+    "name": "진남컵밥 중앙점 (1)",
+    "realBusinessName": "진남컵밥 중앙점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "7bdc5b6da821eb1d",
+    "name": "김밥나라 국동점 (1)",
+    "realBusinessName": "김밥나라 국동점 (1)",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "분식"
+  },
+  {
+    "id": "6bc1c18d7ae9e6c4",
+    "name": "몬스터탕수육 여수학동점(1)",
+    "realBusinessName": "몬스터탕수육 여수학동점(1)",
+    "shopInShopNames": [],
+    "district": "여수학동",
+    "category": "중식"
+  },
+  {
+    "id": "055b49c732fa3364",
+    "name": "밥앤동 볶음밥&우동 충무점(1)",
+    "realBusinessName": "밥앤동 볶음밥&우동 충무점(1)",
+    "shopInShopNames": [],
+    "district": "밥앤동",
+    "category": "면요리"
+  },
+  {
+    "id": "8a517126a4d4992a",
+    "name": "김밥나라 관문점 (1)",
+    "realBusinessName": "김밥나라 관문점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "분식"
+  },
+  {
+    "id": "bc548ae614d93159",
+    "name": "김사장 대박난 국수집 문수점(3)",
+    "realBusinessName": "김사장 대박난 국수집 문수점(3)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "a2e061ccbf9e09b1",
+    "name": "김밥천국 국동점 (1)",
+    "realBusinessName": "김밥천국 국동점 (1)",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "분식"
+  },
+  {
+    "id": "841da55e467b8ac1",
+    "name": "덮밥전문점 고기그릇 공화동점 (1)",
+    "realBusinessName": "덮밥전문점 고기그릇 공화동점 (1)",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "고기/구이"
+  },
+  {
+    "id": "1cd2c231eed7b8dd",
+    "name": "바르다김선생 여서점 (1)",
+    "realBusinessName": "바르다김선생 여서점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "ff8c4608b033c7a0",
+    "name": "바삭한 휴게소 여서점 (1)",
+    "realBusinessName": "바삭한 휴게소 여서점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "d46af0c9e2ec5711",
+    "name": "가마솥 볶음밥 여서점 (1)",
+    "realBusinessName": "가마솥 볶음밥 여서점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "bbedd612e3b2a284",
+    "name": "피피마켓 종화동점(2)",
+    "realBusinessName": "피피마켓 종화동점(2)",
+    "shopInShopNames": [],
+    "district": "종화동",
+    "category": "면요리"
+  },
+  {
+    "id": "90d734ab7fd8ff55",
+    "name": "명품1인도시락&시원냉면밀면(국동)(2)",
+    "realBusinessName": "명품1인도시락&시원냉면밀면(국동)(2)",
+    "shopInShopNames": [],
+    "district": "시원냉면밀면",
+    "category": "면요리"
+  },
+  {
+    "id": "eb0d951c5e39e52f",
+    "name": "소코아 웅천점 (1)",
+    "realBusinessName": "소코아 웅천점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "63ab62ed40f10f0c",
+    "name": "밥앤동 볶음밥&우동 충무점(2)",
+    "realBusinessName": "밥앤동 볶음밥&우동 충무점(2)",
+    "shopInShopNames": [],
+    "district": "밥앤동",
+    "category": "면요리"
+  },
+  {
+    "id": "8d38f0a70c54a4c1",
+    "name": "제복이네 짜글이&제육쌈밥&두루치기 교동점(2)",
+    "realBusinessName": "제복이네 짜글이&제육쌈밥&두루치기 교동점(2)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "면요리"
+  },
+  {
+    "id": "bd43718485bc5e3f",
+    "name": "김사장 대박난 국수집 문수점(4)",
+    "realBusinessName": "김사장 대박난 국수집 문수점(4)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "eac0c7e6a3e12d4c",
+    "name": "붕붕먹거리 교동점(2)",
+    "realBusinessName": "붕붕먹거리 교동점(2)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "면요리"
+  },
+  {
+    "id": "cff6ba1b24f91ea7",
+    "name": "속초냉면&직화제육 교동점(1)",
+    "realBusinessName": "속초냉면&직화제육 교동점(1)",
+    "shopInShopNames": [],
+    "district": "속초냉면",
+    "category": "면요리"
+  },
+  {
+    "id": "07951b9f2734fbae",
+    "name": "육식사관학교 여서점(3)",
+    "realBusinessName": "육식사관학교 여서점(3)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "ee836895934cb021",
+    "name": "청송삼계탕&닭칼국수 문수점(2)",
+    "realBusinessName": "청송삼계탕&닭칼국수 문수점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "785c69700ab3c852",
+    "name": "김사장 국밥 문수점(2)",
+    "realBusinessName": "김사장 국밥 문수점(2)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "8d31e8959c080895",
+    "name": "소녹 종화동점(2)",
+    "realBusinessName": "소녹 종화동점(2)",
+    "shopInShopNames": [],
+    "district": "종화동",
+    "category": "면요리"
+  },
+  {
+    "id": "d3a49cbf5625dee6",
+    "name": "배불이 순대국&돼지국밥 교동점(2)",
+    "realBusinessName": "배불이 순대국&돼지국밥 교동점(2)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "92d3ac6297834e92",
+    "name": "60일숙성 명품김치찜&김치찌개&쌈밥 교동점(2)",
+    "realBusinessName": "60일숙성 명품김치찜&김치찌개&쌈밥 교동점(2)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "3fd1f5df260a9524",
+    "name": "명품1인도시락&시원냉면밀면(국동)(3)",
+    "realBusinessName": "명품1인도시락&시원냉면밀면(국동)(3)",
+    "shopInShopNames": [],
+    "district": "시원냉면밀면",
+    "category": "면요리"
+  },
+  {
+    "id": "5ccc6380e91d6c66",
+    "name": "이가네 나주곰탕&설렁탕 교동점(2)",
+    "realBusinessName": "이가네 나주곰탕&설렁탕 교동점(2)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "ddf2b415831d0a0f",
+    "name": "인생냉면 가야밀면 여서점(3)",
+    "realBusinessName": "인생냉면 가야밀면 여서점(3)",
+    "shopInShopNames": [],
+    "district": "인생냉면",
+    "category": "면요리"
+  },
+  {
+    "id": "070e1d5b8f3a18cf",
+    "name": "콩담은 콩나물 국밥 문수점(3)",
+    "realBusinessName": "콩담은 콩나물 국밥 문수점(3)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "f3b66a0a2290f8b8",
+    "name": "코리안 찌개 타운 서교점 (1)",
+    "realBusinessName": "코리안 찌개 타운 서교점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "2af2289e50e539ce",
+    "name": "교동야식 교동점(1)",
+    "realBusinessName": "교동야식 교동점(1)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "면요리"
+  },
+  {
+    "id": "249f404e65eb6f97",
+    "name": "청담낙곱새 고소동점 (1)",
+    "realBusinessName": "청담낙곱새 고소동점 (1)",
+    "shopInShopNames": [],
+    "district": "고소동",
+    "category": "면요리"
+  },
+  {
+    "id": "57e270cc0520d544",
+    "name": "육식사관학교 여서점(1)",
+    "realBusinessName": "육식사관학교 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "9b953ee0790554c8",
+    "name": "스팸많이주는부대찌개 여서점(1)",
+    "realBusinessName": "스팸많이주는부대찌개 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "b4b640f7767d2174",
+    "name": "60일숙성 명품김치찜&김치찌개&쌈밥 교동점(1)",
+    "realBusinessName": "60일숙성 명품김치찜&김치찌개&쌈밥 교동점(1)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "cf7e9fa0b0082975",
+    "name": "꽃게장&갈치조림 전문점 늘푸른식당 봉산점 (1)",
+    "realBusinessName": "꽃게장&갈치조림 전문점 늘푸른식당 봉산점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "8210dfdc9908ecfd",
+    "name": "고궁 갈비탕&갈비찜&육개장 문수점 (1)",
+    "realBusinessName": "고궁 갈비탕&갈비찜&육개장 문수점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "768207e8ee367d01",
+    "name": "김사장 대박난 국수집 문수점(1)",
+    "realBusinessName": "김사장 대박난 국수집 문수점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "5282e0299ffcf81c",
+    "name": "전골의법칙 얼큰한곱창전골 문수점(1)",
+    "realBusinessName": "전골의법칙 얼큰한곱창전골 문수점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "089c5f9f633acebb",
+    "name": "아구찜&장어탕명가 조롱박 교동점 (1)",
+    "realBusinessName": "아구찜&장어탕명가 조롱박 교동점 (1)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "면요리"
+  },
+  {
+    "id": "3a097d631cb713e5",
+    "name": "금마차 여서점(1)",
+    "realBusinessName": "금마차 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "de47900b229c04d7",
+    "name": "여수다복 교동점 (1)",
+    "realBusinessName": "여수다복 교동점 (1)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "면요리"
+  },
+  {
+    "id": "35a8395abddf78ce",
+    "name": "소녹 종화동점 (1)",
+    "realBusinessName": "소녹 종화동점 (1)",
+    "shopInShopNames": [],
+    "district": "종화동",
+    "category": "면요리"
+  },
+  {
+    "id": "b08dfab026fb56e8",
+    "name": "매운맛 땡길때 밥장인 엑스포점 (1)",
+    "realBusinessName": "매운맛 땡길때 밥장인 엑스포점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "6cdc5b5bcbf73a91",
+    "name": "엄마미안 김치찜 공화동점 (1)",
+    "realBusinessName": "엄마미안 김치찜 공화동점 (1)",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "면요리"
+  },
+  {
+    "id": "2c91cc4cbd4a80ec",
+    "name": "찹쌀품은 삼계탕 문수점(1)",
+    "realBusinessName": "찹쌀품은 삼계탕 문수점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "ddd0178362d86b53",
+    "name": "골목낙곱새 1977 봉강점 (1)",
+    "realBusinessName": "골목낙곱새 1977 봉강점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "4b4bf27fdd1672ef",
+    "name": "허참봉 곰탕&갈비탕 봉산점 (1)",
+    "realBusinessName": "허참봉 곰탕&갈비탕 봉산점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "8f47635377e7b6d0",
+    "name": "내조국 국밥 봉산점(1)",
+    "realBusinessName": "내조국 국밥 봉산점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "3c55c276d48abde8",
+    "name": "울엄마 김치찜 갈비찜 중앙점 (1)",
+    "realBusinessName": "울엄마 김치찜 갈비찜 중앙점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "고기/구이"
+  },
+  {
+    "id": "2badd6c7f04bdaae",
+    "name": "통큰한방삼계탕 공화점 (1)",
+    "realBusinessName": "통큰한방삼계탕 공화점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "df4b63b74a218429",
+    "name": "진한설렁탕 문수점 (1)",
+    "realBusinessName": "진한설렁탕 문수점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "18bb533162d83e01",
+    "name": "30년전통 할매손곰탕 문수점 (1)",
+    "realBusinessName": "30년전통 할매손곰탕 문수점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "dd9b79599b4764b9",
+    "name": "귀한김치찜 국동봉산점 (2)",
+    "realBusinessName": "귀한김치찜 국동봉산점 (2)",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "면요리"
+  },
+  {
+    "id": "548ef8cd2b80f4b9",
+    "name": "토담 민속주점 문수점(1)",
+    "realBusinessName": "토담 민속주점 문수점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "c9089234315cf620",
+    "name": "찜스틸러갈비찜 봉산점 (1)",
+    "realBusinessName": "찜스틸러갈비찜 봉산점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "고기/구이"
+  },
+  {
+    "id": "7ed26d6d9bcf7280",
+    "name": "제복이네 짜글이&제육쌈밥&두루치기 교동점(1)",
+    "realBusinessName": "제복이네 짜글이&제육쌈밥&두루치기 교동점(1)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "면요리"
+  },
+  {
+    "id": "c2b6538822db86ba",
+    "name": "청담곱떡 고소동점 (1)",
+    "realBusinessName": "청담곱떡 고소동점 (1)",
+    "shopInShopNames": [],
+    "district": "고소동",
+    "category": "면요리"
+  },
+  {
+    "id": "322255f48542d272",
+    "name": "붕붕먹거리 교동점(1)",
+    "realBusinessName": "붕붕먹거리 교동점(1)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "면요리"
+  },
+  {
+    "id": "51c76ce482d70141",
+    "name": "서희국밥&족발 국동본점(2)",
+    "realBusinessName": "서희국밥&족발 국동본점(2)",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "b3aeab22a127174f",
+    "name": "시민감자탕 문수점 (1)",
+    "realBusinessName": "시민감자탕 문수점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "efbcb9795f559845",
+    "name": "나능이 능이버섯백숙 봉산점(1)",
+    "realBusinessName": "나능이 능이버섯백숙 봉산점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "1007878ca0e3481a",
+    "name": "통뼈감자탕 문수점(1)",
+    "realBusinessName": "통뼈감자탕 문수점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "9ab94a0d6739f22c",
+    "name": "불의제육 여서점(1)",
+    "realBusinessName": "불의제육 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "30797abd197a7349",
+    "name": "인생냉면 가야밀면 여서점(1)",
+    "realBusinessName": "인생냉면 가야밀면 여서점(1)",
+    "shopInShopNames": [],
+    "district": "인생냉면",
+    "category": "면요리"
+  },
+  {
+    "id": "a4760c50a9ee9f33",
+    "name": "만석군 봉산점 (1)",
+    "realBusinessName": "만석군 봉산점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "7ac18d343aa0ff16",
+    "name": "장터순대국 교동점(1)",
+    "realBusinessName": "장터순대국 교동점(1)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "면요리"
+  },
+  {
+    "id": "7203656eda530ef1",
+    "name": "손수끓인육개장 문수점 (1)",
+    "realBusinessName": "손수끓인육개장 문수점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "4968bd5210ae4435",
+    "name": "서희국밥&족발 국동본점(1)",
+    "realBusinessName": "서희국밥&족발 국동본점(1)",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "족발/보쌈"
+  },
+  {
+    "id": "39dac887524cda46",
+    "name": "강남국밥 돌산점 (1)",
+    "realBusinessName": "강남국밥 돌산점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "7a9b3c50e987d3ed",
+    "name": "여서 육감 문수점(1)",
+    "realBusinessName": "여서 육감 문수점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "076b37d44fa66a74",
+    "name": "고기듬뿍 국물두루치기 문수점(1)",
+    "realBusinessName": "고기듬뿍 국물두루치기 문수점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "고기/구이"
+  },
+  {
+    "id": "068669043560a142",
+    "name": "배불이 순대국&돼지국밥 교동점(1)",
+    "realBusinessName": "배불이 순대국&돼지국밥 교동점(1)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "1e2aee7a91f038a2",
+    "name": "미친 짜글이 서교점 (1)",
+    "realBusinessName": "미친 짜글이 서교점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "cd19953277ec968b",
+    "name": "봉명가닭도리탕 국동점 (1)",
+    "realBusinessName": "봉명가닭도리탕 국동점 (1)",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "면요리"
+  },
+  {
+    "id": "976113f132e095eb",
+    "name": "더 진한 소한마리탕&국밥 엑스포점 (1)",
+    "realBusinessName": "더 진한 소한마리탕&국밥 엑스포점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "931ac1d8b1e1d905",
+    "name": "청송삼계탕&닭칼국수 문수점 (1)",
+    "realBusinessName": "청송삼계탕&닭칼국수 문수점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "f04947c92bfd8373",
+    "name": "한국전통춘천닭갈비 공화동점 (1)",
+    "realBusinessName": "한국전통춘천닭갈비 공화동점 (1)",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "고기/구이"
+  },
+  {
+    "id": "ca36271b79973f85",
+    "name": "김치찌개참잘하는집 여서점(1)",
+    "realBusinessName": "김치찌개참잘하는집 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "f768d174b4cc51fc",
+    "name": "낙지천국 문수점(1)",
+    "realBusinessName": "낙지천국 문수점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "9c9eb7a4f29d0633",
+    "name": "김치찜팝니다 서교점 (1)",
+    "realBusinessName": "김치찜팝니다 서교점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "b20c3e86f9d3c232",
+    "name": "황금코다리 봉산점 (1)",
+    "realBusinessName": "황금코다리 봉산점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "ae8fed9068cf3696",
+    "name": "닭곰탕 백숙 보약한첩 문수점 (1)",
+    "realBusinessName": "닭곰탕 백숙 보약한첩 문수점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "2fd56028321c15ba",
+    "name": "79대포 여서점(1)",
+    "realBusinessName": "79대포 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "7ca8d4d39f986687",
+    "name": "한식전문 혼밥대장 공화동점 (1)",
+    "realBusinessName": "한식전문 혼밥대장 공화동점 (1)",
+    "shopInShopNames": [],
+    "district": "공화동",
+    "category": "한식"
+  },
+  {
+    "id": "f5b9b69b07358a21",
+    "name": "김사장 국밥 문수점(1)",
+    "realBusinessName": "김사장 국밥 문수점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "96eb3d0d2e47f4ca",
+    "name": "진통뼈사랑 봉산점 (1)",
+    "realBusinessName": "진통뼈사랑 봉산점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "5a3625832bbccfa5",
+    "name": "청하대 영빈관 여서점(1)",
+    "realBusinessName": "청하대 영빈관 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "dedc987cba7782ee",
+    "name": "콩담은 콩나물 국밥 문수점(1)",
+    "realBusinessName": "콩담은 콩나물 국밥 문수점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "ed47b2104731fe5c",
+    "name": "더바른 정국밥 미평점 (1)",
+    "realBusinessName": "더바른 정국밥 미평점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "86aaa0c7afb7b374",
+    "name": "시우푸드 봉산점 (1)",
+    "realBusinessName": "시우푸드 봉산점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "097b0a2f1739a9f7",
+    "name": "예향정 여서점(1)",
+    "realBusinessName": "예향정 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "3f4d9235c3609976",
+    "name": "돈도니밥도둑짜글이 국동점 (1)",
+    "realBusinessName": "돈도니밥도둑짜글이 국동점 (1)",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "면요리"
+  },
+  {
+    "id": "535420f4390f6430",
+    "name": "맛있는 전시회 국동점(1)",
+    "realBusinessName": "맛있는 전시회 국동점(1)",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "회/해산물"
+  },
+  {
+    "id": "3dfaa76e3a83b440",
+    "name": "찌개랑갈비랑 여서점(1)",
+    "realBusinessName": "찌개랑갈비랑 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "361789fdd3de7c15",
+    "name": "바다양푼이동태탕/찜 문수점(1)",
+    "realBusinessName": "바다양푼이동태탕/찜 문수점(1)",
+    "shopInShopNames": [],
+    "district": "바다양푼이동",
+    "category": "면요리"
+  },
+  {
+    "id": "8dedd39ea5f21bcf",
+    "name": "손수김밥 여서점(1)",
+    "realBusinessName": "손수김밥 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "분식"
+  },
+  {
+    "id": "bd5b75fb8e8aa97f",
+    "name": "청년뚝배기 덕충점 (1)",
+    "realBusinessName": "청년뚝배기 덕충점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "8a6fec95229f1280",
+    "name": "임꺽정 갈비탕 봉산점 (1)",
+    "realBusinessName": "임꺽정 갈비탕 봉산점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "한식"
+  },
+  {
+    "id": "8617d283a645f239",
+    "name": "우사골설렁탕 여서동본점 (1)",
+    "realBusinessName": "우사골설렁탕 여서동본점 (1)",
+    "shopInShopNames": [],
+    "district": "여서동",
+    "category": "면요리"
+  },
+  {
+    "id": "c1af7985ea028a0f",
+    "name": "또바기 여서점(1)",
+    "realBusinessName": "또바기 여서점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "48d97694d334584c",
+    "name": "이가네 나주곰탕&설렁탕 교동점(1)",
+    "realBusinessName": "이가네 나주곰탕&설렁탕 교동점(1)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "8d22aa94b4396bff",
+    "name": "귀한김치찜 국동봉산점 (1)",
+    "realBusinessName": "귀한김치찜 국동봉산점 (1)",
+    "shopInShopNames": [],
+    "district": "국동",
+    "category": "면요리"
+  },
+  {
+    "id": "4ecb26668ba5066e",
+    "name": "쭈꾸미닭 공화점 (1)",
+    "realBusinessName": "쭈꾸미닭 공화점 (1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "1c096fa21fc3b9a1",
+    "name": "조선제일 감자탕&뼈해장국 여서점 (1)",
+    "realBusinessName": "조선제일 감자탕&뼈해장국 여서점 (1)",
+    "shopInShopNames": [],
+    "district": "여수",
+    "category": "음식점"
+  },
+  {
+    "id": "dba6beeeb774318f",
+    "name": "베트남쌀국수 123 ZO",
+    "realBusinessName": "베트남쌀국수 123 ZO",
+    "shopInShopNames": [],
+    "district": "저장해두시면",
+    "category": "면요리"
+  },
+  {
+    "id": "320d26d67b993c4a",
+    "name": "아로이태국음식전문점",
+    "realBusinessName": "아로이태국음식전문점",
+    "shopInShopNames": [],
+    "district": "저장해두시면",
+    "category": "면요리"
+  },
+  {
+    "id": "ba870ddfedb99508",
+    "name": "본죽&비빔밥 여수미평점",
+    "realBusinessName": "본죽&비빔밥 여수미평점",
+    "shopInShopNames": [],
+    "district": "저장해두시면",
+    "category": "면요리"
+  },
+  {
+    "id": "ddc27f852308889a",
+    "name": "본죽 여수국동점",
+    "realBusinessName": "본죽 여수국동점",
+    "shopInShopNames": [],
+    "district": "여수국동",
+    "category": "면요리"
+  },
+  {
+    "id": "1921d1d5c7710872",
+    "name": "모두의 죽 교동점(영업시간06시~02시까지)",
+    "realBusinessName": "모두의 죽 교동점(영업시간06시~02시까지)",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "면요리"
+  },
+  {
+    "id": "08e5e26653436fef",
+    "name": "알토랑반찬 여수문수본점",
+    "realBusinessName": "알토랑반찬 여수문수본점",
+    "shopInShopNames": [],
+    "district": "저장해두시면",
+    "category": "면요리"
+  },
+  {
+    "id": "768e4fe8150f5039",
+    "name": "정성이 가득찬 반찬",
+    "realBusinessName": "정성이 가득찬 반찬",
+    "shopInShopNames": [],
+    "district": "저장해두시면",
+    "category": "면요리"
+  },
+  {
+    "id": "0ad5341dc696d4f1",
+    "name": "맛있는 반찬",
+    "realBusinessName": "맛있는 반찬",
+    "shopInShopNames": [],
+    "district": "저장해두시면",
+    "category": "면요리"
+  },
+  {
+    "id": "d409f6d9118b7bad",
+    "name": "황금손 반찬",
+    "realBusinessName": "황금손 반찬",
+    "shopInShopNames": [],
+    "district": "저장해두시면",
+    "category": "면요리"
+  },
+  {
+    "id": "84c118675c0caa4c",
+    "name": "바오탕수 여서점",
+    "realBusinessName": "바오탕수 여서점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "중식"
+  },
+  {
+    "id": "f7d93ad21c1a93d7",
+    "name": "맘스터치 엑스포점",
+    "realBusinessName": "맘스터치 엑스포점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "1acf6756b7471125",
+    "name": "맘스터치 중앙점",
+    "realBusinessName": "맘스터치 중앙점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "8cb29ac81df85b54",
+    "name": "여수언니 교동점",
+    "realBusinessName": "여수언니 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "면요리"
+  },
+  {
+    "id": "4e83618703e993b5",
+    "name": "걸작떡볶이치킨 여수중앙점",
+    "realBusinessName": "걸작떡볶이치킨 여수중앙점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "치킨"
+  },
+  {
+    "id": "91798b85e5a50244",
+    "name": "진남집밥 교동점",
+    "realBusinessName": "진남집밥 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "한식"
+  },
+  {
+    "id": "144ed6ece1f4734a",
+    "name": "여수팥빙수 교동점",
+    "realBusinessName": "여수팥빙수 교동점",
+    "shopInShopNames": [],
+    "district": "교동",
+    "category": "카페/디저트"
+  },
+  {
+    "id": "411052fdc9de5d44",
+    "name": "모노데일리 남산점",
+    "realBusinessName": "모노데일리 남산점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "e5b0545e92f03409",
+    "name": "이조삼계탕 충무점",
+    "realBusinessName": "이조삼계탕 충무점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "98a1464075ea68e5",
+    "name": "포슈아 쌀국수배달전문 서교점",
+    "realBusinessName": "포슈아 쌀국수배달전문 서교점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "b58c688c90df4687",
+    "name": "본죽&비빔밥 여수중앙점",
+    "realBusinessName": "본죽&비빔밥 여수중앙점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "8dc7782b3cb4bdcf",
+    "name": "김밥세상 광무점",
+    "realBusinessName": "김밥세상 광무점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "분식"
+  },
+  {
+    "id": "3bcce1dd4c36eee0",
+    "name": "동백 봉강점",
+    "realBusinessName": "동백 봉강점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "5942ed8c00fa1037",
+    "name": "금도령찜닭 여수봉강점",
+    "realBusinessName": "금도령찜닭 여수봉강점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "75dbdaa6383cd49c",
+    "name": "생생연어 여서점",
+    "realBusinessName": "생생연어 여서점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "c29fb9cd27867a9d",
+    "name": "여서해장국",
+    "realBusinessName": "여서해장국",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "02bed6e23cbbf188",
+    "name": "양아 치킨 여수점(문수동)",
+    "realBusinessName": "양아 치킨 여수점(문수동)",
+    "shopInShopNames": [],
+    "district": "문수동",
+    "category": "치킨"
+  },
+  {
+    "id": "925f6f828599eb4f",
+    "name": "맛조은 미평점",
+    "realBusinessName": "맛조은 미평점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "0bcf02e9bd40b7d0",
+    "name": "뿅가야채곱창 문수점",
+    "realBusinessName": "뿅가야채곱창 문수점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "0ee3922e77afa736",
+    "name": "배가네왕족보 여문본점",
+    "realBusinessName": "배가네왕족보 여문본점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "a7d684d2ce59e962",
+    "name": "부뚜막 문수점",
+    "realBusinessName": "부뚜막 문수점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "585904750de0000c",
+    "name": "땡초닭발 미평점",
+    "realBusinessName": "땡초닭발 미평점",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "면요리"
+  },
+  {
+    "id": "9e422525b203c97f",
+    "name": "황실육회 봉산점(1)",
+    "realBusinessName": "황실육회 봉산점(1)",
+    "shopInShopNames": [],
+    "district": "홈화면",
+    "category": "회/해산물"
+  }
+]

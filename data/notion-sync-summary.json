@@ -1,32 +1,33 @@
 {
-  "generatedAt": "2026-07-16T09:09:40.635Z",
+  "generatedAt": "2026-07-16T10:28:36.391Z",
   "pagesScanned": 593,
-  "matchedCount": 404,
+  "matchedCount": 564,
   "ambiguousCount": 1,
   "unmatchedCount": 1,
-  "errorCount": 25,
+  "errorCount": 24,
   "scoreCounts": {
-    "exact100": 403,
+    "exact100": 563,
     "high95to99": 0,
     "accepted80to94": 1
   },
   "routeCounts": {
-    "direct": 404,
-    "mukkebi": 358,
-    "chak": 404,
-    "phone": 403,
-    "coupang": 364,
-    "baemin": 385,
-    "ddangyo": 317,
-    "yogiyo": 316
+    "direct": 563,
+    "mukkebi": 514,
+    "chak": 564,
+    "phone": 563,
+    "coupang": 488,
+    "baemin": 527,
+    "ddangyo": 425,
+    "yogiyo": 405
   },
   "missingRouteCounts": {
-    "ddangyo": 87,
-    "yogiyo": 88,
-    "coupang": 40,
-    "mukkebi": 46,
-    "baemin": 19,
-    "phone": 1
+    "ddangyo": 139,
+    "yogiyo": 159,
+    "coupang": 76,
+    "mukkebi": 50,
+    "baemin": 37,
+    "phone": 1,
+    "direct": 1
   },
   "ambiguousSamples": [
     {
@@ -50,6 +51,51 @@
     }
   ],
   "errorSamples": [
+    {
+      "store": "청하대 영빈관 여서점",
+      "notionTitle": "청하대 영빈관 여서점",
+      "error": "/blocks/8a5da158-dd2a-83fe-8625-01711aa30a88/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "초밥처럼 봉산점",
+      "notionTitle": "초밥처럼 봉산점",
+      "error": "/blocks/396da158-dd2a-80ee-b044-da01aa2734a6/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치코두마리파닭 여서점",
+      "notionTitle": "치코두마리파닭 여서점",
+      "error": "/blocks/353da158-dd2a-8327-96ad-810b53773559/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨갱스터 국동유탑점",
+      "notionTitle": "치킨갱스터 국동유탑점",
+      "error": "/blocks/317da158-dd2a-82a5-b472-81388f55fdea/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨마루 무선호수공원점(화장동)",
+      "notionTitle": "치킨마루 무선호수공원점(화장동)",
+      "error": "/blocks/09bda158-dd2a-83e5-a513-01a29bb3ee65/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨마루 여수봉계점",
+      "notionTitle": "치킨마루 여수봉계점",
+      "error": "/blocks/82eda158-dd2a-836c-9c88-01eea0be990b/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨아이 국동점",
+      "notionTitle": "치킨아이 국동점",
+      "error": "/blocks/0dbda158-dd2a-8292-bc7a-816a49494e44/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨아이 둔덕점",
+      "notionTitle": "치킨아이 둔덕점",
+      "error": "/blocks/0e7da158-dd2a-8383-bd56-81e76d799585/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨아이 무선점",
+      "notionTitle": "치킨아이 무선점",
+      "error": "/blocks/455da158-dd2a-83ce-9376-012c078f51a4/children?page_size=100 재시도 초과"
+    },
     {
       "store": "치킨아이 문수점",
       "notionTitle": "치킨아이 문수점",
@@ -124,56 +170,6 @@
       "store": "킹짬뽕 본점(여서동)",
       "notionTitle": "킹짬뽕 본점(여서동)",
       "error": "/blocks/e50da158-dd2a-8209-9fd8-816866f4ed51/children?page_size=100 재시도 초과"
-    },
-    {
-      "store": "타코아찌 타코야끼전문점 문수점",
-      "notionTitle": "타코아찌 타코야끼전문점 문수점",
-      "error": "/blocks/25fda158-dd2a-82da-996d-012b1b48b796/children?page_size=100 재시도 초과"
-    },
-    {
-      "store": "타코이찌 타코야끼전문점 문수점",
-      "notionTitle": "타코이찌 타코야끼전문점 문수점",
-      "error": "/blocks/1e1da158-dd2a-83f5-bde3-81341706c446/children?page_size=100 재시도 초과"
-    },
-    {
-      "store": "탕참 탕수육참잘하는집 여수점(여서동)",
-      "notionTitle": "탕참 탕수육참잘하는집 여수점(여서동)",
-      "error": "/blocks/633da158-dd2a-830d-8e99-81fa98713d24/children?page_size=100 재시도 초과"
-    },
-    {
-      "store": "토담 민속주점 문수점",
-      "notionTitle": "토담 민속주점 문수점",
-      "error": "/blocks/e83da158-dd2a-8216-9c22-01a6a73b2923/children?page_size=100 재시도 초과"
-    },
-    {
-      "store": "통뼈감자탕 문수점",
-      "notionTitle": "통뼈감자탕 문수점",
-      "error": "/blocks/74ada158-dd2a-830f-9b7a-810c973ceee0/children?page_size=100 재시도 초과"
-    },
-    {
-      "store": "통큰두마리찜닭 여서점",
-      "notionTitle": "통큰두마리찜닭 여서점",
-      "error": "/blocks/b09da158-dd2a-8314-97bc-01f800568ccb/children?page_size=100 재시도 초과"
-    },
-    {
-      "store": "통큰한방삼계탕 공화점",
-      "notionTitle": "통큰한방삼계탕 공화점",
-      "error": "/blocks/e78da158-dd2a-833a-8a67-81410c65711a/children?page_size=100 재시도 초과"
-    },
-    {
-      "store": "투썸플레이스 웅천점",
-      "notionTitle": "투썸플레이스 웅천점",
-      "error": "/blocks/d58da158-dd2a-820b-8af6-81ed245857f9/children?page_size=100 재시도 초과"
-    },
-    {
-      "store": "투썸플레이스 한재사거리점",
-      "notionTitle": "투썸플레이스 한재사거리점",
-      "error": "/blocks/210da158-dd2a-82cf-8975-8177a19354b4/children?page_size=100 재시도 초과"
-    },
-    {
-      "store": "파리바게뜨 여수교동점",
-      "notionTitle": "파리바게뜨 여수교동점",
-      "error": "/blocks/67cda158-dd2a-823e-85a0-01147163cdf3/children?page_size=100 재시도 초과"
     }
   ]
 }

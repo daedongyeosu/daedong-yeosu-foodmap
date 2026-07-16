@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-07-16T09:29:57.286Z",
+  "startedAt": "2026-07-16T10:15:03.862Z",
   "rules": {
     "routeAuthority": "notion-main-page",
     "phonePriority": "notion-then-existing",
@@ -6282,424 +6282,6 @@
       ]
     },
     {
-      "store": "청하대 영빈관 여서점",
-      "notionTitle": "청하대 영빈관 여서점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "chak",
-        "phone",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": [
-        "ddangyo",
-        "yogiyo"
-      ]
-    },
-    {
-      "store": "초밥처럼 봉산점",
-      "notionTitle": "초밥처럼 봉산점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "치코두마리파닭 여서점",
-      "notionTitle": "치코두마리파닭 여서점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "치킨갱스터 국동유탑점",
-      "notionTitle": "치킨갱스터 국동유탑점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang"
-      ],
-      "phone": null,
-      "missingRoutes": [
-        "mukkebi",
-        "baemin"
-      ]
-    },
-    {
-      "store": "치킨마루 무선호수공원점(화장동)",
-      "notionTitle": "치킨마루 무선호수공원점(화장동)",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": [
-        "ddangyo"
-      ]
-    },
-    {
-      "store": "치킨마루 여수봉계점",
-      "notionTitle": "치킨마루 여수봉계점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "치킨아이 국동점",
-      "notionTitle": "치킨아이 국동점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "치킨아이 둔덕점",
-      "notionTitle": "치킨아이 둔덕점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": [
-        "yogiyo"
-      ]
-    },
-    {
-      "store": "치킨아이 무선점",
-      "notionTitle": "치킨아이 무선점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "치킨아이 문수점",
-      "notionTitle": "치킨아이 문수점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": [
-        "yogiyo"
-      ]
-    },
-    {
-      "store": "치킨아이 소호점",
-      "notionTitle": "치킨아이 소호점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "치킨아이 신기점",
-      "notionTitle": "치킨아이 신기점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "치킨아이 학동점",
-      "notionTitle": "치킨아이 학동점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "치폴리니 여서점",
-      "notionTitle": "치폴리니 여서점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": [
-        "yogiyo"
-      ]
-    },
-    {
-      "store": "카레상 봉산점",
-      "notionTitle": "카레상 봉산점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "카페요아정 여수엑스포점",
-      "notionTitle": "카페요아정 여수엑스포점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "chak",
-        "phone",
-        "yogiyo",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": [
-        "ddangyo",
-        "coupang"
-      ]
-    },
-    {
-      "store": "코리안 찌개 타운 서교점",
-      "notionTitle": "코리안 찌개 타운 서교점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": [
-        "ddangyo"
-      ]
-    },
-    {
-      "store": "코리엔탈깻잎두마리치킨 선원점",
-      "notionTitle": "코리엔탈깻잎두마리치킨 선원점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": [
-        "yogiyo"
-      ]
-    },
-    {
-      "store": "콩담은 콩나물 국밥 문수점",
-      "notionTitle": "콩담은 콩나물 국밥 문수점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "chak",
-        "phone"
-      ],
-      "phone": null,
-      "missingRoutes": [
-        "ddangyo",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ]
-    },
-    {
-      "store": "크라운닭발 문수점",
-      "notionTitle": "크라운닭발 문수점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "큰손닭강정 여수본점(학동)",
-      "notionTitle": "큰손닭강정 여수본점(학동)",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "키로족발 여수점(여서동)",
-      "notionTitle": "키로족발 여수점(여서동)",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "킹스타피자 관문점",
-      "notionTitle": "킹스타피자 관문점",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
-      "store": "킹짬뽕 본점(여서동)",
-      "notionTitle": "킹짬뽕 본점(여서동)",
-      "score": 100,
-      "routes": [
-        "direct",
-        "mukkebi",
-        "ddangyo",
-        "chak",
-        "phone",
-        "yogiyo",
-        "coupang",
-        "baemin"
-      ],
-      "phone": null,
-      "missingRoutes": []
-    },
-    {
       "store": "타코아찌 타코야끼전문점 문수점",
       "notionTitle": "타코아찌 타코야끼전문점 문수점",
       "score": 100,
@@ -7618,6 +7200,357 @@
       "missingRoutes": [
         "direct",
         "yogiyo"
+      ]
+    },
+    {
+      "store": "대동여수음식지도(지속업데이트중)",
+      "notionTitle": "대동여수음식지도(지속업데이트중)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "chak",
+        "phone",
+        "ddangyo",
+        "yogiyo",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": []
+    },
+    {
+      "store": "효자오리바베큐 여서점(1)",
+      "notionTitle": "효자오리바베큐 여서점(1)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "yogiyo",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": []
+    },
+    {
+      "store": "RIB&TABLE 바베큐립 전문점(미평동) (1)",
+      "notionTitle": "RIB&TABLE 바베큐립 전문점(미평동) (1)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "chak",
+        "phone",
+        "yogiyo",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "ddangyo"
+      ]
+    },
+    {
+      "store": "참숯이면돼지 문수점(1)",
+      "notionTitle": "참숯이면돼지 문수점(1)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "yogiyo"
+      ]
+    },
+    {
+      "store": "또바기 여서점(2)",
+      "notionTitle": "또바기 여서점(2)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "yogiyo"
+      ]
+    },
+    {
+      "store": "집으로 삼겹구이 문수점 (1)",
+      "notionTitle": "집으로 삼겹구이 문수점 (1)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "yogiyo",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": []
+    },
+    {
+      "store": "크라운닭발 문수점(1)",
+      "notionTitle": "크라운닭발 문수점(1)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "yogiyo",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": []
+    },
+    {
+      "store": "낙지천국 문수점(3)",
+      "notionTitle": "낙지천국 문수점(3)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "yogiyo"
+      ]
+    },
+    {
+      "store": "육식사관학교 여서점(2)",
+      "notionTitle": "육식사관학교 여서점(2)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "yogiyo",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": []
+    },
+    {
+      "store": "시장불닭발 문수점(1)",
+      "notionTitle": "시장불닭발 문수점(1)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "chak",
+        "phone",
+        "yogiyo",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "ddangyo",
+        "coupang"
+      ]
+    },
+    {
+      "store": "인생냉면 가야밀면 여서점(2)",
+      "notionTitle": "인생냉면 가야밀면 여서점(2)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "yogiyo",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": []
+    },
+    {
+      "store": "화끈하게매운 핫불닭발&오돌뼈 여서점(1)",
+      "notionTitle": "화끈하게매운 핫불닭발&오돌뼈 여서점(1)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "yogiyo",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": []
+    },
+    {
+      "store": "79대포 여서점(3)",
+      "notionTitle": "79대포 여서점(3)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "yogiyo",
+        "coupang"
+      ]
+    },
+    {
+      "store": "왕창 돼지두루치기 여서점(3)",
+      "notionTitle": "왕창 돼지두루치기 여서점(3)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "chak",
+        "phone"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "ddangyo",
+        "yogiyo",
+        "coupang",
+        "baemin"
+      ]
+    },
+    {
+      "store": "교동야식 교동점(2)",
+      "notionTitle": "교동야식 교동점(2)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "chak",
+        "phone",
+        "yogiyo",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "ddangyo",
+        "coupang"
+      ]
+    },
+    {
+      "store": "토담 민속주점 문수점(3)",
+      "notionTitle": "토담 민속주점 문수점(3)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "chak",
+        "phone",
+        "yogiyo",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "ddangyo",
+        "coupang"
+      ]
+    },
+    {
+      "store": "그루브 여서점(3)",
+      "notionTitle": "그루브 여서점(3)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "yogiyo",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": []
+    },
+    {
+      "store": "79대포 여서점(2)",
+      "notionTitle": "79대포 여서점(2)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "yogiyo",
+        "coupang"
+      ]
+    },
+    {
+      "store": "LA통닭&포차 여서본점 (1)",
+      "notionTitle": "LA통닭&포차 여서본점 (1)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "phone",
+        "yogiyo",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": []
+    },
+    {
+      "store": "왕창 돼지두루치기 여서점(2)",
+      "notionTitle": "왕창 돼지두루치기 여서점(2)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "chak",
+        "phone"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "ddangyo",
+        "yogiyo",
+        "coupang",
+        "baemin"
       ]
     },
     {
@@ -9926,6 +9859,24 @@
       "missingRoutes": [
         "yogiyo"
       ]
+    },
+    {
+      "store": "조선제일 감자탕&뼈해장국 여서점 (1)",
+      "notionTitle": "조선제일 감자탕&뼈해장국 여서점 (1)",
+      "score": 100,
+      "routes": [
+        "direct",
+        "ddangyo",
+        "chak",
+        "phone",
+        "coupang",
+        "baemin"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "mukkebi",
+        "yogiyo"
+      ]
     }
   ],
   "ambiguous": [
@@ -9951,109 +9902,141 @@
   ],
   "errors": [
     {
-      "store": "대동여수음식지도(지속업데이트중)",
-      "notionTitle": "대동여수음식지도(지속업데이트중)",
-      "error": "/blocks/d05da158-dd2a-83ec-b348-81da34e4f07e/children?page_size=100 재시도 초과"
+      "store": "청하대 영빈관 여서점",
+      "notionTitle": "청하대 영빈관 여서점",
+      "error": "/blocks/8a5da158-dd2a-83fe-8625-01711aa30a88/children?page_size=100 재시도 초과"
     },
     {
-      "store": "효자오리바베큐 여서점(1)",
-      "notionTitle": "효자오리바베큐 여서점(1)",
-      "error": "/blocks/03dda158-dd2a-8315-af63-01851736dad4/children?page_size=100 재시도 초과"
+      "store": "초밥처럼 봉산점",
+      "notionTitle": "초밥처럼 봉산점",
+      "error": "/blocks/396da158-dd2a-80ee-b044-da01aa2734a6/children?page_size=100 재시도 초과"
     },
     {
-      "store": "RIB&TABLE 바베큐립 전문점(미평동) (1)",
-      "notionTitle": "RIB&TABLE 바베큐립 전문점(미평동) (1)",
-      "error": "/blocks/0a5da158-dd2a-8246-8911-81acf8d17fd4/children?page_size=100 재시도 초과"
+      "store": "치코두마리파닭 여서점",
+      "notionTitle": "치코두마리파닭 여서점",
+      "error": "/blocks/353da158-dd2a-8327-96ad-810b53773559/children?page_size=100 재시도 초과"
     },
     {
-      "store": "참숯이면돼지 문수점(1)",
-      "notionTitle": "참숯이면돼지 문수점(1)",
-      "error": "/blocks/20eda158-dd2a-824f-9f5f-816cab97fb48/children?page_size=100 재시도 초과"
+      "store": "치킨갱스터 국동유탑점",
+      "notionTitle": "치킨갱스터 국동유탑점",
+      "error": "/blocks/317da158-dd2a-82a5-b472-81388f55fdea/children?page_size=100 재시도 초과"
     },
     {
-      "store": "또바기 여서점(2)",
-      "notionTitle": "또바기 여서점(2)",
-      "error": "/blocks/348da158-dd2a-83f0-8eac-01438b8521d3/children?page_size=100 재시도 초과"
+      "store": "치킨마루 무선호수공원점(화장동)",
+      "notionTitle": "치킨마루 무선호수공원점(화장동)",
+      "error": "/blocks/09bda158-dd2a-83e5-a513-01a29bb3ee65/children?page_size=100 재시도 초과"
     },
     {
-      "store": "집으로 삼겹구이 문수점 (1)",
-      "notionTitle": "집으로 삼겹구이 문수점 (1)",
-      "error": "/blocks/382da158-dd2a-83f5-a8e3-01394ca27c66/children?page_size=100 재시도 초과"
+      "store": "치킨마루 여수봉계점",
+      "notionTitle": "치킨마루 여수봉계점",
+      "error": "/blocks/82eda158-dd2a-836c-9c88-01eea0be990b/children?page_size=100 재시도 초과"
     },
     {
-      "store": "크라운닭발 문수점(1)",
-      "notionTitle": "크라운닭발 문수점(1)",
-      "error": "/blocks/4c1da158-dd2a-8354-8ec8-01650b150fd4/children?page_size=100 재시도 초과"
+      "store": "치킨아이 국동점",
+      "notionTitle": "치킨아이 국동점",
+      "error": "/blocks/0dbda158-dd2a-8292-bc7a-816a49494e44/children?page_size=100 재시도 초과"
     },
     {
-      "store": "낙지천국 문수점(3)",
-      "notionTitle": "낙지천국 문수점(3)",
-      "error": "/blocks/572da158-dd2a-82a2-8cdb-010896ac0614/children?page_size=100 재시도 초과"
+      "store": "치킨아이 둔덕점",
+      "notionTitle": "치킨아이 둔덕점",
+      "error": "/blocks/0e7da158-dd2a-8383-bd56-81e76d799585/children?page_size=100 재시도 초과"
     },
     {
-      "store": "육식사관학교 여서점(2)",
-      "notionTitle": "육식사관학교 여서점(2)",
-      "error": "/blocks/5d1da158-dd2a-8372-8cf7-81234abca81b/children?page_size=100 재시도 초과"
+      "store": "치킨아이 무선점",
+      "notionTitle": "치킨아이 무선점",
+      "error": "/blocks/455da158-dd2a-83ce-9376-012c078f51a4/children?page_size=100 재시도 초과"
     },
     {
-      "store": "시장불닭발 문수점(1)",
-      "notionTitle": "시장불닭발 문수점(1)",
-      "error": "/blocks/91cda158-dd2a-8329-9303-01b313a66964/children?page_size=100 재시도 초과"
+      "store": "치킨아이 문수점",
+      "notionTitle": "치킨아이 문수점",
+      "error": "/blocks/c5eda158-dd2a-8308-bfd8-81c2e3d6252f/children?page_size=100 재시도 초과"
     },
     {
-      "store": "인생냉면 가야밀면 여서점(2)",
-      "notionTitle": "인생냉면 가야밀면 여서점(2)",
-      "error": "/blocks/951da158-dd2a-8264-a45e-814bcfc4304a/children?page_size=100 재시도 초과"
+      "store": "치킨아이 소호점",
+      "notionTitle": "치킨아이 소호점",
+      "error": "/blocks/1a7da158-dd2a-82ba-a612-01b3590bce83/children?page_size=100 재시도 초과"
     },
     {
-      "store": "화끈하게매운 핫불닭발&오돌뼈 여서점(1)",
-      "notionTitle": "화끈하게매운 핫불닭발&오돌뼈 여서점(1)",
-      "error": "/blocks/aa0da158-dd2a-836b-80b7-81226ca60713/children?page_size=100 재시도 초과"
+      "store": "치킨아이 신기점",
+      "notionTitle": "치킨아이 신기점",
+      "error": "/blocks/d03da158-dd2a-83b2-8799-01b479008d83/children?page_size=100 재시도 초과"
     },
     {
-      "store": "79대포 여서점(3)",
-      "notionTitle": "79대포 여서점(3)",
-      "error": "/blocks/b03da158-dd2a-821b-b44d-8176cdcb901c/children?page_size=100 재시도 초과"
+      "store": "치킨아이 학동점",
+      "notionTitle": "치킨아이 학동점",
+      "error": "/blocks/738da158-dd2a-82d7-9e06-81086b98abfa/children?page_size=100 재시도 초과"
     },
     {
-      "store": "왕창 돼지두루치기 여서점(3)",
-      "notionTitle": "왕창 돼지두루치기 여서점(3)",
-      "error": "/blocks/f2dda158-dd2a-82bd-8582-815b4b16f01a/children?page_size=100 재시도 초과"
+      "store": "치폴리니 여서점",
+      "notionTitle": "치폴리니 여서점",
+      "error": "/blocks/28bda158-dd2a-83c1-bc17-01f8d455b533/children?page_size=100 재시도 초과"
     },
     {
-      "store": "교동야식 교동점(2)",
-      "notionTitle": "교동야식 교동점(2)",
-      "error": "/blocks/28fda158-dd2a-8243-9eca-01335566e2ef/children?page_size=100 재시도 초과"
+      "store": "카레상 봉산점",
+      "notionTitle": "카레상 봉산점",
+      "error": "/blocks/39bda158-dd2a-805c-abd3-fa3b1ee59bc5/children?page_size=100 재시도 초과"
     },
     {
-      "store": "토담 민속주점 문수점(3)",
-      "notionTitle": "토담 민속주점 문수점(3)",
-      "error": "/blocks/33ada158-dd2a-8222-a3ae-017ced283a1f/children?page_size=100 재시도 초과"
+      "store": "카페요아정 여수엑스포점",
+      "notionTitle": "카페요아정 여수엑스포점",
+      "error": "/blocks/1bcda158-dd2a-837c-8b34-8108ad1dd23a/children?page_size=100 재시도 초과"
     },
     {
-      "store": "그루브 여서점(3)",
-      "notionTitle": "그루브 여서점(3)",
-      "error": "/blocks/3f0da158-dd2a-82cd-ad4b-815182f4e7b4/children?page_size=100 재시도 초과"
+      "store": "코리안 찌개 타운 서교점",
+      "notionTitle": "코리안 찌개 타운 서교점",
+      "error": "/blocks/ed5da158-dd2a-8259-b83d-81635c469ffb/children?page_size=100 재시도 초과"
     },
     {
-      "store": "79대포 여서점(2)",
-      "notionTitle": "79대포 여서점(2)",
-      "error": "/blocks/530da158-dd2a-82f4-ba5d-81e70dc97db2/children?page_size=100 재시도 초과"
+      "store": "코리엔탈깻잎두마리치킨 선원점",
+      "notionTitle": "코리엔탈깻잎두마리치킨 선원점",
+      "error": "/blocks/cd5da158-dd2a-83e3-874c-011a1693a4be/children?page_size=100 재시도 초과"
     },
     {
-      "store": "LA통닭&포차 여서본점 (1)",
-      "notionTitle": "LA통닭&포차 여서본점 (1)",
-      "error": "/blocks/5e2da158-dd2a-8274-95d3-0156df555a77/children?page_size=100 재시도 초과"
+      "store": "콩담은 콩나물 국밥 문수점",
+      "notionTitle": "콩담은 콩나물 국밥 문수점",
+      "error": "/blocks/931da158-dd2a-831a-a1e5-810b229b9686/children?page_size=100 재시도 초과"
     },
     {
-      "store": "왕창 돼지두루치기 여서점(2)",
-      "notionTitle": "왕창 돼지두루치기 여서점(2)",
-      "error": "/blocks/636da158-dd2a-833e-a16d-81d8430b00dc/children?page_size=100 재시도 초과"
+      "store": "크라운닭발 문수점",
+      "notionTitle": "크라운닭발 문수점",
+      "error": "/blocks/0d9da158-dd2a-82e8-a062-810aaaabfc5a/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "큰손닭강정 여수본점(학동)",
+      "notionTitle": "큰손닭강정 여수본점(학동)",
+      "error": "/blocks/5e6da158-dd2a-8337-a618-0105cb4ac0fd/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "키로족발 여수점(여서동)",
+      "notionTitle": "키로족발 여수점(여서동)",
+      "error": "/blocks/547da158-dd2a-83b2-bada-81bdb34371b1/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "킹스타피자 관문점",
+      "notionTitle": "킹스타피자 관문점",
+      "error": "/blocks/796da158-dd2a-8305-b836-01c76c3a7eb0/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "킹짬뽕 본점(여서동)",
+      "notionTitle": "킹짬뽕 본점(여서동)",
+      "error": "/blocks/e50da158-dd2a-8209-9fd8-816866f4ed51/children?page_size=100 재시도 초과"
     }
   ],
-  "finishedAt": "2026-07-16T09:43:56.816Z",
-  "matchedCount": 567,
+  "finishedAt": "2026-07-16T10:28:36.055Z",
+  "matchedCount": 564,
   "ambiguousCount": 1,
   "unmatchedCount": 1,
-  "errorCount": 20
+  "errorCount": 24,
+  "phoneEnrichment": {
+    "checked": 43,
+    "updated": 11,
+    "unresolved": 0,
+    "errors": [
+      {
+        "store": "귀한김치찜 국동봉산점",
+        "error": "/blocks/396da158-dd2a-80d3-8373-c1f1e7cfc541/children?page_size=100 실패: 404 {\"object\":\"error\",\"status\":404,\"code\":\"object_not_found\",\"message\":\"Could not find block with ID: 396da158-dd2a-80d3-8373-c1f1e7cfc541. Make sure the relevant pages and databases are shared with your integration \\\"대동여수음식지도\\\".\",\"additional_data\":{\"integration_id\":\"39eda158-dd2a-8130-b85a-00277ac1f40c\"},\"request_id\":\"722c1d9c-75cb-421d-998c-3e619fc87846\"}"
+      }
+    ],
+    "errorCount": 1
+  }
 }

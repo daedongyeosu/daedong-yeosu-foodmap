@@ -7,6 +7,8 @@ on:
     paths:
       - 'assets/store-photos/**'
       - 'data/photo-manifest.json'
+      - 'tools/filter-menu-photos.py'
+      - 'tools/apply-photo-manifest.mjs'
       - '.github/workflows/apply-store-photos.yml'
   workflow_dispatch:
 
@@ -20,7 +22,7 @@ concurrency:
 jobs:
   apply:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - name: Checkout working branch
         uses: actions/checkout@v4
@@ -33,12 +35,20 @@ jobs:
         with:
           node-version: '22'
 
+      - name: Setup Python photo filter
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install image filter dependency
+        run: python -m pip install --disable-pip-version-check pillow
+
       - name: Validate photo package
         run: |
           test -f data/photo-manifest.json || { echo "data/photo-manifest.json이 없습니다."; exit 1; }
           test -d assets/store-photos || { echo "assets/store-photos 폴더가 없습니다."; exit 1; }
 
-      - name: Match, commit and push latest photo data safely
+      - name: Filter menu screens, match photos and push safely
         env:
           APPLY_CHANGES: 'true'
         shell: bash
@@ -52,15 +62,16 @@ jobs:
             git fetch origin fix/load-stores-db790
             git reset --hard origin/fix/load-stores-db790
 
+            python tools/filter-menu-photos.py
             node tools/apply-photo-manifest.mjs
-            git add -f data/stores.json data/photo-apply-report.json data/stores.before-photo-apply.json
+            git add -f data/stores.json data/photo-apply-report.json data/photo-filter-report.json data/stores.before-photo-apply.json
 
             if git diff --cached --quiet; then
               echo "사진 데이터 변경 없음"
               exit 0
             fi
 
-            git commit -m "가게사진 자동매칭과 프랜차이즈 사진 다양화"
+            git commit -m "메뉴 가격화면 제외와 가게사진 매칭 보강"
             if git push origin HEAD:fix/load-stores-db790; then
               echo "사진 데이터 반영 완료"
               exit 0

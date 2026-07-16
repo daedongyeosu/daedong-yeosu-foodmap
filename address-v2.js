@@ -43,7 +43,7 @@ function openAddressSetup(){
   const saved=getSavedAddress();
   const book=getAddressBook();
   openModal(`<div class="address-sheet">
-    <div class="address-sheet-head"><h2>배달 주소 설정</h2><p>주소를 넉넉하게 입력하면 가까운 가게와 배달 가능 가게를 더 정확히 찾을 수 있습니다.</p></div>
+    <div class="address-sheet-head"><h2>배달 주소 설정</h2><p>정확한 배달 주소를 설정하면 가까운 가게와 이용 가능한 주문방법을 더 정확히 안내해 드립니다.</p></div>
     <div class="address-search-box"><span>⌕</span><input id="addressSearchInput" placeholder="도로명, 건물명, 지번, 아파트명을 입력하세요" autocomplete="street-address"><button id="addressSearchSave">주소 설정</button></div>
     <button id="useCurrentLocation" class="current-location-btn">⌖ <span>현재 위치로 주소 설정하기</span></button>
     <div class="address-type-row"><button data-address-type="home">🏠 집으로 저장</button><button data-address-type="work">🏢 회사로 저장</button></div>

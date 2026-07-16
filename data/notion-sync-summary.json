@@ -1,31 +1,32 @@
 {
-  "generatedAt": "2026-07-16T02:53:19.524Z",
-  "pagesScanned": 586,
-  "matchedCount": 391,
+  "generatedAt": "2026-07-16T07:48:40.426Z",
+  "pagesScanned": 593,
+  "matchedCount": 362,
   "ambiguousCount": 1,
   "unmatchedCount": 1,
-  "errorCount": 38,
+  "errorCount": 67,
   "scoreCounts": {
-    "exact100": 390,
+    "exact100": 361,
     "high95to99": 0,
     "accepted80to94": 1
   },
   "routeCounts": {
-    "direct": 391,
-    "mukkebi": 346,
-    "chak": 391,
-    "phone": 391,
-    "coupang": 353,
-    "baemin": 375,
-    "ddangyo": 311,
-    "yogiyo": 308
+    "direct": 362,
+    "mukkebi": 330,
+    "chak": 362,
+    "phone": 361,
+    "coupang": 327,
+    "baemin": 348,
+    "ddangyo": 285,
+    "yogiyo": 282
   },
   "missingRouteCounts": {
-    "ddangyo": 80,
-    "yogiyo": 83,
-    "coupang": 38,
-    "mukkebi": 45,
-    "baemin": 16
+    "ddangyo": 77,
+    "yogiyo": 80,
+    "coupang": 35,
+    "mukkebi": 32,
+    "baemin": 14,
+    "phone": 1
   },
   "ambiguousSamples": [
     {
@@ -50,154 +51,154 @@
   ],
   "errorSamples": [
     {
-      "store": "얌샘김밥 웅천점",
-      "notionTitle": "얌샘김밥 웅천점",
-      "error": "/blocks/fc7da158-dd2a-82ca-9a15-813f16ff3e7f/children?page_size=100 재시도 초과"
+      "store": "닭씨네 닭강정 여수점(문수동)",
+      "notionTitle": "닭씨네 닭강정 여수점(문수동)",
+      "error": "/blocks/9e4da158-dd2a-8388-ae62-8139c5a0a1d4/children?page_size=100 재시도 초과"
     },
     {
-      "store": "엄마미안 김치찜 공화동점",
-      "notionTitle": "엄마미안 김치찜 공화동점",
-      "error": "/blocks/adbda158-dd2a-8383-9fb7-81d9873e5bae/children?page_size=100 재시도 초과"
+      "store": "담분식 서교점",
+      "notionTitle": "담분식 서교점",
+      "error": "/blocks/efcda158-dd2a-8202-b32a-01c697d16d9d/children?page_size=100 재시도 초과"
     },
     {
-      "store": "여서 육감 문수점",
-      "notionTitle": "여서 육감 문수점",
-      "error": "/blocks/777da158-dd2a-83ac-80a7-81a3974ca70d/children?page_size=100 재시도 초과"
+      "store": "더 진한 소한마리탕&국밥 엑스포점",
+      "notionTitle": "더 진한 소한마리탕&국밥 엑스포점",
+      "error": "/blocks/c3eda158-dd2a-8292-9bf4-81aaa16f0b54/children?page_size=100 재시도 초과"
     },
     {
-      "store": "여수 김치찜 참 잘하는집 봉산점",
-      "notionTitle": "여수 김치찜 참 잘하는집 봉산점",
-      "error": "/blocks/396da158-dd2a-80ca-ae08-c5aa1edd357f/children?page_size=100 재시도 초과"
+      "store": "더리터 문수점",
+      "notionTitle": "더리터 문수점",
+      "error": "/blocks/30bda158-dd2a-8200-ab2d-810c3d3721be/children?page_size=100 재시도 초과"
     },
     {
-      "store": "여수 오리날개 튀김 여천점(신기동)",
-      "notionTitle": "여수 오리날개 튀김 여천점(신기동)",
-      "error": "/blocks/1a9da158-dd2a-82bf-815b-01faa1ce7a69/children?page_size=100 재시도 초과"
+      "store": "더바른 정국밥 미평점",
+      "notionTitle": "더바른 정국밥 미평점",
+      "error": "/blocks/a7ada158-dd2a-83d6-8fc6-0103f8e16e0b/children?page_size=100 재시도 초과"
     },
     {
-      "store": "여수강촌토종닭숯불구이 봉산직영점",
-      "notionTitle": "여수강촌토종닭숯불구이 봉산직영점",
-      "error": "/blocks/b29da158-dd2a-8367-ac95-016c467b816c/children?page_size=100 재시도 초과"
+      "store": "더벤티 여수국동서희스타힐스점",
+      "notionTitle": "더벤티 여수국동서희스타힐스점",
+      "error": "/blocks/ba9da158-dd2a-83a2-bab9-0110e78fab02/children?page_size=100 재시도 초과"
     },
     {
-      "store": "여수강촌토종닭숯불구이 웅천본점",
-      "notionTitle": "여수강촌토종닭숯불구이 웅천본점",
-      "error": "/blocks/3e8da158-dd2a-83dd-b9aa-81aa61f654fd/children?page_size=100 재시도 초과"
+      "store": "더벤티 여수돌산점",
+      "notionTitle": "더벤티 여수돌산점",
+      "error": "/blocks/422da158-dd2a-8250-bad3-01267ffc6071/children?page_size=100 재시도 초과"
     },
     {
-      "store": "여수강촌토종닭숯불구이 죽림직영점",
-      "notionTitle": "여수강촌토종닭숯불구이 죽림직영점",
-      "error": "/blocks/4a6da158-dd2a-8328-b1cc-81d9c53964c8/children?page_size=100 재시도 초과"
+      "store": "더벤티 여수수산시장점(교동)",
+      "notionTitle": "더벤티 여수수산시장점(교동)",
+      "error": "/blocks/ac0da158-dd2a-8342-8ef2-8192ff1cc0ac/children?page_size=100 재시도 초과"
     },
     {
-      "store": "여수다복 교동점",
-      "notionTitle": "여수다복 교동점",
-      "error": "/blocks/1e8da158-dd2a-8355-b6db-010567ebabcf/children?page_size=100 재시도 초과"
+      "store": "더벤티 여수이순신광장점(중앙동)",
+      "notionTitle": "더벤티 여수이순신광장점(중앙동)",
+      "error": "/blocks/c27da158-dd2a-831e-b99d-818c2dfaefb7/children?page_size=100 재시도 초과"
     },
     {
-      "store": "여수분식 문수점",
-      "notionTitle": "여수분식 문수점",
-      "error": "/blocks/419da158-dd2a-8206-9b9a-81db9c7d80e4/children?page_size=100 재시도 초과"
+      "store": "더벤티 여수해양공원점(중앙동)",
+      "notionTitle": "더벤티 여수해양공원점(중앙동)",
+      "error": "/blocks/ccfda158-dd2a-8368-bd4d-814d7c0e7b55/children?page_size=100 재시도 초과"
     },
     {
-      "store": "여수족발 엑스포점",
-      "notionTitle": "여수족발 엑스포점",
-      "error": "/blocks/4b3da158-dd2a-8339-99e1-8158cafc2d93/children?page_size=100 재시도 초과"
+      "store": "던킨 여수롯데마트점",
+      "notionTitle": "던킨 여수롯데마트점",
+      "error": "/blocks/5dada158-dd2a-832e-9fd1-0199c86f8175/children?page_size=100 재시도 초과"
     },
     {
-      "store": "여수족발(신기동)",
-      "notionTitle": "여수족발(신기동)",
-      "error": "/blocks/8c8da158-dd2a-83a2-884d-81086346a4cc/children?page_size=100 재시도 초과"
+      "store": "덮밥전문점 고기그릇 공화동점",
+      "notionTitle": "덮밥전문점 고기그릇 공화동점",
+      "error": "/blocks/d1bda158-dd2a-82a7-b09f-8125156c9d38/children?page_size=100 재시도 초과"
     },
     {
-      "store": "여수튀김 국동점",
-      "notionTitle": "여수튀김 국동점",
-      "error": "/blocks/2bbda158-dd2a-82a8-a3a9-017a191bc36e/children?page_size=100 재시도 초과"
+      "store": "도담식당 충무동점",
+      "notionTitle": "도담식당 충무동점",
+      "error": "/blocks/1d3da158-dd2a-8233-98cb-01abdc3493fb/children?page_size=100 재시도 초과"
     },
     {
-      "store": "역전할머니맥주 덕충점",
-      "notionTitle": "역전할머니맥주 덕충점",
-      "error": "/blocks/29dda158-dd2a-82ec-970a-8184b91bf48c/children?page_size=100 재시도 초과"
+      "store": "도도닭발&오돌뼈 봉산점",
+      "notionTitle": "도도닭발&오돌뼈 봉산점",
+      "error": "/blocks/ca9da158-dd2a-823b-9575-8181af866054/children?page_size=100 재시도 초과"
     },
     {
-      "store": "연변양꼬치구이&마라탕 여서점",
-      "notionTitle": "연변양꼬치구이&마라탕 여서점",
-      "error": "/blocks/6dada158-dd2a-83eb-b13f-8142c2f69d3f/children?page_size=100 재시도 초과"
+      "store": "도미노피자 여천점(학동)",
+      "notionTitle": "도미노피자 여천점(학동)",
+      "error": "/blocks/f0eda158-dd2a-834a-9a8a-8103d0f5f0ad/children?page_size=100 재시도 초과"
     },
     {
-      "store": "영화루 국동점",
-      "notionTitle": "영화루 국동점",
-      "error": "/blocks/bacda158-dd2a-82f4-a5c0-81b9efe87dd3/children?page_size=100 재시도 초과"
+      "store": "도야족발 여수여천점(죽림)",
+      "notionTitle": "도야족발 여수여천점(죽림)",
+      "error": "/blocks/506da158-dd2a-82c5-96bc-8138b7f7d652/children?page_size=100 재시도 초과"
     },
     {
-      "store": "예원닭강정 여수1호점(문수동)",
-      "notionTitle": "예원닭강정 여수1호점(문수동)",
-      "error": "/blocks/921da158-dd2a-83a6-aa13-013c12a602cc/children?page_size=100 재시도 초과"
+      "store": "돈도니밥도둑짜글이 국동점",
+      "notionTitle": "돈도니밥도둑짜글이 국동점",
+      "error": "/blocks/75bda158-dd2a-8248-91ad-016c6a1e6a7a/children?page_size=100 재시도 초과"
     },
     {
-      "store": "예향정 여서점",
-      "notionTitle": "예향정 여서점",
-      "error": "/blocks/85dda158-dd2a-83df-8a7d-01e60bf5d1dd/children?page_size=100 재시도 초과"
+      "store": "돈쌈대패 문수점",
+      "notionTitle": "돈쌈대패 문수점",
+      "error": "/blocks/312da158-dd2a-83cb-beec-0177457d3983/children?page_size=100 재시도 초과"
     },
     {
-      "store": "오꾸닭 학동점",
-      "notionTitle": "오꾸닭 학동점",
-      "error": "/blocks/e64da158-dd2a-8215-afe7-01f7cfdd061d/children?page_size=100 재시도 초과"
+      "store": "돌산텃밭김치·반찬 교동점",
+      "notionTitle": "돌산텃밭김치·반찬 교동점",
+      "error": "/blocks/34dda158-dd2a-83d0-a8fd-01728f28516c/children?page_size=100 재시도 초과"
     },
     {
-      "store": "오늘은카레 봉산점",
-      "notionTitle": "오늘은카레 봉산점",
-      "error": "/blocks/d54da158-dd2a-825b-af50-818347892709/children?page_size=100 재시도 초과"
+      "store": "동대문엽기떡볶이 문수점",
+      "notionTitle": "동대문엽기떡볶이 문수점",
+      "error": "/blocks/ae2da158-dd2a-825a-b1a0-01c7607c8846/children?page_size=100 재시도 초과"
     },
     {
-      "store": "온앤 신월점",
-      "notionTitle": "온앤 신월점",
-      "error": "/blocks/948da158-dd2a-83e1-9076-01fa2c1c240f/children?page_size=100 재시도 초과"
+      "store": "동서울왕족발(신기동)",
+      "notionTitle": "동서울왕족발(신기동)",
+      "error": "/blocks/765da158-dd2a-82a4-a2cf-81bd8f0f5500/children?page_size=100 재시도 초과"
     },
     {
-      "store": "왕창 돼지두루치기 여서점",
-      "notionTitle": "왕창 돼지두루치기 여서점",
-      "error": "/blocks/c51da158-dd2a-8203-a5d7-81428baa1f9d/children?page_size=100 재시도 초과"
+      "store": "두마리찜닭 두찜 여수문수점",
+      "notionTitle": "두마리찜닭 두찜 여수문수점",
+      "error": "/blocks/c17da158-dd2a-83ef-9885-81ef77c5ae29/children?page_size=100 재시도 초과"
     },
     {
-      "store": "우가족발 여수점(충무동)",
-      "notionTitle": "우가족발 여수점(충무동)",
-      "error": "/blocks/1bbda158-dd2a-82b9-9b98-01585841de54/children?page_size=100 재시도 초과"
+      "store": "두마리찜닭 두찜 여수엑스포점",
+      "notionTitle": "두마리찜닭 두찜 여수엑스포점",
+      "error": "/blocks/d03da158-dd2a-8373-921d-01d7a2c1f5de/children?page_size=100 재시도 초과"
     },
     {
-      "store": "우리할매떡볶이 여서점",
-      "notionTitle": "우리할매떡볶이 여서점",
-      "error": "/blocks/b5fda158-dd2a-82e6-81bd-01f62c72e77a/children?page_size=100 재시도 초과"
+      "store": "두마리찜닭 두찜 여수웅천점",
+      "notionTitle": "두마리찜닭 두찜 여수웅천점",
+      "error": "/blocks/cb8da158-dd2a-8262-a4e2-81334e516974/children?page_size=100 재시도 초과"
     },
     {
-      "store": "우사골설렁탕 여서동본점",
-      "notionTitle": "우사골설렁탕 여서동본점",
-      "error": "/blocks/52dda158-dd2a-83fb-937c-01625a9bc632/children?page_size=100 재시도 초과"
+      "store": "둥이식당 봉강점",
+      "notionTitle": "둥이식당 봉강점",
+      "error": "/blocks/396da158-dd2a-80d3-88e6-fe5eb05200a4/children?page_size=100 재시도 초과"
     },
     {
-      "store": "우주호떡 여서점",
-      "notionTitle": "우주호떡 여서점",
-      "error": "/blocks/723da158-dd2a-82f3-b76a-81aef14b8614/children?page_size=100 재시도 초과"
+      "store": "드피치 피자&치킨 선원동점",
+      "notionTitle": "드피치 피자&치킨 선원동점",
+      "error": "/blocks/b57da158-dd2a-833d-99dd-01cf3be85a6a/children?page_size=100 재시도 초과"
     },
     {
-      "store": "울엄마 김치찜 갈비찜 중앙점",
-      "notionTitle": "울엄마 김치찜 갈비찜 중앙점",
-      "error": "/blocks/aebda158-dd2a-83aa-9099-8123a32b2eaa/children?page_size=100 재시도 초과"
+      "store": "땅스부대찌개 여서점",
+      "notionTitle": "땅스부대찌개 여서점",
+      "error": "/blocks/236da158-dd2a-836f-bc85-01b09b6c4122/children?page_size=100 재시도 초과"
     },
     {
-      "store": "웅천횟집",
-      "notionTitle": "웅천횟집",
-      "error": "/blocks/cf8da158-dd2a-8318-8ffb-813f8a14f810/children?page_size=100 재시도 초과"
+      "store": "땅스즉석떡볶이 여서점",
+      "notionTitle": "땅스즉석떡볶이 여서점",
+      "error": "/blocks/c18da158-dd2a-8223-86f6-017e5a3b4f71/children?page_size=100 재시도 초과"
     },
     {
-      "store": "원할머니보쌈족발 여수여천점",
-      "notionTitle": "원할머니보쌈족발 여수여천점",
-      "error": "/blocks/7f2da158-dd2a-82d4-b572-01fca511e81a/children?page_size=100 재시도 초과"
+      "store": "떡순이 알찬만두 문수점",
+      "notionTitle": "떡순이 알찬만두 문수점",
+      "error": "/blocks/540da158-dd2a-8379-928d-016648cc2ee8/children?page_size=100 재시도 초과"
     },
     {
-      "store": "웡김밥 여서점",
-      "notionTitle": "웡김밥 여서점",
-      "error": "/blocks/073da158-dd2a-8313-983b-0109fd4b6011/children?page_size=100 재시도 초과"
+      "store": "또래김밥 문수점",
+      "notionTitle": "또래김밥 문수점",
+      "error": "/blocks/da5da158-dd2a-836f-b764-816ad694e771/children?page_size=100 재시도 초과"
     }
   ]
 }

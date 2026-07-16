@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-07-16T08:19:05.379Z",
+  "startedAt": "2026-07-16T08:54:17.496Z",
   "rootPageId": "36dda158dd2a8040afdffdafa72ddd40",
   "rootAccessible": true,
   "pages": [
@@ -4693,33 +4693,155 @@
     }
   ],
   "databases": [],
+  "workspaceSearch": {
+    "accessiblePageCount": 594,
+    "rootTreePageCount": 587,
+    "outsideRootCount": 7,
+    "outsideRootPages": [
+      {
+        "id": "2ddda158-dd2a-809c-8aa9-d22fc48d38b7",
+        "title": "수라상궁 조선국밥 여서점",
+        "url": "https://app.notion.com/p/2ddda158dd2a809c8aa9d22fc48d38b7",
+        "archived": false,
+        "inTrash": false,
+        "lastEditedTime": "2026-07-16T03:45:00.000Z",
+        "parent": {
+          "type": "workspace",
+          "id": ""
+        }
+      },
+      {
+        "id": "2e8da158-dd2a-8012-a794-eaafabbd4d5a",
+        "title": "오워래 수제 돈까스",
+        "url": "https://app.notion.com/p/2e8da158dd2a8012a794eaafabbd4d5a",
+        "archived": false,
+        "inTrash": false,
+        "lastEditedTime": "2026-07-16T03:45:00.000Z",
+        "parent": {
+          "type": "workspace",
+          "id": ""
+        }
+      },
+      {
+        "id": "2ecda158-dd2a-80cb-8ff3-c5290cf5558a",
+        "title": "와쭈 본점",
+        "url": "https://app.notion.com/p/2ecda158dd2a80cb8ff3c5290cf5558a",
+        "archived": false,
+        "inTrash": false,
+        "lastEditedTime": "2026-07-16T03:50:00.000Z",
+        "parent": {
+          "type": "workspace",
+          "id": ""
+        }
+      },
+      {
+        "id": "354da158-dd2a-807a-923f-d6e7060a4573",
+        "title": "이화수 전통 육개장",
+        "url": "https://app.notion.com/p/354da158dd2a807a923fd6e7060a4573",
+        "archived": false,
+        "inTrash": false,
+        "lastEditedTime": "2026-07-16T03:49:00.000Z",
+        "parent": {
+          "type": "workspace",
+          "id": ""
+        }
+      },
+      {
+        "id": "33cda158-dd2a-8097-b610-d66623340030",
+        "title": "정성집밥",
+        "url": "https://app.notion.com/p/33cda158dd2a8097b610d66623340030",
+        "archived": false,
+        "inTrash": false,
+        "lastEditedTime": "2026-07-16T03:47:00.000Z",
+        "parent": {
+          "type": "workspace",
+          "id": ""
+        }
+      },
+      {
+        "id": "33bda158-dd2a-8050-8ffb-c6cc093d1ad3",
+        "title": "콩산소 (음식 연구소)",
+        "url": "https://app.notion.com/p/33bda158dd2a80508ffbc6cc093d1ad3",
+        "archived": false,
+        "inTrash": false,
+        "lastEditedTime": "2026-07-16T03:46:00.000Z",
+        "parent": {
+          "type": "workspace",
+          "id": ""
+        }
+      },
+      {
+        "id": "301da158-dd2a-80b8-8fa0-dd440c8606a7",
+        "title": "콩시루 여서점",
+        "url": "https://app.notion.com/p/301da158dd2a80b88fa0dd440c8606a7",
+        "archived": false,
+        "inTrash": false,
+        "lastEditedTime": "2026-07-16T03:48:00.000Z",
+        "parent": {
+          "type": "workspace",
+          "id": ""
+        }
+      }
+    ]
+  },
   "errors": [],
   "rootTitle": "대동여수음식지도(지속업데이트중)",
   "rootUrl": "https://app.notion.com/p/36dda158dd2a8040afdffdafa72ddd40",
-  "finishedAt": "2026-07-16T08:28:04.409Z",
+  "finishedAt": "2026-07-16T09:02:32.785Z",
   "pageCount": 586,
   "databaseCount": 0,
   "errorCount": 0,
   "focus": [
     {
       "keyword": "오워래",
-      "matches": []
+      "rootMatches": [],
+      "outsideRootMatches": [
+        {
+          "id": "2e8da158-dd2a-8012-a794-eaafabbd4d5a",
+          "title": "오워래 수제 돈까스",
+          "url": "https://app.notion.com/p/2e8da158dd2a8012a794eaafabbd4d5a",
+          "archived": false,
+          "inTrash": false,
+          "lastEditedTime": "2026-07-16T03:45:00.000Z",
+          "parent": {
+            "type": "workspace",
+            "id": ""
+          }
+        }
+      ]
     },
     {
       "keyword": "해인이네",
-      "matches": []
+      "rootMatches": [],
+      "outsideRootMatches": []
     },
     {
       "keyword": "수라상궁",
-      "matches": []
+      "rootMatches": [],
+      "outsideRootMatches": [
+        {
+          "id": "2ddda158-dd2a-809c-8aa9-d22fc48d38b7",
+          "title": "수라상궁 조선국밥 여서점",
+          "url": "https://app.notion.com/p/2ddda158dd2a809c8aa9d22fc48d38b7",
+          "archived": false,
+          "inTrash": false,
+          "lastEditedTime": "2026-07-16T03:45:00.000Z",
+          "parent": {
+            "type": "workspace",
+            "id": ""
+          }
+        }
+      ]
     },
     {
       "keyword": "바오탕수",
-      "matches": []
+      "rootMatches": [],
+      "outsideRootMatches": []
     },
     {
       "keyword": "바로탕수",
-      "matches": []
+      "rootMatches": [],
+      "outsideRootMatches": []
     }
   ]
 }

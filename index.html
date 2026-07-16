@@ -15,6 +15,7 @@
 <link rel="stylesheet" href="app-route-browser-v1.css?v=1" />
 <link rel="stylesheet" href="local-order-campaign-v1.css?v=1" />
 <link rel="stylesheet" href="photo-card-ratio-v1.css?v=2" />
+<link rel="stylesheet" href="experience-v2.css?v=1" />
 </head>
 <body>
 <div id="app">
@@ -27,6 +28,8 @@
 <section class="search-row main-search-row">
   <div class="searchbox"><span>⌕</span><input id="mainSearch" placeholder="메뉴, 가게명, 동네 검색" autocomplete="off"><button id="clearMainSearch" class="input-clear" aria-label="검색어 지우기" hidden>×</button></div>
   <button id="searchBtn" class="primary-btn">검색</button>
+  <button id="topFavoriteBtn" class="top-quick-btn" type="button" aria-label="찜한 가게">♡<span>찜</span></button>
+  <button id="topRecentBtn" class="top-quick-btn" type="button" aria-label="최근 방문 가게">◷<span>최근</span></button>
 </section>
 <section class="section order-section">
   <div class="section-head"><h2>모든 주문방법을 한곳에서</h2><button class="text-btn" data-open="guide">주문방법이란? ›</button></div>
@@ -61,13 +64,13 @@
 </section>
 <footer class="legal"><button data-open="guide">이용안내</button><button>개인정보처리방침</button><button>정보 수정 제안</button><button>광고 문의</button></footer>
 </div>
-<nav class="bottom-nav"><button data-tab="home" class="active">⌂<span>홈</span></button><button data-tab="search">⌕<span>검색</span></button><button data-tab="favorite">♡<span>찜한가게</span></button><button data-tab="recent">◷<span>최근방문가게</span></button><button data-tab="mypage">♙<span>마이페이지</span></button></nav>
+<nav class="bottom-nav"><button data-tab="home" class="active">⌂<span>홈</span></button><button data-tab="category">▦<span>카테고리</span></button><button data-tab="order">◎<span>주문방법</span></button><button data-tab="near">⌖<span>내 주변</span></button><button data-tab="mypage">♙<span>마이페이지</span></button></nav>
 <div id="overlay" class="overlay" hidden></div>
 <div id="modal" class="modal" hidden role="dialog" aria-modal="true"><div class="modal-card"><button class="modal-close" aria-label="닫기">×</button><div id="modalContent"></div></div></div>
 <div id="startupAd" class="startup-ad" hidden><div class="startup-card"><button class="startup-close" aria-label="닫기">×</button><small>대동여수음식지도 안내</small><h2>배달기사·가맹점 모집</h2><p>기사 모집, 가게 모집, 주문앱 가입 권유, 신규 오픈 가게와 소상공인협회 공지를 이곳에서 알립니다.</p><div class="startup-actions"><button id="startupDetails" class="primary-btn">자세히 보기</button><button id="hideToday">오늘 그만 보기</button></div></div></div>
 <script src="app-db790.js?v=9"></script>
 <script src="photo-display-v1.js?v=1"></script>
-<script src="app-route-browser-v1.js?v=1"></script>
+<script src="app-route-browser-v1.js?v=2"></script>
 <script src="search-core-v3.js?v=1"></script>
 <script src="brand-app-fix-v1.js?v=1"></script>
 <script src="detail-v2.js?v=2"></script>
@@ -78,5 +81,6 @@
 <script src="search-v2.js?v=3"></script>
 <script src="modal-scroll-lock-v1.js?v=1"></script>
 <script src="local-order-campaign-v1.js?v=1"></script>
-<div class="build-mark">build DB790-photo-ratio2</div>
+<script src="experience-v2.js?v=1"></script>
+<div class="build-mark">build DB790-experience2</div>
 </body></html>

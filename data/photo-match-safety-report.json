@@ -1,7 +1,7 @@
 {
   "phase": "post",
-  "at": "2026-07-16T20:32:01.127Z",
-  "removedUnsafeMatchCount": 9,
+  "at": "2026-07-16T20:45:49.536Z",
+  "removedUnsafeMatchCount": 19,
   "removed": [
     {
       "folderName": "1980밀면회관&냉면 여수문수점 공산소",
@@ -13,7 +13,19 @@
       "folderName": "강대진 베트남쌀국수123 ZO",
       "store": "베트남쌀국수 123 ZO",
       "reason": "name-not-certain",
-      "removedImageCount": 1
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "강촌토종닭숯불구이",
+      "store": "여수강촌토종닭숯불구이 웅천본점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "닭씨네 닭강정 여수점",
+      "store": "닭씨네 닭강정 여수점(문수동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
     },
     {
       "folderName": "마포매운쌀떡볶이 문수점 하루끼우동",
@@ -25,7 +37,13 @@
       "folderName": "생생치킨 무선점",
       "store": "생생치킨 무선점(선원동)",
       "reason": "name-not-certain",
-      "removedImageCount": 1
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "위대한 닭뽀끼&짜파구리 여서점 투키드치킨",
+      "store": "위대한 닭뽀끼&짜파구리 여서점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
     },
     {
       "folderName": "정성이가득찬",
@@ -37,7 +55,31 @@
       "folderName": "큰손닭강정 여수본점",
       "store": "큰손닭강정 여수본점(학동)",
       "reason": "name-not-certain",
-      "removedImageCount": 1
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "1989마라탕",
+      "store": "1989마라탕 봉강점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "곱도리辛 낙곱새",
+      "store": "곱도리辛 낙곱새 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "김치찜참잘하는집",
+      "store": "여수 김치찜 참 잘하는집 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "도도닭발&오돌뼈",
+      "store": "도도닭발&오돌뼈 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
     },
     {
       "folderName": "마라시대 마라탕",
@@ -46,8 +88,26 @@
       "removedImageCount": 2
     },
     {
+      "folderName": "수육보쌈 25시포차",
+      "store": "수육보쌈 25시포차(여서동)",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "여수강촌토종닭숯불구이",
+      "store": "여수강촌토종닭숯불구이 웅천본점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
       "folderName": "이라이타코야끼",
       "store": "이라이타코야끼 봉산점",
+      "reason": "name-not-certain",
+      "removedImageCount": 2
+    },
+    {
+      "folderName": "자연산오징어회",
+      "store": "자연산오징어회 봉산점",
       "reason": "name-not-certain",
       "removedImageCount": 2
     },

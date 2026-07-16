@@ -1,8 +1,8 @@
 {
-  "startedAt": "2026-07-16T20:31:52.514Z",
+  "startedAt": "2026-07-16T20:45:25.016Z",
   "policy": "strict-primary-name-and-branch-only",
   "storeCount": 622,
-  "manifestFolderCount": 193,
+  "manifestFolderCount": 673,
   "exactMatches": [
     {
       "folderName": "1980밀면회관&냉면 여수문수점 공산소",
@@ -17,6 +17,18 @@
       "imageCount": 2
     },
     {
+      "folderName": "BHC 돌산점",
+      "store": "BHC 돌산점",
+      "score": 100,
+      "imageCount": 3
+    },
+    {
+      "folderName": "Boss짬뽕 직화제육 미평점",
+      "store": "Boss짬뽕 직화제육 미평점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
       "folderName": "갈비냉면 문수점",
       "store": "갈비냉면 문수점",
       "score": 100,
@@ -26,7 +38,13 @@
       "folderName": "강대진 베트남쌀국수123 ZO",
       "store": "베트남쌀국수 123 ZO",
       "score": 96.3,
-      "imageCount": 1
+      "imageCount": 2
+    },
+    {
+      "folderName": "강촌토종닭숯불구이",
+      "store": "여수강촌토종닭숯불구이 웅천본점",
+      "score": 95.5,
+      "imageCount": 2
     },
     {
       "folderName": "공차 여서점",
@@ -41,8 +59,56 @@
       "imageCount": 2
     },
     {
+      "folderName": "닭씨네 닭강정 여수점",
+      "store": "닭씨네 닭강정 여수점(문수동)",
+      "score": 95.6,
+      "imageCount": 2
+    },
+    {
+      "folderName": "담분식 서교점",
+      "store": "담분식 서교점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "더리터 문수점",
+      "store": "더리터 문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "도담식당 충무동",
+      "store": "도담식당 충무동점",
+      "score": 97,
+      "imageCount": 2
+    },
+    {
       "folderName": "동대문엽기떡볶이 문수점",
       "store": "동대문엽기떡볶이 문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "땡초닭발 미평점",
+      "store": "땡초닭발 미평점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "또래김밥 문수점",
+      "store": "또래김밥 문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "뚱땡이숯불두마리치킨 직영점",
+      "store": "뚱땡이숯불두마리치킨 직영점(학동)",
+      "score": 96.9,
+      "imageCount": 2
+    },
+    {
+      "folderName": "라홍방마라탕 웅천점",
+      "store": "라홍방마라탕 웅천점",
       "score": 100,
       "imageCount": 2
     },
@@ -59,14 +125,56 @@
       "imageCount": 2
     },
     {
+      "folderName": "명품육회 오림동점",
+      "store": "명품육회 오림동점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "못말리는파닭 덕충점",
+      "store": "못말리는파닭 덕충점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "미스터피자 웅천점",
+      "store": "미스터피자 웅천점",
+      "score": 100,
+      "imageCount": 5
+    },
+    {
+      "folderName": "박스터지는 두마리치킨 문수점",
+      "store": "박스터지는 두마리치킨 여수문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "버거리 웅천점",
+      "store": "버거리 웅천점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
       "folderName": "버거킹 웅천점",
       "store": "버거킹 웅천점",
       "score": 100,
-      "imageCount": 1
+      "imageCount": 2
     },
     {
       "folderName": "보배반점 여서점",
       "store": "보배반점 여수여서점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "부뚜막 문수점",
+      "store": "부뚜막 문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "부리나 바베큐치킨 여문점",
+      "store": "부리나 바베큐 치킨 여문점",
       "score": 100,
       "imageCount": 2
     },
@@ -83,20 +191,44 @@
       "imageCount": 2
     },
     {
+      "folderName": "생생연어 여서점",
+      "store": "생생연어 여서점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
       "folderName": "생생치킨 무선점",
       "store": "생생치킨 무선점(선원동)",
       "score": 95.6,
-      "imageCount": 1
+      "imageCount": 2
+    },
+    {
+      "folderName": "설악칡냉면 여문점",
+      "store": "설악칡냉면 여문점",
+      "score": 100,
+      "imageCount": 2
     },
     {
       "folderName": "소유 커피&디저트 웅천점",
       "store": "소유 커피&디저트 웅천점",
       "score": 100,
-      "imageCount": 1
+      "imageCount": 2
+    },
+    {
+      "folderName": "송촌꼬마김밥 여문점",
+      "store": "송촌꼬마김밥 여문점",
+      "score": 100,
+      "imageCount": 2
     },
     {
       "folderName": "순살만공격 여서점",
       "store": "순살만공격 여수여서점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "슬기로운돼지생활 문수동",
+      "store": "슬기로운돼지생활(문수동)",
       "score": 100,
       "imageCount": 2
     },
@@ -107,8 +239,20 @@
       "imageCount": 2
     },
     {
+      "folderName": "신전떡볶이 문수점",
+      "store": "신전떡볶이 문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
       "folderName": "아담만두 문수점",
       "store": "아담만두 문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "얌샘김밥 웅천점",
+      "store": "얌샘김밥 웅천점",
       "score": 100,
       "imageCount": 2
     },
@@ -119,8 +263,26 @@
       "imageCount": 2
     },
     {
+      "folderName": "여서해장국",
+      "store": "여서해장국",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "여수분식 문수점",
+      "store": "여수분식 문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
       "folderName": "연변양꼬치구이&마라탕 여서점",
       "store": "연변양꼬치구이&마라탕 여서점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "오워래 수제돈까스",
+      "store": "오워래 수제 돈까스",
       "score": 100,
       "imageCount": 2
     },
@@ -128,7 +290,25 @@
       "folderName": "우리할매떡볶이 여서점",
       "store": "우리할매떡볶이 여서점",
       "score": 100,
-      "imageCount": 1
+      "imageCount": 2
+    },
+    {
+      "folderName": "웅천횟집",
+      "store": "웅천횟집",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "웡김밥 여서점",
+      "store": "웡김밥 여서점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "위대한 닭뽀끼&짜파구리 여서점 투키드치킨",
+      "store": "위대한 닭뽀끼&짜파구리 여서점",
+      "score": 95.8,
+      "imageCount": 2
     },
     {
       "folderName": "유어문 Your Moon 둔덕점",
@@ -137,16 +317,52 @@
       "imageCount": 2
     },
     {
+      "folderName": "육회밤바다 여서점",
+      "store": "육회밤바다 여서점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "윤김밥 문수점",
+      "store": "윤김밥 문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
       "folderName": "이동천 시원냉면 여서점",
       "store": "이동천 시원냉면 여서점",
       "score": 100,
-      "imageCount": 1
+      "imageCount": 2
+    },
+    {
+      "folderName": "이모네분식 봉산점",
+      "store": "이모네분식 봉산점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "정담오리바베큐 여수엑스포점",
+      "store": "정담오리바베큐 여수엑스포점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "정말 맛있는 김치찌개 문수점",
+      "store": "정말 맛있는 김치찌개 문수점",
+      "score": 100,
+      "imageCount": 2
     },
     {
       "folderName": "정성이가득찬",
       "store": "정성이 가득찬 반찬",
       "score": 96,
       "imageCount": 2
+    },
+    {
+      "folderName": "정성집밥",
+      "store": "정성집밥",
+      "score": 100,
+      "imageCount": 1
     },
     {
       "folderName": "종가찜 문수점",
@@ -161,16 +377,52 @@
       "imageCount": 2
     },
     {
+      "folderName": "짱구김밥 문수점",
+      "store": "짱구김밥 문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "쭈신쭈왕 문수점",
+      "store": "쭈신쭈왕 문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "차이난짬뽕 여서점",
+      "store": "차이난짬뽕 여서점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "처갓집양념치킨 문수점",
+      "store": "처갓집양념치킨 문수점",
+      "score": 100,
+      "imageCount": 4
+    },
+    {
+      "folderName": "청정게장촌 봉산점",
+      "store": "청정게장촌 봉산점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
       "folderName": "치코두마리파닭 여서점",
       "store": "치코두마리파닭 여서점",
       "score": 100,
       "imageCount": 2
     },
     {
+      "folderName": "치킨아이 소호점",
+      "store": "치킨아이 소호점",
+      "score": 100,
+      "imageCount": 3
+    },
+    {
       "folderName": "큰손닭강정 여수본점",
       "store": "큰손닭강정 여수본점(학동)",
       "score": 96.2,
-      "imageCount": 1
+      "imageCount": 2
     },
     {
       "folderName": "타코이찌 타코야끼전문점 문수점 배떡",
@@ -179,8 +431,26 @@
       "imageCount": 2
     },
     {
+      "folderName": "통큰두마리찜닭 여서점",
+      "store": "통큰두마리찜닭 여서점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "투썸플레이스 웅천점",
+      "store": "투썸플레이스 웅천점",
+      "score": 100,
+      "imageCount": 3
+    },
+    {
       "folderName": "포슬포슬꼬마김밥 문수점",
       "store": "포슬포슬꼬마김밥 문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "프랭크버거 여서점",
+      "store": "프랭크버거 여수여서점",
       "score": 100,
       "imageCount": 2
     },
@@ -191,15 +461,87 @@
       "imageCount": 2
     },
     {
+      "folderName": "행복분식 문수점",
+      "store": "행복분식 문수점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "화란 중화요리",
+      "store": "화란 중화요리",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "황금손반찬",
+      "store": "황금손 반찬",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "황실육회 봉산점",
+      "store": "황실육회 봉산점(1)",
+      "score": 100,
+      "imageCount": 1
+    },
+    {
+      "folderName": "1989마라탕",
+      "store": "1989마라탕 봉강점",
+      "score": 95.6,
+      "imageCount": 2
+    },
+    {
+      "folderName": "걸작떡볶이치킨 여수중앙점",
+      "store": "걸작떡볶이치킨 여수중앙점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "곱도리辛 낙곱새",
+      "store": "곱도리辛 낙곱새 봉산점",
+      "score": 95.6,
+      "imageCount": 2
+    },
+    {
       "folderName": "교촌치킨 둔덕점",
       "store": "교촌치킨 둔덕점",
       "score": 100,
       "imageCount": 6
     },
     {
+      "folderName": "김치찜참잘하는집",
+      "store": "여수 김치찜 참 잘하는집 봉산점",
+      "score": 95.8,
+      "imageCount": 2
+    },
+    {
+      "folderName": "도도닭발&오돌뼈",
+      "store": "도도닭발&오돌뼈 봉산점",
+      "score": 95.6,
+      "imageCount": 2
+    },
+    {
       "folderName": "마라시대 마라탕",
       "store": "마라시대 마라탕 봉산점",
       "score": 95.6,
+      "imageCount": 2
+    },
+    {
+      "folderName": "마형제 족발보쌈 여수학동점",
+      "store": "마형제 족발보쌈 학동점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "맛있는반찬",
+      "store": "맛있는 반찬",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "반반한족발닭발 학동점",
+      "store": "반반한족발닭발 학동점",
+      "score": 100,
       "imageCount": 2
     },
     {
@@ -209,8 +551,44 @@
       "imageCount": 2
     },
     {
+      "folderName": "본죽&비빔밥 (여수미평점)",
+      "store": "본죽&비빔밥 여수미평점",
+      "score": 100,
+      "imageCount": 6
+    },
+    {
+      "folderName": "수육보쌈 25시포차",
+      "store": "수육보쌈 25시포차(여서동)",
+      "score": 96,
+      "imageCount": 2
+    },
+    {
+      "folderName": "아로이태국음식전문점",
+      "store": "아로이태국음식전문점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "알토랑반찬 여수문수본점 061-651-8300",
+      "store": "알토랑반찬 여수문수본점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "여수강촌토종닭숯불구이",
+      "store": "여수강촌토종닭숯불구이 웅천본점",
+      "score": 95.5,
+      "imageCount": 2
+    },
+    {
       "folderName": "여수튀김 국동점",
       "store": "여수튀김 국동점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "여수팥빙수 교동점",
+      "store": "여수팥빙수 교동점",
       "score": 100,
       "imageCount": 2
     },
@@ -221,9 +599,51 @@
       "imageCount": 2
     },
     {
+      "folderName": "자연산오징어회",
+      "store": "자연산오징어회 봉산점",
+      "score": 95.6,
+      "imageCount": 2
+    },
+    {
+      "folderName": "정성이 가득찬 반찬",
+      "store": "정성이 가득찬 반찬",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "정성집밥",
+      "store": "정성집밥",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "진남집밥 교동점",
+      "store": "진남집밥 교동점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "콩시루 여서점",
+      "store": "콩시루 여서점",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
+      "folderName": "평양보쌈왕족발",
+      "store": "평양보쌈왕족발",
+      "score": 100,
+      "imageCount": 2
+    },
+    {
       "folderName": "한끼국밥&갈비찜",
       "store": "한끼국밥&갈비찜 국동점",
       "score": 95.6,
+      "imageCount": 2
+    },
+    {
+      "folderName": "황금손 반찬",
+      "store": "황금손 반찬",
+      "score": 100,
       "imageCount": 2
     }
   ],
@@ -240,15 +660,75 @@
       ]
     },
     {
+      "brand": "두찜",
+      "storeCount": 3,
+      "imageCount": 6,
+      "stores": [
+        "두마리찜닭 두찜 여수문수점",
+        "두마리찜닭 두찜 여수엑스포점",
+        "두마리찜닭 두찜 여수웅천점"
+      ]
+    },
+    {
+      "brand": "본죽",
+      "storeCount": 3,
+      "imageCount": 8,
+      "stores": [
+        "본죽&비빔밥 여수중앙점",
+        "본죽&비빔밥 여수미평점",
+        "본죽 여수국동점"
+      ]
+    },
+    {
+      "brand": "가마치통닭",
+      "storeCount": 6,
+      "imageCount": 2,
+      "stores": [
+        "가마치통닭 문수점",
+        "가마치통닭 신기점",
+        "가마치통닭 소호점",
+        "가마치통닭 학동점",
+        "가마치통닭 무선점",
+        "가마치통닭 죽림점"
+      ]
+    },
+    {
+      "brand": "반올림피자샵",
+      "storeCount": 2,
+      "imageCount": 1,
+      "stores": [
+        "반올림피자 여수점(신기동)",
+        "반올림피자 여수3호점피자(교동)"
+      ]
+    },
+    {
+      "brand": "배스킨라빈스",
+      "storeCount": 2,
+      "imageCount": 5,
+      "stores": [
+        "배스킨라빈스 여수국동점",
+        "배스킨라빈스 여수충무점"
+      ]
+    },
+    {
       "brand": "자담치킨",
       "storeCount": 5,
-      "imageCount": 5,
+      "imageCount": 6,
       "stores": [
         "자담치킨 여수학동점",
         "자담치킨 여수여서점",
         "자담치킨 여수웅천점",
         "자담치킨 여수엑스포점",
         "자담치킨 여수죽림점"
+      ]
+    },
+    {
+      "brand": "피자헛",
+      "storeCount": 2,
+      "imageCount": 4,
+      "stores": [
+        "피자헛 여수시청점",
+        "피자헛 여수문수점"
       ]
     },
     {
@@ -262,19 +742,40 @@
       ]
     },
     {
-      "brand": "본죽",
-      "storeCount": 3,
+      "brand": "더벤티",
+      "storeCount": 5,
       "imageCount": 5,
       "stores": [
-        "본죽&비빔밥 여수중앙점",
-        "본죽&비빔밥 여수미평점",
-        "본죽 여수국동점"
+        "더벤티 여수해양공원점(중앙동)",
+        "더벤티 여수수산시장점(교동)",
+        "더벤티 여수돌산점",
+        "더벤티 여수이순신광장점(중앙동)",
+        "더벤티 여수국동서희스타힐스점"
+      ]
+    },
+    {
+      "brand": "이디야커피",
+      "storeCount": 3,
+      "imageCount": 6,
+      "stores": [
+        "이디야커피 여수돌산우두리점",
+        "이디야커피 여수연등메트하임점",
+        "이디야 여수대교동점"
+      ]
+    },
+    {
+      "brand": "투썸플레이스",
+      "storeCount": 2,
+      "imageCount": 5,
+      "stores": [
+        "투썸플레이스 웅천점",
+        "투썸플레이스 한재사거리점"
       ]
     },
     {
       "brand": "피자스쿨",
       "storeCount": 6,
-      "imageCount": 2,
+      "imageCount": 3,
       "stores": [
         "피자스쿨 여수교동점",
         "피자스쿨 여수학동점",
@@ -300,6 +801,45 @@
       ]
     },
     {
+      "folderName": "30년전통 할매손곰탕 문수점",
+      "candidates": [
+        {
+          "store": "30년전통 할매손곰탕 문수점",
+          "score": 100
+        },
+        {
+          "store": "30년전통 할매손곰탕 문수점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "LA통닭&포차 여서본점",
+      "candidates": [
+        {
+          "store": "LA통닭&포차 여서본점",
+          "score": 100
+        },
+        {
+          "store": "LA통닭&포차 여서본점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "강남국밥 돌산점",
+      "candidates": [
+        {
+          "store": "강남국밥 돌산점",
+          "score": 100
+        },
+        {
+          "store": "강남국밥 돌산점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
       "folderName": "고궁 갈비탕&갈비찜&육개장 문수점",
       "candidates": [
         {
@@ -313,6 +853,49 @@
       ]
     },
     {
+      "folderName": "고기듬뿍 국물두루치기 문수점",
+      "candidates": [
+        {
+          "store": "고기듬뿍 국물두루치기 문수점",
+          "score": 100
+        },
+        {
+          "store": "고기듬뿍 국물두루치기 문수점(1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "골목낙곱새 1977 봉강점",
+      "candidates": [
+        {
+          "store": "골목낙곱새 1977 봉강점",
+          "score": 100
+        },
+        {
+          "store": "골목낙곱새 1977 봉강점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "귀한김치찜 국동봉산점 바싹족발",
+      "candidates": [
+        {
+          "store": "귀한김치찜 국동봉산점",
+          "score": 95.7
+        },
+        {
+          "store": "귀한김치찜 국동봉산점 (1)",
+          "score": 95.7
+        },
+        {
+          "store": "귀한김치찜 국동봉산점 (2)",
+          "score": 95.7
+        }
+      ]
+    },
+    {
       "folderName": "금마차 여서점",
       "candidates": [
         {
@@ -321,6 +904,19 @@
         },
         {
           "store": "금마차 여서점(1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "김밥천국 국동점",
+      "candidates": [
+        {
+          "store": "김밥천국 국동점",
+          "score": 100
+        },
+        {
+          "store": "김밥천국 국동점 (1)",
           "score": 100
         }
       ]
@@ -339,6 +935,19 @@
       ]
     },
     {
+      "folderName": "김치찜팝니다 서교점",
+      "candidates": [
+        {
+          "store": "김치찜팝니다 서교점",
+          "score": 100
+        },
+        {
+          "store": "김치찜팝니다 서교점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
       "folderName": "꽃게장&갈치조림 전문점 늘푸른식당 봉산점",
       "candidates": [
         {
@@ -347,6 +956,58 @@
         },
         {
           "store": "꽃게장&갈치조림 전문점 늘푸른식당 봉산점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "나능이 능이버섯백숙",
+      "candidates": [
+        {
+          "store": "나능이 능이버섯백숙 봉산점",
+          "score": 96
+        },
+        {
+          "store": "나능이 능이버섯백숙 봉산점(1)",
+          "score": 96
+        }
+      ]
+    },
+    {
+      "folderName": "닭곰탕 백숙 보약한첩 문수점 정담푸드",
+      "candidates": [
+        {
+          "store": "닭곰탕 백숙 보약한첩 문수점",
+          "score": 96
+        },
+        {
+          "store": "닭곰탕 백숙 보약한첩 문수점 (1)",
+          "score": 96
+        }
+      ]
+    },
+    {
+      "folderName": "더 진한 소한마리탕&국밥 엑스포점",
+      "candidates": [
+        {
+          "store": "더 진한 소한마리탕&국밥 엑스포점",
+          "score": 100
+        },
+        {
+          "store": "더 진한 소한마리탕&국밥 엑스포점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "더바른 정국밥 미평점",
+      "candidates": [
+        {
+          "store": "더바른 정국밥 미평점",
+          "score": 100
+        },
+        {
+          "store": "더바른 정국밥 미평점 (1)",
           "score": 100
         }
       ]
@@ -365,6 +1026,144 @@
       ]
     },
     {
+      "folderName": "돈쌈대패 문수점",
+      "candidates": [
+        {
+          "store": "돈쌈대패 문수점",
+          "score": 100
+        },
+        {
+          "store": "돈쌈대패 문수점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "또바기 여서점",
+      "candidates": [
+        {
+          "store": "또바기 여서점",
+          "score": 100
+        },
+        {
+          "store": "또바기 여서점(1)",
+          "score": 100
+        },
+        {
+          "store": "또바기 여서점(2)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "만석군 봉산점",
+      "candidates": [
+        {
+          "store": "만석군 봉산점",
+          "score": 100
+        },
+        {
+          "store": "만석군 봉산점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "매운맛 땡길때 밥장인 엑스포점",
+      "candidates": [
+        {
+          "store": "매운맛 땡길때 밥장인 엑스포점",
+          "score": 100
+        },
+        {
+          "store": "매운맛 땡길때 밥장인 엑스포점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "몬스터탕수육 학동점",
+      "candidates": [
+        {
+          "store": "몬스터탕수육 여수학동점",
+          "score": 100
+        },
+        {
+          "store": "몬스터탕수육 여수학동점(1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "미친 짜글이 서교점",
+      "candidates": [
+        {
+          "store": "미친 짜글이 서교점",
+          "score": 100
+        },
+        {
+          "store": "미친 짜글이 서교점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "바르다김선생 여서점",
+      "candidates": [
+        {
+          "store": "바르다김선생 여서점",
+          "score": 100
+        },
+        {
+          "store": "바르다김선생 여서점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "바삭한 휴게소 여서점",
+      "candidates": [
+        {
+          "store": "바삭한 휴게소 여서점",
+          "score": 100
+        },
+        {
+          "store": "바삭한 휴게소 여서점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "밥앤동 볶음밥&우동 충무점",
+      "candidates": [
+        {
+          "store": "밥앤동 볶음밥&우동 충무점",
+          "score": 100
+        },
+        {
+          "store": "밥앤동 볶음밥&우동 충무점(1)",
+          "score": 100
+        },
+        {
+          "store": "밥앤동 볶음밥&우동 충무점(2)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "봉명가닭도리탕 국동점",
+      "candidates": [
+        {
+          "store": "봉명가닭도리탕 국동점",
+          "score": 100
+        },
+        {
+          "store": "봉명가닭도리탕 국동점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
       "folderName": "불의제육 여서점",
       "candidates": [
         {
@@ -373,6 +1172,23 @@
         },
         {
           "store": "불의제육 여서점(1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "소녹 종화동점",
+      "candidates": [
+        {
+          "store": "소녹 종화동점",
+          "score": 100
+        },
+        {
+          "store": "소녹 종화동점 (1)",
+          "score": 100
+        },
+        {
+          "store": "소녹 종화동점(2)",
           "score": 100
         }
       ]
@@ -404,6 +1220,32 @@
       ]
     },
     {
+      "folderName": "수시아 김밥전문 공화동점",
+      "candidates": [
+        {
+          "store": "수시아 김밥전문 공화동점",
+          "score": 100
+        },
+        {
+          "store": "수시아 김밥전문 공화동점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "쉐프의수제요리 야미야미 여서점",
+      "candidates": [
+        {
+          "store": "쉐프의수제요리 야미야미 여서점",
+          "score": 100
+        },
+        {
+          "store": "쉐프의수제요리 야미야미 여서점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
       "folderName": "스팸많이주는부대찌개 여서점",
       "candidates": [
         {
@@ -430,6 +1272,49 @@
       ]
     },
     {
+      "folderName": "시우푸드 봉산점",
+      "candidates": [
+        {
+          "store": "시우푸드 봉산점",
+          "score": 100
+        },
+        {
+          "store": "시우푸드 봉산점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "아구찜&장어탕명가 조롱박 교동점",
+      "candidates": [
+        {
+          "store": "아구찜&장어탕명가 조롱박 교동점",
+          "score": 100
+        },
+        {
+          "store": "아구찜&장어탕명가 조롱박 교동점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "여서육감 문수점",
+      "candidates": [
+        {
+          "store": "여서 육감 문수점",
+          "score": 100
+        },
+        {
+          "store": "여서 육감 문수점(1)",
+          "score": 100
+        },
+        {
+          "store": "여서 육감 문수점(2)",
+          "score": 100
+        }
+      ]
+    },
+    {
       "folderName": "여수다복 교동점",
       "candidates": [
         {
@@ -443,6 +1328,62 @@
       ]
     },
     {
+      "folderName": "예향정 여서점",
+      "candidates": [
+        {
+          "store": "예향정 여서점",
+          "score": 100
+        },
+        {
+          "store": "예향정 여서점(1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "왕창 돼지두루치기 여서점 맛집콜",
+      "candidates": [
+        {
+          "store": "왕창 돼지두루치기 여서점",
+          "score": 96.3
+        },
+        {
+          "store": "왕창 돼지두루치기 여서점 (1)",
+          "score": 96.3
+        },
+        {
+          "store": "왕창 돼지두루치기 여서점(2)",
+          "score": 96.3
+        }
+      ]
+    },
+    {
+      "folderName": "우사골설렁탕 여서동본점",
+      "candidates": [
+        {
+          "store": "우사골설렁탕 여서동본점",
+          "score": 100
+        },
+        {
+          "store": "우사골설렁탕 여서동본점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "우주호떡 여서점",
+      "candidates": [
+        {
+          "store": "우주호떡 여서점",
+          "score": 100
+        },
+        {
+          "store": "우주호떡 여서점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
       "folderName": "울엄마 김치찜 갈비찜 중앙점",
       "candidates": [
         {
@@ -451,6 +1392,92 @@
         },
         {
           "store": "울엄마 김치찜 갈비찜 중앙점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "육식사관학교 여서점",
+      "candidates": [
+        {
+          "store": "육식사관학교 여서점",
+          "score": 100
+        },
+        {
+          "store": "육식사관학교 여서점(1)",
+          "score": 100
+        },
+        {
+          "store": "육식사관학교 여서점(2)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "인생냉면 가야밀면 여서점",
+      "candidates": [
+        {
+          "store": "인생냉면 가야밀면 여서점",
+          "score": 100
+        },
+        {
+          "store": "인생냉면 가야밀면 여서점(1)",
+          "score": 100
+        },
+        {
+          "store": "인생냉면 가야밀면 여서점(2)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "진남컵밥 중앙점",
+      "candidates": [
+        {
+          "store": "진남컵밥 중앙점",
+          "score": 100
+        },
+        {
+          "store": "진남컵밥 중앙점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "진통뼈사랑 봉산점",
+      "candidates": [
+        {
+          "store": "진통뼈사랑 봉산점",
+          "score": 100
+        },
+        {
+          "store": "진통뼈사랑 봉산점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "집으로 삼겹구이 문수점",
+      "candidates": [
+        {
+          "store": "집으로 삼겹구이 문수점",
+          "score": 100
+        },
+        {
+          "store": "집으로 삼겹구이 문수점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "쭈꾸미닭 공화점",
+      "candidates": [
+        {
+          "store": "쭈꾸미닭 공화점",
+          "score": 100
+        },
+        {
+          "store": "쭈꾸미닭 공화점 (1)",
           "score": 100
         }
       ]
@@ -482,6 +1509,19 @@
       ]
     },
     {
+      "folderName": "찹쌀품은 삼계탕 문수점",
+      "candidates": [
+        {
+          "store": "찹쌀품은 삼계탕 문수점",
+          "score": 100
+        },
+        {
+          "store": "찹쌀품은 삼계탕 문수점(1)",
+          "score": 100
+        }
+      ]
+    },
+    {
       "folderName": "철웅이네 입큰 붕어빵 문수점",
       "candidates": [
         {
@@ -490,6 +1530,196 @@
         },
         {
           "store": "철웅이네 입큰 붕어빵 문수점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "청년뚝배기 덕충점",
+      "candidates": [
+        {
+          "store": "청년뚝배기 덕충점",
+          "score": 100
+        },
+        {
+          "store": "청년뚝배기 덕충점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "청담곱떡 고소동점",
+      "candidates": [
+        {
+          "store": "청담곱떡 고소동점",
+          "score": 100
+        },
+        {
+          "store": "청담곱떡 고소동점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "청담낙곱새 고소동점",
+      "candidates": [
+        {
+          "store": "청담낙곱새 고소동점",
+          "score": 100
+        },
+        {
+          "store": "청담낙곱새 고소동점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "청송삼계탕&닭칼국수 문수점 정담푸드",
+      "candidates": [
+        {
+          "store": "청송삼계탕&닭칼국수 문수점",
+          "score": 96
+        },
+        {
+          "store": "청송삼계탕&닭칼국수 문수점 (1)",
+          "score": 96
+        },
+        {
+          "store": "청송삼계탕&닭칼국수 문수점(2)",
+          "score": 96
+        }
+      ]
+    },
+    {
+      "folderName": "청하대 영빈관 여서점",
+      "candidates": [
+        {
+          "store": "청하대 영빈관 여서점",
+          "score": 100
+        },
+        {
+          "store": "청하대 영빈관 여서점(1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "치폴리니 여서점",
+      "candidates": [
+        {
+          "store": "치폴리니 여서점",
+          "score": 100
+        },
+        {
+          "store": "치폴리니 여서점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "코리안 찌개 타운 서교점",
+      "candidates": [
+        {
+          "store": "코리안 찌개 타운 서교점",
+          "score": 100
+        },
+        {
+          "store": "코리안 찌개 타운 서교점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "크라운닭발 문수점",
+      "candidates": [
+        {
+          "store": "크라운닭발 문수점",
+          "score": 100
+        },
+        {
+          "store": "크라운닭발 문수점(1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "통뼈감자탕 문수점",
+      "candidates": [
+        {
+          "store": "통뼈감자탕 문수점",
+          "score": 100
+        },
+        {
+          "store": "통뼈감자탕 문수점(1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "통큰한방삼계탕 공화점",
+      "candidates": [
+        {
+          "store": "통큰한방삼계탕 공화점",
+          "score": 100
+        },
+        {
+          "store": "통큰한방삼계탕 공화점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "피피마켓 종화동점 흐뭇",
+      "candidates": [
+        {
+          "store": "피피마켓 종화동점",
+          "score": 96.4
+        },
+        {
+          "store": "피피마켓 종화동점(1)",
+          "score": 96.4
+        },
+        {
+          "store": "피피마켓 종화동점(2)",
+          "score": 96.4
+        }
+      ]
+    },
+    {
+      "folderName": "해룡옥수수찐빵 문수점",
+      "candidates": [
+        {
+          "store": "해룡옥수수찐빵 문수점",
+          "score": 100
+        },
+        {
+          "store": "해룡옥수수찐빵 문수점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "허참봉 곰탕&갈비탕 봉산점",
+      "candidates": [
+        {
+          "store": "허참봉 곰탕&갈비탕 봉산점",
+          "score": 100
+        },
+        {
+          "store": "허참봉 곰탕&갈비탕 봉산점 (1)",
+          "score": 100
+        }
+      ]
+    },
+    {
+      "folderName": "화끈하게매운 핫불닭발&오돌뼈 여서점",
+      "candidates": [
+        {
+          "store": "화끈하게매운 핫불닭발&오돌뼈 여서점",
+          "score": 100
+        },
+        {
+          "store": "화끈하게매운 핫불닭발&오돌뼈 여서점(1)",
           "score": 100
         }
       ]
@@ -538,6 +1768,23 @@
       ]
     },
     {
+      "folderName": "명품1인도시락&시원냉면밀면",
+      "candidates": [
+        {
+          "store": "명품1인도시락&시원냉면밀면(국동)",
+          "score": 96.9
+        },
+        {
+          "store": "명품1인도시락&시원냉면밀면(국동) (1)",
+          "score": 96.9
+        },
+        {
+          "store": "명품1인도시락&시원냉면밀면(국동)(2)",
+          "score": 96.9
+        }
+      ]
+    },
+    {
       "folderName": "바른보쌈1990",
       "candidates": [
         {
@@ -547,6 +1794,19 @@
         {
           "store": "바른보쌈1990 여수웅천점",
           "score": 95.8
+        }
+      ]
+    },
+    {
+      "folderName": "조선제일 감자탕&뼈해장국 여서점",
+      "candidates": [
+        {
+          "store": "조선제일 감자탕&뼈해장국 여서점",
+          "score": 100
+        },
+        {
+          "store": "조선제일 감자탕&뼈해장국 여서점 (1)",
+          "score": 100
         }
       ]
     },
@@ -562,14 +1822,60 @@
           "score": 95.6
         }
       ]
+    },
+    {
+      "folderName": "타코아찌 타코야끼전문점 문수점",
+      "candidates": [
+        {
+          "store": "타코아찌 타코야끼전문점 문수점",
+          "score": 100
+        },
+        {
+          "store": "타코아찌 타코야끼전문점 문수점 (1)",
+          "score": 100
+        }
+      ]
     }
   ],
   "unmatchedFolders": [
     {
+      "folderName": "(이순신닭강정) 이집닭강정잘하네 여수점"
+    },
+    {
+      "folderName": "60계치킨여서문수점"
+    },
+    {
+      "folderName": "60일숙성명품김치찜 왕가네"
+    },
+    {
+      "folderName": "79대포"
+    },
+    {
+      "folderName": "79포차여서점"
+    },
+    {
       "folderName": "88시장버거"
     },
     {
+      "folderName": "Café purplemint 오림점 바이킹오토바이"
+    },
+    {
       "folderName": "RIB&TABLE 바베큐립 전문점 미평정"
+    },
+    {
+      "folderName": "가마솥 볶음밥"
+    },
+    {
+      "folderName": "가마치통닭 여서점"
+    },
+    {
+      "folderName": "고기밥상 문수점"
+    },
+    {
+      "folderName": "골목짬뽕 치킨의달인"
+    },
+    {
+      "folderName": "과일참좋다"
     },
     {
       "folderName": "교동 하이오커피"
@@ -578,19 +1884,64 @@
       "folderName": "교동야식"
     },
     {
+      "folderName": "구운돼지 문수점 영미푸드"
+    },
+    {
+      "folderName": "국동 김밥나라"
+    },
+    {
+      "folderName": "국동 네네치킨"
+    },
+    {
+      "folderName": "국동 두찜"
+    },
+    {
       "folderName": "국동 롯데리아"
     },
     {
       "folderName": "국동 서희국밥"
     },
     {
+      "folderName": "국동 이디야"
+    },
+    {
+      "folderName": "국동 조선다방"
+    },
+    {
+      "folderName": "국민학교"
+    },
+    {
+      "folderName": "국빈"
+    },
+    {
+      "folderName": "그루브"
+    },
+    {
       "folderName": "그루브(브루웍스)"
+    },
+    {
+      "folderName": "금성냉면"
     },
     {
       "folderName": "김동식사장님 힐링요트 광고"
     },
     {
+      "folderName": "김사장 국밥 콩산소"
+    },
+    {
+      "folderName": "김사장 대박난 국수집 콩산소"
+    },
+    {
+      "folderName": "김종구치킨"
+    },
+    {
+      "folderName": "김치찜은 못참지"
+    },
+    {
       "folderName": "깻잎두마리치킨"
+    },
+    {
+      "folderName": "꾸브라꼬 숯불치킨"
     },
     {
       "folderName": "나도국밥"
@@ -599,31 +1950,91 @@
       "folderName": "나의 손금"
     },
     {
-      "folderName": "내 제록스 사양"
+      "folderName": "낙지천국"
+    },
+    {
+      "folderName": "남도밀면"
+    },
+    {
+      "folderName": "낭만포차18번"
+    },
+    {
+      "folderName": "내가끓엿찌 여서점"
+    },
+    {
+      "folderName": "내조국봉산점"
+    },
+    {
+      "folderName": "네네치킨둔덕미평점"
     },
     {
       "folderName": "노브랜드버거"
     },
     {
+      "folderName": "늘커피 봉산동"
+    },
+    {
+      "folderName": "다기야"
+    },
+    {
+      "folderName": "다정아꾸"
+    },
+    {
       "folderName": "당빙땡"
+    },
+    {
+      "folderName": "대박삼겹김치찜"
+    },
+    {
+      "folderName": "대성이 대동여수음식지도 홍보사진"
+    },
+    {
+      "folderName": "대성이가게 오마카세 우미"
+    },
+    {
+      "folderName": "대정식당"
     },
     {
       "folderName": "덕충점 역전할머니맥주"
     },
     {
+      "folderName": "덮덮밥"
+    },
+    {
       "folderName": "덮밥전문점 고기그릇 공화점"
+    },
+    {
+      "folderName": "도도닭발 봉산점"
+    },
+    {
+      "folderName": "도란도란"
+    },
+    {
+      "folderName": "돌산꽈배기"
     },
     {
       "folderName": "돌산텃밭김치 교동점"
     },
     {
+      "folderName": "동영상제작"
+    },
+    {
+      "folderName": "드피치피자,치킨"
+    },
+    {
       "folderName": "등뼈가묵은지"
+    },
+    {
+      "folderName": "땅스부대찌개"
+    },
+    {
+      "folderName": "땅스즉석떡볶이 여서점 땅스부대찌개"
     },
     {
       "folderName": "떡순이 알찬만두 문수점 떡순이두마리치킨"
     },
     {
-      "folderName": "로봇청소기 집지도"
+      "folderName": "뚜레쥬르"
     },
     {
       "folderName": "리얼펍"
@@ -635,6 +2046,12 @@
       "folderName": "마라월드"
     },
     {
+      "folderName": "막국수파는집 문수본점 돈쌈푸드스토리"
+    },
+    {
+      "folderName": "맛있돼지 문수점"
+    },
+    {
       "folderName": "맛조은 미평점 조은식당"
     },
     {
@@ -644,7 +2061,31 @@
       "folderName": "메가커피 교동점"
     },
     {
+      "folderName": "메밀꽃필 막구수"
+    },
+    {
+      "folderName": "모두의죽 왕가네푸드"
+    },
+    {
+      "folderName": "문수 맘스터치"
+    },
+    {
+      "folderName": "문수 탕화쿵푸마라탕"
+    },
+    {
       "folderName": "문수 피자스쿨"
+    },
+    {
+      "folderName": "문수점 이화수육개장"
+    },
+    {
+      "folderName": "미몽 여서점"
+    },
+    {
+      "folderName": "미미꼬마김밥"
+    },
+    {
+      "folderName": "미평 가마치통닭"
     },
     {
       "folderName": "미평 비비큐"
@@ -653,16 +2094,46 @@
       "folderName": "미평 피자스쿨"
     },
     {
+      "folderName": "미평 한솥도시락"
+    },
+    {
       "folderName": "미평동 피자스쿨"
+    },
+    {
+      "folderName": "미평햄버거"
     },
     {
       "folderName": "바다양푼이동태탕 문수점"
     },
     {
+      "folderName": "바싹족발"
+    },
+    {
       "folderName": "바오탕수"
     },
     {
+      "folderName": "밥수레 왕가네푸드"
+    },
+    {
+      "folderName": "밥심이"
+    },
+    {
+      "folderName": "배가네왕족보 문수점"
+    },
+    {
+      "folderName": "배불이 순대국 왕가네"
+    },
+    {
+      "folderName": "배스킨라빈스 미평점"
+    },
+    {
       "folderName": "백년족발"
+    },
+    {
+      "folderName": "백억꼬마김밥"
+    },
+    {
+      "folderName": "별별 김밥"
     },
     {
       "folderName": "복돼지 갈비찜 문수점"
@@ -671,16 +2142,49 @@
       "folderName": "본스치킨"
     },
     {
+      "folderName": "봉계동 조선다방"
+    },
+    {
+      "folderName": "봉산 늘푸른식당"
+    },
+    {
+      "folderName": "봉산동 노랑통닭"
+    },
+    {
       "folderName": "봉산동 신포우리만두"
+    },
+    {
+      "folderName": "봉산동 역전할머니"
+    },
+    {
+      "folderName": "봉산동 포포샌드"
     },
     {
       "folderName": "부대찌개전쟁터"
     },
     {
+      "folderName": "부어치킨 소호점"
+    },
+    {
       "folderName": "분당 형님"
     },
     {
+      "folderName": "붕붕먹거리 왕가네"
+    },
+    {
+      "folderName": "브라더한정식도시락 여수점 밥플릭스같음"
+    },
+    {
+      "folderName": "빵위에치즈"
+    },
+    {
       "folderName": "빵위에치즈 1인피자"
+    },
+    {
+      "folderName": "뽕뜨락피자"
+    },
+    {
+      "folderName": "뿅가야채곱창 문수점 딜리버리&테이크아웃"
     },
     {
       "folderName": "사계절 실타래빙수 여서점 마나바"
@@ -692,13 +2196,49 @@
       "folderName": "새 폴더 (6)"
     },
     {
+      "folderName": "새 폴더 (7)"
+    },
+    {
+      "folderName": "새 폴더 (8)"
+    },
+    {
       "folderName": "새 폴더 (9)"
+    },
+    {
+      "folderName": "샌디스카페 미평점"
+    },
+    {
+      "folderName": "서울깍두기"
+    },
+    {
+      "folderName": "소상공인연합회 여수가게홍보"
+    },
+    {
+      "folderName": "소풍분식"
+    },
+    {
+      "folderName": "속초냉면 왕가네푸드"
     },
     {
       "folderName": "손수김밥"
     },
     {
+      "folderName": "수라상궁"
+    },
+    {
+      "folderName": "수라상조선국밥"
+    },
+    {
       "folderName": "수원왕갈비통닭 여수점"
+    },
+    {
+      "folderName": "수해복마라탕"
+    },
+    {
+      "folderName": "순살 참잘튀기는집"
+    },
+    {
+      "folderName": "술상밥상"
     },
     {
       "folderName": "쉐프의생안심탕수육(빵위의치즈)"
@@ -707,10 +2247,25 @@
       "folderName": "스마트푸드 마선생얼큰국밥"
     },
     {
+      "folderName": "스윗스윗 문수점"
+    },
+    {
+      "folderName": "슬기로운김치찜(문수동"
+    },
+    {
+      "folderName": "슬로우캘리 여서점"
+    },
+    {
       "folderName": "시원밀면냉면 바싹족발"
     },
     {
+      "folderName": "시장님 정책 제안서"
+    },
+    {
       "folderName": "시장불닭발 진리국밥쪽"
+    },
+    {
+      "folderName": "아구회관"
     },
     {
       "folderName": "아도쿄"
@@ -722,7 +2277,22 @@
       "folderName": "아이커 버거&치킨"
     },
     {
+      "folderName": "아주커치킨"
+    },
+    {
+      "folderName": "압구정날라리"
+    },
+    {
+      "folderName": "앨리스토리커피"
+    },
+    {
       "folderName": "앳퍼즈 문수점"
+    },
+    {
+      "folderName": "양지골수육"
+    },
+    {
+      "folderName": "양철북곱창"
     },
     {
       "folderName": "엄마미안 김치찜 공화점"
@@ -731,10 +2301,37 @@
       "folderName": "여서 향미진짬뽕"
     },
     {
+      "folderName": "여서동 용우동"
+    },
+    {
+      "folderName": "여서점 멕시카나"
+    },
+    {
       "folderName": "여서점 피자나라치킨공주"
     },
     {
+      "folderName": "여수 음식주문 길라잡이"
+    },
+    {
+      "folderName": "여수대표치킨"
+    },
+    {
+      "folderName": "여수숯불창고"
+    },
+    {
+      "folderName": "여수오리날개튀김"
+    },
+    {
       "folderName": "여천 읍천리382 여천점"
+    },
+    {
+      "folderName": "역전할머니맥주 미평점"
+    },
+    {
+      "folderName": "연등 이디야"
+    },
+    {
+      "folderName": "연변양꼬치구이"
     },
     {
       "folderName": "영커피&수제붕어빵 여서점"
@@ -746,10 +2343,34 @@
       "folderName": "오림점 내조국"
     },
     {
+      "folderName": "올떡"
+    },
+    {
+      "folderName": "와쭈"
+    },
+    {
       "folderName": "외계인피자"
     },
     {
       "folderName": "요거트월드"
+    },
+    {
+      "folderName": "우정통닭"
+    },
+    {
+      "folderName": "유림식당"
+    },
+    {
+      "folderName": "윤가네선어"
+    },
+    {
+      "folderName": "을찌로 떡볶이 국동점"
+    },
+    {
+      "folderName": "응큼떡볶이"
+    },
+    {
+      "folderName": "이가네 나주곰탕 왕가네"
     },
     {
       "folderName": "이다크로폴&분식 여서점"
@@ -758,10 +2379,43 @@
       "folderName": "이라이타코야끼&카페1리터 여문점 떡순이두마리치킨,호아커피앤디저트"
     },
     {
+      "folderName": "이모야분식"
+    },
+    {
       "folderName": "이순신갈비탕"
     },
     {
+      "folderName": "인프라 감탄떡볶이"
+    },
+    {
+      "folderName": "인프라 계근상"
+    },
+    {
       "folderName": "인프라 계동치킨"
+    },
+    {
+      "folderName": "인프라 금쪽갈비"
+    },
+    {
+      "folderName": "인프라 까치식당"
+    },
+    {
+      "folderName": "인프라 닭가대표"
+    },
+    {
+      "folderName": "인프라 대박난 쪽갈비"
+    },
+    {
+      "folderName": "인프라 대패가1900"
+    },
+    {
+      "folderName": "인프라 도야짬뽕"
+    },
+    {
+      "folderName": "인프라 돈치킨"
+    },
+    {
+      "folderName": "인프라 둔덕미평교촌치킨"
     },
     {
       "folderName": "인프라 라홍방마라탕"
@@ -770,7 +2424,67 @@
       "folderName": "인프라 롤링파스타"
     },
     {
+      "folderName": "인프라 맛있는반찬"
+    },
+    {
+      "folderName": "인프라 미치게"
+    },
+    {
+      "folderName": "인프라 미평 굽네치킨"
+    },
+    {
+      "folderName": "인프라 배떡"
+    },
+    {
+      "folderName": "인프라 백수초밥"
+    },
+    {
       "folderName": "인프라 보드람치킨"
+    },
+    {
+      "folderName": "인프라 봉구스밥버거"
+    },
+    {
+      "folderName": "인프라 봉명동내커피"
+    },
+    {
+      "folderName": "인프라 북촌손만두"
+    },
+    {
+      "folderName": "인프라 불로만"
+    },
+    {
+      "folderName": "인프라 빙동댕"
+    },
+    {
+      "folderName": "인프라 빵빵김밥"
+    },
+    {
+      "folderName": "인프라 서영이네김밥"
+    },
+    {
+      "folderName": "인프라 시민족발보쌈"
+    },
+    {
+      "folderName": "인프라 쌀통닭"
+    },
+    {
+      "folderName": "인프라 쑝쑝돈까스"
+    },
+    {
+      "folderName": "인프라 알토랑반찬"
+    },
+    {
+      "folderName": "인프라 여수싱싱회육회"
+    },
+    {
+      "folderName": "인프라 여수하늘커피"
+    },
+    {
+      "folderName": "인프라 여수회포차"
+    },
+    {
+      "folderName": "인프라 여정식당"
     },
     {
       "folderName": "인프라 오븐에꾸운닭"
@@ -779,13 +2493,37 @@
       "folderName": "인프라 요이참치"
     },
     {
+      "folderName": "인프라 원할머니"
+    },
+    {
+      "folderName": "인프라 인생아구찜"
+    },
+    {
       "folderName": "인프라 제육대가"
     },
     {
       "folderName": "인프라 주가네김치찌개"
     },
     {
+      "folderName": "인프라 중국관"
+    },
+    {
+      "folderName": "인프라 지코바치킨"
+    },
+    {
+      "folderName": "인프라 쫑포피자"
+    },
+    {
+      "folderName": "인프라 찜콩"
+    },
+    {
       "folderName": "인프라 천화마라탕"
+    },
+    {
+      "folderName": "인프라 청년다방"
+    },
+    {
+      "folderName": "인프라 초이커피"
     },
     {
       "folderName": "인프라 카페브라운"
@@ -794,16 +2532,61 @@
       "folderName": "인프라 콩시루"
     },
     {
+      "folderName": "인프라 킹콩부대찌개"
+    },
+    {
+      "folderName": "인프라 타코아찌"
+    },
+    {
+      "folderName": "인프라 푸줏간고기도시락"
+    },
+    {
+      "folderName": "인프라 피자먹다"
+    },
+    {
       "folderName": "인프라 호미스피자"
+    },
+    {
+      "folderName": "인프라 회먹다"
     },
     {
       "folderName": "인프라 휴게소"
     },
     {
+      "folderName": "장민지 국수나무"
+    },
+    {
+      "folderName": "장민지 더벤티 엑스포점"
+    },
+    {
+      "folderName": "장민지 덕충 교촌치킨"
+    },
+    {
       "folderName": "장민지 뚜레쥬르"
     },
     {
+      "folderName": "장민지 셀럽스프"
+    },
+    {
+      "folderName": "장민지 퀴즈노스"
+    },
+    {
+      "folderName": "장충동B&F족발"
+    },
+    {
+      "folderName": "장충동왕족발"
+    },
+    {
       "folderName": "장터순대국밥"
+    },
+    {
+      "folderName": "재료에 진심을담다 제육에 진심을 담다"
+    },
+    {
+      "folderName": "전가복"
+    },
+    {
+      "folderName": "전골의법칙 문수점"
     },
     {
       "folderName": "전국3대춘천닭갈비 문수점 정담푸드"
@@ -812,22 +2595,97 @@
       "folderName": "정남옥"
     },
     {
+      "folderName": "제복이 왕가네"
+    },
+    {
+      "folderName": "제육대패,제패 영미푸드 한성푸드"
+    },
+    {
+      "folderName": "조선밀면"
+    },
+    {
+      "folderName": "조선제일뼈해장국"
+    },
+    {
+      "folderName": "족발자리"
+    },
+    {
+      "folderName": "족팔계"
+    },
+    {
+      "folderName": "중앙 바싹족발 아차산매운떡볶이"
+    },
+    {
+      "folderName": "중앙동 롯데리아"
+    },
+    {
+      "folderName": "중앙하이츠 아주커"
+    },
+    {
+      "folderName": "진한설렁탕"
+    },
+    {
       "folderName": "짜장왕 왕서방 치킨의달인"
     },
     {
       "folderName": "착한쭝식"
     },
     {
+      "folderName": "참새제과"
+    },
+    {
+      "folderName": "참숯이면돼지 쏘니"
+    },
+    {
       "folderName": "촌닭이두마리치킨"
+    },
+    {
+      "folderName": "치킨마루"
+    },
+    {
+      "folderName": "카페달링 여수여서점"
     },
     {
       "folderName": "카페달링 여수점"
     },
     {
+      "folderName": "카페인"
+    },
+    {
+      "folderName": "카페인시애틀 여문점"
+    },
+    {
+      "folderName": "캔바테스트슬라이드이미지"
+    },
+    {
       "folderName": "커피샵"
     },
     {
+      "folderName": "커피어클락"
+    },
+    {
+      "folderName": "컴포즈커피문수광장점"
+    },
+    {
       "folderName": "케이키팩토리"
+    },
+    {
+      "folderName": "콩담은 콩나물국밥 콩산소"
+    },
+    {
+      "folderName": "콩불"
+    },
+    {
+      "folderName": "콩산소"
+    },
+    {
+      "folderName": "콩산소 김사장 삼겹통"
+    },
+    {
+      "folderName": "콩산소 조쉐프의 쌀국수"
+    },
+    {
+      "folderName": "킹짬뽕 여서본점"
     },
     {
       "folderName": "탕참"
@@ -836,7 +2694,31 @@
       "folderName": "토담"
     },
     {
+      "folderName": "틈돈까스"
+    },
+    {
+      "folderName": "파파핫도그 여서점 카페,라떼"
+    },
+    {
+      "folderName": "포우머그"
+    },
+    {
       "folderName": "프랭크버거미평"
+    },
+    {
+      "folderName": "피자 프렌드"
+    },
+    {
+      "folderName": "피자나라치킨공주 국동점"
+    },
+    {
+      "folderName": "피자나라치킨공주 여서점"
+    },
+    {
+      "folderName": "하나옛날통닭"
+    },
+    {
+      "folderName": "하루빙수 여서점 카페,라떼"
     },
     {
       "folderName": "하림맥시칸"
@@ -845,16 +2727,151 @@
       "folderName": "한국전통춘천닭갈비 공화점"
     },
     {
+      "folderName": "한식전문 혼밥대장 공화점"
+    },
+    {
+      "folderName": "해인이네"
+    },
+    {
+      "folderName": "현우 내조국 관문점"
+    },
+    {
+      "folderName": "현우 서울해장국"
+    },
+    {
+      "folderName": "현우 컬투치킨"
+    },
+    {
+      "folderName": "호분식"
+    },
+    {
+      "folderName": "호식이두마리치킨 국동점"
+    },
+    {
       "folderName": "호아 커피앤디저트 문수점 떡순이두마리치킨"
+    },
+    {
+      "folderName": "호호아줌마"
+    },
+    {
+      "folderName": "황금마차"
+    },
+    {
+      "folderName": "황금수산"
+    },
+    {
+      "folderName": "황금아구"
+    },
+    {
+      "folderName": "황토장군"
+    },
+    {
+      "folderName": "1인피자 미니8 여수점"
+    },
+    {
+      "folderName": "1인피자 피자먹다 여수여서점"
+    },
+    {
+      "folderName": "가마치통닭 여서점 061-651-8292 -치킨"
+    },
+    {
+      "folderName": "감탄떡볶이 문수점"
+    },
+    {
+      "folderName": "계근상 여수본점"
+    },
+    {
+      "folderName": "국민학교"
+    },
+    {
+      "folderName": "굽네치킨&피자 여수미평점"
     },
     {
       "folderName": "금도령찜닭"
     },
     {
+      "folderName": "금성칡냉면 미평점"
+    },
+    {
+      "folderName": "금쪽갈비 (여수점)"
+    },
+    {
+      "folderName": "기영이 숯불두마리치킨 여수여서점 전화061-810-0666"
+    },
+    {
+      "folderName": "김밥나라"
+    },
+    {
+      "folderName": "김밥세상"
+    },
+    {
+      "folderName": "김종구 식맛치킨 전기바베큐 옛날통닭 여수여서점"
+    },
+    {
+      "folderName": "까치식당"
+    },
+    {
       "folderName": "까페빈"
     },
     {
+      "folderName": "깐깐한족발"
+    },
+    {
+      "folderName": "냠냠치킨"
+    },
+    {
+      "folderName": "네네치킨 둔덕미평점"
+    },
+    {
+      "folderName": "다기야치킨 여문점"
+    },
+    {
+      "folderName": "다정아구"
+    },
+    {
+      "folderName": "닭가대표 숯불직화구이치킨 여수대표점"
+    },
+    {
+      "folderName": "대박난쪽갈비 여수점"
+    },
+    {
+      "folderName": "대정식당"
+    },
+    {
+      "folderName": "대패가1900 문수점"
+    },
+    {
+      "folderName": "더벤티 (미평점)"
+    },
+    {
+      "folderName": "더벤티 여서로터리점"
+    },
+    {
       "folderName": "덮덮밥 미평점"
+    },
+    {
+      "folderName": "도야족발 여수죽림점"
+    },
+    {
+      "folderName": "돈치킨 여수둔덕봉계점"
+    },
+    {
+      "folderName": "동백"
+    },
+    {
+      "folderName": "동서울왕족발"
+    },
+    {
+      "folderName": "둥이식당"
+    },
+    {
+      "folderName": "뚜레쥬르여수미평점"
+    },
+    {
+      "folderName": "뚜레쥬르여수여서점"
+    },
+    {
+      "folderName": "라인반점"
     },
     {
       "folderName": "라홍방마라탕 (여수미평점)"
@@ -863,7 +2880,22 @@
       "folderName": "라홍방마라탕 문수점 061-654-8240"
     },
     {
+      "folderName": "롤링파스타 여서점"
+    },
+    {
+      "folderName": "리얼펍살얼음맥주 여수문수점"
+    },
+    {
+      "folderName": "린차이나"
+    },
+    {
+      "folderName": "맘스터치 여수미평점"
+    },
+    {
       "folderName": "맛있는 전시회"
+    },
+    {
+      "folderName": "맛집남도밀면"
     },
     {
       "folderName": "맵도리닭"
@@ -875,7 +2907,40 @@
       "folderName": "모노데일리"
     },
     {
+      "folderName": "모도리보쌈족발"
+    },
+    {
+      "folderName": "미미꼬마김밥 여서점"
+    },
+    {
+      "folderName": "미치게 (본점 )"
+    },
+    {
+      "folderName": "반올림피자 여수미평점 061-652-7979"
+    },
+    {
+      "folderName": "배떡 여수점 전화 061-654-8288"
+    },
+    {
+      "folderName": "배스킨라빈스 (여수여서점) 전화 061-651-3336"
+    },
+    {
+      "folderName": "백년족발"
+    },
+    {
+      "folderName": "백수초밥"
+    },
+    {
+      "folderName": "백억 흑미 꼬마김밥"
+    },
+    {
       "folderName": "별별김밥"
+    },
+    {
+      "folderName": "본스치킨 미평점"
+    },
+    {
+      "folderName": "봉구스밥버거 문수점"
     },
     {
       "folderName": "봉명동내커피 여수문수점 전화 050-7209-34075"
@@ -887,7 +2952,16 @@
       "folderName": "북촌손만두&피냉면 여수문수점"
     },
     {
+      "folderName": "불로만치킨바베큐 (여서점)"
+    },
+    {
+      "folderName": "불족대가"
+    },
+    {
       "folderName": "빙동댕 (여수문수점)"
+    },
+    {
+      "folderName": "빵빵김밥 여서점"
     },
     {
       "folderName": "삼첩분식 (미평점)"
@@ -896,13 +2970,97 @@
       "folderName": "삼해수산마차"
     },
     {
+      "folderName": "서영이네김밥 미평점"
+    },
+    {
+      "folderName": "선비칼국수"
+    },
+    {
+      "folderName": "수해복마라탕 여수미평점"
+    },
+    {
+      "folderName": "쉐프의 생 안심탕수육 문수점"
+    },
+    {
+      "folderName": "시민족발보쌈 (여수점)"
+    },
+    {
+      "folderName": "쑝쑝돈까스 여수미평점"
+    },
+    {
+      "folderName": "아구회관"
+    },
+    {
+      "folderName": "아주커치킨 문수점"
+    },
+    {
+      "folderName": "양지골수육"
+    },
+    {
+      "folderName": "양철북곱창 여수미평점"
+    },
+    {
+      "folderName": "여수 돌산 꽈배기"
+    },
+    {
+      "folderName": "여수대표치킨"
+    },
+    {
       "folderName": "여수돌게빵&커피"
+    },
+    {
+      "folderName": "여수싱싱회&육회 문수본점"
+    },
+    {
+      "folderName": "여수언니"
+    },
+    {
+      "folderName": "여수족발"
+    },
+    {
+      "folderName": "여수하늘"
+    },
+    {
+      "folderName": "여수회포차 전화0507-1345-7828"
+    },
+    {
+      "folderName": "여정식당 (여문점) 전화 061-652-8878"
+    },
+    {
+      "folderName": "연변양꼬치구이 미평점"
+    },
+    {
+      "folderName": "영화루"
     },
     {
       "folderName": "오늘은 오므라이스 여수점"
     },
     {
+      "folderName": "오늘은카레"
+    },
+    {
+      "folderName": "오븐에꾸운닭 여문점"
+    },
+    {
+      "folderName": "온앤"
+    },
+    {
       "folderName": "올떡볶이 여수봉계점"
+    },
+    {
+      "folderName": "요아정 (여수여서점) 전화 070-8657-0733"
+    },
+    {
+      "folderName": "요이참치 (여수점)"
+    },
+    {
+      "folderName": "우가족발"
+    },
+    {
+      "folderName": "우정통닭"
+    },
+    {
+      "folderName": "우쿠야여수여서점"
     },
     {
       "folderName": "원할머니보쌈"
@@ -911,16 +3069,88 @@
       "folderName": "원할머니보쌈족발여수여서점 전화061-654-5354"
     },
     {
+      "folderName": "유림식당"
+    },
+    {
+      "folderName": "윤가네 선어"
+    },
+    {
+      "folderName": "응큼떡뽁이 여수점"
+    },
+    {
       "folderName": "이조삼계탕"
+    },
+    {
+      "folderName": "인생냉면"
+    },
+    {
+      "folderName": "인생아구찜 여수문수점 전화061-652-3601"
+    },
+    {
+      "folderName": "잇텐스시"
     },
     {
       "folderName": "자담치킨 여수미평점"
     },
     {
+      "folderName": "장충동B&F족발보쌈 여수점 061-662-7878"
+    },
+    {
+      "folderName": "장충동왕족발 여수점"
+    },
+    {
+      "folderName": "제육대가 (여수미평점)"
+    },
+    {
       "folderName": "조선다방"
     },
     {
+      "folderName": "족발자리"
+    },
+    {
+      "folderName": "족팔계왕족발"
+    },
+    {
+      "folderName": "주가네김치찌개&찜 여수여서점"
+    },
+    {
+      "folderName": "중국관"
+    },
+    {
+      "folderName": "중앙돈까스"
+    },
+    {
+      "folderName": "지코바치킨  미평점"
+    },
+    {
+      "folderName": "쫑포피자 문수점,"
+    },
+    {
+      "folderName": "찜콩 갈비찜 전문"
+    },
+    {
+      "folderName": "참 맛있는 족발"
+    },
+    {
+      "folderName": "천화마라탕"
+    },
+    {
+      "folderName": "청년다방 여서점"
+    },
+    {
+      "folderName": "청담피자"
+    },
+    {
+      "folderName": "청춘꼬마김밥"
+    },
+    {
       "folderName": "초밥처럼"
+    },
+    {
+      "folderName": "초이커피"
+    },
+    {
+      "folderName": "촌닭두마리치킨 오림점"
     },
     {
       "folderName": "치킨갱스터"
@@ -929,7 +3159,37 @@
       "folderName": "카레상"
     },
     {
+      "folderName": "카페 브라운"
+    },
+    {
+      "folderName": "커피어클락"
+    },
+    {
+      "folderName": "컴포즈커피 (여수여서점)"
+    },
+    {
+      "folderName": "케이키팩토리"
+    },
+    {
+      "folderName": "키로족발"
+    },
+    {
+      "folderName": "킹스타피자"
+    },
+    {
+      "folderName": "킹콩부대찌개 여수점"
+    },
+    {
       "folderName": "파라바게뜨"
+    },
+    {
+      "folderName": "포슈아 쌀국수배달전문"
+    },
+    {
+      "folderName": "푸라닭 여수문수점 061-651-9206"
+    },
+    {
+      "folderName": "푸줏간 고기도시락 여수문수점"
     },
     {
       "folderName": "피자알볼로"
@@ -941,13 +3201,40 @@
       "folderName": "항아리치킨"
     },
     {
+      "folderName": "해인이네"
+    },
+    {
       "folderName": "핵떡"
+    },
+    {
+      "folderName": "호미스피자 여수점 전화0507-1311-9916"
     },
     {
       "folderName": "홈화면추가"
     },
     {
       "folderName": "홍紅 곱도리탕"
+    },
+    {
+      "folderName": "홍콩반점 문수점 전화 070-8691-0410"
+    },
+    {
+      "folderName": "황금마차"
+    },
+    {
+      "folderName": "황금아구"
+    },
+    {
+      "folderName": "황실육회"
+    },
+    {
+      "folderName": "회먹다"
+    },
+    {
+      "folderName": "후라이드참잘하는집 여서문수점"
+    },
+    {
+      "folderName": "휴게소"
     }
   ],
   "updatedStores": [
@@ -955,6 +3242,11 @@
       "store": "1980밀면회관&냉면 문수점",
       "imageCount": 2,
       "photoGroup": "store:3f441930b8d18783"
+    },
+    {
+      "store": "1989마라탕 봉강점",
+      "imageCount": 2,
+      "photoGroup": "store:d09fa15da80ff88e"
     },
     {
       "store": "1키로 오리스타 여서점",
@@ -982,9 +3274,54 @@
       "photoGroup": "brand:60계치킨"
     },
     {
+      "store": "BHC 돌산점",
+      "imageCount": 3,
+      "photoGroup": "store:53300b03ac188a38"
+    },
+    {
+      "store": "Boss짬뽕 직화제육 미평점",
+      "imageCount": 2,
+      "photoGroup": "store:55ef78aa24e1eac6"
+    },
+    {
+      "store": "가마치통닭 무선점",
+      "imageCount": 2,
+      "photoGroup": "brand:가마치통닭"
+    },
+    {
+      "store": "가마치통닭 문수점",
+      "imageCount": 2,
+      "photoGroup": "brand:가마치통닭"
+    },
+    {
+      "store": "가마치통닭 소호점",
+      "imageCount": 2,
+      "photoGroup": "brand:가마치통닭"
+    },
+    {
+      "store": "가마치통닭 신기점",
+      "imageCount": 2,
+      "photoGroup": "brand:가마치통닭"
+    },
+    {
+      "store": "가마치통닭 죽림점",
+      "imageCount": 2,
+      "photoGroup": "brand:가마치통닭"
+    },
+    {
+      "store": "가마치통닭 학동점",
+      "imageCount": 2,
+      "photoGroup": "brand:가마치통닭"
+    },
+    {
       "store": "갈비냉면 문수점",
       "imageCount": 2,
       "photoGroup": "store:1e7308d1e28fe49e"
+    },
+    {
+      "store": "곱도리辛 낙곱새 봉산점",
+      "imageCount": 2,
+      "photoGroup": "store:f68c9f29515c518e"
     },
     {
       "store": "공차 여서점",
@@ -1012,9 +3349,89 @@
       "photoGroup": "store:dc42166bad88a929"
     },
     {
+      "store": "닭씨네 닭강정 여수점(문수동)",
+      "imageCount": 2,
+      "photoGroup": "store:36d31c0f01bd0e9a"
+    },
+    {
+      "store": "담분식 서교점",
+      "imageCount": 2,
+      "photoGroup": "store:f1b6def61b82cc48"
+    },
+    {
+      "store": "더리터 문수점",
+      "imageCount": 2,
+      "photoGroup": "store:d86fa53d88c8d127"
+    },
+    {
+      "store": "더벤티 여수국동서희스타힐스점",
+      "imageCount": 5,
+      "photoGroup": "brand:더벤티"
+    },
+    {
+      "store": "더벤티 여수돌산점",
+      "imageCount": 5,
+      "photoGroup": "brand:더벤티"
+    },
+    {
+      "store": "더벤티 여수수산시장점(교동)",
+      "imageCount": 5,
+      "photoGroup": "brand:더벤티"
+    },
+    {
+      "store": "더벤티 여수이순신광장점(중앙동)",
+      "imageCount": 5,
+      "photoGroup": "brand:더벤티"
+    },
+    {
+      "store": "더벤티 여수해양공원점(중앙동)",
+      "imageCount": 5,
+      "photoGroup": "brand:더벤티"
+    },
+    {
+      "store": "도담식당 충무동점",
+      "imageCount": 2,
+      "photoGroup": "store:86df23f2e79b3bb8"
+    },
+    {
+      "store": "도도닭발&오돌뼈 봉산점",
+      "imageCount": 2,
+      "photoGroup": "store:634cd6c2572df494"
+    },
+    {
       "store": "동대문엽기떡볶이 문수점",
       "imageCount": 2,
       "photoGroup": "store:149224e8ca5281d9"
+    },
+    {
+      "store": "두마리찜닭 두찜 여수문수점",
+      "imageCount": 6,
+      "photoGroup": "brand:두찜"
+    },
+    {
+      "store": "두마리찜닭 두찜 여수엑스포점",
+      "imageCount": 6,
+      "photoGroup": "brand:두찜"
+    },
+    {
+      "store": "두마리찜닭 두찜 여수웅천점",
+      "imageCount": 6,
+      "photoGroup": "brand:두찜"
+    },
+    {
+      "store": "또래김밥 문수점",
+      "imageCount": 2,
+      "photoGroup": "store:c05575dae26cfbae"
+    },
+    {
+      "store": "뚱땡이숯불두마리치킨 직영점(학동)",
+      "imageCount": 2,
+      "photoGroup": "store:bee72f182a400ed4"
+    },
+    {
+      "store": "라홍방마라탕 웅천점",
+      "imageCount": 2,
+      "photoGroup": "store:cc97a2338805f0c2"
     },
     {
       "store": "마라시대 마라탕 봉산점",
@@ -1027,13 +3444,68 @@
       "photoGroup": "store:e74e79529019bad1"
     },
     {
+      "store": "마형제 족발보쌈 학동점",
+      "imageCount": 2,
+      "photoGroup": "store:a3297f2e48bf9793"
+    },
+    {
       "store": "맛나감자탕 여서점",
       "imageCount": 2,
       "photoGroup": "store:e9753bad89c254a3"
     },
     {
-      "store": "버거킹 웅천점",
+      "store": "명품육회 오림동점",
+      "imageCount": 2,
+      "photoGroup": "store:fbf90dcb8bf85a24"
+    },
+    {
+      "store": "못말리는파닭 덕충점",
+      "imageCount": 2,
+      "photoGroup": "store:315dee55700b0a02"
+    },
+    {
+      "store": "미스터피자 웅천점",
+      "imageCount": 5,
+      "photoGroup": "store:6a7625bd1d16ac3b"
+    },
+    {
+      "store": "박스터지는 두마리치킨 여수문수점",
+      "imageCount": 2,
+      "photoGroup": "store:4b5980481e1d5f41"
+    },
+    {
+      "store": "반반한족발닭발 학동점",
+      "imageCount": 2,
+      "photoGroup": "store:a16ab5b99748d6a2"
+    },
+    {
+      "store": "반올림피자 여수3호점피자(교동)",
       "imageCount": 1,
+      "photoGroup": "brand:반올림피자샵"
+    },
+    {
+      "store": "반올림피자 여수점(신기동)",
+      "imageCount": 1,
+      "photoGroup": "brand:반올림피자샵"
+    },
+    {
+      "store": "배스킨라빈스 여수국동점",
+      "imageCount": 5,
+      "photoGroup": "brand:배스킨라빈스"
+    },
+    {
+      "store": "배스킨라빈스 여수충무점",
+      "imageCount": 5,
+      "photoGroup": "brand:배스킨라빈스"
+    },
+    {
+      "store": "버거리 웅천점",
+      "imageCount": 2,
+      "photoGroup": "store:2ec1cf195195db03"
+    },
+    {
+      "store": "버거킹 웅천점",
+      "imageCount": 2,
       "photoGroup": "store:7b80f8d10b67089e"
     },
     {
@@ -1047,6 +3519,11 @@
       "photoGroup": "store:db28774d00c0d9ba"
     },
     {
+      "store": "부리나 바베큐 치킨 여문점",
+      "imageCount": 2,
+      "photoGroup": "store:6721d86f9ff6f74b"
+    },
+    {
       "store": "비비큐 여수웅천점",
       "imageCount": 3,
       "photoGroup": "store:b73ca9b4a41f7502"
@@ -1058,13 +3535,28 @@
     },
     {
       "store": "생생치킨 무선점(선원동)",
-      "imageCount": 1,
+      "imageCount": 2,
       "photoGroup": "store:030d45b86234bb7b"
     },
     {
+      "store": "설악칡냉면 여문점",
+      "imageCount": 2,
+      "photoGroup": "store:2723324111f200b8"
+    },
+    {
       "store": "소유 커피&디저트 웅천점",
-      "imageCount": 1,
+      "imageCount": 2,
       "photoGroup": "store:03809451afc7b09b"
+    },
+    {
+      "store": "송촌꼬마김밥 여문점",
+      "imageCount": 2,
+      "photoGroup": "store:11e1973f448ef7a6"
+    },
+    {
+      "store": "수육보쌈 25시포차(여서동)",
+      "imageCount": 2,
+      "photoGroup": "store:3a33f3bc732c6bae"
     },
     {
       "store": "순살만공격 여수여서점",
@@ -1072,14 +3564,44 @@
       "photoGroup": "store:0104c356b7c6428c"
     },
     {
+      "store": "슬기로운돼지생활(문수동)",
+      "imageCount": 2,
+      "photoGroup": "store:49814996a90d2a3d"
+    },
+    {
       "store": "시니롱 웅천점",
       "imageCount": 2,
       "photoGroup": "store:b218c9f269d44fa8"
     },
     {
+      "store": "신전떡볶이 문수점",
+      "imageCount": 2,
+      "photoGroup": "store:e6ac7de74abcd1d9"
+    },
+    {
       "store": "아담만두 문수점",
       "imageCount": 2,
       "photoGroup": "store:e7be983ffc863971"
+    },
+    {
+      "store": "얌샘김밥 웅천점",
+      "imageCount": 2,
+      "photoGroup": "store:86976639259e5d7f"
+    },
+    {
+      "store": "여수 김치찜 참 잘하는집 봉산점",
+      "imageCount": 2,
+      "photoGroup": "store:c34a81ea7ed1d578"
+    },
+    {
+      "store": "여수강촌토종닭숯불구이 웅천본점",
+      "imageCount": 4,
+      "photoGroup": "store:d3dbc3f83e7b9aed"
+    },
+    {
+      "store": "여수분식 문수점",
+      "imageCount": 2,
+      "photoGroup": "store:732120ab53b3f457"
     },
     {
       "store": "여수튀김 국동점",
@@ -1093,8 +3615,23 @@
     },
     {
       "store": "우리할매떡볶이 여서점",
-      "imageCount": 1,
+      "imageCount": 2,
       "photoGroup": "store:34817ff59a6bc66d"
+    },
+    {
+      "store": "웅천횟집",
+      "imageCount": 2,
+      "photoGroup": "store:571770a25990ba97"
+    },
+    {
+      "store": "웡김밥 여서점",
+      "imageCount": 2,
+      "photoGroup": "store:c8633f33e72e2e0a"
+    },
+    {
+      "store": "위대한 닭뽀끼&짜파구리 여서점",
+      "imageCount": 2,
+      "photoGroup": "store:df16b7312c25da31"
     },
     {
       "store": "유어문 Your Moon 둔덕점",
@@ -1102,9 +3639,34 @@
       "photoGroup": "store:0199534cac937a52"
     },
     {
+      "store": "육회밤바다 여서점",
+      "imageCount": 2,
+      "photoGroup": "store:fb28167259749571"
+    },
+    {
+      "store": "윤김밥 문수점",
+      "imageCount": 2,
+      "photoGroup": "store:3c3819748a5c2d63"
+    },
+    {
       "store": "이동천 시원냉면 여서점",
-      "imageCount": 1,
+      "imageCount": 2,
       "photoGroup": "store:382dd89b36993ff8"
+    },
+    {
+      "store": "이디야 여수대교동점",
+      "imageCount": 6,
+      "photoGroup": "brand:이디야커피"
+    },
+    {
+      "store": "이디야커피 여수돌산우두리점",
+      "imageCount": 6,
+      "photoGroup": "brand:이디야커피"
+    },
+    {
+      "store": "이디야커피 여수연등메트하임점",
+      "imageCount": 6,
+      "photoGroup": "brand:이디야커피"
     },
     {
       "store": "이라이타코야끼 봉산점",
@@ -1112,29 +3674,49 @@
       "photoGroup": "store:31ffaa41b54a57aa"
     },
     {
+      "store": "이모네분식 봉산점",
+      "imageCount": 2,
+      "photoGroup": "store:424a3dadd34b19fa"
+    },
+    {
       "store": "자담치킨 여수엑스포점",
-      "imageCount": 5,
+      "imageCount": 6,
       "photoGroup": "brand:자담치킨"
     },
     {
       "store": "자담치킨 여수여서점",
-      "imageCount": 5,
+      "imageCount": 6,
       "photoGroup": "brand:자담치킨"
     },
     {
       "store": "자담치킨 여수웅천점",
-      "imageCount": 5,
+      "imageCount": 6,
       "photoGroup": "brand:자담치킨"
     },
     {
       "store": "자담치킨 여수죽림점",
-      "imageCount": 5,
+      "imageCount": 6,
       "photoGroup": "brand:자담치킨"
     },
     {
       "store": "자담치킨 여수학동점",
-      "imageCount": 5,
+      "imageCount": 6,
       "photoGroup": "brand:자담치킨"
+    },
+    {
+      "store": "자연산오징어회 봉산점",
+      "imageCount": 2,
+      "photoGroup": "store:401e4210d0416b54"
+    },
+    {
+      "store": "정담오리바베큐 여수엑스포점",
+      "imageCount": 2,
+      "photoGroup": "store:f58bf8f877dcacd5"
+    },
+    {
+      "store": "정말 맛있는 김치찌개 문수점",
+      "imageCount": 2,
+      "photoGroup": "store:21a676f860851a5a"
     },
     {
       "store": "종가찜 문수점",
@@ -1147,13 +3729,43 @@
       "photoGroup": "store:4e43f1180007c10f"
     },
     {
+      "store": "짱구김밥 문수점",
+      "imageCount": 2,
+      "photoGroup": "store:36856e4f20cae7d0"
+    },
+    {
+      "store": "쭈신쭈왕 문수점",
+      "imageCount": 2,
+      "photoGroup": "store:77b1600313d1d6d4"
+    },
+    {
+      "store": "차이난짬뽕 여서점",
+      "imageCount": 2,
+      "photoGroup": "store:102347a538ed090c"
+    },
+    {
+      "store": "처갓집양념치킨 문수점",
+      "imageCount": 4,
+      "photoGroup": "store:b6c5400a34504bc0"
+    },
+    {
+      "store": "청정게장촌 봉산점",
+      "imageCount": 2,
+      "photoGroup": "store:b6e9f49b01144bc8"
+    },
+    {
       "store": "치코두마리파닭 여서점",
       "imageCount": 2,
       "photoGroup": "store:2857b7140087f6ab"
     },
     {
+      "store": "치킨아이 소호점",
+      "imageCount": 3,
+      "photoGroup": "store:4cd9573bfca48b92"
+    },
+    {
       "store": "큰손닭강정 여수본점(학동)",
-      "imageCount": 1,
+      "imageCount": 2,
       "photoGroup": "store:420af240943ff849"
     },
     {
@@ -1162,39 +3774,74 @@
       "photoGroup": "store:92f4faa988a87728"
     },
     {
+      "store": "통큰두마리찜닭 여서점",
+      "imageCount": 2,
+      "photoGroup": "store:a6f3cc0da6d5c044"
+    },
+    {
+      "store": "투썸플레이스 웅천점",
+      "imageCount": 5,
+      "photoGroup": "brand:투썸플레이스"
+    },
+    {
+      "store": "투썸플레이스 한재사거리점",
+      "imageCount": 5,
+      "photoGroup": "brand:투썸플레이스"
+    },
+    {
+      "store": "평양보쌈왕족발",
+      "imageCount": 2,
+      "photoGroup": "store:6b13f2db6e79b4eb"
+    },
+    {
       "store": "포슬포슬꼬마김밥 문수점",
       "imageCount": 2,
       "photoGroup": "store:20c107a437ec483e"
     },
     {
-      "store": "피자스쿨 여수교동점",
+      "store": "프랭크버거 여수여서점",
       "imageCount": 2,
+      "photoGroup": "store:3d91b86995f619d6"
+    },
+    {
+      "store": "피자스쿨 여수교동점",
+      "imageCount": 3,
       "photoGroup": "brand:피자스쿨"
     },
     {
       "store": "피자스쿨 여수국동점",
-      "imageCount": 2,
+      "imageCount": 3,
       "photoGroup": "brand:피자스쿨"
     },
     {
       "store": "피자스쿨 여수무선점",
-      "imageCount": 2,
+      "imageCount": 3,
       "photoGroup": "brand:피자스쿨"
     },
     {
       "store": "피자스쿨 여수신기점",
-      "imageCount": 2,
+      "imageCount": 3,
       "photoGroup": "brand:피자스쿨"
     },
     {
       "store": "피자스쿨 여수죽림점",
-      "imageCount": 2,
+      "imageCount": 3,
       "photoGroup": "brand:피자스쿨"
     },
     {
       "store": "피자스쿨 여수학동점",
-      "imageCount": 2,
+      "imageCount": 3,
       "photoGroup": "brand:피자스쿨"
+    },
+    {
+      "store": "피자헛 여수문수점",
+      "imageCount": 4,
+      "photoGroup": "brand:피자헛"
+    },
+    {
+      "store": "피자헛 여수시청점",
+      "imageCount": 4,
+      "photoGroup": "brand:피자헛"
     },
     {
       "store": "한끼국밥&갈비찜 국동점",
@@ -1207,43 +3854,126 @@
       "photoGroup": "store:6047251f50214125"
     },
     {
+      "store": "행복분식 문수점",
+      "imageCount": 2,
+      "photoGroup": "store:b8c2dcaa9ef57af5"
+    },
+    {
+      "store": "화란 중화요리",
+      "imageCount": 2,
+      "photoGroup": "store:9586eb46ca401707"
+    },
+    {
+      "store": "콩시루 여서점",
+      "imageCount": 2,
+      "photoGroup": "store:bb036844c501c40a"
+    },
+    {
+      "store": "정성집밥",
+      "imageCount": 3,
+      "photoGroup": "store:a037743d0ee273e2"
+    },
+    {
+      "store": "오워래 수제 돈까스",
+      "imageCount": 2,
+      "photoGroup": "store:04910f606ba038a6"
+    },
+    {
       "store": "베트남쌀국수 123 ZO",
-      "imageCount": 1,
+      "imageCount": 2,
       "photoGroup": "store:dba6beeeb774318f"
     },
     {
+      "store": "아로이태국음식전문점",
+      "imageCount": 2,
+      "photoGroup": "store:320d26d67b993c4a"
+    },
+    {
       "store": "본죽&비빔밥 여수미평점",
-      "imageCount": 5,
+      "imageCount": 8,
       "photoGroup": "brand:본죽"
     },
     {
       "store": "본죽 여수국동점",
-      "imageCount": 5,
+      "imageCount": 8,
       "photoGroup": "brand:본죽"
+    },
+    {
+      "store": "알토랑반찬 여수문수본점",
+      "imageCount": 2,
+      "photoGroup": "store:08e5e26653436fef"
     },
     {
       "store": "정성이 가득찬 반찬",
-      "imageCount": 2,
+      "imageCount": 4,
       "photoGroup": "store:768e4fe8150f5039"
     },
     {
+      "store": "맛있는 반찬",
+      "imageCount": 2,
+      "photoGroup": "store:0ad5341dc696d4f1"
+    },
+    {
+      "store": "황금손 반찬",
+      "imageCount": 4,
+      "photoGroup": "store:d409f6d9118b7bad"
+    },
+    {
+      "store": "걸작떡볶이치킨 여수중앙점",
+      "imageCount": 2,
+      "photoGroup": "store:4e83618703e993b5"
+    },
+    {
+      "store": "진남집밥 교동점",
+      "imageCount": 2,
+      "photoGroup": "store:91798b85e5a50244"
+    },
+    {
+      "store": "여수팥빙수 교동점",
+      "imageCount": 2,
+      "photoGroup": "store:144ed6ece1f4734a"
+    },
+    {
       "store": "본죽&비빔밥 여수중앙점",
-      "imageCount": 5,
+      "imageCount": 8,
       "photoGroup": "brand:본죽"
+    },
+    {
+      "store": "생생연어 여서점",
+      "imageCount": 2,
+      "photoGroup": "store:75dbdaa6383cd49c"
+    },
+    {
+      "store": "여서해장국",
+      "imageCount": 2,
+      "photoGroup": "store:c29fb9cd27867a9d"
     },
     {
       "store": "양아 치킨 여수점(문수동)",
       "imageCount": 2,
       "photoGroup": "store:02bed6e23cbbf188"
+    },
+    {
+      "store": "부뚜막 문수점",
+      "imageCount": 2,
+      "photoGroup": "store:a7d684d2ce59e962"
+    },
+    {
+      "store": "땡초닭발 미평점",
+      "imageCount": 2,
+      "photoGroup": "store:585904750de0000c"
+    },
+    {
+      "store": "황실육회 봉산점(1)",
+      "imageCount": 1,
+      "photoGroup": "store:9e422525b203c97f"
     }
   ],
   "unchangedStores": [
     "1988응답하라추억의옛날도시락 고소동점",
-    "1989마라탕 봉강점",
     "30년전통 할매손곰탕 문수점",
     "60일숙성 명품김치찜&김치찌개&쌈밥 교동점",
     "79대포 여서점",
-    "BHC 돌산점",
     "BHC 여수국동점",
     "BHC 여수문수점",
     "BHC 여수미평점",
@@ -1254,16 +3984,9 @@
     "BHC 여수웅천점",
     "BHC 여수죽림무선점",
     "BHC 여수학동점",
-    "Boss짬뽕 직화제육 미평점",
     "LA통닭&포차 여서본점",
     "RIB&TABLE 바베큐립 전문점(미평동)",
     "가마솥 볶음밥 여서점",
-    "가마치통닭 무선점",
-    "가마치통닭 문수점",
-    "가마치통닭 소호점",
-    "가마치통닭 신기점",
-    "가마치통닭 죽림점",
-    "가마치통닭 학동점",
     "가장맛있는족발 여수돌산점",
     "가장맛있는족발 여수신월점",
     "가장맛있는족발 여수여서점",
@@ -1276,7 +3999,6 @@
     "고기듬뿍 국물두루치기 문수점",
     "골목낙곱새 1977 봉강점",
     "골목짬뽕 여서점",
-    "곱도리辛 낙곱새 봉산점",
     "교동야식 교동점",
     "교촌치킨 국동점",
     "교촌치킨 덕충점",
@@ -1336,43 +4058,26 @@
     "닥엔돈스 쪽갈비 봉강점",
     "닥엔돈스 쪽갈비 여천점(신기동)",
     "닭곰탕 백숙 보약한첩 문수점",
-    "닭씨네 닭강정 여수점(문수동)",
-    "담분식 서교점",
     "더 진한 소한마리탕&국밥 엑스포점",
-    "더리터 문수점",
     "더바른 정국밥 미평점",
-    "더벤티 여수국동서희스타힐스점",
-    "더벤티 여수돌산점",
-    "더벤티 여수수산시장점(교동)",
-    "더벤티 여수이순신광장점(중앙동)",
-    "더벤티 여수해양공원점(중앙동)",
     "던킨 여수롯데마트점",
     "덮밥전문점 고기그릇 공화동점",
-    "도담식당 충무동점",
-    "도도닭발&오돌뼈 봉산점",
     "도미노피자 여천점(학동)",
     "도야족발 여수여천점(죽림)",
     "돈도니밥도둑짜글이 국동점",
     "돈쌈대패 문수점",
     "돌산텃밭김치·반찬 교동점",
     "동서울왕족발(신기동)",
-    "두마리찜닭 두찜 여수문수점",
-    "두마리찜닭 두찜 여수엑스포점",
-    "두마리찜닭 두찜 여수웅천점",
     "둥이식당 봉강점",
     "드피치 피자&치킨 선원동점",
     "땅스부대찌개 여서점",
     "땅스즉석떡볶이 여서점",
     "떡순이 알찬만두 문수점",
-    "또래김밥 문수점",
     "또바기 여서점",
     "뚜레쥬르 여수돌산점",
     "뚜레쥬르 여수엑스포타운점",
-    "뚱땡이숯불두마리치킨 직영점(학동)",
     "라인반점 국동점",
-    "라홍방마라탕 웅천점",
     "마라월드 마라탕&마라상궈 여수문수점",
-    "마형제 족발보쌈 학동점",
     "막국수파는집 문수본점",
     "만석군 봉산점",
     "맘스터치 무선점",
@@ -1404,31 +4109,20 @@
     "멕시칸치킨 학동점",
     "멜로우 국동점",
     "명품1인도시락&시원냉면밀면(국동)",
-    "명품육회 오림동점",
     "모도리보쌈족발 여수본점(봉산동)",
     "모도리보쌈족발 여수직영점(신기동)",
     "몬스터탕수육 여수학동점",
-    "못말리는파닭 덕충점",
-    "미스터피자 웅천점",
     "미친 짜글이 서교점",
     "바다양푼이동태탕/찜 문수점",
     "바르다김선생 여서점",
     "바른보쌈1990 문수점",
     "바른보쌈1990 여수웅천점",
     "바삭한 휴게소 여서점",
-    "박스터지는 두마리치킨 여수문수점",
-    "반반한족발닭발 학동점",
-    "반올림피자 여수3호점피자(교동)",
-    "반올림피자 여수점(신기동)",
     "밥앤동 볶음밥&우동 충무점",
     "배불이 순대국&돼지국밥 교동점",
-    "배스킨라빈스 여수국동점",
-    "배스킨라빈스 여수충무점",
-    "버거리 웅천점",
     "별별김밥 봉산점",
     "봉명가닭도리탕 국동점",
     "뵈르뵈르 여수봉산점",
-    "부리나 바베큐 치킨 여문점",
     "부어치킨 여수학동점",
     "부어치킨&버거 여수소호점",
     "불의제육 여서점",
@@ -1445,26 +4139,21 @@
     "삼해수산마차 국동점",
     "서희국밥&족발 국동본점",
     "선비칼국수 여수국동점",
-    "설악칡냉면 여문점",
     "소녹 종화동점",
     "소코아 웅천점",
     "속초냉면&직화제육 교동점",
     "손수김밥 여서점",
     "손수끓인육개장 문수점",
-    "송촌꼬마김밥 여문점",
     "수시아 김밥전문 공화동점",
     "수원왕갈비통닭 여서점",
-    "수육보쌈 25시포차(여서동)",
     "순살 참잘튀기는집 여수점(여서동)",
     "쉐프의수제요리 야미야미 여서점",
     "스텔라떡볶이 웅천점",
     "스팸많이주는부대찌개 여서점",
     "슬기로운 김치찜/제육대패",
-    "슬기로운돼지생활(문수동)",
     "시민감자탕 문수점",
     "시우푸드 봉산점",
     "시장불닭발 문수점",
-    "신전떡볶이 문수점",
     "쌀쌀맞은닭 여천점(신기동)",
     "쌀통닭 무선점",
     "쌀통닭 여문점",
@@ -1477,16 +4166,12 @@
     "아주커치킨 여수국동점",
     "아주커치킨 여수돌산대교점",
     "아주커치킨 학동점",
-    "얌샘김밥 웅천점",
     "엄마미안 김치찜 공화동점",
     "여서 육감 문수점",
-    "여수 김치찜 참 잘하는집 봉산점",
     "여수 오리날개 튀김 여천점(신기동)",
     "여수강촌토종닭숯불구이 봉산직영점",
-    "여수강촌토종닭숯불구이 웅천본점",
     "여수강촌토종닭숯불구이 죽림직영점",
     "여수다복 교동점",
-    "여수분식 문수점",
     "여수족발 엑스포점",
     "여수족발(신기동)",
     "역전할머니맥주 덕충점",
@@ -1501,29 +4186,17 @@
     "우사골설렁탕 여서동본점",
     "우주호떡 여서점",
     "울엄마 김치찜 갈비찜 중앙점",
-    "웅천횟집",
     "원할머니보쌈족발 여수여천점",
-    "웡김밥 여서점",
-    "위대한 닭뽀끼&짜파구리 여서점",
     "육식사관학교 여서점",
-    "육회밤바다 여서점",
-    "윤김밥 문수점",
     "이가네 나주곰탕&설렁탕 교동점",
-    "이디야 여수대교동점",
-    "이디야커피 여수돌산우두리점",
-    "이디야커피 여수연등메트하임점",
     "이라이타코야끼&카페1리터 여문점",
-    "이모네분식 봉산점",
     "인생냉면 가야밀면 여서점",
     "인생냉면 국동점",
     "임꺽정 갈비탕 봉산점",
     "잇텐스시 국동점",
-    "자연산오징어회 봉산점",
     "장터순대국 교동점",
     "전가복 웅천점",
     "전골의법칙 얼큰한곱창전골 문수점",
-    "정담오리바베큐 여수엑스포점",
-    "정말 맛있는 김치찌개 문수점",
     "제목 없음",
     "제복이네 짜글이&제육쌈밥&두루치기 교동점",
     "제육대패 문수점",
@@ -1538,17 +4211,13 @@
     "진한설렁탕 문수점",
     "집으로 삼겹구이 문수점",
     "짜장왕 왕서방 여서점",
-    "짱구김밥 문수점",
     "쭈꾸미닭 공화점",
-    "쭈신쭈왕 문수점",
     "찌개랑갈비랑 여서점",
     "찜스틸러갈비찜 봉산점",
-    "차이난짬뽕 여서점",
     "참 맛있는 족발 여수본점(신기동)",
     "참숯이면돼지 문수점",
     "찹쌀품은 삼계탕 문수점",
     "처갓집양념치킨 무선점",
-    "처갓집양념치킨 문수점",
     "처갓집양념치킨 신기점",
     "처갓집양념치킨 웅천점",
     "철웅이네 입큰 붕어빵 문수점",
@@ -1558,7 +4227,6 @@
     "청담피자 여수웅천",
     "청담피자 여수죽림점",
     "청송삼계탕&닭칼국수 문수점",
-    "청정게장촌 봉산점",
     "청춘꼬마김밥 여수국동점",
     "청하대 영빈관 여서점",
     "초밥처럼 봉산점",
@@ -1569,7 +4237,6 @@
     "치킨아이 둔덕점",
     "치킨아이 무선점",
     "치킨아이 문수점",
-    "치킨아이 소호점",
     "치킨아이 신기점",
     "치킨아이 학동점",
     "치폴리니 여서점",
@@ -1586,21 +4253,14 @@
     "탕참 탕수육참잘하는집 여수점(여서동)",
     "토담 민속주점 문수점",
     "통뼈감자탕 문수점",
-    "통큰두마리찜닭 여서점",
     "통큰한방삼계탕 공화점",
-    "투썸플레이스 웅천점",
-    "투썸플레이스 한재사거리점",
     "파리바게뜨 여수교동점",
     "파리바게뜨 여수국동점",
     "파리바게뜨 여수엑스포점",
     "파리바게뜨 여수중앙점",
     "파파핫도그 여서점",
-    "평양보쌈왕족발",
     "포우머그 문수점",
-    "프랭크버거 여수여서점",
     "피자알볼로 여수엑스포점(수정동)",
-    "피자헛 여수문수점",
-    "피자헛 여수시청점",
     "피피마켓 종화동점",
     "하루빙수 여서점",
     "하이오커피 여수신월국동항점",
@@ -1610,21 +4270,16 @@
     "항아리치킨&깐풍기 봉산점",
     "해룡옥수수찐빵 문수점",
     "핵떡 여수봉산점",
-    "행복분식 문수점",
     "허참봉 곰탕&갈비탕 봉산점",
     "호(HO)분식 미평점",
     "홍紅 곱도리탕 봉강점",
     "화끈하게매운 핫불닭발&오돌뼈 여서점",
-    "화란 중화요리",
     "황금코다리 봉산점",
     "효자오리바베큐 여서점",
     "와쭈 본점",
     "이화수 전통 육개장",
-    "콩시루 여서점",
-    "정성집밥",
     "콩산소 (음식 연구소)",
     "수라상궁 조선국밥 여서점",
-    "오워래 수제 돈까스",
     "대동여수음식지도(지속업데이트중)",
     "효자오리바베큐 여서점(1)",
     "RIB&TABLE 바베큐립 전문점(미평동) (1)",
@@ -1777,37 +4432,25 @@
     "귀한김치찜 국동봉산점 (1)",
     "쭈꾸미닭 공화점 (1)",
     "조선제일 감자탕&뼈해장국 여서점 (1)",
-    "아로이태국음식전문점",
     "모두의 죽 교동점(영업시간06시~02시까지)",
-    "알토랑반찬 여수문수본점",
-    "맛있는 반찬",
-    "황금손 반찬",
     "바오탕수 여서점",
     "맘스터치 엑스포점",
     "맘스터치 중앙점",
     "여수언니 교동점",
-    "걸작떡볶이치킨 여수중앙점",
-    "진남집밥 교동점",
-    "여수팥빙수 교동점",
     "모노데일리 남산점",
     "이조삼계탕 충무점",
     "포슈아 쌀국수배달전문 서교점",
     "김밥세상 광무점",
     "동백 봉강점",
     "금도령찜닭 여수봉강점",
-    "생생연어 여서점",
-    "여서해장국",
     "맛조은 미평점",
     "뿅가야채곱창 문수점",
-    "배가네왕족보 여문본점",
-    "부뚜막 문수점",
-    "땡초닭발 미평점",
-    "황실육회 봉산점(1)"
+    "배가네왕족보 여문본점"
   ],
-  "finishedAt": "2026-07-16T20:32:01.047Z",
-  "updatedStoreCount": 57,
-  "exactMatchCount": 37,
-  "brandPoolCount": 5,
-  "ambiguousFolderCount": 21,
-  "unmatchedFolderCount": 128
+  "finishedAt": "2026-07-16T20:45:49.442Z",
+  "updatedStoreCount": 146,
+  "exactMatchCount": 107,
+  "brandPoolCount": 13,
+  "ambiguousFolderCount": 77,
+  "unmatchedFolderCount": 466
 }

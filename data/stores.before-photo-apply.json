@@ -16181,7 +16181,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FDchD67F",
-    "image": "images/notion-stores/17fba5c0b042.png",
+    "image": "assets/store1.jpg",
     "routes": [
       {
         "name": "가게바로주문",
@@ -16232,7 +16232,8 @@
     },
     "notionPageId": "a30da158-dd2a-825a-a5f4-01fb18b02da6",
     "notionUrl": "https://app.notion.com/p/a30da158dd2a825aa5f401fb18b02da6",
-    "notionSyncedAt": "2026-07-16T13:48:52.514Z"
+    "notionSyncedAt": "2026-07-16T13:48:52.514Z",
+    "img": "assets/store1.jpg"
   },
   {
     "id": "67d28f42d21c125f",

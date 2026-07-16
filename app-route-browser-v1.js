@@ -48,15 +48,15 @@
     return `<span class="app-browser-emoji">${escapeHtml(meta.icon)}</span>`;
   }
 
-  function browserCard(store, key, meta) {
+  function browserCard(store, key, meta, index = 0) {
     const url = routeFor(store, key);
     const external = /^https?:/i.test(url);
     const target = external ? ' target="_blank" rel="noopener"' : '';
-    const image = store.img || store.image || 'assets/store1.jpg';
+    const photo = window.DaedongPhotoDisplay?.attributes(store, 'card', index) || {src: store.img || store.image || 'assets/store1.jpg', loading: index >= 4 ? 'lazy' : 'eager'};
     const area = store.area || store.district || '여수';
     const category = store.cat || store.category || '음식점';
     return `<a class="app-browser-card" href="${escapeHtml(url)}"${target}>
-      <img class="app-browser-photo" src="${escapeHtml(image)}" alt="${escapeHtml(store.name)}" onerror="this.src='assets/store1.jpg'">
+      <img class="app-browser-photo" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)}" loading="${photo.loading}" decoding="async" width="72" height="64" onerror="this.src='assets/store1.jpg'">
       <div class="app-browser-info">
         <strong>${escapeHtml(store.name)}</strong>
         <small>${escapeHtml(area)} · ${escapeHtml(category)}</small>
@@ -75,7 +75,7 @@
       ? `<a class="app-browser-install" href="${escapeHtml(meta.installUrl)}" target="_blank" rel="noopener">앱 설치</a>`
       : '';
     const cards = ordered.length
-      ? ordered.map(store => browserCard(store, key, meta)).join('')
+      ? ordered.map((store, index) => browserCard(store, key, meta, index)).join('')
       : `<div class="app-browser-empty">현재 ${escapeHtml(meta.label)} 주문 링크가 등록된 가게가 없습니다.</div>`;
 
     openModal(`<section class="app-browser" data-app="${escapeHtml(key)}">

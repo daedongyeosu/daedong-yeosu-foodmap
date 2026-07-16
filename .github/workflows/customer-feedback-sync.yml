@@ -1,0 +1,68 @@
+name: Customer feedback sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
+  push:
+    branches:
+      - fix/load-stores-db790
+    paths:
+      - 'tools/customer-feedback-sync.mjs'
+      - '.github/workflows/customer-feedback-sync.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: customer-feedback-sync
+  cancel-in-progress: false
+
+jobs:
+  feedback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout working branch
+        uses: actions/checkout@v4
+        with:
+          ref: fix/load-stores-db790
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate secret
+        run: test -n "${{ secrets.NOTION_TOKEN }}" || { echo 'NOTION_TOKEN이 없습니다.'; exit 1; }
+
+      - name: Verify feedback and save safely
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          FEEDBACK_DATABASE_ID: 8ae3728176e344fdaee3475a97d03740
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "daedong-feedback-sync"
+          git config user.email "actions@users.noreply.github.com"
+
+          for attempt in 1 2 3; do
+            git fetch origin fix/load-stores-db790
+            git reset --hard origin/fix/load-stores-db790
+            node tools/customer-feedback-sync.mjs
+            git add -f data/stores.json data/customer-feedback-report.json
+
+            if git diff --cached --quiet; then
+              echo '새로운 고객 정보수정 결과가 없습니다.'
+              exit 0
+            fi
+
+            git commit -m "고객 정보수정 요청 검증과 주문경로 보류 반영"
+            if git push origin HEAD:fix/load-stores-db790; then
+              echo '고객 정보수정 결과 저장 완료'
+              exit 0
+            fi
+            sleep 5
+          done
+          exit 1

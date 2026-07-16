@@ -23,6 +23,7 @@ on:
       - 'tools/notion-import-missing-stores.mjs'
       - 'tools/notion-sync-dry-run.mjs'
       - 'tools/dedupe-stores.mjs'
+      - 'tools/apply-photo-manifest-smart.mjs'
       - '.github/workflows/notion-sync.yml'
 
 permissions:
@@ -92,12 +93,22 @@ jobs:
           APPLY_CHANGES: 'true'
         run: node tools/dedupe-stores.mjs
 
+      - name: Match photos again after adding Notion stores
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.apply_changes == true }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f data/photo-manifest.json || { echo "사진 매니페스트가 없어 사진 재매칭을 건너뜁니다."; exit 0; }
+          PHOTO_SAFETY_PHASE=pre node tools/photo-match-safety.mjs
+          node tools/apply-photo-manifest-smart.mjs
+          PHOTO_SAFETY_PHASE=post node tools/photo-match-safety.mjs
+
       - name: Check order-link quality
         run: node tools/link-quality.mjs
 
       - name: Show diagnosis summary
         run: |
-          node -e "const fs=require('fs'); const files=['data/notion-complete-import-report.json','data/notion-import-missing-report.json','data/store-dedup-report.json']; for(const f of files){if(fs.existsSync(f)){const r=require('./'+f); console.log(f, JSON.stringify({accessiblePages:r.accessiblePages||r.pagesVisibleToIntegration,addedCount:r.addedCount,excludedCount:r.excludedCount,skippedCount:r.skippedCount,errorCount:r.errorCount,duplicateGroupCount:r.duplicateGroupCount,removedCount:r.removedCount,totalBefore:r.totalBefore,totalAfter:r.totalAfter},null,2));}}"
+          node -e "const fs=require('fs'); const files=['data/notion-complete-import-report.json','data/notion-import-missing-report.json','data/store-dedup-report.json','data/photo-apply-report.json']; for(const f of files){if(fs.existsSync(f)){const r=require('./'+f); console.log(f, JSON.stringify({accessiblePages:r.accessiblePages||r.pagesVisibleToIntegration,addedCount:r.addedCount,excludedCount:r.excludedCount,skippedCount:r.skippedCount,errorCount:r.errorCount,duplicateGroupCount:r.duplicateGroupCount,removedCount:r.removedCount,totalBefore:r.totalBefore,totalAfter:r.totalAfter,updatedStoreCount:r.updatedStoreCount,coverageRate:r.coverageRate,reviewNeededCount:r.reviewNeededCount},null,2));}}"
 
       - name: Upload sync and diagnosis reports
         if: always()
@@ -111,6 +122,8 @@ jobs:
             data/store-dedup-report.json
             data/stores.before-dedup.json
             data/link-quality-report.json
+            data/photo-apply-report.json
+            data/photo-match-review.json
           if-no-files-found: warn
           retention-days: 14
 
@@ -138,16 +151,16 @@ jobs:
           set -euo pipefail
           git config user.name "daedong-notion-sync"
           git config user.email "actions@users.noreply.github.com"
-          git add -f data/stores.json data/notion-complete-import-report.json data/notion-sync-report.json data/notion-import-missing-report.json data/store-dedup-report.json data/link-quality-report.json
+          git add -f data/stores.json data/notion-complete-import-report.json data/notion-sync-report.json data/notion-import-missing-report.json data/store-dedup-report.json data/link-quality-report.json data/photo-apply-report.json data/photo-match-review.json data/photo-match-safety-report.json data/stores.before-photo-apply.json
           if git diff --cached --quiet; then
             echo "No changes"
             exit 0
           fi
-          git commit -m "노션 가게 동기화 및 복사본 자동 통합"
+          git commit -m "노션 가게 동기화와 스마트 사진 재매칭"
           for attempt in 1 2 3 4 5; do
             git fetch origin fix/load-stores-db790
             if git rebase origin/fix/load-stores-db790 && git push origin HEAD:fix/load-stores-db790; then
-              echo "노션 동기화 저장 완료"
+              echo "노션 동기화와 사진 재매칭 저장 완료"
               exit 0
             fi
             git rebase --abort 2>/dev/null || true

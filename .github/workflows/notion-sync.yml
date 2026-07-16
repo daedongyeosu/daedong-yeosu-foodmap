@@ -17,7 +17,9 @@ on:
     branches:
       - fix/load-stores-db790
     paths:
+      - 'tools/notion-complete-import.mjs'
       - 'tools/notion-import-missing-stores.mjs'
+      - 'tools/notion-sync-dry-run.mjs'
       - '.github/workflows/notion-sync.yml'
 
 permissions:
@@ -46,14 +48,21 @@ jobs:
             exit 1
           fi
 
-      - name: Preview Notion sync safely
+      - name: Preview complete Notion sync safely
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_changes == false }}
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
         run: node tools/notion-sync-dry-run.mjs
 
-      - name: Apply Notion sync
+      - name: Import every accessible Notion store
+        if: ${{ github.event_name == 'push' || inputs.apply_changes == true }}
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
+        run: node tools/notion-complete-import.mjs
+
+      - name: Apply Notion route sync
         if: ${{ github.event_name == 'push' || inputs.apply_changes == true }}
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -73,7 +82,7 @@ jobs:
 
       - name: Show diagnosis summary
         run: |
-          node -e "const r=require('./data/notion-import-missing-report.json'); console.log(JSON.stringify({mode:r.mode,pagesVisibleToIntegration:r.pagesVisibleToIntegration,targetDiagnostics:r.targetDiagnostics,addedCount:r.addedCount,skippedCount:r.skippedCount,errorCount:r.errorCount},null,2))"
+          node -e "const fs=require('fs'); const files=['data/notion-complete-import-report.json','data/notion-import-missing-report.json']; for(const f of files){if(fs.existsSync(f)){const r=require('./'+f); console.log(f, JSON.stringify({accessiblePages:r.accessiblePages||r.pagesVisibleToIntegration,addedCount:r.addedCount,excludedCount:r.excludedCount,skippedCount:r.skippedCount,errorCount:r.errorCount},null,2));}}"
 
       - name: Upload sync and diagnosis reports
         if: always()
@@ -81,6 +90,7 @@ jobs:
         with:
           name: notion-sync-reports
           path: |
+            data/notion-complete-import-report.json
             data/notion-sync-report.json
             data/notion-import-missing-report.json
             data/link-quality-report.json
@@ -92,12 +102,12 @@ jobs:
         run: |
           git config user.name "daedong-notion-sync"
           git config user.email "actions@users.noreply.github.com"
-          git add data/notion-sync-report.json data/notion-import-missing-report.json data/link-quality-report.json
+          git add -f data/notion-complete-import-report.json data/notion-sync-report.json data/notion-import-missing-report.json data/link-quality-report.json
           if git diff --cached --quiet; then
             echo "No report changes"
             exit 0
           fi
-          git commit -m "노션 누락 가게 정밀 진단 보고서"
+          git commit -m "노션 전체 가게 완전 동기화 진단 보고서"
           git push
 
       - name: Commit applied data and reports
@@ -105,10 +115,10 @@ jobs:
         run: |
           git config user.name "daedong-notion-sync"
           git config user.email "actions@users.noreply.github.com"
-          git add data/stores.json data/notion-sync-report.json data/notion-import-missing-report.json data/link-quality-report.json
+          git add -f data/stores.json data/notion-complete-import-report.json data/notion-sync-report.json data/notion-import-missing-report.json data/link-quality-report.json
           if git diff --cached --quiet; then
             echo "No changes"
             exit 0
           fi
-          git commit -m "노션 누락 가게와 주문링크 자동 동기화"
+          git commit -m "노션 등록 가게 전체 자동 동기화"
           git push

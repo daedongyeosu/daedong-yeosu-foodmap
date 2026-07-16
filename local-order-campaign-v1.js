@@ -13,9 +13,9 @@
     brand: {label: '브랜드앱', icon: 'B'},
     phone: {label: '전화주문', icon: '☎'},
     ondongne: {label: '온동네', icon: 'assets/ondongne.png'},
-    baemin: {label: '배달의민족'},
-    coupang: {label: '쿠팡이츠'},
-    yogiyo: {label: '요기요'}
+    baemin: {label: '배달의민족', icon: 'assets/baemin.jpg'},
+    coupang: {label: '쿠팡이츠', icon: 'assets/coupang-eats.jpg'},
+    yogiyo: {label: '요기요', icon: 'assets/yogiyo.jpg'}
   };
 
   const clean = value => String(value ?? '').trim();
@@ -117,15 +117,15 @@
     const overlay = document.createElement('div');
     overlay.id = 'communityOrderOverlay';
     overlay.className = 'community-order-overlay';
-    overlay.innerHTML = `<div class="community-order-card" role="dialog" aria-modal="true" aria-label="여수에 남는 주문 안내">
+    overlay.innerHTML = `<div class="community-order-card" role="dialog" aria-modal="true" aria-label="여수와 함께하는 주문 안내">
       <button class="community-order-close" aria-label="닫기">×</button>
-      <span class="community-order-kicker">💚 여수에 힘이 되는 주문</span>
-      <h2>오늘의 한 끼,<br>여수에 남는 주문으로</h2>
-      <p class="community-order-lead">같은 음식을 주문해도 어떤 방법으로 주문하느냐에 따라 가게가 부담하는 비용은 달라질 수 있습니다.</p>
-      <p class="community-order-emphasis">가능하다면 가게바로주문 · 먹깨비 · 땡겨요 · 온동네 · 브랜드앱 · 전화주문을 먼저 살펴봐 주세요.</p>
-      <p class="community-order-lead">고객님의 한 번의 선택이 여수의 가게와 일자리, 우리 동네 경제에 힘이 됩니다.</p>
-      <div class="community-order-actions"><button class="community-order-primary" data-community-scroll>여수에 남는 주문 보기</button><button class="community-order-secondary" data-community-close>모든 주문방법 보기</button></div>
-      <p class="community-order-note">주문방법은 자유롭게 선택하실 수 있습니다. 대동여수음식지도는 가게 부담이 적은 주문방법을 먼저 안내합니다.</p>
+      <span class="community-order-kicker">💚 우리는 같은 여수에서 살아갑니다</span>
+      <h2>오늘의 한 끼가<br>여수의 내일로 이어지도록</h2>
+      <p class="community-order-lead">한 번의 주문은 한 끼로 끝나지 않습니다. 동네 가게의 불을 밝히고, 지역의 일자리를 지키며, 다시 여수 안에서 소비되는 힘이 됩니다.</p>
+      <p class="community-order-emphasis">가격과 배달비를 비교해 고객님께 맞는 방법을 자유롭게 선택하시되, 조건이 비슷하다면 가게바로주문 · 먹깨비 · 땡겨요 · 온동네 · 브랜드앱 · 전화주문을 한 번 먼저 살펴봐 주세요.</p>
+      <p class="community-order-lead">우리의 작은 선택이 모이면 여수가 함께 살아납니다.</p>
+      <div class="community-order-actions"><button class="community-order-primary" data-community-scroll>여수와 함께하는 주문 보기</button><button class="community-order-secondary" data-community-close>모든 주문방법 보기</button></div>
+      <p class="community-order-note">고객님의 비용과 편의를 먼저 확인한 뒤 선택해 주세요. 대동여수음식지도는 지역에 도움이 되는 주문방법도 함께 안내합니다.</p>
     </div>`;
     document.body.appendChild(overlay);
     document.body.style.overflow = 'hidden';
@@ -139,14 +139,17 @@
     const overlay = document.createElement('div');
     overlay.id = 'communityOrderOverlay';
     overlay.className = 'community-order-overlay';
+    const selectedMeta = META[selectedKey] || {label: '처음 선택한 주문앱', icon: '↗'};
     overlay.innerHTML = `<div class="community-order-card" role="dialog" aria-modal="true">
       <button class="community-order-close" aria-label="닫기">×</button>
-      <span class="community-order-kicker">💚 잠깐만요</span>
-      <h2>이 가게는 부담이 더 적은 주문방법도 있습니다</h2>
-      <p class="community-order-lead"><b>${escHtml(store.name)}</b>을 주문하면서 우리 동네 가게에 조금 더 힘이 되는 방법을 선택하실 수 있습니다.</p>
+      <span class="community-order-kicker">💚 같은 여수, 함께 이어가는 주문</span>
+      <h2>주문하기 전에 지역에 힘이 되는 방법도 함께 확인해 보세요</h2>
+      <p class="community-order-lead"><b>${escHtml(store.name)}</b>에서 선택하신 <b>${escHtml(selectedMeta.label)}</b> 주문도 아래에서 바로 이용할 수 있습니다.</p>
+      <p class="community-order-lead community-order-lead-space">가격과 배달비를 비교해 고객님께 맞는 방법을 자유롭게 선택하시고, 조건이 비슷하다면 여수의 가게와 일자리에 더 오래 힘이 되는 방법을 한 번 먼저 살펴봐 주세요.</p>
       <div class="community-choice-list">${routes.map(item => `<a class="community-choice-link" data-community-low="${escHtml(item.key)}" data-store-id="${escHtml(store.id)}" href="${escHtml(item.url)}" ${/^https?:/i.test(item.url) ? 'target="_blank" rel="noopener"' : ''}>${iconHtml(item.meta)}<span>${escHtml(item.meta.label)}</span><b>›</b></a>`).join('')}</div>
-      <button class="community-choice-continue" data-community-continue data-url="${escHtml(selectedUrl)}" data-route="${escHtml(selectedKey)}">${escHtml(META[selectedKey]?.label || '선택한 주문앱')}으로 계속</button>
-      <p class="community-order-note">어떤 주문방법을 선택하셔도 이용 가능합니다.</p>
+      <p class="community-original-label">처음 선택한 주문방법</p>
+      <a class="community-choice-link community-choice-original" data-community-original data-url="${escHtml(selectedUrl)}" data-route="${escHtml(selectedKey)}" href="${escHtml(selectedUrl)}" ${/^https?:/i.test(selectedUrl) ? 'target="_blank" rel="noopener"' : ''}>${iconHtml(selectedMeta)}<span>${escHtml(selectedMeta.label)}으로 계속</span><b>›</b></a>
+      <p class="community-order-note">어떤 주문방법을 선택하셔도 됩니다. 고객님의 비용과 편의를 먼저 확인해 주세요.</p>
     </div>`;
     document.body.appendChild(overlay);
     document.body.style.overflow = 'hidden';
@@ -160,7 +163,7 @@
     const strip = document.createElement('section');
     strip.id = 'localOrderStrip';
     strip.className = 'local-order-strip';
-    strip.innerHTML = `<strong>같은 한 끼, 더 많은 힘이 여수에 남도록</strong><p>가게의 부담이 적은 주문방법을 먼저 선택해 주세요.</p><button type="button" data-community-scroll>여수에 힘이 되는 주문</button>`;
+    strip.innerHTML = `<strong>한 번의 주문이 여수의 가게와 일자리를 이어갑니다</strong><p>가격과 배달비를 비교한 뒤, 조건이 비슷하다면 여수 안에서 더 오래 힘이 되는 주문방법을 먼저 살펴봐 주세요.</p><button type="button" data-community-scroll>여수와 함께하는 주문</button>`;
     searchRow.insertAdjacentElement('afterend', strip);
   }
 
@@ -201,14 +204,14 @@
     if (lowChoice) {
       const store = storeById(lowChoice.dataset.storeId);
       savePreferredChoice(store, lowChoice.dataset.communityLow);
-      toast('고맙습니다. 고객님의 선택이 여수의 가게에 힘이 됩니다.');
+      toast('고맙습니다. 고객님의 선택이 여수의 가게와 일자리에 힘이 됩니다.');
       closeCampaignOverlay();
       return;
     }
-    const continueButton = event.target.closest('[data-community-continue]');
-    if (continueButton) {
+    const originalChoice = event.target.closest('[data-community-original]');
+    if (originalChoice) {
       event.preventDefault();
-      const url = continueButton.dataset.url;
+      const url = originalChoice.dataset.url;
       closeCampaignOverlay();
       openUrl(url);
       return;
@@ -225,12 +228,12 @@
     if (!store) return;
     if (LOW_COST_KEYS.includes(key)) {
       savePreferredChoice(store, key);
-      toast('고맙습니다. 여수에 힘이 되는 주문을 선택하셨습니다.');
+      toast('고맙습니다. 여수와 함께하는 주문을 선택하셨습니다.');
       return;
     }
     if (!EXTERNAL_KEYS.includes(key)) return;
-    const cheaper = lowCostRoutes(store);
-    if (!cheaper.length) return;
+    const alternatives = lowCostRoutes(store);
+    if (!alternatives.length) return;
     const nudgeKey = `${NUDGE_PREFIX}${store.id}:${key}`;
     const lastNudge = Number(localStorage.getItem(nudgeKey) || 0);
     if (Date.now() - lastNudge < NUDGE_INTERVAL) return;

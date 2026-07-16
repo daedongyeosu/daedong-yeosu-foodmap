@@ -4,10 +4,15 @@ on:
   workflow_dispatch:
     inputs:
       apply_changes:
-        description: 'stores.json에 실제 반영할까요? 처음에는 false로 시험하세요.'
+        description: '검증 후 stores.json에 실제 반영'
         required: true
         default: false
         type: boolean
+      diagnostic_keywords:
+        description: '누락 여부를 집중 확인할 가게명(쉼표로 구분)'
+        required: false
+        default: '오워래,해인이네,수라상궁,바로탕수,바오탕수'
+        type: string
   push:
     branches:
       - fix/load-stores-db790
@@ -30,7 +35,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: Validate secrets
         env:
@@ -55,27 +60,44 @@ jobs:
           NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
         run: node tools/notion-sync.mjs
 
-      - name: Import missing Notion stores
-        if: ${{ github.event_name == 'push' || inputs.apply_changes == true }}
+      - name: Diagnose and import missing Notion stores
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_ROOT_PAGE_ID: ${{ secrets.NOTION_ROOT_PAGE_ID }}
+          APPLY_CHANGES: ${{ github.event_name == 'push' || inputs.apply_changes == true }}
+          DIAGNOSTIC_KEYWORDS: ${{ github.event_name == 'workflow_dispatch' && inputs.diagnostic_keywords || '오워래,해인이네,수라상궁,바로탕수,바오탕수' }}
         run: node tools/notion-import-missing-stores.mjs
 
       - name: Check order-link quality
         run: node tools/link-quality.mjs
+
+      - name: Show diagnosis summary
+        run: |
+          node -e "const r=require('./data/notion-import-missing-report.json'); console.log(JSON.stringify({mode:r.mode,pagesVisibleToIntegration:r.pagesVisibleToIntegration,targetDiagnostics:r.targetDiagnostics,addedCount:r.addedCount,skippedCount:r.skippedCount,errorCount:r.errorCount},null,2))"
+
+      - name: Upload sync and diagnosis reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: notion-sync-reports
+          path: |
+            data/notion-sync-report.json
+            data/notion-import-missing-report.json
+            data/link-quality-report.json
+          if-no-files-found: warn
+          retention-days: 14
 
       - name: Commit reports only
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.apply_changes == false }}
         run: |
           git config user.name "daedong-notion-sync"
           git config user.email "actions@users.noreply.github.com"
-          git add data/notion-sync-report.json data/link-quality-report.json
+          git add data/notion-sync-report.json data/notion-import-missing-report.json data/link-quality-report.json
           if git diff --cached --quiet; then
             echo "No report changes"
             exit 0
           fi
-          git commit -m "노션 동기화 시험 보고서"
+          git commit -m "노션 누락 가게 정밀 진단 보고서"
           git push
 
       - name: Commit applied data and reports

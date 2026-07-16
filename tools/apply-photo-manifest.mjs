@@ -90,7 +90,9 @@ const STATIC_BRANDS = [
   ['이디야커피',['이디야커피','이디야']], ['투썸플레이스',['투썸플레이스','투썸']], ['파리바게뜨',['파리바게뜨','파리바게트']],
   ['본죽&비빔밥',['본죽비빔밥']], ['본죽',['본죽']], ['죠스떡볶이',['죠스떡볶이']],
   ['신전떡볶이',['신전떡볶이']], ['엽기떡볶이',['동대문엽기떡볶이','엽기떡볶이']],
-  ['홍콩반점',['홍콩반점']], ['탕화쿵푸마라탕',['탕화쿵푸마라탕','탕화쿵푸']]
+  ['홍콩반점',['홍콩반점']], ['탕화쿵푸마라탕',['탕화쿵푸마라탕','탕화쿵푸']],
+  ['공차',['공차']], ['더벤티',['더벤티']], ['요아정',['카페요아정','요아정']], ['던킨',['던킨']], ['두찜',['두마리찜닭두찜','두찜']],
+  ['여수강촌토종닭숯불구이',['여수강촌토종닭숯불구이','강촌토종닭숯불구이']], ['여수족발',['여수족발']]
 ].map(([key, aliases]) => ({key, aliases: aliases.map(normalize).sort((a,b) => b.length-a.length)}));
 
 function staticBrand(value) {
@@ -116,9 +118,7 @@ function scoreFolderToStore(folderName, store) {
     else if (folder.includes(alias) || alias.includes(folder)) {
       const ratio = Math.min(folder.length, alias.length) / Math.max(folder.length, alias.length);
       best = Math.max(best, 83 + ratio * 14);
-    } else {
-      best = Math.max(best, diceSimilarity(folder, alias) * 92);
-    }
+    } else best = Math.max(best, diceSimilarity(folder, alias) * 92);
   }
   const folderLocations = locationTokens(folderName);
   const storeLocations = locationTokens([store.name, store.realBusinessName, store.district].join(' '));
@@ -130,8 +130,7 @@ function scoreFolderToStore(folderName, store) {
 }
 
 function normalizeImages(folder) {
-  return unique((folder.images || []).map(image => image?.src || image?.card || image?.url || image))
-    .map(src => ({card: src, detail: src}));
+  return unique((folder.images || []).map(image => image?.src || image?.card || image?.url || image)).map(src => ({card: src, detail: src}));
 }
 
 function rotate(values, offset) {
@@ -156,8 +155,7 @@ async function main() {
   const report = {
     startedAt: new Date().toISOString(), mode: APPLY_CHANGES ? 'apply' : 'preview',
     storeCount: stores.length, manifestFolderCount: folders.length,
-    exactMatches: [], brandPools: [], ambiguousFolders: [], unmatchedFolders: [],
-    updatedStores: [], unchangedStores: []
+    exactMatches: [], brandPools: [], ambiguousFolders: [], unmatchedFolders: [], updatedStores: [], unchangedStores: []
   };
 
   const directByStoreId = new Map();

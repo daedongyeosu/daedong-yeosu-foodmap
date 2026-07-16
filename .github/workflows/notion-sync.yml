@@ -24,6 +24,7 @@ on:
       - 'tools/notion-sync-dry-run.mjs'
       - 'tools/notion-sync.mjs'
       - 'tools/dedupe-stores.mjs'
+      - 'tools/photo-prefix-overrides.mjs'
       - 'tools/apply-photo-manifest-strict.mjs'
       - '.github/workflows/notion-sync.yml'
 
@@ -98,20 +99,21 @@ jobs:
 
             if [ -f data/photo-manifest.json ] && [ -d assets/store-photos ]; then
               PHOTO_SAFETY_PHASE=pre node tools/photo-match-safety.mjs
+              node tools/photo-prefix-overrides.mjs
               node tools/apply-photo-manifest-strict.mjs
               PHOTO_SAFETY_PHASE=post node tools/photo-match-safety.mjs
             fi
 
             node tools/link-quality.mjs
 
-            git add -f data/stores.json data/notion-complete-import-report.json data/notion-sync-report.json data/notion-import-missing-report.json data/store-dedup-report.json data/stores.before-dedup.json data/link-quality-report.json data/photo-apply-report.json data/photo-match-action-report.json data/photo-match-safety-report.json data/stores.before-photo-apply.json
+            git add -f data/stores.json data/notion-complete-import-report.json data/notion-sync-report.json data/notion-import-missing-report.json data/store-dedup-report.json data/stores.before-dedup.json data/link-quality-report.json data/photo-apply-report.json data/photo-match-action-report.json data/photo-prefix-match-report.json data/photo-match-overrides.json data/photo-match-safety-report.json data/stores.before-photo-apply.json
 
             if git diff --cached --quiet; then
               echo "노션 동기화 변경 없음"
               exit 0
             fi
 
-            git commit -m "노션 가게 동기화와 가게명 기준 사진 재매칭"
+            git commit -m "노션 가게 동기화와 앞부분 가게명 기준 사진 재매칭"
             if git push origin HEAD:fix/load-stores-db790; then
               echo "노션 동기화와 사진 재매칭 저장 완료"
               exit 0
@@ -138,6 +140,7 @@ jobs:
             data/link-quality-report.json
             data/photo-apply-report.json
             data/photo-match-action-report.json
+            data/photo-prefix-match-report.json
             data/photo-match-safety-report.json
           if-no-files-found: warn
           retention-days: 14

@@ -15,10 +15,31 @@ const APP_KEYS = new Map([
   ['요기요', 'yogiyo']
 ]);
 
+const SHORTENER_HOSTS = new Set([
+  'bit.ly',
+  'www.bit.ly',
+  'tinyurl.com',
+  'www.tinyurl.com',
+  't.co',
+  'goo.gl',
+  'is.gd',
+  'v.gd',
+  'cutt.ly',
+  'han.gl'
+]);
+
 function appKey(name = '') {
   const text = String(name).replace(/\s+/g, '');
   for (const [label, key] of APP_KEYS) if (text.includes(label)) return key;
   return '';
+}
+
+function isShortener(urlString) {
+  try {
+    return SHORTENER_HOSTS.has(new URL(urlString).hostname.toLowerCase());
+  } catch {
+    return false;
+  }
 }
 
 function genericHomeReason(key, urlString) {
@@ -71,12 +92,24 @@ async function inspectRoute(route) {
   const key = appKey(route?.name);
   if (!key || !route?.url) return null;
 
+  if (isShortener(route.url)) {
+    return {
+      app: key,
+      name: route.name,
+      sourceUrl: route.url,
+      finalUrl: route.url,
+      httpStatus: null,
+      quality: 'short-link-skipped',
+      reason: 'analytics-protection',
+      skipped: true
+    };
+  }
+
   const resolved = await resolveUrl(route.url);
   const reason = genericHomeReason(key, resolved.finalUrl);
   let quality = 'direct-or-unknown';
   if (!resolved.ok) quality = 'unreachable';
   else if (reason) quality = 'home-or-install';
-  else if (/bit\.ly|short|tinyurl/i.test(new URL(route.url).hostname) && resolved.finalUrl === route.url) quality = 'short-link-unresolved';
   else quality = 'direct-likely';
 
   return {
@@ -97,7 +130,7 @@ async function main() {
     rules: {
       'direct-likely': '가게 상세 경로로 보이는 링크',
       'home-or-install': '앱 설치 또는 서비스 메인화면으로 보이는 링크',
-      'short-link-unresolved': '단축 URL의 최종 목적지를 확인하지 못함',
+      'short-link-skipped': 'Bitly 등 단축주소는 클릭 통계 보호를 위해 접속하지 않음',
       unreachable: '접속 실패 또는 시간 초과'
     },
     totals: {},

@@ -1,17 +1,40 @@
 {
-  "startedAt": "2026-07-16T13:59:36.963Z",
+  "startedAt": "2026-07-16T22:13:49.801Z",
   "mode": "apply",
   "explanation": "이 보고서에 제목이 전혀 나타나지 않는 페이지는 현재 Notion API 연결이 발견하지 못한 페이지일 가능성이 큽니다.",
   "diagnosticKeywords": [
+    "아구회관",
+    "아도쿄",
     "오워래",
     "해인이네",
     "수라상궁",
     "바로탕수",
     "바오탕수"
   ],
-  "pagesVisibleToIntegration": 627,
-  "added": [],
+  "pagesVisibleToIntegration": 628,
+  "added": [
+    {
+      "title": "대동여수음식지도 신규가게 등록함",
+      "pageId": "39fda158-dd2a-802c-a5ac-e3ed6b2b1032",
+      "result": "added",
+      "routes": [
+        "direct",
+        "mukkebi",
+        "ddangyo",
+        "chak",
+        "naver",
+        "phone",
+        "coupang",
+        "baemin",
+        "yogiyo"
+      ]
+    }
+  ],
   "existing": [
+    {
+      "title": "해인이네 여서점",
+      "pageId": "318da158-dd2a-808a-be50-d5f9330d5ca4"
+    },
     {
       "title": "베트남쌀국수 123 ZO",
       "pageId": "2f9da158-dd2a-80cf-ada0-c011a60d5591"
@@ -2514,21 +2537,14 @@
     }
   ],
   "skipped": [],
-  "errors": [
-    {
-      "title": "대동여수음식지도 신규가게 등록함",
-      "pageId": "39fda158-dd2a-802c-a5ac-e3ed6b2b1032",
-      "status": null,
-      "error": "/blocks/39cda158-dd2a-8002-afda-cb07387da39e/children?page_size=100 재시도 초과"
-    }
-  ],
+  "errors": [],
   "pageDiagnostics": [
     {
-      "title": "바오탕수 여서점",
-      "pageId": "2eada158-dd2a-80aa-83f0-d14acd3d04be",
-      "pageUrl": "https://app.notion.com/p/2eada158dd2a80aa83f0d14acd3d04be",
+      "title": "해인이네 여서점",
+      "pageId": "318da158-dd2a-808a-be50-d5f9330d5ca4",
+      "pageUrl": "https://app.notion.com/p/318da158dd2a808abe50d5f9330d5ca4",
       "keywordMatches": [
-        "바오탕수"
+        "해인이네"
       ],
       "titleAccepted": true,
       "existingInStores": true,
@@ -2546,12 +2562,38 @@
       "keywordMatches": [],
       "titleAccepted": true,
       "existingInStores": false,
+      "bodyReadable": true,
+      "blockCount": 469,
+      "rawLinkCount": 202,
+      "routes": [
+        "가게바로주문",
+        "먹깨비",
+        "땡겨요",
+        "CHAK",
+        "네이버지도",
+        "전화",
+        "쿠팡이츠",
+        "배달의민족",
+        "요기요"
+      ],
+      "result": "added",
+      "reason": "주문 경로 9개 발견"
+    },
+    {
+      "title": "바오탕수 여서점",
+      "pageId": "2eada158-dd2a-80aa-83f0-d14acd3d04be",
+      "pageUrl": "https://app.notion.com/p/2eada158dd2a80aa83f0d14acd3d04be",
+      "keywordMatches": [
+        "바오탕수"
+      ],
+      "titleAccepted": true,
+      "existingInStores": true,
       "bodyReadable": false,
       "blockCount": 0,
       "rawLinkCount": 0,
       "routes": [],
-      "result": "error",
-      "reason": "/blocks/39cda158-dd2a-8002-afda-cb07387da39e/children?page_size=100 재시도 초과"
+      "result": "existing",
+      "reason": "이미 stores.json에 존재"
     },
     {
       "title": "수라상궁 조선국밥 여서점",
@@ -2590,6 +2632,8 @@
       "pageId": "d47da158-dd2a-82df-ad0e-01db9188c847",
       "pageUrl": "https://app.notion.com/p/d47da158dd2a82dfad0e01db9188c847",
       "keywordMatches": [
+        "아구회관",
+        "아도쿄",
         "오워래",
         "해인이네",
         "수라상궁",
@@ -2608,6 +2652,18 @@
   ],
   "targetDiagnostics": [
     {
+      "keyword": "아구회관",
+      "visibleToIntegration": false,
+      "matchedTitles": [],
+      "conclusion": "API 검색에서 발견되지 않음. 해당 페이지 또는 상위 페이지의 연결 권한을 확인해야 함."
+    },
+    {
+      "keyword": "아도쿄",
+      "visibleToIntegration": false,
+      "matchedTitles": [],
+      "conclusion": "API 검색에서 발견되지 않음. 해당 페이지 또는 상위 페이지의 연결 권한을 확인해야 함."
+    },
+    {
       "keyword": "오워래",
       "visibleToIntegration": true,
       "matchedTitles": [
@@ -2617,9 +2673,11 @@
     },
     {
       "keyword": "해인이네",
-      "visibleToIntegration": false,
-      "matchedTitles": [],
-      "conclusion": "API 검색에서 발견되지 않음. 해당 페이지 또는 상위 페이지의 연결 권한을 확인해야 함."
+      "visibleToIntegration": true,
+      "matchedTitles": [
+        "해인이네 여서점"
+      ],
+      "conclusion": "API 검색에서 발견됨. 아래 pageDiagnostics에서 처리 결과 확인."
     },
     {
       "keyword": "수라상궁",
@@ -2644,10 +2702,10 @@
       "conclusion": "API 검색에서 발견됨. 아래 pageDiagnostics에서 처리 결과 확인."
     }
   ],
-  "finishedAt": "2026-07-16T13:59:47.721Z",
-  "addedCount": 0,
-  "existingCount": 625,
+  "finishedAt": "2026-07-16T22:13:57.646Z",
+  "addedCount": 1,
+  "existingCount": 626,
   "skippedCount": 0,
-  "errorCount": 1,
-  "totalStoresAfterRun": 622
+  "errorCount": 0,
+  "totalStoresAfterRun": 624
 }

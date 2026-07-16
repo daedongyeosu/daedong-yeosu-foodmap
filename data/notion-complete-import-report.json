@@ -1,431 +1,180 @@
 {
-  "startedAt": "2026-07-16T13:45:56.746Z",
-  "accessiblePages": 627,
-  "inspected": 39,
+  "startedAt": "2026-07-16T22:03:51.735Z",
+  "accessiblePages": 628,
+  "inspected": 8,
   "added": [
     {
-      "title": "베트남쌀국수 123 ZO",
-      "pageId": "2f9da158-dd2a-80cf-ada0-c011a60d5591",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "전화",
-        "CHAK",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "아로이태국음식전문점",
-      "pageId": "34bda158-dd2a-8022-943c-c858964e4c2c",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "전화",
-        "CHAK",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "본죽&비빔밥 여수미평점",
-      "pageId": "2f7da158-dd2a-8017-af39-c3ad77e59708",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "전화",
-        "CHAK",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "본죽 여수국동점",
-      "pageId": "2fcda158-dd2a-80bc-bbac-e019c5b119c9",
-      "routes": [
-        "가게바로주문",
-        "땡겨요",
-        "전화",
-        "CHAK",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "모두의 죽 교동점(영업시간06시~02시까지)",
-      "pageId": "31dda158-dd2a-80cf-a378-fab2b44f969d",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "전화",
-        "CHAK",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "알토랑반찬 여수문수본점",
-      "pageId": "2f1da158-dd2a-8041-8dae-f0ff9ef5ffab",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족",
-        "CHAK"
-      ]
-    },
-    {
-      "title": "정성이 가득찬 반찬",
-      "pageId": "31fda158-dd2a-8005-8266-c984f0411d28",
+      "title": "해인이네 여서점",
+      "pageId": "318da158-dd2a-808a-be50-d5f9330d5ca4",
       "routes": [
         "가게바로주문",
         "먹깨비",
         "CHAK",
-        "전화",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "맛있는 반찬",
-      "pageId": "2f8da158-dd2a-8072-a527-e8f58230af42",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "전화",
-        "CHAK",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "황금손 반찬",
-      "pageId": "324da158-dd2a-808c-936f-ed38511ae7e0",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "전화",
-        "CHAK",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "바오탕수 여서점",
-      "pageId": "2eada158-dd2a-80aa-83f0-d14acd3d04be",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "맘스터치 엑스포점",
-      "pageId": "39dda158-dd2a-809d-98ef-f42484ee5c89",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "맘스터치 중앙점",
-      "pageId": "39dda158-dd2a-80c3-8359-ee834ceb60d1",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "여수언니 교동점",
-      "pageId": "da3da158-dd2a-82d3-88a5-814cbff83624",
-      "routes": [
-        "가게바로주문",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "걸작떡볶이치킨 여수중앙점",
-      "pageId": "dabda158-dd2a-82bb-95d0-01e2aed643cd",
-      "routes": [
-        "가게바로주문",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "진남집밥 교동점",
-      "pageId": "39dda158-dd2a-80fd-87be-d296b61ed337",
-      "routes": [
-        "가게바로주문",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "여수팥빙수 교동점",
-      "pageId": "39dda158-dd2a-804d-b416-c064f8a58e71",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "모노데일리 남산점",
-      "pageId": "39bda158-dd2a-800a-a886-faf1ca7f60e2",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "이조삼계탕 충무점",
-      "pageId": "39bda158-dd2a-8020-babc-de2ba358123c",
-      "routes": [
-        "가게바로주문",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "포슈아 쌀국수배달전문 서교점",
-      "pageId": "39bda158-dd2a-80d2-a756-e8202b8142a4",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "본죽&비빔밥 여수중앙점",
-      "pageId": "394da158-dd2a-8068-8ca6-d42ec38b9a42",
-      "routes": [
-        "가게바로주문",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "김밥세상 광무점",
-      "pageId": "39ada158-dd2a-80bd-848f-ddbad4702d86",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "동백 봉강점",
-      "pageId": "39ada158-dd2a-8044-a38b-e31ec2fde127",
-      "routes": [
-        "가게바로주문",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "금도령찜닭 여수봉강점",
-      "pageId": "39ada158-dd2a-8058-99e1-cb3b9802551f",
-      "routes": [
-        "가게바로주문",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "생생연어 여서점",
-      "pageId": "39cda158-dd2a-806d-875c-e879406da57a",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "여서해장국",
-      "pageId": "39cda158-dd2a-8002-afda-cb07387da39e",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "양아 치킨 여수점(문수동)",
-      "pageId": "39cda158-dd2a-8011-ad77-cb9bae2ff09f",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠"
-      ]
-    },
-    {
-      "title": "맛조은 미평점",
-      "pageId": "39cda158-dd2a-80f4-96e2-f9b291c09aa1",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "뿅가야채곱창 문수점",
-      "pageId": "39bda158-dd2a-8082-a0c7-c374287de8db",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "배가네왕족보 여문본점",
-      "pageId": "39bda158-dd2a-8052-8bd6-d2f16b9c043d",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "부뚜막 문수점",
-      "pageId": "39bda158-dd2a-80dc-a1ae-f79871fc92d1",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "땡초닭발 미평점",
-      "pageId": "39bda158-dd2a-809b-9784-d68a7b9b4f80",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "요기요",
-        "쿠팡이츠",
-        "배달의민족"
-      ]
-    },
-    {
-      "title": "황실육회 봉산점(1)",
-      "pageId": "390da158-dd2a-80d6-86f9-c10371e0f394",
-      "routes": [
-        "가게바로주문",
-        "먹깨비",
-        "땡겨요",
-        "CHAK",
-        "전화",
-        "쿠팡이츠",
-        "배달의민족"
+        "전화"
       ]
     }
   ],
   "alreadyPresent": [
+    {
+      "title": "베트남쌀국수 123 ZO",
+      "pageId": "2f9da158-dd2a-80cf-ada0-c011a60d5591",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "아로이태국음식전문점",
+      "pageId": "34bda158-dd2a-8022-943c-c858964e4c2c",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "본죽&비빔밥 여수미평점",
+      "pageId": "2f7da158-dd2a-8017-af39-c3ad77e59708",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "본죽 여수국동점",
+      "pageId": "2fcda158-dd2a-80bc-bbac-e019c5b119c9",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "모두의 죽 교동점(영업시간06시~02시까지)",
+      "pageId": "31dda158-dd2a-80cf-a378-fab2b44f969d",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "알토랑반찬 여수문수본점",
+      "pageId": "2f1da158-dd2a-8041-8dae-f0ff9ef5ffab",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "정성이 가득찬 반찬",
+      "pageId": "31fda158-dd2a-8005-8266-c984f0411d28",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "맛있는 반찬",
+      "pageId": "2f8da158-dd2a-8072-a527-e8f58230af42",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "황금손 반찬",
+      "pageId": "324da158-dd2a-808c-936f-ed38511ae7e0",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "바오탕수 여서점",
+      "pageId": "2eada158-dd2a-80aa-83f0-d14acd3d04be",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "맘스터치 엑스포점",
+      "pageId": "39dda158-dd2a-809d-98ef-f42484ee5c89",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "맘스터치 중앙점",
+      "pageId": "39dda158-dd2a-80c3-8359-ee834ceb60d1",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "여수언니 교동점",
+      "pageId": "da3da158-dd2a-82d3-88a5-814cbff83624",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "걸작떡볶이치킨 여수중앙점",
+      "pageId": "dabda158-dd2a-82bb-95d0-01e2aed643cd",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "진남집밥 교동점",
+      "pageId": "39dda158-dd2a-80fd-87be-d296b61ed337",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "여수팥빙수 교동점",
+      "pageId": "39dda158-dd2a-804d-b416-c064f8a58e71",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "모노데일리 남산점",
+      "pageId": "39bda158-dd2a-800a-a886-faf1ca7f60e2",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "이조삼계탕 충무점",
+      "pageId": "39bda158-dd2a-8020-babc-de2ba358123c",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "포슈아 쌀국수배달전문 서교점",
+      "pageId": "39bda158-dd2a-80d2-a756-e8202b8142a4",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "본죽&비빔밥 여수중앙점",
+      "pageId": "394da158-dd2a-8068-8ca6-d42ec38b9a42",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "김밥세상 광무점",
+      "pageId": "39ada158-dd2a-80bd-848f-ddbad4702d86",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "동백 봉강점",
+      "pageId": "39ada158-dd2a-8044-a38b-e31ec2fde127",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "금도령찜닭 여수봉강점",
+      "pageId": "39ada158-dd2a-8058-99e1-cb3b9802551f",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "생생연어 여서점",
+      "pageId": "39cda158-dd2a-806d-875c-e879406da57a",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "여서해장국",
+      "pageId": "39cda158-dd2a-8002-afda-cb07387da39e",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "양아 치킨 여수점(문수동)",
+      "pageId": "39cda158-dd2a-8011-ad77-cb9bae2ff09f",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "맛조은 미평점",
+      "pageId": "39cda158-dd2a-80f4-96e2-f9b291c09aa1",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "뿅가야채곱창 문수점",
+      "pageId": "39bda158-dd2a-8082-a0c7-c374287de8db",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "배가네왕족보 여문본점",
+      "pageId": "39bda158-dd2a-8052-8bd6-d2f16b9c043d",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "부뚜막 문수점",
+      "pageId": "39bda158-dd2a-80dc-a1ae-f79871fc92d1",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "땡초닭발 미평점",
+      "pageId": "39bda158-dd2a-809b-9784-d68a7b9b4f80",
+      "reason": "same-page-id"
+    },
+    {
+      "title": "황실육회 봉산점(1)",
+      "pageId": "390da158-dd2a-80d6-86f9-c10371e0f394",
+      "reason": "same-page-id"
+    },
     {
       "title": "와쭈 본점",
       "pageId": "2ecda158-dd2a-80cb-8ff3-c5290cf5558a",
@@ -3400,8 +3149,8 @@
     }
   ],
   "errors": [],
-  "finishedAt": "2026-07-16T13:46:18.457Z",
-  "addedCount": 32,
+  "finishedAt": "2026-07-16T22:03:54.943Z",
+  "addedCount": 1,
   "excludedCount": 1,
   "errorCount": 0
 }

@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-07-16T13:46:25.232Z",
+  "startedAt": "2026-07-16T22:04:00.857Z",
   "rules": {
     "routeAuthority": "notion-main-page",
     "phonePriority": "notion-then-existing",
@@ -8,7 +8,7 @@
     "matching": "exact-contained-dice",
     "rootPageIdConfigured": true
   },
-  "pagesScanned": 626,
+  "pagesScanned": 627,
   "matched": [
     {
       "store": "1980밀면회관&냉면 문수점",
@@ -10859,6 +10859,24 @@
       "missingRoutes": [
         "yogiyo"
       ]
+    },
+    {
+      "store": "해인이네 여서점",
+      "notionTitle": "해인이네 여서점",
+      "score": 100,
+      "routes": [
+        "direct",
+        "mukkebi",
+        "chak",
+        "phone"
+      ],
+      "phone": null,
+      "missingRoutes": [
+        "ddangyo",
+        "yogiyo",
+        "coupang",
+        "baemin"
+      ]
     }
   ],
   "ambiguous": [
@@ -10883,8 +10901,8 @@
     }
   ],
   "errors": [],
-  "finishedAt": "2026-07-16T13:59:30.757Z",
-  "matchedCount": 620,
+  "finishedAt": "2026-07-16T22:13:44.471Z",
+  "matchedCount": 621,
   "ambiguousCount": 1,
   "unmatchedCount": 1,
   "errorCount": 0

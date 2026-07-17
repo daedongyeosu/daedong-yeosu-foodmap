@@ -9,6 +9,8 @@ on:
       - 'app.css'
       - 'data/**'
       - 'images/notion-stores/**'
+      - 'assets/store-photos/**'
+      - 'assets/notion-store-photos/**'
       - 'scripts/**'
       - '.github/workflows/integration-validation.yml'
   push:
@@ -21,7 +23,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 35
     steps:
       - name: Checkout integration branch
         uses: actions/checkout@v4
@@ -32,6 +34,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+
+      - name: Verify no repository files were deleted
+        id: no_deletions
+        continue-on-error: true
+        shell: bash
+        run: |
+          git fetch origin main --depth=1
+          git diff --diff-filter=D --name-only origin/main...HEAD | tee deleted-files.txt
+          test ! -s deleted-files.txt
 
       - name: Check JavaScript syntax
         run: node --check app.js
@@ -120,12 +131,33 @@ jobs:
           set -o pipefail
           node scripts/test-app-unit.mjs 2>&1 | tee unit-tests.txt
 
+      - name: Install Chromium browser test runtime
+        id: browser_install
+        continue-on-error: true
+        shell: bash
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Run mobile browser smoke tests
+        id: browser
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 -m http.server 4173 --bind 127.0.0.1 > browser-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill $server_pid 2>/dev/null || true' EXIT
+          sleep 2
+          BASE_URL=http://127.0.0.1:4173 node scripts/browser-smoke.mjs 2>&1 | tee browser-smoke.txt
+
       - name: Upload validation reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: integration-validation-report
           path: |
+            deleted-files.txt
             data-inventory.txt
             db790-data-inventory.txt
             db790-branch-inventory.txt
@@ -141,6 +173,11 @@ jobs:
             photo-build.txt
             integration-validation.txt
             unit-tests.txt
+            browser-server.log
+            browser-smoke.txt
+            browser-smoke-report.json
+            browser-mobile.png
+            browser-mobile-failure.png
           if-no-files-found: warn
           retention-days: 14
 
@@ -148,11 +185,14 @@ jobs:
         if: always()
         shell: bash
         run: |
+          echo "no_deletions=${{ steps.no_deletions.outcome }}"
           echo "db790=${{ steps.db790.outcome }}"
           echo "db790_prepare=${{ steps.db790_prepare.outcome }}"
           echo "photo_build=${{ steps.photo_build.outcome }}"
           echo "integration=${{ steps.integration.outcome }}"
           echo "unit=${{ steps.unit.outcome }}"
-          if [[ "${{ steps.db790_prepare.outcome }}" != "success" || "${{ steps.integration.outcome }}" != "success" || "${{ steps.unit.outcome }}" != "success" ]]; then
+          echo "browser_install=${{ steps.browser_install.outcome }}"
+          echo "browser=${{ steps.browser.outcome }}"
+          if [[ "${{ steps.no_deletions.outcome }}" != "success" || "${{ steps.db790_prepare.outcome }}" != "success" || "${{ steps.integration.outcome }}" != "success" || "${{ steps.unit.outcome }}" != "success" || "${{ steps.browser_install.outcome }}" != "success" || "${{ steps.browser.outcome }}" != "success" ]]; then
             exit 1
           fi

@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-18T04:00:00+09:00",
+  "matching": {
+    "keys": ["storeId", "normalizedName", "aliases"],
+    "sourcePriority": ["photo-batch-2", "photo-batch-1-final", "notion"],
+    "duplicateRule": "higher-priority-safe-entry-wins"
+  },
+  "packages": [
+    {
+      "id": "photo-batch-1-final",
+      "label": "1차 가게사진 패키지",
+      "type": "sprite-parts",
+      "basePath": "data/photo-batch-1-final",
+      "expectedParts": 22,
+      "detectedParts": 17,
+      "status": "incomplete",
+      "runtimeEnabled": false,
+      "reason": "22개 중 17개까지만 확인되었고 가게별 색인 파일이 없어 자동 노출을 중지한다."
+    },
+    {
+      "id": "photo-batch-2",
+      "label": "2차 가게사진 패키지",
+      "type": "package",
+      "basePath": "data/photo-batch-2",
+      "status": "awaiting-index",
+      "runtimeEnabled": false,
+      "reason": "가게 ID·파일 경로·안전 분류가 포함된 색인 확인 후 활성화한다."
+    },
+    {
+      "id": "notion",
+      "label": "노션 추출 가게사진",
+      "type": "direct-files",
+      "basePath": "images/notion-stores",
+      "status": "active-legacy-fallback",
+      "runtimeEnabled": true,
+      "reason": "stores.json의 기존 image 경로를 안전검사 후 최종 대체사진으로 사용한다."
+    }
+  ],
+  "entries": []
+}

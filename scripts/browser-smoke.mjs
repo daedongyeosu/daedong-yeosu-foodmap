@@ -37,17 +37,17 @@ try{
   await page.waitForFunction(()=>document.querySelector('#startupAd')?.hasAttribute('hidden'));
   check(!(await page.locator('#startupAd').isVisible()),'시작 팝업 닫기');
 
-  const heroInfo=await page.evaluate(()=>({slides:document.querySelectorAll('#heroTrack .carousel-slide').length,dots:document.querySelectorAll('#heroDots button').length,transform:getComputedStyle(document.querySelector('#heroTrack')).transform}));
+  const heroInfo=await page.evaluate(()=>({slides:document.querySelectorAll('#heroTrack .carousel-slide').length,dots:document.querySelectorAll('#heroDots button').length,active:document.querySelector('#heroDots button.active')?.dataset.slide}));
   check(heroInfo.slides===19&&heroInfo.dots===17,'메인 무한 슬라이드 복제·점 표시',heroInfo);
   await page.locator('#heroCarousel [data-carousel-next]').click();
-  await wait(650);
-  const heroAfter=await page.locator('#heroTrack').evaluate(element=>getComputedStyle(element).transform);
-  check(heroAfter!==heroInfo.transform,'메인 슬라이드 다음 이동',{before:heroInfo.transform,after:heroAfter});
-  const promoBefore=await page.locator('#promoTrack').evaluate(element=>getComputedStyle(element).transform);
+  await page.waitForFunction(before=>document.querySelector('#heroDots button.active')?.dataset.slide!==before,heroInfo.active);
+  const heroAfter=await page.locator('#heroDots button.active').getAttribute('data-slide');
+  check(heroAfter!==heroInfo.active,'메인 슬라이드 다음 이동',{before:heroInfo.active,after:heroAfter});
+  const promoBefore=await page.locator('#promoCarousel .carousel-dots button.active').getAttribute('data-slide');
   await page.locator('#promoCarousel [data-carousel-next]').click();
-  await wait(650);
-  const promoAfter=await page.locator('#promoTrack').evaluate(element=>getComputedStyle(element).transform);
-  check(promoAfter!==promoBefore,'소식 무한 슬라이드 다음 이동');
+  await page.waitForFunction(before=>document.querySelector('#promoCarousel .carousel-dots button.active')?.dataset.slide!==before,promoBefore);
+  const promoAfter=await page.locator('#promoCarousel .carousel-dots button.active').getAttribute('data-slide');
+  check(promoAfter!==promoBefore,'소식 무한 슬라이드 다음 이동',{before:promoBefore,after:promoAfter});
 
   await page.locator('#moreAppsBtn').click();
   check(await page.locator('#moreAppsPopover').isVisible(),'다른 주문앱 팝오버 표시');

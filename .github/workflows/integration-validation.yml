@@ -34,6 +34,10 @@ jobs:
       - name: Check JavaScript syntax
         run: node --check app.js
 
+      - name: Inventory data sources
+        shell: bash
+        run: node scripts/inventory-data-sources.mjs 2>&1 | tee data-inventory.txt
+
       - name: Inventory photo packages
         shell: bash
         run: node scripts/inventory-photo-packages.mjs 2>&1 | tee photo-inventory.txt
@@ -41,6 +45,14 @@ jobs:
       - name: Inspect photo package encoding
         shell: bash
         run: node scripts/inspect-photo-parts.mjs 2>&1 | tee photo-parts-inspection.txt
+
+      - name: Test safe photo assembly
+        id: photo_build
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/build-photo-batch-1.mjs 2>&1 | tee photo-build.txt
 
       - name: Run integration validation
         id: integration
@@ -64,8 +76,10 @@ jobs:
         with:
           name: integration-validation-report
           path: |
+            data-inventory.txt
             photo-inventory.txt
             photo-parts-inspection.txt
+            photo-build.txt
             integration-validation.txt
             unit-tests.txt
           if-no-files-found: warn
@@ -75,6 +89,7 @@ jobs:
         if: always()
         shell: bash
         run: |
+          echo "photo_build=${{ steps.photo_build.outcome }}"
           echo "integration=${{ steps.integration.outcome }}"
           echo "unit=${{ steps.unit.outcome }}"
           if [[ "${{ steps.integration.outcome }}" != "success" || "${{ steps.unit.outcome }}" != "success" ]]; then

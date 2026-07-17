@@ -30,7 +30,7 @@ const BRAND_BY_ID = Object.fromEntries(BRAND_GROUPS.flatMap(group=>group.brands)
 
 const CATEGORY_PREFERRED = ['한식','치킨','피자','중식','분식/도시락','분식','족발/보쌈','회/해산물','국밥/찜/탕/찌개/조림','면요리','고기/구이','돈까스/일식','카페/디저트','햄버거','야식/주점','마라탕/양꼬치','샐러드/건강식','도시락/죽','반찬','베이커리/떡','아시안','패스트푸드','퓨전','기타'];
 const CATEGORY_ICON_RULES = [[/치킨|닭/,'🍗'],[/피자/,'🍕'],[/중식|짜장|짬뽕/,'🍜'],[/분식|떡볶이|도시락/,'🍢'],[/족발|보쌈/,'🥩'],[/회|해산물|횟집|수산/,'🐟'],[/국밥|찜|탕|찌개|조림/,'🍲'],[/면|냉면|국수/,'🍜'],[/고기|구이|삼겹|갈비/,'🥩'],[/돈까스|일식|초밥|스시/,'🍱'],[/카페|커피|디저트|빙수/,'☕'],[/햄버거|버거/,'🍔'],[/야식|주점|술집/,'🌙'],[/마라|양꼬치/,'🌶️'],[/샐러드|건강/,'🥗'],[/죽/,'🥣'],[/반찬/,'🍚'],[/베이커리|빵|떡/,'🥐'],[/아시안|베트남|태국/,'🍛'],[/한식/,'🍚']];
-const HERO_BANNERS = Array.from({length:17},(_,index)=>{const number=String(index+1).padStart(2,'0');return {desktop:`images/${number}.webp`,mobile:`images/${number}-m.webp`,fallback:`images/${number}.png`,alt:`대동여수음식지도 배너 ${index+1}`};});
+const HERO_BANNERS = Array.from({length:17},(_,index)=>{const number=String(index+1).padStart(2,'0');return {desktop:`images/${number}.webp`,mobile:`images/${number}.webp`,fallback:`images/${number}.png`,alt:`대동여수음식지도 배너 ${index+1}`};});
 const PROMOS = [{kind:'rider',title:'배송기사 모집',desc:'여수 지역 베테랑 기사님을 기다립니다.'},{kind:'store',title:'배달대행 가맹점 모집',desc:'가게 사장님을 위한 주문·홍보·배달 연결'},{kind:'join',title:'먹깨비·땡겨요·온동네 가입 안내',desc:'저수수료 주문경로를 한 번에 연결하세요.'},{kind:'new',title:'신규 오픈 가게 광고',desc:'새로 문을 연 여수 가게를 빠르게 알립니다.'},{kind:'notice',title:'소상공인협회 알림',desc:'여수 소상공인에게 필요한 소식을 전합니다.'}];
 
 const $ = selector=>document.querySelector(selector);

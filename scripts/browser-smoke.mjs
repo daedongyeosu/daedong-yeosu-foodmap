@@ -34,7 +34,7 @@ try{
   await page.waitForSelector('#startupAd:not([hidden])',{timeout:5000});
   check(await page.locator('#startupAd').isVisible(),'시작 팝업 표시');
   await page.locator('.startup-close').click();
-  await page.waitForSelector('#startupAd[hidden]');
+  await page.waitForFunction(()=>document.querySelector('#startupAd')?.hasAttribute('hidden'));
   check(!(await page.locator('#startupAd').isVisible()),'시작 팝업 닫기');
 
   const heroInfo=await page.evaluate(()=>({slides:document.querySelectorAll('#heroTrack .carousel-slide').length,dots:document.querySelectorAll('#heroDots button').length,transform:getComputedStyle(document.querySelector('#heroTrack')).transform}));
@@ -87,7 +87,7 @@ try{
   check(detailRoutes>0,'가게 상세 주문방법 표시',{detailRoutes});
   check(invalidDetailRoutes.length===0,'상세 주문주소 절대경로',invalidDetailRoutes);
   await page.locator('.modal-close').click();
-  await page.waitForSelector('#modal[hidden]');
+  await page.waitForFunction(()=>document.querySelector('#modal')?.hasAttribute('hidden'));
 
   await page.evaluate(async()=>{
     for(let y=0;y<document.body.scrollHeight;y+=700){window.scrollTo(0,y);await new Promise(resolve=>setTimeout(resolve,20));}

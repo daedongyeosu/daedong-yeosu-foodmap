@@ -79,6 +79,15 @@ jobs:
           } > db790-branch-inventory.txt
           node scripts/compare-store-databases.mjs data/stores.json db790-source/stores.json db790-comparison.json 2>&1 | tee db790-comparison.txt
 
+      - name: Prepare selective DB790 import preview
+        id: db790_prepare
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/prepare-db790-import.mjs /tmp/db790-worktree build/db790-import 2>&1 | tee db790-import-prepare.txt
+          node scripts/compare-store-databases.mjs data/stores.json build/db790-import/stores.json db790-import-comparison.json 2>&1 | tee db790-import-comparison.txt
+
       - name: Inventory photo packages
         shell: bash
         run: node scripts/inventory-photo-packages.mjs 2>&1 | tee photo-inventory.txt
@@ -123,6 +132,10 @@ jobs:
             db790-comparison.txt
             db790-comparison.json
             db790-source/**
+            db790-import-prepare.txt
+            db790-import-comparison.txt
+            db790-import-comparison.json
+            build/db790-import/**
             photo-inventory.txt
             photo-parts-inspection.txt
             photo-build.txt
@@ -136,9 +149,10 @@ jobs:
         shell: bash
         run: |
           echo "db790=${{ steps.db790.outcome }}"
+          echo "db790_prepare=${{ steps.db790_prepare.outcome }}"
           echo "photo_build=${{ steps.photo_build.outcome }}"
           echo "integration=${{ steps.integration.outcome }}"
           echo "unit=${{ steps.unit.outcome }}"
-          if [[ "${{ steps.integration.outcome }}" != "success" || "${{ steps.unit.outcome }}" != "success" ]]; then
+          if [[ "${{ steps.db790_prepare.outcome }}" != "success" || "${{ steps.integration.outcome }}" != "success" || "${{ steps.unit.outcome }}" != "success" ]]; then
             exit 1
           fi

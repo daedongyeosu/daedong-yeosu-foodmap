@@ -48,16 +48,36 @@ jobs:
           set -o pipefail
           git fetch origin fix/load-stores-db790 --depth=1
           DB790_REF=FETCH_HEAD
-          git show "$DB790_REF:data/stores.json" > /tmp/stores-db790.json
+          rm -rf /tmp/db790-worktree
+          git worktree add --detach /tmp/db790-worktree "$DB790_REF"
+          mkdir -p db790-source/reports
+          cp /tmp/db790-worktree/data/stores.json db790-source/stores.json
+          for file in \
+            notion-sync-summary.json \
+            notion-sync-report.json \
+            notion-complete-import-report.json \
+            notion-import-missing-report.json \
+            store-dedup-report.json \
+            photo-filter-report.json \
+            photo-match-safety-report.json \
+            photo-manifest.json \
+            notion-photo-manifest.json \
+            notion-photo-apply-report.json \
+            photo-coverage-resolution.json; do
+            if [[ -f "/tmp/db790-worktree/data/$file" ]]; then
+              cp "/tmp/db790-worktree/data/$file" "db790-source/reports/$file"
+            fi
+          done
+          node scripts/inventory-data-sources.mjs /tmp/db790-worktree 2>&1 | tee db790-data-inventory.txt
           {
             echo '[DB790 branch markers]'
-            git show "$DB790_REF:DB790_READY.txt" 2>/dev/null || true
-            git show "$DB790_REF:README_DB790_TEST.txt" 2>/dev/null || true
+            cat /tmp/db790-worktree/DB790_READY.txt 2>/dev/null || true
+            cat /tmp/db790-worktree/README_DB790_TEST.txt 2>/dev/null || true
             echo
             echo '[DB790 related files]'
-            git ls-tree -r --name-only "$DB790_REF" | grep -Ei '(^data/|photo|db790|notion|route|address)' | sort
+            git -C /tmp/db790-worktree ls-tree -r --name-only HEAD | grep -Ei '(^data/|photo|db790|notion|route|address)' | sort
           } > db790-branch-inventory.txt
-          node scripts/compare-store-databases.mjs data/stores.json /tmp/stores-db790.json db790-comparison.json 2>&1 | tee db790-comparison.txt
+          node scripts/compare-store-databases.mjs data/stores.json db790-source/stores.json db790-comparison.json 2>&1 | tee db790-comparison.txt
 
       - name: Inventory photo packages
         shell: bash
@@ -98,9 +118,11 @@ jobs:
           name: integration-validation-report
           path: |
             data-inventory.txt
+            db790-data-inventory.txt
             db790-branch-inventory.txt
             db790-comparison.txt
             db790-comparison.json
+            db790-source/**
             photo-inventory.txt
             photo-parts-inspection.txt
             photo-build.txt

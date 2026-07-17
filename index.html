@@ -1,96 +1,97 @@
 <!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
-<meta name="theme-color" content="#ff5a1f">
-<title>대동여수음식지도</title>
-<link rel="stylesheet" href="styles-v8.css?v=8">
-<link rel="stylesheet" href="fix-v9.css?v=9">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+  <meta name="theme-color" content="#ff5a1f">
+  <meta name="description" content="여수 음식점과 주문방법을 한눈에 찾는 대동여수음식지도">
+  <title>대동여수음식지도</title>
+  <link rel="stylesheet" href="app.css?v=integration-1">
 </head>
 <body>
-<div id="app">
-<header class="topbar">
-  <button id="locationBtn" class="location-chip" aria-label="지역 선택">📍 <span id="locationText">여수시 전체</span>⌄</button>
-  <div class="top-actions"><button id="noticeBtn" class="icon-btn" aria-label="알림">🔔<b class="badge">2</b></button></div>
-</header>
-<section class="brand"><img src="assets/logo.png" alt="대동여수음식지도"></section>
+  <div id="app">
+    <header class="topbar">
+      <button id="locationBtn" class="location-chip" type="button" aria-label="지역 선택">
+        <span aria-hidden="true">📍</span><span id="locationText">여수시 전체</span><span aria-hidden="true">⌄</span>
+      </button>
+      <button id="noticeBtn" class="icon-btn" type="button" aria-label="알림">🔔<b class="badge">2</b></button>
+    </header>
 
-<section class="hero" aria-label="메인 슬라이드 배너">
-  <div id="heroCarousel" class="carousel-controller">
-    <div class="carousel-shell hero-frame">
-      <button class="carousel-arrow prev" data-carousel-prev aria-label="이전 배너">‹</button>
-      <div id="heroTrack" class="carousel-track"></div>
-      <button class="carousel-arrow next" data-carousel-next aria-label="다음 배너">›</button>
-    </div>
-    <div id="heroDots" class="carousel-dots" aria-label="배너 위치"></div>
+    <section class="brand"><img src="assets/logo.png" alt="대동여수음식지도"></section>
+
+    <section class="hero" aria-label="메인 슬라이드 배너">
+      <div id="heroCarousel" class="carousel-controller">
+        <div class="carousel-shell hero-frame">
+          <button class="carousel-arrow prev" type="button" data-carousel-prev aria-label="이전 배너">‹</button>
+          <div id="heroTrack" class="carousel-track"></div>
+          <button class="carousel-arrow next" type="button" data-carousel-next aria-label="다음 배너">›</button>
+        </div>
+        <div id="heroDots" class="carousel-dots" aria-label="배너 위치"></div>
+      </div>
+    </section>
+
+    <section class="search-row main-search-row" aria-label="가게 검색">
+      <div class="searchbox"><span aria-hidden="true">⌕</span><input id="mainSearch" placeholder="메뉴, 가게명, 동네 검색" autocomplete="off"><button id="clearMainSearch" class="input-clear" type="button" aria-label="검색어 지우기" hidden>×</button></div>
+      <button id="searchBtn" class="primary-btn" type="button">검색</button>
+    </section>
+
+    <section class="section order-section">
+      <div class="section-head">
+        <div class="section-head-copy"><h2>여수와 함께하는 주문방법</h2><p>가게를 선택하면 실제 이용 가능한 주문경로만 안내합니다.</p></div>
+        <button class="text-btn" type="button" data-open="guide">이용안내 ›</button>
+      </div>
+      <div class="order-grid">
+        <a class="order-item first" href="#recommendSection"><span class="order-icon">🏪</span><strong>가게바로주문</strong></a>
+        <a class="order-item" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=mukkebi.user.app.android"><img src="assets/mukkebi-v7.png" alt="먹깨비"><strong>먹깨비</strong></a>
+        <a class="order-item" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.shinhan.o2o"><img src="assets/ddangyo-v7.png" alt="땡겨요"><strong>땡겨요</strong></a>
+        <a class="order-item" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=kr.co.kncsol.ondongne"><img src="assets/ondongne.png" alt="온동네"><strong>온동네</strong></a>
+        <button class="order-item" type="button" data-open="brands"><span class="brand-app-icon"><img src="images/momstouch.jpg" alt=""><img src="images/ajukeo.jpg" alt=""><img src="images/burgerking.png" alt=""><span aria-hidden="true">＋</span></span><strong>브랜드앱</strong></button>
+        <button class="order-item" type="button" data-open="phone"><span class="order-icon purple">☎</span><strong>전화주문</strong></button>
+        <button id="moreAppsBtn" class="order-item more-apps" type="button"><strong>다른 주문앱 보기</strong><span>›</span></button>
+      </div>
+      <div id="moreAppsPopover" class="popover" hidden>
+        <button class="popover-close" type="button" aria-label="닫기">×</button><h3>다른 주문앱 보기</h3>
+        <div class="external-apps">
+          <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.fineapp.yogiyo"><img src="assets/yogiyo.jpg" alt="요기요"><span>요기요</span></a>
+          <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.coupang.mobile.eats"><img src="assets/coupang-eats.jpg" alt="쿠팡이츠"><span>쿠팡이츠</span></a>
+          <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.sampleapp"><img src="assets/baemin.jpg" alt="배달의민족"><span>배달의민족</span></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section category-section">
+      <div class="section-head"><div class="section-head-copy"><h2>원하는 음식 종류를 선택하세요</h2><p>카테고리와 동네를 5초 안에 선택할 수 있도록 구성했습니다.</p></div><button id="allCategoryBtn" class="text-btn" type="button">전체보기 ›</button></div>
+      <div id="categoryGrid" class="category-grid"></div>
+    </section>
+
+    <section id="searchSummary" class="search-summary" hidden></section>
+    <section id="recommendSection" class="section">
+      <div class="section-head"><h2>오늘의 추천</h2><button id="resetCategoryBtn" class="text-btn" type="button" hidden>전체 추천 보기 ›</button></div>
+      <div id="storeGrid" class="store-grid"><div class="empty">가게 정보를 불러오는 중입니다.</div></div>
+      <button id="loadMoreBtn" class="load-more" type="button" hidden>가게 더 보기</button>
+    </section>
+
+    <section class="section promo-section" aria-label="광고와 지역 소식">
+      <div class="section-head"><div class="section-head-copy"><h2>여수와 함께하는 소식</h2><p>기사 모집, 가게 모집, 신규 오픈과 지역 소식을 전합니다.</p></div></div>
+      <div id="promoCarousel" class="carousel-controller">
+        <div class="carousel-shell promo-frame">
+          <button class="carousel-arrow prev" type="button" data-carousel-prev aria-label="이전 소식">‹</button>
+          <div id="promoTrack" class="carousel-track"></div>
+          <button class="carousel-arrow next" type="button" data-carousel-next aria-label="다음 소식">›</button>
+        </div>
+        <div class="carousel-dots" aria-label="소식 위치"></div>
+      </div>
+    </section>
+
+    <footer class="legal"><button type="button" data-open="guide">이용안내</button><button type="button">개인정보처리방침</button><button type="button">정보 수정 제안</button><button type="button">광고 문의</button></footer>
+    <div class="build-mark">통합 검증 후보 · main 미반영</div>
   </div>
-</section>
 
-<section class="search-row main-search-row">
-  <div class="searchbox"><span>⌕</span><input id="mainSearch" placeholder="메뉴, 가게명, 동네 검색" autocomplete="off"><button id="clearMainSearch" class="input-clear" aria-label="검색어 지우기" hidden>×</button></div>
-  <button id="searchBtn" class="primary-btn">검색</button>
-</section>
-
-<section class="section order-section">
-  <div class="section-head">
-    <div class="section-head-copy"><h2>여수와 함께하는 주문방법</h2><p>가게를 선택하면 이용 가능한 주문방법을 한곳에서 확인할 수 있습니다.</p></div>
-    <button class="text-btn" data-open="guide">이용안내 ›</button>
-  </div>
-  <div class="order-grid">
-    <a class="order-item first" href="#recommendSection"><span class="order-icon">🏪</span><strong>가게바로주문</strong></a>
-    <a class="order-item" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=mukkebi.user.app.android"><img src="assets/mukkebi-v7.png" alt="먹깨비"><strong>먹깨비</strong></a>
-    <a class="order-item" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.shinhan.o2o"><img src="assets/ddangyo-v7.png" alt="땡겨요"><strong>땡겨요</strong></a>
-    <a class="order-item" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=kr.co.kncsol.ondongne"><img src="assets/ondongne.png" alt="온동네"><strong>온동네</strong></a>
-    <button class="order-item" data-open="brands" aria-label="브랜드앱 주문 가능 가게 보기">
-      <span class="brand-app-icon"><img src="images/momstouch.jpg" alt="맘스터치"><img src="images/ajukeo.jpg" alt="아주커치킨"><img src="images/burgerking.png" alt="버거킹"><img src="https://www.google.com/s2/favicons?domain=mega-mgccoffee.com&sz=128" alt="메가MGC커피"></span><strong>브랜드앱</strong>
-    </button>
-    <button class="order-item" data-open="phone"><span class="order-icon purple">☎</span><strong>전화주문</strong></button>
-    <button id="moreAppsBtn" class="order-item more-apps"><strong>다른 주문앱 보기</strong><span>›</span></button>
-  </div>
-  <div id="moreAppsPopover" class="popover" hidden>
-    <button class="popover-close" aria-label="닫기">×</button><h3>다른 주문앱 보기</h3>
-    <div class="external-apps">
-      <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.fineapp.yogiyo"><img src="assets/yogiyo.jpg" alt="요기요"><span>요기요</span></a>
-      <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.coupang.mobile.eats"><img src="assets/coupang-eats.jpg" alt="쿠팡이츠"><span>쿠팡이츠</span></a>
-      <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.sampleapp"><img src="assets/baemin.jpg" alt="배달의민족"><span>배달의민족</span></a>
-    </div>
-  </div>
-</section>
-
-<section class="section category-section">
-  <div class="section-head"><div class="section-head-copy"><h2>원하는 음식 종류를 선택하세요</h2><p>등록된 가게의 음식 카테고리를 빠르게 찾을 수 있습니다.</p></div><button id="allCategoryBtn" class="text-btn">전체보기 ›</button></div>
-  <div id="categoryGrid" class="category-grid"></div>
-</section>
-
-<section id="searchSummary" class="search-summary" hidden></section>
-<section id="recommendSection" class="section">
-  <div class="section-head"><h2>오늘의 추천</h2><button id="resetCategoryBtn" class="text-btn" hidden>전체 추천 보기 ›</button></div>
-  <div id="storeGrid" class="store-grid"><div class="empty">가게 정보를 불러오는 중입니다.</div></div>
-  <button id="loadMoreBtn" class="load-more" hidden>가게 더 보기</button>
-</section>
-
-<section class="section promo-section" aria-label="광고와 지역 소식">
-  <div class="section-head"><div class="section-head-copy"><h2>여수와 함께하는 소식</h2><p>기사 모집, 가게 모집, 신규 오픈과 지역 소식을 전합니다.</p></div></div>
-  <div id="promoCarousel" class="carousel-controller">
-    <div class="carousel-shell promo-frame">
-      <button class="carousel-arrow prev" data-carousel-prev aria-label="이전 소식">‹</button>
-      <div id="promoTrack" class="carousel-track"></div>
-      <button class="carousel-arrow next" data-carousel-next aria-label="다음 소식">›</button>
-    </div>
-    <div class="carousel-dots" aria-label="소식 위치"></div>
-  </div>
-</section>
-
-<footer class="legal"><button data-open="guide">이용안내</button><button>개인정보처리방침</button><button>정보 수정 제안</button><button>광고 문의</button></footer>
-</div>
-
-<nav class="bottom-nav"><button data-tab="home" class="active">⌂<span>홈</span></button><button data-tab="search">⌕<span>검색</span></button><button data-tab="favorite">♡<span>찜한가게</span></button><button data-tab="recent">◷<span>최근방문가게</span></button><button data-tab="mypage">♙<span>마이페이지</span></button></nav>
-<div id="overlay" class="overlay" hidden></div>
-<div id="modal" class="modal" hidden role="dialog" aria-modal="true"><div class="modal-card"><button class="modal-close" aria-label="닫기">×</button><div id="modalContent"></div></div></div>
-<div id="startupAd" class="startup-ad" hidden><div class="startup-card"><button class="startup-close" aria-label="닫기">×</button><small>대동여수음식지도 안내</small><h2>배달기사·가맹점 모집</h2><p>기사 모집, 가게 모집, 주문앱 가입 권유, 신규 오픈 가게와 소상공인협회 공지를 이곳에서 알립니다.</p><div class="startup-actions"><button id="startupDetails" class="primary-btn">자세히 보기</button><button id="hideToday">오늘 그만 보기</button></div></div></div>
-<script src="app-v8.js?v=8"></script>
-<script src="fix-v9.js?v=9"></script>
-<div class="build-mark">build v9 · 중복 안내 제거 · 미등록 사진 보정</div>
+  <nav class="bottom-nav"><button type="button" data-tab="home" class="active">⌂<span>홈</span></button><button type="button" data-tab="search">⌕<span>검색</span></button><button type="button" data-tab="favorite">♡<span>찜한가게</span></button><button type="button" data-tab="recent">◷<span>최근방문</span></button><button type="button" data-tab="mypage">♙<span>마이페이지</span></button></nav>
+  <div id="overlay" class="overlay" hidden></div>
+  <div id="modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-card"><button class="modal-close" type="button" aria-label="닫기">×</button><div id="modalContent"></div></div></div>
+  <div id="startupAd" class="startup-ad" hidden><div class="startup-card"><button class="startup-close" type="button" aria-label="닫기">×</button><small>대동여수음식지도 안내</small><h2>배달기사·가맹점 모집</h2><p>기사 모집, 가게 모집, 주문앱 가입 안내, 신규 오픈 가게와 소상공인 소식을 알립니다.</p><div class="startup-actions"><button id="startupDetails" class="primary-btn" type="button">자세히 보기</button><button id="hideToday" type="button">오늘 그만 보기</button></div></div></div>
+  <noscript><p class="noscript">대동여수음식지도를 이용하려면 자바스크립트를 켜주세요.</p></noscript>
+  <script src="app.js?v=integration-1" defer></script>
 </body>
 </html>

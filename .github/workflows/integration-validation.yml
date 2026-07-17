@@ -1,0 +1,40 @@
+name: Integration validation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'app.js'
+      - 'app.css'
+      - 'data/**'
+      - 'scripts/**'
+      - '.github/workflows/integration-validation.yml'
+  push:
+    branches: [agent/main-unification]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout integration branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check JavaScript syntax
+        run: node --check app.js
+
+      - name: Run integration validation
+        run: node scripts/validate-integration.mjs
+
+      - name: Run unit regression tests
+        run: node scripts/test-app-unit.mjs

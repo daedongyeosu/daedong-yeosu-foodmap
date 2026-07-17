@@ -1,0 +1,212 @@
+/* 대동여수음식지도 상세팝업·메인광고 고도화 v3 */
+
+/* 메인 가게카드에는 주문경로만: 지도·상품권·전화는 팝업에서만 */
+#storeGrid .miniapps{min-height:42px;display:flex;align-items:center;gap:6px;overflow:hidden}
+#storeGrid .miniapps .miniapp-icon{flex:0 0 auto}
+
+/* 15개 메인 광고 슬라이드 */
+.hero{margin-top:0!important;padding-top:0!important;overflow:hidden!important}
+.hero-track{display:flex!important;width:100%!important;transition:transform .48s cubic-bezier(.22,.7,.2,1)!important;will-change:transform}
+.hero-card.hero-campaign-card{
+  position:relative!important;flex:0 0 100%!important;width:100%!important;
+  aspect-ratio:12/7!important;min-height:0!important;border-radius:0 0 26px 26px!important;
+  overflow:hidden!important;background-size:cover!important;background-position:center!important;
+  cursor:pointer!important;isolation:isolate!important
+}
+.hero-card.hero-campaign-card::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(8,14,24,.02) 25%,rgba(8,14,24,.78) 100%)
+}
+.hero-card.hero-campaign-card .hero-copy{
+  position:absolute;left:22px;right:22px;bottom:24px;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.6)
+}
+.hero-card.hero-campaign-card .hero-kicker{
+  display:inline-flex;padding:5px 9px;margin-bottom:7px;border-radius:999px;
+  background:rgba(255,255,255,.9);color:#17362a;font-size:12px;font-weight:900;text-shadow:none
+}
+.hero-card.hero-campaign-card h2{margin:0 0 5px!important;font-size:clamp(24px,6.8vw,34px)!important;line-height:1.13!important;letter-spacing:-.045em}
+.hero-card.hero-campaign-card p{margin:0!important;font-size:14px!important;line-height:1.4!important;font-weight:750!important}
+.hero-card.hero-store-ad .hero-kicker{background:#ff5a1f;color:#fff}
+.hero-dots{gap:6px!important;padding:10px 0 4px!important;overflow:hidden}
+.hero-dots i{width:7px!important;height:7px!important;flex:0 0 7px!important}
+.hero-dots i.active{width:24px!important;flex-basis:24px!important}
+
+/* 상세 팝업: 제목·사진·버튼이 잘리지 않도록 구조를 다시 잡음 */
+#modal.store-detail-compact,
+#modal.store-detail-refined{
+  position:fixed!important;inset:0!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  padding:max(8px,env(safe-area-inset-top)) 8px max(8px,env(safe-area-inset-bottom))!important;
+  overflow:hidden!important
+}
+#modal.store-detail-compact .modal-card,
+#modal.store-detail-refined .modal-card{
+  width:min(94vw,520px)!important;
+  height:auto!important;max-height:calc(100dvh - 16px)!important;
+  margin:0!important;padding:10px 12px 11px!important;
+  border-radius:24px!important;overflow:hidden!important;
+  display:flex!important;flex-direction:column!important;
+  zoom:1!important;transform:none!important
+}
+#modal.store-detail-compact #modalContent,
+#modal.store-detail-refined #modalContent{
+  min-height:0!important;max-height:none!important;
+  overflow-y:auto!important;overflow-x:hidden!important;
+  overscroll-behavior:contain;scrollbar-width:none;
+  display:flex!important;flex-direction:column!important;gap:7px!important;
+  padding-top:0!important
+}
+#modal.store-detail-compact #modalContent::-webkit-scrollbar,
+#modal.store-detail-refined #modalContent::-webkit-scrollbar{display:none}
+#modal.store-detail-compact .modal-close,
+#modal.store-detail-refined .modal-close{
+  position:absolute!important;top:10px!important;right:10px!important;
+  width:42px!important;height:42px!important;border-radius:50%!important;
+  display:grid!important;place-items:center!important;
+  background:#fff!important;border:1px solid #e8ebef!important;
+  box-shadow:0 4px 14px rgba(0,0,0,.12)!important;
+  font-size:29px!important;line-height:1!important;z-index:60!important
+}
+#modal.store-detail-compact .store-detail-head,
+#modal.store-detail-refined .store-detail-head{
+  flex:0 0 auto!important;min-height:44px!important;
+  display:flex!important;align-items:center!important;
+  padding:2px 52px 2px 4px!important;margin:0!important
+}
+#modal.store-detail-compact .store-detail-head h2,
+#modal.store-detail-refined .store-detail-head h2{
+  width:100%!important;margin:0!important;
+  font-size:clamp(24px,6.2vw,32px)!important;line-height:1.14!important;
+  letter-spacing:-.045em!important;word-break:keep-all!important;
+  overflow:visible!important;white-space:normal!important
+}
+
+/* 사진 전체가 보이게: 기존 max-height:112px과 cover를 무효화 */
+#modal.store-detail-compact .detail-gallery,
+#modal.store-detail-refined .detail-gallery{
+  flex:0 0 auto!important;height:clamp(155px,25dvh,230px)!important;
+  min-height:155px!important;margin:0!important;border-radius:19px!important;
+  overflow:hidden!important;background:#eef0f3!important
+}
+#modal.store-detail-compact .detail-gallery-track,
+#modal.store-detail-refined .detail-gallery-track,
+#modal.store-detail-compact .detail-gallery-slide,
+#modal.store-detail-refined .detail-gallery-slide{height:100%!important;min-height:0!important}
+#modal.store-detail-compact #modalContent img,
+#modal.store-detail-refined #modalContent img,
+#modal.store-detail-compact .detail-gallery-slide img,
+#modal.store-detail-refined .detail-gallery-slide img{
+  width:100%!important;height:100%!important;max-height:none!important;
+  object-fit:contain!important;object-position:center!important;background:#eef0f3!important
+}
+#modal.store-detail-compact .detail-gallery-arrow,
+#modal.store-detail-refined .detail-gallery-arrow{width:44px!important;height:44px!important;font-size:34px!important}
+#modal.store-detail-compact .detail-gallery-dots,
+#modal.store-detail-refined .detail-gallery-dots{bottom:8px!important}
+#modal.store-detail-compact .detail-gallery-count,
+#modal.store-detail-refined .detail-gallery-count{top:9px!important;right:9px!important}
+#modal.store-detail-compact .detail-meta,
+#modal.store-detail-refined .detail-meta{
+  margin:0!important;padding:0 4px!important;font-size:17px!important;line-height:1.2!important;flex:0 0 auto
+}
+
+/* 지도·상품권은 팝업에서 선명하게 */
+#modal.store-detail-compact .detail-quick-links,
+#modal.store-detail-refined .detail-quick-links{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:7px!important;margin:0!important;flex:0 0 auto
+}
+#modal.store-detail-compact .detail-quick-link,
+#modal.store-detail-refined .detail-quick-link{
+  min-height:48px!important;padding:7px 8px!important;margin:0!important;
+  border-radius:15px!important;font-size:14px!important;gap:6px!important
+}
+
+/* 주문버튼을 2열로 조밀하고 균형 있게 */
+#modal.store-detail-compact .detail-routes,
+#modal.store-detail-refined .detail-routes,
+#modal.store-detail-compact .ux-detail-route-grid,
+#modal.store-detail-refined .ux-detail-route-grid{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:7px!important;margin:0!important;flex:0 0 auto
+}
+#modal.store-detail-compact .detail-routes>.detail-route,
+#modal.store-detail-refined .detail-routes>.detail-route,
+#modal.store-detail-compact .detail-routes>.store-other-wrap,
+#modal.store-detail-refined .detail-routes>.store-other-wrap,
+#modal.store-detail-compact .ux-detail-route-grid>*,
+#modal.store-detail-refined .ux-detail-route-grid>*{
+  width:100%!important;min-width:0!important;margin:0!important
+}
+#modal.store-detail-compact .detail-route,
+#modal.store-detail-refined .detail-route{
+  min-height:51px!important;padding:7px 9px!important;border-radius:16px!important;
+  font-size:15px!important;gap:7px!important
+}
+#modal.store-detail-compact .detail-route-icon,
+#modal.store-detail-refined .detail-route-icon{width:37px!important;height:37px!important;object-fit:contain!important;background:transparent!important}
+#modal.store-detail-compact .other-inline-icons img,
+#modal.store-detail-refined .other-inline-icons img,
+#modal.store-detail-compact .other-inline-icons span,
+#modal.store-detail-refined .other-inline-icons span{width:31px!important;height:31px!important}
+#modal.store-detail-compact .store-other-wrap,
+#modal.store-detail-refined .store-other-wrap{grid-column:span 2!important}
+#modal.store-detail-compact .store-other-toggle,
+#modal.store-detail-refined .store-other-toggle{width:100%!important}
+
+/* 찜하기·정보수정요청은 언제나 화면 안쪽 하단에 */
+#modal.store-detail-compact .detail-personal-actions,
+#modal.store-detail-refined .detail-personal-actions,
+#modal.store-detail-compact .ux-detail-actions,
+#modal.store-detail-refined .ux-detail-actions{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:7px!important;margin:0!important;padding-top:1px!important;flex:0 0 auto
+}
+#modal.store-detail-compact .detail-personal-btn,
+#modal.store-detail-refined .detail-personal-btn,
+#modal.store-detail-compact .ux-detail-actions>*,
+#modal.store-detail-refined .ux-detail-actions>*{
+  min-height:49px!important;padding:8px 6px!important;margin:0!important;
+  border-radius:16px!important;font-size:15px!important;white-space:nowrap!important
+}
+
+/* 캠페인 팝업 */
+.campaign-detail{display:flex;flex-direction:column;gap:12px;padding-top:42px}
+.campaign-detail h2{font-size:28px;line-height:1.18;margin:0;letter-spacing:-.04em}
+.campaign-detail>img{width:100%;max-height:48dvh;object-fit:contain;border-radius:18px;background:#f3f4f6}
+.campaign-detail p{margin:0;color:#48515e;font-size:16px;line-height:1.55}
+.campaign-detail .campaign-note{padding:13px 14px;border-radius:15px;background:#fff4ed;color:#8f3b18;font-weight:800}
+.campaign-detail .campaign-action{
+  display:flex;align-items:center;justify-content:center;min-height:54px;
+  border-radius:16px;background:#ff5a1f;color:#fff;font-size:18px;font-weight:900;text-decoration:none;border:0
+}
+.campaign-detail .campaign-action.secondary{background:#117d3d}
+.campaign-detail-modal .modal-card{max-height:calc(100dvh - 18px)!important;overflow:hidden!important}
+.campaign-detail-modal #modalContent{max-height:calc(100dvh - 42px)!important;overflow-y:auto!important}
+
+/* 낮은 화면에서도 주요 요소가 먼저 다 보이도록 */
+@media(max-height:760px){
+  #modal.store-detail-compact .modal-card,
+  #modal.store-detail-refined .modal-card{padding:7px 9px 8px!important}
+  #modal.store-detail-compact .store-detail-head,
+  #modal.store-detail-refined .store-detail-head{min-height:38px!important}
+  #modal.store-detail-compact .store-detail-head h2,
+  #modal.store-detail-refined .store-detail-head h2{font-size:23px!important}
+  #modal.store-detail-compact .detail-gallery,
+  #modal.store-detail-refined .detail-gallery{height:145px!important;min-height:145px!important}
+  #modal.store-detail-compact .detail-route,
+  #modal.store-detail-refined .detail-route{min-height:46px!important;padding:5px 7px!important}
+  #modal.store-detail-compact .detail-quick-link,
+  #modal.store-detail-refined .detail-quick-link{min-height:44px!important}
+  #modal.store-detail-compact .detail-personal-btn,
+  #modal.store-detail-refined .detail-personal-btn,
+  #modal.store-detail-compact .ux-detail-actions>*,
+  #modal.store-detail-refined .ux-detail-actions>*{min-height:45px!important}
+}
+@media(max-width:390px){
+  .hero-card.hero-campaign-card .hero-copy{left:16px;right:16px;bottom:18px}
+  #modal.store-detail-compact .detail-route,
+  #modal.store-detail-refined .detail-route{font-size:14px!important}
+  #modal.store-detail-compact .detail-route-icon,
+  #modal.store-detail-refined .detail-route-icon{width:33px!important;height:33px!important}
+}

@@ -21,10 +21,12 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - name: Checkout integration branch
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -37,6 +39,25 @@ jobs:
       - name: Inventory data sources
         shell: bash
         run: node scripts/inventory-data-sources.mjs 2>&1 | tee data-inventory.txt
+
+      - name: Compare DB790 working branch
+        id: db790
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          git fetch origin fix/load-stores-db790 --depth=1
+          DB790_REF=FETCH_HEAD
+          git show "$DB790_REF:data/stores.json" > /tmp/stores-db790.json
+          {
+            echo '[DB790 branch markers]'
+            git show "$DB790_REF:DB790_READY.txt" 2>/dev/null || true
+            git show "$DB790_REF:README_DB790_TEST.txt" 2>/dev/null || true
+            echo
+            echo '[DB790 related files]'
+            git ls-tree -r --name-only "$DB790_REF" | grep -Ei '(^data/|photo|db790|notion|route|address)' | sort
+          } > db790-branch-inventory.txt
+          node scripts/compare-store-databases.mjs data/stores.json /tmp/stores-db790.json db790-comparison.json 2>&1 | tee db790-comparison.txt
 
       - name: Inventory photo packages
         shell: bash
@@ -77,6 +98,9 @@ jobs:
           name: integration-validation-report
           path: |
             data-inventory.txt
+            db790-branch-inventory.txt
+            db790-comparison.txt
+            db790-comparison.json
             photo-inventory.txt
             photo-parts-inspection.txt
             photo-build.txt
@@ -89,6 +113,7 @@ jobs:
         if: always()
         shell: bash
         run: |
+          echo "db790=${{ steps.db790.outcome }}"
           echo "photo_build=${{ steps.photo_build.outcome }}"
           echo "integration=${{ steps.integration.outcome }}"
           echo "unit=${{ steps.unit.outcome }}"

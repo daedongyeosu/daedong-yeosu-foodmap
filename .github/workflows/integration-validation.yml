@@ -34,7 +34,38 @@ jobs:
         run: node --check app.js
 
       - name: Run integration validation
-        run: node scripts/validate-integration.mjs
+        id: integration
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/validate-integration.mjs 2>&1 | tee integration-validation.txt
 
       - name: Run unit regression tests
-        run: node scripts/test-app-unit.mjs
+        id: unit
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          node scripts/test-app-unit.mjs 2>&1 | tee unit-tests.txt
+
+      - name: Upload validation reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-validation-report
+          path: |
+            integration-validation.txt
+            unit-tests.txt
+          if-no-files-found: warn
+          retention-days: 14
+
+      - name: Final validation gate
+        if: always()
+        shell: bash
+        run: |
+          echo "integration=${{ steps.integration.outcome }}"
+          echo "unit=${{ steps.unit.outcome }}"
+          if [[ "${{ steps.integration.outcome }}" != "success" || "${{ steps.unit.outcome }}" != "success" ]]; then
+            exit 1
+          fi

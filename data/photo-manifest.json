@@ -1,9 +1,17 @@
 {
-  "version": 2,
-  "generatedAt": "2026-07-18T05:05:00+09:00",
+  "version": 3,
+  "generatedAt": "2026-07-17T20:24:08.619Z",
   "matching": {
-    "keys": ["storeId", "normalizedName", "aliases"],
-    "sourcePriority": ["photo-batch-2", "photo-batch-1-final", "notion"],
+    "keys": [
+      "storeId",
+      "normalizedName",
+      "aliases"
+    ],
+    "sourcePriority": [
+      "photo-batch-2",
+      "photo-batch-1-final",
+      "notion"
+    ],
     "duplicateRule": "higher-priority-safe-entry-wins"
   },
   "packages": [
@@ -16,9 +24,35 @@
       "expectedParts": 22,
       "preferredPartsDetected": 14,
       "recoverableParts": 17,
-      "recoverablePartNumbers": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17],
-      "missingPartNumbers": [18,19,20,21,22],
-      "invalidFiles": ["data/photo-batch-1-final/sprite-tail-01.txt"],
+      "recoverablePartNumbers": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "missingPartNumbers": [
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "invalidFiles": [
+        "data/photo-batch-1-final/sprite-tail-01.txt"
+      ],
       "expectedDecodedBytes": 252182,
       "status": "incomplete",
       "runtimeEnabled": false,
@@ -42,8 +76,45 @@
       "detectedFiles": 300,
       "status": "active-legacy-fallback",
       "runtimeEnabled": true,
-      "reason": "stores.json의 기존 image 경로를 파일 존재·확장자·차단 키워드 검사 후 대체사진으로 사용한다."
+      "reason": "stores.json의 기존 image 경로를 파일 존재·확장자·차단 키워드 검사 후 대체사진으로 사용한다.",
+      "referencedStores": 32
+    },
+    {
+      "id": "db790-safe-store-photos",
+      "label": "DB790 검수 가게사진",
+      "type": "direct-webp-files",
+      "basePath": "assets/store-photos",
+      "referencedStores": 217,
+      "detectedFiles": 432,
+      "status": "active-filtered",
+      "runtimeEnabled": true,
+      "safetyReports": [
+        "data/integration-sources/db790/photo-filter-report.json",
+        "data/integration-sources/db790/photo-match-safety-report.json"
+      ],
+      "reason": "food-only-v2와 document-safety-first 필터를 통과하고, 불확실한 가게명 매칭을 제거한 사진만 연결한다."
+    },
+    {
+      "id": "db790-notion-safe-photos",
+      "label": "DB790 노션 보충사진",
+      "type": "direct-webp-files",
+      "basePath": "assets/notion-store-photos",
+      "referencedStores": 123,
+      "detectedFiles": 133,
+      "status": "active-exact-title-fill-missing",
+      "runtimeEnabled": true,
+      "safetyReports": [
+        "data/integration-sources/db790/notion-photo-manifest.json",
+        "data/integration-sources/db790/notion-photo-apply-report.json"
+      ],
+      "reason": "노션 표시 제목이 정확히 일치하고 기존 사진이 없는 가게만 보충한 사진이다."
     }
   ],
-  "entries": []
+  "entries": [],
+  "coverage": {
+    "storeCount": 471,
+    "storesWithPhoto": 372,
+    "storesAwaitingPhoto": 99,
+    "updatedAt": "2026-07-17T20:24:08.631Z"
+  }
 }

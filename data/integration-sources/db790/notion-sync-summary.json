@@ -1,0 +1,175 @@
+{
+  "generatedAt": "2026-07-16T10:28:36.391Z",
+  "pagesScanned": 593,
+  "matchedCount": 564,
+  "ambiguousCount": 1,
+  "unmatchedCount": 1,
+  "errorCount": 24,
+  "scoreCounts": {
+    "exact100": 563,
+    "high95to99": 0,
+    "accepted80to94": 1
+  },
+  "routeCounts": {
+    "direct": 563,
+    "mukkebi": 514,
+    "chak": 564,
+    "phone": 563,
+    "coupang": 488,
+    "baemin": 527,
+    "ddangyo": 425,
+    "yogiyo": 405
+  },
+  "missingRouteCounts": {
+    "ddangyo": 139,
+    "yogiyo": 159,
+    "coupang": 76,
+    "mukkebi": 50,
+    "baemin": 37,
+    "phone": 1,
+    "direct": 1
+  },
+  "ambiguousSamples": [
+    {
+      "store": "귀한김치찜 국동봉산점",
+      "candidates": [
+        {
+          "title": "귀한김치찜 국동봉산점 (2)",
+          "score": 93
+        },
+        {
+          "title": "귀한김치찜 국동봉산점 (1)",
+          "score": 93
+        }
+      ]
+    }
+  ],
+  "unmatchedSamples": [
+    {
+      "store": "제목 없음",
+      "bestCandidate": null
+    }
+  ],
+  "errorSamples": [
+    {
+      "store": "청하대 영빈관 여서점",
+      "notionTitle": "청하대 영빈관 여서점",
+      "error": "/blocks/8a5da158-dd2a-83fe-8625-01711aa30a88/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "초밥처럼 봉산점",
+      "notionTitle": "초밥처럼 봉산점",
+      "error": "/blocks/396da158-dd2a-80ee-b044-da01aa2734a6/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치코두마리파닭 여서점",
+      "notionTitle": "치코두마리파닭 여서점",
+      "error": "/blocks/353da158-dd2a-8327-96ad-810b53773559/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨갱스터 국동유탑점",
+      "notionTitle": "치킨갱스터 국동유탑점",
+      "error": "/blocks/317da158-dd2a-82a5-b472-81388f55fdea/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨마루 무선호수공원점(화장동)",
+      "notionTitle": "치킨마루 무선호수공원점(화장동)",
+      "error": "/blocks/09bda158-dd2a-83e5-a513-01a29bb3ee65/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨마루 여수봉계점",
+      "notionTitle": "치킨마루 여수봉계점",
+      "error": "/blocks/82eda158-dd2a-836c-9c88-01eea0be990b/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨아이 국동점",
+      "notionTitle": "치킨아이 국동점",
+      "error": "/blocks/0dbda158-dd2a-8292-bc7a-816a49494e44/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨아이 둔덕점",
+      "notionTitle": "치킨아이 둔덕점",
+      "error": "/blocks/0e7da158-dd2a-8383-bd56-81e76d799585/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨아이 무선점",
+      "notionTitle": "치킨아이 무선점",
+      "error": "/blocks/455da158-dd2a-83ce-9376-012c078f51a4/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨아이 문수점",
+      "notionTitle": "치킨아이 문수점",
+      "error": "/blocks/c5eda158-dd2a-8308-bfd8-81c2e3d6252f/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨아이 소호점",
+      "notionTitle": "치킨아이 소호점",
+      "error": "/blocks/1a7da158-dd2a-82ba-a612-01b3590bce83/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨아이 신기점",
+      "notionTitle": "치킨아이 신기점",
+      "error": "/blocks/d03da158-dd2a-83b2-8799-01b479008d83/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치킨아이 학동점",
+      "notionTitle": "치킨아이 학동점",
+      "error": "/blocks/738da158-dd2a-82d7-9e06-81086b98abfa/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "치폴리니 여서점",
+      "notionTitle": "치폴리니 여서점",
+      "error": "/blocks/28bda158-dd2a-83c1-bc17-01f8d455b533/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "카레상 봉산점",
+      "notionTitle": "카레상 봉산점",
+      "error": "/blocks/39bda158-dd2a-805c-abd3-fa3b1ee59bc5/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "카페요아정 여수엑스포점",
+      "notionTitle": "카페요아정 여수엑스포점",
+      "error": "/blocks/1bcda158-dd2a-837c-8b34-8108ad1dd23a/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "코리안 찌개 타운 서교점",
+      "notionTitle": "코리안 찌개 타운 서교점",
+      "error": "/blocks/ed5da158-dd2a-8259-b83d-81635c469ffb/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "코리엔탈깻잎두마리치킨 선원점",
+      "notionTitle": "코리엔탈깻잎두마리치킨 선원점",
+      "error": "/blocks/cd5da158-dd2a-83e3-874c-011a1693a4be/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "콩담은 콩나물 국밥 문수점",
+      "notionTitle": "콩담은 콩나물 국밥 문수점",
+      "error": "/blocks/931da158-dd2a-831a-a1e5-810b229b9686/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "크라운닭발 문수점",
+      "notionTitle": "크라운닭발 문수점",
+      "error": "/blocks/0d9da158-dd2a-82e8-a062-810aaaabfc5a/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "큰손닭강정 여수본점(학동)",
+      "notionTitle": "큰손닭강정 여수본점(학동)",
+      "error": "/blocks/5e6da158-dd2a-8337-a618-0105cb4ac0fd/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "키로족발 여수점(여서동)",
+      "notionTitle": "키로족발 여수점(여서동)",
+      "error": "/blocks/547da158-dd2a-83b2-bada-81bdb34371b1/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "킹스타피자 관문점",
+      "notionTitle": "킹스타피자 관문점",
+      "error": "/blocks/796da158-dd2a-8305-b836-01c76c3a7eb0/children?page_size=100 재시도 초과"
+    },
+    {
+      "store": "킹짬뽕 본점(여서동)",
+      "notionTitle": "킹짬뽕 본점(여서동)",
+      "error": "/blocks/e50da158-dd2a-8209-9fd8-816866f4ed51/children?page_size=100 재시도 초과"
+    }
+  ]
+}

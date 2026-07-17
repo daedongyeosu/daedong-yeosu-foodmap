@@ -52,6 +52,7 @@ jobs:
         shell: bash
         run: |
           rm -rf build/db790-import
+          mkdir -p build/db790-import
           node scripts/prepare-db790-import.mjs /tmp/db790-worktree build/db790-import | tee build/db790-import-prepare.txt
           node - <<'NODE'
           const fs=require('fs');

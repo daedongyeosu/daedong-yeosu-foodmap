@@ -48,6 +48,17 @@
     catch { return fallback; }
   }
 
+  function writeJson(key,value){
+    localStorage.setItem(key,JSON.stringify(value));
+  }
+
+  function rememberChoice(store,key){
+    const current=readJson('daedongPreferredOrderHistoryV1');
+    const next=[{storeId:String(store.id),storeName:store.name,routeKey:key,selectedAt:new Date().toISOString()},
+      ...current.filter(item=>!(String(item.storeId)===String(store.id)&&item.routeKey===key))].slice(0,100);
+    writeJson('daedongPreferredOrderHistoryV1',next);
+  }
+
   function preferenceRanks(key) {
     const ranks = new Map();
     const choices = readJson('daedongPreferredOrderHistoryV1');
@@ -96,9 +107,6 @@
   }
 
   function browserCard(store, key, meta, index = 0, usedPhotos = new Set()) {
-    const url = routeFor(store, key);
-    const external = /^https?:/i.test(url);
-    const target = external ? ' target="_blank" rel="noopener"' : '';
     const area = store.area || store.district || '여수';
     const category = categoryOf(store);
     const distance = Number.isFinite(store.distanceKm) ? `<em>${store.distanceKm < 1 ? `${Math.round(store.distanceKm * 1000)}m` : `${store.distanceKm.toFixed(1)}km`}</em>` : '';
@@ -106,11 +114,11 @@
     const visual = photo
       ? `<img class="app-browser-photo" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)}" loading="${photo.loading}" decoding="async" width="72" height="64" onerror="this.outerHTML='<span class=&quot;app-browser-photo-placeholder&quot;>${CATEGORY_EMOJI[category] || '🍽️'}</span>'">`
       : `<span class="app-browser-photo-placeholder" aria-label="${escapeHtml(category)}">${CATEGORY_EMOJI[category] || '🍽️'}</span>`;
-    return `<a class="app-browser-card" data-store-id="${escapeHtml(store.id)}" href="${escapeHtml(url)}"${target}>
+    return `<button type="button" class="app-browser-card" data-app-store-id="${escapeHtml(store.id)}" data-app-key="${escapeHtml(key)}">
       ${visual}
-      <div class="app-browser-info"><strong>${escapeHtml(store.name)}</strong><small>${escapeHtml(area)} · ${escapeHtml(category)} ${distance}</small><span class="app-browser-only-icon" aria-label="${escapeHtml(meta.label)}">${browserIcon(meta)}</span></div>
+      <span class="app-browser-info"><strong>${escapeHtml(store.name)}</strong><small>${escapeHtml(area)} · ${escapeHtml(category)} ${distance}</small><span class="app-browser-only-icon" aria-label="${escapeHtml(meta.label)}">${browserIcon(meta)}</span></span>
       <b class="app-browser-arrow">›</b>
-    </a>`;
+    </button>`;
   }
 
   function sortedCategories(groups) {
@@ -162,12 +170,39 @@
     const ordered = orderedForApp(available, key);
     const installButton = meta.installUrl ? `<a class="app-browser-install" href="${escapeHtml(meta.installUrl)}" target="_blank" rel="noopener">앱 설치</a>` : '';
     const content = ordered.length ? categoryContent(ordered, key, meta, selected) : `<div class="app-browser-empty">현재 ${escapeHtml(meta.label)} 주문 링크가 등록된 가게가 없습니다.</div>`;
-    openModal(`<section class="app-browser" data-app="${escapeHtml(key)}"><header class="app-browser-head"><span class="app-browser-head-icon">${browserIcon(meta)}</span><div><h2>${escapeHtml(meta.label)} 주문 가능 가게</h2><p>카테고리별로 가까운 가게를 먼저 추천합니다.</p></div>${installButton}</header><div class="app-browser-list">${content}</div></section>`);
+    openModal(`<section class="app-browser" data-app="${escapeHtml(key)}">
+      <button type="button" class="app-browser-home" data-app-browser-close>← 홈으로</button>
+      <header class="app-browser-head"><span class="app-browser-head-icon">${browserIcon(meta)}</span><div><h2>${escapeHtml(meta.label)} 주문 가능 가게</h2><p>카테고리별로 가까운 가게를 먼저 추천합니다.</p></div>${installButton}</header>
+      <div class="app-browser-list">${content}</div>
+      <div class="app-browser-selected-strip">${browserIcon(meta)}<span>현재 선택한 주문앱: <b>${escapeHtml(meta.label)}</b></span></div>
+    </section>`);
   }
 
-  window.DaedongAppBrowser = {open: openAppBrowser, routeFor};
+  window.DaedongAppBrowser = {open: openAppBrowser, routeFor, meta: APP_BROWSER_META};
 
   document.addEventListener('click', event => {
+    const close = event.target.closest('[data-app-browser-close]');
+    if (close) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      if(typeof closeModal==='function')closeModal();
+      return;
+    }
+
+    const card = event.target.closest('[data-app-store-id]');
+    if (card) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const store=(Array.isArray(stores)?stores:[]).find(item=>String(item.id)===String(card.dataset.appStoreId));
+      const key=card.dataset.appKey;
+      if(store&&key){
+        rememberChoice(store,key);
+        window.DaedongSelectedOrderApp={key,storeId:String(store.id),selectedAt:Date.now()};
+        detail(store);
+      }
+      return;
+    }
+
     const categoryButton = event.target.closest('[data-app-category]');
     if (categoryButton) {
       event.preventDefault();
@@ -176,6 +211,7 @@
       if (sheet?.dataset.app) openAppBrowser(sheet.dataset.app, categoryButton.dataset.appCategory);
       return;
     }
+
     const launcher = event.target.closest('.order-grid .order-item, #moreAppsPopover .external-apps a');
     if (!launcher) return;
     const key = keyFromLauncher(launcher);

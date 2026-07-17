@@ -1,24 +1,14 @@
 name: Apply runtime validation fixes
 
 on:
-  push:
-    branches: [agent/main-unification]
-    paths:
-      - '.integration/apply-runtime-fixes'
-  pull_request:
-    branches: [main]
-    paths:
-      - '.integration/apply-runtime-fixes'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
-concurrency:
-  group: apply-runtime-validation-fixes
-  cancel-in-progress: false
-
 jobs:
   apply:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -28,12 +18,9 @@ jobs:
           ref: agent/main-unification
           fetch-depth: 0
 
-      - name: Guard branch and marker
+      - name: Guard branch
         shell: bash
-        run: |
-          branch="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
-          test "$branch" = "agent/main-unification"
-          test -f .integration/apply-runtime-fixes
+        run: test "${GITHUB_REF_NAME}" = "agent/main-unification"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -57,5 +44,9 @@ jobs:
           git config user.name "daedong-integration-bot"
           git config user.email "actions@users.noreply.github.com"
           git add app.js scripts/browser-smoke.mjs
+          if git diff --cached --quiet; then
+            echo "No runtime fixes to commit"
+            exit 0
+          fi
           git commit -m "모바일 배너 경로와 브라우저 검수 조건 수정"
           git push origin HEAD:agent/main-unification

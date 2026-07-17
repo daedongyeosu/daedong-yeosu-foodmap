@@ -18,6 +18,8 @@ assert(normalize(' 여서동 · 치킨 ')==='여서동치킨','검색어 정규�
 assert(routeKey('CHAK 지역상품권')==='chak','주문경로 분류');
 const store=normalizedStore({id:'1',name:'긴 가게',district:'여서동',category:'치킨',image:'images/사업자등록증.png',routes:[{name:'먹깨비',url:'https://example.com',enabled:true}]},0);
 assert(store.routes.length===1,'유효 주문주소 유지');
+const emptyCoords=normalizedStore({id:'2',name:'좌표없음',latitude:'',longitude:''},1);
+assert(emptyCoords.lat===null&&emptyCoords.lng===null,'빈 좌표는 미등록 처리');
 const policy={allowedClassifications:['food'],blockedClassifications:['sensitive_document','price_list','non_food'],blockedPathKeywords:['사업자등록','가격표'],requireExplicitAllowForPackageEntries:true};
 let resolver=new PhotoResolver({entries:[]},policy);
 assert(resolver.resolve(store)===null,'민감서류 파일명 차단');

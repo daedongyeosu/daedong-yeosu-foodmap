@@ -1,12 +1,12 @@
 {
-  "createdAt": "2026-07-16T23:24:19.120Z",
+  "createdAt": "2026-07-17T07:00:52.345Z",
   "summary": {
     "totalStores": 473,
-    "storesWithPhotos": 319,
-    "storesWithoutPhotos": 154,
-    "likelyAutoFix": 73,
-    "candidateReview": 40,
-    "sourceMissing": 41,
+    "storesWithPhotos": 340,
+    "storesWithoutPhotos": 133,
+    "likelyAutoFix": 64,
+    "candidateReview": 30,
+    "sourceMissing": 39,
     "photoFolderWithoutNotionStore": 264,
     "ignoredNonStoreFolders": 10
   },
@@ -19,11 +19,6 @@
   "likelyAutoFix": [
     {
       "store": "BHC 여수국동점",
-      "candidate": "BHC 돌산점",
-      "score": 98
-    },
-    {
-      "store": "BHC 여수문수점",
       "candidate": "BHC 돌산점",
       "score": 98
     },
@@ -60,31 +55,6 @@
     {
       "store": "BHC 여수학동점",
       "candidate": "BHC 돌산점",
-      "score": 98
-    },
-    {
-      "store": "가장맛있는족발 여수돌산점",
-      "candidate": "가장맛있는족발",
-      "score": 98
-    },
-    {
-      "store": "가장맛있는족발 여수신월점",
-      "candidate": "가장맛있는족발",
-      "score": 98
-    },
-    {
-      "store": "가장맛있는족발 여수여서점",
-      "candidate": "가장맛있는족발",
-      "score": 98
-    },
-    {
-      "store": "가장맛있는족발 여수웅천점",
-      "candidate": "가장맛있는족발",
-      "score": 98
-    },
-    {
-      "store": "가장맛있는족발 여수죽림점",
-      "candidate": "가장맛있는족발",
       "score": 98
     },
     {
@@ -129,11 +99,6 @@
     },
     {
       "store": "교촌치킨 안산점",
-      "candidate": "교촌치킨 둔덕점",
-      "score": 98
-    },
-    {
-      "store": "교촌치킨 여서점",
       "candidate": "교촌치킨 둔덕점",
       "score": 98
     },
@@ -183,11 +148,6 @@
       "score": 98
     },
     {
-      "store": "굽네치킨&피자 웅천점",
-      "candidate": "굽네치킨&피자 여수미평점",
-      "score": 98
-    },
-    {
       "store": "굽네치킨&피자 죽림점",
       "candidate": "굽네치킨&피자 여수미평점",
       "score": 98
@@ -203,23 +163,8 @@
       "score": 98
     },
     {
-      "store": "깐깐한족발 여수문수점",
-      "candidate": "깐깐한족발",
-      "score": 98
-    },
-    {
-      "store": "깐깐한족발 여수학동점",
-      "candidate": "깐깐한족발",
-      "score": 98
-    },
-    {
       "store": "노랑고래 찹쌀꽈배기 여수여서직영점",
       "candidate": "노랑고래 찹쌀꽈배기 중앙점",
-      "score": 98
-    },
-    {
-      "store": "노랑통닭 여서문수점",
-      "candidate": "봉산동 노랑통닭",
       "score": 98
     },
     {
@@ -238,34 +183,9 @@
       "score": 98
     },
     {
-      "store": "마라월드 마라탕&마라상궈 여수문수점",
-      "candidate": "마라월드",
-      "score": 87.1
-    },
-    {
       "store": "맥도날드 여수학동DT점",
       "candidate": "맥도날드 미평점",
       "score": 91.3
-    },
-    {
-      "store": "모도리보쌈족발 여수본점(봉산동)",
-      "candidate": "모도리보쌈족발",
-      "score": 98
-    },
-    {
-      "store": "모도리보쌈족발 여수직영점(신기동)",
-      "candidate": "모도리보쌈족발",
-      "score": 98
-    },
-    {
-      "store": "바른보쌈1990 문수점",
-      "candidate": "바른보쌈1990",
-      "score": 98
-    },
-    {
-      "store": "바른보쌈1990 여수웅천점",
-      "candidate": "바른보쌈1990",
-      "score": 98
     },
     {
       "store": "부어치킨 여수학동점",
@@ -328,16 +248,6 @@
       "score": 98
     },
     {
-      "store": "청담피자 여수웅천",
-      "candidate": "청담피자",
-      "score": 98
-    },
-    {
-      "store": "청담피자 여수죽림점",
-      "candidate": "청담피자",
-      "score": 98
-    },
-    {
       "store": "치킨마루 무선호수공원점(화장동)",
       "candidate": "치킨마루",
       "score": 89
@@ -358,11 +268,6 @@
       "score": 98
     },
     {
-      "store": "치킨아이 문수점",
-      "candidate": "치킨아이 소호점",
-      "score": 98
-    },
-    {
       "store": "치킨아이 신기점",
       "candidate": "치킨아이 소호점",
       "score": 98
@@ -373,14 +278,64 @@
       "score": 98
     },
     {
-      "store": "피자알볼로 여수엑스포점(수정동)",
-      "candidate": "피자알볼로",
-      "score": 89.8
+      "store": "와쭈 본점",
+      "candidate": "와쭈",
+      "score": 98
     },
     {
       "store": "수라상궁 조선국밥 여서점",
       "candidate": "수라상궁",
       "score": 89
+    },
+    {
+      "store": "베트남쌀국수 123 ZO",
+      "candidate": "강대진 베트남쌀국수123 ZO",
+      "score": 93
+    },
+    {
+      "store": "바오탕수 여서점",
+      "candidate": "바오탕수",
+      "score": 98
+    },
+    {
+      "store": "여수언니 교동점",
+      "candidate": "여수언니",
+      "score": 98
+    },
+    {
+      "store": "모노데일리 남산점",
+      "candidate": "모노데일리",
+      "score": 98
+    },
+    {
+      "store": "이조삼계탕 충무점",
+      "candidate": "이조삼계탕",
+      "score": 98
+    },
+    {
+      "store": "포슈아 쌀국수배달전문 서교점",
+      "candidate": "포슈아 쌀국수배달전문",
+      "score": 98
+    },
+    {
+      "store": "김밥세상 광무점",
+      "candidate": "김밥세상",
+      "score": 98
+    },
+    {
+      "store": "동백 봉강점",
+      "candidate": "동백",
+      "score": 98
+    },
+    {
+      "store": "금도령찜닭 여수봉강점",
+      "candidate": "금도령찜닭",
+      "score": 98
+    },
+    {
+      "store": "배가네왕족보 여문본점",
+      "candidate": "배가네왕족보 문수점",
+      "score": 92.5
     }
   ],
   "candidateReview": [
@@ -408,27 +363,6 @@
         {
           "folderName": "화란 중화요리",
           "score": 55.2
-        }
-      ]
-    },
-    {
-      "store": "김밥나라 관문점",
-      "candidates": [
-        {
-          "folderName": "국동 김밥나라",
-          "score": 98
-        },
-        {
-          "folderName": "김밥나라",
-          "score": 98
-        },
-        {
-          "folderName": "웡김밥 여서점",
-          "score": 36.8
-        },
-        {
-          "folderName": "윤김밥 문수점",
-          "score": 36.8
         }
       ]
     },
@@ -542,86 +476,6 @@
       ]
     },
     {
-      "store": "네네치킨 여서문수점",
-      "candidates": [
-        {
-          "folderName": "국동 네네치킨",
-          "score": 98
-        },
-        {
-          "folderName": "네네치킨 둔덕미평점",
-          "score": 98
-        },
-        {
-          "folderName": "네네치킨둔덕미평점",
-          "score": 98
-        },
-        {
-          "folderName": "굽네치킨&피자 여수미평점",
-          "score": 46
-        },
-        {
-          "folderName": "인프라 미평 굽네치킨",
-          "score": 40.9
-        }
-      ]
-    },
-    {
-      "store": "도미노피자 여천점(학동)",
-      "candidates": [
-        {
-          "folderName": "도미노피자",
-          "score": 98
-        },
-        {
-          "folderName": "도미노피자",
-          "score": 98
-        }
-      ]
-    },
-    {
-      "store": "뚜레쥬르 여수돌산점",
-      "candidates": [
-        {
-          "folderName": "뚜레쥬르",
-          "score": 98
-        },
-        {
-          "folderName": "뚜레쥬르여수미평점",
-          "score": 98
-        },
-        {
-          "folderName": "뚜레쥬르여수여서점",
-          "score": 98
-        },
-        {
-          "folderName": "장민지 뚜레쥬르",
-          "score": 90
-        }
-      ]
-    },
-    {
-      "store": "뚜레쥬르 여수엑스포타운점",
-      "candidates": [
-        {
-          "folderName": "뚜레쥬르",
-          "score": 91.3
-        },
-        {
-          "folderName": "뚜레쥬르여수미평점",
-          "score": 91.3
-        },
-        {
-          "folderName": "뚜레쥬르여수여서점",
-          "score": 91.3
-        },
-        {
-          "folderName": "장민지 뚜레쥬르",
-          "score": 50.2
-        }
-      ]
-    },
-    {
       "store": "맘스터치 무선점",
       "candidates": [
         {
@@ -636,19 +490,6 @@
     },
     {
       "store": "맘스터치 여천 학동점",
-      "candidates": [
-        {
-          "folderName": "맘스터치 여수미평점",
-          "score": 98
-        },
-        {
-          "folderName": "문수 맘스터치",
-          "score": 98
-        }
-      ]
-    },
-    {
-      "store": "맘스터치 웅천점",
       "candidates": [
         {
           "folderName": "맘스터치 여수미평점",
@@ -779,23 +620,6 @@
       ]
     },
     {
-      "store": "아주커치킨 관문점",
-      "candidates": [
-        {
-          "folderName": "아주커치킨",
-          "score": 98
-        },
-        {
-          "folderName": "아주커치킨 문수점",
-          "score": 98
-        },
-        {
-          "folderName": "중앙하이츠 아주커",
-          "score": 40.9
-        }
-      ]
-    },
-    {
       "store": "아주커치킨 무선점",
       "candidates": [
         {
@@ -873,19 +697,6 @@
       ]
     },
     {
-      "store": "여수강촌토종닭숯불구이 웅천본점",
-      "candidates": [
-        {
-          "folderName": "강촌토종닭숯불구이",
-          "score": 98
-        },
-        {
-          "folderName": "여수강촌토종닭숯불구이",
-          "score": 98
-        }
-      ]
-    },
-    {
       "store": "여수강촌토종닭숯불구이 죽림직영점",
       "candidates": [
         {
@@ -894,40 +705,6 @@
         },
         {
           "folderName": "여수강촌토종닭숯불구이",
-          "score": 98
-        }
-      ]
-    },
-    {
-      "store": "조선다방 돌산점",
-      "candidates": [
-        {
-          "folderName": "국동 조선다방",
-          "score": 98
-        },
-        {
-          "folderName": "봉계동 조선다방",
-          "score": 98
-        },
-        {
-          "folderName": "조선다방",
-          "score": 98
-        }
-      ]
-    },
-    {
-      "store": "조선다방 엑스포점",
-      "candidates": [
-        {
-          "folderName": "국동 조선다방",
-          "score": 98
-        },
-        {
-          "folderName": "봉계동 조선다방",
-          "score": 98
-        },
-        {
-          "folderName": "조선다방",
           "score": 98
         }
       ]
@@ -1012,10 +789,6 @@
     },
     {
       "store": "맥시칸치킨 미평점",
-      "reason": "업로드된 사진 폴더에서 이 가게와 비슷한 이름을 찾지 못함"
-    },
-    {
-      "store": "메가MGC커피 문수점",
       "reason": "업로드된 사진 폴더에서 이 가게와 비슷한 이름을 찾지 못함"
     },
     {
@@ -1120,10 +893,6 @@
     },
     {
       "store": "파리바게뜨 여수중앙점",
-      "reason": "업로드된 사진 폴더에서 이 가게와 비슷한 이름을 찾지 못함"
-    },
-    {
-      "store": "한국식중화요리 미몽 여서점",
       "reason": "업로드된 사진 폴더에서 이 가게와 비슷한 이름을 찾지 못함"
     },
     {

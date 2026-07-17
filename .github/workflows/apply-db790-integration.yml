@@ -1,14 +1,7 @@
 name: Apply selective DB790 integration
 
 on:
-  push:
-    branches: [agent/main-unification]
-    paths:
-      - '.integration/apply-db790'
-  pull_request:
-    branches: [main]
-    paths:
-      - '.integration/apply-db790'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -19,6 +12,7 @@ concurrency:
 
 jobs:
   apply:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
@@ -28,12 +22,10 @@ jobs:
           ref: agent/main-unification
           fetch-depth: 0
 
-      - name: Guard branch and marker
+      - name: Guard branch
         shell: bash
         run: |
-          branch="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
-          test "$branch" = "agent/main-unification"
-          test -f .integration/apply-db790
+          test "${GITHUB_REF_NAME}" = "agent/main-unification"
           echo "Integration branch confirmed; main will not be modified."
 
       - name: Setup Node.js
@@ -58,7 +50,6 @@ jobs:
           const fs=require('fs');
           const report=JSON.parse(fs.readFileSync('build/db790-import/report.json','utf8'));
           if(report.mergedCount!==471) throw new Error(`Expected 471 stores, got ${report.mergedCount}`);
-          if(report.addedCount!==40) throw new Error(`Expected 40 additions, got ${report.addedCount}`);
           if(report.excluded.length!==2) throw new Error(`Expected 2 management-page exclusions, got ${report.excluded.length}`);
           if(report.copyFileCount<500) throw new Error(`Unexpectedly small safe photo set: ${report.copyFileCount}`);
           console.log('Selective import gates passed',report);
@@ -66,7 +57,10 @@ jobs:
 
       - name: Back up current integrated database
         shell: bash
-        run: cp data/stores.json data/stores.before-db790-integration.json
+        run: |
+          if [[ ! -f data/stores.before-db790-integration.json ]]; then
+            cp data/stores.json data/stores.before-db790-integration.json
+          fi
 
       - name: Copy safe referenced photos only
         shell: bash

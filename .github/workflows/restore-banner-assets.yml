@@ -1,24 +1,14 @@
 name: Restore historical banner assets
 
 on:
-  push:
-    branches: [agent/main-unification]
-    paths:
-      - '.integration/restore-banner-assets'
-  pull_request:
-    branches: [main]
-    paths:
-      - '.integration/restore-banner-assets'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
-concurrency:
-  group: restore-historical-banner-assets
-  cancel-in-progress: false
-
 jobs:
   restore:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -30,10 +20,7 @@ jobs:
 
       - name: Guard integration branch
         shell: bash
-        run: |
-          branch="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
-          test "$branch" = "agent/main-unification"
-          test -f .integration/restore-banner-assets
+        run: test "${GITHUB_REF_NAME}" = "agent/main-unification"
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -48,7 +35,6 @@ jobs:
             git checkout FETCH_HEAD -- "images/${number}.png"
             test -s "images/${number}.png"
           done
-          echo "Restored banner files: $(find images -maxdepth 1 -name '*.png' -printf '%f\n' | grep -E '^(0[1-9]|1[0-7])\.png$' | wc -l)"
 
       - name: Apply banner runtime and test fixes
         run: node scripts/fix-banner-runtime.mjs
@@ -70,5 +56,9 @@ jobs:
           git config user.name "daedong-integration-bot"
           git config user.email "actions@users.noreply.github.com"
           git add app.js scripts/browser-smoke.mjs images/01.png images/02.png images/03.png images/04.png images/05.png images/06.png images/07.png images/08.png images/09.png images/10.png images/11.png images/12.png images/13.png images/14.png images/15.png images/16.png images/17.png
+          if git diff --cached --quiet; then
+            echo "No banner restoration changes to commit"
+            exit 0
+          fi
           git commit -m "과거 배너 원본 복원과 무한슬라이드 검수 수정"
           git push origin HEAD:agent/main-unification

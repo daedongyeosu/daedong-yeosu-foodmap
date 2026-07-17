@@ -38,6 +38,10 @@ jobs:
         shell: bash
         run: node scripts/inventory-photo-packages.mjs 2>&1 | tee photo-inventory.txt
 
+      - name: Inspect photo package encoding
+        shell: bash
+        run: node scripts/inspect-photo-parts.mjs 2>&1 | tee photo-parts-inspection.txt
+
       - name: Run integration validation
         id: integration
         continue-on-error: true
@@ -61,6 +65,7 @@ jobs:
           name: integration-validation-report
           path: |
             photo-inventory.txt
+            photo-parts-inspection.txt
             integration-validation.txt
             unit-tests.txt
           if-no-files-found: warn

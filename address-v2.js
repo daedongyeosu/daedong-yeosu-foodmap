@@ -145,8 +145,9 @@ document.addEventListener('click',event=>{
 
 document.addEventListener('keydown',event=>{if(event.key==='Enter'&&event.target?.id==='addressSearchInput'){event.preventDefault();openPostcodeSearch(event.target.value);}if(event.key==='Enter'&&event.target?.id==='addressDetailInput')saveSelectedAddress('recent');});
 
+/* 첫 화면에서 주소 팝업을 자동으로 열지 않는다.
+   저장 주소가 있을 때만 적용하고, 새 고객은 주소 버튼 또는 '내 주변'을 눌렀을 때 한 번만 안내한다. */
 document.addEventListener('DOMContentLoaded',()=>{
   const saved=getSavedAddress();
   if(saved)applyAddress(saved,{confirm:false});
-  else setTimeout(()=>openAddressSetup(),700);
 });

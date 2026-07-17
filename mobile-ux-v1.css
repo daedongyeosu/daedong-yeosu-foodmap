@@ -1,0 +1,30 @@
+/* 대동여수음식지도 모바일 UX 정돈 */
+.topbar{display:grid!important;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center!important;gap:8px!important;min-height:66px!important;padding:8px 14px 6px!important;background:#fff;position:relative;z-index:20}
+.topbar .location-chip{justify-self:start;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.topbar .brand{display:flex!important;align-items:center;justify-content:center;justify-self:center;width:126px!important;height:52px!important;margin:0!important;padding:0!important;overflow:visible!important;background:transparent!important}
+.topbar .brand img{display:block;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain!important;object-position:center!important}
+.topbar .top-actions{justify-self:end;display:flex;align-items:center}.hero{margin-top:0!important;padding-top:0!important}
+#topRecentBtn{width:64px!important;min-width:64px!important;height:64px!important;border-width:2px!important;font-size:25px!important;line-height:1!important;display:inline-flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important}
+#topRecentBtn span{display:block!important;font-size:11px!important;font-weight:900!important;line-height:1!important}
+.order-section.local-order-hub{margin-top:16px!important;padding:0!important;border:1.5px solid #b8dfc1!important;border-radius:26px!important;overflow:hidden!important;background:linear-gradient(145deg,#f5fff7 0%,#fffdf5 48%,#fff 100%)!important;box-shadow:0 12px 28px rgba(20,112,55,.08)!important}
+.local-order-intro{padding:22px 20px 18px;background:linear-gradient(135deg,rgba(235,255,239,.94),rgba(255,253,242,.94));border-bottom:1px solid #d7ebda}
+.local-order-intro .local-order-eyebrow{display:inline-flex;align-items:center;gap:6px;margin-bottom:8px;color:#13823d;font-size:13px;font-weight:900}
+.local-order-intro h2{margin:0 0 10px;color:#0f5f2d;font-size:clamp(23px,6.4vw,30px);line-height:1.25;letter-spacing:-.04em}
+.local-order-intro p{margin:0;color:#4c6655;font-size:15px;line-height:1.55;font-weight:650}
+.order-section.local-order-hub>.section-head{margin:0!important;padding:17px 18px 8px!important;background:transparent!important}.order-section.local-order-hub>.section-head h2{font-size:22px!important;line-height:1.25!important;letter-spacing:-.035em}
+.order-section.local-order-hub .order-grid{padding:8px 14px 18px!important;gap:10px!important}.order-section.local-order-hub .order-item{min-height:105px;background:rgba(255,255,255,.94)!important;box-shadow:0 4px 14px rgba(34,47,55,.05)}.order-section.local-order-hub .more-apps{min-height:105px}.ux-legacy-campaign{display:none!important}
+[data-ux-card-info-request]{display:none!important}
+#modal.store-detail-compact{display:flex!important;align-items:center!important;justify-content:center!important;padding:8px!important;overflow:hidden!important}
+#modal.store-detail-compact .modal-card{width:min(94vw,520px)!important;max-width:520px!important;max-height:none!important;margin:0!important;padding:9px 11px 11px!important;border-radius:25px!important;overflow:visible!important;transform-origin:center center}
+#modal.store-detail-compact #modalContent{max-height:none!important;overflow:visible!important}
+#modal.store-detail-compact #modalContent h1,#modal.store-detail-compact #modalContent h2,#modal.store-detail-compact #modalContent h3{margin-top:4px!important;margin-bottom:4px!important;line-height:1.16!important}
+#modal.store-detail-compact #modalContent p{margin-top:3px!important;margin-bottom:3px!important;line-height:1.25!important}
+#modal.store-detail-compact #modalContent img{max-height:112px;object-fit:cover}
+#modal.store-detail-compact #modalContent button,#modal.store-detail-compact #modalContent a{min-height:0!important}
+#modal.store-detail-compact .modal-close{top:7px!important;right:7px!important;z-index:20!important}
+#modal.store-detail-compact .ux-detail-route-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin:8px 0!important}
+#modal.store-detail-compact .ux-detail-route-grid>*{width:100%!important;margin:0!important;min-height:48px!important;padding:8px 7px!important}
+#modal.store-detail-compact .ux-detail-actions{display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;margin-top:8px!important}
+#modal.store-detail-compact .ux-detail-actions>*{width:100%!important;margin:0!important;min-height:48px!important;padding:8px!important}
+@media(max-width:420px){.topbar{grid-template-columns:minmax(0,1fr) 112px minmax(0,1fr);padding-left:10px!important;padding-right:10px!important}.topbar .brand{width:112px!important;height:48px!important}.topbar .location-chip{padding-left:8px!important;padding-right:8px!important}#topRecentBtn{width:61px!important;min-width:61px!important;height:61px!important}.local-order-intro{padding:20px 17px 16px}}
+@media(max-height:740px){#modal.store-detail-compact .modal-card{padding:6px 8px 8px!important}#modal.store-detail-compact #modalContent img{max-height:92px}}

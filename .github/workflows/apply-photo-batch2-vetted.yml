@@ -58,3 +58,5 @@ jobs:
           git add -A
           git commit -m '[photo-batch2-generated] 2차 사진 재검수 안전 적용'
           git push origin HEAD:agent/main-unification
+
+# retrigger after initial workflow installation

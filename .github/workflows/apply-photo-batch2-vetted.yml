@@ -1,0 +1,60 @@
+name: Apply revalidated photo batch 2
+
+on:
+  push:
+    branches: [agent/main-unification]
+    paths:
+      - 'assets/photo-batch-2-vetted/**'
+      - 'data/photo-batch2-vetted-*.json'
+      - 'data/photo-batch2-structure-report.json'
+      - 'scripts/apply-photo-batch2-vetted.mjs'
+      - 'scripts/validate-photo-batch2-vetted.mjs'
+      - '.github/workflows/apply-photo-batch2-vetted.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: photo-batch2-revalidated-apply
+  cancel-in-progress: false
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout integration branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/main-unification
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Reassemble and verify reviewed text payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat .integration/photo-batch2-revalidated/text-part-*.b64 | base64 -d > /tmp/photo-batch2-text.zip
+          echo 'eb115636ebd62fcf4ac5eed76d81df6de5c08e6829b52f9e2ea9e00bd09e04dd  /tmp/photo-batch2-text.zip' | sha256sum -c -
+          unzip -oq /tmp/photo-batch2-text.zip -d .
+          rm -rf .integration/photo-batch2-revalidated
+
+      - name: Apply and validate revalidated photos
+        run: |
+          node scripts/apply-photo-batch2-vetted.mjs
+          node scripts/validate-photo-batch2-vetted.mjs
+
+      - name: Commit generated data to integration branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'daedong-photo-revalidation'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m '[photo-batch2-generated] 2차 사진 재검수 안전 적용'
+          git push origin HEAD:agent/main-unification

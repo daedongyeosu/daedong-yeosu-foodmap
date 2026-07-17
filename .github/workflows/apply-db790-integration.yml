@@ -5,6 +5,10 @@ on:
     branches: [agent/main-unification]
     paths:
       - '.integration/apply-db790'
+  pull_request:
+    branches: [main]
+    paths:
+      - '.integration/apply-db790'
 
 permissions:
   contents: write
@@ -27,7 +31,8 @@ jobs:
       - name: Guard branch and marker
         shell: bash
         run: |
-          test "${GITHUB_REF_NAME}" = "agent/main-unification"
+          branch="${GITHUB_HEAD_REF:-$GITHUB_REF_NAME}"
+          test "$branch" = "agent/main-unification"
           test -f .integration/apply-db790
           echo "Integration branch confirmed; main will not be modified."
 

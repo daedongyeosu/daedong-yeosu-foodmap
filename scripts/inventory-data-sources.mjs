@@ -2,7 +2,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
-const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const defaultRoot=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const root=path.resolve(process.argv[2]||defaultRoot);
 const skip=new Set(['.git','node_modules','images','assets','build']);
 const candidates=[];
 const walk=directory=>{
@@ -15,7 +16,7 @@ const walk=directory=>{
 };
 walk(root);
 
-console.log('[데이터 소스 후보]');
+console.log(`[데이터 소스 후보] ${root}`);
 for(const full of candidates.sort()){
   const relative=path.relative(root,full).replaceAll('\\','/');
   const stat=fs.statSync(full);

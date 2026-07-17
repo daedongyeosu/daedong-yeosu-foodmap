@@ -8,6 +8,7 @@ on:
       - 'app.js'
       - 'app.css'
       - 'data/**'
+      - 'images/notion-stores/**'
       - 'scripts/**'
       - '.github/workflows/integration-validation.yml'
   push:
@@ -33,6 +34,10 @@ jobs:
       - name: Check JavaScript syntax
         run: node --check app.js
 
+      - name: Inventory photo packages
+        shell: bash
+        run: node scripts/inventory-photo-packages.mjs 2>&1 | tee photo-inventory.txt
+
       - name: Run integration validation
         id: integration
         continue-on-error: true
@@ -55,6 +60,7 @@ jobs:
         with:
           name: integration-validation-report
           path: |
+            photo-inventory.txt
             integration-validation.txt
             unit-tests.txt
           if-no-files-found: warn

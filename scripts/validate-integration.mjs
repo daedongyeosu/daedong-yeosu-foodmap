@@ -65,9 +65,24 @@ if(package1){
   check(package1.runtimeEnabled===false,'불완전 1차 사진 패키지 런타임 비활성');
   if(missingNumbers.length)warnings.push(`1차 사진 패키지 미완성: 복구 가능 ${recoverableNumbers.length}/${package1.expectedParts}, 누락 ${missingNumbers.join(', ')}`);
 }
+
 const package2=(manifest.packages||[]).find(item=>item.id==='photo-batch-2');
 check(Boolean(package2),'2차 사진 패키지 항목 존재');
-if(package2){const detected=exists(package2.basePath);check(detected===Boolean(package2.detected),`2차 사진 실제 존재 상태 일치: ${detected?'발견':'미발견'}`);check(package2.runtimeEnabled===false,'미발견 2차 사진 패키지 런타임 비활성');if(!detected)warnings.push('2차 사진 패키지 파일이 저장소에 없음');}
+if(package2){
+  const detected=exists(package2.basePath);
+  check(detected===Boolean(package2.detected),`2차 사진 실제 존재 상태 일치: ${detected?'발견':'미발견'}`);
+  if(detected){
+    check(package2.runtimeEnabled===true,'발견·재검수 완료 2차 사진 패키지 런타임 활성');
+    check(package2.status==='active-revalidated','2차 사진 패키지 재검수 상태 활성');
+    check(package2.revalidatedApprovedImages===9,`2차 승인 사진 수 일치: ${package2.revalidatedApprovedImages}/9`);
+    check(package2.appliedStores===14,`2차 적용 가게 수 일치: ${package2.appliedStores}/14`);
+    check(listFiles(package2.basePath).filter(file=>file.endsWith('.webp')).length===9,'2차 검수 WebP 파일 9장 존재');
+  }else{
+    check(package2.runtimeEnabled===false,'미발견 2차 사진 패키지 런타임 비활성');
+    warnings.push('2차 사진 패키지 파일이 저장소에 없음');
+  }
+}
+
 const notion=(manifest.packages||[]).find(item=>item.id==='notion');
 check(Boolean(notion),'노션 사진 패키지 항목 존재');
 if(notion){const notionCount=listFiles(notion.basePath).length;check(notionCount===notion.detectedFiles,`노션 사진 파일 수 일치: ${notionCount}개`);}
@@ -75,4 +90,9 @@ check((policy.blockedClassifications||[]).includes('sensitive_document'),'민감
 check((policy.blockedClassifications||[]).includes('price_list'),'가격표 차단 분류 존재');
 check((policy.blockedClassifications||[]).includes('non_food'),'비음식 사진 차단 분류 존재');
 
-console.log('\n[통합 검증 결과]');for(const item of pass)console.log(`PASS  ${item}`);for(const item of warnings)console.log(`WARN  ${item}`);for(const item of errors)console.log(`FAIL  ${item}`);console.log(`\nPASS ${pass.length} / WARN ${warnings.length} / FAIL ${errors.length}`);process.exitCode=errors.length?1:0;
+console.log('\n[통합 검증 결과]');
+for(const item of pass)console.log(`PASS  ${item}`);
+for(const item of warnings)console.log(`WARN  ${item}`);
+for(const item of errors)console.log(`FAIL  ${item}`);
+console.log(`\nPASS ${pass.length} / WARN ${warnings.length} / FAIL ${errors.length}`);
+process.exitCode=errors.length?1:0;

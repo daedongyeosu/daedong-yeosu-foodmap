@@ -1,6 +1,22 @@
 {
-  "status": "in_progress",
+  "status": "success",
+  "success": true,
   "runId": 29636343330,
   "runUrl": "https://github.com/daedongyeosu/daedong-yeosu-foodmap/actions/runs/29636343330",
-  "mergeCommitSha": "78fcfebd0cb9bf760dd3d3703e910efd0a9382a6"
+  "mergeCommitSha": "78fcfebd0cb9bf760dd3d3703e910efd0a9382a6",
+  "pagesUrl": "https://daedongyeosu.github.io/daedong-yeosu-foodmap/",
+  "pagesApiStatus": "built",
+  "pagesDeployment": {
+    "runId": 29636006158,
+    "runUrl": "https://github.com/daedongyeosu/daedong-yeosu-foodmap/actions/runs/29636006158",
+    "status": "completed",
+    "conclusion": "success"
+  },
+  "mobile": {
+    "pass": 51,
+    "warn": 1,
+    "fail": 0,
+    "success": true
+  },
+  "verifiedAt": "2026-07-18T07:48:37.336Z"
 }

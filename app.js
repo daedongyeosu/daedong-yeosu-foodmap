@@ -252,15 +252,34 @@ class InfiniteCarousel {
     }
     this.jump(false); this.renderDots();
   }
+  beginDrag(clientX) {
+    if (!Number.isFinite(clientX) || this.dragStart !== null) return;
+    this.dragStart = clientX;
+    this.stop();
+  }
+  finishDrag(clientX) {
+    if (this.dragStart === null || !Number.isFinite(clientX)) return;
+    const delta = clientX - this.dragStart;
+    this.dragStart = null;
+    if (Math.abs(delta) > 38) this.move(delta < 0 ? 1 : -1);
+    this.start();
+  }
+  cancelDrag() { this.dragStart = null; this.start(); }
   bind() {
     this.prev?.addEventListener('click', () => this.move(-1));
     this.next?.addEventListener('click', () => this.move(1));
     this.track.addEventListener('transitionend', () => this.normalizePosition());
-    this.shell.addEventListener('pointerdown', event => { this.dragStart = event.clientX; this.stop(); this.shell.setPointerCapture?.(event.pointerId); });
-    this.shell.addEventListener('pointerup', event => { if (this.dragStart === null) return; const delta = event.clientX - this.dragStart; this.dragStart = null; if (Math.abs(delta) > 38) this.move(delta < 0 ? 1 : -1); this.start(); });
-    this.shell.addEventListener('pointercancel', () => { this.dragStart = null; this.start(); });
+    this.shell.addEventListener('dragstart', event => event.preventDefault());
+    this.shell.addEventListener('pointerdown', event => { this.beginDrag(event.clientX); try { this.shell.setPointerCapture?.(event.pointerId); } catch {} });
+    this.shell.addEventListener('pointerup', event => this.finishDrag(event.clientX));
+    this.shell.addEventListener('pointercancel', () => this.cancelDrag());
+    this.shell.addEventListener('mousedown', event => this.beginDrag(event.clientX));
+    window.addEventListener('mouseup', event => this.finishDrag(event.clientX));
+    this.shell.addEventListener('touchstart', event => this.beginDrag(event.touches[0]?.clientX), {passive: true});
+    this.shell.addEventListener('touchend', event => this.finishDrag(event.changedTouches[0]?.clientX), {passive: true});
+    this.shell.addEventListener('touchcancel', () => this.cancelDrag(), {passive: true});
     this.shell.addEventListener('mouseenter', () => this.stop());
-    this.shell.addEventListener('mouseleave', () => this.start());
+    this.shell.addEventListener('mouseleave', () => { if (this.dragStart === null) this.start(); });
     this.root.addEventListener('focusin', () => this.stop());
     this.root.addEventListener('focusout', () => this.start());
     this.dots?.addEventListener('click', event => { const button = event.target.closest('[data-slide]'); if (button) this.goTo(Number(button.dataset.slide)); });

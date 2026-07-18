@@ -1,49 +1,74 @@
-name: Photo batch 3 workspace export
+name: Photo batch 3 apply and validate
 
 on:
   pull_request:
     branches: [main]
     paths:
       - '.github/workflows/photo-batch3-workspace-export.yml'
+      - '.github/photo-batch3-payload/payload.zip.b64'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  export-current-branch-data:
+  apply-photo-payload:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30
     steps:
-      - name: Checkout exact pull request head
+      - name: Checkout photo branch
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: feature/photo-batch-3-refresh
           fetch-depth: 0
-          show-progress: false
+          persist-credentials: true
 
-      - name: Build read-only workspace export
+      - name: Decode and verify payload
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p workspace-export/data workspace-export/scripts
-          cp data/stores.json workspace-export/data/
-          cp data/photo-manifest.json workspace-export/data/
-          cp data/photo-policy.json workspace-export/data/
-          find data -maxdepth 1 -type f -name '*photo*.json' -exec cp {} workspace-export/data/ \;
-          find scripts -maxdepth 1 -type f -name '*.mjs' -exec cp {} workspace-export/scripts/ \;
-          cp SHA256SUMS.txt workspace-export/ 2>/dev/null || true
-          cp index.html app.css app.js workspace-export/ 2>/dev/null || true
-          git ls-tree -r --long HEAD > workspace-export/repo-tree.txt
-          find assets -type f -printf '%P\t%s\n' | sort > workspace-export/existing-assets-files.tsv
-          find assets -type f -print0 | sort -z | xargs -0 sha256sum > workspace-export/existing-assets-sha256.txt
-          git rev-parse HEAD > workspace-export/head-sha.txt
-          git status --porcelain=v1 > workspace-export/git-status.txt
+          base64 -d .github/photo-batch3-payload/payload.zip.b64 > /tmp/photo-batch3-payload.zip
+          echo 'df3f75a76e3d7d16ad1c03066dfc6d4268e383e3e6505e21af194ef70144a4cb  /tmp/photo-batch3-payload.zip' | sha256sum -c -
+          unzip -t /tmp/photo-batch3-payload.zip
 
-      - name: Upload exact branch data
-        uses: actions/upload-artifact@v4
-        with:
-          name: photo-batch3-workspace-${{ github.run_id }}
-          path: workspace-export
-          if-no-files-found: error
-          retention-days: 7
+      - name: Apply photos and remove temporary transport
+        shell: bash
+        run: |
+          set -euo pipefail
+          unzip -o /tmp/photo-batch3-payload.zip -d .
+          rm -rf .github/photo-batch3-payload
+          rm -f .github/workflows/photo-batch3-bootstrap.yml
+          rm -f .github/workflows/photo-batch3-workspace-export.yml
+          rm -f existing-assets-files.tsv existing-assets-sha256.txt git-status.txt head-sha.txt repo-tree.txt
+          rm -f photo-batch3-validation-result.json static-validation-report.json
+
+      - name: Protect restored UI and runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code ecfc1f7d053914c7f6d4d9be9edbc88740534d0d -- index.html app.css app.js
+
+      - name: Run data, integrity, sensitive-photo and mobile checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/validate-static.mjs
+          node scripts/test-app-unit.mjs
+          node scripts/validate-data.mjs
+          sha256sum -c SHA256SUMS.txt
+          node scripts/validate-photo-batch2-vetted.mjs
+          node scripts/validate-photo-batch3-refresh.mjs
+          node scripts/photo-batch3-mobile.mjs
+          sha256sum -c PHOTO_BATCH3_SHA256SUMS.txt
+
+      - name: Commit photo-only result
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'daedongyeosu-photo-bot'
+          git config user.email 'sisakim@naver.com'
+          git add -A
+          git diff --cached --quiet && exit 0
+          git commit -m '사진 3차 보충: 58개 가게 안전 적용'
+          git push origin HEAD:feature/photo-batch-3-refresh

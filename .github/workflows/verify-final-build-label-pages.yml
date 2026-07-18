@@ -1,0 +1,152 @@
+name: Verify final build label Pages deployment
+
+on:
+  push:
+    branches: [agent/post-merge-pages-check]
+    paths:
+      - '.github/workflows/verify-final-build-label-pages.yml'
+
+permissions:
+  contents: write
+  actions: read
+  pages: read
+  deployments: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout verification branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/post-merge-pages-check
+          fetch-depth: 0
+          show-progress: false
+
+      - name: Publish run ID
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > final-build-label-pages.json <<JSON
+          {"status":"in_progress","runId":$GITHUB_RUN_ID,"runUrl":"https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID","mergeCommitSha":"618d4c2f5768a1ffdee3c4a6508e9201c883ff43"}
+          JSON
+          git config user.name 'daedong-label-pages-verifier'
+          git config user.email 'actions@users.noreply.github.com'
+          git add final-build-label-pages.json
+          git commit -m 'chore: expose label Pages verification run'
+          git push origin HEAD:agent/post-merge-pages-check
+
+      - name: Checkout exact merged main commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --depth=1
+          git checkout --detach 618d4c2f5768a1ffdee3c4a6508e9201c883ff43
+          test "$(git rev-parse HEAD)" = '618d4c2f5768a1ffdee3c4a6508e9201c883ff43'
+          grep -q '<div class="build-mark">대동여수음식지도 정식 통합본</div>' index.html
+          ! grep -q '최종 통합 검증 후보 · main 미반영' index.html
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Poll GitHub Pages deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/label-pages/logs
+          api="https://api.github.com/repos/$GITHUB_REPOSITORY"
+          auth=(-H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28')
+          ok=false
+          for attempt in $(seq 1 60); do
+            curl -fsSL "${auth[@]}" "$api/pages" -o /tmp/label-pages/pages-api.json
+            pages_url=$(jq -r '.html_url // empty' /tmp/label-pages/pages-api.json)
+            pages_status=$(jq -r '.status // empty' /tmp/label-pages/pages-api.json)
+            curl -fsSL "${auth[@]}" "$api/actions/runs?head_sha=618d4c2f5768a1ffdee3c4a6508e9201c883ff43&per_page=100" -o /tmp/label-pages/actions-runs.json
+            jq '[.workflow_runs[] | select((.name|ascii_downcase|contains("pages")) or (.path|ascii_downcase|contains("pages")))]' /tmp/label-pages/actions-runs.json > /tmp/label-pages/pages-runs.json
+            pages_run_id=$(jq -r 'sort_by(.created_at)|last|.id // empty' /tmp/label-pages/pages-runs.json)
+            pages_run_url=$(jq -r 'sort_by(.created_at)|last|.html_url // empty' /tmp/label-pages/pages-runs.json)
+            pages_run_status=$(jq -r 'sort_by(.created_at)|last|.status // empty' /tmp/label-pages/pages-runs.json)
+            pages_run_conclusion=$(jq -r 'sort_by(.created_at)|last|.conclusion // empty' /tmp/label-pages/pages-runs.json)
+            echo "attempt=$attempt pages=$pages_status run=$pages_run_id status=$pages_run_status conclusion=$pages_run_conclusion url=$pages_url" | tee -a /tmp/label-pages/logs/01-pages-poll.log
+            if [[ "$pages_run_status" == completed && "$pages_run_conclusion" == success && -n "$pages_url" ]]; then ok=true; break; fi
+            sleep 10
+          done
+          test "$ok" = true
+          {
+            echo "PAGES_URL=$pages_url"
+            echo "PAGES_STATUS=$pages_status"
+            echo "PAGES_RUN_ID=$pages_run_id"
+            echo "PAGES_RUN_URL=$pages_run_url"
+            echo "PAGES_RUN_CONCLUSION=$pages_run_conclusion"
+          } >> "$GITHUB_ENV"
+
+      - name: Verify public mobile site
+        shell: bash
+        run: |
+          set -euo pipefail
+          public_ok=false
+          for attempt in $(seq 1 40); do
+            code=$(curl -L -sS -o /tmp/label-pages/public-index.html -D /tmp/label-pages/public-headers.txt -w '%{http_code}' "$PAGES_URL?build=618d4c2f5768a1ffdee3c4a6508e9201c883ff43&attempt=$attempt" || true)
+            echo "attempt=$attempt http=$code" | tee -a /tmp/label-pages/logs/02-public-poll.log
+            if [[ "$code" == 200 ]] && grep -q '대동여수음식지도 정식 통합본' /tmp/label-pages/public-index.html && ! grep -q '최종 통합 검증 후보 · main 미반영' /tmp/label-pages/public-index.html; then public_ok=true; break; fi
+            sleep 10
+          done
+          test "$public_ok" = true
+          npm install --no-save --no-package-lock playwright@1.55.0 2>&1 | tee /tmp/label-pages/logs/03-playwright.log
+          npx playwright install --with-deps chromium 2>&1 | tee /tmp/label-pages/logs/04-chromium.log
+          BASE_URL="$PAGES_URL" node scripts/browser-smoke.mjs 2>&1 | tee /tmp/label-pages/logs/05-mobile.log
+          cp browser-smoke-report.json /tmp/label-pages/browser-smoke-report.json
+          cp browser-mobile.png /tmp/label-pages/browser-mobile.png
+          node --input-type=module <<'NODE'
+          import { chromium } from 'playwright';
+          import fs from 'node:fs';
+          const browser=await chromium.launch({headless:true});
+          const page=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
+          await page.goto(process.env.PAGES_URL,{waitUntil:'networkidle'});
+          const text=(await page.locator('.build-mark').innerText()).trim();
+          if(text!=='대동여수음식지도 정식 통합본') throw new Error(`Unexpected public build mark: ${text}`);
+          await page.locator('.build-mark').scrollIntoViewIfNeeded();
+          await page.screenshot({path:'/tmp/label-pages/build-label-public-mobile.png',fullPage:true});
+          fs.writeFileSync('/tmp/label-pages/build-label-public-check.json',JSON.stringify({success:true,text,oldTextPresent:(await page.content()).includes('최종 통합 검증 후보 · main 미반영')},null,2)+'\n');
+          await browser.close();
+          NODE
+
+      - name: Build result and upload evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const browser=JSON.parse(fs.readFileSync('/tmp/label-pages/browser-smoke-report.json','utf8'));
+          const label=JSON.parse(fs.readFileSync('/tmp/label-pages/build-label-public-check.json','utf8'));
+          const result={status:'success',success:Boolean(browser.success&&label.success&&!label.oldTextPresent&&process.env.PAGES_RUN_CONCLUSION==='success'),runId:Number(process.env.GITHUB_RUN_ID),runUrl:`https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,mergeCommitSha:'618d4c2f5768a1ffdee3c4a6508e9201c883ff43',pagesUrl:process.env.PAGES_URL,pagesApiStatus:process.env.PAGES_STATUS,pagesDeployment:{runId:Number(process.env.PAGES_RUN_ID),runUrl:process.env.PAGES_RUN_URL,conclusion:process.env.PAGES_RUN_CONCLUSION},buildMark:label.text,mobile:{pass:browser.checks.length,warn:browser.warnings?.length||0,fail:browser.success?0:1},verifiedAt:new Date().toISOString()};
+          if(!result.success)throw new Error('Final label Pages verification failed');
+          fs.writeFileSync('/tmp/label-pages/final-build-label-pages.json',JSON.stringify(result,null,2)+'\n');
+          NODE
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-build-label-pages
+          path: /tmp/label-pages/**
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish final result
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp /tmp/label-pages/final-build-label-pages.json /tmp/final-result.json
+          git fetch origin agent/post-merge-pages-check
+          git switch -C agent/post-merge-pages-check origin/agent/post-merge-pages-check
+          cp /tmp/final-result.json final-build-label-pages.json
+          git config user.name 'daedong-label-pages-verifier'
+          git config user.email 'actions@users.noreply.github.com'
+          git add final-build-label-pages.json
+          git commit -m 'chore: record final build-label Pages success'
+          git push origin HEAD:agent/post-merge-pages-check

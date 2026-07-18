@@ -19,17 +19,31 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Report stores awaiting photos
+      - name: Build inventory files
         shell: bash
         run: |
+          mkdir -p photo-batch3-inventory/data photo-batch3-inventory/scripts
           node <<'NODE'
           const fs = require('fs');
           const stores = JSON.parse(fs.readFileSync('data/stores.json','utf8'));
           const paths = s => [s.image,s.img,...(Array.isArray(s.images)?s.images.flatMap(v => typeof v === 'string' ? [v] : [v?.card,v?.detail]):[])].filter(Boolean);
           const awaiting = stores.filter(s => paths(s).length === 0).map(s => ({id:String(s.id),name:s.name,district:s.district||'',realBusinessName:s.realBusinessName||'',aliases:s.shopInShopNames||[]}));
-          console.log('PHOTO_BATCH_3_AWAITING_JSON_BEGIN');
-          console.log(JSON.stringify({storeCount:stores.length,awaitingCount:awaiting.length,awaiting},null,2));
-          console.log('PHOTO_BATCH_3_AWAITING_JSON_END');
+          const report = {storeCount:stores.length,awaitingCount:awaiting.length,awaiting};
+          fs.writeFileSync('photo-batch3-inventory/awaiting-stores.json', JSON.stringify(report,null,2)+'\n');
+          console.log(JSON.stringify({storeCount:stores.length,awaitingCount:awaiting.length}));
           if (stores.length !== 471) throw new Error(`store count ${stores.length} != 471`);
           if (awaiting.length !== 85) throw new Error(`awaiting count ${awaiting.length} != 85`);
           NODE
+          cp data/stores.json photo-batch3-inventory/data/stores.json
+          cp data/photo-manifest.json photo-batch3-inventory/data/photo-manifest.json
+          cp data/photo-policy.json photo-batch3-inventory/data/photo-policy.json
+          cp package.json photo-batch3-inventory/package.json
+          cp app.js index.html styles.css photo-batch3-inventory/ 2>/dev/null || true
+          cp scripts/validate-data.mjs photo-batch3-inventory/scripts/ 2>/dev/null || true
+          cp scripts/browser-smoke.mjs photo-batch3-inventory/scripts/ 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: photo-batch-3-inventory
+          path: photo-batch3-inventory
+          if-no-files-found: error
+          retention-days: 3

@@ -1,0 +1,1052 @@
+{
+  "success": true,
+  "pass": 209,
+  "fail": 0,
+  "checks": [
+    {
+      "name": "승인 WebP 사진 수",
+      "ok": true,
+      "detail": "9/9"
+    },
+    {
+      "name": "사진 존재 082",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/082.webp"
+    },
+    {
+      "name": "사진 크기 082",
+      "ok": true,
+      "detail": "10846/10846"
+    },
+    {
+      "name": "사진 SHA-256 082",
+      "ok": true,
+      "detail": "4b9b3aec6b8c419027be0d9a27cbe51659ff69f7a8d3860fecb31edf77acc84a"
+    },
+    {
+      "name": "WebP 형식 082",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "사진 존재 083",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/083.webp"
+    },
+    {
+      "name": "사진 크기 083",
+      "ok": true,
+      "detail": "7274/7274"
+    },
+    {
+      "name": "사진 SHA-256 083",
+      "ok": true,
+      "detail": "76a6d3fc5a0cee78f390195a4e5fe3516cbcdd62933010baca885a7a9072e1dc"
+    },
+    {
+      "name": "WebP 형식 083",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "사진 존재 084",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/084.webp"
+    },
+    {
+      "name": "사진 크기 084",
+      "ok": true,
+      "detail": "3398/3398"
+    },
+    {
+      "name": "사진 SHA-256 084",
+      "ok": true,
+      "detail": "1cc0188609cb49a591944dcf4615ee91f770d30813d218fcfe2f9b420eeb0ec2"
+    },
+    {
+      "name": "WebP 형식 084",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "사진 존재 089",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/089.webp"
+    },
+    {
+      "name": "사진 크기 089",
+      "ok": true,
+      "detail": "5054/5054"
+    },
+    {
+      "name": "사진 SHA-256 089",
+      "ok": true,
+      "detail": "0906964b97b94bac1ec996450d75faa02c8506ce21347ab435a4f7112be65d83"
+    },
+    {
+      "name": "WebP 형식 089",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "사진 존재 107",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/107.webp"
+    },
+    {
+      "name": "사진 크기 107",
+      "ok": true,
+      "detail": "7472/7472"
+    },
+    {
+      "name": "사진 SHA-256 107",
+      "ok": true,
+      "detail": "3aa0f30d473a70e1092a978ccaa3b1f093c3980ffb769352ddf2160ead5dee0d"
+    },
+    {
+      "name": "WebP 형식 107",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "사진 존재 108",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/108.webp"
+    },
+    {
+      "name": "사진 크기 108",
+      "ok": true,
+      "detail": "8416/8416"
+    },
+    {
+      "name": "사진 SHA-256 108",
+      "ok": true,
+      "detail": "c85963e5599f92ed81dc006af902f31d5df56be2a693f82bae90e50f73c0fb40"
+    },
+    {
+      "name": "WebP 형식 108",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "사진 존재 109",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/109.webp"
+    },
+    {
+      "name": "사진 크기 109",
+      "ok": true,
+      "detail": "6100/6100"
+    },
+    {
+      "name": "사진 SHA-256 109",
+      "ok": true,
+      "detail": "ab2ecebceebb569162e12d28d2d301c6853f01b65175d87caab2be28a2b84f48"
+    },
+    {
+      "name": "WebP 형식 109",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "사진 존재 282",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/282.webp"
+    },
+    {
+      "name": "사진 크기 282",
+      "ok": true,
+      "detail": "3402/3402"
+    },
+    {
+      "name": "사진 SHA-256 282",
+      "ok": true,
+      "detail": "fe473112ea6a1dd77e7daeb21cdf43a7cf91e5ecee1b9f9696dc8bb79a6239c0"
+    },
+    {
+      "name": "WebP 형식 282",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "사진 존재 284",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/284.webp"
+    },
+    {
+      "name": "사진 크기 284",
+      "ok": true,
+      "detail": "4922/4922"
+    },
+    {
+      "name": "사진 SHA-256 284",
+      "ok": true,
+      "detail": "6fc02db236ead95ab450e5fa6d759d5ddec606b0b6c442af08b59421c56a5584"
+    },
+    {
+      "name": "WebP 형식 284",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "적용 가게 배정 수",
+      "ok": true,
+      "detail": "14/14"
+    },
+    {
+      "name": "실제 참조 사진 경로 수",
+      "ok": true,
+      "detail": "9/9"
+    },
+    {
+      "name": "실제 참조 사진 ID 수",
+      "ok": true,
+      "detail": "9/9"
+    },
+    {
+      "name": "가게 존재 교촌치킨 국동점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 교촌치킨 국동점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/282.webp"
+    },
+    {
+      "name": "다중사진 적용 교촌치킨 국동점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 교촌치킨 국동점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/282.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 교촌치킨 국동점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 교촌치킨 덕충점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 교촌치킨 덕충점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/284.webp"
+    },
+    {
+      "name": "다중사진 적용 교촌치킨 덕충점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 교촌치킨 덕충점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/284.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 교촌치킨 덕충점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 교촌치킨 돌산점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 교촌치킨 돌산점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/282.webp"
+    },
+    {
+      "name": "다중사진 적용 교촌치킨 돌산점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 교촌치킨 돌산점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/282.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 교촌치킨 돌산점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 교촌치킨 문수점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 교촌치킨 문수점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/284.webp"
+    },
+    {
+      "name": "다중사진 적용 교촌치킨 문수점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 교촌치킨 문수점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/284.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 교촌치킨 문수점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 교촌치킨 신기점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 교촌치킨 신기점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/282.webp"
+    },
+    {
+      "name": "다중사진 적용 교촌치킨 신기점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 교촌치킨 신기점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/282.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 교촌치킨 신기점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 교촌치킨 안산점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 교촌치킨 안산점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/284.webp"
+    },
+    {
+      "name": "다중사진 적용 교촌치킨 안산점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 교촌치킨 안산점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/284.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 교촌치킨 안산점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 교촌치킨 웅천점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 교촌치킨 웅천점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/282.webp"
+    },
+    {
+      "name": "다중사진 적용 교촌치킨 웅천점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 교촌치킨 웅천점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/282.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 교촌치킨 웅천점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 교촌치킨 죽림무선점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 교촌치킨 죽림무선점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/284.webp"
+    },
+    {
+      "name": "다중사진 적용 교촌치킨 죽림무선점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 교촌치킨 죽림무선점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/284.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 교촌치킨 죽림무선점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 맘스터치 무선점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 맘스터치 무선점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/082.webp"
+    },
+    {
+      "name": "다중사진 적용 맘스터치 무선점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 맘스터치 무선점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/082.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 맘스터치 무선점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 맘스터치 여천 학동점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 맘스터치 여천 학동점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/083.webp"
+    },
+    {
+      "name": "다중사진 적용 맘스터치 여천 학동점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 맘스터치 여천 학동점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/083.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 맘스터치 여천 학동점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 맘스터치 엑스포점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 맘스터치 엑스포점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/084.webp"
+    },
+    {
+      "name": "다중사진 적용 맘스터치 엑스포점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 맘스터치 엑스포점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/084.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 맘스터치 엑스포점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 맘스터치 중앙점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 맘스터치 중앙점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/082.webp"
+    },
+    {
+      "name": "다중사진 적용 맘스터치 중앙점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 맘스터치 중앙점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/082.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 맘스터치 중앙점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 맥도날드 여수학동DT점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 맥도날드 여수학동DT점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/089.webp"
+    },
+    {
+      "name": "다중사진 적용 맥도날드 여수학동DT점",
+      "ok": true,
+      "detail": "1/1"
+    },
+    {
+      "name": "매니페스트 대표사진 맥도날드 여수학동DT점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/089.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 맥도날드 여수학동DT점",
+      "ok": true,
+      "detail": "0/0"
+    },
+    {
+      "name": "가게 존재 배가네왕족보 여문본점",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "대표사진 적용 배가네왕족보 여문본점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/107.webp"
+    },
+    {
+      "name": "다중사진 적용 배가네왕족보 여문본점",
+      "ok": true,
+      "detail": "3/3"
+    },
+    {
+      "name": "매니페스트 대표사진 배가네왕족보 여문본점",
+      "ok": true,
+      "detail": "assets/photo-batch-2-vetted/107.webp"
+    },
+    {
+      "name": "매니페스트 추가사진 배가네왕족보 여문본점",
+      "ok": true,
+      "detail": "2/2"
+    },
+    {
+      "name": "전체 가게 수",
+      "ok": true,
+      "detail": "471/471"
+    },
+    {
+      "name": "사진 보유 가게 수",
+      "ok": true,
+      "detail": "386/386"
+    },
+    {
+      "name": "사진 준비 중 가게 수",
+      "ok": true,
+      "detail": "85/85"
+    },
+    {
+      "name": "전수검수 원본 타일",
+      "ok": true,
+      "detail": "374/374"
+    },
+    {
+      "name": "이전 승인 후보",
+      "ok": true,
+      "detail": "20/20"
+    },
+    {
+      "name": "최종 승인 사진",
+      "ok": true,
+      "detail": "9/9"
+    },
+    {
+      "name": "전체 제외 사진",
+      "ok": true,
+      "detail": "27/27"
+    },
+    {
+      "name": "재검수 제외 090",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "재검수 제외 091",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "재검수 제외 106",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "재검수 제외 169",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "재검수 제외 170",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "재검수 제외 202",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "재검수 제외 203",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "재검수 제외 205",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "재검수 제외 277",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "재검수 제외 280",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "재검수 제외 327",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "메뉴·홍보 사진 차단 169",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "메뉴·홍보 사진 차단 170",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "승인·제외 목록 중복 없음",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "적용 보고 사진 수",
+      "ok": true,
+      "detail": "9/9"
+    },
+    {
+      "name": "적용 보고 가게 수",
+      "ok": true,
+      "detail": "14/14"
+    },
+    {
+      "name": "기존 정상사진 수 보존",
+      "ok": true,
+      "detail": "372/372"
+    },
+    {
+      "name": "보고서 사진 준비 중 수",
+      "ok": true,
+      "detail": "85/85"
+    },
+    {
+      "name": "2차 패키지 활성화",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "1차 누락파일 임의생성 금지",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "payload-manifest 파일 수",
+      "ok": true,
+      "detail": "23/23"
+    },
+    {
+      "name": "매니페스트 존재 assets/photo-batch-2-vetted/082.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 assets/photo-batch-2-vetted/082.webp",
+      "ok": true,
+      "detail": "10846/10846"
+    },
+    {
+      "name": "매니페스트 SHA assets/photo-batch-2-vetted/082.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 assets/photo-batch-2-vetted/083.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 assets/photo-batch-2-vetted/083.webp",
+      "ok": true,
+      "detail": "7274/7274"
+    },
+    {
+      "name": "매니페스트 SHA assets/photo-batch-2-vetted/083.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 assets/photo-batch-2-vetted/084.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 assets/photo-batch-2-vetted/084.webp",
+      "ok": true,
+      "detail": "3398/3398"
+    },
+    {
+      "name": "매니페스트 SHA assets/photo-batch-2-vetted/084.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 assets/photo-batch-2-vetted/089.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 assets/photo-batch-2-vetted/089.webp",
+      "ok": true,
+      "detail": "5054/5054"
+    },
+    {
+      "name": "매니페스트 SHA assets/photo-batch-2-vetted/089.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 assets/photo-batch-2-vetted/107.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 assets/photo-batch-2-vetted/107.webp",
+      "ok": true,
+      "detail": "7472/7472"
+    },
+    {
+      "name": "매니페스트 SHA assets/photo-batch-2-vetted/107.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 assets/photo-batch-2-vetted/108.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 assets/photo-batch-2-vetted/108.webp",
+      "ok": true,
+      "detail": "8416/8416"
+    },
+    {
+      "name": "매니페스트 SHA assets/photo-batch-2-vetted/108.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 assets/photo-batch-2-vetted/109.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 assets/photo-batch-2-vetted/109.webp",
+      "ok": true,
+      "detail": "6100/6100"
+    },
+    {
+      "name": "매니페스트 SHA assets/photo-batch-2-vetted/109.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 assets/photo-batch-2-vetted/282.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 assets/photo-batch-2-vetted/282.webp",
+      "ok": true,
+      "detail": "3402/3402"
+    },
+    {
+      "name": "매니페스트 SHA assets/photo-batch-2-vetted/282.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 assets/photo-batch-2-vetted/284.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 assets/photo-batch-2-vetted/284.webp",
+      "ok": true,
+      "detail": "4922/4922"
+    },
+    {
+      "name": "매니페스트 SHA assets/photo-batch-2-vetted/284.webp",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 data/stores.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 data/stores.json",
+      "ok": true,
+      "detail": "1240917/1240917"
+    },
+    {
+      "name": "매니페스트 SHA data/stores.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 data/photo-manifest.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 data/photo-manifest.json",
+      "ok": true,
+      "detail": "14944/14944"
+    },
+    {
+      "name": "매니페스트 SHA data/photo-manifest.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 data/photo-policy.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 data/photo-policy.json",
+      "ok": true,
+      "detail": "1170/1170"
+    },
+    {
+      "name": "매니페스트 SHA data/photo-policy.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 data/photo-batch2-structure-report.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 data/photo-batch2-structure-report.json",
+      "ok": true,
+      "detail": "302/302"
+    },
+    {
+      "name": "매니페스트 SHA data/photo-batch2-structure-report.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 data/photo-batch2-vetted-assets.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 data/photo-batch2-vetted-assets.json",
+      "ok": true,
+      "detail": "2016/2016"
+    },
+    {
+      "name": "매니페스트 SHA data/photo-batch2-vetted-assets.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 data/photo-batch2-vetted-assignments.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 data/photo-batch2-vetted-assignments.json",
+      "ok": true,
+      "detail": "4103/4103"
+    },
+    {
+      "name": "매니페스트 SHA data/photo-batch2-vetted-assignments.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 data/photo-batch2-vetted-report.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 data/photo-batch2-vetted-report.json",
+      "ok": true,
+      "detail": "11188/11188"
+    },
+    {
+      "name": "매니페스트 SHA data/photo-batch2-vetted-report.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 data/photo-batch2-vetted-review-decisions.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 data/photo-batch2-vetted-review-decisions.json",
+      "ok": true,
+      "detail": "4679/4679"
+    },
+    {
+      "name": "매니페스트 SHA data/photo-batch2-vetted-review-decisions.json",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 scripts/seed-photo-batch2-vetted.mjs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 scripts/seed-photo-batch2-vetted.mjs",
+      "ok": true,
+      "detail": "7498/7498"
+    },
+    {
+      "name": "매니페스트 SHA scripts/seed-photo-batch2-vetted.mjs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 scripts/apply-photo-batch2-vetted.mjs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 scripts/apply-photo-batch2-vetted.mjs",
+      "ok": true,
+      "detail": "9018/9018"
+    },
+    {
+      "name": "매니페스트 SHA scripts/apply-photo-batch2-vetted.mjs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 scripts/generate-photo-batch2-payload-manifest.mjs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 scripts/generate-photo-batch2-payload-manifest.mjs",
+      "ok": true,
+      "detail": "1978/1978"
+    },
+    {
+      "name": "매니페스트 SHA scripts/generate-photo-batch2-payload-manifest.mjs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 scripts/validate-photo-batch2-vetted.mjs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 scripts/validate-photo-batch2-vetted.mjs",
+      "ok": true,
+      "detail": "6349/6349"
+    },
+    {
+      "name": "매니페스트 SHA scripts/validate-photo-batch2-vetted.mjs",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 .github/workflows/photo-batch2-final-verification.yml",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 .github/workflows/photo-batch2-final-verification.yml",
+      "ok": true,
+      "detail": "12728/12728"
+    },
+    {
+      "name": "매니페스트 SHA .github/workflows/photo-batch2-final-verification.yml",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 존재 .github/workflows/integration-validation.yml",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "매니페스트 크기 .github/workflows/integration-validation.yml",
+      "ok": true,
+      "detail": "13469/13469"
+    },
+    {
+      "name": "매니페스트 SHA .github/workflows/integration-validation.yml",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "SHA256SUMS 항목 수",
+      "ok": true,
+      "detail": "24/24"
+    },
+    {
+      "name": "SHA256SUMS 전체 일치",
+      "ok": true,
+      "detail": "24/24"
+    }
+  ]
+}

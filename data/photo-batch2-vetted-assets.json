@@ -1,0 +1,64 @@
+{
+  "version": 4,
+  "sourcePackage": "photo_batch2_ready.zip",
+  "reviewedAt": "2026-07-18T08:02:50.545Z",
+  "assetCount": 9,
+  "assets": [
+    {
+      "imageId": "082",
+      "src": "assets/photo-batch-2-vetted/082.webp",
+      "bytes": 10846,
+      "sha256": "4b9b3aec6b8c419027be0d9a27cbe51659ff69f7a8d3860fecb31edf77acc84a"
+    },
+    {
+      "imageId": "083",
+      "src": "assets/photo-batch-2-vetted/083.webp",
+      "bytes": 7274,
+      "sha256": "76a6d3fc5a0cee78f390195a4e5fe3516cbcdd62933010baca885a7a9072e1dc"
+    },
+    {
+      "imageId": "084",
+      "src": "assets/photo-batch-2-vetted/084.webp",
+      "bytes": 3398,
+      "sha256": "1cc0188609cb49a591944dcf4615ee91f770d30813d218fcfe2f9b420eeb0ec2"
+    },
+    {
+      "imageId": "089",
+      "src": "assets/photo-batch-2-vetted/089.webp",
+      "bytes": 5054,
+      "sha256": "0906964b97b94bac1ec996450d75faa02c8506ce21347ab435a4f7112be65d83"
+    },
+    {
+      "imageId": "107",
+      "src": "assets/photo-batch-2-vetted/107.webp",
+      "bytes": 7472,
+      "sha256": "3aa0f30d473a70e1092a978ccaa3b1f093c3980ffb769352ddf2160ead5dee0d"
+    },
+    {
+      "imageId": "108",
+      "src": "assets/photo-batch-2-vetted/108.webp",
+      "bytes": 8416,
+      "sha256": "c85963e5599f92ed81dc006af902f31d5df56be2a693f82bae90e50f73c0fb40"
+    },
+    {
+      "imageId": "109",
+      "src": "assets/photo-batch-2-vetted/109.webp",
+      "bytes": 6100,
+      "sha256": "ab2ecebceebb569162e12d28d2d301c6853f01b65175d87caab2be28a2b84f48"
+    },
+    {
+      "imageId": "282",
+      "src": "assets/photo-batch-2-vetted/282.webp",
+      "bytes": 3402,
+      "sha256": "fe473112ea6a1dd77e7daeb21cdf43a7cf91e5ecee1b9f9696dc8bb79a6239c0"
+    },
+    {
+      "imageId": "284",
+      "src": "assets/photo-batch-2-vetted/284.webp",
+      "bytes": 4922,
+      "sha256": "6fc02db236ead95ab450e5fa6d759d5ddec606b0b6c442af08b59421c56a5584"
+    }
+  ],
+  "generatedFromActualBranchFilesAt": "2026-07-18T03:03:15.625Z",
+  "sourceOfTruth": "actual-agent-main-unification-files"
+}

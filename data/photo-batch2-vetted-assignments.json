@@ -1,0 +1,173 @@
+{
+  "version": 4,
+  "rule": "기존 정상사진 보존, 사진 없는 가게만 보충",
+  "districtRules": {
+    "문수점": "문수동",
+    "여서점": "여서동",
+    "덕충점": "덕충동",
+    "웅천점": "웅천동",
+    "여문점": "여서·문수 권역"
+  },
+  "assignmentCount": 14,
+  "referencedPhotoCount": 9,
+  "assignments": [
+    {
+      "storeName": "교촌치킨 국동점",
+      "imageIds": [
+        "282"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/282.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "국동점 ↔ 국동"
+    },
+    {
+      "storeName": "교촌치킨 덕충점",
+      "imageIds": [
+        "284"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/284.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "덕충점 ↔ 덕충동"
+    },
+    {
+      "storeName": "교촌치킨 돌산점",
+      "imageIds": [
+        "282"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/282.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "돌산점 ↔ 돌산 권역"
+    },
+    {
+      "storeName": "교촌치킨 문수점",
+      "imageIds": [
+        "284"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/284.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "문수점 ↔ 문수동"
+    },
+    {
+      "storeName": "교촌치킨 신기점",
+      "imageIds": [
+        "282"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/282.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "신기점 ↔ 신기동"
+    },
+    {
+      "storeName": "교촌치킨 안산점",
+      "imageIds": [
+        "284"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/284.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "안산점 ↔ 안산동"
+    },
+    {
+      "storeName": "교촌치킨 웅천점",
+      "imageIds": [
+        "282"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/282.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "웅천점 ↔ 웅천동"
+    },
+    {
+      "storeName": "교촌치킨 죽림무선점",
+      "imageIds": [
+        "284"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/284.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "죽림무선점 ↔ 죽림·무선 권역"
+    },
+    {
+      "storeName": "맘스터치 무선점",
+      "imageIds": [
+        "082"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/082.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "무선점 ↔ 무선 권역"
+    },
+    {
+      "storeName": "맘스터치 여천 학동점",
+      "imageIds": [
+        "083"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/083.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "학동점 ↔ 학동"
+    },
+    {
+      "storeName": "맘스터치 엑스포점",
+      "imageIds": [
+        "084"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/084.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "엑스포점 ↔ 엑스포 권역"
+    },
+    {
+      "storeName": "맘스터치 중앙점",
+      "imageIds": [
+        "082"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/082.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "중앙점 ↔ 중앙 권역"
+    },
+    {
+      "storeName": "맥도날드 여수학동DT점",
+      "imageIds": [
+        "089"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/089.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "여수학동DT점 ↔ 학동"
+    },
+    {
+      "storeName": "배가네왕족보 여문본점",
+      "imageIds": [
+        "107",
+        "108",
+        "109"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/107.webp",
+        "assets/photo-batch-2-vetted/108.webp",
+        "assets/photo-batch-2-vetted/109.webp"
+      ],
+      "mode": "fill-missing-only",
+      "reason": "정확한 가게명과 여문 권역(여서·문수) 일치"
+    }
+  ]
+}

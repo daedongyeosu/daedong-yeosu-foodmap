@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generatedAt": "2026-07-17T20:24:08.619Z",
+  "generatedAt": "2026-07-18T03:03:15.635Z",
   "matching": {
     "keys": [
       "storeId",
@@ -56,17 +56,26 @@
       "expectedDecodedBytes": 252182,
       "status": "incomplete",
       "runtimeEnabled": false,
-      "reason": "최종 폴더 14개와 이전 원본의 05~07을 합쳐 01~17까지만 복구 가능하다. 18~22와 가게별 스프라이트 좌표 색인이 없어 노출하지 않는다."
+      "reason": "18~22와 가게별 좌표 색인이 없어 임의 생성·노출하지 않는다."
     },
     {
       "id": "photo-batch-2",
-      "label": "2차 가게사진 패키지",
-      "type": "package",
-      "basePath": "data/photo-batch-2",
-      "detected": false,
-      "status": "not-found",
-      "runtimeEnabled": false,
-      "reason": "현재 저장소에서 2차 사진 폴더·매니페스트·가게별 색인을 찾지 못했다. 실제 파일이 들어오기 전에는 노출하지 않는다."
+      "label": "2차 가게사진 패키지 재검수본",
+      "type": "direct-vetted-webp-files",
+      "basePath": "assets/photo-batch-2-vetted",
+      "detected": true,
+      "status": "active-revalidated",
+      "runtimeEnabled": true,
+      "reviewedSourceTiles": 374,
+      "sourceApprovedCandidates": 20,
+      "revalidatedApprovedImages": 9,
+      "excludedSourceImages": 27,
+      "appliedStores": 14,
+      "integrityManifest": "payload-manifest.json",
+      "integritySums": "SHA256SUMS.txt",
+      "assignments": "data/photo-batch2-vetted-assignments.json",
+      "reviewDecisions": "data/photo-batch2-vetted-review-decisions.json",
+      "reason": "실제 파일 기준 SHA-256·크기 재생성, 글자·가격·전화번호·주소·지점정보·메뉴판 재검수, 기존 정상사진 372곳 보존 후 사진 없는 가게만 보충"
     },
     {
       "id": "notion",
@@ -110,11 +119,367 @@
       "reason": "노션 표시 제목이 정확히 일치하고 기존 사진이 없는 가게만 보충한 사진이다."
     }
   ],
-  "entries": [],
+  "entries": [
+    {
+      "storeId": "dc01f52e24fc6b2b",
+      "storeName": "교촌치킨 국동점",
+      "normalizedName": "교촌치킨국동점",
+      "aliases": [
+        "교촌치킨 국동점"
+      ],
+      "src": "assets/photo-batch-2-vetted/282.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/282.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "국동점 ↔ 국동",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "b115c4e54c35d82e",
+      "storeName": "교촌치킨 덕충점",
+      "normalizedName": "교촌치킨덕충점",
+      "aliases": [
+        "교촌치킨 덕충점"
+      ],
+      "src": "assets/photo-batch-2-vetted/284.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/284.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "덕충점 ↔ 덕충동",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "4e2bf615062e7234",
+      "storeName": "교촌치킨 돌산점",
+      "normalizedName": "교촌치킨돌산점",
+      "aliases": [
+        "교촌치킨 돌산점"
+      ],
+      "src": "assets/photo-batch-2-vetted/282.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/282.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "돌산점 ↔ 돌산 권역",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "84fc553896d0b051",
+      "storeName": "교촌치킨 문수점",
+      "normalizedName": "교촌치킨문수점",
+      "aliases": [
+        "교촌치킨 문수점"
+      ],
+      "src": "assets/photo-batch-2-vetted/284.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/284.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "문수점 ↔ 문수동",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "04ae2e96e82f63ef",
+      "storeName": "교촌치킨 신기점",
+      "normalizedName": "교촌치킨신기점",
+      "aliases": [
+        "교촌치킨 신기점"
+      ],
+      "src": "assets/photo-batch-2-vetted/282.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/282.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "신기점 ↔ 신기동",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "dfb50765a5f3a8ab",
+      "storeName": "교촌치킨 안산점",
+      "normalizedName": "교촌치킨안산점",
+      "aliases": [
+        "교촌치킨 안산점"
+      ],
+      "src": "assets/photo-batch-2-vetted/284.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/284.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "안산점 ↔ 안산동",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "6126fa948ce536e6",
+      "storeName": "교촌치킨 웅천점",
+      "normalizedName": "교촌치킨웅천점",
+      "aliases": [
+        "교촌치킨 웅천점"
+      ],
+      "src": "assets/photo-batch-2-vetted/282.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/282.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "웅천점 ↔ 웅천동",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "8e930495e2e94c21",
+      "storeName": "교촌치킨 죽림무선점",
+      "normalizedName": "교촌치킨죽림무선점",
+      "aliases": [
+        "교촌치킨 죽림무선점"
+      ],
+      "src": "assets/photo-batch-2-vetted/284.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/284.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "죽림무선점 ↔ 죽림·무선 권역",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "11161bd0b4783703",
+      "storeName": "맘스터치 무선점",
+      "normalizedName": "맘스터치무선점",
+      "aliases": [
+        "맘스터치 무선점"
+      ],
+      "src": "assets/photo-batch-2-vetted/082.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/082.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "무선점 ↔ 무선 권역",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "a7d0d397991605ec",
+      "storeName": "맘스터치 여천 학동점",
+      "normalizedName": "맘스터치여천학동점",
+      "aliases": [
+        "맘스터치 여천 학동점"
+      ],
+      "src": "assets/photo-batch-2-vetted/083.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/083.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "학동점 ↔ 학동",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "f7d93ad21c1a93d7",
+      "storeName": "맘스터치 엑스포점",
+      "normalizedName": "맘스터치엑스포점",
+      "aliases": [
+        "맘스터치 엑스포점"
+      ],
+      "src": "assets/photo-batch-2-vetted/084.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/084.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "엑스포점 ↔ 엑스포 권역",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "1acf6756b7471125",
+      "storeName": "맘스터치 중앙점",
+      "normalizedName": "맘스터치중앙점",
+      "aliases": [
+        "맘스터치 중앙점"
+      ],
+      "src": "assets/photo-batch-2-vetted/082.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/082.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "중앙점 ↔ 중앙 권역",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "8dfdc5de41e3eca9",
+      "storeName": "맥도날드 여수학동DT점",
+      "normalizedName": "맥도날드여수학동dt점",
+      "aliases": [
+        "맥도날드 여수학동DT점"
+      ],
+      "src": "assets/photo-batch-2-vetted/089.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/photo-batch-2-vetted/089.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "여수학동DT점 ↔ 학동",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    },
+    {
+      "storeId": "0ee3922e77afa736",
+      "storeName": "배가네왕족보 여문본점",
+      "normalizedName": "배가네왕족보여문본점",
+      "aliases": [
+        "배가네왕족보 여문본점"
+      ],
+      "src": "assets/photo-batch-2-vetted/107.webp",
+      "additionalSrcs": [
+        "assets/photo-batch-2-vetted/108.webp",
+        "assets/photo-batch-2-vetted/109.webp"
+      ],
+      "gallery": [
+        "assets/photo-batch-2-vetted/107.webp",
+        "assets/photo-batch-2-vetted/108.webp",
+        "assets/photo-batch-2-vetted/109.webp"
+      ],
+      "source": "photo-batch-2",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T08:02:50.545Z",
+      "reviewReason": "정확한 가게명과 여문 권역(여서·문수) 일치",
+      "visualReview": {
+        "textRisk": "none-prominent",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "none-or-generic-food",
+        "menuBoardRisk": "none"
+      }
+    }
+  ],
   "coverage": {
     "storeCount": 471,
-    "storesWithPhoto": 372,
-    "storesAwaitingPhoto": 99,
-    "updatedAt": "2026-07-17T20:24:08.631Z"
+    "storesWithPhoto": 386,
+    "storesAwaitingPhoto": 85,
+    "updatedAt": "2026-07-18T03:03:15.635Z"
   }
 }

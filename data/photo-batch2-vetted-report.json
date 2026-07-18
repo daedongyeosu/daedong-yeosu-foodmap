@@ -1,0 +1,405 @@
+{
+  "version": 4,
+  "reviewedSourceTileCount": 374,
+  "previouslyApprovedCount": 20,
+  "approvedAfterRevalidation": 9,
+  "excludedTotal": 27,
+  "exclusionReasonCounts": {
+    "excessive_promotional_text": 8,
+    "menu_promotional_text": 3,
+    "non_food_logo": 6,
+    "non_food_storefront": 2,
+    "people_promotional": 2,
+    "personal_contact": 4,
+    "price_menu": 2
+  },
+  "appliedPhotoCount": 9,
+  "appliedStoreCount": 14,
+  "storesWithPhotoBefore": 372,
+  "storesWithPhotoAfter": 386,
+  "storesAwaitingPhoto": 85,
+  "manifestMatchedFiles": 23,
+  "sha256SumsMatchedFiles": 24,
+  "excluded": [
+    {
+      "imageId": "023",
+      "reason": "personal_contact",
+      "detail": "전화번호가 선명하게 보이는 배달앱 주문 화면"
+    },
+    {
+      "imageId": "024",
+      "reason": "personal_contact",
+      "detail": "전화번호가 선명하게 보이는 배달앱 주문 화면"
+    },
+    {
+      "imageId": "036",
+      "reason": "personal_contact",
+      "detail": "주소와 전화번호가 선명하게 보이는 지도 화면"
+    },
+    {
+      "imageId": "039",
+      "reason": "personal_contact",
+      "detail": "주소와 전화번호가 선명하게 보이는 배달앱 화면"
+    },
+    {
+      "imageId": "040",
+      "reason": "price_menu",
+      "detail": "메뉴판과 가격이 크게 표시된 이미지"
+    },
+    {
+      "imageId": "042",
+      "reason": "price_menu",
+      "detail": "메뉴판과 가격이 크게 표시된 이미지"
+    },
+    {
+      "imageId": "043",
+      "reason": "non_food_storefront",
+      "detail": "음식이 아닌 매장·간판 중심 이미지"
+    },
+    {
+      "imageId": "044",
+      "reason": "non_food_storefront",
+      "detail": "음식이 아닌 매장·간판 중심 이미지"
+    },
+    {
+      "imageId": "045",
+      "reason": "non_food_logo",
+      "detail": "로고 또는 문자만 표시된 이미지"
+    },
+    {
+      "imageId": "046",
+      "reason": "non_food_logo",
+      "detail": "로고 또는 문자만 표시된 이미지"
+    },
+    {
+      "imageId": "047",
+      "reason": "non_food_logo",
+      "detail": "로고 또는 문자만 표시된 이미지"
+    },
+    {
+      "imageId": "048",
+      "reason": "non_food_logo",
+      "detail": "로고 또는 문자만 표시된 이미지"
+    },
+    {
+      "imageId": "049",
+      "reason": "non_food_logo",
+      "detail": "로고 또는 문자만 표시된 이미지"
+    },
+    {
+      "imageId": "050",
+      "reason": "non_food_logo",
+      "detail": "로고 또는 문자만 표시된 이미지"
+    },
+    {
+      "imageId": "051",
+      "reason": "people_promotional",
+      "detail": "사람 중심 홍보 이미지"
+    },
+    {
+      "imageId": "052",
+      "reason": "people_promotional",
+      "detail": "사람 중심 홍보 이미지"
+    },
+    {
+      "imageId": "090",
+      "reason": "excessive_promotional_text",
+      "detail": "배달앱 주문 유도와 큰 홍보문구"
+    },
+    {
+      "imageId": "091",
+      "reason": "excessive_promotional_text",
+      "detail": "배달앱 주문 유도와 큰 홍보문구"
+    },
+    {
+      "imageId": "106",
+      "reason": "excessive_promotional_text",
+      "detail": "브랜드·배달앱·캐릭터 홍보문구"
+    },
+    {
+      "imageId": "169",
+      "reason": "menu_promotional_text",
+      "detail": "메뉴명과 설명 문구가 크게 표시"
+    },
+    {
+      "imageId": "170",
+      "reason": "menu_promotional_text",
+      "detail": "메뉴명과 설명 문구가 크게 표시"
+    },
+    {
+      "imageId": "202",
+      "reason": "excessive_promotional_text",
+      "detail": "상품 소개 문구가 음식보다 두드러짐"
+    },
+    {
+      "imageId": "203",
+      "reason": "excessive_promotional_text",
+      "detail": "홍보문구가 음식보다 두드러짐"
+    },
+    {
+      "imageId": "205",
+      "reason": "menu_promotional_text",
+      "detail": "메뉴명·설명 중심 메뉴판형 이미지"
+    },
+    {
+      "imageId": "277",
+      "reason": "excessive_promotional_text",
+      "detail": "브랜드 역사·홍보문구가 크게 표시"
+    },
+    {
+      "imageId": "280",
+      "reason": "excessive_promotional_text",
+      "detail": "배달앱 주문 유도와 캐릭터 홍보"
+    },
+    {
+      "imageId": "327",
+      "reason": "excessive_promotional_text",
+      "detail": "간판형 브랜드 문구와 앱 홍보"
+    }
+  ],
+  "applied": [
+    {
+      "storeId": "dc01f52e24fc6b2b",
+      "storeName": "교촌치킨 국동점",
+      "area": "국동",
+      "imageIds": [
+        "282"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/282.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/282.webp",
+      "reason": "국동점 ↔ 국동"
+    },
+    {
+      "storeId": "b115c4e54c35d82e",
+      "storeName": "교촌치킨 덕충점",
+      "area": "덕충동",
+      "imageIds": [
+        "284"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/284.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/284.webp",
+      "reason": "덕충점 ↔ 덕충동"
+    },
+    {
+      "storeId": "4e2bf615062e7234",
+      "storeName": "교촌치킨 돌산점",
+      "area": "돌산",
+      "imageIds": [
+        "282"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/282.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/282.webp",
+      "reason": "돌산점 ↔ 돌산 권역"
+    },
+    {
+      "storeId": "84fc553896d0b051",
+      "storeName": "교촌치킨 문수점",
+      "area": "문수동",
+      "imageIds": [
+        "284"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/284.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/284.webp",
+      "reason": "문수점 ↔ 문수동"
+    },
+    {
+      "storeId": "04ae2e96e82f63ef",
+      "storeName": "교촌치킨 신기점",
+      "area": "신기동",
+      "imageIds": [
+        "282"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/282.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/282.webp",
+      "reason": "신기점 ↔ 신기동"
+    },
+    {
+      "storeId": "dfb50765a5f3a8ab",
+      "storeName": "교촌치킨 안산점",
+      "area": "안산동",
+      "imageIds": [
+        "284"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/284.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/284.webp",
+      "reason": "안산점 ↔ 안산동"
+    },
+    {
+      "storeId": "6126fa948ce536e6",
+      "storeName": "교촌치킨 웅천점",
+      "area": "웅천동",
+      "imageIds": [
+        "282"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/282.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/282.webp",
+      "reason": "웅천점 ↔ 웅천동"
+    },
+    {
+      "storeId": "8e930495e2e94c21",
+      "storeName": "교촌치킨 죽림무선점",
+      "area": "죽림",
+      "imageIds": [
+        "284"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/284.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/284.webp",
+      "reason": "죽림무선점 ↔ 죽림·무선 권역"
+    },
+    {
+      "storeId": "11161bd0b4783703",
+      "storeName": "맘스터치 무선점",
+      "area": "무선",
+      "imageIds": [
+        "082"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/082.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/082.webp",
+      "reason": "무선점 ↔ 무선 권역"
+    },
+    {
+      "storeId": "a7d0d397991605ec",
+      "storeName": "맘스터치 여천 학동점",
+      "area": "학동",
+      "imageIds": [
+        "083"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/083.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/083.webp",
+      "reason": "학동점 ↔ 학동"
+    },
+    {
+      "storeId": "f7d93ad21c1a93d7",
+      "storeName": "맘스터치 엑스포점",
+      "area": "홈화면",
+      "imageIds": [
+        "084"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/084.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/084.webp",
+      "reason": "엑스포점 ↔ 엑스포 권역"
+    },
+    {
+      "storeId": "1acf6756b7471125",
+      "storeName": "맘스터치 중앙점",
+      "area": "홈화면",
+      "imageIds": [
+        "082"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/082.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/082.webp",
+      "reason": "중앙점 ↔ 중앙 권역"
+    },
+    {
+      "storeId": "8dfdc5de41e3eca9",
+      "storeName": "맥도날드 여수학동DT점",
+      "area": "학동",
+      "imageIds": [
+        "089"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/089.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/089.webp",
+      "reason": "여수학동DT점 ↔ 학동"
+    },
+    {
+      "storeId": "0ee3922e77afa736",
+      "storeName": "배가네왕족보 여문본점",
+      "area": "홈화면",
+      "imageIds": [
+        "107",
+        "108",
+        "109"
+      ],
+      "paths": [
+        "assets/photo-batch-2-vetted/107.webp",
+        "assets/photo-batch-2-vetted/108.webp",
+        "assets/photo-batch-2-vetted/109.webp"
+      ],
+      "primary": "assets/photo-batch-2-vetted/107.webp",
+      "reason": "정확한 가게명과 여문 권역(여서·문수) 일치"
+    }
+  ],
+  "actualAssetMeasurements": [
+    {
+      "imageId": "082",
+      "src": "assets/photo-batch-2-vetted/082.webp",
+      "bytes": 10846,
+      "sha256": "4b9b3aec6b8c419027be0d9a27cbe51659ff69f7a8d3860fecb31edf77acc84a"
+    },
+    {
+      "imageId": "083",
+      "src": "assets/photo-batch-2-vetted/083.webp",
+      "bytes": 7274,
+      "sha256": "76a6d3fc5a0cee78f390195a4e5fe3516cbcdd62933010baca885a7a9072e1dc"
+    },
+    {
+      "imageId": "084",
+      "src": "assets/photo-batch-2-vetted/084.webp",
+      "bytes": 3398,
+      "sha256": "1cc0188609cb49a591944dcf4615ee91f770d30813d218fcfe2f9b420eeb0ec2"
+    },
+    {
+      "imageId": "089",
+      "src": "assets/photo-batch-2-vetted/089.webp",
+      "bytes": 5054,
+      "sha256": "0906964b97b94bac1ec996450d75faa02c8506ce21347ab435a4f7112be65d83"
+    },
+    {
+      "imageId": "107",
+      "src": "assets/photo-batch-2-vetted/107.webp",
+      "bytes": 7472,
+      "sha256": "3aa0f30d473a70e1092a978ccaa3b1f093c3980ffb769352ddf2160ead5dee0d"
+    },
+    {
+      "imageId": "108",
+      "src": "assets/photo-batch-2-vetted/108.webp",
+      "bytes": 8416,
+      "sha256": "c85963e5599f92ed81dc006af902f31d5df56be2a693f82bae90e50f73c0fb40"
+    },
+    {
+      "imageId": "109",
+      "src": "assets/photo-batch-2-vetted/109.webp",
+      "bytes": 6100,
+      "sha256": "ab2ecebceebb569162e12d28d2d301c6853f01b65175d87caab2be28a2b84f48"
+    },
+    {
+      "imageId": "282",
+      "src": "assets/photo-batch-2-vetted/282.webp",
+      "bytes": 3402,
+      "sha256": "fe473112ea6a1dd77e7daeb21cdf43a7cf91e5ecee1b9f9696dc8bb79a6239c0"
+    },
+    {
+      "imageId": "284",
+      "src": "assets/photo-batch-2-vetted/284.webp",
+      "bytes": 4922,
+      "sha256": "6fc02db236ead95ab450e5fa6d759d5ddec606b0b6c442af08b59421c56a5584"
+    }
+  ],
+  "generatedAt": "2026-07-18T03:03:15.635Z"
+}

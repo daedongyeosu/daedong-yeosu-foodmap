@@ -4391,7 +4391,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://bit.ly/4dSPtS5",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/282.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4455,8 +4455,12 @@
     "notionPageId": "f21da158-dd2a-82c8-a4bf-0170e14cc3a0",
     "notionUrl": "https://app.notion.com/p/f21da158dd2a82c8a4bf0170e14cc3a0",
     "notionSyncedAt": "2026-07-16T22:29:30.981Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/282.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/282.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:교촌치킨국동",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "b115c4e54c35d82e",
@@ -4468,7 +4472,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://naver.me/F5Cvz5au",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/284.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4532,8 +4536,12 @@
     "notionPageId": "cafda158-dd2a-83eb-85e1-814b25f142e1",
     "notionUrl": "https://app.notion.com/p/cafda158dd2a83eb85e1814b25f142e1",
     "notionSyncedAt": "2026-07-16T22:29:31.553Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/284.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/284.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:교촌치킨덕충",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "4e2bf615062e7234",
@@ -4545,7 +4553,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://naver.me/FEdFcQWs",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/282.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4603,8 +4611,12 @@
     "notionPageId": "9e6da158-dd2a-8218-8453-018b3e4d6958",
     "notionUrl": "https://app.notion.com/p/9e6da158dd2a82188453018b3e4d6958",
     "notionSyncedAt": "2026-07-16T22:29:32.045Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/282.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/282.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:교촌치킨돌산",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "c97c66bc78a649ea",
@@ -4720,7 +4732,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://bit.ly/4u4Ypd8",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/284.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4784,8 +4796,12 @@
     "notionPageId": "1f8da158-dd2a-8393-aba6-011f0fdd0aa8",
     "notionUrl": "https://app.notion.com/p/1f8da158dd2a8393aba6011f0fdd0aa8",
     "notionSyncedAt": "2026-07-16T22:29:36.016Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/284.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/284.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:교촌치킨문수",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "04ae2e96e82f63ef",
@@ -4797,7 +4813,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://naver.me/xD6yIxam",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/282.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4861,8 +4877,12 @@
     "notionPageId": "befda158-dd2a-8390-81c7-81f36c804b1d",
     "notionUrl": "https://app.notion.com/p/befda158dd2a839081c781f36c804b1d",
     "notionSyncedAt": "2026-07-16T22:29:36.618Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/282.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/282.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:교촌치킨신기",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "dfb50765a5f3a8ab",
@@ -4874,7 +4894,7 @@
     "address": "",
     "phone": "0129587233",
     "naverMap": "https://naver.me/59NT2rFu",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/284.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -4939,8 +4959,12 @@
     "notionUrl": "https://app.notion.com/p/5d0da158dd2a82fab797019de13d61db",
     "notionSyncedAt": "2026-07-16T22:29:37.095Z",
     "phoneSource": "notion",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/284.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/284.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:교촌치킨안산",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "99ade7376cceea13",
@@ -5036,7 +5060,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://naver.me/5XDCPHHT",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/282.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -5100,8 +5124,12 @@
     "notionPageId": "ee2da158-dd2a-83b6-a2b3-818fbd64e521",
     "notionUrl": "https://app.notion.com/p/ee2da158dd2a83b6a2b3818fbd64e521",
     "notionSyncedAt": "2026-07-16T22:29:38.104Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/282.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/282.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:교촌치킨웅천",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "8e930495e2e94c21",
@@ -5113,7 +5141,7 @@
     "address": "",
     "phone": "031030926",
     "naverMap": "https://naver.me/50ebVwN4",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/284.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -5171,8 +5199,12 @@
     "notionPageId": "931da158-dd2a-82d0-b08f-812ec5876322",
     "notionUrl": "https://app.notion.com/p/931da158dd2a82d0b08f812ec5876322",
     "notionSyncedAt": "2026-07-16T22:29:38.544Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/284.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/284.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:교촌치킨죽림무선",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "57bb58bd63f0de94",
@@ -13293,7 +13325,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/5FDI3m4k",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/082.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -13357,8 +13389,12 @@
     "notionPageId": "4a4da158-dd2a-8291-b2a9-81d51d6641d4",
     "notionUrl": "https://app.notion.com/p/4a4da158dd2a8291b2a981d51d6641d4",
     "notionSyncedAt": "2026-07-16T22:30:33.265Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/082.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/082.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:맘스터치무선",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "a7d0d397991605ec",
@@ -13370,7 +13406,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/GT4s0on6",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/083.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -13434,8 +13470,12 @@
     "notionPageId": "0b4da158-dd2a-83cd-b50f-8165792adb53",
     "notionUrl": "https://app.notion.com/p/0b4da158dd2a83cdb50f8165792adb53",
     "notionSyncedAt": "2026-07-16T22:30:33.769Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/083.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/083.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:맘스터치여천학동",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "3b07bfa30f252db8",
@@ -13920,7 +13960,7 @@
     "address": "",
     "phone": "083418621",
     "naverMap": "https://bit.ly/4vmAW8j",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/089.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -13978,8 +14018,12 @@
     "notionPageId": "333da158-dd2a-8351-901c-81b0c73d112a",
     "notionUrl": "https://app.notion.com/p/DT-333da158dd2a8351901c81b0c73d112a",
     "notionSyncedAt": "2026-07-16T22:30:37.154Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/089.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/089.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:맥도날드여수학동dt",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "4c16d7a9aafcf6fd",
@@ -38972,7 +39016,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/G65zQs5k",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/084.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -39043,8 +39087,12 @@
     "notionPageId": "39dda158-dd2a-809d-98ef-f42484ee5c89",
     "notionUrl": "https://app.notion.com/p/39dda158dd2a809d98eff42484ee5c89",
     "notionSyncedAt": "2026-07-16T22:39:36.540Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/084.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/084.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:맘스터치엑스포",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "1acf6756b7471125",
@@ -39056,7 +39104,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/GALbBOHz",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/082.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -39127,8 +39175,12 @@
     "notionPageId": "39dda158-dd2a-80c3-8359-ee834ceb60d1",
     "notionUrl": "https://app.notion.com/p/39dda158dd2a80c38359ee834ceb60d1",
     "notionSyncedAt": "2026-07-16T22:39:37.069Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/082.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/082.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:맘스터치중앙",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "8cb29ac81df85b54",
@@ -40503,7 +40555,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/GmpUg1FX",
-    "image": "",
+    "image": "assets/photo-batch-2-vetted/107.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -40568,8 +40620,14 @@
     "notionPageId": "39bda158-dd2a-8052-8bd6-d2f16b9c043d",
     "notionUrl": "https://app.notion.com/p/39bda158dd2a80528bd6d2f16b9c043d",
     "notionSyncedAt": "2026-07-16T22:39:46.134Z",
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-2-vetted/107.webp",
+    "images": [
+      "assets/photo-batch-2-vetted/107.webp",
+      "assets/photo-batch-2-vetted/108.webp",
+      "assets/photo-batch-2-vetted/109.webp"
+    ],
+    "photoGroup": "photo-batch2-vetted:배가네왕족보여문본",
+    "photoSource": "photo-batch2-vetted:manual-revalidation-fill-missing-only"
   },
   {
     "id": "a7d684d2ce59e962",

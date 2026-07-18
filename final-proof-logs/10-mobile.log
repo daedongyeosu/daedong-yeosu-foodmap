@@ -34,7 +34,7 @@ PASS 위치 권한 결과·주소 저장 {
   label: '현재 위치 기준',
   coords: { lat: 34.7604, lng: 127.6622 },
   sortByDistance: true,
-  savedAt: '2026-07-18T05:06:34.433Z'
+  savedAt: '2026-07-18T05:09:21.499Z'
 }
 PASS GPS 선택 후 팝업 닫기 
 PASS 카테고리별 가까운 가게 추천 { firstCategory: '한식' }
@@ -87,21 +87,21 @@ Call log:
       - element is visible, enabled and stable
       - scrolling into view if needed
       - done scrolling
-      - <div aria-label="가게사진 위치" class="carousel-dots">…</div> from <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-active-store-id="3f441930b8d18783" data-external-routes="[{"name":"쿠팡이츠","url":"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15","enabled":true,"source":"notion","key":"coupang"},{"name":"배달의민족","url":"https://s.baemin.com/4c000DmgKEX9U","enabled":true,"source":"notion","key":"baemin"}]">…</div> subtree intercepts pointer events
+      - <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-active-store-id="3f441930b8d18783" data-external-routes="[{"name":"쿠팡이츠","url":"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15","enabled":true,"source":"notion","key":"coupang"},{"name":"배달의민족","url":"https://s.baemin.com/4c000DmgKEX9U","enabled":true,"source":"notion","key":"baemin"}]">…</div> intercepts pointer events
     - retrying click action
     - waiting 20ms
     2 × waiting for element to be visible, enabled and stable
       - element is visible, enabled and stable
       - scrolling into view if needed
       - done scrolling
-      - <div aria-label="가게사진 위치" class="carousel-dots">…</div> from <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-active-store-id="3f441930b8d18783" data-external-routes="[{"name":"쿠팡이츠","url":"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15","enabled":true,"source":"notion","key":"coupang"},{"name":"배달의민족","url":"https://s.baemin.com/4c000DmgKEX9U","enabled":true,"source":"notion","key":"baemin"}]">…</div> subtree intercepts pointer events
+      - <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-active-store-id="3f441930b8d18783" data-external-routes="[{"name":"쿠팡이츠","url":"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15","enabled":true,"source":"notion","key":"coupang"},{"name":"배달의민족","url":"https://s.baemin.com/4c000DmgKEX9U","enabled":true,"source":"notion","key":"baemin"}]">…</div> intercepts pointer events
     - retrying click action
       - waiting 100ms
     57 × waiting for element to be visible, enabled and stable
        - element is visible, enabled and stable
        - scrolling into view if needed
        - done scrolling
-       - <div aria-label="가게사진 위치" class="carousel-dots">…</div> from <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-active-store-id="3f441930b8d18783" data-external-routes="[{"name":"쿠팡이츠","url":"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15","enabled":true,"source":"notion","key":"coupang"},{"name":"배달의민족","url":"https://s.baemin.com/4c000DmgKEX9U","enabled":true,"source":"notion","key":"baemin"}]">…</div> subtree intercepts pointer events
+       - <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-active-store-id="3f441930b8d18783" data-external-routes="[{"name":"쿠팡이츠","url":"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15","enabled":true,"source":"notion","key":"coupang"},{"name":"배달의민족","url":"https://s.baemin.com/4c000DmgKEX9U","enabled":true,"source":"notion","key":"baemin"}]">…</div> intercepts pointer events
      - retrying click action
        - waiting 500ms
 

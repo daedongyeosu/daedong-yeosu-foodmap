@@ -6,7 +6,8 @@
   <meta name="theme-color" content="#ff5a1f">
   <meta name="description" content="여수 음식점과 주문방법을 한눈에 찾는 대동여수음식지도">
   <title>대동여수음식지도</title>
-  <link rel="stylesheet" href="app.css?v=final-integration-1">
+  <link rel="preload" as="image" href="images/01.png">
+  <link rel="stylesheet" href="app.css?v=approved-ux-1">
 </head>
 <body>
   <div id="app">
@@ -32,6 +33,8 @@
     <section class="search-row main-search-row" aria-label="가게 검색">
       <div class="searchbox"><span aria-hidden="true">⌕</span><input id="mainSearch" placeholder="메뉴, 가게명, 동네 검색" autocomplete="off"><button id="clearMainSearch" class="input-clear" type="button" aria-label="검색어 지우기" hidden>×</button></div>
       <button id="searchBtn" class="primary-btn" type="button">검색</button>
+      <button id="topFavoriteBtn" class="top-quick-btn" type="button" aria-label="찜한 가게">♡<span>찜</span></button>
+      <button id="topRecentBtn" class="top-quick-btn" type="button" aria-label="최근 방문 가게">◷<span>최근</span></button>
     </section>
 
     <section class="section order-section">
@@ -81,8 +84,8 @@
       </div>
     </section>
 
-    <footer class="legal"><button type="button" data-open="guide">이용안내</button><button type="button">개인정보처리방침</button><button type="button">정보 수정 제안</button><button type="button">광고 문의</button></footer>
-    <div class="build-mark">대동여수음식지도 정식 통합본</div>
+    <footer class="legal"><button type="button" data-open="guide">이용안내</button><button type="button">개인정보처리방침</button><button type="button">광고 문의</button></footer>
+    <div class="build-mark">대동여수음식지도 승인 UX 복원 검증본 · main 미반영</div>
   </div>
 
   <nav class="bottom-nav"><button type="button" data-tab="home" class="active">⌂<span>홈</span></button><button type="button" data-tab="search">⌕<span>검색</span></button><button type="button" data-tab="favorite">♡<span>찜한가게</span></button><button type="button" data-tab="recent">◷<span>최근방문</span></button><button type="button" data-tab="mypage">♙<span>마이페이지</span></button></nav>
@@ -90,6 +93,6 @@
   <div id="modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-card"><button class="modal-close" type="button" aria-label="닫기">×</button><div id="modalContent"></div></div></div>
   <div id="startupAd" class="startup-ad" hidden><div class="startup-card"><button class="startup-close" type="button" aria-label="닫기">×</button><small>대동여수음식지도 안내</small><h2>배달기사·가맹점 모집</h2><p>기사 모집, 가게 모집, 주문앱 가입 안내, 신규 오픈 가게와 소상공인 소식을 알립니다.</p><div class="startup-actions"><button id="startupDetails" class="primary-btn" type="button">자세히 보기</button><button id="hideToday" type="button">오늘 그만 보기</button></div></div></div>
   <noscript><p class="noscript">대동여수음식지도를 이용하려면 자바스크립트를 켜주세요.</p></noscript>
-  <script src="app.js?v=final-integration-1" defer></script>
+  <script src="app.js?v=approved-ux-1" defer></script>
 </body>
 </html>

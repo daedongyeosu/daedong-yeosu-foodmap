@@ -37,3 +37,7 @@ memory.set('savedLocation',JSON.stringify({label:'현재 위치 기준',coords:{
 const saved=loadSavedLocation();
 assert(saved.label==='현재 위치 기준'&&saved.sortByDistance&&saved.coords.lat===34.7,'위치·주소 저장값 복원');
 console.log('PASS unit tests complete');
+
+assert(source.includes('function appRegisteredStores(key)'),'앱별 등록 가게 필터 구현');
+assert(source.includes('function openCommunityChoice(store'),'지역 도움 안내 흐름 구현');
+assert(source.includes('daedongFavoriteStoresV2'),'찜 저장키 유지');

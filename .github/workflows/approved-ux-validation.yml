@@ -1,0 +1,77 @@
+name: Approved UX mobile validation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'app.css'
+      - 'app.js'
+      - 'scripts/approved-ux-mobile.mjs'
+      - 'scripts/validate-static.mjs'
+      - 'scripts/test-app-unit.mjs'
+      - '.github/workflows/approved-ux-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mobile-flow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout UX branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          show-progress: false
+      - name: Checkout current main for before screenshot
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: before-main
+          show-progress: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Static, unit and data preservation checks
+        run: |
+          node scripts/validate-static.mjs
+          node scripts/test-app-unit.mjs
+          node scripts/validate-data.mjs
+          sha256sum -c SHA256SUMS.txt
+          node scripts/validate-photo-batch2-vetted.mjs
+      - name: Install mobile browser runtime
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Compare main and restored mobile flows
+        # Includes active-image position and actual pixel-range checks before and after mixed carousel input.
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory before-main > before-main-server.log 2>&1 &
+          before_pid=$!
+          python3 -m http.server 4174 --bind 127.0.0.1 > after-branch-server.log 2>&1 &
+          after_pid=$!
+          trap 'kill $before_pid $after_pid 2>/dev/null || true' EXIT
+          sleep 3
+          BEFORE_URL=http://127.0.0.1:4173 AFTER_URL=http://127.0.0.1:4174 node scripts/approved-ux-mobile.mjs
+      - name: Upload before-after evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: approved-ux-mobile-evidence
+          path: |
+            approved-ux-comparison.json
+            approved-ux-before-main.png
+            approved-ux-after-home.png
+            approved-ux-after-detail-initial.png
+            approved-ux-after-detail.png
+            approved-ux-after-app-list.png
+            approved-ux-after-community-guide.png
+            static-validation-report.json
+            data-validation-report.json
+            before-main-server.log
+            after-branch-server.log
+          if-no-files-found: warn
+          retention-days: 30

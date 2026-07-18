@@ -34,7 +34,7 @@ PASS 위치 권한 결과·주소 저장 {
   label: '현재 위치 기준',
   coords: { lat: 34.7604, lng: 127.6622 },
   sortByDistance: true,
-  savedAt: '2026-07-18T05:03:14.012Z'
+  savedAt: '2026-07-18T05:06:34.433Z'
 }
 PASS GPS 선택 후 팝업 닫기 
 PASS 카테고리별 가까운 가게 추천 { firstCategory: '한식' }
@@ -50,6 +50,61 @@ PASS 메인 가게카드 상세전용 정보 제거 {
 PASS 긴 가게명 두 줄 표시 { text: '1980밀면회관&냉면 문수점', clamp: '2' }
 PASS 가게 상세 다중사진 슬라이드 표시 
 PASS 상세사진 무한순환 복제 { original: 2, slides: 4, dots: 2, active: '0' }
-Error: 상세사진 3.5초 자동전환: {"before":"0","after":"0"}
-    at check (file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:7:23)
-    at file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:122:3
+PASS 상세사진 3.5초 자동전환 { before: '0', after: '1' }
+PASS 상세사진 손가락 이동 
+PASS 전화·지역상품권 상세 팝업 표시 1980밀면회관&냉면 문수점
+‹
+›
+
+문수동 · 면요리
+
+🏪
+가게바로주문
+›
+먹깨비
+›
+☎
+전화주문
+›
+💳
+CHAK 지역상품권
+›
+🗺️
+네이버지도에서 보기
+›
+📦
+요기요·쿠팡이츠·배달의민족
+PASS 배달 3사 안내를 같은 상세 팝업에 표시 { selectedExternal: '쿠팡이츠' }
+PASS 저수수료 주문경로 함께 표시 
+PASS 원래 선택 앱 함께 표시 
+PASS 상세 팝업 ESC 닫기 
+locator.click: Timeout 30000ms exceeded.
+Call log:
+  - waiting for locator('#overlay')
+    - locator resolved to <div id="overlay" class="overlay"></div>
+  - attempting click action
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div aria-label="가게사진 위치" class="carousel-dots">…</div> from <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-active-store-id="3f441930b8d18783" data-external-routes="[{"name":"쿠팡이츠","url":"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15","enabled":true,"source":"notion","key":"coupang"},{"name":"배달의민족","url":"https://s.baemin.com/4c000DmgKEX9U","enabled":true,"source":"notion","key":"baemin"}]">…</div> subtree intercepts pointer events
+    - retrying click action
+    - waiting 20ms
+    2 × waiting for element to be visible, enabled and stable
+      - element is visible, enabled and stable
+      - scrolling into view if needed
+      - done scrolling
+      - <div aria-label="가게사진 위치" class="carousel-dots">…</div> from <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-active-store-id="3f441930b8d18783" data-external-routes="[{"name":"쿠팡이츠","url":"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15","enabled":true,"source":"notion","key":"coupang"},{"name":"배달의민족","url":"https://s.baemin.com/4c000DmgKEX9U","enabled":true,"source":"notion","key":"baemin"}]">…</div> subtree intercepts pointer events
+    - retrying click action
+      - waiting 100ms
+    57 × waiting for element to be visible, enabled and stable
+       - element is visible, enabled and stable
+       - scrolling into view if needed
+       - done scrolling
+       - <div aria-label="가게사진 위치" class="carousel-dots">…</div> from <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" data-active-store-id="3f441930b8d18783" data-external-routes="[{"name":"쿠팡이츠","url":"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15","enabled":true,"source":"notion","key":"coupang"},{"name":"배달의민족","url":"https://s.baemin.com/4c000DmgKEX9U","enabled":true,"source":"notion","key":"baemin"}]">…</div> subtree intercepts pointer events
+     - retrying click action
+       - waiting 500ms
+
+    at /home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:138:34 {
+  name: 'TimeoutError'
+}

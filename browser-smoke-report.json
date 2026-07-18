@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-07-18T05:03:05.309Z",
+  "startedAt": "2026-07-18T05:06:27.207Z",
   "checks": [
     {
       "message": "문서 제목",
@@ -127,7 +127,7 @@
           "lng": 127.6622
         },
         "sortByDistance": true,
-        "savedAt": "2026-07-18T05:03:14.012Z"
+        "savedAt": "2026-07-18T05:06:34.433Z"
       }
     },
     {
@@ -174,11 +174,44 @@
         "dots": 2,
         "active": "0"
       }
+    },
+    {
+      "message": "상세사진 3.5초 자동전환",
+      "details": {
+        "before": "0",
+        "after": "1"
+      }
+    },
+    {
+      "message": "상세사진 손가락 이동",
+      "details": null
+    },
+    {
+      "message": "전화·지역상품권 상세 팝업 표시",
+      "details": "1980밀면회관&냉면 문수점\n‹\n›\n\n문수동 · 면요리\n\n🏪\n가게바로주문\n›\n먹깨비\n›\n☎\n전화주문\n›\n💳\nCHAK 지역상품권\n›\n🗺️\n네이버지도에서 보기\n›\n📦\n요기요·쿠팡이츠·배달의민족"
+    },
+    {
+      "message": "배달 3사 안내를 같은 상세 팝업에 표시",
+      "details": {
+        "selectedExternal": "쿠팡이츠"
+      }
+    },
+    {
+      "message": "저수수료 주문경로 함께 표시",
+      "details": null
+    },
+    {
+      "message": "원래 선택 앱 함께 표시",
+      "details": null
+    },
+    {
+      "message": "상세 팝업 ESC 닫기",
+      "details": null
     }
   ],
   "warnings": [],
   "errors": [],
-  "finishedAt": "2026-07-18T05:03:22.861Z",
+  "finishedAt": "2026-07-18T05:07:14.301Z",
   "success": false,
-  "failure": "Error: 상세사진 3.5초 자동전환: {\"before\":\"0\",\"after\":\"0\"}\n    at check (file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:7:23)\n    at file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:122:3"
+  "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#overlay')\n    - locator resolved to <div id=\"overlay\" class=\"overlay\"></div>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div aria-label=\"가게사진 위치\" class=\"carousel-dots\">…</div> from <div id=\"modal\" class=\"modal\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"modalTitle\" data-active-store-id=\"3f441930b8d18783\" data-external-routes=\"[{\"name\":\"쿠팡이츠\",\"url\":\"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15\",\"enabled\":true,\"source\":\"notion\",\"key\":\"coupang\"},{\"name\":\"배달의민족\",\"url\":\"https://s.baemin.com/4c000DmgKEX9U\",\"enabled\":true,\"source\":\"notion\",\"key\":\"baemin\"}]\">…</div> subtree intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div aria-label=\"가게사진 위치\" class=\"carousel-dots\">…</div> from <div id=\"modal\" class=\"modal\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"modalTitle\" data-active-store-id=\"3f441930b8d18783\" data-external-routes=\"[{\"name\":\"쿠팡이츠\",\"url\":\"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15\",\"enabled\":true,\"source\":\"notion\",\"key\":\"coupang\"},{\"name\":\"배달의민족\",\"url\":\"https://s.baemin.com/4c000DmgKEX9U\",\"enabled\":true,\"source\":\"notion\",\"key\":\"baemin\"}]\">…</div> subtree intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    57 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div aria-label=\"가게사진 위치\" class=\"carousel-dots\">…</div> from <div id=\"modal\" class=\"modal\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"modalTitle\" data-active-store-id=\"3f441930b8d18783\" data-external-routes=\"[{\"name\":\"쿠팡이츠\",\"url\":\"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15\",\"enabled\":true,\"source\":\"notion\",\"key\":\"coupang\"},{\"name\":\"배달의민족\",\"url\":\"https://s.baemin.com/4c000DmgKEX9U\",\"enabled\":true,\"source\":\"notion\",\"key\":\"baemin\"}]\">…</div> subtree intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n\n    at /home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:138:34"
 }

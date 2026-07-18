@@ -309,8 +309,6 @@ class InfiniteCarousel {
     this.shell.addEventListener('touchstart', event => this.beginDrag(event.touches[0]?.clientX), {passive: true});
     this.shell.addEventListener('touchend', event => this.finishDrag(event.changedTouches[0]?.clientX), {passive: true});
     this.shell.addEventListener('touchcancel', () => this.cancelDrag(), {passive: true});
-    this.shell.addEventListener('mouseenter', () => this.stop());
-    this.shell.addEventListener('mouseleave', () => { if (this.dragStart === null) this.start(); });
     this.root.addEventListener('focusin', () => this.stop());
     this.root.addEventListener('focusout', () => this.start());
     this.dots?.addEventListener('click', event => { const button = event.target.closest('[data-slide]'); if (button) this.goTo(Number(button.dataset.slide)); });

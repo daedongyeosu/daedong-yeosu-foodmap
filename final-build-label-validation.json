@@ -1,1 +1,21 @@
-{"status":"in_progress","runId":29637252077,"runUrl":"https://github.com/daedongyeosu/daedong-yeosu-foodmap/actions/runs/29637252077","candidateSha":"aad2263836da16f8aa659d643a5727c7f2ee2240"}
+{
+  "status": "success",
+  "success": true,
+  "runId": 29637252077,
+  "runUrl": "https://github.com/daedongyeosu/daedong-yeosu-foodmap/actions/runs/29637252077",
+  "candidateSha": "aad2263836da16f8aa659d643a5727c7f2ee2240",
+  "changedFiles": [
+    "index.html"
+  ],
+  "diff": {
+    "additions": 1,
+    "deletions": 1
+  },
+  "buildMark": "대동여수음식지도 정식 통합본",
+  "mobile": {
+    "pass": 51,
+    "warn": 1,
+    "fail": 0
+  },
+  "verifiedAt": "2026-07-18T08:20:36.751Z"
+}

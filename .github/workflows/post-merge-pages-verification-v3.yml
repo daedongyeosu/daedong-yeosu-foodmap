@@ -1,0 +1,148 @@
+name: Post-merge Pages verification v3
+
+on:
+  push:
+    branches: [agent/post-merge-pages-check]
+    paths:
+      - '.github/workflows/post-merge-pages-verification-v3.yml'
+
+permissions:
+  contents: write
+  actions: read
+  pages: read
+  deployments: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout verification branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/post-merge-pages-check
+          fetch-depth: 0
+          show-progress: false
+
+      - name: Publish verification run id
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > post-merge-pages-run.json <<JSON
+          {
+            "status": "in_progress",
+            "runId": $GITHUB_RUN_ID,
+            "runUrl": "https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID",
+            "mergeCommitSha": "78fcfebd0cb9bf760dd3d3703e910efd0a9382a6"
+          }
+          JSON
+          git config user.name 'daedong-pages-verifier'
+          git config user.email 'actions@users.noreply.github.com'
+          git add post-merge-pages-run.json
+          git commit -m 'chore: expose Pages verification run id'
+          git push origin HEAD:agent/post-merge-pages-check
+
+      - name: Checkout exact merged main commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin 78fcfebd0cb9bf760dd3d3703e910efd0a9382a6 --depth=1
+          git checkout --detach 78fcfebd0cb9bf760dd3d3703e910efd0a9382a6
+          test "$(git rev-parse HEAD)" = '78fcfebd0cb9bf760dd3d3703e910efd0a9382a6'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Check Pages deployment
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/pages-v3/logs
+          api="https://api.github.com/repos/$GITHUB_REPOSITORY"
+          auth=(-H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28')
+          ok=false
+          for attempt in $(seq 1 60); do
+            curl -fsSL "${auth[@]}" "$api/pages" -o /tmp/pages-v3/pages-api.json
+            pages_url=$(jq -r '.html_url // empty' /tmp/pages-v3/pages-api.json)
+            pages_status=$(jq -r '.status // empty' /tmp/pages-v3/pages-api.json)
+            curl -fsSL "${auth[@]}" "$api/actions/runs?head_sha=78fcfebd0cb9bf760dd3d3703e910efd0a9382a6&per_page=100" -o /tmp/pages-v3/actions-runs.json
+            jq '[.workflow_runs[] | select((.name|ascii_downcase|contains("pages")) or (.path|ascii_downcase|contains("pages")))]' /tmp/pages-v3/actions-runs.json > /tmp/pages-v3/pages-runs.json
+            deploy_run_id=$(jq -r 'sort_by(.created_at)|last|.id // empty' /tmp/pages-v3/pages-runs.json)
+            deploy_run_url=$(jq -r 'sort_by(.created_at)|last|.html_url // empty' /tmp/pages-v3/pages-runs.json)
+            deploy_status=$(jq -r 'sort_by(.created_at)|last|.status // empty' /tmp/pages-v3/pages-runs.json)
+            deploy_conclusion=$(jq -r 'sort_by(.created_at)|last|.conclusion // empty' /tmp/pages-v3/pages-runs.json)
+            echo "attempt=$attempt pages=$pages_status deploy=$deploy_status/$deploy_conclusion run=$deploy_run_id url=$pages_url" | tee -a /tmp/pages-v3/logs/pages-poll.log
+            if [[ "$deploy_status" == completed && "$deploy_conclusion" == success && -n "$pages_url" ]]; then ok=true; break; fi
+            sleep 10
+          done
+          test "$ok" = true
+          {
+            echo "PAGES_URL=$pages_url"
+            echo "PAGES_API_STATUS=$pages_status"
+            echo "DEPLOY_RUN_ID=$deploy_run_id"
+            echo "DEPLOY_RUN_URL=$deploy_run_url"
+            echo "DEPLOY_STATUS=$deploy_status"
+            echo "DEPLOY_CONCLUSION=$deploy_conclusion"
+          } >> "$GITHUB_ENV"
+
+      - name: Verify public site and run mobile checks
+        shell: bash
+        run: |
+          set -euo pipefail
+          public_ok=false
+          for attempt in $(seq 1 40); do
+            code=$(curl -L -sS -o /tmp/pages-v3/public-index.html -D /tmp/pages-v3/public-headers.txt -w '%{http_code}' "$PAGES_URL?merge=78fcfebd0cb9bf760dd3d3703e910efd0a9382a6&attempt=$attempt" || true)
+            echo "attempt=$attempt http=$code" | tee -a /tmp/pages-v3/logs/public-poll.log
+            if [[ "$code" == 200 ]] && grep -q '대동여수음식지도' /tmp/pages-v3/public-index.html && grep -q 'app.css?v=final-integration-1' /tmp/pages-v3/public-index.html && grep -q 'app.js?v=final-integration-1' /tmp/pages-v3/public-index.html; then public_ok=true; break; fi
+            sleep 10
+          done
+          test "$public_ok" = true
+          npm install --no-save --no-package-lock playwright@1.55.0 2>&1 | tee /tmp/pages-v3/logs/playwright-install.log
+          npx playwright install --with-deps chromium 2>&1 | tee /tmp/pages-v3/logs/chromium-install.log
+          BASE_URL="$PAGES_URL" node scripts/browser-smoke.mjs 2>&1 | tee /tmp/pages-v3/logs/public-mobile.log
+          cp browser-smoke-report.json /tmp/pages-v3/browser-smoke-report.json
+          cp browser-mobile.png /tmp/pages-v3/browser-mobile.png
+
+      - name: Build and upload report
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const browser=JSON.parse(fs.readFileSync('/tmp/pages-v3/browser-smoke-report.json','utf8'));
+          const report={
+            status:'success',success:Boolean(browser.success&&process.env.DEPLOY_CONCLUSION==='success'),
+            runId:Number(process.env.GITHUB_RUN_ID),runUrl:`https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
+            mergeCommitSha:'78fcfebd0cb9bf760dd3d3703e910efd0a9382a6',pagesUrl:process.env.PAGES_URL,pagesApiStatus:process.env.PAGES_API_STATUS,
+            pagesDeployment:{runId:Number(process.env.DEPLOY_RUN_ID),runUrl:process.env.DEPLOY_RUN_URL,status:process.env.DEPLOY_STATUS,conclusion:process.env.DEPLOY_CONCLUSION},
+            mobile:{pass:browser.checks.length,warn:browser.warnings?.length||0,fail:browser.success?0:1,success:browser.success},verifiedAt:new Date().toISOString()
+          };
+          if(!report.success)throw new Error('Verification failed');
+          fs.writeFileSync('/tmp/pages-v3/post-merge-pages-run.json',JSON.stringify(report,null,2)+'\n');
+          NODE
+
+      - name: Upload evidence artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: post-merge-pages-verification-v3
+          path: /tmp/pages-v3/**
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish final report to verification branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp /tmp/pages-v3/post-merge-pages-run.json /tmp/final-pages-run.json
+          git fetch origin agent/post-merge-pages-check
+          git switch -C agent/post-merge-pages-check origin/agent/post-merge-pages-check
+          cp /tmp/final-pages-run.json post-merge-pages-run.json
+          git config user.name 'daedong-pages-verifier'
+          git config user.email 'actions@users.noreply.github.com'
+          git add post-merge-pages-run.json
+          git commit -m 'chore: record final Pages verification result'
+          git push origin HEAD:agent/post-merge-pages-check

@@ -38,10 +38,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          git fetch origin aad2263836da16f8aa659d643a5727c7f2ee2240 --depth=1
-          git checkout --detach aad2263836da16f8aa659d643a5727c7f2ee2240
+          git checkout --detach origin/fix/final-build-label
           test "$(git rev-parse HEAD)" = 'aad2263836da16f8aa659d643a5727c7f2ee2240'
-          git fetch origin main --depth=1
           test "$(git diff --name-only origin/main...HEAD)" = 'index.html'
           test "$(git diff --numstat origin/main...HEAD)" = $'1\t1\tindex.html'
           grep -q '<div class="build-mark">대동여수음식지도 정식 통합본</div>' index.html

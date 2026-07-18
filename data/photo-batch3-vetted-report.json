@@ -1,0 +1,205 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-18T12:24:10.603Z",
+  "baselineCommit": "618d4c2f5768a1ffdee3c4a6508e9201c883ff43",
+  "branch": "feature/photo-batch-3",
+  "archive": {
+    "archiveName": "김민태사진2(1).zip",
+    "splitParts": [
+      ".z01",
+      ".z02",
+      ".z03",
+      ".z04",
+      ".zip"
+    ],
+    "integrity": "pass",
+    "combinedBytes": 1406539085,
+    "folderCount": 62,
+    "imageFileCount": 547
+  },
+  "review": {
+    "sourceFolders": 62,
+    "sourceImages": 547,
+    "existingPhotoFoldersPreserved": 50,
+    "noCurrentStoreMatchHeld": 10,
+    "ambiguousBranchHeld": 1,
+    "appliedFolders": 1,
+    "approvedImages": 3,
+    "duplicateCompositesNotUsed": 3
+  },
+  "coverage": {
+    "storeCount": 471,
+    "storesWithPhotoBefore": 386,
+    "storesWithPhotoAfter": 387,
+    "storesAwaitingBefore": 85,
+    "storesAwaitingAfter": 84
+  },
+  "preservation": {
+    "existingNormalPhotoStoresChanged": 0,
+    "nonPhotoFieldsChanged": 0,
+    "functionFilesChangedForRuntime": 0,
+    "onlyTargetStorePhotoFieldsChanged": true
+  },
+  "safety": {
+    "sensitiveDocumentsCommitted": 0,
+    "priceListsCommitted": 0,
+    "personalInformationCommitted": 0,
+    "nonFoodPhotosCommitted": 0,
+    "ambiguousMatchesCommitted": 0
+  },
+  "applied": [
+    {
+      "storeId": "98779281080288d1",
+      "storeName": "제복이네 짜글이&제육쌈밥&두루치기 교동점",
+      "district": "교동",
+      "sourceFolder": "제복이",
+      "paths": [
+        "assets/photo-batch-3-vetted/98779281080288d1-01.webp",
+        "assets/photo-batch-3-vetted/98779281080288d1-02.webp",
+        "assets/photo-batch-3-vetted/98779281080288d1-03.webp"
+      ],
+      "assets": [
+        {
+          "sequence": 1,
+          "sourceFile": "KakaoTalk_20260625_061800999.jpg",
+          "bytes": 17274,
+          "sha256": "093cde1bd4429163d2df2c95fb92247050b89717b690372a27f1ce4de5b14722",
+          "dimensions": [
+            400,
+            263
+          ],
+          "parts": 4,
+          "sourceFolder": "제복이",
+          "src": "assets/photo-batch-3-vetted/98779281080288d1-01.webp",
+          "classification": "food",
+          "blocked": false,
+          "visualReview": {
+            "sensitiveDocumentRisk": "none",
+            "priceRisk": "none",
+            "personalInfoRisk": "none",
+            "nonFoodRisk": "none",
+            "peopleRisk": "none"
+          }
+        },
+        {
+          "sequence": 2,
+          "sourceFile": "KakaoTalk_20260625_061800999_01.jpg",
+          "bytes": 19048,
+          "sha256": "5c39d60596a38d162dde6a857d48bcbf79e4a7e99e858ba037b580a5b14e8780",
+          "dimensions": [
+            400,
+            267
+          ],
+          "parts": 5,
+          "sourceFolder": "제복이",
+          "src": "assets/photo-batch-3-vetted/98779281080288d1-02.webp",
+          "classification": "food",
+          "blocked": false,
+          "visualReview": {
+            "sensitiveDocumentRisk": "none",
+            "priceRisk": "none",
+            "personalInfoRisk": "none",
+            "nonFoodRisk": "none",
+            "peopleRisk": "none"
+          }
+        },
+        {
+          "sequence": 3,
+          "sourceFile": "KakaoTalk_20260625_061800999_02.jpg",
+          "bytes": 15826,
+          "sha256": "3a4bcdf82c8ec6f578f87f95d8adc36a8563211bea630debfd88cb6887a0753e",
+          "dimensions": [
+            400,
+            267
+          ],
+          "parts": 4,
+          "sourceFolder": "제복이",
+          "src": "assets/photo-batch-3-vetted/98779281080288d1-03.webp",
+          "classification": "food",
+          "blocked": false,
+          "visualReview": {
+            "sensitiveDocumentRisk": "none",
+            "priceRisk": "none",
+            "personalInfoRisk": "none",
+            "nonFoodRisk": "none",
+            "peopleRisk": "none"
+          }
+        }
+      ]
+    }
+  ],
+  "heldFolders": {
+    "existingPhotoPreserved": [
+      "1988응답하라추억의옛날도시락 고소동점",
+      "60일숙성명품김치찜",
+      "고기듬뿍 국물두루치기 문수점",
+      "골목낙곱새 1977 봉강점",
+      "교동야식",
+      "국수나무",
+      "김치찌개참잘하는집 여서점",
+      "김치찜팝니다 서교점",
+      "꽃게장&갈치조림 전문점 봉산점",
+      "나능이 능이버섯백숙",
+      "내가끓엿찌 여서점",
+      "담분식 서교점",
+      "더 진한 소한마리탕&국밥 엑스포점",
+      "덮밥전문점 고기그릇 공화점",
+      "도담식당 충무동",
+      "도도닭발 봉산점",
+      "돈도니밥도둑짜글이 국동점",
+      "돌산텃밭김치 교동점",
+      "또래김밥 문수점",
+      "만석군 봉산점",
+      "매운맛 땡길때 밥장인 엑스포점",
+      "명품육회 오림동점",
+      "미친 짜글이 서교점",
+      "밥앤동 볶음밥&우동 충무점",
+      "배불이 순대국",
+      "붕붕먹거리",
+      "속초냉면",
+      "수시아 김밥전문 공화동점",
+      "시민감자탕 문수점",
+      "엄마미안 김치찜 공화점",
+      "울엄마 김치찜 갈비찜 중앙점",
+      "이가네 나주곰탕",
+      "이동천 시원냉면 여서점",
+      "이모네분식 봉산점",
+      "장터순대국밥",
+      "정담오리바베큐 여수엑스포점",
+      "진남컵밥 중앙점",
+      "진통뼈사랑 봉산점",
+      "쭈꾸미닭 공화점",
+      "쭈신쭈왕 문수점",
+      "찜스틸러갈비찜 봉산점",
+      "청년뚝배기 덕충점",
+      "청담곱떡 고소동점",
+      "청담낙곱새 고소동점",
+      "청정게장촌 봉산점",
+      "코리안 찌개 타운 서교점",
+      "통큰한방삼계탕 공화점",
+      "한국전통춘천닭갈비 공화점",
+      "한식전문 혼밥대장 공화점",
+      "허참봉 곰탕&갈비탕 봉산점"
+    ],
+    "noCurrentStoreMatch": [
+      "맛있돼지 문수점",
+      "백년족발",
+      "빵빵김밥 여서점",
+      "아도쿄",
+      "요거트월드",
+      "족팔계",
+      "중앙동 롯데리아",
+      "착한쭝식",
+      "컴포즈커피문수광장점",
+      "탕화쿵푸마라탕 여서점"
+    ],
+    "ambiguousBranchMatch": [
+      "중앙하이츠 아주커"
+    ]
+  },
+  "mergeDeployment": {
+    "mainMerged": false,
+    "deployed": false,
+    "requiresUserApproval": true
+  }
+}

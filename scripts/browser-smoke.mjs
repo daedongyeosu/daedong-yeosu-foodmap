@@ -162,7 +162,7 @@ try{
     return{count:stores.length,uniqueIds:new Set(stores.map(s=>String(s.id))).size,uniqueNames:new Set(stores.map(s=>normalize(s.name))).size,withPhoto,awaiting:stores.length-withPhoto,coverage:manifest.coverage,first,second,invalidRoutes,suspiciousPhotos};
   });
   check(dataAudit.count===471&&dataAudit.uniqueIds===471&&dataAudit.uniqueNames===471,'브라우저 데이터 471개·중복 없음',dataAudit);
-  check(dataAudit.withPhoto===386&&dataAudit.awaiting===85&&dataAudit.coverage.storesWithPhoto===386&&dataAudit.coverage.storesAwaitingPhoto===85,'사진 보유 386·준비 중 85 유지');
+  check(dataAudit.withPhoto===387&&dataAudit.awaiting===84&&dataAudit.coverage.storesWithPhoto===387&&dataAudit.coverage.storesAwaitingPhoto===84,'사진 보유 387·준비 중 84 유지');
   check(dataAudit.second.runtimeEnabled===true&&dataAudit.second.revalidatedApprovedImages===9&&dataAudit.second.appliedStores===14,'검증 완료 2차 사진 9장·14곳 유지');
   check(dataAudit.first.runtimeEnabled===false&&JSON.stringify(dataAudit.first.missingPartNumbers)==='[18,19,20,21,22]','1차 스프라이트 비활성 유지');
   check(dataAudit.invalidRoutes.length===0,'전체 주문주소 형식 정상');
@@ -176,7 +176,7 @@ try{
   check(brokenVisible.length===0,'현재 표시 이미지 깨짐 없음',brokenVisible);
   check(report.errors.length===0,'브라우저 콘솔·스크립트 오류 없음',report.errors);
 
-  warn('1차 원본 사진 부재는 기능 통합 실패로 처리하지 않음',{awaiting:85});
+  warn('1차 원본 사진 부재는 기능 통합 실패로 처리하지 않음',{awaiting:84});
   report.finishedAt=new Date().toISOString();report.success=true;
   await page.screenshot({path:'browser-mobile.png',fullPage:true});
   fs.writeFileSync('browser-smoke-report.json',JSON.stringify(report,null,2)+'\n');

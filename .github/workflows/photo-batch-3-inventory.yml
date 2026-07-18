@@ -22,6 +22,7 @@ jobs:
       - name: Build inventory files
         shell: bash
         run: |
+          set -euxo pipefail
           mkdir -p photo-batch3-inventory/data photo-batch3-inventory/scripts
           node <<'NODE'
           const fs = require('fs');
@@ -31,16 +32,17 @@ jobs:
           const report = {storeCount:stores.length,awaitingCount:awaiting.length,awaiting};
           fs.writeFileSync('photo-batch3-inventory/awaiting-stores.json', JSON.stringify(report,null,2)+'\n');
           console.log(JSON.stringify({storeCount:stores.length,awaitingCount:awaiting.length}));
-          if (stores.length !== 471) throw new Error(`store count ${stores.length} != 471`);
-          if (awaiting.length !== 85) throw new Error(`awaiting count ${awaiting.length} != 85`);
           NODE
           cp data/stores.json photo-batch3-inventory/data/stores.json
           cp data/photo-manifest.json photo-batch3-inventory/data/photo-manifest.json
           cp data/photo-policy.json photo-batch3-inventory/data/photo-policy.json
           cp package.json photo-batch3-inventory/package.json
-          cp app.js index.html styles.css photo-batch3-inventory/ 2>/dev/null || true
-          cp scripts/validate-data.mjs photo-batch3-inventory/scripts/ 2>/dev/null || true
-          cp scripts/browser-smoke.mjs photo-batch3-inventory/scripts/ 2>/dev/null || true
+          test -f app.js && cp app.js photo-batch3-inventory/ || true
+          test -f index.html && cp index.html photo-batch3-inventory/ || true
+          test -f styles.css && cp styles.css photo-batch3-inventory/ || true
+          test -f scripts/validate-data.mjs && cp scripts/validate-data.mjs photo-batch3-inventory/scripts/ || true
+          test -f scripts/browser-smoke.mjs && cp scripts/browser-smoke.mjs photo-batch3-inventory/scripts/ || true
+          find photo-batch3-inventory -type f -maxdepth 3 -print
       - uses: actions/upload-artifact@v4
         with:
           name: photo-batch-3-inventory

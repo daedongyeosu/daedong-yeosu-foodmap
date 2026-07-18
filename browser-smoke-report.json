@@ -1,5 +1,5 @@
 {
-  "startedAt": "2026-07-18T05:13:02.883Z",
+  "startedAt": "2026-07-18T05:17:05.575Z",
   "checks": [
     {
       "message": "문서 제목",
@@ -127,7 +127,7 @@
           "lng": 127.6622
         },
         "sortByDistance": true,
-        "savedAt": "2026-07-18T05:13:11.287Z"
+        "savedAt": "2026-07-18T05:17:13.950Z"
       }
     },
     {
@@ -352,20 +352,21 @@
     {
       "message": "현재 표시 이미지 깨짐 없음",
       "details": []
+    },
+    {
+      "message": "브라우저 콘솔·스크립트 오류 없음",
+      "details": []
     }
   ],
-  "warnings": [],
-  "errors": [
-    "console: Failed to load resource: the server responded with a status of 404 (File not found)",
-    "console: Failed to load resource: the server responded with a status of 404 (File not found)",
-    "console: Failed to load resource: the server responded with a status of 404 (File not found)",
-    "console: Failed to load resource: the server responded with a status of 404 (File not found)",
-    "console: Failed to load resource: the server responded with a status of 404 (File not found)",
-    "console: Failed to load resource: the server responded with a status of 404 (File not found)",
-    "console: Failed to load resource: the server responded with a status of 404 (File not found)",
-    "console: Failed to load resource: the server responded with a status of 404 (File not found)"
+  "warnings": [
+    {
+      "message": "1차 원본 사진 부재는 기능 통합 실패로 처리하지 않음",
+      "details": {
+        "awaiting": 85
+      }
+    }
   ],
-  "finishedAt": "2026-07-18T05:13:24.059Z",
-  "success": false,
-  "failure": "Error: 브라우저 콘솔·스크립트 오류 없음: [\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\"]\n    at check (file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:7:23)\n    at file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:177:3"
+  "errors": [],
+  "finishedAt": "2026-07-18T05:17:26.734Z",
+  "success": true
 }

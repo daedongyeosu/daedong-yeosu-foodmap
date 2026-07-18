@@ -34,7 +34,7 @@ PASS 위치 권한 결과·주소 저장 {
   label: '현재 위치 기준',
   coords: { lat: 34.7604, lng: 127.6622 },
   sortByDistance: true,
-  savedAt: '2026-07-18T05:13:11.287Z'
+  savedAt: '2026-07-18T05:17:13.950Z'
 }
 PASS GPS 선택 후 팝업 닫기 
 PASS 카테고리별 가까운 가게 추천 { firstCategory: '한식' }
@@ -156,6 +156,6 @@ PASS 구형·중복 파일 실제 제거 {
 }
 PASS 구버전 런타임 자원 미사용 
 PASS 현재 표시 이미지 깨짐 없음 []
-Error: 브라우저 콘솔·스크립트 오류 없음: ["console: Failed to load resource: the server responded with a status of 404 (File not found)","console: Failed to load resource: the server responded with a status of 404 (File not found)","console: Failed to load resource: the server responded with a status of 404 (File not found)","console: Failed to load resource: the server responded with a status of 404 (File not found)","console: Failed to load resource: the server responded with a status of 404 (File not found)","console: Failed to load resource: the server responded with a status of 404 (File not found)","console: Failed to load resource: the server responded with a status of 404 (File not found)","console: Failed to load resource: the server responded with a status of 404 (File not found)"]
-    at check (file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:7:23)
-    at file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:177:3
+PASS 브라우저 콘솔·스크립트 오류 없음 []
+WARN 1차 원본 사진 부재는 기능 통합 실패로 처리하지 않음 { awaiting: 85 }
+PASS browser smoke tests: 51 / WARN 1

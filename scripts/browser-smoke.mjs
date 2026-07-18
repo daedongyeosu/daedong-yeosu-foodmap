@@ -168,7 +168,7 @@ try{
   check(dataAudit.invalidRoutes.length===0,'전체 주문주소 형식 정상');
   check(dataAudit.suspiciousPhotos.length===0,'민감서류·가격표·영수증·개인정보·비음식 경로 차단');
 
-  const legacyStatus=await page.evaluate(async()=>{const files=['app-v7.js','app-v8.js','app-v9.js','styles-v7.css','styles-v8.css','styles-v9.css','fix-v9.css','fix-v9.js'];return Object.fromEntries(await Promise.all(files.map(async file=>[file,(await fetch(file,{cache:'no-store'})).status])));});
+  const legacyFiles=['app-v7.js','app-v8.js','app-v9.js','styles-v7.css','styles-v8.css','styles-v9.css','fix-v9.css','fix-v9.js'];const legacyStatus=Object.fromEntries(await Promise.all(legacyFiles.map(async file=>[file,(await context.request.get(`${baseURL}/${file}`)).status()])));
   check(Object.values(legacyStatus).every(status=>status===404),'구형·중복 파일 실제 제거',legacyStatus);
   const resources=await page.evaluate(()=>performance.getEntriesByType('resource').map(entry=>entry.name));
   check(resources.filter(url=>/app-v[789]\.js|styles-v[789]\.css|fix-v9/i.test(url)).length===0,'구버전 런타임 자원 미사용');

@@ -1,7 +1,7 @@
 {
-  "success": false,
+  "success": true,
   "branch": "agent/main-unification",
-  "validatedCandidateSha": "6aa6c34fdbc4faa88eacfe817a4a22515c4c4284",
+  "validatedCandidateSha": "456c079be042d10c54a3e6cb3332de8004271dcf",
   "mainSha": "facb4dbf4539baee515d213288edec9b1783e15e",
   "pullRequest": {
     "number": 1,
@@ -56,10 +56,10 @@
       "fail": 0
     },
     "mobile": {
-      "pass": 50,
-      "warn": 0,
-      "fail": 1,
-      "failure": "Error: 브라우저 콘솔·스크립트 오류 없음: [\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\"]\n    at check (file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:7:23)\n    at file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:177:3"
+      "pass": 51,
+      "warn": 1,
+      "fail": 0,
+      "failure": null
     }
   },
   "changedFiles": [
@@ -1192,5 +1192,5 @@
     "styles-v8.css"
   ],
   "distanceMethod": "store coordinates when available; otherwise approximate district-centroid distance clearly labelled in UI",
-  "generatedAt": "2026-07-18T05:13:25.027Z"
+  "generatedAt": "2026-07-18T05:17:27.450Z"
 }

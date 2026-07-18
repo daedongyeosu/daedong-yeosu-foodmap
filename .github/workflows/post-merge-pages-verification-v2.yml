@@ -1,0 +1,128 @@
+name: Post-merge Pages verification v2
+
+on:
+  push:
+    branches: [agent/post-merge-pages-check]
+    paths:
+      - '.github/workflows/post-merge-pages-verification-v2.yml'
+
+permissions:
+  contents: write
+  actions: read
+  pages: read
+  deployments: read
+
+jobs:
+  verify-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout exact merged commit
+        uses: actions/checkout@v4
+        with:
+          ref: 78fcfebd0cb9bf760dd3d3703e910efd0a9382a6
+          fetch-depth: 1
+          show-progress: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Verify Pages deployment and public URL
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/pages-proof/logs
+          api="https://api.github.com/repos/$GITHUB_REPOSITORY"
+          auth=(-H "Authorization: Bearer $GH_TOKEN" -H 'Accept: application/vnd.github+json' -H 'X-GitHub-Api-Version: 2022-11-28')
+          pages_ok=false
+          for attempt in $(seq 1 60); do
+            curl -fsSL "${auth[@]}" "$api/pages" -o /tmp/pages-proof/pages-api.json
+            pages_url=$(jq -r '.html_url // empty' /tmp/pages-proof/pages-api.json)
+            pages_status=$(jq -r '.status // empty' /tmp/pages-proof/pages-api.json)
+            curl -fsSL "${auth[@]}" "$api/actions/runs?head_sha=78fcfebd0cb9bf760dd3d3703e910efd0a9382a6&per_page=100" -o /tmp/pages-proof/actions-runs.json
+            jq '[.workflow_runs[] | select((.name|ascii_downcase|contains("pages")) or (.path|ascii_downcase|contains("pages")))]' /tmp/pages-proof/actions-runs.json > /tmp/pages-proof/pages-runs.json
+            pages_run_id=$(jq -r 'sort_by(.created_at) | last | .id // empty' /tmp/pages-proof/pages-runs.json)
+            pages_run_url=$(jq -r 'sort_by(.created_at) | last | .html_url // empty' /tmp/pages-proof/pages-runs.json)
+            pages_run_status=$(jq -r 'sort_by(.created_at) | last | .status // empty' /tmp/pages-proof/pages-runs.json)
+            pages_run_conclusion=$(jq -r 'sort_by(.created_at) | last | .conclusion // empty' /tmp/pages-proof/pages-runs.json)
+            printf 'attempt=%s pages_status=%s run_id=%s run_status=%s conclusion=%s url=%s\n' "$attempt" "$pages_status" "$pages_run_id" "$pages_run_status" "$pages_run_conclusion" "$pages_url" | tee -a /tmp/pages-proof/logs/pages-poll.log
+            if [[ "$pages_run_status" == completed && "$pages_run_conclusion" == success && -n "$pages_url" ]]; then pages_ok=true; break; fi
+            sleep 10
+          done
+          test "$pages_ok" = true
+          public_ok=false
+          for attempt in $(seq 1 40); do
+            http_code=$(curl -L -sS -o /tmp/pages-proof/public-index.html -D /tmp/pages-proof/public-headers.txt -w '%{http_code}' "$pages_url?merge=78fcfebd0cb9bf760dd3d3703e910efd0a9382a6&attempt=$attempt" || true)
+            echo "attempt=$attempt http=$http_code" | tee -a /tmp/pages-proof/logs/public-poll.log
+            if [[ "$http_code" == 200 ]] && grep -q '대동여수음식지도' /tmp/pages-proof/public-index.html && grep -q 'app.css?v=final-integration-1' /tmp/pages-proof/public-index.html && grep -q 'app.js?v=final-integration-1' /tmp/pages-proof/public-index.html; then public_ok=true; break; fi
+            sleep 10
+          done
+          test "$public_ok" = true
+          {
+            echo "PAGES_URL=$pages_url"
+            echo "PAGES_STATUS=$pages_status"
+            echo "PAGES_RUN_ID=$pages_run_id"
+            echo "PAGES_RUN_URL=$pages_run_url"
+            echo "PAGES_RUN_STATUS=$pages_run_status"
+            echo "PAGES_RUN_CONCLUSION=$pages_run_conclusion"
+          } >> "$GITHUB_ENV"
+
+      - name: Install Chromium and run public mobile validation
+        shell: bash
+        run: |
+          set -o pipefail
+          npm install --no-save --no-package-lock playwright@1.55.0 2>&1 | tee /tmp/pages-proof/logs/playwright-install.log
+          npx playwright install --with-deps chromium 2>&1 | tee /tmp/pages-proof/logs/chromium-install.log
+          BASE_URL="$PAGES_URL" node scripts/browser-smoke.mjs 2>&1 | tee /tmp/pages-proof/logs/public-mobile.log
+          cp browser-smoke-report.json /tmp/pages-proof/public-browser-smoke-report.json
+          cp browser-mobile.png /tmp/pages-proof/public-browser-mobile.png
+
+      - name: Create result report
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const browser=JSON.parse(fs.readFileSync('/tmp/pages-proof/public-browser-smoke-report.json','utf8'));
+          const pages=JSON.parse(fs.readFileSync('/tmp/pages-proof/pages-api.json','utf8'));
+          const report={
+            success:Boolean(browser.success && process.env.PAGES_RUN_CONCLUSION==='success'),
+            verificationRunId:Number(process.env.GITHUB_RUN_ID),
+            verificationRunUrl:`https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}`,
+            mergeCommitSha:'78fcfebd0cb9bf760dd3d3703e910efd0a9382a6',
+            pagesUrl:process.env.PAGES_URL,
+            pagesApiStatus:process.env.PAGES_STATUS,
+            pagesDeployment:{runId:Number(process.env.PAGES_RUN_ID),runUrl:process.env.PAGES_RUN_URL,status:process.env.PAGES_RUN_STATUS,conclusion:process.env.PAGES_RUN_CONCLUSION},
+            mobile:{success:browser.success,pass:browser.checks.length,warn:browser.warnings?.length||0,fail:browser.success?0:1},
+            pagesSource:pages.source||null,
+            verifiedAt:new Date().toISOString()
+          };
+          if(!report.success)throw new Error('Pages verification did not succeed');
+          fs.writeFileSync('/tmp/pages-proof/post-merge-pages-result.json',JSON.stringify(report,null,2)+'\n');
+          NODE
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: post-merge-pages-verification-v2
+          path: /tmp/pages-proof/**
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Publish result JSON to verification branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp /tmp/pages-proof/post-merge-pages-result.json /tmp/post-merge-pages-result.json
+          git fetch origin agent/post-merge-pages-check
+          git switch -C agent/post-merge-pages-check origin/agent/post-merge-pages-check
+          cp /tmp/post-merge-pages-result.json post-merge-pages-result.json
+          git config user.name 'daedong-pages-verifier'
+          git config user.email 'actions@users.noreply.github.com'
+          git add post-merge-pages-result.json
+          git commit -m 'chore: record post-merge Pages verification success'
+          git push origin HEAD:agent/post-merge-pages-check

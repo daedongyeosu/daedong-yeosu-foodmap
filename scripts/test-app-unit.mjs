@@ -41,3 +41,11 @@ console.log('PASS unit tests complete');
 assert(source.includes('function appRegisteredStores(key)'),'앱별 등록 가게 필터 구현');
 assert(source.includes('function openCommunityChoice(store'),'지역 도움 안내 흐름 구현');
 assert(source.includes('daedongFavoriteStoresV2'),'찜 저장키 유지');
+assert(source.includes('function hardClose'),'hardClose 구현');
+assert(source.includes('window.DaedongSelectedOrderApp'),'DaedongSelectedOrderApp 호환');
+assert(source.includes('function openPhotoViewer'),'전체화면 사진뷰어 구현');
+assert(source.includes('address-single-sheet'),'주소 단일팝업 구현');
+assert(source.includes('new InfiniteCarousel(carouselRoot,{interval:3500})'),'상세사진 3.5초 자동전환 보존');
+
+
+console.log('PASS v7 selective inheritance: address single modal, hardClose, selected order compatibility, photo viewer');

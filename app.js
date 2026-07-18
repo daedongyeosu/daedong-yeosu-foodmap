@@ -12,6 +12,9 @@ const RECENT_KEY = 'daedongRecentStoresV2';
 const FEEDBACK_QUEUE_KEY = 'daedongFeedbackQueueV1';
 const VISITOR_KEY = 'daedongVisitorKeyV1';
 const SELECTED_EXTERNAL_KEY = 'daedongSelectedExternalV1';
+const SELECTED_ORDER_COMPAT_KEY = 'DaedongSelectedOrderApp';
+const ADDRESS_KEY = 'daedongDeliveryAddressV2';
+const ADDRESS_BOOK_KEY = 'daedongAddressBookV2';
 const FEEDBACK_FORM_URL = 'https://www.notion.so/8ae3728176e344fdaee3475a97d03740';
 
 const APP_META = {
@@ -106,32 +109,52 @@ function visitorKey() {
   if (!key) { key = globalThis.crypto?.randomUUID?.() || `visitor-${Date.now()}-${Math.random().toString(36).slice(2)}`; localStorage.setItem(VISITOR_KEY, key); }
   return key;
 }
-function selectedExternalForStore(store) {
-  const selected = readLocalJson(SELECTED_EXTERNAL_KEY, null);
-  if (!selected || String(selected.storeId) !== String(store.id) || !EXTERNAL_APP_KEYS.includes(selected.key) || Date.now() - Number(selected.selectedAt || 0) > 30 * 60 * 1000) return null;
-  return routeFor(store, selected.key) || null;
+function selectedOrderSnapshot() {
+  const candidates = [window.DaedongSelectedOrderApp, readLocalJson(SELECTED_EXTERNAL_KEY, null), readLocalJson(SELECTED_ORDER_COMPAT_KEY, null)];
+  const selected = candidates.find(item => item && EXTERNAL_APP_KEYS.includes(item.key || item.appKey) && item.storeId && item.url);
+  if (!selected) return null;
+  const normalized = {...selected, key: selected.key || selected.appKey, appKey: selected.key || selected.appKey};
+  window.DaedongSelectedOrderApp = normalized;
+  return normalized;
 }
-function rememberSelectedExternal(store, key) { writeLocalJson(SELECTED_EXTERNAL_KEY, {storeId: String(store.id), key, selectedAt: Date.now()}); }
+function selectedExternalForStore(store) {
+  const selected = selectedOrderSnapshot();
+  if (!selected || String(selected.storeId) !== String(store.id) || Date.now() - Number(selected.selectedAt || 0) > 30 * 60 * 1000) return null;
+  const route = routeFor(store, selected.key);
+  const preservedUrl = safeHref(selected.url);
+  if (!route || preservedUrl === '#') return null;
+  return {...route, url: preservedUrl};
+}
+function rememberSelectedExternal(store, key) {
+  const route = routeFor(store, key); if (!route) return null;
+  const payload = {key, appKey:key, appName:APP_META[key]?.label || route.name, storeId:String(store.id), storeName:store.name, url:route.url, selectedAt:Date.now()};
+  writeLocalJson(SELECTED_EXTERNAL_KEY, payload);
+  writeLocalJson(SELECTED_ORDER_COMPAT_KEY, payload);
+  window.DaedongSelectedOrderApp = payload;
+  return payload;
+}
+function hydrateSelectedOrderApp() { const selected = selectedOrderSnapshot(); if (selected) window.DaedongSelectedOrderApp = selected; }
 
 function loadSavedLocation() {
   try {
     const saved = JSON.parse(localStorage.getItem('savedLocation') || 'null');
     if (!saved || typeof saved !== 'object') return null;
-    const lat = Number(saved.coords?.lat);
-    const lng = Number(saved.coords?.lng);
+    const lat = Number(saved.coords?.lat), lng = Number(saved.coords?.lng);
     return {
-      label: String(saved.label || '').trim() || '여수시 전체',
+      label: String(saved.label || saved.address || '').trim() || '여수시 전체',
+      area: String(saved.area || '').trim() || '여수시 전체',
+      address: String(saved.address || saved.label || '').trim(),
+      detail: String(saved.detail || '').trim(),
       coords: Number.isFinite(lat) && Number.isFinite(lng) ? {lat, lng} : null,
       sortByDistance: Boolean(saved.sortByDistance && Number.isFinite(lat) && Number.isFinite(lng))
     };
-  } catch {
-    return null;
-  }
+  } catch { return null; }
 }
 const savedLocation = loadSavedLocation();
 const state = {
   query: '', category: '전체', brandId: '', visibleCount: 40,
-  location: savedLocation?.label || localStorage.getItem('location') || '여수시 전체',
+  location: savedLocation?.area || localStorage.getItem('location') || '여수시 전체',
+  addressLabel: savedLocation?.label || localStorage.getItem('location') || '여수시 전체',
   coords: savedLocation?.coords || null,
   sortByDistance: savedLocation?.sortByDistance || false
 };
@@ -140,7 +163,12 @@ let categories = [];
 let heroCarousel = null;
 let promoCarousel = null;
 let detailCarousel = null;
+let photoViewerCarousel = null;
 let photoResolver = null;
+let addressDraft = null;
+let modalHistoryActive = false;
+let photoViewerHistoryActive = false;
+let ignoreNextPop = false;
 
 function normalize(value) { return String(value ?? '').trim().toLowerCase().replace(/[\s·&()\-_/.,]/g, ''); }
 function escapeHtml(value) { return String(value ?? '').replace(/[&<>'"]/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'}[char])); }
@@ -277,11 +305,14 @@ class PhotoResolver {
   galleryMarkup(store) {
     const photos = this.resolveGallery(store);
     if (!photos.length) return placeholderMarkup('detail');
-    if (photos.length === 1) return `<div class="detail-single-photo">${this.markup(store, 'detail')}</div>`;
+    if (photos.length === 1) {
+      const photo = photos[0];
+      return `<div class="detail-single-photo"><img class="detail-photo" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)} 사진 1" loading="lazy" data-photo-kind="detail" data-photo-source="${escapeHtml(photo.source)}" data-photo-viewer data-gallery-index="0"></div>`;
+    }
     return `<div id="detailPhotoCarousel" class="carousel-controller detail-photo-carousel" data-original-count="${photos.length}">
       <div class="carousel-shell detail-photo-frame">
         <button class="carousel-arrow prev" type="button" data-carousel-prev aria-label="이전 가게사진">‹</button>
-        <div class="carousel-track">${photos.map((photo, index) => `<article class="carousel-slide detail-photo-slide"><img class="detail-photo" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)} 사진 ${index + 1}" loading="lazy" data-photo-kind="detail" data-photo-source="${escapeHtml(photo.source)}"></article>`).join('')}</div>
+        <div class="carousel-track">${photos.map((photo, index) => `<article class="carousel-slide detail-photo-slide"><img class="detail-photo" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)} 사진 ${index + 1}" loading="lazy" data-photo-kind="detail" data-photo-source="${escapeHtml(photo.source)}" data-photo-viewer data-gallery-index="${index}"></article>`).join('')}</div>
         <button class="carousel-arrow next" type="button" data-carousel-next aria-label="다음 가게사진">›</button>
       </div><div class="carousel-dots" aria-label="가게사진 위치"></div></div>`;
   }
@@ -296,7 +327,7 @@ function handleImageError(image) {
 }
 
 class InfiniteCarousel {
-  constructor(root, {interval = 3500} = {}) {
+  constructor(root, {interval = 3500, onChange = null} = {}) {
     this.root = root;
     if (!root) return;
     this.shell = root.querySelector('.carousel-shell');
@@ -305,6 +336,7 @@ class InfiniteCarousel {
     this.prev = root.querySelector('[data-carousel-prev]');
     this.next = root.querySelector('[data-carousel-next]');
     this.interval = interval;
+    this.onChange = typeof onChange === 'function' ? onChange : null;
     this.timer = null;
     this.dragStart = null;
     this.current = 0;
@@ -361,7 +393,7 @@ class InfiniteCarousel {
   }
   logicalIndex() { return this.count <= 1 ? 0 : (this.current - 1 + this.count) % this.count; }
   renderDots() { if (!this.dots) return; this.dots.innerHTML = this.original.map((_, index) => `<button type="button" data-slide="${index}" aria-label="${index + 1}번째 슬라이드"></button>`).join(''); this.updateDots(); }
-  updateDots() { if (!this.dots) return; [...this.dots.children].forEach((dot, index) => dot.classList.toggle('active', index === this.logicalIndex())); }
+  updateDots() { if (this.dots) [...this.dots.children].forEach((dot, index) => dot.classList.toggle('active', index === this.logicalIndex())); this.onChange?.(this.logicalIndex(), this.count); }
   jump(animated = true) { if (!this.count) return; this.track.classList.toggle('is-animated', animated); this.track.style.transform = `translate3d(-${this.current * 100}%,0,0)`; this.updateDots(); }
   normalizeCurrent() {
     if (this.count <= 1) return;
@@ -381,7 +413,7 @@ class InfiniteCarousel {
   }
   goTo(index) { if (this.count <= 1) return; this.current = Math.max(0, Math.min(this.count - 1, index)) + 1; this.jump(true); this.restart(); }
   normalizePosition() { this.normalizeCurrent(); }
-  start() { if (this.count <= 1 || this.timer) return; this.timer = setInterval(() => this.move(1), this.interval); }
+  start() { if (this.count <= 1 || this.timer || !(this.interval > 0)) return; this.timer = setInterval(() => this.move(1), this.interval); }
   stop() { if (this.timer) { clearInterval(this.timer); this.timer = null; } }
   restart() { this.stop(); this.start(); }
   destroy() { this.stop(); clearTimeout(this.normalizeTimer); }
@@ -475,24 +507,82 @@ function renderStores({scroll = false, resetCount = false} = {}) {
   if (scroll) $('#recommendSection').scrollIntoView({behavior: 'smooth', block: 'start'});
 }
 
+function lockPage() {
+  if (document.body.classList.contains('modal-open')) return;
+  const top = window.scrollY || document.documentElement.scrollTop || 0;
+  document.body.dataset.lockScrollY = String(top);
+  document.documentElement.classList.add('modal-open'); document.body.classList.add('modal-open');
+  Object.assign(document.body.style, {position:'fixed', top:`-${top}px`, left:'0', right:'0', width:'100%', overflow:'hidden'});
+}
+function unlockPage() {
+  const top = Number(document.body.dataset.lockScrollY || 0);
+  delete document.body.dataset.lockScrollY;
+  document.documentElement.classList.remove('modal-open','photo-viewer-open'); document.body.classList.remove('modal-open','photo-viewer-open');
+  for (const property of ['position','top','left','right','width','overflow']) document.body.style.removeProperty(property);
+  window.scrollTo(0, top);
+}
+function layerStillOpen() {
+  return !$('#modal')?.hidden || !$('#photoViewer')?.hidden || !$('#startupAd')?.hidden;
+}
+function classifyModal() {
+  const modal = $('#modal'); if (!modal) return;
+  modal.className = 'modal';
+  if ($('#modalContent .store-detail')) modal.classList.add('store-modal');
+  else if ($('#modalContent .app-browser')) modal.classList.add('app-browser-modal');
+  else if ($('#modalContent .community-guide')) modal.classList.add('community-guide-modal');
+  else if ($('#modalContent .feedback-sheet')) modal.classList.add('feedback-modal');
+  else if ($('#modalContent .address-single-sheet')) modal.classList.add('address-modal');
+}
 function openModal(html) {
+  const modal = $('#modal'), wasHidden = modal.hidden;
   detailCarousel?.destroy(); detailCarousel = null;
   $('#modalContent').innerHTML = html;
-  $('#modal').className = 'modal';
-  if ($('#modalContent .store-detail')) $('#modal').classList.add('store-modal');
-  else if ($('#modalContent .app-browser')) $('#modal').classList.add('app-browser-modal');
-  else if ($('#modalContent .community-guide')) $('#modal').classList.add('community-guide-modal');
-  else if ($('#modalContent .feedback-sheet')) $('#modal').classList.add('feedback-modal');
-  const wasHidden = $('#modal').hidden;
-  $('#overlay').hidden = false; $('#modal').hidden = false; document.body.style.overflow = 'hidden';
-  if (wasHidden) history.pushState({modal: true}, '');
+  classifyModal();
+  $('#overlay').hidden = false; modal.hidden = false; lockPage();
+  if (wasHidden && !history.state?.daedongModal) { history.pushState({daedongModal:true}, ''); modalHistoryActive = true; }
   setTimeout(() => $('.modal-close')?.focus(), 0);
 }
-function closeModal({fromPop = false} = {}) {
-  if ($('#modal').hidden) return;
+function closePhotoViewer({fromPop = false, syncDetail = true} = {}) {
+  const viewer = $('#photoViewer'); if (!viewer || viewer.hidden) return;
+  const index = photoViewerCarousel?.logicalIndex?.() ?? 0;
+  photoViewerCarousel?.destroy(); photoViewerCarousel = null;
+  viewer.hidden = true; viewer.setAttribute('aria-hidden','true'); viewer.querySelector('.carousel-track').innerHTML = ''; viewer.querySelector('.carousel-dots').innerHTML = '';
+  document.documentElement.classList.remove('photo-viewer-open'); document.body.classList.remove('photo-viewer-open');
+  if (syncDetail && detailCarousel?.count) { detailCarousel.current = Math.max(0, Math.min(detailCarousel.count - 1, index)) + 1; detailCarousel.jump(false); detailCarousel.start(); }
+  photoViewerHistoryActive = false;
+  if (!layerStillOpen()) unlockPage();
+  if (!fromPop && history.state?.daedongPhotoViewer) { ignoreNextPop = true; history.back(); }
+}
+function hardClose({fromPop = false} = {}) {
+  const viewerWasOpen = !$('#photoViewer')?.hidden;
+  closePhotoViewer({fromPop:true, syncDetail:false});
   detailCarousel?.destroy(); detailCarousel = null;
-  $('#modal').hidden = true; $('#modal').className = 'modal'; $('#overlay').hidden = true; document.body.style.overflow = '';
-  if (!fromPop && history.state?.modal) history.back();
+  const modal = $('#modal'); if (modal) { modal.hidden = true; modal.className = 'modal'; modal.removeAttribute('data-app-browser-key'); modal.removeAttribute('data-app-browser-category'); modal.removeAttribute('data-active-store-id'); }
+  if ($('#modalContent')) $('#modalContent').innerHTML = '';
+  if ($('#overlay')) $('#overlay').hidden = true;
+  if ($('#moreAppsPopover')) $('#moreAppsPopover').hidden = true;
+  if ($('#startupAd')) $('#startupAd').hidden = true;
+  unlockPage(); modalHistoryActive = false; photoViewerHistoryActive = false;
+  if (!fromPop) {
+    if (viewerWasOpen && history.state?.daedongPhotoViewer) { ignoreNextPop = true; history.go(-2); }
+    else if (history.state?.daedongModal) { ignoreNextPop = true; history.back(); }
+  }
+}
+function closeModal(options = {}) { hardClose(options); }
+window.hardClose = hardClose; window.hideModal = hardClose; window.closeModal = hardClose;
+function openPhotoViewer(image) {
+  const viewer = $('#photoViewer'), store = stores.find(item => String(item.id) === String($('#modal')?.dataset.activeStoreId));
+  if (!viewer || !store) return;
+  const photos = photoResolver.resolveGallery(store); if (!photos.length) return;
+  const requested = Number(image?.dataset.galleryIndex); const initial = Number.isFinite(requested) ? requested : (detailCarousel?.logicalIndex?.() ?? 0);
+  const track = viewer.querySelector('.carousel-track');
+  track.innerHTML = photos.map((photo,index)=>`<article class="carousel-slide photo-viewer-slide"><img src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)} 전체화면 사진 ${index+1}" data-gallery-index="${index}"></article>`).join('');
+  viewer.hidden = false; viewer.setAttribute('aria-hidden','false'); document.documentElement.classList.add('photo-viewer-open'); document.body.classList.add('photo-viewer-open'); lockPage(); detailCarousel?.stop();
+  const counter = viewer.querySelector('.photo-viewer-count');
+  photoViewerCarousel = new InfiniteCarousel($('#photoViewerCarousel'), {interval:0, onChange:(index,count)=>{ counter.textContent = `${index+1} / ${count}`; }});
+  photoViewerCarousel.goTo(Math.max(0, Math.min(photos.length - 1, initial)));
+  if (!history.state?.daedongPhotoViewer) { history.pushState({daedongPhotoViewer:true}, ''); photoViewerHistoryActive = true; }
+  viewer.querySelector('.photo-viewer-close')?.focus();
 }
 function guide() {
   openModal(`<h2 id="modalTitle">여수와 함께하는 주문방법</h2><p>가게를 먼저 고르면 실제 이용 가능한 주문경로만 보여줍니다. 낮은 수수료 주문경로를 앞에 안내하며, 요기요·쿠팡이츠·배달의민족을 선택해도 선택한 앱과 저수수료 경로를 같은 상세창에서 함께 확인할 수 있습니다.</p><div class="guide-list"><button type="button">🏪 가게바로주문</button><button type="button">📱 먹깨비·땡겨요·온동네</button><button type="button">🏷️ 브랜드앱</button><button type="button">📦 요기요·쿠팡이츠·배달의민족</button></div>`);
@@ -556,44 +646,49 @@ function brandsModal() {
 function allCategoriesModal() {
   openModal(`<h2 id="modalTitle">전체 음식 카테고리</h2><div class="all-category-list">${categories.map(name => `<button type="button" data-modal-cat="${escapeHtml(name)}"><span>${categoryIcon(name)}</span><b>${escapeHtml(name)}</b></button>`).join('')}</div>`);
 }
-function saveLocationState(label, coords = null, sortByDistance = false) {
-  const saved = {label, coords, sortByDistance, savedAt: new Date().toISOString()};
-  localStorage.setItem('savedLocation', JSON.stringify(saved));
-  localStorage.setItem('location', label);
+function getSavedAddress() { return readLocalJson(ADDRESS_KEY, null); }
+function getAddressBook() { return readLocalJson(ADDRESS_BOOK_KEY, []); }
+function saveAddressBook(list) { writeLocalJson(ADDRESS_BOOK_KEY, list.slice(0, 12)); }
+function shortAddress(text = '') { const value = String(text).trim() || '여수시 전체'; return value.length > 18 ? `${value.slice(0,18)}…` : value; }
+function saveLocationState(label, coords = null, sortByDistance = false, meta = {}) {
+  const saved = {label, area:meta.area || label, address:meta.address || label, detail:meta.detail || '', type:meta.type || 'recent', coords, sortByDistance, savedAt:new Date().toISOString()};
+  localStorage.setItem('savedLocation', JSON.stringify(saved)); localStorage.setItem('location', saved.area);
+}
+function addressAreas() { return ['여수시 전체', ...new Set(stores.map(store => store.area).filter(Boolean))].sort((a,b)=>a==='여수시 전체'?-1:a.localeCompare(b,'ko')); }
+function addressAreaFor(text='') { const normalized=normalize(text); return addressAreas().find(area=>area!=='여수시 전체'&&normalized.includes(normalize(area))) || (text==='여수시 전체'?'여수시 전체':'여수시 전체'); }
+function renderAddressDraft() {
+  const preview = $('#addressSelectedPreview'); if (!preview) return;
+  const base = String(addressDraft?.address || '').trim(), detail = String($('#addressDetailInput')?.value || addressDraft?.detail || '').trim();
+  preview.innerHTML = base ? `<small>선택한 주소</small><b>${escapeHtml(base)}</b><span>${detail ? escapeHtml(detail) : '상세주소를 입력하거나 그대로 선택하세요.'}</span>` : '<small>선택한 주소</small><b>주소를 검색하거나 최근 주소를 선택하세요.</b>';
+  $('#addressConfirmBtn').disabled = !base;
+}
+function renderAddressResults(query='') {
+  const target=$('#addressSearchResults'); if (!target) return;
+  const value=String(query).trim(), areas=addressAreas();
+  const matches=areas.filter(area=>!value || normalize(area).includes(normalize(value))).slice(0,12);
+  const typed=value && !matches.some(area=>normalize(area)===normalize(value)) ? `<button type="button" data-address-base="${escapeHtml(value)}"><span>📍</span><b>${escapeHtml(value)}</b><small>입력한 주소 사용</small></button>` : '';
+  target.innerHTML = typed + matches.map(area=>`<button type="button" data-address-base="${escapeHtml(area)}"><span>📍</span><b>${escapeHtml(area)}</b><small>여수 지역 주소</small></button>`).join('') || '<p class="address-empty">검색된 주소가 없습니다.</p>';
 }
 function areaModal() {
-  const areas = ['여수시 전체', ...new Set(stores.map(store => store.area).filter(Boolean))].sort((a, b) => a === '여수시 전체' ? -1 : a.localeCompare(b, 'ko'));
-  openModal(`<h2 id="modalTitle">지역·주소 설정</h2><p class="muted">저장된 지역은 다음 방문에도 유지됩니다.</p><div class="location-actions"><button type="button" class="gps-btn" id="gpsLocationBtn">📍 위치 권한으로 가까운 순</button><button type="button" id="allYeosuBtn">여수시 전체</button></div><div class="searchbox area-search"><input id="areaSearchInput" aria-label="지역 주소 검색" placeholder="예: 여서동, 웅천동"><button id="clearAreaSearch" class="input-clear" type="button" hidden>×</button></div><div id="areaResults" class="location-list"></div>`);
-  const input = $('#areaSearchInput'), clear = $('#clearAreaSearch');
-  const render = (query = '') => {
-    $('#areaResults').innerHTML = areas.filter(area => area !== '여수시 전체').filter(area => !query || normalize(area).includes(normalize(query))).map(area => `<button type="button" data-location="${escapeHtml(area)}">${escapeHtml(area)}</button>`).join('') || '<div class="empty">검색된 지역이 없습니다.</div>';
-  };
-  input.addEventListener('input', () => { clear.hidden = !input.value; render(input.value); });
-  clear.addEventListener('click', () => { input.value = ''; clear.hidden = true; render(); });
-  $('#allYeosuBtn').addEventListener('click', () => selectLocation('여수시 전체'));
-  $('#gpsLocationBtn').addEventListener('click', useCurrentLocation);
-  render();
+  const saved=getSavedAddress(); const recent=getAddressBook();
+  addressDraft = saved ? {...saved, coords:saved.coords || (saved.latitude&&saved.longitude?{lat:Number(saved.latitude),lng:Number(saved.longitude)}:null)} : {address:state.addressLabel==='여수시 전체'?'':state.addressLabel, detail:'', area:state.location, coords:state.coords, sortByDistance:state.sortByDistance, type:'recent'};
+  openModal(`<section class="address-single-sheet" data-address-single><header><h2 id="modalTitle">배달 주소 설정</h2><p>주소 검색·상세주소·최근주소·현재 위치·선택 완료를 이 화면에서 한 번에 처리합니다.</p></header><div class="address-search-row"><div class="searchbox"><input id="addressSearchInput" placeholder="예: 여서동, 웅천동, 쌍봉로 368" autocomplete="street-address"><button id="clearAddressSearch" class="input-clear" type="button" hidden>×</button></div><button id="addressSearchBtn" type="button">주소검색</button></div><div id="addressSearchResults" class="address-search-results"></div><button id="gpsLocationBtn" class="current-location-btn" type="button">⌖ <span>현재 위치 사용</span></button><div id="addressSelectedPreview" class="address-selected-preview"></div><label class="address-detail-label">상세주소<input id="addressDetailInput" value="${escapeHtml(addressDraft?.detail || '')}" placeholder="동·호수, 건물명, 상세 위치" autocomplete="address-line2"></label><section class="address-recent"><div class="address-section-title"><h3>최근 주소</h3><span>최대 12개 저장</span></div><div class="address-recent-list">${recent.length?recent.map((item,index)=>`<button type="button" data-address-recent="${index}"><span>${item.type==='current'?'⌖':'📍'}</span><b>${escapeHtml(item.label||item.address)}</b><small>${escapeHtml([item.address,item.detail].filter(Boolean).join(' '))}</small></button>`).join(''):'<p class="address-empty">아직 저장된 주소가 없습니다.</p>'}</div></section><button id="addressConfirmBtn" class="address-confirm-btn" type="button">이 주소로 선택 완료</button></section>`);
+  $('#addressSearchInput').value = addressDraft?.address || ''; renderAddressResults(addressDraft?.address || ''); renderAddressDraft();
 }
-function selectLocation(area) {
-  state.location = area; state.sortByDistance = false; state.coords = null;
-  saveLocationState(area, null, false);
-  $('#locationText').textContent = area; closeModal();
-  setTimeout(() => renderStores({scroll: true, resetCount: true}), 60);
+function chooseAddressBase(value, extra={}) { addressDraft={...(addressDraft||{}),address:String(value).trim(),area:extra.area||addressAreaFor(value),coords:extra.coords||null,sortByDistance:Boolean(extra.sortByDistance),type:extra.type||'recent'}; renderAddressDraft(); }
+function commitAddressSelection() {
+  const base=String(addressDraft?.address || $('#addressSearchInput')?.value || '').trim(); if(!base){$('#addressSearchInput')?.focus();return;}
+  const detail=String($('#addressDetailInput')?.value||'').trim(), full=[base,detail].filter(Boolean).join(' '), coords=addressDraft?.coords||null, sortByDistance=Boolean(addressDraft?.sortByDistance&&coords);
+  const item={type:addressDraft?.type||'recent',address:base,detail,label:full,area:addressDraft?.area||addressAreaFor(base),coords,sortByDistance,createdAt:new Date().toISOString()};
+  writeLocalJson(ADDRESS_KEY,item); saveAddressBook([item,...getAddressBook().filter(old=>old.label!==item.label||old.type!==item.type)]);
+  state.location=item.area||'여수시 전체'; state.addressLabel=item.label; state.coords=coords; state.sortByDistance=sortByDistance;
+  saveLocationState(item.label,coords,sortByDistance,item); $('#locationText').textContent=shortAddress(item.label); hardClose(); setTimeout(()=>renderStores({scroll:true,resetCount:true}),60);
 }
 function useCurrentLocation() {
-  const button = $('#gpsLocationBtn');
-  if (!navigator.geolocation) { button.textContent = '이 기기는 위치 기능을 지원하지 않습니다'; return; }
-  button.disabled = true; button.textContent = '현재 위치 확인 중…';
-  navigator.geolocation.getCurrentPosition(position => {
-    state.coords = {lat: position.coords.latitude, lng: position.coords.longitude};
-    state.sortByDistance = true; state.location = '현재 위치 기준';
-    saveLocationState(state.location, state.coords, true);
-    $('#locationText').textContent = state.location; closeModal();
-    setTimeout(() => renderStores({scroll: true, resetCount: true}), 60);
-  }, error => {
-    button.disabled = false;
-    button.textContent = error.code === 1 ? '위치 권한을 허용해 주세요' : '현재 위치를 확인하지 못했습니다';
-  }, {enableHighAccuracy: false, timeout: 10000, maximumAge: 300000});
+  const button=$('#gpsLocationBtn'); if(!button)return;
+  if(!navigator.geolocation){button.innerHTML='⌖ <span>이 기기는 위치 기능을 지원하지 않습니다</span>';return;}
+  button.disabled=true;button.innerHTML='⌖ <span>현재 위치 확인 중…</span>';
+  navigator.geolocation.getCurrentPosition(position=>{button.disabled=false;button.innerHTML='⌖ <span>현재 위치 확인 완료</span>';chooseAddressBase('현재 위치',{area:'여수시 전체',coords:{lat:position.coords.latitude,lng:position.coords.longitude},sortByDistance:true,type:'current'});},error=>{button.disabled=false;button.innerHTML=`⌖ <span>${error.code===1?'위치 권한을 허용해 주세요':'현재 위치를 확인하지 못했습니다'}</span>`;},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
 }
 function myPage() {
   openModal(`<h2 id="modalTitle">마이페이지</h2><p>로그인 없이 이 기기에 저장된 정보입니다.</p><div class="my-list"><button type="button" data-open-favorites>♡ 찜한 가게 <b>${favoriteIds().length}곳</b></button><button type="button" data-open-recent>◷ 최근 방문 가게 <b>${readLocalJson(RECENT_KEY,[]).length}곳</b></button><button type="button">📍 저장 지역 — ${escapeHtml(state.location)}</button><button type="button" data-open-guide>❓ 주문방법 안내</button><button type="button">✉ 광고 문의</button></div>`);
@@ -608,7 +703,8 @@ function feeGuideMarkup(store, selectedRoute, {fromBrowser = false} = {}) {
 }
 function openCommunityChoice(store, key, options = {}) {
   const selectedRoute = routeFor(store,key); if (!selectedRoute) return;
-  rememberSelectedExternal(store,key); openModal(feeGuideMarkup(store,selectedRoute,options));
+  const selected = rememberSelectedExternal(store,key);
+  openModal(feeGuideMarkup(store,{...selectedRoute,url:selected?.url||selectedRoute.url},options));
 }
 function openStore(store) {
   addRecentStore(store);
@@ -647,7 +743,8 @@ async function initialize() {
     if (ai >= 0 || bi >= 0) return (ai < 0 ? 999 : ai) - (bi < 0 ? 999 : bi);
     return a.localeCompare(b, 'ko');
   });
-  $('#locationText').textContent = state.location;
+  hydrateSelectedOrderApp();
+  $('#locationText').textContent = shortAddress(state.addressLabel || state.location);
   renderCategories(); renderStores();
 }
 function resetFilters() {
@@ -677,13 +774,21 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', event => { if (!pop.hidden && !event.target.closest('#moreAppsPopover') && !event.target.closest('#moreAppsBtn')) pop.hidden = true; });
 
   $$('[data-open]').forEach(button => button.addEventListener('click', () => ({mypage: myPage, guide, brands: brandsModal}[button.dataset.open] || guide)()));
-  $('.modal-close').addEventListener('click', () => closeModal());
-  $('#overlay').addEventListener('click', () => closeModal());
-  $('#modal').addEventListener('click', event => { if (event.target === $('#modal')) closeModal(); });
-  document.addEventListener('keydown', event => { if (event.key === 'Escape' && !$('#modal').hidden) closeModal(); });
+  $('.modal-close').addEventListener('click', () => hardClose());
+  $('#overlay').addEventListener('click', () => hardClose());
+  $('#modal').addEventListener('click', event => { if (event.target === $('#modal')) hardClose(); });
+  $('#photoViewer').addEventListener('click', event => { if (event.target === $('#photoViewer') || event.target.closest('[data-photo-viewer-close]')) closePhotoViewer(); });
+  document.addEventListener('keydown', event => { if (event.key !== 'Escape') return; if (!$('#photoViewer').hidden) closePhotoViewer(); else if (!$('#modal').hidden) hardClose(); });
 
   document.addEventListener('click', event => {
     if (event.target.id === 'clearSearch') { resetFilters(); return; }
+    if (event.target.closest('[data-photo-viewer]')) { event.preventDefault(); event.stopPropagation(); openPhotoViewer(event.target.closest('[data-photo-viewer]')); return; }
+    if (event.target.id === 'addressSearchBtn') { renderAddressResults($('#addressSearchInput')?.value || ''); return; }
+    if (event.target.id === 'clearAddressSearch') { $('#addressSearchInput').value=''; event.target.hidden=true; renderAddressResults(''); return; }
+    const addressBase=event.target.closest('[data-address-base]'); if(addressBase){chooseAddressBase(addressBase.dataset.addressBase);return;}
+    const recentAddress=event.target.closest('[data-address-recent]'); if(recentAddress){const item=getAddressBook()[Number(recentAddress.dataset.addressRecent)];if(item){addressDraft={...item};$('#addressSearchInput').value=item.address||item.label||'';$('#addressDetailInput').value=item.detail||'';renderAddressResults(item.address||'');renderAddressDraft();}return;}
+    if(event.target.id==='gpsLocationBtn'){useCurrentLocation();return;}
+    if(event.target.id==='addressConfirmBtn'){commitAddressSelection();return;}
     const globalExternal = event.target.closest('[data-global-external]');
     if (globalExternal) { pop.hidden = true; globalExternalGuide(globalExternal.dataset.globalExternal); return; }
     const appCategory = event.target.closest('[data-app-category]');
@@ -695,8 +800,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (brandButton) { state.brandId = brandButton.dataset.brandId; state.category = '전체'; state.query = ''; $('#mainSearch').value = ''; closeModal(); setTimeout(() => renderStores({scroll: true, resetCount: true}), 60); return; }
     const categoryButton = event.target.closest('[data-modal-cat]');
     if (categoryButton) { state.category = categoryButton.dataset.modalCat; state.brandId = ''; state.query = ''; $('#mainSearch').value = ''; closeModal(); setTimeout(() => renderStores({scroll: true, resetCount: true}), 60); return; }
-    const locationButton = event.target.closest('[data-location]');
-    if (locationButton) { selectLocation(locationButton.dataset.location); return; }
     const toggle = event.target.closest('.store-other-toggle');
     if (toggle) { event.preventDefault(); event.stopPropagation(); const menu = toggle.closest('.store-other-wrap').querySelector('.store-other-popover'); $$('.store-other-popover').forEach(item => { if (item !== menu) item.hidden = true; }); menu.hidden = !menu.hidden; return; }
     const otherClose = event.target.closest('.store-other-close');
@@ -709,6 +812,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if(event.target.closest('[data-open-favorites]')){favoritesModal();return;}
     if(event.target.closest('[data-open-recent]')){recentModal();return;}
     if(event.target.closest('[data-open-guide]')){guide();return;}
+    if(event.target.closest('[data-open-address]')){areaModal();return;}
     const copyButton=event.target.closest('[data-feedback-copy]');if(copyButton){copyQueuedReport(copyButton.dataset.feedbackCopy);return;}
     if (!event.target.closest('.store-other-wrap')) $$('.store-other-popover').forEach(item => item.hidden = true);
   });
@@ -724,19 +828,22 @@ document.addEventListener('DOMContentLoaded', () => {
     if (tab === 'mypage') myPage();
     if (tab === 'recent') recentModal();
     if (tab === 'favorite') favoritesModal();
+    if (tab === 'nearby') areaModal();
   });
 
+  document.addEventListener('input', event => { if(event.target.id==='addressSearchInput'){ $('#clearAddressSearch').hidden=!event.target.value; } if(event.target.id==='addressDetailInput') renderAddressDraft(); });
+  document.addEventListener('keydown', event => { if(event.key==='Enter'&&event.target.id==='addressSearchInput'){event.preventDefault();renderAddressResults(event.target.value);} if(event.key==='Enter'&&event.target.id==='addressDetailInput'){event.preventDefault();commitAddressSelection();} });
   document.addEventListener('submit', event => { if(event.target.id!=='storeFeedbackForm')return; event.preventDefault(); submitFeedback(event.target); });
 
   const today = new Date().toLocaleDateString('sv-SE', {timeZone: 'Asia/Seoul'}), startupAd = $('#startupAd');
   let startupHistoryOpen = false;
-  const openStartupAd = () => { startupAd.hidden = false; document.body.style.overflow = 'hidden'; if (!startupHistoryOpen) { history.pushState({startupAd: true}, ''); startupHistoryOpen = true; } };
-  const closeStartupAd = ({fromPop = false} = {}) => { if (startupAd.hidden) return; startupAd.hidden = true; document.body.style.overflow = ''; const goBack = !fromPop && startupHistoryOpen && history.state?.startupAd; startupHistoryOpen = false; if (goBack) history.back(); };
+  const openStartupAd = () => { startupAd.hidden = false; lockPage(); if (!startupHistoryOpen) { history.pushState({daedongStartup:true}, ''); startupHistoryOpen = true; } };
+  const closeStartupAd = ({fromPop = false} = {}) => { if (startupAd.hidden) return; startupAd.hidden = true; const goBack = !fromPop && startupHistoryOpen && history.state?.daedongStartup; startupHistoryOpen = false; if (!layerStillOpen()) unlockPage(); if (goBack) { ignoreNextPop=true; history.back(); } };
   if (localStorage.getItem('hideStartup') !== today) setTimeout(openStartupAd, 600);
   $('.startup-close').addEventListener('click', event => { event.preventDefault(); event.stopPropagation(); closeStartupAd(); });
   startupAd.addEventListener('click', event => { if (event.target === startupAd) closeStartupAd(); });
   $('.startup-card').addEventListener('click', event => event.stopPropagation());
   $('#hideToday').addEventListener('click', event => { event.preventDefault(); event.stopPropagation(); localStorage.setItem('hideStartup', today); closeStartupAd(); });
   $('#startupDetails').addEventListener('click', event => { event.preventDefault(); event.stopPropagation(); closeStartupAd(); setTimeout(() => openModal(`<h2 id="modalTitle">대동여수음식지도 모집·광고 안내</h2><div class="guide-list">${PROMOS.map(promo => `<button type="button">${promo.title}<br><small>${promo.desc}</small></button>`).join('')}</div>`), 60); });
-  window.addEventListener('popstate', () => { if (!startupAd.hidden) { closeStartupAd({fromPop: true}); return; } if (!$('#modal').hidden) closeModal({fromPop: true}); });
+  window.addEventListener('popstate', () => { if(ignoreNextPop){ignoreNextPop=false;return;} if (!$('#photoViewer').hidden) { closePhotoViewer({fromPop:true}); return; } if (!startupAd.hidden) { closeStartupAd({fromPop:true}); return; } if (!$('#modal').hidden) hardClose({fromPop:true}); });
 });

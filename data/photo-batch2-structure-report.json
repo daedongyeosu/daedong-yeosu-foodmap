@@ -1,0 +1,11 @@
+{
+  "version": 4,
+  "source": "photo_batch2_ready.zip",
+  "items": 13,
+  "sprites": 4,
+  "sourceTileCount": 374,
+  "manifestStores": 123,
+  "manifestPhotos": 374,
+  "installer": "apply_photo_batch2.py",
+  "note": "원본 구조와 파일명을 바꾸지 않고 별도 검수 구조로 안전 적용"
+}

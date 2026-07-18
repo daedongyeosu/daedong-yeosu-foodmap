@@ -1,0 +1,2669 @@
+{
+  "startedAt": "2026-07-16T22:43:30.565Z",
+  "mode": "apply",
+  "rules": {
+    "autoMerge": "끝의 (1), (2), (3), 복사본, 사본, copy 또는 완전히 같은 가게명",
+    "safeGuard": "복사본 표시 없이 구두점만 다른 후보는 자동 통합하지 않음",
+    "primarySelection": "주문경로·전화·지도·사진·분류 정보 완성도가 높은 항목 우선, 동점이면 원본 이름 우선",
+    "routeConflict": "대표 항목의 링크를 유지하고 충돌은 보고서에 기록"
+  },
+  "totalBefore": 624,
+  "duplicateGroupCount": 113,
+  "removedCount": 151,
+  "totalAfter": 473,
+  "groups": [
+    {
+      "key": "1988응답하라추억의옛날도시락고소동점",
+      "canonicalName": "1988응답하라추억의옛날도시락 고소동점",
+      "primary": {
+        "id": "a75505094208bb61",
+        "originalName": "1988응답하라추억의옛날도시락 고소동점",
+        "score": 103,
+        "notionPageId": "a00da158-dd2a-83fb-8dd2-813e80e9c042"
+      },
+      "merged": [
+        {
+          "id": "9e06aee2bfa7d347",
+          "name": "1988응답하라추억의옛날도시락 고소동점 (1)",
+          "score": 95,
+          "notionPageId": "0feda158-dd2a-8358-a2d8-81a886855e12"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "30년전통할매손곰탕문수점",
+      "canonicalName": "30년전통 할매손곰탕 문수점",
+      "primary": {
+        "id": "275f52997bdd2755",
+        "originalName": "30년전통 할매손곰탕 문수점",
+        "score": 96,
+        "notionPageId": "109da158-dd2a-82d4-aafa-01c7b878a1e4"
+      },
+      "merged": [
+        {
+          "id": "18bb533162d83e01",
+          "name": "30년전통 할매손곰탕 문수점 (1)",
+          "score": 88,
+          "notionPageId": "69eda158-dd2a-8279-a234-81d47094d4fd"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "60일숙성명품김치찜김치찌개쌈밥교동점",
+      "canonicalName": "60일숙성 명품김치찜&김치찌개&쌈밥 교동점",
+      "primary": {
+        "id": "b1beeb518c437d02",
+        "originalName": "60일숙성 명품김치찜&김치찌개&쌈밥 교동점",
+        "score": 108,
+        "notionPageId": "335da158-dd2a-839b-a26b-81c57d8c2713"
+      },
+      "merged": [
+        {
+          "id": "92d3ac6297834e92",
+          "name": "60일숙성 명품김치찜&김치찌개&쌈밥 교동점(2)",
+          "score": 95,
+          "notionPageId": "ce2da158-dd2a-8349-b653-01c8f2f5d03b"
+        },
+        {
+          "id": "b4b640f7767d2174",
+          "name": "60일숙성 명품김치찜&김치찌개&쌈밥 교동점(1)",
+          "score": 95,
+          "notionPageId": "16dda158-dd2a-837b-9837-81f6dcb27aee"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "79대포여서점",
+      "canonicalName": "79대포 여서점",
+      "primary": {
+        "id": "a0f6eb8bcf768489",
+        "originalName": "79대포 여서점",
+        "score": 96,
+        "notionPageId": "fc5da158-dd2a-8234-85a6-01a5d29760ed"
+      },
+      "merged": [
+        {
+          "id": "c9594621963a81b5",
+          "name": "79대포 여서점(3)",
+          "score": 88,
+          "notionPageId": "b03da158-dd2a-821b-b44d-8176cdcb901c"
+        },
+        {
+          "id": "a602eba3c430c4a0",
+          "name": "79대포 여서점(2)",
+          "score": 88,
+          "notionPageId": "530da158-dd2a-82f4-ba5d-81e70dc97db2"
+        },
+        {
+          "id": "2fd56028321c15ba",
+          "name": "79대포 여서점(1)",
+          "score": 88,
+          "notionPageId": "cccda158-dd2a-83c7-bef7-01e986b83821"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "la통닭포차여서본점",
+      "canonicalName": "LA통닭&포차 여서본점",
+      "primary": {
+        "id": "c443f150b874d4d2",
+        "originalName": "LA통닭&포차 여서본점",
+        "score": 120,
+        "notionPageId": "40cda158-dd2a-8208-948a-01e5adea86ad"
+      },
+      "merged": [
+        {
+          "id": "5308f50be41c66bc",
+          "name": "LA통닭&포차 여서본점 (1)",
+          "score": 112,
+          "notionPageId": "5e2da158-dd2a-8274-95d3-0156df555a77"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "ribtable바베큐립전문점미평동",
+      "canonicalName": "RIB&TABLE 바베큐립 전문점(미평동)",
+      "primary": {
+        "id": "adf7b4ab161ec9d2",
+        "originalName": "RIB&TABLE 바베큐립 전문점(미평동)",
+        "score": 113,
+        "notionPageId": "12bda158-dd2a-8207-bfac-01d612e912f6"
+      },
+      "merged": [
+        {
+          "id": "c3927392f05124d4",
+          "name": "RIB&TABLE 바베큐립 전문점(미평동) (1)",
+          "score": 100,
+          "notionPageId": "0a5da158-dd2a-8246-8911-81acf8d17fd4"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "가마솥볶음밥여서점",
+      "canonicalName": "가마솥 볶음밥 여서점",
+      "primary": {
+        "id": "9cb90900e5057c72",
+        "originalName": "가마솥 볶음밥 여서점",
+        "score": 115,
+        "notionPageId": "227da158-dd2a-8272-83a9-8142320b24e4"
+      },
+      "merged": [
+        {
+          "id": "d46af0c9e2ec5711",
+          "name": "가마솥 볶음밥 여서점 (1)",
+          "score": 107,
+          "notionPageId": "f13da158-dd2a-83c7-ad97-819e299b4511"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "강남국밥돌산점",
+      "canonicalName": "강남국밥 돌산점",
+      "primary": {
+        "id": "539d762fe299233d",
+        "originalName": "강남국밥 돌산점",
+        "score": 84,
+        "notionPageId": "71cda158-dd2a-8247-a4d9-012ec1449b0e"
+      },
+      "merged": [
+        {
+          "id": "39dac887524cda46",
+          "name": "강남국밥 돌산점 (1)",
+          "score": 76,
+          "notionPageId": "a15da158-dd2a-82ff-887c-01a2da7388d1"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "고궁갈비탕갈비찜육개장문수점",
+      "canonicalName": "고궁 갈비탕&갈비찜&육개장 문수점",
+      "primary": {
+        "id": "91cc31c37aa68d62",
+        "originalName": "고궁 갈비탕&갈비찜&육개장 문수점",
+        "score": 103,
+        "notionPageId": "be6da158-dd2a-8377-a73a-8167bad76f6f"
+      },
+      "merged": [
+        {
+          "id": "8210dfdc9908ecfd",
+          "name": "고궁 갈비탕&갈비찜&육개장 문수점 (1)",
+          "score": 95,
+          "notionPageId": "250da158-dd2a-8244-ad23-016934a5e5f4"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "고기듬뿍국물두루치기문수점",
+      "canonicalName": "고기듬뿍 국물두루치기 문수점",
+      "primary": {
+        "id": "5caf409776519dd6",
+        "originalName": "고기듬뿍 국물두루치기 문수점",
+        "score": 115,
+        "notionPageId": "14cda158-dd2a-830d-84a1-018c520921c0"
+      },
+      "merged": [
+        {
+          "id": "076b37d44fa66a74",
+          "name": "고기듬뿍 국물두루치기 문수점(1)",
+          "score": 107,
+          "notionPageId": "a45da158-dd2a-8213-8a3d-019fee5d01af"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "골목낙곱새1977봉강점",
+      "canonicalName": "골목낙곱새 1977 봉강점",
+      "primary": {
+        "id": "2f939a1b44f5f7ec",
+        "originalName": "골목낙곱새 1977 봉강점",
+        "score": 115,
+        "notionPageId": "e6ada158-dd2a-831f-8f8d-812f292b306d"
+      },
+      "merged": [
+        {
+          "id": "ddd0178362d86b53",
+          "name": "골목낙곱새 1977 봉강점 (1)",
+          "score": 107,
+          "notionPageId": "5a9da158-dd2a-82fb-8a2a-816d392937d5"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "교동야식교동점",
+      "canonicalName": "교동야식 교동점",
+      "primary": {
+        "id": "59785990d2abe3e2",
+        "originalName": "교동야식 교동점",
+        "score": 96,
+        "notionPageId": "4b0da158-dd2a-8255-91f4-01fd8d0d6254"
+      },
+      "merged": [
+        {
+          "id": "2eb414dbc832157b",
+          "name": "교동야식 교동점(2)",
+          "score": 88,
+          "notionPageId": "28fda158-dd2a-8243-9eca-01335566e2ef"
+        },
+        {
+          "id": "2af2289e50e539ce",
+          "name": "교동야식 교동점(1)",
+          "score": 88,
+          "notionPageId": "0e5da158-dd2a-83ce-bc1c-811ef57331f6"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "굽네치킨피자무선점화장동",
+      "canonicalName": "굽네치킨&피자 무선점(화장동)",
+      "primary": {
+        "id": "c194972cb20f2229",
+        "originalName": "굽네치킨&피자 무선점(화장동)",
+        "score": 120,
+        "notionPageId": "684da158-dd2a-83b5-a861-017b7d010d0b"
+      },
+      "merged": [
+        {
+          "id": "5f6043643041686d",
+          "name": "굽네치킨&피자 무선점(화장동)(1)",
+          "score": 112,
+          "notionPageId": "267da158-dd2a-837c-a2c0-816438ac669d"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "굽네치킨피자여천점신기동",
+      "canonicalName": "굽네치킨&피자 여천점(신기동)",
+      "primary": {
+        "id": "33558e3cc2ad9dbd",
+        "originalName": "굽네치킨&피자 여천점(신기동)",
+        "score": 120,
+        "notionPageId": "7b8da158-dd2a-8255-9155-011e92bc0684"
+      },
+      "merged": [
+        {
+          "id": "1305137a9e5d4f92",
+          "name": "굽네치킨&피자 여천점(신기동)(1)",
+          "score": 112,
+          "notionPageId": "4ccda158-dd2a-838d-911e-016749039108"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "굽네치킨피자웅천점",
+      "canonicalName": "굽네치킨&피자 웅천점",
+      "primary": {
+        "id": "33c73743521674c6",
+        "originalName": "굽네치킨&피자 웅천점",
+        "score": 120,
+        "notionPageId": "9bada158-dd2a-82b3-82ea-01295521dc88"
+      },
+      "merged": [
+        {
+          "id": "5327bf3141540bff",
+          "name": "굽네치킨&피자 웅천점(1)",
+          "score": 112,
+          "notionPageId": "293da158-dd2a-8396-9f27-81ba87ebb252"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "굽네치킨피자죽림점",
+      "canonicalName": "굽네치킨&피자 죽림점",
+      "primary": {
+        "id": "72e0104c30277686",
+        "originalName": "굽네치킨&피자 죽림점",
+        "score": 120,
+        "notionPageId": "c77da158-dd2a-8325-9222-818a7cf6fb14"
+      },
+      "merged": [
+        {
+          "id": "64cd705f8a8ad3b7",
+          "name": "굽네치킨&피자 죽림점(1)",
+          "score": 112,
+          "notionPageId": "7e5da158-dd2a-838f-a802-01a21a5e0475"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "귀한김치찜국동봉산점",
+      "canonicalName": "귀한김치찜 국동봉산점",
+      "primary": {
+        "id": "aed649ea91b727b8",
+        "originalName": "귀한김치찜 국동봉산점",
+        "score": 64,
+        "notionPageId": ""
+      },
+      "merged": [
+        {
+          "id": "dd9b79599b4764b9",
+          "name": "귀한김치찜 국동봉산점 (2)",
+          "score": 59,
+          "notionPageId": "700da158-dd2a-82fe-9311-811ffaab7a35"
+        },
+        {
+          "id": "8d22aa94b4396bff",
+          "name": "귀한김치찜 국동봉산점 (1)",
+          "score": 59,
+          "notionPageId": "019da158-dd2a-8216-a5b3-01a6a7d39d89"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": [
+        {
+          "key": "direct",
+          "keptUrl": "https://app.notion.com/p/396da158dd2a80aa8180f286bed77551?pvs=21",
+          "otherUrl": "/p/396da158dd2a80aa8180f286bed77551",
+          "otherStore": "귀한김치찜 국동봉산점 (2)"
+        },
+        {
+          "key": "phone",
+          "keptUrl": "https://app.notion.com/p/396da158dd2a80d38373c1f1e7cfc541?pvs=21",
+          "otherUrl": "/p/396da158dd2a80d38373c1f1e7cfc541",
+          "otherStore": "귀한김치찜 국동봉산점 (2)"
+        },
+        {
+          "key": "direct",
+          "keptUrl": "https://app.notion.com/p/396da158dd2a80aa8180f286bed77551?pvs=21",
+          "otherUrl": "/p/396da158dd2a80aa8180f286bed77551",
+          "otherStore": "귀한김치찜 국동봉산점 (1)"
+        },
+        {
+          "key": "phone",
+          "keptUrl": "https://app.notion.com/p/396da158dd2a80d38373c1f1e7cfc541?pvs=21",
+          "otherUrl": "/p/396da158dd2a80d38373c1f1e7cfc541",
+          "otherStore": "귀한김치찜 국동봉산점 (1)"
+        }
+      ]
+    },
+    {
+      "key": "그루브여서점",
+      "canonicalName": "그루브 여서점",
+      "primary": {
+        "id": "c0bab6826b36d95f",
+        "originalName": "그루브 여서점",
+        "score": 120,
+        "notionPageId": "36ada158-dd2a-8210-adee-01778d4476db"
+      },
+      "merged": [
+        {
+          "id": "b0bbc9b79630cac3",
+          "name": "그루브 여서점(3)",
+          "score": 112,
+          "notionPageId": "3f0da158-dd2a-82cd-ad4b-815182f4e7b4"
+        },
+        {
+          "id": "ee3aa2f29b39f7c8",
+          "name": "그루브 여서점 (1)",
+          "score": 112,
+          "notionPageId": "2d7da158-dd2a-83e7-b7aa-81252b1da393"
+        },
+        {
+          "id": "05f6c85afa7bb069",
+          "name": "그루브 여서점(2)",
+          "score": 112,
+          "notionPageId": "68fda158-dd2a-8384-981f-0105a5b5b61f"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "금마차여서점",
+      "canonicalName": "금마차 여서점",
+      "primary": {
+        "id": "8f3251e2788d4931",
+        "originalName": "금마차 여서점",
+        "score": 125,
+        "notionPageId": "c4eda158-dd2a-832b-b279-8141e9efc304"
+      },
+      "merged": [
+        {
+          "id": "3a097d631cb713e5",
+          "name": "금마차 여서점(1)",
+          "score": 112,
+          "notionPageId": "3c6da158-dd2a-8342-a332-015004c32976"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "김밥나라관문점",
+      "canonicalName": "김밥나라 관문점",
+      "primary": {
+        "id": "cc5b3b36c8737601",
+        "originalName": "김밥나라 관문점",
+        "score": 96,
+        "notionPageId": "4a8da158-dd2a-83bd-8349-01d0b570a32e"
+      },
+      "merged": [
+        {
+          "id": "8a517126a4d4992a",
+          "name": "김밥나라 관문점 (1)",
+          "score": 88,
+          "notionPageId": "861da158-dd2a-8351-8019-01f978bc8946"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "김밥나라국동점",
+      "canonicalName": "김밥나라 국동점",
+      "primary": {
+        "id": "fb32c4e0939b5468",
+        "originalName": "김밥나라 국동점",
+        "score": 108,
+        "notionPageId": "0e9da158-dd2a-822b-b627-015677f1bae9"
+      },
+      "merged": [
+        {
+          "id": "7bdc5b6da821eb1d",
+          "name": "김밥나라 국동점 (1)",
+          "score": 100,
+          "notionPageId": "56bda158-dd2a-8393-b000-81c51ea767d6"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "김밥천국국동점",
+      "canonicalName": "김밥천국 국동점",
+      "primary": {
+        "id": "404f1649d53b97eb",
+        "originalName": "김밥천국 국동점",
+        "score": 120,
+        "notionPageId": "132da158-dd2a-827f-a736-81784234a1e2"
+      },
+      "merged": [
+        {
+          "id": "a2e061ccbf9e09b1",
+          "name": "김밥천국 국동점 (1)",
+          "score": 112,
+          "notionPageId": "bd0da158-dd2a-8316-b278-0105a430a56d"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "김사장국밥문수점",
+      "canonicalName": "김사장 국밥 문수점",
+      "primary": {
+        "id": "665953a0453afc52",
+        "originalName": "김사장 국밥 문수점",
+        "score": 91,
+        "notionPageId": "ca2da158-dd2a-8398-a345-81f28ed160e7"
+      },
+      "merged": [
+        {
+          "id": "785c69700ab3c852",
+          "name": "김사장 국밥 문수점(2)",
+          "score": 83,
+          "notionPageId": "8abda158-dd2a-83c3-aadb-01e5ee0ee43a"
+        },
+        {
+          "id": "f5b9b69b07358a21",
+          "name": "김사장 국밥 문수점(1)",
+          "score": 83,
+          "notionPageId": "cfada158-dd2a-82fe-948d-015a984b7f03"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "김사장대박난국수집문수점",
+      "canonicalName": "김사장 대박난 국수집 문수점",
+      "primary": {
+        "id": "7ed65c8f086f11f2",
+        "originalName": "김사장 대박난 국수집 문수점",
+        "score": 67,
+        "notionPageId": "6cfda158-dd2a-82e5-a9c5-81365cf2c43d"
+      },
+      "merged": [
+        {
+          "id": "c9bd99f6063b7a7e",
+          "name": "김사장 대박난 국수집 문수점(2)",
+          "score": 59,
+          "notionPageId": "ecfda158-dd2a-83d3-a86b-01e0134694ac"
+        },
+        {
+          "id": "bc548ae614d93159",
+          "name": "김사장 대박난 국수집 문수점(3)",
+          "score": 59,
+          "notionPageId": "a6cda158-dd2a-8334-a2af-810b48e831a7"
+        },
+        {
+          "id": "bd43718485bc5e3f",
+          "name": "김사장 대박난 국수집 문수점(4)",
+          "score": 59,
+          "notionPageId": "359da158-dd2a-826d-9738-815e5e1e3dea"
+        },
+        {
+          "id": "768207e8ee367d01",
+          "name": "김사장 대박난 국수집 문수점(1)",
+          "score": 59,
+          "notionPageId": "263da158-dd2a-8300-999a-819b60896565"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": [
+        {
+          "key": "direct",
+          "keptUrl": "/p/6cfda158dd2a82e5a9c581365cf2c43d",
+          "otherUrl": "/p/ecfda158dd2a83d3a86b01e0134694ac",
+          "otherStore": "김사장 대박난 국수집 문수점(2)"
+        },
+        {
+          "key": "direct",
+          "keptUrl": "/p/6cfda158dd2a82e5a9c581365cf2c43d",
+          "otherUrl": "/p/a6cda158dd2a8334a2af810b48e831a7",
+          "otherStore": "김사장 대박난 국수집 문수점(3)"
+        },
+        {
+          "key": "direct",
+          "keptUrl": "/p/6cfda158dd2a82e5a9c581365cf2c43d",
+          "otherUrl": "/p/359da158dd2a826d9738815e5e1e3dea",
+          "otherStore": "김사장 대박난 국수집 문수점(4)"
+        },
+        {
+          "key": "direct",
+          "keptUrl": "/p/6cfda158dd2a82e5a9c581365cf2c43d",
+          "otherUrl": "/p/263da158dd2a8300999a819b60896565",
+          "otherStore": "김사장 대박난 국수집 문수점(1)"
+        }
+      ]
+    },
+    {
+      "key": "김치찌개참잘하는집여서점",
+      "canonicalName": "김치찌개참잘하는집 여서점",
+      "primary": {
+        "id": "67f5b4a369c1c6d9",
+        "originalName": "김치찌개참잘하는집 여서점",
+        "score": 120,
+        "notionPageId": "dd6da158-dd2a-82c9-9fa3-816b4ccf9bc9"
+      },
+      "merged": [
+        {
+          "id": "ca36271b79973f85",
+          "name": "김치찌개참잘하는집 여서점(1)",
+          "score": 107,
+          "notionPageId": "b44da158-dd2a-835d-8288-81a0d180f7fd"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "김치찜팝니다서교점",
+      "canonicalName": "김치찜팝니다 서교점",
+      "primary": {
+        "id": "4fd2d6fdd67f0db8",
+        "originalName": "김치찜팝니다 서교점",
+        "score": 108,
+        "notionPageId": "dd5da158-dd2a-82f4-8349-81a1d4a28244"
+      },
+      "merged": [
+        {
+          "id": "9c9eb7a4f29d0633",
+          "name": "김치찜팝니다 서교점 (1)",
+          "score": 95,
+          "notionPageId": "b90da158-dd2a-83c7-ac14-01f1274b9098"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "꽃게장갈치조림전문점늘푸른식당봉산점",
+      "canonicalName": "꽃게장&갈치조림 전문점 늘푸른식당 봉산점",
+      "primary": {
+        "id": "4e44728a4ea3bcef",
+        "originalName": "꽃게장&갈치조림 전문점 늘푸른식당 봉산점",
+        "score": 108,
+        "notionPageId": "7e0da158-dd2a-824c-a835-81953fab0ffa"
+      },
+      "merged": [
+        {
+          "id": "cf7e9fa0b0082975",
+          "name": "꽃게장&갈치조림 전문점 늘푸른식당 봉산점 (1)",
+          "score": 100,
+          "notionPageId": "21cda158-dd2a-83c6-85e2-815bd7f97bf4"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "나능이능이버섯백숙봉산점",
+      "canonicalName": "나능이 능이버섯백숙 봉산점",
+      "primary": {
+        "id": "da59f19c1590082f",
+        "originalName": "나능이 능이버섯백숙 봉산점",
+        "score": 108,
+        "notionPageId": "9e6da158-dd2a-8261-a70e-015b254c7a08"
+      },
+      "merged": [
+        {
+          "id": "efbcb9795f559845",
+          "name": "나능이 능이버섯백숙 봉산점(1)",
+          "score": 100,
+          "notionPageId": "83eda158-dd2a-8362-b545-815cfe08f926"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "낙지천국문수점",
+      "canonicalName": "낙지천국 문수점",
+      "primary": {
+        "id": "4e877826c5a4b649",
+        "originalName": "낙지천국 문수점",
+        "score": 108,
+        "notionPageId": "407da158-dd2a-82a8-8b5f-810baa3a5b7b"
+      },
+      "merged": [
+        {
+          "id": "168e831d9754aeee",
+          "name": "낙지천국 문수점(3)",
+          "score": 100,
+          "notionPageId": "572da158-dd2a-82a2-8cdb-010896ac0614"
+        },
+        {
+          "id": "bd90a1033cc9f5ff",
+          "name": "낙지천국 문수점(2)",
+          "score": 100,
+          "notionPageId": "1b4da158-dd2a-83c7-8e44-01e8450f20ee"
+        },
+        {
+          "id": "f768d174b4cc51fc",
+          "name": "낙지천국 문수점(1)",
+          "score": 100,
+          "notionPageId": "b8dda158-dd2a-8306-8dbc-0165e926fd5a"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "내조국국밥봉산점",
+      "canonicalName": "내조국 국밥 봉산점",
+      "primary": {
+        "id": "f5f72c3d9bbf39b6",
+        "originalName": "내조국 국밥 봉산점",
+        "score": 120,
+        "notionPageId": "dd8da158-dd2a-826d-8225-81e5d011dc38"
+      },
+      "merged": [
+        {
+          "id": "8f47635377e7b6d0",
+          "name": "내조국 국밥 봉산점(1)",
+          "score": 112,
+          "notionPageId": "5e2da158-dd2a-8258-aaf4-81c47abc5fbf"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "닭곰탕백숙보약한첩문수점",
+      "canonicalName": "닭곰탕 백숙 보약한첩 문수점",
+      "primary": {
+        "id": "ac2e0e2021267315",
+        "originalName": "닭곰탕 백숙 보약한첩 문수점",
+        "score": 91,
+        "notionPageId": "971da158-dd2a-831a-8a07-0143d7cfd368"
+      },
+      "merged": [
+        {
+          "id": "ae8fed9068cf3696",
+          "name": "닭곰탕 백숙 보약한첩 문수점 (1)",
+          "score": 83,
+          "notionPageId": "c29da158-dd2a-836a-a67c-01f07a7100b4"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "더진한소한마리탕국밥엑스포점",
+      "canonicalName": "더 진한 소한마리탕&국밥 엑스포점",
+      "primary": {
+        "id": "187287f22433bfcf",
+        "originalName": "더 진한 소한마리탕&국밥 엑스포점",
+        "score": 91,
+        "notionPageId": "c3eda158-dd2a-8292-9bf4-81aaa16f0b54"
+      },
+      "merged": [
+        {
+          "id": "976113f132e095eb",
+          "name": "더 진한 소한마리탕&국밥 엑스포점 (1)",
+          "score": 83,
+          "notionPageId": "b3bda158-dd2a-8212-8a57-012e943b9ae5"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "더바른정국밥미평점",
+      "canonicalName": "더바른 정국밥 미평점",
+      "primary": {
+        "id": "248fb06bce3aa6e4",
+        "originalName": "더바른 정국밥 미평점",
+        "score": 115,
+        "notionPageId": "a7ada158-dd2a-83d6-8fc6-0103f8e16e0b"
+      },
+      "merged": [
+        {
+          "id": "ed47b2104731fe5c",
+          "name": "더바른 정국밥 미평점 (1)",
+          "score": 107,
+          "notionPageId": "d6bda158-dd2a-82e7-91e8-81d7a51b6b71"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "덮밥전문점고기그릇공화동점",
+      "canonicalName": "덮밥전문점 고기그릇 공화동점",
+      "primary": {
+        "id": "d1c9de66c95c1d46",
+        "originalName": "덮밥전문점 고기그릇 공화동점",
+        "score": 115,
+        "notionPageId": "d1bda158-dd2a-82a7-b09f-8125156c9d38"
+      },
+      "merged": [
+        {
+          "id": "841da55e467b8ac1",
+          "name": "덮밥전문점 고기그릇 공화동점 (1)",
+          "score": 107,
+          "notionPageId": "c2ada158-dd2a-82b7-b3ba-0110cf2c8641"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "돈도니밥도둑짜글이국동점",
+      "canonicalName": "돈도니밥도둑짜글이 국동점",
+      "primary": {
+        "id": "950ba1c64e791621",
+        "originalName": "돈도니밥도둑짜글이 국동점",
+        "score": 79,
+        "notionPageId": "75bda158-dd2a-8248-91ad-016c6a1e6a7a"
+      },
+      "merged": [
+        {
+          "id": "3f4d9235c3609976",
+          "name": "돈도니밥도둑짜글이 국동점 (1)",
+          "score": 71,
+          "notionPageId": "e3eda158-dd2a-83f5-8328-0100c276e073"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "돈쌈대패문수점",
+      "canonicalName": "돈쌈대패 문수점",
+      "primary": {
+        "id": "20c4d1a484e47732",
+        "originalName": "돈쌈대패 문수점",
+        "score": 125,
+        "notionPageId": "312da158-dd2a-83cb-beec-0177457d3983"
+      },
+      "merged": [
+        {
+          "id": "434dcb7194a860c1",
+          "name": "돈쌈대패 문수점 (1)",
+          "score": 112,
+          "notionPageId": "f91da158-dd2a-820f-b97b-814197de1a09"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "또바기여서점",
+      "canonicalName": "또바기 여서점",
+      "primary": {
+        "id": "47b56ab22cab7ce0",
+        "originalName": "또바기 여서점",
+        "score": 108,
+        "notionPageId": "06ada158-dd2a-832f-9b88-013142e06e6d"
+      },
+      "merged": [
+        {
+          "id": "4fb036cbdea0c6e1",
+          "name": "또바기 여서점(2)",
+          "score": 100,
+          "notionPageId": "348da158-dd2a-83f0-8eac-01438b8521d3"
+        },
+        {
+          "id": "c1af7985ea028a0f",
+          "name": "또바기 여서점(1)",
+          "score": 100,
+          "notionPageId": "f4fda158-dd2a-8330-b2bd-01634f948289"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "만석군봉산점",
+      "canonicalName": "만석군 봉산점",
+      "primary": {
+        "id": "c99ad2ba715a5abb",
+        "originalName": "만석군 봉산점",
+        "score": 125,
+        "notionPageId": "4ceda158-dd2a-82a5-b0da-816fcef69796"
+      },
+      "merged": [
+        {
+          "id": "a4760c50a9ee9f33",
+          "name": "만석군 봉산점 (1)",
+          "score": 112,
+          "notionPageId": "8d5da158-dd2a-8319-bd4b-81aead9b5314"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "맛있는전시회국동점",
+      "canonicalName": "맛있는 전시회 국동점",
+      "primary": {
+        "id": "1fe48c8f1857b4d2",
+        "originalName": "맛있는 전시회 국동점",
+        "score": 120,
+        "notionPageId": "360da158-dd2a-8338-92e2-018f36965d6d"
+      },
+      "merged": [
+        {
+          "id": "bfe6c52b7bcf5cd0",
+          "name": "맛있는 전시회 국동점(2)",
+          "score": 107,
+          "notionPageId": "ec3da158-dd2a-82ff-b1bb-01bd670c39c4"
+        },
+        {
+          "id": "535420f4390f6430",
+          "name": "맛있는 전시회 국동점(1)",
+          "score": 107,
+          "notionPageId": "e45da158-dd2a-83f3-a25c-01d7a343d4bf"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "매운맛땡길때밥장인엑스포점",
+      "canonicalName": "매운맛 땡길때 밥장인 엑스포점",
+      "primary": {
+        "id": "5bc1cef8362365a5",
+        "originalName": "매운맛 땡길때 밥장인 엑스포점",
+        "score": 120,
+        "notionPageId": "ef3da158-dd2a-8397-a0c4-8175bdacf134"
+      },
+      "merged": [
+        {
+          "id": "b08dfab026fb56e8",
+          "name": "매운맛 땡길때 밥장인 엑스포점 (1)",
+          "score": 112,
+          "notionPageId": "487da158-dd2a-8299-bbf5-81abfe81a76a"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "명품1인도시락시원냉면밀면국동",
+      "canonicalName": "명품1인도시락&시원냉면밀면(국동)",
+      "primary": {
+        "id": "e1089d6ba40ec342",
+        "originalName": "명품1인도시락&시원냉면밀면(국동)",
+        "score": 91,
+        "notionPageId": "ca4da158-dd2a-83dc-b64e-81e86d7e5f1c"
+      },
+      "merged": [
+        {
+          "id": "5c6756dceb5ce51d",
+          "name": "명품1인도시락&시원냉면밀면(국동) (1)",
+          "score": 83,
+          "notionPageId": "5a1da158-dd2a-8331-80e7-01e36d4c5087"
+        },
+        {
+          "id": "90d734ab7fd8ff55",
+          "name": "명품1인도시락&시원냉면밀면(국동)(2)",
+          "score": 83,
+          "notionPageId": "fabda158-dd2a-8266-9c9f-813dac259507"
+        },
+        {
+          "id": "3fd1f5df260a9524",
+          "name": "명품1인도시락&시원냉면밀면(국동)(3)",
+          "score": 83,
+          "notionPageId": "e51da158-dd2a-836d-bb9b-01475d4cfaff"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "몬스터탕수육여수학동점",
+      "canonicalName": "몬스터탕수육 여수학동점",
+      "primary": {
+        "id": "576a1f68d57eaf29",
+        "originalName": "몬스터탕수육 여수학동점",
+        "score": 103,
+        "notionPageId": "fb9da158-dd2a-8308-aecd-015e36b8eb47"
+      },
+      "merged": [
+        {
+          "id": "6bc1c18d7ae9e6c4",
+          "name": "몬스터탕수육 여수학동점(1)",
+          "score": 95,
+          "notionPageId": "704da158-dd2a-82ca-b956-815a27dbf12e"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "미친짜글이서교점",
+      "canonicalName": "미친 짜글이 서교점",
+      "primary": {
+        "id": "876cb9bc8fa15d8e",
+        "originalName": "미친 짜글이 서교점",
+        "score": 103,
+        "notionPageId": "6eeda158-dd2a-82fc-8744-0109f4a6e6b5"
+      },
+      "merged": [
+        {
+          "id": "1e2aee7a91f038a2",
+          "name": "미친 짜글이 서교점 (1)",
+          "score": 95,
+          "notionPageId": "ac8da158-dd2a-8389-bca1-8188c318a4f0"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "바다양푼이동태탕찜문수점",
+      "canonicalName": "바다양푼이동태탕/찜 문수점",
+      "primary": {
+        "id": "4674f8f434b1796a",
+        "originalName": "바다양푼이동태탕/찜 문수점",
+        "score": 96,
+        "notionPageId": "0c4da158-dd2a-83ff-b006-01f05b5221fb"
+      },
+      "merged": [
+        {
+          "id": "361789fdd3de7c15",
+          "name": "바다양푼이동태탕/찜 문수점(1)",
+          "score": 88,
+          "notionPageId": "edfda158-dd2a-83c2-84f3-013928af8cfb"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "바르다김선생여서점",
+      "canonicalName": "바르다김선생 여서점",
+      "primary": {
+        "id": "3a09685a7db0f853",
+        "originalName": "바르다김선생 여서점",
+        "score": 108,
+        "notionPageId": "481da158-dd2a-82f9-a859-813e38baa674"
+      },
+      "merged": [
+        {
+          "id": "1cd2c231eed7b8dd",
+          "name": "바르다김선생 여서점 (1)",
+          "score": 100,
+          "notionPageId": "d6fda158-dd2a-825d-a97e-016d43eca59d"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "바삭한휴게소여서점",
+      "canonicalName": "바삭한 휴게소 여서점",
+      "primary": {
+        "id": "51ed482a660b8247",
+        "originalName": "바삭한 휴게소 여서점",
+        "score": 103,
+        "notionPageId": "bf4da158-dd2a-8343-8c07-81cb57cb1b58"
+      },
+      "merged": [
+        {
+          "id": "ff8c4608b033c7a0",
+          "name": "바삭한 휴게소 여서점 (1)",
+          "score": 95,
+          "notionPageId": "dbfda158-dd2a-82fc-aafa-01769556b521"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "밥앤동볶음밥우동충무점",
+      "canonicalName": "밥앤동 볶음밥&우동 충무점",
+      "primary": {
+        "id": "cf169d6bbf8830f8",
+        "originalName": "밥앤동 볶음밥&우동 충무점",
+        "score": 115,
+        "notionPageId": "bdbda158-dd2a-83c0-a452-0132d11f11d3"
+      },
+      "merged": [
+        {
+          "id": "055b49c732fa3364",
+          "name": "밥앤동 볶음밥&우동 충무점(1)",
+          "score": 107,
+          "notionPageId": "7deda158-dd2a-831a-a998-01266fa7c651"
+        },
+        {
+          "id": "63ab62ed40f10f0c",
+          "name": "밥앤동 볶음밥&우동 충무점(2)",
+          "score": 107,
+          "notionPageId": "0c3da158-dd2a-8321-8ea3-011dc8575e1b"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "배불이순대국돼지국밥교동점",
+      "canonicalName": "배불이 순대국&돼지국밥 교동점",
+      "primary": {
+        "id": "91806c266ead3108",
+        "originalName": "배불이 순대국&돼지국밥 교동점",
+        "score": 91,
+        "notionPageId": "af9da158-dd2a-821b-a709-816d5f17f2d6"
+      },
+      "merged": [
+        {
+          "id": "d3a49cbf5625dee6",
+          "name": "배불이 순대국&돼지국밥 교동점(2)",
+          "score": 83,
+          "notionPageId": "c7fda158-dd2a-82c7-a41d-013963bf59b5"
+        },
+        {
+          "id": "068669043560a142",
+          "name": "배불이 순대국&돼지국밥 교동점(1)",
+          "score": 83,
+          "notionPageId": "a7ada158-dd2a-83cf-a42d-01ede874ee22"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "봉명가닭도리탕국동점",
+      "canonicalName": "봉명가닭도리탕 국동점",
+      "primary": {
+        "id": "30fff2720e2ce0c9",
+        "originalName": "봉명가닭도리탕 국동점",
+        "score": 115,
+        "notionPageId": "165da158-dd2a-82d9-94ba-814cb4a5cf47"
+      },
+      "merged": [
+        {
+          "id": "cd19953277ec968b",
+          "name": "봉명가닭도리탕 국동점 (1)",
+          "score": 107,
+          "notionPageId": "acdda158-dd2a-83fd-bed8-01b09e589361"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "불의제육여서점",
+      "canonicalName": "불의제육 여서점",
+      "primary": {
+        "id": "de00a38f4c4fe9d4",
+        "originalName": "불의제육 여서점",
+        "score": 91,
+        "notionPageId": "ffada158-dd2a-82de-b526-01c2d3dc2f72"
+      },
+      "merged": [
+        {
+          "id": "9ab94a0d6739f22c",
+          "name": "불의제육 여서점(1)",
+          "score": 83,
+          "notionPageId": "887da158-dd2a-8378-a5ca-8163e6fd54d1"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "붕붕먹거리교동점",
+      "canonicalName": "붕붕먹거리 교동점",
+      "primary": {
+        "id": "75cd8af6d0da1b98",
+        "originalName": "붕붕먹거리 교동점",
+        "score": 79,
+        "notionPageId": "187da158-dd2a-83f5-96b0-813580ca7d90"
+      },
+      "merged": [
+        {
+          "id": "eac0c7e6a3e12d4c",
+          "name": "붕붕먹거리 교동점(2)",
+          "score": 71,
+          "notionPageId": "44cda158-dd2a-8374-b648-01fef2ebcc51"
+        },
+        {
+          "id": "322255f48542d272",
+          "name": "붕붕먹거리 교동점(1)",
+          "score": 71,
+          "notionPageId": "7afda158-dd2a-8251-9c61-8179c6b08b43"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "서희국밥족발국동본점",
+      "canonicalName": "서희국밥&족발 국동본점",
+      "primary": {
+        "id": "67d28f42d21c125f",
+        "originalName": "서희국밥&족발 국동본점",
+        "score": 108,
+        "notionPageId": "05fda158-dd2a-8228-a372-01e24e35c0f1"
+      },
+      "merged": [
+        {
+          "id": "51c76ce482d70141",
+          "name": "서희국밥&족발 국동본점(2)",
+          "score": 100,
+          "notionPageId": "7f5da158-dd2a-8206-8d8c-01316302817e"
+        },
+        {
+          "id": "4968bd5210ae4435",
+          "name": "서희국밥&족발 국동본점(1)",
+          "score": 100,
+          "notionPageId": "9f6da158-dd2a-8208-9e46-81343a2d3e49"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "소녹종화동점",
+      "canonicalName": "소녹 종화동점",
+      "primary": {
+        "id": "8d23a7a6daaa7c6d",
+        "originalName": "소녹 종화동점",
+        "score": 108,
+        "notionPageId": "160da158-dd2a-8225-9aa8-01a0a6caa8f8"
+      },
+      "merged": [
+        {
+          "id": "8d31e8959c080895",
+          "name": "소녹 종화동점(2)",
+          "score": 100,
+          "notionPageId": "9dbda158-dd2a-83aa-86ee-016526fd22cd"
+        },
+        {
+          "id": "35a8395abddf78ce",
+          "name": "소녹 종화동점 (1)",
+          "score": 100,
+          "notionPageId": "41bda158-dd2a-82b7-ac1a-01e4eaa89083"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "소코아웅천점",
+      "canonicalName": "소코아 웅천점",
+      "primary": {
+        "id": "de5f7fd077422974",
+        "originalName": "소코아 웅천점",
+        "score": 108,
+        "notionPageId": "0a8da158-dd2a-8218-a46d-8192b81b0a0e"
+      },
+      "merged": [
+        {
+          "id": "eb0d951c5e39e52f",
+          "name": "소코아 웅천점 (1)",
+          "score": 100,
+          "notionPageId": "0beda158-dd2a-829e-8707-8188b71bd8fe"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "속초냉면직화제육교동점",
+      "canonicalName": "속초냉면&직화제육 교동점",
+      "primary": {
+        "id": "72f43b13ec8436f7",
+        "originalName": "속초냉면&직화제육 교동점",
+        "score": 103,
+        "notionPageId": "766da158-dd2a-8303-a298-816b79fea2b2"
+      },
+      "merged": [
+        {
+          "id": "cff6ba1b24f91ea7",
+          "name": "속초냉면&직화제육 교동점(1)",
+          "score": 95,
+          "notionPageId": "5f3da158-dd2a-835a-8dd9-01c3f99dc652"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "손수김밥여서점",
+      "canonicalName": "손수김밥 여서점",
+      "primary": {
+        "id": "3b0b23248891aa0e",
+        "originalName": "손수김밥 여서점",
+        "score": 120,
+        "notionPageId": "6d7da158-dd2a-8282-85bf-8197a4ce6129"
+      },
+      "merged": [
+        {
+          "id": "37e3c480fbc47541",
+          "name": "손수김밥 여서점(2)",
+          "score": 112,
+          "notionPageId": "06cda158-dd2a-826c-9d77-01b448e3f0bd"
+        },
+        {
+          "id": "8dedd39ea5f21bcf",
+          "name": "손수김밥 여서점(1)",
+          "score": 112,
+          "notionPageId": "eebda158-dd2a-823d-a4b0-81a82019e1da"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "손수끓인육개장문수점",
+      "canonicalName": "손수끓인육개장 문수점",
+      "primary": {
+        "id": "779bc5453215d9c5",
+        "originalName": "손수끓인육개장 문수점",
+        "score": 103,
+        "notionPageId": "480da158-dd2a-8325-9689-8160ca0f16fe"
+      },
+      "merged": [
+        {
+          "id": "7203656eda530ef1",
+          "name": "손수끓인육개장 문수점 (1)",
+          "score": 95,
+          "notionPageId": "94ada158-dd2a-834b-823e-01f29077b234"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "수시아김밥전문공화동점",
+      "canonicalName": "수시아 김밥전문 공화동점",
+      "primary": {
+        "id": "421fc97caaddfbc5",
+        "originalName": "수시아 김밥전문 공화동점",
+        "score": 108,
+        "notionPageId": "034da158-dd2a-82c3-a174-8165f2227444"
+      },
+      "merged": [
+        {
+          "id": "6d133581cb9df8fc",
+          "name": "수시아 김밥전문 공화동점 (1)",
+          "score": 100,
+          "notionPageId": "289da158-dd2a-8260-beac-01a6de9c2ec5"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "쉐프의수제요리야미야미여서점",
+      "canonicalName": "쉐프의수제요리 야미야미 여서점",
+      "primary": {
+        "id": "14d4b7be316bc8e7",
+        "originalName": "쉐프의수제요리 야미야미 여서점",
+        "score": 108,
+        "notionPageId": "9eeda158-dd2a-83fd-bcdf-0172919b86a1"
+      },
+      "merged": [
+        {
+          "id": "ea384c54d81a362c",
+          "name": "쉐프의수제요리 야미야미 여서점 (1)",
+          "score": 100,
+          "notionPageId": "c16da158-dd2a-820c-8d30-01ba940b31df"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "스팸많이주는부대찌개여서점",
+      "canonicalName": "스팸많이주는부대찌개 여서점",
+      "primary": {
+        "id": "94fd76dc2861933c",
+        "originalName": "스팸많이주는부대찌개 여서점",
+        "score": 115,
+        "notionPageId": "327da158-dd2a-825e-b29c-810d0bbe9034"
+      },
+      "merged": [
+        {
+          "id": "9b953ee0790554c8",
+          "name": "스팸많이주는부대찌개 여서점(1)",
+          "score": 107,
+          "notionPageId": "13dda158-dd2a-8390-89e0-01b1c805185a"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "시민감자탕문수점",
+      "canonicalName": "시민감자탕 문수점",
+      "primary": {
+        "id": "3a743fd9484606d1",
+        "originalName": "시민감자탕 문수점",
+        "score": 91,
+        "notionPageId": "da5da158-dd2a-8324-9fe0-810d15f5482e"
+      },
+      "merged": [
+        {
+          "id": "b3aeab22a127174f",
+          "name": "시민감자탕 문수점 (1)",
+          "score": 83,
+          "notionPageId": "83ada158-dd2a-8327-a56c-01e7cd270ad0"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "시우푸드봉산점",
+      "canonicalName": "시우푸드 봉산점",
+      "primary": {
+        "id": "2909b3dc166a5ee7",
+        "originalName": "시우푸드 봉산점",
+        "score": 96,
+        "notionPageId": "26eda158-dd2a-82fd-bc38-814fe7be2eec"
+      },
+      "merged": [
+        {
+          "id": "86aaa0c7afb7b374",
+          "name": "시우푸드 봉산점 (1)",
+          "score": 83,
+          "notionPageId": "da6da158-dd2a-83d8-986e-01280a97a43f"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "시장불닭발문수점",
+      "canonicalName": "시장불닭발 문수점",
+      "primary": {
+        "id": "e81c1980fff43a29",
+        "originalName": "시장불닭발 문수점",
+        "score": 96,
+        "notionPageId": "0afda158-dd2a-82b3-a6a6-0145ccc300d9"
+      },
+      "merged": [
+        {
+          "id": "7f8f25d9f8860418",
+          "name": "시장불닭발 문수점(1)",
+          "score": 88,
+          "notionPageId": "91cda158-dd2a-8329-9303-01b313a66964"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "아구찜장어탕명가조롱박교동점",
+      "canonicalName": "아구찜&장어탕명가 조롱박 교동점",
+      "primary": {
+        "id": "c30f3543d3d24747",
+        "originalName": "아구찜&장어탕명가 조롱박 교동점",
+        "score": 120,
+        "notionPageId": "347da158-dd2a-8320-8ada-01614a95ca68"
+      },
+      "merged": [
+        {
+          "id": "089c5f9f633acebb",
+          "name": "아구찜&장어탕명가 조롱박 교동점 (1)",
+          "score": 112,
+          "notionPageId": "324da158-dd2a-83c1-8c68-817ea1854fa5"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "아이커버거치킨여천점신기동",
+      "canonicalName": "아이커 버거&치킨 여천점(신기동)",
+      "primary": {
+        "id": "b77500c258104b51",
+        "originalName": "아이커 버거&치킨 여천점(신기동)",
+        "score": 120,
+        "notionPageId": "d9ada158-dd2a-83cb-96bf-81932f515f54"
+      },
+      "merged": [
+        {
+          "id": "0479825cfb86c3dd",
+          "name": "아이커 버거&치킨 여천점(신기동)(1)",
+          "score": 112,
+          "notionPageId": "076da158-dd2a-839a-8a6c-819941c9102a"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "엄마미안김치찜공화동점",
+      "canonicalName": "엄마미안 김치찜 공화동점",
+      "primary": {
+        "id": "6772d4141d54e74d",
+        "originalName": "엄마미안 김치찜 공화동점",
+        "score": 103,
+        "notionPageId": "adbda158-dd2a-8383-9fb7-81d9873e5bae"
+      },
+      "merged": [
+        {
+          "id": "6cdc5b5bcbf73a91",
+          "name": "엄마미안 김치찜 공화동점 (1)",
+          "score": 95,
+          "notionPageId": "4b1da158-dd2a-828f-ae8c-812fe839f22e"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "여서육감문수점",
+      "canonicalName": "여서 육감 문수점",
+      "primary": {
+        "id": "38f4e2e9e89a61b9",
+        "originalName": "여서 육감 문수점",
+        "score": 120,
+        "notionPageId": "777da158-dd2a-83ac-80a7-81a3974ca70d"
+      },
+      "merged": [
+        {
+          "id": "63932e4fbec79e97",
+          "name": "여서 육감 문수점(2)",
+          "score": 112,
+          "notionPageId": "d8ada158-dd2a-8319-8ad3-81c10ea67bc5"
+        },
+        {
+          "id": "7a9b3c50e987d3ed",
+          "name": "여서 육감 문수점(1)",
+          "score": 112,
+          "notionPageId": "a25da158-dd2a-8396-a344-014f82ec8ba2"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "여수다복교동점",
+      "canonicalName": "여수다복 교동점",
+      "primary": {
+        "id": "2a1bd22a9b5f938e",
+        "originalName": "여수다복 교동점",
+        "score": 120,
+        "notionPageId": "1e8da158-dd2a-8355-b6db-010567ebabcf"
+      },
+      "merged": [
+        {
+          "id": "de47900b229c04d7",
+          "name": "여수다복 교동점 (1)",
+          "score": 112,
+          "notionPageId": "3efda158-dd2a-83d9-956d-01ac884d39a6"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "예향정여서점",
+      "canonicalName": "예향정 여서점",
+      "primary": {
+        "id": "2cd9e5b3f51e62e6",
+        "originalName": "예향정 여서점",
+        "score": 120,
+        "notionPageId": "85dda158-dd2a-83df-8a7d-01e60bf5d1dd"
+      },
+      "merged": [
+        {
+          "id": "097b0a2f1739a9f7",
+          "name": "예향정 여서점(1)",
+          "score": 112,
+          "notionPageId": "de3da158-dd2a-821a-92c9-01fe5015c841"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "왕창돼지두루치기여서점",
+      "canonicalName": "왕창 돼지두루치기 여서점",
+      "primary": {
+        "id": "0cc943f6a58888d0",
+        "originalName": "왕창 돼지두루치기 여서점",
+        "score": 67,
+        "notionPageId": "c51da158-dd2a-8203-a5d7-81428baa1f9d"
+      },
+      "merged": [
+        {
+          "id": "ee3ff842eb029c8e",
+          "name": "왕창 돼지두루치기 여서점(3)",
+          "score": 59,
+          "notionPageId": "f2dda158-dd2a-82bd-8582-815b4b16f01a"
+        },
+        {
+          "id": "39549f0543e363b3",
+          "name": "왕창 돼지두루치기 여서점(2)",
+          "score": 59,
+          "notionPageId": "636da158-dd2a-833e-a16d-81d8430b00dc"
+        },
+        {
+          "id": "7ed02fe55d44704f",
+          "name": "왕창 돼지두루치기 여서점 (1)",
+          "score": 59,
+          "notionPageId": "203da158-dd2a-8385-b078-81f6af8d049f"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "우사골설렁탕여서동본점",
+      "canonicalName": "우사골설렁탕 여서동본점",
+      "primary": {
+        "id": "0e6d7a1000b1c53b",
+        "originalName": "우사골설렁탕 여서동본점",
+        "score": 96,
+        "notionPageId": "52dda158-dd2a-83fb-937c-01625a9bc632"
+      },
+      "merged": [
+        {
+          "id": "8617d283a645f239",
+          "name": "우사골설렁탕 여서동본점 (1)",
+          "score": 88,
+          "notionPageId": "efbda158-dd2a-83a4-a072-81eb4e3a4503"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "우주호떡여서점",
+      "canonicalName": "우주호떡 여서점",
+      "primary": {
+        "id": "39b2241021f9616c",
+        "originalName": "우주호떡 여서점",
+        "score": 108,
+        "notionPageId": "723da158-dd2a-82f3-b76a-81aef14b8614"
+      },
+      "merged": [
+        {
+          "id": "cfafec340642099f",
+          "name": "우주호떡 여서점 (1)",
+          "score": 100,
+          "notionPageId": "cc0da158-dd2a-828f-8e97-01b96be32bc2"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "울엄마김치찜갈비찜중앙점",
+      "canonicalName": "울엄마 김치찜 갈비찜 중앙점",
+      "primary": {
+        "id": "e6339c85e31322fa",
+        "originalName": "울엄마 김치찜 갈비찜 중앙점",
+        "score": 91,
+        "notionPageId": "aebda158-dd2a-83aa-9099-8123a32b2eaa"
+      },
+      "merged": [
+        {
+          "id": "3c55c276d48abde8",
+          "name": "울엄마 김치찜 갈비찜 중앙점 (1)",
+          "score": 83,
+          "notionPageId": "5eada158-dd2a-8296-b840-0159fea9c365"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "육식사관학교여서점",
+      "canonicalName": "육식사관학교 여서점",
+      "primary": {
+        "id": "65c908d7b367de45",
+        "originalName": "육식사관학교 여서점",
+        "score": 120,
+        "notionPageId": "f9bda158-dd2a-8283-88c0-01f96dac52d4"
+      },
+      "merged": [
+        {
+          "id": "195cff88db37b676",
+          "name": "육식사관학교 여서점(2)",
+          "score": 112,
+          "notionPageId": "5d1da158-dd2a-8372-8cf7-81234abca81b"
+        },
+        {
+          "id": "07951b9f2734fbae",
+          "name": "육식사관학교 여서점(3)",
+          "score": 112,
+          "notionPageId": "807da158-dd2a-830a-b26c-81246b310446"
+        },
+        {
+          "id": "57e270cc0520d544",
+          "name": "육식사관학교 여서점(1)",
+          "score": 112,
+          "notionPageId": "136da158-dd2a-8260-bfc9-01061a15ba26"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "이가네나주곰탕설렁탕교동점",
+      "canonicalName": "이가네 나주곰탕&설렁탕 교동점",
+      "primary": {
+        "id": "9edba048ff8c3b2e",
+        "originalName": "이가네 나주곰탕&설렁탕 교동점",
+        "score": 115,
+        "notionPageId": "413da158-dd2a-8298-9c4a-81802a4ae200"
+      },
+      "merged": [
+        {
+          "id": "5ccc6380e91d6c66",
+          "name": "이가네 나주곰탕&설렁탕 교동점(2)",
+          "score": 107,
+          "notionPageId": "e5eda158-dd2a-83c1-99b5-016b74ce3846"
+        },
+        {
+          "id": "48d97694d334584c",
+          "name": "이가네 나주곰탕&설렁탕 교동점(1)",
+          "score": 107,
+          "notionPageId": "fceda158-dd2a-8390-9a8c-81c6f68a0dee"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "인생냉면가야밀면여서점",
+      "canonicalName": "인생냉면 가야밀면 여서점",
+      "primary": {
+        "id": "b22e961a2bed3729",
+        "originalName": "인생냉면 가야밀면 여서점",
+        "score": 115,
+        "notionPageId": "9b1da158-dd2a-82b5-8d17-81fdcdbac225"
+      },
+      "merged": [
+        {
+          "id": "200562b38e37fb18",
+          "name": "인생냉면 가야밀면 여서점(2)",
+          "score": 107,
+          "notionPageId": "951da158-dd2a-8264-a45e-814bcfc4304a"
+        },
+        {
+          "id": "ddf2b415831d0a0f",
+          "name": "인생냉면 가야밀면 여서점(3)",
+          "score": 107,
+          "notionPageId": "f23da158-dd2a-8358-ad94-81e1667fa5ec"
+        },
+        {
+          "id": "30797abd197a7349",
+          "name": "인생냉면 가야밀면 여서점(1)",
+          "score": 107,
+          "notionPageId": "8b9da158-dd2a-835c-a224-0111c5523a7f"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "임꺽정갈비탕봉산점",
+      "canonicalName": "임꺽정 갈비탕 봉산점",
+      "primary": {
+        "id": "a638ac9c079a28c0",
+        "originalName": "임꺽정 갈비탕 봉산점",
+        "score": 96,
+        "notionPageId": "f9cda158-dd2a-82c0-aab8-81a4c3eeef3d"
+      },
+      "merged": [
+        {
+          "id": "8a6fec95229f1280",
+          "name": "임꺽정 갈비탕 봉산점 (1)",
+          "score": 88,
+          "notionPageId": "ef1da158-dd2a-823b-b58a-010b2e55caf1"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "장터순대국교동점",
+      "canonicalName": "장터순대국 교동점",
+      "primary": {
+        "id": "802d4c09e4ee1ae9",
+        "originalName": "장터순대국 교동점",
+        "score": 120,
+        "notionPageId": "f94da158-dd2a-830c-977d-01875a1bbf04"
+      },
+      "merged": [
+        {
+          "id": "7ac18d343aa0ff16",
+          "name": "장터순대국 교동점(1)",
+          "score": 112,
+          "notionPageId": "92ada158-dd2a-82d6-875d-810827205f6d"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "전골의법칙얼큰한곱창전골문수점",
+      "canonicalName": "전골의법칙 얼큰한곱창전골 문수점",
+      "primary": {
+        "id": "bc6152833cd076f5",
+        "originalName": "전골의법칙 얼큰한곱창전골 문수점",
+        "score": 120,
+        "notionPageId": "eb0da158-dd2a-82e3-928f-01c68d250093"
+      },
+      "merged": [
+        {
+          "id": "5282e0299ffcf81c",
+          "name": "전골의법칙 얼큰한곱창전골 문수점(1)",
+          "score": 112,
+          "notionPageId": "317da158-dd2a-8217-ae46-81e9d2ad6e17"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "제복이네짜글이제육쌈밥두루치기교동점",
+      "canonicalName": "제복이네 짜글이&제육쌈밥&두루치기 교동점",
+      "primary": {
+        "id": "98779281080288d1",
+        "originalName": "제복이네 짜글이&제육쌈밥&두루치기 교동점",
+        "score": 96,
+        "notionPageId": "fe4da158-dd2a-8298-a14d-812103634c87"
+      },
+      "merged": [
+        {
+          "id": "8d38f0a70c54a4c1",
+          "name": "제복이네 짜글이&제육쌈밥&두루치기 교동점(2)",
+          "score": 88,
+          "notionPageId": "25eda158-dd2a-83a3-8270-816818b92071"
+        },
+        {
+          "id": "7ed26d6d9bcf7280",
+          "name": "제복이네 짜글이&제육쌈밥&두루치기 교동점(1)",
+          "score": 88,
+          "notionPageId": "726da158-dd2a-82d4-a418-014730a1151f"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "조선제일감자탕뼈해장국여서점",
+      "canonicalName": "조선제일 감자탕&뼈해장국 여서점",
+      "primary": {
+        "id": "5768a9d8a72502ef",
+        "originalName": "조선제일 감자탕&뼈해장국 여서점",
+        "score": 108,
+        "notionPageId": "a80da158-dd2a-83e8-88ee-81416777e3da"
+      },
+      "merged": [
+        {
+          "id": "1c096fa21fc3b9a1",
+          "name": "조선제일 감자탕&뼈해장국 여서점 (1)",
+          "score": 89,
+          "notionPageId": "a80da158-dd2a-83e8-88ee-81416777e3da"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "진남컵밥중앙점",
+      "canonicalName": "진남컵밥 중앙점",
+      "primary": {
+        "id": "0b952604bdf47c31",
+        "originalName": "진남컵밥 중앙점",
+        "score": 108,
+        "notionPageId": "df3da158-dd2a-83f8-9076-01bce41f87a5"
+      },
+      "merged": [
+        {
+          "id": "5e873641af44308c",
+          "name": "진남컵밥 중앙점 (1)",
+          "score": 100,
+          "notionPageId": "516da158-dd2a-82e2-b4ab-01cb67823c5a"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "진통뼈사랑봉산점",
+      "canonicalName": "진통뼈사랑 봉산점",
+      "primary": {
+        "id": "27fc5651d1d3feb0",
+        "originalName": "진통뼈사랑 봉산점",
+        "score": 108,
+        "notionPageId": "c10da158-dd2a-832d-a1b5-018e0968fb35"
+      },
+      "merged": [
+        {
+          "id": "96eb3d0d2e47f4ca",
+          "name": "진통뼈사랑 봉산점 (1)",
+          "score": 100,
+          "notionPageId": "d06da158-dd2a-823a-baeb-01c281f83128"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "진한설렁탕문수점",
+      "canonicalName": "진한설렁탕 문수점",
+      "primary": {
+        "id": "5d45d58855f0c602",
+        "originalName": "진한설렁탕 문수점",
+        "score": 96,
+        "notionPageId": "26ada158-dd2a-8328-b841-01ed1d003374"
+      },
+      "merged": [
+        {
+          "id": "df4b63b74a218429",
+          "name": "진한설렁탕 문수점 (1)",
+          "score": 88,
+          "notionPageId": "618da158-dd2a-82aa-84a6-01497f34b727"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "집으로삼겹구이문수점",
+      "canonicalName": "집으로 삼겹구이 문수점",
+      "primary": {
+        "id": "54fd901a0b754ee1",
+        "originalName": "집으로 삼겹구이 문수점",
+        "score": 115,
+        "notionPageId": "72ada158-dd2a-8366-87b1-01baad0ce3e9"
+      },
+      "merged": [
+        {
+          "id": "cd410ac1628bd2d5",
+          "name": "집으로 삼겹구이 문수점 (1)",
+          "score": 107,
+          "notionPageId": "382da158-dd2a-83f5-a8e3-01394ca27c66"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "쭈꾸미닭공화점",
+      "canonicalName": "쭈꾸미닭 공화점",
+      "primary": {
+        "id": "09dc33ce2f8f08d3",
+        "originalName": "쭈꾸미닭 공화점",
+        "score": 103,
+        "notionPageId": "defda158-dd2a-83b9-aac6-0122f9e93c81"
+      },
+      "merged": [
+        {
+          "id": "4ecb26668ba5066e",
+          "name": "쭈꾸미닭 공화점 (1)",
+          "score": 95,
+          "notionPageId": "cfbda158-dd2a-8242-9cef-013ad030bb81"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "찌개랑갈비랑여서점",
+      "canonicalName": "찌개랑갈비랑 여서점",
+      "primary": {
+        "id": "2524c5a9954d4ba8",
+        "originalName": "찌개랑갈비랑 여서점",
+        "score": 103,
+        "notionPageId": "494da158-dd2a-83ca-a718-8170f2dd7951"
+      },
+      "merged": [
+        {
+          "id": "3dfaa76e3a83b440",
+          "name": "찌개랑갈비랑 여서점(1)",
+          "score": 95,
+          "notionPageId": "e7ada158-dd2a-82e2-b3bf-01f3b91c3ec9"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "찜스틸러갈비찜봉산점",
+      "canonicalName": "찜스틸러갈비찜 봉산점",
+      "primary": {
+        "id": "9b2419177903b1d8",
+        "originalName": "찜스틸러갈비찜 봉산점",
+        "score": 120,
+        "notionPageId": "512da158-dd2a-82f9-895d-814f52a6c455"
+      },
+      "merged": [
+        {
+          "id": "c9089234315cf620",
+          "name": "찜스틸러갈비찜 봉산점 (1)",
+          "score": 107,
+          "notionPageId": "71eda158-dd2a-83d0-b99b-017d9a3ea505"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "참숯이면돼지문수점",
+      "canonicalName": "참숯이면돼지 문수점",
+      "primary": {
+        "id": "3c62ab40bf66608e",
+        "originalName": "참숯이면돼지 문수점",
+        "score": 103,
+        "notionPageId": "b95da158-dd2a-824d-9408-01bf9b0e0f91"
+      },
+      "merged": [
+        {
+          "id": "3c6ea21609edb311",
+          "name": "참숯이면돼지 문수점(1)",
+          "score": 95,
+          "notionPageId": "20eda158-dd2a-824f-9f5f-816cab97fb48"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "찹쌀품은삼계탕문수점",
+      "canonicalName": "찹쌀품은 삼계탕 문수점",
+      "primary": {
+        "id": "215d025987786df2",
+        "originalName": "찹쌀품은 삼계탕 문수점",
+        "score": 103,
+        "notionPageId": "05eda158-dd2a-838e-be8b-815873ff4f08"
+      },
+      "merged": [
+        {
+          "id": "2c91cc4cbd4a80ec",
+          "name": "찹쌀품은 삼계탕 문수점(1)",
+          "score": 95,
+          "notionPageId": "50fda158-dd2a-82be-aec8-81b31f0e4eb3"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "철웅이네입큰붕어빵문수점",
+      "canonicalName": "철웅이네 입큰 붕어빵 문수점",
+      "primary": {
+        "id": "23e36eb3741524aa",
+        "originalName": "철웅이네 입큰 붕어빵 문수점",
+        "score": 84,
+        "notionPageId": "06eda158-dd2a-8213-92d2-01119e7eca89"
+      },
+      "merged": [
+        {
+          "id": "f22d45feee8cb1a4",
+          "name": "철웅이네 입큰 붕어빵 문수점 (1)",
+          "score": 76,
+          "notionPageId": "32bda158-dd2a-827d-805b-01a53bbbae20"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "청년뚝배기덕충점",
+      "canonicalName": "청년뚝배기 덕충점",
+      "primary": {
+        "id": "bb9aef1788a685c6",
+        "originalName": "청년뚝배기 덕충점",
+        "score": 103,
+        "notionPageId": "c0eda158-dd2a-82ee-a366-01827474e6a1"
+      },
+      "merged": [
+        {
+          "id": "bd5b75fb8e8aa97f",
+          "name": "청년뚝배기 덕충점 (1)",
+          "score": 95,
+          "notionPageId": "eeeda158-dd2a-8259-92dc-81cf88bf6f63"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "청담곱떡고소동점",
+      "canonicalName": "청담곱떡 고소동점",
+      "primary": {
+        "id": "7d656b9342aabd94",
+        "originalName": "청담곱떡 고소동점",
+        "score": 115,
+        "notionPageId": "570da158-dd2a-82cf-ae81-81079b33970f"
+      },
+      "merged": [
+        {
+          "id": "c2b6538822db86ba",
+          "name": "청담곱떡 고소동점 (1)",
+          "score": 107,
+          "notionPageId": "75cda158-dd2a-8269-bcbf-011582260ae2"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "청담낙곱새고소동점",
+      "canonicalName": "청담낙곱새 고소동점",
+      "primary": {
+        "id": "8df8f77db6d9a205",
+        "originalName": "청담낙곱새 고소동점",
+        "score": 115,
+        "notionPageId": "2f9da158-dd2a-83f1-aeb0-813edf3b7179"
+      },
+      "merged": [
+        {
+          "id": "249f404e65eb6f97",
+          "name": "청담낙곱새 고소동점 (1)",
+          "score": 107,
+          "notionPageId": "0f5da158-dd2a-8228-bf27-81a0d1198e39"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "청송삼계탕닭칼국수문수점",
+      "canonicalName": "청송삼계탕&닭칼국수 문수점",
+      "primary": {
+        "id": "37f1a033eac82aa2",
+        "originalName": "청송삼계탕&닭칼국수 문수점",
+        "score": 91,
+        "notionPageId": "195da158-dd2a-82e1-9042-8164920955a3"
+      },
+      "merged": [
+        {
+          "id": "ee836895934cb021",
+          "name": "청송삼계탕&닭칼국수 문수점(2)",
+          "score": 83,
+          "notionPageId": "887da158-dd2a-8382-9b3b-01c4fb764dc0"
+        },
+        {
+          "id": "931ac1d8b1e1d905",
+          "name": "청송삼계탕&닭칼국수 문수점 (1)",
+          "score": 83,
+          "notionPageId": "b3cda158-dd2a-83ea-9b54-015c040ca46c"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "청하대영빈관여서점",
+      "canonicalName": "청하대 영빈관 여서점",
+      "primary": {
+        "id": "b9501772f0f6b1fb",
+        "originalName": "청하대 영빈관 여서점",
+        "score": 96,
+        "notionPageId": "8a5da158-dd2a-83fe-8625-01711aa30a88"
+      },
+      "merged": [
+        {
+          "id": "5a3625832bbccfa5",
+          "name": "청하대 영빈관 여서점(1)",
+          "score": 88,
+          "notionPageId": "d24da158-dd2a-82c7-bc70-019083b4d2c7"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "치폴리니여서점",
+      "canonicalName": "치폴리니 여서점",
+      "primary": {
+        "id": "da81c19f4ce50220",
+        "originalName": "치폴리니 여서점",
+        "score": 108,
+        "notionPageId": "28bda158-dd2a-83c1-bc17-01f8d455b533"
+      },
+      "merged": [
+        {
+          "id": "cb1348828127637c",
+          "name": "치폴리니 여서점 (1)",
+          "score": 100,
+          "notionPageId": "54fda158-dd2a-83e8-bc95-010cbf1e3509"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "코리안찌개타운서교점",
+      "canonicalName": "코리안 찌개 타운 서교점",
+      "primary": {
+        "id": "60dbbe5071a2ebe6",
+        "originalName": "코리안 찌개 타운 서교점",
+        "score": 103,
+        "notionPageId": "ed5da158-dd2a-8259-b83d-81635c469ffb"
+      },
+      "merged": [
+        {
+          "id": "f3b66a0a2290f8b8",
+          "name": "코리안 찌개 타운 서교점 (1)",
+          "score": 95,
+          "notionPageId": "050da158-dd2a-8398-885f-010022a14c09"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "콩담은콩나물국밥문수점",
+      "canonicalName": "콩담은 콩나물 국밥 문수점",
+      "primary": {
+        "id": "f3cb61dd45ba9b8b",
+        "originalName": "콩담은 콩나물 국밥 문수점",
+        "score": 67,
+        "notionPageId": "931da158-dd2a-831a-a1e5-810b229b9686"
+      },
+      "merged": [
+        {
+          "id": "d572b9fd40f5cc55",
+          "name": "콩담은 콩나물 국밥 문수점(2)",
+          "score": 59,
+          "notionPageId": "06ada158-dd2a-831e-963d-81bc43356085"
+        },
+        {
+          "id": "070e1d5b8f3a18cf",
+          "name": "콩담은 콩나물 국밥 문수점(3)",
+          "score": 59,
+          "notionPageId": "f75da158-dd2a-83db-87ba-0177efd51e2c"
+        },
+        {
+          "id": "dedc987cba7782ee",
+          "name": "콩담은 콩나물 국밥 문수점(1)",
+          "score": 59,
+          "notionPageId": "d5eda158-dd2a-8293-8802-81d1ab173342"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "크라운닭발문수점",
+      "canonicalName": "크라운닭발 문수점",
+      "primary": {
+        "id": "7ec91a7f6e875069",
+        "originalName": "크라운닭발 문수점",
+        "score": 120,
+        "notionPageId": "0d9da158-dd2a-82e8-a062-810aaaabfc5a"
+      },
+      "merged": [
+        {
+          "id": "c5a7e487413d7199",
+          "name": "크라운닭발 문수점(1)",
+          "score": 112,
+          "notionPageId": "4c1da158-dd2a-8354-8ec8-01650b150fd4"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "타코아찌타코야끼전문점문수점",
+      "canonicalName": "타코아찌 타코야끼전문점 문수점",
+      "primary": {
+        "id": "0eea4a740e820fd3",
+        "originalName": "타코아찌 타코야끼전문점 문수점",
+        "score": 108,
+        "notionPageId": "25fda158-dd2a-82da-996d-012b1b48b796"
+      },
+      "merged": [
+        {
+          "id": "e08ad39fd7136cdd",
+          "name": "타코아찌 타코야끼전문점 문수점 (1)",
+          "score": 100,
+          "notionPageId": "cc8da158-dd2a-8333-af32-812ec2c93237"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "토담민속주점문수점",
+      "canonicalName": "토담 민속주점 문수점",
+      "primary": {
+        "id": "a1e8130ec540e37f",
+        "originalName": "토담 민속주점 문수점",
+        "score": 96,
+        "notionPageId": "e83da158-dd2a-8216-9c22-01a6a73b2923"
+      },
+      "merged": [
+        {
+          "id": "7ed85df98ff00979",
+          "name": "토담 민속주점 문수점(3)",
+          "score": 88,
+          "notionPageId": "33ada158-dd2a-8222-a3ae-017ced283a1f"
+        },
+        {
+          "id": "63448d2746b695e8",
+          "name": "토담 민속주점 문수점(2)",
+          "score": 88,
+          "notionPageId": "5bdda158-dd2a-82fa-ab19-8115af5a0a1a"
+        },
+        {
+          "id": "548ef8cd2b80f4b9",
+          "name": "토담 민속주점 문수점(1)",
+          "score": 88,
+          "notionPageId": "71bda158-dd2a-835e-b670-81ba028850d3"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "통뼈감자탕문수점",
+      "canonicalName": "통뼈감자탕 문수점",
+      "primary": {
+        "id": "f9a6f0eb9fba0696",
+        "originalName": "통뼈감자탕 문수점",
+        "score": 115,
+        "notionPageId": "74ada158-dd2a-830f-9b7a-810c973ceee0"
+      },
+      "merged": [
+        {
+          "id": "1007878ca0e3481a",
+          "name": "통뼈감자탕 문수점(1)",
+          "score": 107,
+          "notionPageId": "844da158-dd2a-837a-9552-01c27ea576de"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "통큰한방삼계탕공화점",
+      "canonicalName": "통큰한방삼계탕 공화점",
+      "primary": {
+        "id": "217d38b37c2b4d5b",
+        "originalName": "통큰한방삼계탕 공화점",
+        "score": 103,
+        "notionPageId": "e78da158-dd2a-833a-8a67-81410c65711a"
+      },
+      "merged": [
+        {
+          "id": "2badd6c7f04bdaae",
+          "name": "통큰한방삼계탕 공화점 (1)",
+          "score": 95,
+          "notionPageId": "60ada158-dd2a-83b4-bc77-812eab90ac6b"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "파파핫도그여서점",
+      "canonicalName": "파파핫도그 여서점",
+      "primary": {
+        "id": "83f635e7ea7d737e",
+        "originalName": "파파핫도그 여서점",
+        "score": 115,
+        "notionPageId": "1c4da158-dd2a-8390-84a2-816d543f2ddb"
+      },
+      "merged": [
+        {
+          "id": "e54434c678abbc69",
+          "name": "파파핫도그 여서점(1)",
+          "score": 107,
+          "notionPageId": "c6dda158-dd2a-83d9-b5f5-8169e4de64f4"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "피피마켓종화동점",
+      "canonicalName": "피피마켓 종화동점",
+      "primary": {
+        "id": "bf15349639417d6b",
+        "originalName": "피피마켓 종화동점",
+        "score": 115,
+        "notionPageId": "bcfda158-dd2a-8273-8886-019b0f5b3ed3"
+      },
+      "merged": [
+        {
+          "id": "2dba72a48d263250",
+          "name": "피피마켓 종화동점(1)",
+          "score": 107,
+          "notionPageId": "6a3da158-dd2a-8342-ab59-01eddd005340"
+        },
+        {
+          "id": "bbedd612e3b2a284",
+          "name": "피피마켓 종화동점(2)",
+          "score": 107,
+          "notionPageId": "f8dda158-dd2a-83d0-bda0-0148b2571ffe"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "한국전통춘천닭갈비공화동점",
+      "canonicalName": "한국전통춘천닭갈비 공화동점",
+      "primary": {
+        "id": "4391cea41df014b3",
+        "originalName": "한국전통춘천닭갈비 공화동점",
+        "score": 120,
+        "notionPageId": "e49da158-dd2a-8383-b23f-813d08baa2ef"
+      },
+      "merged": [
+        {
+          "id": "f04947c92bfd8373",
+          "name": "한국전통춘천닭갈비 공화동점 (1)",
+          "score": 112,
+          "notionPageId": "b40da158-dd2a-8297-ad37-813b2845385d"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "한식전문혼밥대장공화동점",
+      "canonicalName": "한식전문 혼밥대장 공화동점",
+      "primary": {
+        "id": "53bfb32926455221",
+        "originalName": "한식전문 혼밥대장 공화동점",
+        "score": 115,
+        "notionPageId": "274da158-dd2a-838a-b252-01d2f16228c2"
+      },
+      "merged": [
+        {
+          "id": "7ca8d4d39f986687",
+          "name": "한식전문 혼밥대장 공화동점 (1)",
+          "score": 107,
+          "notionPageId": "cd3da158-dd2a-82dd-a551-01a0590ef464"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "해룡옥수수찐빵문수점",
+      "canonicalName": "해룡옥수수찐빵 문수점",
+      "primary": {
+        "id": "9b760748be6ee430",
+        "originalName": "해룡옥수수찐빵 문수점",
+        "score": 120,
+        "notionPageId": "c70da158-dd2a-833b-ade7-81a1f20ce842"
+      },
+      "merged": [
+        {
+          "id": "8c308a0a39055940",
+          "name": "해룡옥수수찐빵 문수점 (1)",
+          "score": 112,
+          "notionPageId": "14dda158-dd2a-8332-9b47-01556ab55ac8"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "허참봉곰탕갈비탕봉산점",
+      "canonicalName": "허참봉 곰탕&갈비탕 봉산점",
+      "primary": {
+        "id": "d19810627d63e95c",
+        "originalName": "허참봉 곰탕&갈비탕 봉산점",
+        "score": 120,
+        "notionPageId": "257da158-dd2a-822c-b484-0106519c832d"
+      },
+      "merged": [
+        {
+          "id": "4b4bf27fdd1672ef",
+          "name": "허참봉 곰탕&갈비탕 봉산점 (1)",
+          "score": 107,
+          "notionPageId": "5d3da158-dd2a-8310-b59b-019e36d7d74f"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "화끈하게매운핫불닭발오돌뼈여서점",
+      "canonicalName": "화끈하게매운 핫불닭발&오돌뼈 여서점",
+      "primary": {
+        "id": "a6ff0bcfc0afe5b6",
+        "originalName": "화끈하게매운 핫불닭발&오돌뼈 여서점",
+        "score": 120,
+        "notionPageId": "ec7da158-dd2a-8263-a09f-81e9b3884257"
+      },
+      "merged": [
+        {
+          "id": "d87e3b32b38a272b",
+          "name": "화끈하게매운 핫불닭발&오돌뼈 여서점(1)",
+          "score": 112,
+          "notionPageId": "aa0da158-dd2a-836b-80b7-81226ca60713"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "황금코다리봉산점",
+      "canonicalName": "황금코다리 봉산점",
+      "primary": {
+        "id": "7777fc7f051bf178",
+        "originalName": "황금코다리 봉산점",
+        "score": 113,
+        "notionPageId": "6c6da158-dd2a-83da-8c3e-01e4819115be"
+      },
+      "merged": [
+        {
+          "id": "b20c3e86f9d3c232",
+          "name": "황금코다리 봉산점 (1)",
+          "score": 100,
+          "notionPageId": "b9fda158-dd2a-82ed-8a1b-8115e13181d6"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    },
+    {
+      "key": "효자오리바베큐여서점",
+      "canonicalName": "효자오리바베큐 여서점",
+      "primary": {
+        "id": "35613e179e0c318b",
+        "originalName": "효자오리바베큐 여서점",
+        "score": 120,
+        "notionPageId": "f7ada158-dd2a-8313-b82e-813a04fd3b3b"
+      },
+      "merged": [
+        {
+          "id": "84eaaaf768498e4f",
+          "name": "효자오리바베큐 여서점(1)",
+          "score": 112,
+          "notionPageId": "03dda158-dd2a-8315-af63-01851736dad4"
+        }
+      ],
+      "filledFields": [],
+      "addedRoutes": [],
+      "routeConflicts": []
+    }
+  ],
+  "suspiciousGroups": [],
+  "finishedAt": "2026-07-16T22:43:30.565Z"
+}

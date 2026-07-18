@@ -4,11 +4,7 @@ on:
   push:
     branches: [agent/main-unification]
     paths:
-      - 'assets/photo-batch-2-vetted/**'
-      - 'data/photo-batch2-vetted-*.json'
-      - 'data/photo-batch2-structure-report.json'
-      - 'scripts/apply-photo-batch2-vetted.mjs'
-      - 'scripts/validate-photo-batch2-vetted.mjs'
+      - '.integration/photo-batch2-binary/READY'
       - '.github/workflows/apply-photo-batch2-vetted.yml'
   workflow_dispatch:
 
@@ -35,21 +31,38 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Reassemble and verify reviewed text payload
+      - name: Detect ready marker
+        id: ready
+        shell: bash
+        run: |
+          if [[ -f .integration/photo-batch2-binary/READY ]]; then
+            echo 'found=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'found=false' >> "$GITHUB_OUTPUT"
+            echo 'READY 표식이 없어 안전하게 종료합니다.'
+          fi
+
+      - name: Reassemble and verify reviewed payload
+        if: steps.ready.outputs.found == 'true'
         shell: bash
         run: |
           set -euo pipefail
-          cat .integration/photo-batch2-revalidated/text-part-*.b64 | base64 -d > /tmp/photo-batch2-text.zip
+          : > /tmp/photo-batch2-text.zip
+          for file in .integration/photo-batch2-binary/part-*.b64; do
+            base64 -d "$file" >> /tmp/photo-batch2-text.zip
+          done
           echo 'eb115636ebd62fcf4ac5eed76d81df6de5c08e6829b52f9e2ea9e00bd09e04dd  /tmp/photo-batch2-text.zip' | sha256sum -c -
           unzip -oq /tmp/photo-batch2-text.zip -d .
-          rm -rf .integration/photo-batch2-revalidated
+          rm -rf .integration/photo-batch2-binary .integration/photo-batch2-revalidated
 
       - name: Apply and validate revalidated photos
+        if: steps.ready.outputs.found == 'true'
         run: |
           node scripts/apply-photo-batch2-vetted.mjs
           node scripts/validate-photo-batch2-vetted.mjs
 
       - name: Commit generated data to integration branch
+        if: steps.ready.outputs.found == 'true'
         shell: bash
         run: |
           set -euo pipefail
@@ -58,5 +71,3 @@ jobs:
           git add -A
           git commit -m '[photo-batch2-generated] 2차 사진 재검수 안전 적용'
           git push origin HEAD:agent/main-unification
-
-# retrigger after initial workflow installation

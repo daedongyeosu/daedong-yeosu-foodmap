@@ -1,0 +1,43 @@
+name: Full source snapshot
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/full-source-snapshot.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout final integration branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/main-unification
+          fetch-depth: 0
+          show-progress: false
+
+      - name: Record exact refs
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --depth=1
+          git rev-parse HEAD > BRANCH_HEAD.txt
+          git rev-parse origin/main > MAIN_HEAD.txt
+          git status --short > WORKTREE_STATUS.txt
+
+      - name: Upload full source snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-full-source-snapshot
+          path: |
+            .
+            !.git/**
+            !node_modules/**
+          if-no-files-found: error
+          retention-days: 7

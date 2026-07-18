@@ -1,6 +1,6 @@
 {
   "version": 4,
-  "generatedAt": "2026-07-18T03:06:58.022Z",
+  "generatedAt": "2026-07-18T04:03:09.166Z",
   "algorithm": "SHA-256",
   "sourceOfTruth": "actual-agent-main-unification-files",
   "fileCount": 23,
@@ -58,7 +58,7 @@
     {
       "path": "data/photo-manifest.json",
       "bytes": 14944,
-      "sha256": "26d6b81005c9b923a0492dcfa02e2d65ea0a8bbd429a699edf3ad37bc5c55305"
+      "sha256": "653174f534f00774db75d516408dc6d682f800bca5d3d7c14d7c88c59db84019"
     },
     {
       "path": "data/photo-policy.json",
@@ -73,7 +73,7 @@
     {
       "path": "data/photo-batch2-vetted-assets.json",
       "bytes": 2016,
-      "sha256": "d7d645f65b77b8c97e8b1cc0e35c6d5b26243ebf9479558b5c3c95cc0de2505b"
+      "sha256": "439547d37549310e9dba15ea706aeeec50e58a85f937c8fd77d595b566aab733"
     },
     {
       "path": "data/photo-batch2-vetted-assignments.json",
@@ -83,7 +83,7 @@
     {
       "path": "data/photo-batch2-vetted-report.json",
       "bytes": 11188,
-      "sha256": "56cbbd3a6652f3d27870dfd1b063e885411cc25c33c76e9974ac7d8e2ea5960a"
+      "sha256": "899901ca9951a42ea61ea0d8d71cbda846d0ecd2b4f6657673eff4edb829a01a"
     },
     {
       "path": "data/photo-batch2-vetted-review-decisions.json",

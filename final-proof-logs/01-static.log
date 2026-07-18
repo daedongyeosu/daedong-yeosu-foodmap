@@ -1,0 +1,40 @@
+
+[정적검사 결과]
+PASS  필수 파일 존재: index.html
+PASS  필수 파일 존재: app.css
+PASS  필수 파일 존재: app.js
+PASS  필수 파일 존재: data/stores.json
+PASS  필수 파일 존재: data/photo-manifest.json
+PASS  필수 파일 존재: data/photo-policy.json
+PASS  구형·중복 실행 파일 제거: app-v7.js
+PASS  구형·중복 실행 파일 제거: app-v8.js
+PASS  구형·중복 실행 파일 제거: app-v9.js
+PASS  구형·중복 실행 파일 제거: styles-v7.css
+PASS  구형·중복 실행 파일 제거: styles-v8.css
+PASS  구형·중복 실행 파일 제거: styles-v9.css
+PASS  구형·중복 실행 파일 제거: fix-v9.css
+PASS  구형·중복 실행 파일 제거: fix-v9.js
+PASS  스타일시트 진입점 1개
+PASS  자바스크립트 진입점 1개
+PASS  정식 CSS 진입점 app.css
+PASS  정식 JS 진입점 app.js
+PASS  HTML 구형 실행 참조 없음
+PASS  위치·로고·알림 상단 배치
+PASS  메인 전화주문 버튼 제거
+PASS  메인 정보수정요청 문구 없음
+PASS  app.js 문법 검사 통과
+PASS  3.5초 자동전환 구현
+PASS  무한순환 복제 구조
+PASS  손가락 이동 구현
+PASS  가게 상세사진 갤러리 구현
+PASS  동일 상세 팝업 저수수료 안내 구현
+PASS  위치·주소 저장 구현
+PASS  X·바깥·ESC·뒤로가기 닫기 구현
+PASS  메인카드 상세전용 경로 제외
+PASS  긴 가게명 두 줄 표시
+PASS  상단 여백·로고 위치 통합 CSS
+PASS  상세 갤러리·안내 스타일
+PASS  팝업 스크롤 작동
+WARN  1차 스프라이트 패키지는 원본·좌표 색인 부재로 비활성 유지
+
+PASS 35 / WARN 1 / FAIL 0

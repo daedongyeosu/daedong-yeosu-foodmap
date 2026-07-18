@@ -1,0 +1,31 @@
+
+[데이터검사 결과]
+PASS  가게 수 471개: 471
+PASS  가게 ID 중복 없음
+PASS  정규화 가게명 중복 없음
+PASS  가게명 누락 없음
+PASS  관리용 노션 페이지 제외
+PASS  사진 보유 386곳: 386
+PASS  사진 준비 중 85곳: 85
+PASS  사진 매니페스트 386/85 일치
+PASS  1차 패키지 비활성 유지
+PASS  1차 누락 18~22 기록 유지
+PASS  2차 패키지 검증 활성 유지
+PASS  2차 사진 9장·가게 14곳 유지
+PASS  2차 WebP 자산 9장
+PASS  2차 적용 가게 목록 14곳
+PASS  2차 실제 참조 파일 9장
+PASS  전체 음식 카테고리 제공: 21개
+PASS  주문경로 URL 형식 정상
+PASS  민감서류·가격표·영수증 경로 차단
+PASS  차단 분류 존재: sensitive_document
+PASS  차단 분류 존재: price_list
+PASS  차단 분류 존재: receipt
+PASS  차단 분류 존재: personal_information
+PASS  차단 분류 존재: identity_document
+PASS  차단 분류 존재: contract
+PASS  차단 분류 존재: non_food
+WARN  사진 없는 85곳은 검수된 음식 사진 준비 중으로 유지
+WARN  1차 스프라이트는 전체 기능 통합을 막지 않고 비활성 유지
+
+PASS 25 / WARN 2 / FAIL 0

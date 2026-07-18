@@ -127,6 +127,32 @@ function parseCoordinate(value) {
   const number = Number(value);
   return Number.isFinite(number) ? number : null;
 }
+const DISTRICT_CENTERS = new Map(Object.entries({
+  '여서동':[34.7602,127.7007], '문수동':[34.7578,127.7027], '국동':[34.7355,127.7199],
+  '봉산동':[34.7407,127.7282], '웅천동':[34.7485,127.6715], '학동':[34.7616,127.6621],
+  '교동':[34.7412,127.7336], '신기동':[34.7587,127.6785], '덕충동':[34.7535,127.7460],
+  '돌산':[34.7120,127.7440], '죽림':[34.7930,127.6370], '공화동':[34.7488,127.7455],
+  '미평동':[34.7750,127.7050], '선원동':[34.7715,127.6505], '화장동':[34.7790,127.6550],
+  '중앙동':[34.7398,127.7365], '충무동':[34.7488,127.7270], '봉강동':[34.7540,127.7150],
+  '소호동':[34.7315,127.6520], '관문동':[34.7410,127.7420], '서교동':[34.7450,127.7280],
+  '고소동':[34.7380,127.7420], '봉계동':[34.7825,127.6890], '신월동':[34.7280,127.7060],
+  '안산동':[34.7555,127.6470], '종화동':[34.7330,127.7440], '무선':[34.7800,127.6600],
+  '오림동':[34.7660,127.7240], '여천동':[34.7760,127.6640], '둔덕동':[34.7820,127.7120],
+  '연등동':[34.7580,127.7240], '광무동':[34.7500,127.7190], '수정동':[34.7460,127.7500],
+  '여수시':[34.7604,127.6622], '여서문수':[34.7590,127.7017], '미평둔덕':[34.7785,127.7085],
+  '미평둔덕동':[34.7785,127.7085], '교동중앙동':[34.7405,127.7350], '여수국동':[34.7355,127.7199]
+}).map(([name,[lat,lng]]) => [normalize(name), {lat,lng}]));
+function districtCoordinate(value) {
+  const area = normalize(value);
+  if (!area || area.includes('홈화면') || area.includes('저장해두시면')) return null;
+  if (DISTRICT_CENTERS.has(area)) return DISTRICT_CENTERS.get(area);
+  const matches = [...DISTRICT_CENTERS.entries()].filter(([key]) => area.includes(key) || key.includes(area));
+  if (!matches.length) return null;
+  return {
+    lat: matches.reduce((sum,[,point]) => sum + point.lat, 0) / matches.length,
+    lng: matches.reduce((sum,[,point]) => sum + point.lng, 0) / matches.length
+  };
+}
 function imagePathFromValue(value) {
   if (typeof value === 'string') return value.trim();
   if (!value || typeof value !== 'object') return '';
@@ -137,17 +163,22 @@ function normalizedStore(raw, index) {
   const routes = (raw.routes || [])
     .filter(route => route && route.enabled !== false && route.url && safeHref(route.url) !== '#')
     .map(route => ({...route, key: routeKey(route.name), url: safeHref(route.url)}));
-  const lat = parseCoordinate(raw.latitude ?? raw.lat);
-  const lng = parseCoordinate(raw.longitude ?? raw.lng);
+  const area = raw.district || raw.area || '';
+  const rawLat = parseCoordinate(raw.latitude ?? raw.lat);
+  const rawLng = parseCoordinate(raw.longitude ?? raw.lng);
+  const center = rawLat !== null && rawLng !== null ? null : districtCoordinate(area);
+  const lat = rawLat ?? center?.lat ?? null;
+  const lng = rawLng ?? center?.lng ?? null;
+  const coordinateSource = rawLat !== null && rawLng !== null ? 'store' : center ? 'district-centroid' : '';
   const legacyImages = uniquePaths([raw.image, raw.img, ...(Array.isArray(raw.images) ? raw.images : [])]);
   return {
     id: String(raw.id || index), name: raw.name || '이름 없는 가게', realBusinessName: raw.realBusinessName || '',
-    shopInShopNames: raw.shopInShopNames || [], area: raw.district || raw.area || '', cat: raw.category || raw.cat || '기타',
+    shopInShopNames: raw.shopInShopNames || [], area, cat: raw.category || raw.cat || '기타',
     address: raw.address || '', phone: raw.phone || '', naverMap: safeHref(raw.naverMap || ''),
     legacyImage: legacyImages[0] || '', legacyImages,
     tags: [raw.category, raw.district, raw.address, ...(raw.shopInShopNames || [])].filter(Boolean), routes,
     managed: Boolean(raw.managed), sharedManaged: Boolean(raw.sharedManaged), pinPosition: raw.pinPosition,
-    forceBottom: Boolean(raw.forceBottom), lat, lng
+    forceBottom: Boolean(raw.forceBottom), lat, lng, coordinateSource
   };
 }
 function storeText(store) { return normalize([store.name, store.realBusinessName, ...store.shopInShopNames, store.area, store.cat, ...store.tags].join(' ')); }
@@ -352,7 +383,10 @@ function miniRoutes(store) {
   return keys.filter(key => routeFor(store, key)).slice(0, 6).map(key => appIcon(key, 'miniapp-icon')).join('');
 }
 function storeCard(store) {
-  const distance = Number.isFinite(store.distance) ? `<span class="distance-note">현재 위치에서 약 ${store.distance < 1 ? `${Math.round(store.distance * 1000)}m` : `${store.distance.toFixed(1)}km`}</span>` : '';
+  const distanceLabel = store.coordinateSource === 'district-centroid' ? '동네 중심 기준 약' : '현재 위치에서 약';
+  const distance = Number.isFinite(store.distance)
+    ? `<span class="distance-note">${distanceLabel} ${store.distance < 1 ? `${Math.round(store.distance * 1000)}m` : `${store.distance.toFixed(1)}km`}</span>`
+    : state.sortByDistance ? '<span class="distance-note distance-pending">거리 정보 준비 중</span>' : '';
   return `<article class="store-card" data-id="${escapeHtml(store.id)}">${photoResolver.markup(store, 'card')}<div class="store-info"><h3 title="${escapeHtml(store.name)}">${escapeHtml(store.name)}</h3><p>${escapeHtml(store.area || '여수')} · ${escapeHtml(store.cat)}</p>${distance}<div class="miniapps">${miniRoutes(store)}</div></div><button class="order-open" type="button">주문방법 보기</button></article>`;
 }
 function renderStores({scroll = false, resetCount = false} = {}) {

@@ -1,0 +1,55 @@
+PASS 문서 제목 
+PASS 첫 화면 가게 40개 표시 { initialCards: 40 }
+PASS 모바일 가로 넘침 없음 { innerWidth: 390, scrollWidth: 390, appWidth: 390 }
+PASS 위치·로고·알림 상단 배치 {
+  locationRight: 150,
+  logoLeft: 158,
+  logoRight: 328,
+  noticeLeft: 335,
+  gap: 0
+}
+PASS 로고와 메인 배너 상단 여백 정리 {
+  locationRight: 150,
+  logoLeft: 158,
+  logoRight: 328,
+  noticeLeft: 335,
+  gap: 0
+}
+PASS 시작 팝업 표시 
+PASS 시작 팝업 X 닫기 
+PASS 시작 팝업 바깥 터치 닫기 
+PASS 시작 팝업 휴대전화 뒤로가기 닫기 
+PASS 메인 배너 무한순환 복제·점 표시 { slides: 19, dots: 17, active: '0' }
+PASS 메인 배너 3.5초 자동전환 { before: '0', after: '1' }
+PASS 메인 배너 손가락 이동 { before: '1', after: '2' }
+PASS 소식 슬라이드 무한순환 { slides: 7, dots: 5, active: '1' }
+PASS 다른 주문앱 팝오버 표시 
+PASS 선택 앱과 저수수료 안내 같은 팝업 
+PASS 원래 선택 앱 계속하기 표시 
+PASS 메인 음식 카테고리 표시 { categoryCount: 12 }
+PASS 전체 음식 카테고리 모두 표시 { allCategoryCount: 21, dataCategoryCount: 21 }
+PASS 주소 입력창 중복 제거 
+PASS 동네 선택 목록 표시 
+PASS 위치 권한 결과·주소 저장 {
+  label: '현재 위치 기준',
+  coords: { lat: 34.7604, lng: 127.6622 },
+  sortByDistance: true,
+  savedAt: '2026-07-18T05:03:14.012Z'
+}
+PASS GPS 선택 후 팝업 닫기 
+PASS 카테고리별 가까운 가게 추천 { firstCategory: '한식' }
+PASS 브라우저 검증 대상 가게 확보 {
+  detail: '1980밀면회관&냉면 문수점',
+  naver: '1989마라탕 봉강점',
+  noPhoto: 'BHC 여수국동점'
+}
+PASS 메인 가게카드 상세전용 정보 제거 {
+  mainCardText: '1980밀면회관&냉면 문수점\n\n문수동 · 면요리\n\n동네 중심 기준 약 3.7km\n🏪\n주문방법 보기',
+  mainDetailLinks: 0
+}
+PASS 긴 가게명 두 줄 표시 { text: '1980밀면회관&냉면 문수점', clamp: '2' }
+PASS 가게 상세 다중사진 슬라이드 표시 
+PASS 상세사진 무한순환 복제 { original: 2, slides: 4, dots: 2, active: '0' }
+Error: 상세사진 3.5초 자동전환: {"before":"0","after":"0"}
+    at check (file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:7:23)
+    at file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:122:3

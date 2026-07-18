@@ -1,7 +1,7 @@
 {
   "success": false,
   "branch": "agent/main-unification",
-  "validatedCandidateSha": "d30bc5e5b8711153c693b9e527d1d10790e78b16",
+  "validatedCandidateSha": "feb7a596a2a806e7af0bc5b413c919ce1dadd043",
   "mainSha": "facb4dbf4539baee515d213288edec9b1783e15e",
   "pullRequest": {
     "number": 1,
@@ -34,14 +34,6 @@
     "approvedPhotos": 9,
     "appliedStores": 14
   },
-  "outcomes": {
-    "static": "success",
-    "unit": "success",
-    "data": "success",
-    "photo": "success",
-    "install": "success",
-    "browser": "failure"
-  },
   "results": {
     "static": {
       "pass": 35,
@@ -64,16 +56,16 @@
       "fail": 0
     },
     "mobile": {
-      "pass": 22,
+      "pass": 28,
       "warn": 0,
       "fail": 1,
-      "failure": "Error: 카테고리별 가까운 가게 추천: {\"firstCategory\":\"한식\"}\n    at check (file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:7:23)\n    at file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:97:3"
+      "failure": "Error: 상세사진 3.5초 자동전환: {\"before\":\"0\",\"after\":\"0\"}\n    at check (file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:7:23)\n    at file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:122:3"
     }
   },
   "changedFiles": [
     "A\t.github/workflows/apply-db790-integration.yml",
     "A\t.github/workflows/apply-runtime-fixes.yml",
-    "A\t.github/workflows/final-validation-proof.yml",
+    "A\t.github/workflows/fix-location-distance.yml",
     "A\t.github/workflows/integration-validation.yml",
     "A\t.github/workflows/restore-banner-assets.yml",
     "A\tSHA256SUMS.txt",
@@ -677,6 +669,7 @@
     "A\tdata/photo-policy.json",
     "A\tdata/stores.before-db790-integration.json",
     "M\tdata/stores.json",
+    "A\tfinal-integration-state.json",
     "D\tfix-v9.css",
     "D\tfix-v9.js",
     "A\timages/01.png",
@@ -729,5 +722,6 @@
     "styles-v7.css",
     "styles-v8.css"
   ],
-  "generatedAt": "2026-07-18T04:58:04.889Z"
+  "distanceMethod": "store coordinates when available; otherwise approximate district-centroid distance clearly labelled in UI",
+  "generatedAt": "2026-07-18T05:03:23.598Z"
 }

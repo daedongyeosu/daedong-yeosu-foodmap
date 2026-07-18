@@ -1,0 +1,36 @@
+name: Refresh photo batch 2 integrity report
+
+on:
+  push:
+    branches: [agent/main-unification]
+    paths: ['.integration/photo-batch2-refresh/READY']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/main-unification
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Refresh counts and regenerate hashes
+        run: |
+          node scripts/refresh-photo-batch2-report.mjs
+          node scripts/generate-photo-batch2-payload-manifest.mjs
+          node scripts/validate-photo-batch2-vetted.mjs
+      - name: Commit refreshed report
+        run: |
+          rm -rf .integration/photo-batch2-refresh
+          git config user.name 'daedong-photo-revalidation'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m '[photo-batch2-final] 무결성 보고서와 해시 최종 갱신'
+          git push origin HEAD:agent/main-unification

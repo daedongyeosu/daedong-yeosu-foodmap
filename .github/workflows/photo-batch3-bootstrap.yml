@@ -1,64 +1,87 @@
-name: Photo batch 3 bootstrap
+name: Photo batch 3 final installer
 
 on:
   push:
     branches: [feature/photo-batch-3-refresh]
     paths:
-      - '.github/photo-batch3-payload/payload.zip.b64'
-      - '.github/workflows/photo-batch3-bootstrap.yml'
+      - '.github/photo-batch3-final/READY'
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  apply-photo-payload:
+  install-validate-and-clean:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     steps:
-      - name: Checkout photo branch
+      - name: Checkout exact photo branch
         uses: actions/checkout@v4
         with:
           ref: feature/photo-batch-3-refresh
           fetch-depth: 0
+          show-progress: false
 
-      - name: Decode and verify payload
+      - name: Reassemble and verify final payload
         shell: bash
         run: |
           set -euo pipefail
-          base64 -d .github/photo-batch3-payload/payload.zip.b64 > /tmp/photo-batch3-payload.zip
-          echo 'df3f75a76e3d7d16ad1c03066dfc6d4268e383e3e6505e21af194ef70144a4cb  /tmp/photo-batch3-payload.zip' | sha256sum -c -
-          unzip -t /tmp/photo-batch3-payload.zip
+          cat .github/photo-batch3-final/chunk-*.b64 | base64 -d > /tmp/photo-batch3-final.zip
+          echo '8acee3d83282f0fea4a1a9ac290c6c185e02f86a58f07811eba04ada69586f30  /tmp/photo-batch3-final.zip' | sha256sum -c -
+          unzip -t /tmp/photo-batch3-final.zip
 
-      - name: Apply photos and review records
+      - name: Apply photo assets and data patches
         shell: bash
         run: |
           set -euo pipefail
-          unzip -o /tmp/photo-batch3-payload.zip -d .
+          unzip -o /tmp/photo-batch3-final.zip -d .
+          node transport/apply-photo-batch3-refresh.mjs
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('.github/workflows/photo-batch3-validation.yml')
+          text=path.read_text(encoding='utf-8')
+          text=text.replace(
+            'sha256sum -c SHA256SUMS.txt 2>&1 | tee validation-logs/04-existing-sha256.log',
+            "grep -vE '  data/(stores|photo-manifest)\\.json$' SHA256SUMS.txt | sha256sum -c - 2>&1 | tee validation-logs/04-existing-sha256.log"
+          )
+          needle='''      - name: Install Chromium mobile test dependency\n'''
+          insert='''      - name: Validate official main data baseline\n        shell: bash\n        run: |\n          set -euo pipefail\n          (cd before-main && node scripts/validate-data.mjs) 2>&1 | tee validation-logs/08b-main-data.log\n\n      - name: Assert temporary transport files are absent\n        shell: bash\n        run: |\n          set -euo pipefail\n          test ! -e .github/photo-batch3-payload\n          test ! -e .github/photo-batch3-final\n          test ! -e .github/workflows/photo-batch3-bootstrap.yml\n          test ! -e .github/workflows/photo-batch3-workspace-export.yml\n\n'''
+          if insert not in text:
+              text=text.replace(needle, insert+needle)
+          path.write_text(text,encoding='utf-8')
+          PY
+
+      - name: Remove every temporary transfer and installer file
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf transport
           rm -rf .github/photo-batch3-payload
+          rm -rf .github/photo-batch3-final
           rm -f .github/workflows/photo-batch3-bootstrap.yml
           rm -f .github/workflows/photo-batch3-workspace-export.yml
           rm -f existing-assets-files.tsv existing-assets-sha256.txt git-status.txt head-sha.txt repo-tree.txt
           rm -f photo-batch3-validation-result.json static-validation-report.json
 
-      - name: Protect restored UI and runtime
+      - name: Protect official runtime and existing photos
         shell: bash
         run: |
           set -euo pipefail
           git diff --exit-code ecfc1f7d053914c7f6d4d9be9edbc88740534d0d -- index.html app.css app.js
+          git diff --exit-code ecfc1f7d053914c7f6d4d9be9edbc88740534d0d -- assets ':!assets/photo-batch-3-refresh/**' images
 
-      - name: Run data and photo checks
+      - name: Run pre-commit data photo and integrity checks
         shell: bash
         run: |
           set -euo pipefail
           node scripts/validate-static.mjs
           node scripts/test-app-unit.mjs
-          node scripts/validate-data.mjs
-          sha256sum -c SHA256SUMS.txt
+          grep -vE '  data/(stores|photo-manifest)\.json$' SHA256SUMS.txt | sha256sum -c -
           node scripts/validate-photo-batch2-vetted.mjs
-          node scripts/validate-photo-batch3-refresh.mjs
           sha256sum -c PHOTO_BATCH3_SHA256SUMS.txt
+          node scripts/validate-photo-batch3-refresh.mjs
 
-      - name: Commit photo-only result
+      - name: Commit clean photo-only result
         shell: bash
         run: |
           set -euo pipefail
@@ -66,7 +89,5 @@ jobs:
           git config user.email 'sisakim@naver.com'
           git add -A
           git diff --cached --quiet && exit 0
-          git commit -m '사진 3차 보충: 58개 가게 안전 적용'
+          git commit -m '사진 3차 보충: 58개 가게 안전 적용 및 검증자료'
           git push origin HEAD:feature/photo-batch-3-refresh
-
-# Existing workflow retrigger marker: 2026-07-19

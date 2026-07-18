@@ -17,8 +17,8 @@ const css=read('app.css');
 const app=read('app.js');
 check((index.match(/<link\s+[^>]*rel="stylesheet"/g)||[]).length===1,'스타일시트 진입점 1개');
 check((index.match(/<script\s+[^>]*src=/g)||[]).length===1,'자바스크립트 진입점 1개');
-check(/href="app\.css\?v=final-integration-1"/.test(index),'정식 CSS 진입점 app.css');
-check(/src="app\.js\?v=final-integration-1"/.test(index),'정식 JS 진입점 app.js');
+check(/href="app\.css\?v=approved-ux-2"/.test(index),'정식 CSS 진입점 app.css');
+check(/src="app\.js\?v=approved-ux-2"/.test(index),'정식 JS 진입점 app.js');
 check(!/app-v[789]\.js|styles-v[789]\.css|fix-v9/i.test(index),'HTML 구형 실행 참조 없음');
 check(/<header class="topbar">[\s\S]*id="locationBtn"[\s\S]*class="brand"[\s\S]*id="noticeBtn"/.test(index),'위치·로고·알림 상단 배치');
 check(!/data-open="phone"/.test(index),'메인 전화주문 버튼 제거');
@@ -28,15 +28,28 @@ check(app.includes('interval = 3500')&&app.includes('setInterval(() => this.move
 check(app.includes("this.track.prepend")&&app.includes("this.track.append")&&app.includes('normalizePosition()'),'무한순환 복제 구조');
 check(app.includes("pointerdown")&&app.includes("pointerup")&&app.includes('Math.abs(delta) > 38'),'손가락 이동 구현');
 check(app.includes('galleryMarkup(store)')&&app.includes('detailPhotoCarousel'),'가게 상세사진 갤러리 구현');
-check(app.includes('feeGuideMarkup(store, selectedRoute)')&&app.includes('feeGuideMount'),'동일 상세 팝업 저수수료 안내 구현');
+check(app.includes('feeGuideMarkup(store, selectedRoute')&&app.includes('openCommunityChoice(store'),'동일 상세 팝업 저수수료 안내 구현');
 check(app.includes("savedLocation")&&app.includes('saveLocationState'),'위치·주소 저장 구현');
-check(app.includes("event.key === 'Escape'")&&app.includes("event.target === $('#modal')")&&app.includes("popstate"),'X·바깥·ESC·뒤로가기 닫기 구현');
+check((app.includes("event.key === 'Escape'")||app.includes("event.key !== 'Escape'"))&&app.includes("event.target === $('#modal')")&&app.includes("popstate")&&app.includes("hardClose"),'X·바깥·ESC·뒤로가기 닫기 구현');
 check(app.includes("const keys = ['direct', 'mukkebi', 'ddangyo', 'ondongne', 'brand', 'yogiyo', 'coupang', 'baemin']"),'메인카드 상세전용 경로 제외');
 check(css.includes('-webkit-line-clamp:2'),'긴 가게명 두 줄 표시');
-check(css.includes('.topbar{display:grid'),'상단 여백·로고 위치 통합 CSS');
+check(css.includes('.topbar .brand{position:absolute;left:50%'),'상단 로고 정확한 정중앙 CSS');
 check(css.includes('.detail-photo-carousel')&&css.includes('.fee-guide-panel'),'상세 갤러리·안내 스타일');
 check(css.includes('overflow:auto')&&css.includes('overscroll-behavior:contain'),'팝업 스크롤 작동');
 warn(true,'1차 스프라이트 패키지는 원본·좌표 색인 부재로 비활성 유지');
+
+check(index.includes('id="topFavoriteBtn"')&&index.includes('id="topRecentBtn"'),'검색 옆 찜·최근 버튼 복원');
+check(app.includes('function openAppBrowser(key')&&app.includes('data-app-store-id'),'앱별 실제 등록 가게 목록 구현');
+check(app.includes('function openCommunityChoice(store')&&app.includes('community-guide'),'선택 앱과 지역 주문방법 동일 안내팝업 구현');
+check(app.includes('detail-personal-actions')&&app.includes('data-feedback-store'),'상세에만 찜·정보수정 동작 구현');
+check(!index.includes('정보 수정 제안'),'메인·푸터 정보수정요청 제거');
+check(css.includes('.topbar .brand{position:absolute;left:50%')&&css.includes('.app-browser-card')&&css.includes('.community-guide'),'정중앙 로고·앱목록·지역안내 스타일');
+check(app.includes('address-single-sheet')&&app.includes('commitAddressSelection'),'주소검색·상세주소·최근주소·현재위치 단일팝업');
+check(app.includes('function hardClose')&&app.includes('unlockPage')&&app.includes('ignoreNextPop'),'안전한 hardClose와 히스토리 정리');
+check(app.includes('window.DaedongSelectedOrderApp')&&app.includes('SELECTED_ORDER_COMPAT_KEY'),'DaedongSelectedOrderApp 호환 저장');
+check(app.includes('function openPhotoViewer')&&index.includes('id="photoViewer"'),'전체화면 상세사진 뷰어');
+check(app.includes('new InfiniteCarousel(carouselRoot,{interval:3500})'),'상세사진 3.5초 자동전환 보존');
+
 
 console.log('\n[정적검사 결과]');
 for(const item of checks)console.log('PASS ',item);

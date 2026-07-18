@@ -1,0 +1,170 @@
+name: Approved UX remote branch validation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'index.html'
+      - 'app.css'
+      - 'app.js'
+      - 'scripts/approved-ux-mobile.mjs'
+      - 'scripts/validate-static.mjs'
+      - 'scripts/test-app-unit.mjs'
+      - '.github/workflows/approved-ux-validation.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mobile-flow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      EXPECTED_HEAD_REF: ${{ github.event.pull_request.head.ref || github.ref_name }}
+      EXPECTED_BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
+      EXPECTED_BASE_REF: ${{ github.event.pull_request.base.ref || 'main' }}
+    steps:
+      - name: Checkout exact PR head SHA
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          show-progress: false
+
+      - name: Prove GitHub runner and exact branch checkout
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual_sha="$(git rev-parse HEAD)"
+          test "$actual_sha" = "$EXPECTED_HEAD_SHA"
+          initial_status="$(git status --porcelain=v1)"
+          printf '%s' "$initial_status" > github-actions-git-status.txt
+          git fetch origin main --no-tags
+          git diff --name-only origin/main...HEAD | sort > github-actions-changed-files.txt
+          git log -1 --format='%H%n%P%n%an%n%ae%n%aI%n%s' > github-actions-head-commit.txt
+          git remote -v > github-actions-remotes.txt
+          python3 - <<'PY'
+          import json, os, platform, subprocess
+          actual = subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip()
+          changed = open('github-actions-changed-files.txt', encoding='utf-8').read().splitlines()
+          status = open('github-actions-git-status.txt', encoding='utf-8').read().splitlines()
+          proof = {
+            'proofType': 'github-actions-hosted-runner',
+            'repository': os.environ['GITHUB_REPOSITORY'],
+            'workflow': os.environ['GITHUB_WORKFLOW'],
+            'runId': int(os.environ['GITHUB_RUN_ID']),
+            'runNumber': int(os.environ['GITHUB_RUN_NUMBER']),
+            'runAttempt': int(os.environ['GITHUB_RUN_ATTEMPT']),
+            'runUrl': f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_RUN_ID']}",
+            'eventName': os.environ['GITHUB_EVENT_NAME'],
+            'githubRef': os.environ['GITHUB_REF'],
+            'githubRefName': os.environ['GITHUB_REF_NAME'],
+            'githubSha': os.environ['GITHUB_SHA'],
+            'expectedHeadRef': os.environ['EXPECTED_HEAD_REF'],
+            'expectedHeadSha': os.environ['EXPECTED_HEAD_SHA'],
+            'expectedBaseRef': os.environ['EXPECTED_BASE_REF'],
+            'expectedBaseSha': os.environ.get('EXPECTED_BASE_SHA',''),
+            'actualCheckedOutSha': actual,
+            'headMatchesExactly': actual == os.environ['EXPECTED_HEAD_SHA'],
+            'sourceTreeCleanBeforeEvidence': len(status) == 0,
+            'runnerName': os.environ['RUNNER_NAME'],
+            'runnerOs': os.environ['RUNNER_OS'],
+            'runnerArch': os.environ['RUNNER_ARCH'],
+            'runnerEnvironment': os.environ.get('RUNNER_ENVIRONMENT',''),
+            'pythonPlatform': platform.platform(),
+            'workspace': os.environ['GITHUB_WORKSPACE'],
+            'changedFilesAgainstMain': changed,
+            'gitStatusBeforeEvidence': status,
+            'pagesDeploymentPerformed': False,
+            'mainMergePerformed': False
+          }
+          with open('github-actions-provenance.json','w',encoding='utf-8') as f:
+            json.dump(proof,f,ensure_ascii=False,indent=2)
+          print(json.dumps(proof,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Checkout current main for before screenshot
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: before-main
+          show-progress: false
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Static, unit, data and photo preservation checks
+        run: |
+          node scripts/validate-static.mjs
+          node scripts/test-app-unit.mjs
+          node scripts/validate-data.mjs
+          sha256sum -c SHA256SUMS.txt
+          node scripts/validate-photo-batch2-vetted.mjs
+
+      - name: Install mobile browser runtime on GitHub runner
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Run mobile click flow against checked-out branch
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 --directory before-main > before-main-server.log 2>&1 &
+          before_pid=$!
+          python3 -m http.server 4174 --bind 127.0.0.1 > after-branch-server.log 2>&1 &
+          after_pid=$!
+          trap 'kill $before_pid $after_pid 2>/dev/null || true' EXIT
+          sleep 3
+          BEFORE_URL=http://127.0.0.1:4173 AFTER_URL=http://127.0.0.1:4174 node scripts/approved-ux-mobile.mjs
+
+      - name: Bind screenshots and reports to this GitHub run
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          : > github-actions-evidence-sha256.txt
+          for file in approved-ux-*.png approved-ux-comparison.json static-validation-report.json data-validation-report.json; do
+            if [ -f "$file" ]; then sha256sum "$file" >> github-actions-evidence-sha256.txt; fi
+          done
+          python3 - <<'PY'
+          import json, os
+          path='github-actions-provenance.json'
+          if os.path.exists(path):
+            proof=json.load(open(path,encoding='utf-8'))
+            proof['evidenceSha256File']='github-actions-evidence-sha256.txt'
+            proof['evidenceFiles']=[line.strip().split('  ',1)[1] for line in open('github-actions-evidence-sha256.txt',encoding='utf-8') if '  ' in line]
+            json.dump(proof,open(path,'w',encoding='utf-8'),ensure_ascii=False,indent=2)
+          PY
+
+      - name: Upload GitHub-runner provenance and mobile evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: approved-ux-github-run-${{ github.run_id }}-attempt-${{ github.run_attempt }}
+          path: |
+            github-actions-provenance.json
+            github-actions-changed-files.txt
+            github-actions-git-status.txt
+            github-actions-head-commit.txt
+            github-actions-remotes.txt
+            github-actions-evidence-sha256.txt
+            approved-ux-comparison.json
+            approved-ux-before-main.png
+            approved-ux-after-home.png
+            approved-ux-address-single-popup.png
+            approved-ux-hard-close-clean.png
+            approved-ux-after-detail-initial.png
+            approved-ux-after-detail.png
+            approved-ux-photo-viewer.png
+            approved-ux-photo-viewer-return.png
+            approved-ux-after-app-list.png
+            approved-ux-app-selection-guide.png
+            approved-ux-after-community-guide.png
+            static-validation-report.json
+            data-validation-report.json
+            before-main-server.log
+            after-branch-server.log
+          if-no-files-found: warn
+          retention-days: 30

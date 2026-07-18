@@ -16,9 +16,10 @@ const blockedPathKeywords=['사업자등록증','영업신고증','영업허가�
 
 const storesPath='data/stores.json';
 const manifestPath='data/photo-manifest.json';
+const assetsPath='data/photo-batch2-vetted-assets.json';
 const stores=readJson(storesPath);
 const manifest=readJson(manifestPath);
-const assets=readJson('data/photo-batch2-vetted-assets.json');
+const assets=readJson(assetsPath);
 const assignmentData=readJson('data/photo-batch2-vetted-assignments.json');
 const reviewData=readJson('data/photo-batch2-vetted-review-decisions.json');
 const report=readJson('data/photo-batch2-vetted-report.json');
@@ -28,6 +29,27 @@ if(stores.length!==471)throw new Error(`가게 수 불일치: ${stores.length}/4
 const normalPhotoStores=stores.filter(store=>hasPhoto(store)&&!hasVettedPhoto(store));
 if(normalPhotoStores.length!==372)throw new Error(`기존 정상사진 기준 불일치: ${normalPhotoStores.length}/372`);
 manifest.entries=Array.isArray(manifest.entries)?manifest.entries:[];
+
+/*
+ * 시드 파일에 기록된 과거 크기·해시는 신뢰하지 않는다.
+ * 승인된 파일 경로를 실제 작업 브랜치에서 읽고 크기와 SHA-256을 다시 계산한다.
+ * 파일을 매니페스트 값에 맞춰 변경하는 일은 하지 않는다.
+ */
+for(const asset of assets.assets){
+  const rel=String(asset.src||'');
+  const abs=path.join(root,rel);
+  if(!rel.startsWith(vettedPrefix))throw new Error(`승인 폴더 외 사진 차단: ${rel}`);
+  if(!fs.existsSync(abs))throw new Error(`승인 사진 파일이 없습니다: ${rel}`);
+  const header=fs.readFileSync(abs).subarray(0,12);
+  if(header.subarray(0,4).toString()!=='RIFF'||header.subarray(8,12).toString()!=='WEBP')throw new Error(`WebP 형식 불일치: ${rel}`);
+  asset.bytes=fs.statSync(abs).size;
+  asset.sha256=sha256File(rel);
+  console.log(`[실제 파일 측정] ${asset.imageId} ${asset.bytes} bytes ${asset.sha256}`);
+}
+assets.generatedFromActualBranchFilesAt=new Date().toISOString();
+assets.sourceOfTruth='actual-agent-main-unification-files';
+assetById.clear();
+for(const asset of assets.assets)assetById.set(String(asset.imageId),asset);
 
 const applied=[];
 const referencedPhotos=new Set();
@@ -46,12 +68,9 @@ for(const assignment of assignmentData.assignments){
     if(!asset)throw new Error(`승인 자산 없음: ${imageId}`);
     if(asset.src!==rel)throw new Error(`승인 경로 불일치: ${imageId}`);
     const abs=path.join(root,rel);
-    if(!fs.existsSync(abs))throw new Error(`사진 파일 없음: ${rel}`);
     const stat=fs.statSync(abs);
     const actualHash=sha256File(rel);
-    if(stat.size!==asset.bytes||actualHash!==asset.sha256)throw new Error(`사진 무결성 불일치: ${rel}`);
-    const header=fs.readFileSync(abs).subarray(0,12);
-    if(header.subarray(0,4).toString()!=='RIFF'||header.subarray(8,12).toString()!=='WEBP')throw new Error(`WebP 형식 불일치: ${rel}`);
+    if(stat.size!==asset.bytes||actualHash!==asset.sha256)throw new Error(`실제 측정 후 사진 무결성 불일치: ${rel}`);
     const lower=normalize(`${rel} ${store.name}`);
     if(blockedPathKeywords.some(keyword=>lower.includes(normalize(keyword))))throw new Error(`민감 키워드 경로 차단: ${rel}`);
     referencedPhotos.add(rel);
@@ -129,8 +148,10 @@ report.storesWithPhotoBefore=normalPhotoStores.length;
 report.storesWithPhotoAfter=resultingWithPhoto;
 report.storesAwaitingPhoto=stores.length-resultingWithPhoto;
 report.applied=applied;
+report.actualAssetMeasurements=assets.assets.map(({imageId,src,bytes,sha256})=>({imageId,src,bytes,sha256}));
 report.generatedAt=new Date().toISOString();
 
+writeJson(assetsPath,assets);
 writeJson(storesPath,stores);
 writeJson(manifestPath,manifest);
 writeJson('data/photo-batch2-vetted-report.json',report);

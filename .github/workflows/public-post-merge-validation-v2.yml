@@ -1,0 +1,205 @@
+name: Public post-merge validation v2
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/public-post-merge-validation-v2.yml'
+
+permissions:
+  contents: read
+  actions: read
+  pages: read
+
+jobs:
+  public-mobile-v2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      MERGE_SHA: ecfc1f7d053914c7f6d4d9be9edbc88740534d0d
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout exact merged main SHA
+        uses: actions/checkout@v4
+        with:
+          ref: ecfc1f7d053914c7f6d4d9be9edbc88740534d0d
+          fetch-depth: 0
+          show-progress: false
+
+      - name: Prove main, backup and preserved work branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          actual="$(git rev-parse HEAD)"
+          main_remote="$(git ls-remote origin refs/heads/main | awk '{print $1}')"
+          backup_remote="$(git ls-remote origin refs/heads/backup/pre-approved-ux-merge | awk '{print $1}')"
+          work_remote="$(git ls-remote origin refs/heads/fix/restore-approved-ux | awk '{print $1}')"
+          test "$actual" = "$MERGE_SHA"
+          test "$main_remote" = "$MERGE_SHA"
+          test "$backup_remote" = "618d4c2f5768a1ffdee3c4a6508e9201c883ff43"
+          test "$work_remote" = "3eb61334c2c6ac54f06d66c7519857e6ae5e02e0"
+          python3 - <<'PY'
+          import json,os,subprocess
+          def ref(name):
+              out=subprocess.check_output(['git','ls-remote','origin',f'refs/heads/{name}'],text=True).strip()
+              return out.split()[0] if out else ''
+          out={'repository':os.environ['GITHUB_REPOSITORY'],'githubRunId':int(os.environ['GITHUB_RUN_ID']),'runnerEnvironment':os.environ.get('RUNNER_ENVIRONMENT',''),'runnerOs':os.environ['RUNNER_OS'],'runnerArch':os.environ['RUNNER_ARCH'],'mergeSha':os.environ['MERGE_SHA'],'actualCheckedOutSha':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),'mainSha':ref('main'),'backupBranch':'backup/pre-approved-ux-merge','backupSha':ref('backup/pre-approved-ux-merge'),'preservedWorkBranch':'fix/restore-approved-ux','preservedWorkBranchSha':ref('fix/restore-approved-ux')}
+          json.dump(out,open('public-validation-provenance.json','w'),ensure_ascii=False,indent=2)
+          print(json.dumps(out,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Confirm successful Pages deployment and public URL
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh api -X GET "repos/$GITHUB_REPOSITORY/actions/runs?head_sha=$MERGE_SHA&per_page=100" > actions-runs.json
+          python3 - <<'PY'
+          import json,os
+          data=json.load(open('actions-runs.json')); sha=os.environ['MERGE_SHA']
+          candidates=[r for r in data.get('workflow_runs',[]) if r.get('head_sha')==sha and r.get('head_branch')=='main' and ('pages' in str(r.get('name','')).lower() or 'pages' in str(r.get('path','')).lower())]
+          candidates.sort(key=lambda r:r.get('created_at',''),reverse=True)
+          if not candidates: raise SystemExit('Pages run not found')
+          run=candidates[0]
+          if run.get('status')!='completed' or run.get('conclusion')!='success': raise SystemExit(f"Pages not successful: {run.get('status')} {run.get('conclusion')}")
+          json.dump(run,open('pages-deployment-run.json','w'),ensure_ascii=False,indent=2)
+          print(json.dumps({'id':run['id'],'status':run['status'],'conclusion':run['conclusion'],'url':run['html_url']},ensure_ascii=False,indent=2))
+          PY
+          gh api -X GET "repos/$GITHUB_REPOSITORY/pages" > pages-site.json
+          PUBLIC_URL="$(python3 -c "import json; print(json.load(open('pages-site.json'))['html_url'].rstrip('/') + '/')")"
+          echo "PUBLIC_URL=$PUBLIC_URL" >> "$GITHUB_ENV"
+          gh api -X GET "repos/$GITHUB_REPOSITORY/pages/deployments/$MERGE_SHA" > pages-deployment-status.json || true
+
+      - name: Prove public index, CSS and JS bytes equal merged main
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p public-fetched
+          for file in index.html app.css app.js; do
+            curl --fail --location --silent --show-error -H 'Cache-Control: no-cache' -H 'Pragma: no-cache' "${PUBLIC_URL}${file}?main=${MERGE_SHA}&run=${GITHUB_RUN_ID}" -o "public-fetched/$file"
+            cmp --silent "$file" "public-fetched/$file"
+          done
+          python3 - <<'PY'
+          import hashlib,json,os
+          def sha(path):return hashlib.sha256(open(path,'rb').read()).hexdigest()
+          rows=[]
+          for name in ['index.html','app.css','app.js']:
+              rows.append({'file':name,'mainSha256':sha(name),'publicSha256':sha('public-fetched/'+name),'identical':open(name,'rb').read()==open('public-fetched/'+name,'rb').read()})
+          out={'mergeSha':os.environ['MERGE_SHA'],'publicUrl':os.environ['PUBLIC_URL'],'files':rows,'allIdentical':all(x['identical'] for x in rows)}
+          json.dump(out,open('public-file-byte-proof.json','w'),ensure_ascii=False,indent=2)
+          print(json.dumps(out,ensure_ascii=False,indent=2))
+          PY
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Validate merged data, photos and static structure
+        run: |
+          node scripts/validate-static.mjs
+          node scripts/test-app-unit.mjs
+          node scripts/validate-data.mjs
+          sha256sum -c SHA256SUMS.txt
+          node scripts/validate-photo-batch2-vetted.mjs
+
+      - name: Install mobile Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Run full approved 45-check flow on public URL
+        shell: bash
+        run: |
+          BEFORE_URL="${PUBLIC_URL}?view=before&sha=${MERGE_SHA}" AFTER_URL="${PUBLIC_URL}?view=public&sha=${MERGE_SHA}" node scripts/approved-ux-mobile.mjs
+
+      - name: Force lazy images and audit visible breakage, overflow and popup duplication
+        shell: bash
+        run: |
+          cat > public-extra-audit-v2.mjs <<'NODE'
+          import fs from 'node:fs';
+          import {chromium} from 'playwright';
+          const url=process.env.PUBLIC_URL+'?audit=v2&sha='+process.env.MERGE_SHA+'&run='+process.env.GITHUB_RUN_ID;
+          const report={url,startedAt:new Date().toISOString(),pass:[],warn:[],fail:[],consoleErrors:[]};
+          const ok=(name,details={})=>report.pass.push({name,details});
+          const warn=(name,details={})=>report.warn.push({name,details});
+          const bad=(name,details={})=>report.fail.push({name,details});
+          const browser=await chromium.launch({headless:true});
+          const context=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:1,locale:'ko-KR',permissions:['geolocation'],geolocation:{latitude:34.7604,longitude:127.6622}});
+          const page=await context.newPage();
+          page.on('pageerror',e=>report.consoleErrors.push('pageerror: '+e.message));
+          page.on('console',m=>{if(m.type()==='error')report.consoleErrors.push('console: '+m.text())});
+          await page.addInitScript(()=>{const today=new Date().toLocaleDateString('sv-SE',{timeZone:'Asia/Seoul'});localStorage.setItem('hideStartup',today)});
+          await page.goto(url,{waitUntil:'networkidle',timeout:120000});await page.waitForSelector('#storeGrid .store-card',{timeout:120000});
+          await page.evaluate(()=>{for(const img of document.querySelectorAll('img[src]')){img.loading='eager';img.setAttribute('loading','eager')}});
+          await page.waitForTimeout(12000);
+          const home=await page.evaluate(async()=>{
+            const imgs=[...document.querySelectorAll('img[src]')];
+            const unique=[...new Set(imgs.map(i=>i.getAttribute('src')).filter(Boolean))];
+            const http=[];
+            for(const src of unique){
+              if(src.startsWith('data:')||src.startsWith('blob:'))continue;
+              try{const r=await fetch(new URL(src,location.href),{cache:'no-store'});http.push({src,status:r.status,ok:r.ok,type:r.headers.get('content-type')||''})}catch(e){http.push({src,status:0,ok:false,error:String(e)})}
+            }
+            const visibleBroken=imgs.filter(img=>{const r=img.getBoundingClientRect(),s=getComputedStyle(img);const visible=r.right>0&&r.left<innerWidth&&r.bottom>0&&r.top<innerHeight&&s.display!=='none'&&s.visibility!=='hidden'&&Number(s.opacity)>0;return visible&&img.naturalWidth===0}).map(i=>i.getAttribute('src'));
+            const unresolved=imgs.filter(i=>i.complete&&i.naturalWidth===0).map(i=>i.getAttribute('src'));
+            return{visibleBroken:[...new Set(visibleBroken)],unresolvedAfterForcedLoad:[...new Set(unresolved)],httpFailures:http.filter(x=>!x.ok),httpChecked:http.length,overflow:document.documentElement.scrollWidth-innerWidth,roots:{modal:document.querySelectorAll('#modal').length,overlay:document.querySelectorAll('#overlay').length,viewer:document.querySelectorAll('#photoViewer').length}};
+          });
+          home.visibleBroken.length===0?ok('현재 화면에 깨진 이미지 없음',home):bad('현재 화면 깨진 이미지',home);
+          home.httpFailures.length===0?ok('렌더링 이미지 URL HTTP 오류 0',home):warn('이미지 원본 HTTP 오류는 fallback으로 처리됨',home.httpFailures);
+          home.overflow<=2?ok('홈 가로 넘침 없음',home):bad('홈 가로 넘침',home);
+          Object.values(home.roots).every(v=>v===1)?ok('팝업 루트 중복 없음',home):bad('팝업 루트 중복',home);
+          await page.screenshot({path:'public-final-home-v2.png'});
+          await page.locator('#locationBtn').click();await page.waitForSelector('#modal.address-modal:not([hidden])');await page.screenshot({path:'public-address-popup-v2.png'});await page.locator('.modal-close').click();
+          await page.locator('#mainSearch').fill('LA통닭&포차 여서본점');await page.locator('#searchBtn').click();await page.waitForSelector('#storeGrid .store-card');await page.locator('#storeGrid .store-card').first().click();await page.waitForSelector('#modal.store-modal:not([hidden])');
+          const detail=await page.evaluate(()=>({overflow:document.querySelector('.store-modal .modal-card').scrollWidth-document.querySelector('.store-modal .modal-card').clientWidth,visibleModals:document.querySelectorAll('.modal:not([hidden])').length}));
+          detail.overflow<=2?ok('상세팝업 가로 넘침 없음',detail):bad('상세팝업 가로 넘침',detail);
+          detail.visibleModals===1?ok('팝업 중복 표시 없음',detail):bad('팝업 중복 표시',detail);
+          await page.screenshot({path:'public-store-detail-v2.png'});
+          await page.evaluate(()=>{const root=document.querySelector('#detailPhotoCarousel'),frame=root.querySelector('.detail-photo-frame').getBoundingClientRect(),img=[...root.querySelectorAll('.detail-photo')].find(i=>{const r=i.getBoundingClientRect();return r.right>frame.left&&r.left<frame.right});img?.click()});
+          await page.waitForSelector('#photoViewer:not([hidden])');await page.screenshot({path:'public-photo-viewer-v2.png'});await page.locator('[data-photo-viewer-close]').click();
+          report.consoleErrors.length===0?ok('콘솔 오류 0'):bad('콘솔 오류',report.consoleErrors);
+          report.finishedAt=new Date().toISOString();report.passCount=report.pass.length;report.warnCount=report.warn.length;report.failCount=report.fail.length;
+          fs.writeFileSync('public-extra-audit-v2.json',JSON.stringify(report,null,2)+'\n');await browser.close();if(report.fail.length)process.exit(1);
+          NODE
+          PUBLIC_URL="$PUBLIC_URL" MERGE_SHA="$MERGE_SHA" node public-extra-audit-v2.mjs
+
+      - name: Build final summary and evidence hashes
+        if: always()
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json,os,glob,hashlib
+          def load(p):
+              try:return json.load(open(p,encoding='utf-8'))
+              except:return {}
+          ux=load('approved-ux-comparison.json');extra=load('public-extra-audit-v2.json');run=load('pages-deployment-run.json');proof=load('public-file-byte-proof.json')
+          out={'mergeSha':os.environ.get('MERGE_SHA'),'pagesRunId':run.get('id'),'pagesRunUrl':run.get('html_url'),'pagesStatus':run.get('status'),'pagesConclusion':run.get('conclusion'),'publicUrl':os.environ.get('PUBLIC_URL'),'publicFilesMatchMergedMain':proof.get('allIdentical'),'mobilePass':len(ux.get('checks',[])) if ux.get('success') else 0,'mobileErrors':len(ux.get('errors',[])),'extraPass':extra.get('passCount',0),'extraWarn':extra.get('warnCount',0),'extraFail':extra.get('failCount',0),'backupBranch':'backup/pre-approved-ux-merge','backupSha':'618d4c2f5768a1ffdee3c4a6508e9201c883ff43','workBranchPreserved':True}
+          json.dump(out,open('public-validation-summary-v2.json','w'),ensure_ascii=False,indent=2)
+          with open('public-evidence-sha256-v2.txt','w') as f:
+              files=sorted(glob.glob('public-*.png')+glob.glob('approved-ux-*.png')+['public-validation-summary-v2.json','public-file-byte-proof.json','pages-deployment-run.json','public-extra-audit-v2.json'])
+              for p in files:
+                  if os.path.exists(p):f.write(hashlib.sha256(open(p,'rb').read()).hexdigest()+'  '+p+'\n')
+          print(json.dumps(out,ensure_ascii=False,indent=2))
+          PY
+
+      - name: Upload final public validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: public-post-merge-v2-${{ github.run_id }}
+          path: |
+            public-validation-provenance.json
+            pages-deployment-run.json
+            pages-deployment-status.json
+            pages-site.json
+            actions-runs.json
+            public-file-byte-proof.json
+            public-validation-summary-v2.json
+            public-evidence-sha256-v2.txt
+            approved-ux-comparison.json
+            public-extra-audit-v2.json
+            static-validation-report.json
+            data-validation-report.json
+            approved-ux-*.png
+            public-*.png
+          if-no-files-found: warn
+          retention-days: 30

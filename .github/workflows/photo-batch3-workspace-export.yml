@@ -1,0 +1,49 @@
+name: Photo batch 3 workspace export
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/photo-batch3-workspace-export.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  export-current-branch-data:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact pull request head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+          show-progress: false
+
+      - name: Build read-only workspace export
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p workspace-export/data workspace-export/scripts
+          cp data/stores.json workspace-export/data/
+          cp data/photo-manifest.json workspace-export/data/
+          cp data/photo-policy.json workspace-export/data/
+          find data -maxdepth 1 -type f -name '*photo*.json' -exec cp {} workspace-export/data/ \;
+          find scripts -maxdepth 1 -type f -name '*.mjs' -exec cp {} workspace-export/scripts/ \;
+          cp SHA256SUMS.txt workspace-export/ 2>/dev/null || true
+          cp index.html app.css app.js workspace-export/ 2>/dev/null || true
+          git ls-tree -r --long HEAD > workspace-export/repo-tree.txt
+          find assets -type f -printf '%P\t%s\n' | sort > workspace-export/existing-assets-files.tsv
+          find assets -type f -print0 | sort -z | xargs -0 sha256sum > workspace-export/existing-assets-sha256.txt
+          git rev-parse HEAD > workspace-export/head-sha.txt
+          git status --porcelain=v1 > workspace-export/git-status.txt
+
+      - name: Upload exact branch data
+        uses: actions/upload-artifact@v4
+        with:
+          name: photo-batch3-workspace-${{ github.run_id }}
+          path: workspace-export
+          if-no-files-found: error
+          retention-days: 7

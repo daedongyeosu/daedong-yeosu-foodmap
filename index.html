@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#ff5a1f">
   <meta name="description" content="여수 음식점과 주문방법을 한눈에 찾는 대동여수음식지도">
   <title>대동여수음식지도</title>
-  <link rel="stylesheet" href="app.css?v=integration-1">
+  <link rel="stylesheet" href="app.css?v=final-integration-1">
 </head>
 <body>
   <div id="app">
@@ -14,10 +14,9 @@
       <button id="locationBtn" class="location-chip" type="button" aria-label="지역 선택">
         <span aria-hidden="true">📍</span><span id="locationText">여수시 전체</span><span aria-hidden="true">⌄</span>
       </button>
+      <a class="brand" href="#app" aria-label="대동여수음식지도 홈"><img src="assets/logo.png" alt="대동여수음식지도"></a>
       <button id="noticeBtn" class="icon-btn" type="button" aria-label="알림">🔔<b class="badge">2</b></button>
     </header>
-
-    <section class="brand"><img src="assets/logo.png" alt="대동여수음식지도"></section>
 
     <section class="hero" aria-label="메인 슬라이드 배너">
       <div id="heroCarousel" class="carousel-controller">
@@ -46,15 +45,14 @@
         <a class="order-item" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.shinhan.o2o"><img src="assets/ddangyo-v7.png" alt="땡겨요"><strong>땡겨요</strong></a>
         <a class="order-item" target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=kr.co.kncsol.ondongne"><img src="assets/ondongne.png" alt="온동네"><strong>온동네</strong></a>
         <button class="order-item" type="button" data-open="brands"><span class="brand-app-icon"><img src="images/momstouch.jpg" alt=""><img src="images/ajukeo.jpg" alt=""><img src="images/burgerking.png" alt=""><span aria-hidden="true">＋</span></span><strong>브랜드앱</strong></button>
-        <button class="order-item" type="button" data-open="phone"><span class="order-icon purple">☎</span><strong>전화주문</strong></button>
-        <button id="moreAppsBtn" class="order-item more-apps" type="button"><strong>다른 주문앱 보기</strong><span>›</span></button>
+        <button id="moreAppsBtn" class="order-item more-apps" type="button"><span class="order-icon">📦</span><strong>다른 주문앱</strong></button>
       </div>
       <div id="moreAppsPopover" class="popover" hidden>
         <button class="popover-close" type="button" aria-label="닫기">×</button><h3>다른 주문앱 보기</h3>
         <div class="external-apps">
-          <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.fineapp.yogiyo"><img src="assets/yogiyo.jpg" alt="요기요"><span>요기요</span></a>
-          <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.coupang.mobile.eats"><img src="assets/coupang-eats.jpg" alt="쿠팡이츠"><span>쿠팡이츠</span></a>
-          <a target="_blank" rel="noopener" href="https://play.google.com/store/apps/details?id=com.sampleapp"><img src="assets/baemin.jpg" alt="배달의민족"><span>배달의민족</span></a>
+          <button type="button" data-global-external="yogiyo"><img src="assets/yogiyo.jpg" alt="요기요"><span>요기요</span></button>
+          <button type="button" data-global-external="coupang"><img src="assets/coupang-eats.jpg" alt="쿠팡이츠"><span>쿠팡이츠</span></button>
+          <button type="button" data-global-external="baemin"><img src="assets/baemin.jpg" alt="배달의민족"><span>배달의민족</span></button>
         </div>
       </div>
     </section>
@@ -84,7 +82,7 @@
     </section>
 
     <footer class="legal"><button type="button" data-open="guide">이용안내</button><button type="button">개인정보처리방침</button><button type="button">정보 수정 제안</button><button type="button">광고 문의</button></footer>
-    <div class="build-mark">통합 검증 후보 · main 미반영</div>
+    <div class="build-mark">최종 통합 검증 후보 · main 미반영</div>
   </div>
 
   <nav class="bottom-nav"><button type="button" data-tab="home" class="active">⌂<span>홈</span></button><button type="button" data-tab="search">⌕<span>검색</span></button><button type="button" data-tab="favorite">♡<span>찜한가게</span></button><button type="button" data-tab="recent">◷<span>최근방문</span></button><button type="button" data-tab="mypage">♙<span>마이페이지</span></button></nav>
@@ -92,6 +90,6 @@
   <div id="modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-card"><button class="modal-close" type="button" aria-label="닫기">×</button><div id="modalContent"></div></div></div>
   <div id="startupAd" class="startup-ad" hidden><div class="startup-card"><button class="startup-close" type="button" aria-label="닫기">×</button><small>대동여수음식지도 안내</small><h2>배달기사·가맹점 모집</h2><p>기사 모집, 가게 모집, 주문앱 가입 안내, 신규 오픈 가게와 소상공인 소식을 알립니다.</p><div class="startup-actions"><button id="startupDetails" class="primary-btn" type="button">자세히 보기</button><button id="hideToday" type="button">오늘 그만 보기</button></div></div></div>
   <noscript><p class="noscript">대동여수음식지도를 이용하려면 자바스크립트를 켜주세요.</p></noscript>
-  <script src="app.js?v=integration-1" defer></script>
+  <script src="app.js?v=final-integration-1" defer></script>
 </body>
 </html>

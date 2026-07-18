@@ -986,7 +986,7 @@
     {
       "name": "매니페스트 크기 scripts/generate-photo-batch2-payload-manifest.mjs",
       "ok": true,
-      "detail": "1978/1978"
+      "detail": "1926/1926"
     },
     {
       "name": "매니페스트 SHA scripts/generate-photo-batch2-payload-manifest.mjs",
@@ -1009,17 +1009,17 @@
       "detail": ""
     },
     {
-      "name": "매니페스트 존재 .github/workflows/photo-batch2-final-verification.yml",
+      "name": "매니페스트 존재 scripts/validate-data.mjs",
       "ok": true,
       "detail": ""
     },
     {
-      "name": "매니페스트 크기 .github/workflows/photo-batch2-final-verification.yml",
+      "name": "매니페스트 크기 scripts/validate-data.mjs",
       "ok": true,
-      "detail": "12728/12728"
+      "detail": "4489/4489"
     },
     {
-      "name": "매니페스트 SHA .github/workflows/photo-batch2-final-verification.yml",
+      "name": "매니페스트 SHA scripts/validate-data.mjs",
       "ok": true,
       "detail": ""
     },
@@ -1031,7 +1031,7 @@
     {
       "name": "매니페스트 크기 .github/workflows/integration-validation.yml",
       "ok": true,
-      "detail": "13375/13375"
+      "detail": "6659/6659"
     },
     {
       "name": "매니페스트 SHA .github/workflows/integration-validation.yml",

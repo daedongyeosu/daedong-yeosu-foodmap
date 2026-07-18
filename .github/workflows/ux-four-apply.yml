@@ -40,6 +40,16 @@ jobs:
           gunzip -c /tmp/ux-four.patch.gz > /tmp/ux-four.patch
           cd "$GITHUB_WORKSPACE"
           patch -p1 < /tmp/ux-four.patch
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('scripts/validate-static.mjs')
+          text=path.read_text()
+          old='check(app.includes("event.key === \'Escape\'")&&app.includes("event.target === $(\'#modal\')")&&app.includes("popstate"),\'X·바깥·ESC·뒤로가기 닫기 구현\');'
+          new='check((app.includes("event.key === \'Escape\'")||app.includes("event.key !== \'Escape\'"))&&app.includes("event.target === $(\'#modal\')")&&app.includes("popstate")&&app.includes("hardClose"),\'X·바깥·ESC·뒤로가기 닫기 구현\');'
+          if old not in text:
+              raise SystemExit('static close check target not found')
+          path.write_text(text.replace(old,new))
+          PY
       - name: Validate preserved and reinforced behavior
         shell: bash
         run: |

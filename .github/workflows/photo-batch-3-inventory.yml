@@ -1,0 +1,32 @@
+name: photo-batch-3 inventory
+
+on:
+  push:
+    branches:
+      - feature/photo-batch-3
+    paths:
+      - .github/workflows/photo-batch-3-inventory.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Report stores awaiting photos
+        shell: bash
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const stores = JSON.parse(fs.readFileSync('data/stores.json','utf8'));
+          const paths = s => [s.image,s.img,...(Array.isArray(s.images)?s.images.flatMap(v => typeof v === 'string' ? [v] : [v?.card,v?.detail]):[])].filter(Boolean);
+          const awaiting = stores.filter(s => paths(s).length === 0).map(s => ({id:String(s.id),name:s.name,district:s.district||'',realBusinessName:s.realBusinessName||'',aliases:s.shopInShopNames||[]}));
+          console.log('PHOTO_BATCH_3_AWAITING_JSON_BEGIN');
+          console.log(JSON.stringify({storeCount:stores.length,awaitingCount:awaiting.length,awaiting},null,2));
+          console.log('PHOTO_BATCH_3_AWAITING_JSON_END');
+          if (stores.length !== 471) throw new Error(`store count ${stores.length} != 471`);
+          if (awaiting.length !== 85) throw new Error(`awaiting count ${awaiting.length} != 85`);
+          NODE

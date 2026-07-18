@@ -47,7 +47,6 @@ jobs:
           npm install --no-save --no-package-lock playwright@1.55.0
           npx playwright install --with-deps chromium
       - name: Compare main and restored mobile flows
-        # Includes active-image position and actual pixel-range checks before and after mixed carousel input.
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 --directory before-main > before-main-server.log 2>&1 &
           before_pid=$!
@@ -65,9 +64,14 @@ jobs:
             approved-ux-comparison.json
             approved-ux-before-main.png
             approved-ux-after-home.png
+            approved-ux-address-single-popup.png
+            approved-ux-hard-close-clean.png
             approved-ux-after-detail-initial.png
             approved-ux-after-detail.png
+            approved-ux-photo-viewer.png
+            approved-ux-photo-viewer-return.png
             approved-ux-after-app-list.png
+            approved-ux-app-selection-guide.png
             approved-ux-after-community-guide.png
             static-validation-report.json
             data-validation-report.json

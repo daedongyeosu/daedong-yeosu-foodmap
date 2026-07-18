@@ -1,0 +1,107 @@
+name: Apply final carousel drag fix
+
+on:
+  push:
+    branches: [agent/main-unification]
+    paths:
+      - '.github/workflows/fix-carousel-drag.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout integration branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/main-unification
+          fetch-depth: 0
+          show-progress: false
+
+      - name: Patch carousel drag handling
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('app.js')
+          text=path.read_text()
+          old="""  bind() {
+              this.prev?.addEventListener('click', () => this.move(-1));
+              this.next?.addEventListener('click', () => this.move(1));
+              this.track.addEventListener('transitionend', () => this.normalizePosition());
+              this.shell.addEventListener('pointerdown', event => { this.dragStart = event.clientX; this.stop(); this.shell.setPointerCapture?.(event.pointerId); });
+              this.shell.addEventListener('pointerup', event => { if (this.dragStart === null) return; const delta = event.clientX - this.dragStart; this.dragStart = null; if (Math.abs(delta) > 38) this.move(delta < 0 ? 1 : -1); this.start(); });
+              this.shell.addEventListener('pointercancel', () => { this.dragStart = null; this.start(); });
+              this.shell.addEventListener('mouseenter', () => this.stop());
+              this.shell.addEventListener('mouseleave', () => this.start());
+              this.root.addEventListener('focusin', () => this.stop());
+              this.root.addEventListener('focusout', () => this.start());
+              this.dots?.addEventListener('click', event => { const button = event.target.closest('[data-slide]'); if (button) this.goTo(Number(button.dataset.slide)); });
+            }
+          """
+          new="""  beginDrag(clientX) {
+              if (!Number.isFinite(clientX) || this.dragStart !== null) return;
+              this.dragStart = clientX;
+              this.stop();
+            }
+            finishDrag(clientX) {
+              if (this.dragStart === null || !Number.isFinite(clientX)) return;
+              const delta = clientX - this.dragStart;
+              this.dragStart = null;
+              if (Math.abs(delta) > 38) this.move(delta < 0 ? 1 : -1);
+              this.start();
+            }
+            cancelDrag() { this.dragStart = null; this.start(); }
+            bind() {
+              this.prev?.addEventListener('click', () => this.move(-1));
+              this.next?.addEventListener('click', () => this.move(1));
+              this.track.addEventListener('transitionend', () => this.normalizePosition());
+              this.shell.addEventListener('dragstart', event => event.preventDefault());
+              this.shell.addEventListener('pointerdown', event => { this.beginDrag(event.clientX); try { this.shell.setPointerCapture?.(event.pointerId); } catch {} });
+              this.shell.addEventListener('pointerup', event => this.finishDrag(event.clientX));
+              this.shell.addEventListener('pointercancel', () => this.cancelDrag());
+              this.shell.addEventListener('mousedown', event => this.beginDrag(event.clientX));
+              window.addEventListener('mouseup', event => this.finishDrag(event.clientX));
+              this.shell.addEventListener('touchstart', event => this.beginDrag(event.touches[0]?.clientX), {passive: true});
+              this.shell.addEventListener('touchend', event => this.finishDrag(event.changedTouches[0]?.clientX), {passive: true});
+              this.shell.addEventListener('touchcancel', () => this.cancelDrag(), {passive: true});
+              this.shell.addEventListener('mouseenter', () => this.stop());
+              this.shell.addEventListener('mouseleave', () => { if (this.dragStart === null) this.start(); });
+              this.root.addEventListener('focusin', () => this.stop());
+              this.root.addEventListener('focusout', () => this.start());
+              this.dots?.addEventListener('click', event => { const button = event.target.closest('[data-slide]'); if (button) this.goTo(Number(button.dataset.slide)); });
+            }
+          """
+          if old not in text:
+              raise SystemExit('Expected carousel block not found; no files changed')
+          path.write_text(text.replace(old,new))
+          PY
+          rm -f .github/workflows/full-source-snapshot.yml .github/workflows/fix-carousel-drag.yml
+
+      - name: Run pre-commit regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check app.js
+          node scripts/test-app-unit.mjs
+          node scripts/validate-static.mjs
+          node scripts/validate-data.mjs
+          node scripts/generate-photo-batch2-payload-manifest.mjs
+          sha256sum -c SHA256SUMS.txt
+          node scripts/validate-photo-batch2-vetted.mjs
+
+      - name: Commit clean final candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'daedong-final-integration'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git status --short
+          git commit -m '[final-integration] 배너 드래그 보강 및 임시 검증파일 정리'
+          git push origin HEAD:agent/main-unification
+          git rev-parse HEAD

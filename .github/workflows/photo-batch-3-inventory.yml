@@ -1,60 +1,37 @@
-name: photo-batch-3 inventory
+name: photo-batch-3 one-shot apply
 
 on:
   push:
-    branches:
-      - feature/photo-batch-3
-    paths:
-      - .github/workflows/photo-batch-3-inventory.yml
-  pull_request:
-    branches:
-      - main
-  workflow_dispatch:
+    branches: [feature/photo-batch-3]
+    paths: [data/photo-batch3-upload/READY]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  inventory:
+  apply:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          show-progress: false
-      - name: Build inventory files
-        shell: bash
-        run: |
-          mkdir -p photo-batch3-inventory/data photo-batch3-inventory/scripts
-          node <<'NODE'
-          const fs = require('fs');
-          const path = require('path');
-          const stores = JSON.parse(fs.readFileSync('data/stores.json','utf8'));
-          const paths = s => [s.image,s.img,...(Array.isArray(s.images)?s.images.flatMap(v => typeof v === 'string' ? [v] : [v?.card,v?.detail]):[])].filter(Boolean);
-          const awaiting = stores.filter(s => paths(s).length === 0).map(s => ({id:String(s.id),name:s.name,district:s.district||'',realBusinessName:s.realBusinessName||'',aliases:s.shopInShopNames||[]}));
-          const report = {storeCount:stores.length,awaitingCount:awaiting.length,awaiting};
-          fs.writeFileSync('photo-batch3-inventory/awaiting-stores.json', JSON.stringify(report,null,2)+'\n');
-          const copies = [
-            ['data/stores.json','photo-batch3-inventory/data/stores.json'],
-            ['data/photo-manifest.json','photo-batch3-inventory/data/photo-manifest.json'],
-            ['data/photo-policy.json','photo-batch3-inventory/data/photo-policy.json'],
-            ['package.json','photo-batch3-inventory/package.json'],
-            ['app.js','photo-batch3-inventory/app.js'],
-            ['index.html','photo-batch3-inventory/index.html'],
-            ['styles.css','photo-batch3-inventory/styles.css'],
-            ['scripts/validate-data.mjs','photo-batch3-inventory/scripts/validate-data.mjs'],
-            ['scripts/browser-smoke.mjs','photo-batch3-inventory/scripts/browser-smoke.mjs']
-          ];
-          for (const [src,dst] of copies) {
-            if (!fs.existsSync(src)) { console.log('OPTIONAL_MISSING',src); continue; }
-            fs.mkdirSync(path.dirname(dst),{recursive:true});
-            fs.copyFileSync(src,dst);
-          }
-          console.log('PHOTO_BATCH_3_COUNTS',JSON.stringify({storeCount:stores.length,awaitingCount:awaiting.length}));
-          console.log('PHOTO_BATCH_3_INVENTORY_READY');
-          NODE
-      - uses: actions/upload-artifact@v4
+          ref: feature/photo-batch-3
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
         with:
-          name: photo-batch-3-inventory
-          path: photo-batch3-inventory
-          if-no-files-found: error
-          retention-days: 3
+          node-version: 22
+      - name: Apply vetted photos and validate
+        run: |
+          node scripts/apply-photo-batch3.mjs
+          node scripts/validate-photo-batch3-vetted.mjs
+          node scripts/validate-data.mjs
+      - name: Commit only to feature branch
+        run: |
+          rm -rf data/photo-batch3-upload
+          rm -f scripts/apply-photo-batch3.mjs
+          rm -f data/photo-batch3-work-status.md data/photo-batch3-trigger.txt
+          rm -f .github/workflows/photo-batch-3-inventory.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m '3차 가게사진 검수 적용'
+          git push origin HEAD:feature/photo-batch-3

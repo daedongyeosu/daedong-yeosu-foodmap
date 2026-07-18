@@ -39,9 +39,10 @@ jobs:
           set -euo pipefail
           actual_sha="$(git rev-parse HEAD)"
           test "$actual_sha" = "$EXPECTED_HEAD_SHA"
+          initial_status="$(git status --porcelain=v1)"
+          printf '%s' "$initial_status" > github-actions-git-status.txt
           git fetch origin main --no-tags
           git diff --name-only origin/main...HEAD | sort > github-actions-changed-files.txt
-          git status --porcelain=v1 > github-actions-git-status.txt
           git log -1 --format='%H%n%P%n%an%n%ae%n%aI%n%s' > github-actions-head-commit.txt
           git remote -v > github-actions-remotes.txt
           python3 - <<'PY'
@@ -67,6 +68,7 @@ jobs:
             'expectedBaseSha': os.environ.get('EXPECTED_BASE_SHA',''),
             'actualCheckedOutSha': actual,
             'headMatchesExactly': actual == os.environ['EXPECTED_HEAD_SHA'],
+            'sourceTreeCleanBeforeEvidence': len(status) == 0,
             'runnerName': os.environ['RUNNER_NAME'],
             'runnerOs': os.environ['RUNNER_OS'],
             'runnerArch': os.environ['RUNNER_ARCH'],
@@ -74,7 +76,7 @@ jobs:
             'pythonPlatform': platform.platform(),
             'workspace': os.environ['GITHUB_WORKSPACE'],
             'changedFilesAgainstMain': changed,
-            'gitStatusBeforeTests': status,
+            'gitStatusBeforeEvidence': status,
             'pagesDeploymentPerformed': False,
             'mainMergePerformed': False
           }

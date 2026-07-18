@@ -6,6 +6,9 @@ on:
       - feature/photo-batch-3
     paths:
       - .github/workflows/photo-batch-3-inventory.yml
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 permissions:

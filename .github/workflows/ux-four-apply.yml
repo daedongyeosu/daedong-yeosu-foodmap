@@ -5,6 +5,11 @@ on:
     branches: [fix/restore-approved-ux]
     paths:
       - 'data/ux-four-upload/READY'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'data/ux-four-upload/**'
+      - '.github/workflows/ux-four-apply.yml'
 
 permissions:
   contents: write

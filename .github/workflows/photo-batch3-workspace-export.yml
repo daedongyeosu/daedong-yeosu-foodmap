@@ -1,74 +1,41 @@
-name: Photo batch 3 apply and validate
+name: Photo batch 3 transport audit
 
 on:
   pull_request:
     branches: [main]
     paths:
       - '.github/workflows/photo-batch3-workspace-export.yml'
-      - '.github/photo-batch3-payload/payload.zip.b64'
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  apply-photo-payload:
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+  export-transport-parts:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
     steps:
       - name: Checkout photo branch
         uses: actions/checkout@v4
         with:
           ref: feature/photo-batch-3-refresh
           fetch-depth: 0
-          persist-credentials: true
+          show-progress: false
 
-      - name: Decode and verify payload
+      - name: Audit temporary transport files
         shell: bash
         run: |
           set -euo pipefail
-          base64 -d .github/photo-batch3-payload/payload.zip.b64 > /tmp/photo-batch3-payload.zip
-          echo 'df3f75a76e3d7d16ad1c03066dfc6d4268e383e3e6505e21af194ef70144a4cb  /tmp/photo-batch3-payload.zip' | sha256sum -c -
-          unzip -t /tmp/photo-batch3-payload.zip
+          mkdir -p transport-audit
+          cp -R .github/photo-batch3-payload transport-audit/
+          find .github/photo-batch3-payload -type f -printf '%P\t%s\n' | sort > transport-audit/file-sizes.tsv
+          sha256sum .github/photo-batch3-payload/* > transport-audit/file-sha256.txt
+          git rev-parse HEAD > transport-audit/head-sha.txt
 
-      - name: Apply photos and remove temporary transport
-        shell: bash
-        run: |
-          set -euo pipefail
-          unzip -o /tmp/photo-batch3-payload.zip -d .
-          rm -rf .github/photo-batch3-payload
-          rm -f .github/workflows/photo-batch3-bootstrap.yml
-          rm -f .github/workflows/photo-batch3-workspace-export.yml
-          rm -f existing-assets-files.tsv existing-assets-sha256.txt git-status.txt head-sha.txt repo-tree.txt
-          rm -f photo-batch3-validation-result.json static-validation-report.json
-
-      - name: Protect restored UI and runtime
-        shell: bash
-        run: |
-          set -euo pipefail
-          git diff --exit-code ecfc1f7d053914c7f6d4d9be9edbc88740534d0d -- index.html app.css app.js
-
-      - name: Run data, integrity, sensitive-photo and mobile checks
-        shell: bash
-        run: |
-          set -euo pipefail
-          node scripts/validate-static.mjs
-          node scripts/test-app-unit.mjs
-          node scripts/validate-data.mjs
-          sha256sum -c SHA256SUMS.txt
-          node scripts/validate-photo-batch2-vetted.mjs
-          node scripts/validate-photo-batch3-refresh.mjs
-          node scripts/photo-batch3-mobile.mjs
-          sha256sum -c PHOTO_BATCH3_SHA256SUMS.txt
-
-      - name: Commit photo-only result
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name 'daedongyeosu-photo-bot'
-          git config user.email 'sisakim@naver.com'
-          git add -A
-          git diff --cached --quiet && exit 0
-          git commit -m '사진 3차 보충: 58개 가게 안전 적용'
-          git push origin HEAD:feature/photo-batch-3-refresh
+      - name: Upload temporary transport audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: photo-batch3-transport-audit-${{ github.run_id }}
+          path: transport-audit
+          if-no-files-found: error
+          retention-days: 3

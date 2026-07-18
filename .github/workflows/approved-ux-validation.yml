@@ -47,6 +47,7 @@ jobs:
           npm install --no-save --no-package-lock playwright@1.55.0
           npx playwright install --with-deps chromium
       - name: Compare main and restored mobile flows
+        # Validates single address popup, hardClose cleanup, app-selection guide, and fullscreen viewer.
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 --directory before-main > before-main-server.log 2>&1 &
           before_pid=$!

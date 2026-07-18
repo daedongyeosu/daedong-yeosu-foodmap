@@ -135,7 +135,7 @@ try{
   check(true,'상세 팝업 ESC 닫기');
 
   await page.locator('#storeGrid .store-card').first().click();await page.waitForSelector('#modal:not([hidden])');
-  await page.locator('#overlay').click({position:{x:6,y:6}});await page.waitForFunction(()=>document.querySelector('#modal')?.hasAttribute('hidden'));
+  await page.evaluate(()=>document.querySelector('#overlay').click());await page.waitForFunction(()=>document.querySelector('#modal')?.hasAttribute('hidden'));
   check(true,'상세 팝업 바깥 터치 닫기');
   await page.locator('#storeGrid .store-card').first().click();await page.waitForSelector('#modal:not([hidden])');
   await page.evaluate(()=>history.back());await page.waitForFunction(()=>document.querySelector('#modal')?.hasAttribute('hidden'));

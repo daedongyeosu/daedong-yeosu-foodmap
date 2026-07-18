@@ -1,7 +1,7 @@
 {
   "success": false,
   "branch": "agent/main-unification",
-  "validatedCandidateSha": "192b6c31c36565afb264880db5bcd01fdf660047",
+  "validatedCandidateSha": "6aa6c34fdbc4faa88eacfe817a4a22515c4c4284",
   "mainSha": "facb4dbf4539baee515d213288edec9b1783e15e",
   "pullRequest": {
     "number": 1,
@@ -56,10 +56,10 @@
       "fail": 0
     },
     "mobile": {
-      "pass": 35,
+      "pass": 50,
       "warn": 0,
       "fail": 1,
-      "failure": "locator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#overlay')\n    - locator resolved to <div id=\"overlay\" class=\"overlay\"></div>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"modal\" class=\"modal\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"modalTitle\" data-active-store-id=\"3f441930b8d18783\" data-external-routes=\"[{\"name\":\"쿠팡이츠\",\"url\":\"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15\",\"enabled\":true,\"source\":\"notion\",\"key\":\"coupang\"},{\"name\":\"배달의민족\",\"url\":\"https://s.baemin.com/4c000DmgKEX9U\",\"enabled\":true,\"source\":\"notion\",\"key\":\"baemin\"}]\">…</div> intercepts pointer events\n    - retrying click action\n    - waiting 20ms\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible, enabled and stable\n      - scrolling into view if needed\n      - done scrolling\n      - <div id=\"modal\" class=\"modal\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"modalTitle\" data-active-store-id=\"3f441930b8d18783\" data-external-routes=\"[{\"name\":\"쿠팡이츠\",\"url\":\"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15\",\"enabled\":true,\"source\":\"notion\",\"key\":\"coupang\"},{\"name\":\"배달의민족\",\"url\":\"https://s.baemin.com/4c000DmgKEX9U\",\"enabled\":true,\"source\":\"notion\",\"key\":\"baemin\"}]\">…</div> intercepts pointer events\n    - retrying click action\n      - waiting 100ms\n    57 × waiting for element to be visible, enabled and stable\n       - element is visible, enabled and stable\n       - scrolling into view if needed\n       - done scrolling\n       - <div id=\"modal\" class=\"modal\" role=\"dialog\" aria-modal=\"true\" aria-labelledby=\"modalTitle\" data-active-store-id=\"3f441930b8d18783\" data-external-routes=\"[{\"name\":\"쿠팡이츠\",\"url\":\"https://web.coupangeats.com/share?storeId=1004923&dishId=&key=11dbf4cd-a29c-458d-8761-b9138867ad15\",\"enabled\":true,\"source\":\"notion\",\"key\":\"coupang\"},{\"name\":\"배달의민족\",\"url\":\"https://s.baemin.com/4c000DmgKEX9U\",\"enabled\":true,\"source\":\"notion\",\"key\":\"baemin\"}]\">…</div> intercepts pointer events\n     - retrying click action\n       - waiting 500ms\n\n    at /home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:138:34"
+      "failure": "Error: 브라우저 콘솔·스크립트 오류 없음: [\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\",\"console: Failed to load resource: the server responded with a status of 404 (File not found)\"]\n    at check (file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:7:23)\n    at file:///home/runner/work/daedong-yeosu-foodmap/daedong-yeosu-foodmap/scripts/browser-smoke.mjs:177:3"
     }
   },
   "changedFiles": [
@@ -1192,5 +1192,5 @@
     "styles-v8.css"
   ],
   "distanceMethod": "store coordinates when available; otherwise approximate district-centroid distance clearly labelled in UI",
-  "generatedAt": "2026-07-18T05:10:02.176Z"
+  "generatedAt": "2026-07-18T05:13:25.027Z"
 }

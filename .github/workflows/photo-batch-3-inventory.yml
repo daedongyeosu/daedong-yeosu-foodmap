@@ -19,30 +19,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          show-progress: false
       - name: Build inventory files
         shell: bash
         run: |
-          set -euxo pipefail
           mkdir -p photo-batch3-inventory/data photo-batch3-inventory/scripts
           node <<'NODE'
           const fs = require('fs');
+          const path = require('path');
           const stores = JSON.parse(fs.readFileSync('data/stores.json','utf8'));
           const paths = s => [s.image,s.img,...(Array.isArray(s.images)?s.images.flatMap(v => typeof v === 'string' ? [v] : [v?.card,v?.detail]):[])].filter(Boolean);
           const awaiting = stores.filter(s => paths(s).length === 0).map(s => ({id:String(s.id),name:s.name,district:s.district||'',realBusinessName:s.realBusinessName||'',aliases:s.shopInShopNames||[]}));
           const report = {storeCount:stores.length,awaitingCount:awaiting.length,awaiting};
           fs.writeFileSync('photo-batch3-inventory/awaiting-stores.json', JSON.stringify(report,null,2)+'\n');
-          console.log(JSON.stringify({storeCount:stores.length,awaitingCount:awaiting.length}));
+          const copies = [
+            ['data/stores.json','photo-batch3-inventory/data/stores.json'],
+            ['data/photo-manifest.json','photo-batch3-inventory/data/photo-manifest.json'],
+            ['data/photo-policy.json','photo-batch3-inventory/data/photo-policy.json'],
+            ['package.json','photo-batch3-inventory/package.json'],
+            ['app.js','photo-batch3-inventory/app.js'],
+            ['index.html','photo-batch3-inventory/index.html'],
+            ['styles.css','photo-batch3-inventory/styles.css'],
+            ['scripts/validate-data.mjs','photo-batch3-inventory/scripts/validate-data.mjs'],
+            ['scripts/browser-smoke.mjs','photo-batch3-inventory/scripts/browser-smoke.mjs']
+          ];
+          for (const [src,dst] of copies) {
+            if (!fs.existsSync(src)) { console.log('OPTIONAL_MISSING',src); continue; }
+            fs.mkdirSync(path.dirname(dst),{recursive:true});
+            fs.copyFileSync(src,dst);
+          }
+          console.log('PHOTO_BATCH_3_COUNTS',JSON.stringify({storeCount:stores.length,awaitingCount:awaiting.length}));
+          console.log('PHOTO_BATCH_3_INVENTORY_READY');
           NODE
-          cp data/stores.json photo-batch3-inventory/data/stores.json
-          cp data/photo-manifest.json photo-batch3-inventory/data/photo-manifest.json
-          cp data/photo-policy.json photo-batch3-inventory/data/photo-policy.json
-          cp package.json photo-batch3-inventory/package.json
-          test -f app.js && cp app.js photo-batch3-inventory/ || true
-          test -f index.html && cp index.html photo-batch3-inventory/ || true
-          test -f styles.css && cp styles.css photo-batch3-inventory/ || true
-          test -f scripts/validate-data.mjs && cp scripts/validate-data.mjs photo-batch3-inventory/scripts/ || true
-          test -f scripts/browser-smoke.mjs && cp scripts/browser-smoke.mjs photo-batch3-inventory/scripts/ || true
-          find photo-batch3-inventory -type f -maxdepth 3 -print
       - uses: actions/upload-artifact@v4
         with:
           name: photo-batch-3-inventory

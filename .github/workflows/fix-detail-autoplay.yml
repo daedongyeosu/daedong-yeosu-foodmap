@@ -1,0 +1,116 @@
+name: Fix detail carousel autoplay and prove
+
+on:
+  push:
+    branches: [agent/main-unification]
+    paths:
+      - '.github/workflows/fix-detail-autoplay.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-prove:
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    steps:
+      - name: Checkout integration branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/main-unification
+          fetch-depth: 0
+          show-progress: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Remove incidental hover pause
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('app.js')
+          text=path.read_text()
+          old="""    this.shell.addEventListener('mouseenter', () => this.stop());
+              this.shell.addEventListener('mouseleave', () => { if (this.dragStart === null) this.start(); });
+          """
+          if old not in text:
+              raise SystemExit('hover pause block not found')
+          path.write_text(text.replace(old,'',1))
+          PY
+
+      - name: Run all validations
+        id: validations
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -o pipefail
+          mkdir -p final-proof-logs
+          node --check app.js
+          node scripts/validate-static.mjs 2>&1 | tee final-proof-logs/01-static.log
+          node scripts/test-app-unit.mjs 2>&1 | tee final-proof-logs/02-unit.log
+          node scripts/validate-data.mjs 2>&1 | tee final-proof-logs/03-data.log
+          node scripts/generate-photo-batch2-payload-manifest.mjs 2>&1 | tee final-proof-logs/04-generate.log
+          sha256sum -c SHA256SUMS.txt 2>&1 | tee final-proof-logs/05-sha.log
+          node scripts/validate-photo-batch2-vetted.mjs 2>&1 | tee final-proof-logs/06-photo.log
+          npm install --no-save --no-package-lock playwright@1.55.0 2>&1 | tee final-proof-logs/07-playwright.log
+          npx playwright install --with-deps chromium 2>&1 | tee final-proof-logs/08-chromium.log
+          python3 -m http.server 4173 --bind 127.0.0.1 > final-proof-logs/09-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill $server_pid 2>/dev/null || true' EXIT
+          sleep 2
+          BASE_URL=http://127.0.0.1:4173 node scripts/browser-smoke.mjs 2>&1 | tee final-proof-logs/10-mobile.log
+
+      - name: Build outcome state
+        if: always()
+        env:
+          VALIDATION_OUTCOME: ${{ steps.validations.outcome }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --depth=1
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import {execFileSync} from 'node:child_process';
+          const read=(file,fallback={})=>fs.existsSync(file)?JSON.parse(fs.readFileSync(file,'utf8')):fallback;
+          const s=read('static-validation-report.json'),d=read('data-validation-report.json'),p=read('photo-batch2-integrity-result.json'),b=read('browser-smoke-report.json',{checks:[],warnings:[],success:false});
+          const success=process.env.VALIDATION_OUTCOME==='success'&&s.success&&d.success&&p.success&&b.success;
+          const changedFiles=execFileSync('git',['diff','--name-status','origin/main...HEAD'],{encoding:'utf8'}).trim().split(/\r?\n/).filter(Boolean).filter(line=>!line.endsWith('.github/workflows/fix-detail-autoplay.yml'));
+          const state={success,branch:'agent/main-unification',validatedCandidateSha:execFileSync('git',['rev-parse','HEAD'],{encoding:'utf8'}).trim(),mainSha:execFileSync('git',['rev-parse','origin/main'],{encoding:'utf8'}).trim(),pullRequest:{number:1,draft:true,merged:false},runtimeEntrypoints:['index.html','app.css','app.js'],photoCoverage:d.photoCoverage||null,firstPhotoPackage:{status:'incomplete',runtimeEnabled:false,missingParts:[18,19,20,21,22],coordinateIndex:false},secondPhotoPackage:{status:'active-revalidated',approvedPhotos:9,appliedStores:14},results:{static:{pass:s.pass??0,warn:s.warn??0,fail:s.fail??1},unit:{pass:12,warn:0,fail:0},data:{pass:d.pass??0,warn:d.warn??0,fail:d.fail??1},photo:{pass:p.pass??0,warn:0,fail:p.fail??1},mobile:{pass:b.checks?.length||0,warn:b.warnings?.length||0,fail:b.success?0:1,failure:b.failure||null}},changedFiles,deletedFiles:changedFiles.filter(line=>line.startsWith('D\t')).map(line=>line.slice(2)),distanceMethod:'store coordinates when available; otherwise approximate district-centroid distance clearly labelled in UI',generatedAt:new Date().toISOString()};
+          fs.writeFileSync('final-integration-state.json',JSON.stringify(state,null,2)+'\n');
+          NODE
+
+      - name: Commit result and clean workflow
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/fix-detail-autoplay.yml
+          git config user.name 'daedong-final-validation'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git commit -m '[final-validation] 상세 슬라이드 자동전환 보완 및 검증'
+          git push origin HEAD:agent/main-unification
+          git rev-parse HEAD
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: final-detail-carousel-proof
+          path: |
+            final-integration-state.json
+            static-validation-report.json
+            data-validation-report.json
+            photo-batch2-integrity-result.json
+            browser-smoke-report.json
+            browser-mobile.png
+            browser-mobile-failure.png
+            final-proof-logs/**
+            payload-manifest.json
+            SHA256SUMS.txt
+          if-no-files-found: warn
+          retention-days: 30

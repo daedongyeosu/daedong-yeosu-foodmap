@@ -63,10 +63,7 @@
     }
   },
   "changedFiles": [
-    "A\t.github/workflows/apply-db790-integration.yml",
-    "A\t.github/workflows/apply-runtime-fixes.yml",
     "A\t.github/workflows/integration-validation.yml",
-    "A\t.github/workflows/restore-banner-assets.yml",
     "A\tSHA256SUMS.txt",
     "D\tapp-v7.js",
     "D\tapp-v8.js",
@@ -647,6 +644,7 @@
     "A\tassets/store-photos/ff4a12fb4c31ea/01.webp",
     "A\tassets/store-photos/ff4a12fb4c31ea/02.webp",
     "A\tbrowser-mobile-failure.png",
+    "A\tbrowser-mobile.png",
     "A\tbrowser-smoke-report.json",
     "A\tdata-validation-report.json",
     "A\tdata/db790-import-report.json",
@@ -1192,5 +1190,11 @@
     "styles-v8.css"
   ],
   "distanceMethod": "store coordinates when available; otherwise approximate district-centroid distance clearly labelled in UI",
-  "generatedAt": "2026-07-18T05:17:27.450Z"
+  "generatedAt": "2026-07-18T05:17:27.450Z",
+  "obsoleteWriteWorkflowsRemoved": [
+    ".github/workflows/apply-db790-integration.yml",
+    ".github/workflows/apply-runtime-fixes.yml",
+    ".github/workflows/restore-banner-assets.yml"
+  ],
+  "finalTreeCleanupAt": "2026-07-18T05:20:39.584Z"
 }

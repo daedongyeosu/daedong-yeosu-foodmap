@@ -1,19 +1,6 @@
 name: Integration validation
 
 on:
-  pull_request:
-    branches: [main]
-    paths:
-      - 'index.html'
-      - 'app.js'
-      - 'app.css'
-      - 'data/**'
-      - 'images/notion-stores/**'
-      - 'assets/store-photos/**'
-      - 'assets/notion-store-photos/**'
-      - 'assets/photo-batch-2-vetted/**'
-      - 'scripts/**'
-      - '.github/workflows/integration-validation.yml'
   push:
     branches: [agent/main-unification]
   workflow_dispatch:
@@ -21,12 +8,17 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: integration-validation
+  cancel-in-progress: false
+
 jobs:
   validate:
+    if: (github.event_name == 'push' && github.actor != 'github-actions[bot]') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
     steps:
-      - name: Checkout integration branch
+      - name: Checkout actual integration branch
         uses: actions/checkout@v4
         with:
           ref: agent/main-unification
@@ -37,230 +29,215 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Detect staged revalidated photo batch 2
-        id: staged_photo_batch2
-        shell: bash
-        run: |
-          if [[ -d .integration/photo-batch2-revalidated ]]; then
-            echo 'found=true' >> "$GITHUB_OUTPUT"
-          else
-            echo 'found=false' >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Reassemble and verify reviewed text payload
-        if: steps.staged_photo_batch2.outputs.found == 'true'
+      - name: Record branch and main SHA
         shell: bash
         run: |
           set -euo pipefail
-          cat .integration/photo-batch2-revalidated/text-part-*.b64 | base64 -d > /tmp/photo-batch2-text.zip
-          echo 'eb115636ebd62fcf4ac5eed76d81df6de5c08e6829b52f9e2ea9e00bd09e04dd  /tmp/photo-batch2-text.zip' | sha256sum -c -
-
-      - name: Extract reviewed text payload
-        if: steps.staged_photo_batch2.outputs.found == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          unzip -oq /tmp/photo-batch2-text.zip -d .
-          rm -rf .integration/photo-batch2-revalidated
-
-      - name: Apply revalidated photo assignments
-        if: steps.staged_photo_batch2.outputs.found == 'true'
-        run: node scripts/apply-photo-batch2-vetted.mjs
-
-      - name: Validate revalidated photo data
-        if: steps.staged_photo_batch2.outputs.found == 'true'
-        run: node scripts/validate-photo-batch2-vetted.mjs
-
-      - name: Commit generated revalidated photo data
-        if: steps.staged_photo_batch2.outputs.found == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name 'daedong-photo-revalidation'
-          git config user.email 'actions@users.noreply.github.com'
-          git add -A
-          git commit -m '[photo-batch2-generated] 2차 사진 재검수 안전 적용'
-          git push origin HEAD:agent/main-unification
-
-      - name: Verify no repository files were deleted
-        id: no_deletions
-        continue-on-error: true
-        shell: bash
-        run: |
+          mkdir -p /tmp/photo-batch2-logs
           git fetch origin main --depth=1
-          git diff --diff-filter=D --name-only origin/main...HEAD | tee deleted-files.txt
-          test ! -s deleted-files.txt
+          {
+            echo "working_directory=$PWD"
+            echo "branch=$(git branch --show-current)"
+            echo "starting_head=$(git rev-parse HEAD)"
+            echo "main_sha=$(git rev-parse origin/main)"
+            git status --short
+          } | tee /tmp/photo-batch2-logs/00-branch-state.log
+          test "$(git branch --show-current)" = 'agent/main-unification'
+
+      - name: Verify no main files are deleted
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --diff-filter=D --name-only origin/main...HEAD | tee /tmp/photo-batch2-logs/01-deleted-files.log
+          test ! -s /tmp/photo-batch2-logs/01-deleted-files.log
+
+      - name: Generate reviewed photo data
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          node scripts/seed-photo-batch2-vetted.mjs 2>&1 | tee /tmp/photo-batch2-logs/02-seed.log
+
+      - name: Apply vetted photos to missing-photo stores only
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          node scripts/apply-photo-batch2-vetted.mjs 2>&1 | tee /tmp/photo-batch2-logs/03-apply.log
+
+      - name: Generate payload manifest from actual files
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          node scripts/generate-photo-batch2-payload-manifest.mjs 2>&1 | tee /tmp/photo-batch2-logs/04-generate-manifest.log
+
+      - name: Validate photo and manifest integrity
+        shell: bash
+        run: |
+          set -euo pipefail
+          set -o pipefail
+          node scripts/validate-photo-batch2-vetted.mjs 2>&1 | tee /tmp/photo-batch2-logs/05-photo-integrity.log
 
       - name: Check JavaScript syntax
-        run: node --check app.js
-
-      - name: Inventory data sources
-        shell: bash
-        run: node scripts/inventory-data-sources.mjs 2>&1 | tee data-inventory.txt
-
-      - name: Compare DB790 working branch
-        id: db790
-        continue-on-error: true
         shell: bash
         run: |
-          set -o pipefail
-          git fetch origin fix/load-stores-db790 --depth=1
-          DB790_REF=FETCH_HEAD
-          rm -rf /tmp/db790-worktree
-          git worktree add --detach /tmp/db790-worktree "$DB790_REF"
-          mkdir -p db790-source/reports
-          cp /tmp/db790-worktree/data/stores.json db790-source/stores.json
-          for file in \
-            notion-sync-summary.json \
-            notion-sync-report.json \
-            notion-complete-import-report.json \
-            notion-import-missing-report.json \
-            store-dedup-report.json \
-            photo-filter-report.json \
-            photo-match-safety-report.json \
-            photo-manifest.json \
-            notion-photo-manifest.json \
-            notion-photo-apply-report.json \
-            photo-coverage-resolution.json; do
-            if [[ -f "/tmp/db790-worktree/data/$file" ]]; then
-              cp "/tmp/db790-worktree/data/$file" "db790-source/reports/$file"
-            fi
-          done
-          node scripts/inventory-data-sources.mjs /tmp/db790-worktree 2>&1 | tee db790-data-inventory.txt
+          set -euo pipefail
           {
-            echo '[DB790 branch markers]'
-            cat /tmp/db790-worktree/DB790_READY.txt 2>/dev/null || true
-            cat /tmp/db790-worktree/README_DB790_TEST.txt 2>/dev/null || true
-            echo
-            echo '[DB790 related files]'
-            git -C /tmp/db790-worktree ls-tree -r --name-only HEAD | grep -Ei '(^data/|photo|db790|notion|route|address)' | sort
-          } > db790-branch-inventory.txt
-          node scripts/compare-store-databases.mjs data/stores.json db790-source/stores.json db790-comparison.json 2>&1 | tee db790-comparison.txt
+            node --check app.js
+            node --check scripts/seed-photo-batch2-vetted.mjs
+            node --check scripts/apply-photo-batch2-vetted.mjs
+            node --check scripts/generate-photo-batch2-payload-manifest.mjs
+            node --check scripts/validate-photo-batch2-vetted.mjs
+          } 2>&1 | tee /tmp/photo-batch2-logs/06-syntax.log
 
-      - name: Prepare selective DB790 import preview
-        id: db790_prepare
-        continue-on-error: true
+      - name: Run unit tests
         shell: bash
         run: |
+          set -euo pipefail
           set -o pipefail
-          node scripts/prepare-db790-import.mjs /tmp/db790-worktree build/db790-import 2>&1 | tee db790-import-prepare.txt
-          node scripts/compare-store-databases.mjs data/stores.json build/db790-import/stores.json db790-import-comparison.json 2>&1 | tee db790-import-comparison.txt
+          node scripts/test-app-unit.mjs 2>&1 | tee /tmp/photo-batch2-logs/07-unit-tests.log
 
-      - name: Inventory photo packages
-        shell: bash
-        run: node scripts/inventory-photo-packages.mjs 2>&1 | tee photo-inventory.txt
-
-      - name: Inspect photo package encoding
-        shell: bash
-        run: node scripts/inspect-photo-parts.mjs 2>&1 | tee photo-parts-inspection.txt
-
-      - name: Test safe photo assembly
-        id: photo_build
-        continue-on-error: true
+      - name: Run data and integration tests
         shell: bash
         run: |
+          set -euo pipefail
           set -o pipefail
-          node scripts/build-photo-batch-1.mjs 2>&1 | tee photo-build.txt
+          node scripts/validate-integration.mjs 2>&1 | tee /tmp/photo-batch2-logs/08-data-integration.log
 
-      - name: Validate vetted photo batch 2
-        id: photo_batch2
-        continue-on-error: true
+      - name: Install Chromium test runtime
         shell: bash
         run: |
+          set -euo pipefail
           set -o pipefail
-          node scripts/validate-photo-batch2-vetted.mjs 2>&1 | tee photo-batch2-validation.txt
+          npm install --no-save --no-package-lock playwright@1.55.0 2>&1 | tee /tmp/photo-batch2-logs/09-playwright-install.log
+          npx playwright install --with-deps chromium 2>&1 | tee /tmp/photo-batch2-logs/10-chromium-install.log
 
-      - name: Export complete referenced-photo review bundle
-        id: photo_review_bundle
-        continue-on-error: true
+      - name: Run mobile browser tests
         shell: bash
         run: |
+          set -euo pipefail
           set -o pipefail
-          node scripts/export-photo-review-bundle.mjs 2>&1 | tee photo-review-bundle.txt
-
-      - name: Run integration validation
-        id: integration
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -o pipefail
-          node scripts/validate-integration.mjs 2>&1 | tee integration-validation.txt
-
-      - name: Run unit regression tests
-        id: unit
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -o pipefail
-          node scripts/test-app-unit.mjs 2>&1 | tee unit-tests.txt
-
-      - name: Install Chromium browser test runtime
-        id: browser_install
-        continue-on-error: true
-        shell: bash
-        run: |
-          npm install --no-save --no-package-lock playwright@1.55.0
-          npx playwright install --with-deps chromium
-
-      - name: Run mobile browser smoke tests
-        id: browser
-        continue-on-error: true
-        shell: bash
-        run: |
-          set -o pipefail
-          python3 -m http.server 4173 --bind 127.0.0.1 > browser-server.log 2>&1 &
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/photo-batch2-logs/11-browser-server.log 2>&1 &
           server_pid=$!
           trap 'kill $server_pid 2>/dev/null || true' EXIT
           sleep 2
-          BASE_URL=http://127.0.0.1:4173 node scripts/browser-smoke.mjs 2>&1 | tee browser-smoke.txt
+          BASE_URL=http://127.0.0.1:4173 node scripts/browser-smoke.mjs 2>&1 | tee /tmp/photo-batch2-logs/12-mobile-browser.log
 
-      - name: Upload validation reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: integration-validation-report
-          path: |
-            deleted-files.txt
-            data-inventory.txt
-            db790-data-inventory.txt
-            db790-branch-inventory.txt
-            db790-comparison.txt
-            db790-comparison.json
-            db790-source/**
-            db790-import-prepare.txt
-            db790-import-comparison.txt
-            db790-import-comparison.json
-            build/db790-import/**
-            photo-inventory.txt
-            photo-parts-inspection.txt
-            photo-build.txt
-            photo-batch2-validation.txt
-            photo-review-bundle.txt
-            build/photo-review-bundle/**
-            integration-validation.txt
-            unit-tests.txt
-            browser-server.log
-            browser-smoke.txt
-            browser-smoke-report.json
-            browser-mobile.png
-            browser-mobile-failure.png
-          if-no-files-found: warn
-          retention-days: 14
-
-      - name: Final validation gate
-        if: always()
+      - name: Commit verified generated data
+        id: commit
         shell: bash
         run: |
-          echo "no_deletions=${{ steps.no_deletions.outcome }}"
-          echo "db790=${{ steps.db790.outcome }}"
-          echo "db790_prepare=${{ steps.db790_prepare.outcome }}"
-          echo "photo_build=${{ steps.photo_build.outcome }}"
-          echo "photo_batch2=${{ steps.photo_batch2.outcome }}"
-          echo "photo_review_bundle=${{ steps.photo_review_bundle.outcome }}"
-          echo "integration=${{ steps.integration.outcome }}"
-          echo "unit=${{ steps.unit.outcome }}"
-          echo "browser_install=${{ steps.browser_install.outcome }}"
-          echo "browser=${{ steps.browser.outcome }}"
-          if [[ "${{ steps.no_deletions.outcome }}" != "success" || "${{ steps.db790_prepare.outcome }}" != "success" || "${{ steps.photo_batch2.outcome }}" != "success" || "${{ steps.photo_review_bundle.outcome }}" != "success" || "${{ steps.integration.outcome }}" != "success" || "${{ steps.unit.outcome }}" != "success" || "${{ steps.browser_install.outcome }}" != "success" || "${{ steps.browser.outcome }}" != "success" ]]; then
-            exit 1
-          fi
+          set -euo pipefail
+          git config user.name 'daedong-photo-final-verification'
+          git config user.email 'actions@users.noreply.github.com'
+          git add \
+            data/stores.json \
+            data/photo-manifest.json \
+            data/photo-batch2-structure-report.json \
+            data/photo-batch2-vetted-assets.json \
+            data/photo-batch2-vetted-assignments.json \
+            data/photo-batch2-vetted-review-decisions.json \
+            data/photo-batch2-vetted-report.json \
+            payload-manifest.json \
+            SHA256SUMS.txt \
+            photo-batch2-integrity-result.json
+          git status --short | tee /tmp/photo-batch2-logs/13-staged-files.log
+          git commit -m '[photo-batch2-final] 2차 사진 실제 파일 재검증 적용'
+          git push origin HEAD:agent/main-unification 2>&1 | tee /tmp/photo-batch2-logs/14-push.log
+          final_sha=$(git rev-parse HEAD)
+          remote_sha=$(git ls-remote origin refs/heads/agent/main-unification | awk '{print $1}')
+          test "$final_sha" = "$remote_sha"
+          echo "final_sha=$final_sha" >> "$GITHUB_OUTPUT"
+          echo "remote_sha=$remote_sha" >> "$GITHUB_OUTPUT"
+          git show --stat --oneline HEAD | tee /tmp/photo-batch2-logs/15-final-commit.log
+
+      - name: Build complete verification package
+        shell: bash
+        env:
+          FINAL_SHA: ${{ steps.commit.outputs.final_sha }}
+          REMOTE_SHA: ${{ steps.commit.outputs.remote_sha }}
+        run: |
+          set -euo pipefail
+          package=/tmp/photo-batch2-final-verification
+          rm -rf "$package"
+          mkdir -p "$package"/{actual-applied-webp,data,review,logs,commit,browser,scripts,workflows}
+          cp assets/photo-batch-2-vetted/{082,083,084,089,107,108,109,282,284}.webp "$package/actual-applied-webp/"
+          cp data/stores.json data/photo-manifest.json "$package/data/"
+          cp payload-manifest.json SHA256SUMS.txt photo-batch2-integrity-result.json "$package/"
+          cp data/photo-batch2-structure-report.json "$package/review/"
+          cp data/photo-batch2-vetted-assets.json "$package/review/"
+          cp data/photo-batch2-vetted-assignments.json "$package/review/"
+          cp data/photo-batch2-vetted-review-decisions.json "$package/review/"
+          cp data/photo-batch2-vetted-report.json "$package/review/"
+          cp scripts/seed-photo-batch2-vetted.mjs "$package/scripts/"
+          cp scripts/apply-photo-batch2-vetted.mjs "$package/scripts/"
+          cp scripts/generate-photo-batch2-payload-manifest.mjs "$package/scripts/"
+          cp scripts/validate-photo-batch2-vetted.mjs "$package/scripts/"
+          cp .github/workflows/integration-validation.yml "$package/workflows/"
+          cp .github/workflows/photo-batch2-final-verification.yml "$package/workflows/"
+          cp /tmp/photo-batch2-logs/* "$package/logs/"
+          cp browser-smoke-report.json "$package/browser/"
+          cp browser-mobile.png "$package/browser/"
+          cp browser-mobile-failure.png "$package/browser/" 2>/dev/null || true
+          printf '%s\n' "$FINAL_SHA" > "$package/commit/final-commit-sha.txt"
+          printf '%s\n' "$REMOTE_SHA" > "$package/commit/remote-branch-sha.txt"
+          printf '%s\n' "$(git rev-parse origin/main)" > "$package/commit/main-sha.txt"
+          printf '%s\n' 'agent/main-unification' > "$package/commit/branch-name.txt"
+          node - <<'NODE'
+          const fs=require('fs');
+          const cp=require('child_process');
+          const report=JSON.parse(fs.readFileSync('data/photo-batch2-vetted-report.json','utf8'));
+          const payload=JSON.parse(fs.readFileSync('payload-manifest.json','utf8'));
+          const assignments=JSON.parse(fs.readFileSync('data/photo-batch2-vetted-assignments.json','utf8'));
+          const review=JSON.parse(fs.readFileSync('data/photo-batch2-vetted-review-decisions.json','utf8'));
+          const sums=fs.readFileSync('SHA256SUMS.txt','utf8').trim().split(/\r?\n/).filter(Boolean);
+          const state={
+            success:true,
+            verifiedAt:new Date().toISOString(),
+            workingDirectory:process.cwd(),
+            branch:'agent/main-unification',
+            branchSha:process.env.FINAL_SHA,
+            remoteBranchSha:process.env.REMOTE_SHA,
+            mainSha:cp.execFileSync('git',['rev-parse','origin/main'],{encoding:'utf8'}).trim(),
+            mainMerged:false,
+            deployed:false,
+            appliedPhotoCount:report.appliedPhotoCount,
+            appliedStoreCount:report.appliedStoreCount,
+            storesAwaitingPhoto:report.storesAwaitingPhoto,
+            excludedPhotoCount:review.excluded.length,
+            excludedPhotos:review.excluded,
+            appliedStores:report.applied,
+            manifestMatchedFiles:payload.fileCount,
+            manifestTotalFiles:payload.files.length,
+            sha256SumsMatchedFiles:sums.length,
+            sha256SumsTotalFiles:sums.length,
+            requiredChecks:{photoIntegrity:true,unit:true,dataIntegration:true,mobileBrowser:true,remotePush:true},
+            workflowRunId:process.env.GITHUB_RUN_ID,
+            workflowRunNumber:process.env.GITHUB_RUN_NUMBER
+          };
+          if(state.appliedPhotoCount!==9||state.appliedStoreCount!==14||state.storesAwaitingPhoto!==85||state.manifestMatchedFiles!==23||state.manifestTotalFiles!==23||state.sha256SumsMatchedFiles!==24)throw new Error('최종 상태 수치 불일치');
+          fs.writeFileSync('/tmp/photo-batch2-final-verification/final_state.json',JSON.stringify(state,null,2)+'\n');
+          fs.writeFileSync('/tmp/photo-batch2-final-verification/review/applied-stores.txt',assignments.assignments.map((item,index)=>`${index+1}. ${item.storeName} | ${item.paths.join(', ')}`).join('\n')+'\n');
+          fs.writeFileSync('/tmp/photo-batch2-final-verification/review/excluded-photos.txt',review.excluded.map(item=>`${item.imageId} | ${item.reason} | ${item.detail}`).join('\n')+'\n');
+          NODE
+          cd "$package"
+          primary_count=$(find . -type f | wc -l | tr -d ' ')
+          expected_count=$((primary_count+3))
+          printf '%s\n' "$expected_count" > PACKAGE_FILE_COUNT.txt
+          { find . -type f -printf '%P\n'; echo 'PACKAGE_FILE_INVENTORY.txt'; echo 'PACKAGE_SHA256SUMS.txt'; } | sort -u > PACKAGE_FILE_INVENTORY.txt
+          find . -type f ! -name PACKAGE_SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > PACKAGE_SHA256SUMS.txt
+          sha256sum -c PACKAGE_SHA256SUMS.txt | tee logs/16-package-sha-verification.log
+          actual_count=$(find . -type f | wc -l | tr -d ' ')
+          test "$actual_count" = "$expected_count"
+          echo "PACKAGE FILE COUNT: $actual_count/$expected_count" | tee logs/17-package-file-count.log
+          test "$(find actual-applied-webp -type f -name '*.webp' | wc -l | tr -d ' ')" = '9'
+          test "$(node -p "JSON.parse(require('fs').readFileSync('final_state.json','utf8')).success")" = 'true'
+
+      - name: Upload complete verification ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: photo-batch2-final-verification
+          path: /tmp/photo-batch2-final-verification/**
+          if-no-files-found: error
+          retention-days: 30

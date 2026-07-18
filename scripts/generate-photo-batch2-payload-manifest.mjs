@@ -13,6 +13,7 @@ const files=[
   'assets/photo-batch-2-vetted/284.webp',
   'data/stores.json',
   'data/photo-manifest.json',
+  'data/photo-policy.json',
   'data/photo-batch2-structure-report.json',
   'data/photo-batch2-vetted-assets.json',
   'data/photo-batch2-vetted-assignments.json',
@@ -22,7 +23,6 @@ const files=[
   'scripts/apply-photo-batch2-vetted.mjs',
   'scripts/generate-photo-batch2-payload-manifest.mjs',
   'scripts/validate-photo-batch2-vetted.mjs',
-  'scripts/export-photo-review-bundle.mjs',
   '.github/workflows/photo-batch2-final-verification.yml',
   '.github/workflows/integration-validation.yml'
 ];

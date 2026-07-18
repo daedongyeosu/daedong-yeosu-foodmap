@@ -1,6 +1,6 @@
 {
   "version": 4,
-  "generatedAt": "2026-07-18T03:03:15.698Z",
+  "generatedAt": "2026-07-18T03:06:58.022Z",
   "algorithm": "SHA-256",
   "sourceOfTruth": "actual-agent-main-unification-files",
   "fileCount": 23,
@@ -58,7 +58,7 @@
     {
       "path": "data/photo-manifest.json",
       "bytes": 14944,
-      "sha256": "4f77a262d7647e44ea130c91b5784142d8918a64f3cb33b6b833d26e7f02a228"
+      "sha256": "26d6b81005c9b923a0492dcfa02e2d65ea0a8bbd429a699edf3ad37bc5c55305"
     },
     {
       "path": "data/photo-policy.json",
@@ -73,7 +73,7 @@
     {
       "path": "data/photo-batch2-vetted-assets.json",
       "bytes": 2016,
-      "sha256": "807b67a638e5a7aab96dc909221c83f482f9d1d4ffe6bda476d237d4eff4d8a2"
+      "sha256": "d7d645f65b77b8c97e8b1cc0e35c6d5b26243ebf9479558b5c3c95cc0de2505b"
     },
     {
       "path": "data/photo-batch2-vetted-assignments.json",
@@ -83,7 +83,7 @@
     {
       "path": "data/photo-batch2-vetted-report.json",
       "bytes": 11188,
-      "sha256": "fbf17c8d2e39aa0a0322b1e0de4c9ab6e575217b006e93fde67c7f57dc6e8439"
+      "sha256": "56cbbd3a6652f3d27870dfd1b063e885411cc25c33c76e9974ac7d8e2ea5960a"
     },
     {
       "path": "data/photo-batch2-vetted-review-decisions.json",
@@ -117,8 +117,8 @@
     },
     {
       "path": ".github/workflows/integration-validation.yml",
-      "bytes": 13469,
-      "sha256": "825c48c7ac1894a5fee4a3ca82a5d183475847681f2d911bab0e2daa17e6878f"
+      "bytes": 13375,
+      "sha256": "99533ed66608c116cab3cf888a906ad48774682a53f401390dbc25da19347aa5"
     }
   ]
 }

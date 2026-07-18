@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generatedAt": "2026-07-18T03:03:15.635Z",
+  "generatedAt": "2026-07-18T03:06:57.959Z",
   "matching": {
     "keys": [
       "storeId",
@@ -480,6 +480,6 @@
     "storeCount": 471,
     "storesWithPhoto": 386,
     "storesAwaitingPhoto": 85,
-    "updatedAt": "2026-07-18T03:03:15.635Z"
+    "updatedAt": "2026-07-18T03:06:57.959Z"
   }
 }

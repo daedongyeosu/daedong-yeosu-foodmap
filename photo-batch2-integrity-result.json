@@ -1031,7 +1031,7 @@
     {
       "name": "매니페스트 크기 .github/workflows/integration-validation.yml",
       "ok": true,
-      "detail": "13469/13469"
+      "detail": "13375/13375"
     },
     {
       "name": "매니페스트 SHA .github/workflows/integration-validation.yml",

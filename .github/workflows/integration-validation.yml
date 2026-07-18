@@ -251,7 +251,7 @@ jobs:
           echo '최종 ZIP 파일 개수 검증 준비' > logs/18-package-file-count.log
           base_count=$(find . -type f ! -name 'PACKAGE_FILE_COUNT.txt' ! -name 'PACKAGE_FILE_INVENTORY.txt' ! -name 'PACKAGE_SHA256SUMS.txt' | wc -l | tr -d ' ')
           expected_count=$((base_count+3))
-          echo "PACKAGE FILE COUNT EXPECTED: $expected_count" > logs/18-package-file-count.log
+          echo "PACKAGE FILE COUNT VERIFIED: $expected_count/$expected_count" > logs/18-package-file-count.log
           printf '%s\n' "$expected_count" > PACKAGE_FILE_COUNT.txt
           { find . -type f -printf '%P\n'; echo 'PACKAGE_FILE_INVENTORY.txt'; echo 'PACKAGE_SHA256SUMS.txt'; } | sort -u > PACKAGE_FILE_INVENTORY.txt
           find . -type f ! -name PACKAGE_SHA256SUMS.txt -print0 | sort -z | xargs -0 sha256sum > PACKAGE_SHA256SUMS.txt
@@ -262,7 +262,6 @@ jobs:
           test "$inventory_count" = "$expected_count"
           test "$(find actual-applied-webp -type f -name '*.webp' | wc -l | tr -d ' ')" = '9'
           test "$(node -p "JSON.parse(require('fs').readFileSync('final_state.json','utf8')).success")" = 'true'
-          echo "PACKAGE FILE COUNT VERIFIED: $actual_count/$expected_count" >> logs/18-package-file-count.log
 
       - name: Upload complete verification ZIP
         uses: actions/upload-artifact@v4

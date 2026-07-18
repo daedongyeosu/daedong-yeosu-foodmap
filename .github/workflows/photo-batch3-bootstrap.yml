@@ -26,15 +26,15 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat .github/photo-batch3-final/chunk-*.b64 | base64 -d > /tmp/photo-batch3-final.zip
-          echo '8acee3d83282f0fea4a1a9ac290c6c185e02f86a58f07811eba04ada69586f30  /tmp/photo-batch3-final.zip' | sha256sum -c -
-          unzip -t /tmp/photo-batch3-final.zip
+          cat .github/photo-batch3-final/chunk-*.b64 | base64 -d > /tmp/photo-batch3-final.tar.xz
+          echo '803e40407f79a92028930017790a42bf10a5d00786d5ee82fca38fda32a7ba62  /tmp/photo-batch3-final.tar.xz' | sha256sum -c -
+          xz -t /tmp/photo-batch3-final.tar.xz
 
       - name: Apply photo assets and data patches
         shell: bash
         run: |
           set -euo pipefail
-          unzip -o /tmp/photo-batch3-final.zip -d .
+          tar -xJf /tmp/photo-batch3-final.tar.xz -C .
           node transport/apply-photo-batch3-refresh.mjs
           python3 - <<'PY'
           from pathlib import Path

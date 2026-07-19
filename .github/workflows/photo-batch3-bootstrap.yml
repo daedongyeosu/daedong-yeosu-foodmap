@@ -36,9 +36,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test "$(find .github/photo-batch3-installer -maxdepth 1 -type f -name 'part-*' | wc -l)" = '3'
+          test "$(find .github/photo-batch3-installer -maxdepth 1 -type f -name 'part-*' | wc -l)" = '5'
           cat .github/photo-batch3-installer/part-* > /tmp/photo-batch3-install.sh
-          echo '511e08a6974ee7d45bc4550e42a64dee532ba1654a69dca72c2a4655f2d2bdc4  /tmp/photo-batch3-install.sh' | sha256sum -c -
+          echo '58473b04cf3f4002e4fcc3f0ddca986cd473110a391c717608f79994bc3156f3  /tmp/photo-batch3-install.sh' | sha256sum -c -
           bash -n /tmp/photo-batch3-install.sh
           set +e
           bash /tmp/photo-batch3-install.sh > /tmp/photo-batch3-install.log 2>&1

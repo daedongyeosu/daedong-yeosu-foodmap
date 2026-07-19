@@ -1,0 +1,77 @@
+         BASE_URL=http://127.0.0.1:4173 node scripts/photo-batch3-mobile.mjs',
+  ''
+].join('\n');
+const newMobile=[
+  '      - name: Mobile functional inspection',
+  '        run: |',
+  '          (cd before-main && python3 -m http.server 4173 --bind 127.0.0.1 > ../photo-batch3-before-server.log 2>&1) &',
+  '          before_pid=$!',
+  '          python3 -m http.server 4174 --bind 127.0.0.1 > photo-batch3-server.log 2>&1 &',
+  '          after_pid=$!',
+  "          trap 'kill $before_pid $after_pid 2>/dev/null || true' EXIT",
+  '          sleep 3',
+  '          BEFORE_URL=http://127.0.0.1:4173 AFTER_URL=http://127.0.0.1:4174 node scripts/photo-batch3-mobile.mjs',
+  ''
+].join('\n');
+if(!s.includes(oldMobile)) throw Error('validation mobile anchor missing');
+s=s.replace(oldMobile,newMobile);
+s=s.replace('            photo-batch3-mobile-report.json','            photo-batch3-comparison.json');
+s=s.replace('            photo-batch3-server.log','            photo-batch3-server.log\n            photo-batch3-before-server.log\n            data/photo-batch3-refresh-chunk-confirmation.json');
+fs.writeFileSync(p,s);
+NODE
+
+
+set -euo pipefail
+node - <<'NODE'
+const fs=require('fs'),crypto=require('crypto'),cp=require('child_process');
+const stores=JSON.parse(fs.readFileSync('data/stores.json')),manifest=JSON.parse(fs.readFileSync('data/photo-manifest.json'));
+const baseline=JSON.parse(cp.execFileSync('git',['show','ecfc1f7d053914c7f6d4d9be9edbc88740534d0d:data/stores.json'],{encoding:'utf8',maxBuffer:10*1024*1024}));
+const photoKeys=new Set(['image','img','images','photoGroup','photoSource']);
+const strip=s=>Object.fromEntries(Object.entries(s).filter(([k])=>!photoKeys.has(k)));
+const hash=x=>crypto.createHash('sha256').update(JSON.stringify(x)).digest('hex');
+const has=s=>Boolean(String(s.image||s.img||'').trim()||(Array.isArray(s.images)&&s.images.length));
+const have=stores.filter(has),pending=stores.filter(s=>!has(s)),c=manifest.coverage||{};
+if(stores.length!==471||have.length!==444||pending.length!==27)throw Error(`store counts ${stores.length}/${have.length}/${pending.length}`);
+if(c.storeCount!==471||c.storesWithPhoto!==444||c.storesAwaitingPhoto!==27)throw Error(`manifest coverage ${JSON.stringify(c)}`);
+const titleless=stores.find(s=>s.name==='제목 없음');if(!titleless||has(titleless))throw Error('제목 없음 must remain data-error hold');
+const current=new Map(stores.map(s=>[String(s.id),s]));
+const old=baseline.filter(has);if(baseline.length!==471||old.length!==386)throw Error(`baseline counts ${baseline.length}/${old.length}`);
+for(const s of baseline){const n=current.get(String(s.id));if(!n||hash(strip(s))!==hash(strip(n)))throw Error(`non-photo changed ${s.name}`);if(has(s)&&hash(s)!==hash(n))throw Error(`existing photo store changed ${s.name}`);}
+console.log('PASS stores 471, photo 444, pending 27, manifest agrees, titleless held');
+console.log('PASS existing 386 photo stores and all non-photo data unchanged by SHA');
+NODE
+git diff --exit-code ecfc1f7d053914c7f6d4d9be9edbc88740534d0d -- index.html app.css app.js
+git diff --exit-code ecfc1f7d053914c7f6d4d9be9edbc88740534d0d -- assets ':!assets/photo-batch-3-refresh/**' images
+
+
+set -euo pipefail
+node scripts/validate-static.mjs
+node scripts/test-app-unit.mjs
+grep -vE '  data/(stores|photo-manifest)\.json$' SHA256SUMS.txt | sha256sum -c -
+node scripts/validate-photo-batch2-vetted.mjs
+sha256sum -c PHOTO_BATCH3_SHA256SUMS.txt
+node scripts/validate-photo-batch3-refresh.mjs
+
+
+set -euo pipefail
+cp /tmp/chunk-confirmation.json data/photo-batch3-refresh-chunk-confirmation.json
+rm -rf transport .github/photo-batch3-payload .github/photo-batch3-final .github/photo-batch3-mini .github/photo-batch3-installer
+rm -f .github/workflows/photo-batch3-bootstrap.yml .github/workflows/photo-batch3-workspace-export.yml
+rm -f existing-assets-files.tsv existing-assets-sha256.txt git-status.txt head-sha.txt repo-tree.txt
+rm -f photo-batch3-validation-result.json static-validation-report.json data-validation-report.json
+test "$(find . -type f \( -name 'chunk-*.b64' -o -name 'READY' -o -name '*.tmp' \) | wc -l)" = '0'
+test ! -e transport
+test ! -e .github/photo-batch3-mini
+test ! -e .github/photo-batch3-installer
+test ! -e .github/workflows/photo-batch3-bootstrap.yml
+echo 'PASS temporary transfer files, restore scripts and installers = 0'
+
+
+set -euo pipefail
+git config user.name 'daedongyeosu-photo-bot'
+git config user.email 'sisakim@naver.com'
+git add -A
+git diff --cached --quiet && exit 0
+git commit -m '사진 3차 보충: 58개 가게 안전 적용 및 검증자료'
+git push origin HEAD:feature/photo-batch-3-refresh
+

@@ -1,0 +1,84 @@
+me}`);
+  fs.writeFileSync(`/tmp/photo-batch3-chunks/${name}`,b);
+}
+const used=[...commentsUsed].sort((a,b)=>a-b);
+if(JSON.stringify(used)!==JSON.stringify(expectedCommentIds)) throw Error(`comment source mismatch ${used}`);
+if(used.includes(5013338720)) throw Error('REVOKED comment included');
+const confirmation={schemaVersion:1,status:'PASS',installationSource:m.installationSource,chunkCount:22,chunks:m.chunks,commentsUsed:used,revokedComments:revoked,revokedIncluded:false,excludedLegacyCommentIds:m.excludedLegacyCommentIds||[],localOriginalPayloadSha256:m.localOriginalPayloadSha256,expectedPayloadSha256:m.xzSha256,expectedPayloadBytes:m.xzBytes,expectedPayloadFileCount:m.expectedPayloadFileCount};
+fs.writeFileSync('/tmp/chunk-confirmation.json',JSON.stringify(confirmation,null,2));
+console.log('PASS chunk-000..021 unique, ordered, exact size/SHA/identifier');
+console.log(`PASS exact comments used=${used.join(',')}; REVOKED 5013338720 excluded`);
+NODE
+
+
+set -euo pipefail
+cat /tmp/photo-batch3-chunks/chunk-*.b64 | base64 -d > /tmp/photo-batch3-canonical.tar.xz
+actual_sha="$(sha256sum /tmp/photo-batch3-canonical.tar.xz | awk '{print $1}')"
+local_sha="$(node -p "require('./.github/photo-batch3-mini/manifest.json').localOriginalPayloadSha256")"
+expected_sha="$(node -p "require('./.github/photo-batch3-mini/manifest.json').xzSha256")"
+test "$actual_sha" = "$local_sha"
+test "$actual_sha" = "$expected_sha"
+test "$(stat -c%s /tmp/photo-batch3-canonical.tar.xz)" = '161408'
+xz -t /tmp/photo-batch3-canonical.tar.xz
+node - <<'NODE'
+const fs=require('fs'),p='/tmp/chunk-confirmation.json',x=JSON.parse(fs.readFileSync(p));
+x.completedPayloadSha256='9a81d758c4a789b8150f653c0097ff321668550c85841a6eb5e392864cd87528';
+x.localOriginalHashMatch=true;x.xzIntegrity='PASS';fs.writeFileSync(p,JSON.stringify(x,null,2));
+NODE
+echo 'PASS completed payload SHA equals local original; XZ integrity PASS'
+
+
+set -euo pipefail
+rm -rf /tmp/photo-batch3-extract && mkdir -p /tmp/photo-batch3-extract
+tar -xJf /tmp/photo-batch3-canonical.tar.xz -C /tmp/photo-batch3-extract
+node - <<'NODE'
+const fs=require('fs'),path=require('path'),crypto=require('crypto');
+const m=JSON.parse(fs.readFileSync('.github/photo-batch3-mini/manifest.json','utf8')),root='/tmp/photo-batch3-extract';
+function walk(d){return fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]);}
+const actual=walk(root).map(p=>p.slice(root.length+1)).sort(),expected=m.expectedPayloadFiles.map(x=>x.path).sort();
+if(actual.length!==m.expectedPayloadFileCount||JSON.stringify(actual)!==JSON.stringify(expected)) throw Error(`inventory mismatch ${actual.length}/${m.expectedPayloadFileCount}`);
+for(const e of m.expectedPayloadFiles){const b=fs.readFileSync(path.join(root,e.path)),sha=crypto.createHash('sha256').update(b).digest('hex');if(b.length!==e.size||sha!==e.sha256)throw Error(`file mismatch ${e.path}`);}
+const p='/tmp/chunk-confirmation.json',x=JSON.parse(fs.readFileSync(p));x.extractedInventory={status:'PASS',fileCount:actual.length,files:m.expectedPayloadFiles};fs.writeFileSync(p,JSON.stringify(x,null,2));
+console.log(`PASS extracted ${actual.length} expected files with exact hashes`);
+NODE
+
+
+set -euo pipefail
+cp -a /tmp/photo-batch3-extract/. .
+node transport/apply-photo-batch3-refresh.mjs
+node - <<'NODE'
+const fs=require('fs');
+const p='.github/workflows/photo-batch3-validation.yml';
+let s=fs.readFileSync(p,'utf8');
+const oldAssert=[
+  '      - name: Assert temporary transfer and installer files absent',
+  '        run: |',
+  '          test ! -e .github/photo-batch3-payload',
+  '          test ! -e .github/photo-batch3-final',
+  '          test ! -e .github/workflows/photo-batch3-bootstrap.yml',
+  '          test ! -e .github/workflows/photo-batch3-workspace-export.yml',
+  '          test ! -e transport',
+  ''
+].join('\n');
+const newAssert=[
+  '      - name: Assert canonical confirmation and all temporary files absent',
+  '        run: |',
+  "          node -e \"const x=require('./data/photo-batch3-refresh-chunk-confirmation.json');if(x.status!=='PASS'||x.chunkCount!==22||x.revokedIncluded!==false||x.commentsUsed.includes(5013338720))throw Error('chunk confirmation invalid');console.log('PASS chunk confirmation and REVOKED exclusion')\"",
+  '          test ! -e .github/photo-batch3-payload',
+  '          test ! -e .github/photo-batch3-final',
+  '          test ! -e .github/photo-batch3-mini',
+  '          test ! -e .github/photo-batch3-installer',
+  '          test ! -e .github/workflows/photo-batch3-bootstrap.yml',
+  '          test ! -e .github/workflows/photo-batch3-workspace-export.yml',
+  '          test ! -e transport',
+  "          test \"$(find . -type f \\( -name 'chunk-*.b64' -o -name 'READY' -o -name '*.tmp' \\) | wc -l)\" = '0'",
+  ''
+].join('\n');
+if(!s.includes(oldAssert)) throw Error('validation assert anchor missing');
+s=s.replace(oldAssert,newAssert);
+const oldMobile=[
+  '      - name: Mobile functional inspection',
+  '        run: |',
+  '          python3 -m http.server 4173 --bind 127.0.0.1 > photo-batch3-server.log 2>&1 &',
+  "          pid=$!; trap 'kill $pid 2>/dev/null || true' EXIT; sleep 3",
+  ' 

@@ -1,39 +1,73 @@
-ash(s)!==hash(n))throw Error(`existing photo store changed ${s.name}`);}
-console.log('PASS stores 471, photo 444, pending 27, manifest agrees, titleless held');
-console.log('PASS existing 386 photo stores and all non-photo data unchanged by SHA');
-NODE
-git diff --exit-code ecfc1f7d053914c7f6d4d9be9edbc88740534d0d -- index.html app.css app.js
-git diff --exit-code ecfc1f7d053914c7f6d4d9be9edbc88740534d0d -- assets ':!assets/photo-batch-3-refresh/**' images
-
-
-set -euo pipefail
-node scripts/validate-static.mjs
-node scripts/test-app-unit.mjs
-grep -vE '  data/(stores|photo-manifest)\.json$' SHA256SUMS.txt | sha256sum -c -
-node scripts/validate-photo-batch2-vetted.mjs
-sha256sum -c PHOTO_BATCH3_SHA256SUMS.txt
-node scripts/validate-photo-batch3-refresh.mjs
-
-
-set -euo pipefail
-cp /tmp/chunk-confirmation.json data/photo-batch3-refresh-chunk-confirmation.json
-rm -rf transport .github/photo-batch3-payload .github/photo-batch3-final .github/photo-batch3-mini .github/photo-batch3-installer
-rm -f .github/workflows/photo-batch3-bootstrap.yml .github/workflows/photo-batch3-workspace-export.yml
-rm -f existing-assets-files.tsv existing-assets-sha256.txt git-status.txt head-sha.txt repo-tree.txt
-rm -f photo-batch3-validation-result.json static-validation-report.json data-validation-report.json
-test "$(find . -type f \( -name 'chunk-*.b64' -o -name 'READY' -o -name '*.tmp' \) | wc -l)" = '0'
-test ! -e transport
-test ! -e .github/photo-batch3-mini
-test ! -e .github/photo-batch3-installer
-test ! -e .github/workflows/photo-batch3-bootstrap.yml
-echo 'PASS temporary transfer files, restore scripts and installers = 0'
-
-
-set -euo pipefail
-git config user.name 'daedongyeosu-photo-bot'
-git config user.email 'sisakim@naver.com'
-git add -A
-git diff --cached --quiet && exit 0
-git commit -m '사진 3차 보충: 58개 가게 안전 적용 및 검증자료'
-git push origin HEAD:feature/photo-batch-3-refresh
-
+queId":"issue-comment:5013445900#chunk-021"}}];
+if(m.chunkCount!==22||m.chunks.length!==22) throw Error('chunk count not exactly 22');
+const names=m.chunks.map(c=>c.name),ids=m.chunks.map(c=>c.source.uniqueId);
+if(new Set(names).size!==22) throw Error('duplicate chunk name/number');
+if(new Set(ids).size!==22) throw Error('duplicate unique source identifier');
+const expectedGit=m.chunks.filter(c=>c.source.type==='git_file'||c.source.type==='git_file_with_inline_prefix').map(c=>c.name).sort();
+const actualGit=fs.readdirSync('.github/photo-batch3-mini').filter(x=>/^chunk-\d{3}\.b64$/.test(x)).sort();
+if(JSON.stringify(actualGit)!==JSON.stringify(expectedGit)) throw Error(`Git chunk missing/extra/order mismatch ${actualGit}`);
+const revoked=m.revokedComments||[];
+if(!revoked.some(x=>x.id===5013338720&&x.status==='REVOKED'&&x.mustNeverBeUsed)) throw Error('REVOKED identifier missing');
+const expectedCommentIds=[...new Set(m.chunks.filter(c=>c.source.commentId).map(c=>c.source.commentId))].sort((a,b)=>a-b);
+if(expectedCommentIds.includes(5013338720)) throw Error('manifest references REVOKED comment');
+const cache=new Map(),commentsUsed=new Set();
+function commentBody(id){
+  if(id===5013338720) throw Error('attempt to read REVOKED comment');
+  if(!expectedCommentIds.includes(id)) throw Error(`unapproved comment source ${id}`);
+  if(!cache.has(id)){
+    const body=cp.execFileSync('gh',['api',`repos/${process.env.GITHUB_REPOSITORY}/issues/comments/${id}`,'--jq','.body'],{encoding:'utf8',maxBuffer:2*1024*1024});
+    cache.set(id,body.replace(/\r/g,'').replace(/\n$/,''));
+  }
+  commentsUsed.add(id); return cache.get(id);
+}
+for(const id of expectedCommentIds) commentBody(id);
+const selectedBodies=[...cache.values()];
+const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function markerCount(name,type){
+  if(type==='single') return selectedBodies.reduce((n,b)=>n+(b.match(new RegExp(`^PHOTO_BATCH3_CANONICAL ${esc(name)}[^\\n]*$`,'gm'))||[]).length,0);
+  return selectedBodies.reduce((n,b)=>n+(b.match(new RegExp(`^BEGIN ${esc(name)}[^\\n]*$`,'gm'))||[]).length,0);
+}
+function gitObjectId(b){return crypto.createHash('sha1').update(Buffer.concat([Buffer.from(`blob ${b.length}\0`),b])).digest('hex');}
+function exactGitFile(src){
+  const text=fs.readFileSync(src.path,'utf8').replace(/\s/g,''),b=Buffer.from(text,'utf8');
+  if(src.fileSize!==undefined&&b.length!==src.fileSize) throw Error(`source file size mismatch ${src.path}: ${b.length}/${src.fileSize}`);
+  if(src.fileSha256!==undefined&&crypto.createHash('sha256').update(b).digest('hex')!==src.fileSha256) throw Error(`source file SHA mismatch ${src.path}`);
+  if(src.fileGitBlobSha1!==undefined&&gitObjectId(b)!==src.fileGitBlobSha1) throw Error(`source file blob mismatch ${src.path}`);
+  return text;
+}
+function resolve(c){
+  if(c.source.type==='git_file') return fs.readFileSync(c.source.path,'utf8').replace(/\s/g,'');
+  if(c.source.type==='git_file_with_inline_prefix'){
+    const file=exactGitFile(c.source),prefix=c.source.inlinePrefix,b=Buffer.from(prefix,'utf8');
+    if(b.length!==c.source.inlinePrefixSize||crypto.createHash('sha256').update(b).digest('hex')!==c.source.inlinePrefixSha256||gitObjectId(b)!==c.source.inlinePrefixGitBlobSha1) throw Error(`inline bridge mismatch ${c.name}`);
+    return prefix+file;
+  }
+  const body=commentBody(c.source.commentId);
+  if(c.source.type==='issue_comment_single'||c.source.type==='issue_comment_single_slice'){
+    if(markerCount(c.name,'single')!==1) throw Error(`duplicate/missing selected single chunk marker ${c.name}`);
+    const re=new RegExp(`^PHOTO_BATCH3_CANONICAL ${esc(c.name)}[^\\n]*\\n([A-Za-z0-9+/=]+)$`);
+    const hit=body.match(re); if(!hit) throw Error(`single comment parse failed ${c.name}`);
+    const raw=hit[1],rb=Buffer.from(raw,'utf8');
+    if(c.source.type==='issue_comment_single_slice'){
+      if(rb.length!==c.source.fullSize||crypto.createHash('sha256').update(rb).digest('hex')!==c.source.fullSha256||gitObjectId(rb)!==c.source.fullGitBlobSha1) throw Error(`full comment source mismatch ${c.name}`);
+      return raw.slice(c.source.sliceStart,c.source.sliceEnd);
+    }
+    return raw;
+  }
+  if(c.source.type==='issue_comment_bundle'){
+    if(markerCount(c.name,'bundle')!==1) throw Error(`duplicate/missing selected bundle chunk marker ${c.name}`);
+    const re=new RegExp(`BEGIN ${esc(c.name)}[^\\n]*\\n([A-Za-z0-9+/=\\n]+?)\\nEND ${esc(c.name)}`);
+    const hit=body.match(re); if(!hit) throw Error(`bundle comment parse failed ${c.name}`);
+    return hit[1].replace(/\s/g,'');
+  }
+  throw Error(`unknown source ${c.source.type}`);
+}
+for(let i=0;i<22;i++){
+  const c=m.chunks[i],name=`chunk-${String(i).padStart(3,'0')}.b64`;
+  if(c.index!==i||c.name!==name) throw Error(`sequence error ${i}`);
+  const text=resolve(c),b=Buffer.from(text,'utf8');
+  const sha=crypto.createHash('sha256').update(b).digest('hex');
+  const git=crypto.createHash('sha1').update(Buffer.concat([Buffer.from(`blob ${b.length}\0`),b])).digest('hex');
+  if(b.length!==c.size) throw Error(`size mismatch ${name}: ${b.length}/${c.size}`);
+  if(sha!==c.sha256) throw Error(`SHA mismatch ${name}`);
+  if(git!==c.gitBlobSha1) throw Error(`unique blob mismatch ${na

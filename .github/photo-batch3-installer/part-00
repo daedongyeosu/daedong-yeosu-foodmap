@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+set -euo pipefail
+mkdir -p /tmp/photo-batch3-chunks
+node - <<'NODE'
+const fs=require('fs'),crypto=require('crypto'),cp=require('child_process');
+const manifestPath='.github/photo-batch3-mini/manifest.json';
+const m=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
+if(m.version!=='canonical-v2'||m.transportMode!=='mixed-git-files-and-exact-pr-comments') throw Error('wrong canonical manifest');
+if(m.chunkCount!==22||m.chunks.length!==22) throw Error('chunk count not exactly 22');
+const names=m.chunks.map(c=>c.name),ids=m.chunks.map(c=>c.source.uniqueId);
+if(new Set(names).size!==22) throw Error('duplicate chunk name/number');
+if(new Set(ids).size!==22) throw Error('duplicate unique source identifier');
+const expectedGit=m.chunks.filter(c=>c.source.type==='git_file').map(c=>c.name).sort();
+const actualGit=fs.readdirSync('.github/photo-batch3-mini').filter(x=>/^chunk-\d{3}\.b64$/.test(x)).sort();
+if(JSON.stringify(actualGit)!==JSON.stringify(expectedGit)) throw Error(`Git chunk missing/extra/order mismatch ${actualGit}`);
+const revoked=m.revokedComments||[];
+if(!revoked.some(x=>x.id===5013338720&&x.status==='REVOKED'&&x.mustNeverBeUsed)) throw Error('REVOKED identifier missing');
+const expectedCommentIds=[...new Set(m.chunks.filter(c=>c.source.commentId).map(c=>c.source.commentId))].sort((a,b)=>a-b);
+if(expectedCommentIds.includes(5013338720)) throw Error('manifest references REVOKED comment');
+const cache=new Map(),commentsUsed=new Set();
+function commentBody(id){
+  if(id===5013338720) throw Error('attempt to read REVOKED comment');
+  if(!expectedCommentIds.includes(id)) throw Error(`unapproved comment source ${id}`);
+  if(!cache.has(id)){
+    const body=cp.execFileSync('gh',['api',`repos/${process.env.GITHUB_REPOSITORY}/issues/comments/${id}`,'--jq','.body'],{encoding:'utf8',maxBuffer:2*1024*1024});
+    cache.set(id,body.replace(/\r/g,'').replace(/\n$/,''));
+  }
+  commentsUsed.add(id); return cache.get(id);
+}
+for(const id of expectedCommentIds) commentBody(id);
+const selectedBodies=[...cache.values()];
+const esc=s=>s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+function markerCount(name,type){
+  if(type==='single') return selectedBodies.reduce((n,b)=>n+(b.match(new RegExp(`^PHOTO_BATCH3_CANONICAL ${esc(name)}[^\\n]*$`,'gm'))||[]).length,0);
+  return selectedBodies.reduce((n,b)=>n+(b.match(new RegExp(`^BEGIN ${esc(name)}[^\\n]*$`,'gm'))||[]).length,0);
+}
+function resolve(c){
+  if(c.source.type==='git_file') return fs.readFileSync(c.source.path,'utf8').replace(/\s/g,'');
+  const body=commentBody(c.source.commentId);
+  if(c.source.type==='issue_comment_single'){
+    if(markerCount(c.name,'single')!==1) throw Error(`duplicate/missing selected single chunk marker ${c.name}`);
+    const re=new RegExp(`^PHOTO_BATCH3_CANONICAL ${esc(c.name)}[^\\n]*\\n([A-Za-z0-9+/=]+)$`);
+    const hit=body.match(re); if(!hit) throw Error(`single comment parse failed ${c.name}`);
+    return hit[1];
+  }
+  if(c.source.type==='issue_comment_bundle'){
+    if(markerCount(c.name,'bundle')!==1) throw Error(`duplicate/missing selected bundle chunk marker ${c.name}`);
+    const re=new RegExp(`BEGIN ${esc(c.name)}[^\\n]*\\n([A-Za-z0-9+/=\\n]+?)\\nEND ${esc(c.name)}`);
+    const hit=body.match(re); if(!hit) throw Error(`bundle comment parse failed ${c.name}`);
+    return hit[1].replace(/\s/g,'');
+  }
+  throw Error(`unknown source ${c.source.type}`);
+}
+for(let i=0;i<22;i++){
+  const c=m.chunks[i],name=`chunk-${String(i).padStart(3,'0')}.b64`;
+  if(c.index!==i||c.name!==name) throw Error(`sequence error ${i}`);
+  const text=resolve(c),b=Buffer.from(text,'utf8');
+  const sha=crypto.createHash('sha256').update(b).digest('hex');
+  const git=crypto.createHash('sha1').update(Buffer.concat([Buffer.from(`blob ${b.length}\0`),b])).digest('hex');
+  if(b.length!==c.size) throw Error(`size mismatch ${name}: ${b.length}/${c.size}`);
+  if(sha!==c.sha256) throw Error(`SHA mismatch ${name}`);
+  if(git!==c.gitBlobSha1) throw Error(`unique blob mismatch ${name}`);
+  fs.writeFileSync(`/tmp/photo-batch3-chunks/${name}`,b);
+}
+const used=[...commentsUsed].sort((a,b)=>a-b);
+if(JSON.stringify(used)!==JSON.stringify(expectedCommentIds)) throw Error(`comment source mismatch ${used}`);
+if(used.includes(5013338720)) throw Error('REVOKED comment included');
+const confirmation={schemaVersion:1,status:'PASS',installationSource:'Only canonical Git blobs and exact PR comment IDs/sections listed in manifest',chunkCount:22,chunks:m.chunks,commentsUsed:used,revokedComments:revoked,revokedIncluded:false,excludedLegacyCommentIds:m.excludedLegacyCommentIds||[],localOriginalPayloadSha256:m.localOriginalPayloadSha256,expectedPayloadSha256:m.xzSha256,expectedPayloadBytes:m.xzBytes,expectedPayloadFileCount:m.expectedPayloadFileCount};
+fs.writeFileSync('/tmp/chunk-confirmation.json',JSON.stringify(confirmation,null,2));
+console.log('PASS chunk-000..021 unique, ordered, exact size/SHA/identifier');
+console.log(`PASS exact comments used=${used.join(',')}; REVOKED 5013338720 excluded`);
+NODE
+
+
+set -euo pipefail
+cat /tmp/photo-batch3-chunks/chunk-*.b64 | base64 -d > /tmp/photo-batch3-canonical.tar.xz
+actual_sha="$(sha256sum /tmp/photo-batch3-canonical.tar.xz | awk '{print $1}')"
+local_sha="$(node -p "require('./.github/photo-batch3-mini/manifest.json').localOriginalPayloadSha256")"
+expected_sha="$(node -p "require('./.github/photo-batch3-mini/manifest.json').xzSha256")"
+test "$actual_sha" = "$local_sha"
+test "$actual_sha" = "$expected_sha"
+test "$(stat -c%s /tmp/photo-batch3-canonical.tar.xz)" = '161408'
+xz -t /tmp/photo-batch3-canonical.tar.xz
+node - <<'NODE'
+const fs=require('fs'),p='/tmp/chunk-confirmation.json',x=JSON.parse(fs.readFileSync(p));
+x.completedPayloadSha256='9a81d758c4a789b8150f653c0097ff321668550c85841a6eb5e392864cd87528';
+x.localOriginalHashMatch=true;x.xzIntegrity='PASS';fs.writeFileSync(p,JSON.stringify(x,null,2));
+NODE
+echo 'PASS completed payload SHA equals local original; XZ integrity PASS'
+
+
+set -euo pipefail
+rm -rf 

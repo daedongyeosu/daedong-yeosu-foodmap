@@ -1,0 +1,91 @@
+/tmp/photo-batch3-extract && mkdir -p /tmp/photo-batch3-extract
+tar -xJf /tmp/photo-batch3-canonical.tar.xz -C /tmp/photo-batch3-extract
+node - <<'NODE'
+const fs=require('fs'),path=require('path'),crypto=require('crypto');
+const m=JSON.parse(fs.readFileSync('.github/photo-batch3-mini/manifest.json','utf8')),root='/tmp/photo-batch3-extract';
+function walk(d){return fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):[path.join(d,e.name)]);}
+const actual=walk(root).map(p=>p.slice(root.length+1)).sort(),expected=m.expectedPayloadFiles.map(x=>x.path).sort();
+if(actual.length!==m.expectedPayloadFileCount||JSON.stringify(actual)!==JSON.stringify(expected)) throw Error(`inventory mismatch ${actual.length}/${m.expectedPayloadFileCount}`);
+for(const e of m.expectedPayloadFiles){const b=fs.readFileSync(path.join(root,e.path)),sha=crypto.createHash('sha256').update(b).digest('hex');if(b.length!==e.size||sha!==e.sha256)throw Error(`file mismatch ${e.path}`);}
+const p='/tmp/chunk-confirmation.json',x=JSON.parse(fs.readFileSync(p));x.extractedInventory={status:'PASS',fileCount:actual.length,files:m.expectedPayloadFiles};fs.writeFileSync(p,JSON.stringify(x,null,2));
+console.log(`PASS extracted ${actual.length} expected files with exact hashes`);
+NODE
+
+
+set -euo pipefail
+cp -a /tmp/photo-batch3-extract/. .
+node transport/apply-photo-batch3-refresh.mjs
+node - <<'NODE'
+const fs=require('fs');
+const p='.github/workflows/photo-batch3-validation.yml';
+let s=fs.readFileSync(p,'utf8');
+const oldAssert=[
+  '      - name: Assert temporary transfer and installer files absent',
+  '        run: |',
+  '          test ! -e .github/photo-batch3-payload',
+  '          test ! -e .github/photo-batch3-final',
+  '          test ! -e .github/workflows/photo-batch3-bootstrap.yml',
+  '          test ! -e .github/workflows/photo-batch3-workspace-export.yml',
+  '          test ! -e transport',
+  ''
+].join('\n');
+const newAssert=[
+  '      - name: Assert canonical confirmation and all temporary files absent',
+  '        run: |',
+  "          node -e \"const x=require('./data/photo-batch3-refresh-chunk-confirmation.json');if(x.status!=='PASS'||x.chunkCount!==22||x.revokedIncluded!==false||x.commentsUsed.includes(5013338720))throw Error('chunk confirmation invalid');console.log('PASS chunk confirmation and REVOKED exclusion')\"",
+  '          test ! -e .github/photo-batch3-payload',
+  '          test ! -e .github/photo-batch3-final',
+  '          test ! -e .github/photo-batch3-mini',
+  '          test ! -e .github/photo-batch3-installer',
+  '          test ! -e .github/workflows/photo-batch3-bootstrap.yml',
+  '          test ! -e .github/workflows/photo-batch3-workspace-export.yml',
+  '          test ! -e transport',
+  "          test \"$(find . -type f \\( -name 'chunk-*.b64' -o -name 'READY' -o -name '*.tmp' \\) | wc -l)\" = '0'",
+  ''
+].join('\n');
+if(!s.includes(oldAssert)) throw Error('validation assert anchor missing');
+s=s.replace(oldAssert,newAssert);
+const oldMobile=[
+  '      - name: Mobile functional inspection',
+  '        run: |',
+  '          python3 -m http.server 4173 --bind 127.0.0.1 > photo-batch3-server.log 2>&1 &',
+  "          pid=$!; trap 'kill $pid 2>/dev/null || true' EXIT; sleep 3",
+  '          BASE_URL=http://127.0.0.1:4173 node scripts/photo-batch3-mobile.mjs',
+  ''
+].join('\n');
+const newMobile=[
+  '      - name: Mobile functional inspection',
+  '        run: |',
+  '          (cd before-main && python3 -m http.server 4173 --bind 127.0.0.1 > ../photo-batch3-before-server.log 2>&1) &',
+  '          before_pid=$!',
+  '          python3 -m http.server 4174 --bind 127.0.0.1 > photo-batch3-server.log 2>&1 &',
+  '          after_pid=$!',
+  "          trap 'kill $before_pid $after_pid 2>/dev/null || true' EXIT",
+  '          sleep 3',
+  '          BEFORE_URL=http://127.0.0.1:4173 AFTER_URL=http://127.0.0.1:4174 node scripts/photo-batch3-mobile.mjs',
+  ''
+].join('\n');
+if(!s.includes(oldMobile)) throw Error('validation mobile anchor missing');
+s=s.replace(oldMobile,newMobile);
+s=s.replace('            photo-batch3-mobile-report.json','            photo-batch3-comparison.json');
+s=s.replace('            photo-batch3-server.log','            photo-batch3-server.log\n            photo-batch3-before-server.log\n            data/photo-batch3-refresh-chunk-confirmation.json');
+fs.writeFileSync(p,s);
+NODE
+
+
+set -euo pipefail
+node - <<'NODE'
+const fs=require('fs'),crypto=require('crypto'),cp=require('child_process');
+const stores=JSON.parse(fs.readFileSync('data/stores.json')),manifest=JSON.parse(fs.readFileSync('data/photo-manifest.json'));
+const baseline=JSON.parse(cp.execFileSync('git',['show','ecfc1f7d053914c7f6d4d9be9edbc88740534d0d:data/stores.json'],{encoding:'utf8',maxBuffer:10*1024*1024}));
+const photoKeys=new Set(['image','img','images','photoGroup','photoSource']);
+const strip=s=>Object.fromEntries(Object.entries(s).filter(([k])=>!photoKeys.has(k)));
+const hash=x=>crypto.createHash('sha256').update(JSON.stringify(x)).digest('hex');
+const has=s=>Boolean(String(s.image||s.img||'').trim()||(Array.isArray(s.images)&&s.images.length));
+const have=stores.filter(has),pending=stores.filter(s=>!has(s)),c=manifest.coverage||{};
+if(stores.length!==471||have.length!==444||pending.length!==27)throw Error(`store counts ${stores.length}/${have.length}/${pending.length}`);
+if(c.storeCount!==471||c.storesWithPhoto!==444||c.storesAwaitingPhoto!==27)throw Error(`manifest coverage ${JSON.stringify(c)}`);
+const titleless=stores.find(s=>s.name==='제목 없음');if(!titleless||has(titleless))throw Error('제목 없음 must remain data-error hold');
+const current=new Map(stores.map(s=>[String(s.id),s]));
+const old=baseline.filter(has);if(baseline.length!==471||old.length!==386)throw Error(`baseline counts ${baseline.length}/${old.length}`);
+for(const s of baseline){const n=current.get(String(s.id));if(!n||hash(strip(s))!==hash(strip(n)))throw Error(`non-photo changed ${s.name}`);if(has(s)&&h

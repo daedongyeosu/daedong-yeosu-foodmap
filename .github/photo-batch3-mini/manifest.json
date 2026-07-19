@@ -1,1 +1,431 @@
-{}
+{
+  "version": "canonical-v2",
+  "transportMode": "mixed-git-files-and-exact-pr-comments",
+  "chunkCount": 22,
+  "base64Chars": 215212,
+  "xzBytes": 161408,
+  "xzSha256": "9a81d758c4a789b8150f653c0097ff321668550c85841a6eb5e392864cd87528",
+  "localOriginalPayloadSha256": "9a81d758c4a789b8150f653c0097ff321668550c85841a6eb5e392864cd87528",
+  "payloadFormat": "tar.xz",
+  "expectedPayloadFileCount": 25,
+  "chunks": [
+    {
+      "index": 0,
+      "name": "chunk-000.b64",
+      "size": 9000,
+      "sha256": "6c7f535533d4a32010ecfeee765738cad43ba74f24a8bccb074e899f7e419efb",
+      "gitBlobSha1": "2767192d62b01d64a5c1f8c2239c56ae325a12ef",
+      "source": {
+        "type": "git_file",
+        "path": ".github/photo-batch3-mini/chunk-000.b64",
+        "uniqueId": "gitblob:2767192d62b01d64a5c1f8c2239c56ae325a12ef"
+      }
+    },
+    {
+      "index": 1,
+      "name": "chunk-001.b64",
+      "size": 9000,
+      "sha256": "78338e7770fc1f1bd29d798264a6e434406f09ab9cd41411826d755d1911cdb6",
+      "gitBlobSha1": "49c0e23c5c07b90894d7f18b4908d7e9e8868f44",
+      "source": {
+        "type": "git_file",
+        "path": ".github/photo-batch3-mini/chunk-001.b64",
+        "uniqueId": "gitblob:49c0e23c5c07b90894d7f18b4908d7e9e8868f44"
+      }
+    },
+    {
+      "index": 2,
+      "name": "chunk-002.b64",
+      "size": 9000,
+      "sha256": "c03748d2020cd9f94a57c693a07ffc03a6bd555e0f830bfe133bb8884a008bde",
+      "gitBlobSha1": "e569bee137e93f03f8ed49ecbfee9cc388be0012",
+      "source": {
+        "type": "git_file",
+        "path": ".github/photo-batch3-mini/chunk-002.b64",
+        "uniqueId": "gitblob:e569bee137e93f03f8ed49ecbfee9cc388be0012"
+      }
+    },
+    {
+      "index": 3,
+      "name": "chunk-003.b64",
+      "size": 9000,
+      "sha256": "ad8b22e3d2a05407441e5cbd14eaa95b38765c639f42830f2f91c7153434dec0",
+      "gitBlobSha1": "79520f305d47d70fd196525ceb5ae1c6a34f8412",
+      "source": {
+        "type": "git_file",
+        "path": ".github/photo-batch3-mini/chunk-003.b64",
+        "uniqueId": "gitblob:79520f305d47d70fd196525ceb5ae1c6a34f8412"
+      }
+    },
+    {
+      "index": 4,
+      "name": "chunk-004.b64",
+      "size": 9000,
+      "sha256": "57e254301a150e95a91e704e1c1beccc345434c15e47a6933727250ce23015f3",
+      "gitBlobSha1": "29b7e94f2bcf1938f560bf8d997c0d5838ab5c07",
+      "source": {
+        "type": "git_file",
+        "path": ".github/photo-batch3-mini/chunk-004.b64",
+        "uniqueId": "gitblob:29b7e94f2bcf1938f560bf8d997c0d5838ab5c07"
+      }
+    },
+    {
+      "index": 5,
+      "name": "chunk-005.b64",
+      "size": 9000,
+      "sha256": "308ae42865f81e4dc2b6e886c8c17dc7072d7f063c054379782e4f5e2ca1c948",
+      "gitBlobSha1": "dcbd9859ab96c850cf055902d6ee443e0b412fad",
+      "source": {
+        "type": "git_file",
+        "path": ".github/photo-batch3-mini/chunk-005.b64",
+        "uniqueId": "gitblob:dcbd9859ab96c850cf055902d6ee443e0b412fad"
+      }
+    },
+    {
+      "index": 6,
+      "name": "chunk-006.b64",
+      "size": 9000,
+      "sha256": "7e7a973303ec3141a2098ea733b64fbad480e1f1c77c7b70d337695c7f863fa6",
+      "gitBlobSha1": "c6d86a2d42073f5961130aa7fedb7e09cf611e95",
+      "source": {
+        "type": "git_file",
+        "path": ".github/photo-batch3-mini/chunk-006.b64",
+        "uniqueId": "gitblob:c6d86a2d42073f5961130aa7fedb7e09cf611e95"
+      }
+    },
+    {
+      "index": 7,
+      "name": "chunk-007.b64",
+      "size": 9000,
+      "sha256": "37aaec7937a86c451c22c3c25d05ffb26ace2371e9105e68db20c096412d66f4",
+      "gitBlobSha1": "b83df32e199015974c091e7129ff325bad069519",
+      "source": {
+        "type": "git_file",
+        "path": ".github/photo-batch3-mini/chunk-007.b64",
+        "uniqueId": "gitblob:b83df32e199015974c091e7129ff325bad069519"
+      }
+    },
+    {
+      "index": 8,
+      "name": "chunk-008.b64",
+      "size": 9000,
+      "sha256": "9659fe1b63241fc5a4f8bfa2b754f7af6171916e90e7eba2522390c5911c3dbe",
+      "gitBlobSha1": "541be0ed7b772fb825e4374e023e3f3f775822ed",
+      "source": {
+        "type": "git_file",
+        "path": ".github/photo-batch3-mini/chunk-008.b64",
+        "uniqueId": "gitblob:541be0ed7b772fb825e4374e023e3f3f775822ed"
+      }
+    },
+    {
+      "index": 9,
+      "name": "chunk-009.b64",
+      "size": 9000,
+      "sha256": "5062ea978f18036e58c30df4ab1bca76b96d9b67424e2ac268b91bd4c2c4de3a",
+      "gitBlobSha1": "8bd411a64e6468d3b0baa694a9c6012461c4ad8f",
+      "source": {
+        "type": "git_file",
+        "path": ".github/photo-batch3-mini/chunk-009.b64",
+        "uniqueId": "gitblob:8bd411a64e6468d3b0baa694a9c6012461c4ad8f"
+      }
+    },
+    {
+      "index": 10,
+      "name": "chunk-010.b64",
+      "size": 10435,
+      "sha256": "35ed093eedc6531169b4d7bf7b084cd36a9c52d5378cf029372e48b53ef51190",
+      "gitBlobSha1": "70fc5fe7a8da264c9cd0930678d5989304bd9d4e",
+      "source": {
+        "type": "issue_comment_single",
+        "commentId": 5013323195,
+        "section": "chunk-010",
+        "uniqueId": "issue-comment:5013323195#chunk-010"
+      }
+    },
+    {
+      "index": 11,
+      "name": "chunk-011.b64",
+      "size": 10435,
+      "sha256": "1808a96c7d1636bd790baf260bbb660998f32cc4f51a9a00eae74f54c03f5155",
+      "gitBlobSha1": "edbaa31f9ad51b72d7d0516cf0b31a75399c4867",
+      "source": {
+        "type": "issue_comment_bundle",
+        "commentId": 5013330770,
+        "section": "chunk-011",
+        "uniqueId": "issue-comment:5013330770#chunk-011"
+      }
+    },
+    {
+      "index": 12,
+      "name": "chunk-012.b64",
+      "size": 10435,
+      "sha256": "74047d8efbde30851d0e605dd6cf73170472b8a705357937e65e29e2c00ee600",
+      "gitBlobSha1": "4eb05eab808d170a5b382b22687fc4933024e3a2",
+      "source": {
+        "type": "issue_comment_bundle",
+        "commentId": 5013330770,
+        "section": "chunk-012",
+        "uniqueId": "issue-comment:5013330770#chunk-012"
+      }
+    },
+    {
+      "index": 13,
+      "name": "chunk-013.b64",
+      "size": 10435,
+      "sha256": "3fbcc5db302ad2954b3f7e3353b684751922e8c31c4aa2bdb9c1e50403ff6458",
+      "gitBlobSha1": "be4e16d5ca4adaba6bf20ae1007cd95e797d651a",
+      "source": {
+        "type": "issue_comment_bundle",
+        "commentId": 5013330770,
+        "section": "chunk-013",
+        "uniqueId": "issue-comment:5013330770#chunk-013"
+      }
+    },
+    {
+      "index": 14,
+      "name": "chunk-014.b64",
+      "size": 10434,
+      "sha256": "4248c2e86f48d48427fe8502d4d9eff32640557c161330bcf19e8b4ff183b30e",
+      "gitBlobSha1": "7c821de324ad216ead19af3639def19e4003cd99",
+      "source": {
+        "type": "issue_comment_bundle",
+        "commentId": 5013330770,
+        "section": "chunk-014",
+        "uniqueId": "issue-comment:5013330770#chunk-014"
+      }
+    },
+    {
+      "index": 15,
+      "name": "chunk-015.b64",
+      "size": 10434,
+      "sha256": "f7d5c3634c7e0b3bd9e3689691733b4e077232026af32416e5b3ee628c45d389",
+      "gitBlobSha1": "6928d017b25613115e03a43ccba0f6b5af6cf07e",
+      "source": {
+        "type": "issue_comment_bundle",
+        "commentId": 5013330770,
+        "section": "chunk-015",
+        "uniqueId": "issue-comment:5013330770#chunk-015"
+      }
+    },
+    {
+      "index": 16,
+      "name": "chunk-016.b64",
+      "size": 10434,
+      "sha256": "d104912c6e420674c377cdf76a5a7aeccb333910c14579fe51fbed8fd0d099d6",
+      "gitBlobSha1": "fe82c3f5bbc44de830b221a76f40c3f1b66a8db0",
+      "source": {
+        "type": "issue_comment_bundle",
+        "commentId": 5013440545,
+        "section": "chunk-016",
+        "uniqueId": "issue-comment:5013440545#chunk-016"
+      }
+    },
+    {
+      "index": 17,
+      "name": "chunk-017.b64",
+      "size": 10434,
+      "sha256": "a30fb1b99951733619fe3cb450cdfc0099ede6ceb8eaf0c8a5605fc975aca707",
+      "gitBlobSha1": "c0ca94c770433fd46e60751c068881983e545554",
+      "source": {
+        "type": "issue_comment_bundle",
+        "commentId": 5013440545,
+        "section": "chunk-017",
+        "uniqueId": "issue-comment:5013440545#chunk-017"
+      }
+    },
+    {
+      "index": 18,
+      "name": "chunk-018.b64",
+      "size": 10434,
+      "sha256": "ba2885dac3a3ca84c3c39baf0c60d66884d1c054a036bd2e0f8b633f0b7fe837",
+      "gitBlobSha1": "2c9d85351c83fc5ab41270cccbe8ec798cc916d8",
+      "source": {
+        "type": "issue_comment_bundle",
+        "commentId": 5013440545,
+        "section": "chunk-018",
+        "uniqueId": "issue-comment:5013440545#chunk-018"
+      }
+    },
+    {
+      "index": 19,
+      "name": "chunk-019.b64",
+      "size": 10434,
+      "sha256": "c003c10958d25a90386eb0f77393441725b6d009138f98b67b6d5c241007255f",
+      "gitBlobSha1": "b4683178c69ef295302cfe1f66b8667488400fd3",
+      "source": {
+        "type": "issue_comment_bundle",
+        "commentId": 5013440545,
+        "section": "chunk-019",
+        "uniqueId": "issue-comment:5013440545#chunk-019"
+      }
+    },
+    {
+      "index": 20,
+      "name": "chunk-020.b64",
+      "size": 10434,
+      "sha256": "a9022b7a0ee50ddae32a29bb7c6ec527d07158a2e24d542cb19dfeebfb14da1b",
+      "gitBlobSha1": "1cb27219d7dee0bd77bbd4b86692d9ad9ecc3750",
+      "source": {
+        "type": "issue_comment_bundle",
+        "commentId": 5013440545,
+        "section": "chunk-020",
+        "uniqueId": "issue-comment:5013440545#chunk-020"
+      }
+    },
+    {
+      "index": 21,
+      "name": "chunk-021.b64",
+      "size": 10434,
+      "sha256": "573b206f959f5d7da1bf7d4d43a5a379ac4d46dc2a10c8898fde9bdd441e6755",
+      "gitBlobSha1": "01b34376261171fdc867925175cf5b2f491d4c07",
+      "source": {
+        "type": "issue_comment_bundle",
+        "commentId": 5013445900,
+        "section": "chunk-021",
+        "uniqueId": "issue-comment:5013445900#chunk-021"
+      }
+    }
+  ],
+  "revokedComments": [
+    {
+      "id": 5013338720,
+      "scope": "incorrect mixed chunk-012~014",
+      "status": "REVOKED",
+      "mustNeverBeUsed": true
+    }
+  ],
+  "excludedLegacyCommentIds": [
+    5013349180,
+    5013356406,
+    5013363315,
+    5013370788
+  ],
+  "installationSource": "chunks 000-009 exact Git files; chunks 010-021 exact PR comment IDs/sections; no other comments read",
+  "expectedPayloadFiles": [
+    {
+      "path": ".github/workflows/photo-batch3-validation.yml",
+      "size": 4367,
+      "sha256": "c8b8eb2c678c21ef9937d128bfea3e80ba9b8b4a6e510ba1e8ec4e7f34d21cff"
+    },
+    {
+      "path": "PHOTO_BATCH3_SHA256SUMS.txt",
+      "size": 1612,
+      "sha256": "c28ae2212a56eb6a0f43d41d2bd1ed014fd179d9bf5a96f2707c648a5ee1a1b1"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/bbq.webp",
+      "size": 7436,
+      "sha256": "69fdc87d38df9f456c4375825a22be29e8a2b2e44a7d7096c7079b291581f636"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/bhc.webp",
+      "size": 9798,
+      "sha256": "42c9129e63a62eaa1dd4532cae46df3d7db6ed4be5a6057ac61e3c78e7c5f766"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/boor.webp",
+      "size": 12494,
+      "sha256": "320e369ba132822895d268dc876210ffa8ed8b021204077cb0d73dcc8467ff0a"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/chickeneye.webp",
+      "size": 6494,
+      "sha256": "7b19b9011348d9aa629189e0f0ba3ace6275d3d33a0641451bd1dd6c759847c5"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/dakndons.webp",
+      "size": 17162,
+      "sha256": "b9f86bd34bfcc116537a41e532f38b19ba8f27d47cc5561a4b13d9f6df7343df"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/gangchon.webp",
+      "size": 9550,
+      "sha256": "2811258651e9ca5ebb89ef9ff791b11b803b74b0fb117b0d8b7ac351e5c26c51"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/goobne.webp",
+      "size": 6092,
+      "sha256": "3aae586c9e1f83605526a356f9410b4cdf1f8cc28c69a52cf91dc56e560a3190"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/mega.webp",
+      "size": 6166,
+      "sha256": "478125e3a65b5c1353986a81c32707898f014cbfdc6baa229dce0b0e92eb6ad3"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/mexican.webp",
+      "size": 5378,
+      "sha256": "1c24bf53a0972046148b6c03bd6d6bf5fab9f555747318ed9ab47d7de60f9000"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/mexicana.webp",
+      "size": 7908,
+      "sha256": "b9affd5cf788c15cecdab3fe773b6574663a0dd40228a33b608fc92ed7fdfedb"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/nene.webp",
+      "size": 7752,
+      "sha256": "60385eb77c8b791b4f6ca0c3c6f3e981094c386b5c8e31ef0bcd5a42d183afa9"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/norang.webp",
+      "size": 9900,
+      "sha256": "25f40d57a422e99f13f62afbcb85e50ddcf4fe01d76239d616c1561c34e9cdbe"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/ssaltongdak.webp",
+      "size": 9900,
+      "sha256": "19b07411d35767257f8896e3a9d04edde2a635ac9ca8489283d7f55f40292294"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/surasang.webp",
+      "size": 18826,
+      "sha256": "3880ef6815e3706f97736eccf6b7b10b67b96bc6057457173f5d12cc2688b347"
+    },
+    {
+      "path": "assets/photo-batch-3-refresh/yoajung.webp",
+      "size": 5730,
+      "sha256": "bd70901ec086ec5bd6bf0b0788e32bba777d9326452a255ba88f1759764db38b"
+    },
+    {
+      "path": "data/photo-batch3-refresh-audit.json",
+      "size": 9149,
+      "sha256": "80ad09c02d512dfdc7b512c3916b857708ad8961c31364ed8c68c5297559c594"
+    },
+    {
+      "path": "data/photo-batch3-refresh-report.json",
+      "size": 8642,
+      "sha256": "5420aa0aa2714b220306639022733135811bc127d08135d2352351db6db20da4"
+    },
+    {
+      "path": "data/photo-batch3-refresh-source-store-map.json",
+      "size": 18824,
+      "sha256": "6879a6261c0a75d2eede146262651ec7f4aed12b7d79171014b050d43933409e"
+    },
+    {
+      "path": "scripts/photo-batch3-mobile.mjs",
+      "size": 24606,
+      "sha256": "0c9705573e4ad28337ea1ad7eb513bd1d5facdcb002db90b8493494f1e8c527b"
+    },
+    {
+      "path": "scripts/validate-photo-batch3-refresh.mjs",
+      "size": 4641,
+      "sha256": "4eab7a1a636dad57a5c692d01312c34398d07454dd68bd27f17af2c4360b7ca0"
+    },
+    {
+      "path": "transport/apply-photo-batch3-refresh.mjs",
+      "size": 1233,
+      "sha256": "80022450b73994894aef795bfb7d28cfd8464010926e8ac205ae56e06d8225bb"
+    },
+    {
+      "path": "transport/photo-batch3-manifest-patch.json",
+      "size": 61131,
+      "sha256": "905e1f725e50cbdd6f7f3bd7ca6a7975f40e8f54e89dd3e2f83d38629554e63b"
+    },
+    {
+      "path": "transport/photo-batch3-store-photo-patches.json",
+      "size": 29955,
+      "sha256": "3898b0b4e51e59be09661c0db06b4cf6c1e72189a4af9af66eabd277027c3d0f"
+    }
+  ]
+}

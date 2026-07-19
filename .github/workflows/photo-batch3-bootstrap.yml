@@ -25,11 +25,13 @@ jobs:
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: feature/photo-batch-3-refresh
-          fetch-depth: 0
-          persist-credentials: true
+      - name: Clone exact photo branch with write credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf ./* ./.??* 2>/dev/null || true
+          git clone -q --depth 1 --branch feature/photo-batch-3-refresh "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
+          git fetch -q --depth 1 origin ecfc1f7d053914c7f6d4d9be9edbc88740534d0d
       - name: Verify and execute canonical installer
         shell: bash
         run: |
@@ -42,5 +44,5 @@ jobs:
           bash /tmp/photo-batch3-install.sh > /tmp/photo-batch3-install.log 2>&1
           status=$?
           set -e
-          tail -n 160 /tmp/photo-batch3-install.log
+          cat /tmp/photo-batch3-install.log
           exit $status

@@ -1,0 +1,85 @@
+name: Photo batch 3 finalize orchestrator
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/photo-batch3-finalize-orchestrator.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+
+concurrency:
+  group: photo-batch3-finalize
+  cancel-in-progress: false
+
+jobs:
+  finalize:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 50
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Clone exact photo branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf ./* ./.??* 2>/dev/null || true
+          git clone -q --branch feature/photo-batch-3-refresh "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
+          git fetch -q origin ecfc1f7d053914c7f6d4d9be9edbc88740534d0d
+
+      - name: Finish or clean orchestration
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'daedongyeosu-photo-bot'
+          git config user.email 'sisakim@naver.com'
+
+          if test -f data/photo-batch3-refresh-chunk-confirmation.json \
+             && test ! -e .github/photo-batch3-mini \
+             && test ! -e .github/photo-batch3-installer \
+             && test ! -e .github/workflows/photo-batch3-bootstrap.yml; then
+            rm -f .github/workflows/photo-batch3-finalize-orchestrator.yml
+            rm -f .github/workflows/photo-batch3-canonical-repair.yml
+            git add -A
+            if ! git diff --cached --quiet; then
+              git commit -m 'chore: remove final photo orchestration workflow'
+              git push origin HEAD:feature/photo-batch-3-refresh
+            fi
+            echo 'PASS branch was already clean; orchestrator removed'
+            exit 0
+          fi
+
+          restore_blob() {
+            local blob="$1" path="$2" size="$3" sha="$4"
+            mkdir -p "$(dirname "$path")"
+            gh api "repos/${GITHUB_REPOSITORY}/git/blobs/${blob}" --jq '.content' \
+              | tr -d '\n' | base64 -d > "$path"
+            test "$(stat -c%s "$path")" = "$size"
+            echo "${sha}  ${path}" | sha256sum -c -
+            test "$(printf 'blob %s\0' "$size" | cat - "$path" | sha1sum | awk '{print $1}')" = "$blob"
+          }
+
+          restore_blob 2767192d62b01d64a5c1f8c2239c56ae325a12ef .github/photo-batch3-mini/chunk-000.b64 9000 6c7f535533d4a32010ecfeee765738cad43ba74f24a8bccb074e899f7e419efb
+          restore_blob 49c0e23c5c07b90894d7f18b4908d7e9e8868f44 .github/photo-batch3-mini/chunk-001.b64 9000 78338e7770fc1f1bd29d798264a6e434406f09ab9cd41411826d755d1911cdb6
+          restore_blob e569bee137e93f03f8ed49ecbfee9cc388be0012 .github/photo-batch3-mini/chunk-002.b64 9000 c03748d2020cd9f94a57c693a07ffc03a6bd555e0f830bfe133bb8884a008bde
+          restore_blob 79520f305d47d70fd196525ceb5ae1c6a34f8412 .github/photo-batch3-mini/chunk-003.b64 9000 ad8b22e3d2a05407441e5cbd14eaa95b38765c639f42830f2f91c7153434dec0
+          restore_blob 29b7e94f2bcf1938f560bf8d997c0d5838ab5c07 .github/photo-batch3-mini/chunk-004.b64 9000 57e254301a150e95a91e704e1c1beccc345434c15e47a6933727250ce23015f3
+          restore_blob dcbd9859ab96c850cf055902d6ee443e0b412fad .github/photo-batch3-mini/chunk-005.b64 9000 308ae42865f81e4dc2b6e886c8c17dc7072d7f063c054379782e4f5e2ca1c948
+          restore_blob c6d86a2d42073f5961130aa7fedb7e09cf611e95 .github/photo-batch3-mini/chunk-006.b64 9000 7e7a973303ec3141a2098ea733b64fbad480e1f1c77c7b70d337695c7f863fa6
+          restore_blob d253e8cb706cda06b942f88cd4c13d0809ccb678 .github/photo-batch3-mini/chunk-007.b64 10000 6c446dd6dfc5c39d92fd1a05d01bca1e2f514c238c35d966e12ef1c1729aa157
+          restore_blob 103933245b6f9e6fb9ed6275ffd9f5e799a31d1e .github/photo-batch3-mini/chunk-008.b64 10000 19f319320246bb4d3a34e85c1f28d8bb7366cd94de9d469bfcc94e5108f1bd0d
+          restore_blob ce3b66c0b081cfc32c9afe3823fc7ac608b1ed76 .github/photo-batch3-mini/chunk-009.b64 10000 2f2d3cb5fa8d84579e48bff3e8ca8edf8fb4cbb6db348b7896401ade4a76ae5c
+          echo 'PASS canonical Git objects 000-009 restored'
+
+          test "$(find .github/photo-batch3-installer -maxdepth 1 -type f -name 'part-*' | wc -l)" = '5'
+          cat .github/photo-batch3-installer/part-* > /tmp/photo-batch3-install.sh
+          echo '58473b04cf3f4002e4fcc3f0ddca986cd473110a391c717608f79994bc3156f3  /tmp/photo-batch3-install.sh' | sha256sum -c -
+          bash -n /tmp/photo-batch3-install.sh
+          rm -f .github/workflows/photo-batch3-finalize-orchestrator.yml
+          rm -f .github/workflows/photo-batch3-canonical-repair.yml
+          bash /tmp/photo-batch3-install.sh

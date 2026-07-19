@@ -1,0 +1,62 @@
+name: Photo batch 3 canonical object repair
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/workflows/photo-batch3-canonical-repair.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+  pull-requests: read
+
+jobs:
+  repair-and-install:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Clone exact photo branch with write credentials
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf ./* ./.??* 2>/dev/null || true
+          git clone -q --depth 1 --branch feature/photo-batch-3-refresh "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
+          git fetch -q --depth 1 origin ecfc1f7d053914c7f6d4d9be9edbc88740534d0d
+
+      - name: Restore exact canonical chunk objects 007 through 009
+        shell: bash
+        run: |
+          set -euo pipefail
+          restore_blob() {
+            local blob="$1" path="$2" size="$3" sha="$4"
+            gh api "repos/${GITHUB_REPOSITORY}/git/blobs/${blob}" --jq '.content' \
+              | tr -d '\n' | base64 -d > "$path"
+            test "$(stat -c%s "$path")" = "$size"
+            echo "${sha}  ${path}" | sha256sum -c -
+            test "$(printf 'blob %s\0' "$size" | cat - "$path" | sha1sum | awk '{print $1}')" = "$blob"
+          }
+          restore_blob d253e8cb706cda06b942f88cd4c13d0809ccb678 .github/photo-batch3-mini/chunk-007.b64 10000 6c446dd6dfc5c39d92fd1a05d01bca1e2f514c238c35d966e12ef1c1729aa157
+          restore_blob 103933245b6f9e6fb9ed6275ffd9f5e799a31d1e .github/photo-batch3-mini/chunk-008.b64 10000 19f319320246bb4d3a34e85c1f28d8bb7366cd94de9d469bfcc94e5108f1bd0d
+          restore_blob ce3b66c0b081cfc32c9afe3823fc7ac608b1ed76 .github/photo-batch3-mini/chunk-009.b64 10000 2f2d3cb5fa8d84579e48bff3e8ca8edf8fb4cbb6db348b7896401ade4a76ae5c
+          echo 'PASS restored canonical Git blob objects for chunks 007-009'
+
+      - name: Verify and execute canonical installer
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(find .github/photo-batch3-installer -maxdepth 1 -type f -name 'part-*' | wc -l)" = '5'
+          cat .github/photo-batch3-installer/part-* > /tmp/photo-batch3-install.sh
+          echo '58473b04cf3f4002e4fcc3f0ddca986cd473110a391c717608f79994bc3156f3  /tmp/photo-batch3-install.sh' | sha256sum -c -
+          bash -n /tmp/photo-batch3-install.sh
+          rm -f .github/workflows/photo-batch3-canonical-repair.yml
+          set +e
+          bash /tmp/photo-batch3-install.sh > /tmp/photo-batch3-install.log 2>&1
+          status=$?
+          set -e
+          cat /tmp/photo-batch3-install.log
+          exit $status

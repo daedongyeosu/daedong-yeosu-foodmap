@@ -1,6 +1,6 @@
 {
   "version": 3,
-  "generatedAt": "2026-07-18T04:03:09.103Z",
+  "generatedAt": "2026-07-18T12:24:10.603Z",
   "matching": {
     "keys": [
       "storeId",
@@ -117,6 +117,28 @@
         "data/integration-sources/db790/notion-photo-apply-report.json"
       ],
       "reason": "노션 표시 제목이 정확히 일치하고 기존 사진이 없는 가게만 보충한 사진이다."
+    },
+    {
+      "id": "photo-batch-3",
+      "label": "3차 가게사진 검수본",
+      "type": "direct-vetted-webp-files",
+      "basePath": "assets/photo-batch-3-vetted",
+      "detected": true,
+      "status": "active-vetted",
+      "runtimeEnabled": true,
+      "sourceSplitParts": 5,
+      "sourceArchiveBytes": 1406539085,
+      "sourceFolders": 62,
+      "sourceImageFiles": 547,
+      "existingPhotoFoldersPreserved": 50,
+      "unmatchedFoldersHeld": 10,
+      "ambiguousFoldersHeld": 1,
+      "approvedImages": 3,
+      "appliedStores": 1,
+      "assignments": "data/photo-batch3-vetted-assignments.json",
+      "reviewDecisions": "data/photo-batch3-vetted-review-decisions.json",
+      "report": "data/photo-batch3-vetted-report.json",
+      "reason": "기존 정상사진 386곳을 덮어쓰지 않고 사진 준비 중 가게 가운데 가게명이 명확한 1곳만 수동 검수한 음식 사진 3장으로 보충. 민감서류·가격표·개인정보·비음식·불명확한 지점 사진은 제외 또는 보류."
     }
   ],
   "entries": [
@@ -474,12 +496,44 @@
         "branchRisk": "none-or-generic-food",
         "menuBoardRisk": "none"
       }
+    },
+    {
+      "storeId": "98779281080288d1",
+      "storeName": "제복이네 짜글이&제육쌈밥&두루치기 교동점",
+      "normalizedName": "제복이네짜글이제육쌈밥두루치기교동점",
+      "aliases": [
+        "제복이",
+        "제복이네 짜글이&제육쌈밥&두루치기 교동점"
+      ],
+      "src": "assets/photo-batch-3-vetted/98779281080288d1-01.webp",
+      "additionalSrcs": [
+        "assets/photo-batch-3-vetted/98779281080288d1-02.webp",
+        "assets/photo-batch-3-vetted/98779281080288d1-03.webp"
+      ],
+      "gallery": [
+        "assets/photo-batch-3-vetted/98779281080288d1-01.webp",
+        "assets/photo-batch-3-vetted/98779281080288d1-02.webp",
+        "assets/photo-batch-3-vetted/98779281080288d1-03.webp"
+      ],
+      "source": "photo-batch-3",
+      "classification": "food",
+      "blocked": false,
+      "reviewedAt": "2026-07-18T12:24:10.603Z",
+      "reviewReason": "압축 폴더명 제복이와 사진 준비 중 가게 제복이네 짜글이&제육쌈밥&두루치기 교동점의 고유 상호 핵심어가 명확히 일치하며 음식 사진만 수동 승인",
+      "visualReview": {
+        "textRisk": "none",
+        "priceRisk": "none",
+        "contactRisk": "none",
+        "branchRisk": "low-manual-confirmed",
+        "menuBoardRisk": "none",
+        "nonFoodRisk": "none"
+      }
     }
   ],
   "coverage": {
     "storeCount": 471,
-    "storesWithPhoto": 386,
-    "storesAwaitingPhoto": 85,
-    "updatedAt": "2026-07-18T04:03:09.103Z"
+    "storesWithPhoto": 387,
+    "storesAwaitingPhoto": 84,
+    "updatedAt": "2026-07-18T12:24:10.603Z"
   }
 }

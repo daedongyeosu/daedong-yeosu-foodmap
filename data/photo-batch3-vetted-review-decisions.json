@@ -1,0 +1,489 @@
+{
+  "version": 1,
+  "reviewedAt": "2026-07-18T12:24:10.603Z",
+  "source": {
+    "archiveName": "김민태사진2(1).zip",
+    "splitParts": [
+      ".z01",
+      ".z02",
+      ".z03",
+      ".z04",
+      ".zip"
+    ],
+    "integrity": "pass",
+    "combinedBytes": 1406539085,
+    "folderCount": 62,
+    "imageFileCount": 547
+  },
+  "policy": {
+    "preserveExistingPhotoStores": true,
+    "priority": "stores-awaiting-photo",
+    "blocked": [
+      "sensitive_document",
+      "price_list",
+      "personal_information",
+      "non_food",
+      "ambiguous_match"
+    ],
+    "noGuessing": true
+  },
+  "folderDecisionCounts": {
+    "existing_photo_preserved": 50,
+    "no_current_store_match": 10,
+    "ambiguous_branch_match": 1,
+    "applied": 1
+  },
+  "folderDecisions": [
+    {
+      "sourceFolder": "1988응답하라추억의옛날도시락 고소동점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "60일숙성명품김치찜",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "고기듬뿍 국물두루치기 문수점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "골목낙곱새 1977 봉강점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "교동야식",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "국수나무",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "김치찌개참잘하는집 여서점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "김치찜팝니다 서교점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "꽃게장&갈치조림 전문점 봉산점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "나능이 능이버섯백숙",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "내가끓엿찌 여서점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "담분식 서교점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "더 진한 소한마리탕&국밥 엑스포점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "덮밥전문점 고기그릇 공화점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "도담식당 충무동",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "도도닭발 봉산점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "돈도니밥도둑짜글이 국동점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "돌산텃밭김치 교동점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "또래김밥 문수점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "만석군 봉산점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "매운맛 땡길때 밥장인 엑스포점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "명품육회 오림동점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "미친 짜글이 서교점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "밥앤동 볶음밥&우동 충무점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "배불이 순대국",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "붕붕먹거리",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "속초냉면",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "수시아 김밥전문 공화동점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "시민감자탕 문수점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "엄마미안 김치찜 공화점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "울엄마 김치찜 갈비찜 중앙점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "이가네 나주곰탕",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "이동천 시원냉면 여서점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "이모네분식 봉산점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "장터순대국밥",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "정담오리바베큐 여수엑스포점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "진남컵밥 중앙점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "진통뼈사랑 봉산점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "쭈꾸미닭 공화점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "쭈신쭈왕 문수점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "찜스틸러갈비찜 봉산점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "청년뚝배기 덕충점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "청담곱떡 고소동점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "청담낙곱새 고소동점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "청정게장촌 봉산점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "코리안 찌개 타운 서교점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "통큰한방삼계탕 공화점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "한국전통춘천닭갈비 공화점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "한식전문 혼밥대장 공화점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "허참봉 곰탕&갈비탕 봉산점",
+      "decision": "hold",
+      "reason": "existing_photo_preserved",
+      "detail": "현재 데이터에서 이미 정상사진을 보유한 가게와 일치·근접 일치하여 덮어쓰지 않음"
+    },
+    {
+      "sourceFolder": "맛있돼지 문수점",
+      "decision": "hold",
+      "reason": "no_current_store_match",
+      "detail": "현재 471개 데이터에서 동일 가게를 확정할 수 없어 임의 추가·매칭하지 않음"
+    },
+    {
+      "sourceFolder": "백년족발",
+      "decision": "hold",
+      "reason": "no_current_store_match",
+      "detail": "현재 471개 데이터에서 동일 가게를 확정할 수 없어 임의 추가·매칭하지 않음"
+    },
+    {
+      "sourceFolder": "빵빵김밥 여서점",
+      "decision": "hold",
+      "reason": "no_current_store_match",
+      "detail": "현재 471개 데이터에서 동일 가게를 확정할 수 없어 임의 추가·매칭하지 않음"
+    },
+    {
+      "sourceFolder": "아도쿄",
+      "decision": "hold",
+      "reason": "no_current_store_match",
+      "detail": "현재 471개 데이터에서 동일 가게를 확정할 수 없어 임의 추가·매칭하지 않음"
+    },
+    {
+      "sourceFolder": "요거트월드",
+      "decision": "hold",
+      "reason": "no_current_store_match",
+      "detail": "현재 471개 데이터에서 동일 가게를 확정할 수 없어 임의 추가·매칭하지 않음"
+    },
+    {
+      "sourceFolder": "족팔계",
+      "decision": "hold",
+      "reason": "no_current_store_match",
+      "detail": "현재 471개 데이터에서 동일 가게를 확정할 수 없어 임의 추가·매칭하지 않음"
+    },
+    {
+      "sourceFolder": "중앙동 롯데리아",
+      "decision": "hold",
+      "reason": "no_current_store_match",
+      "detail": "현재 471개 데이터에서 동일 가게를 확정할 수 없어 임의 추가·매칭하지 않음"
+    },
+    {
+      "sourceFolder": "착한쭝식",
+      "decision": "hold",
+      "reason": "no_current_store_match",
+      "detail": "현재 471개 데이터에서 동일 가게를 확정할 수 없어 임의 추가·매칭하지 않음"
+    },
+    {
+      "sourceFolder": "컴포즈커피문수광장점",
+      "decision": "hold",
+      "reason": "no_current_store_match",
+      "detail": "현재 471개 데이터에서 동일 가게를 확정할 수 없어 임의 추가·매칭하지 않음"
+    },
+    {
+      "sourceFolder": "탕화쿵푸마라탕 여서점",
+      "decision": "hold",
+      "reason": "no_current_store_match",
+      "detail": "현재 471개 데이터에서 동일 가게를 확정할 수 없어 임의 추가·매칭하지 않음"
+    },
+    {
+      "sourceFolder": "중앙하이츠 아주커",
+      "decision": "hold",
+      "reason": "ambiguous_branch_match",
+      "detail": "여러 아주커치킨 지점 후보가 있어 지점 추정을 하지 않음"
+    },
+    {
+      "sourceFolder": "제복이",
+      "decision": "apply",
+      "reason": "unique_core_name_match_manual_review",
+      "storeId": "98779281080288d1",
+      "storeName": "제복이네 짜글이&제육쌈밥&두루치기 교동점",
+      "approvedFiles": [
+        "KakaoTalk_20260625_061800999.jpg",
+        "KakaoTalk_20260625_061800999_01.jpg",
+        "KakaoTalk_20260625_061800999_02.jpg"
+      ],
+      "excludedDuplicateFiles": [
+        "노션1.png",
+        "노션2.png",
+        "노션3.png"
+      ]
+    }
+  ],
+  "approvedAssets": [
+    {
+      "sequence": 1,
+      "sourceFile": "KakaoTalk_20260625_061800999.jpg",
+      "bytes": 17274,
+      "sha256": "093cde1bd4429163d2df2c95fb92247050b89717b690372a27f1ce4de5b14722",
+      "dimensions": [
+        400,
+        263
+      ],
+      "parts": 4,
+      "sourceFolder": "제복이",
+      "src": "assets/photo-batch-3-vetted/98779281080288d1-01.webp",
+      "classification": "food",
+      "blocked": false,
+      "visualReview": {
+        "sensitiveDocumentRisk": "none",
+        "priceRisk": "none",
+        "personalInfoRisk": "none",
+        "nonFoodRisk": "none",
+        "peopleRisk": "none"
+      }
+    },
+    {
+      "sequence": 2,
+      "sourceFile": "KakaoTalk_20260625_061800999_01.jpg",
+      "bytes": 19048,
+      "sha256": "5c39d60596a38d162dde6a857d48bcbf79e4a7e99e858ba037b580a5b14e8780",
+      "dimensions": [
+        400,
+        267
+      ],
+      "parts": 5,
+      "sourceFolder": "제복이",
+      "src": "assets/photo-batch-3-vetted/98779281080288d1-02.webp",
+      "classification": "food",
+      "blocked": false,
+      "visualReview": {
+        "sensitiveDocumentRisk": "none",
+        "priceRisk": "none",
+        "personalInfoRisk": "none",
+        "nonFoodRisk": "none",
+        "peopleRisk": "none"
+      }
+    },
+    {
+      "sequence": 3,
+      "sourceFile": "KakaoTalk_20260625_061800999_02.jpg",
+      "bytes": 15826,
+      "sha256": "3a4bcdf82c8ec6f578f87f95d8adc36a8563211bea630debfd88cb6887a0753e",
+      "dimensions": [
+        400,
+        267
+      ],
+      "parts": 4,
+      "sourceFolder": "제복이",
+      "src": "assets/photo-batch-3-vetted/98779281080288d1-03.webp",
+      "classification": "food",
+      "blocked": false,
+      "visualReview": {
+        "sensitiveDocumentRisk": "none",
+        "priceRisk": "none",
+        "personalInfoRisk": "none",
+        "nonFoodRisk": "none",
+        "peopleRisk": "none"
+      }
+    }
+  ]
+}

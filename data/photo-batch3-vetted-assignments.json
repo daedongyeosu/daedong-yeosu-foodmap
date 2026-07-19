@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "generatedAt": "2026-07-18T12:24:10.603Z",
+  "assignments": [
+    {
+      "storeId": "98779281080288d1",
+      "storeName": "제복이네 짜글이&제육쌈밥&두루치기 교동점",
+      "district": "교동",
+      "sourceFolder": "제복이",
+      "imagePaths": [
+        "assets/photo-batch-3-vetted/98779281080288d1-01.webp",
+        "assets/photo-batch-3-vetted/98779281080288d1-02.webp",
+        "assets/photo-batch-3-vetted/98779281080288d1-03.webp"
+      ],
+      "primary": "assets/photo-batch-3-vetted/98779281080288d1-01.webp",
+      "reason": "사진 준비 중 가게에 고유 핵심 상호명 수동 일치 및 3장 음식사진 안전 검수 통과"
+    }
+  ]
+}

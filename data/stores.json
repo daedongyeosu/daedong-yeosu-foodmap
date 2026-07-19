@@ -28076,7 +28076,7 @@
     "address": "",
     "phone": "",
     "naverMap": "https://naver.me/FbVJEFDm",
-    "image": "",
+    "image": "assets/photo-batch-3-vetted/98779281080288d1-01.webp",
     "routes": [
       {
         "name": "가게바로주문",
@@ -28152,8 +28152,23 @@
       "8d38f0a70c54a4c1",
       "7ed26d6d9bcf7280"
     ],
-    "img": "",
-    "images": []
+    "img": "assets/photo-batch-3-vetted/98779281080288d1-01.webp",
+    "images": [
+      {
+        "card": "assets/photo-batch-3-vetted/98779281080288d1-01.webp",
+        "detail": "assets/photo-batch-3-vetted/98779281080288d1-01.webp"
+      },
+      {
+        "card": "assets/photo-batch-3-vetted/98779281080288d1-02.webp",
+        "detail": "assets/photo-batch-3-vetted/98779281080288d1-02.webp"
+      },
+      {
+        "card": "assets/photo-batch-3-vetted/98779281080288d1-03.webp",
+        "detail": "assets/photo-batch-3-vetted/98779281080288d1-03.webp"
+      }
+    ],
+    "photoGroup": "photo-batch3-vetted:제복이",
+    "photoSource": "photo-batch-3-vetted:manual-review-fill-missing-only"
   },
   {
     "id": "0df36c0ba138ac89",

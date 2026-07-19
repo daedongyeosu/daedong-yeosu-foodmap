@@ -38,4 +38,9 @@ jobs:
           cat .github/photo-batch3-installer/part-* > /tmp/photo-batch3-install.sh
           echo '511e08a6974ee7d45bc4550e42a64dee532ba1654a69dca72c2a4655f2d2bdc4  /tmp/photo-batch3-install.sh' | sha256sum -c -
           bash -n /tmp/photo-batch3-install.sh
-          bash /tmp/photo-batch3-install.sh
+          set +e
+          bash /tmp/photo-batch3-install.sh > /tmp/photo-batch3-install.log 2>&1
+          status=$?
+          set -e
+          tail -n 160 /tmp/photo-batch3-install.log
+          exit $status

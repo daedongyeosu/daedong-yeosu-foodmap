@@ -1,6 +1,11 @@
 name: Photo batch 3 canonical bootstrap
 
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - '.github/photo-batch3-mini/READY'
+      - '.github/workflows/photo-batch3-bootstrap.yml'
   push:
     branches: [feature/photo-batch-3-refresh]
     paths:
@@ -14,6 +19,7 @@ permissions:
 
 jobs:
   install:
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:

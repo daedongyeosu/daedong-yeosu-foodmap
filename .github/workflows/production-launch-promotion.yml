@@ -1,0 +1,71 @@
+name: One-time production launch promotion
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/production-launch-promotion.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: production-launch-promotion-20260726
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout production main
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch exact validated preview
+        env:
+          PREVIEW_SHA: 5eb8bc708c3c1bf95dd7463af2dc5c041e8a509c
+          PREVIEW_TREE: db6eb15bec2333204b63f840ae16ec56c6a689d6
+        run: |
+          git clone --depth 1 --branch main https://github.com/daedongyeosu/daedong-yeosu-foodmap-preview.git "$RUNNER_TEMP/daedong-preview"
+          test "$(git -C "$RUNNER_TEMP/daedong-preview" rev-parse HEAD)" = "$PREVIEW_SHA"
+          test "$(git -C "$RUNNER_TEMP/daedong-preview" rev-parse HEAD^{tree})" = "$PREVIEW_TREE"
+
+      - name: Build and verify production branch
+        env:
+          LAUNCH_BRANCH: agent/production-launch-20260726-staging
+        run: |
+          git switch -c "$LAUNCH_BRANCH"
+          rsync -a --delete --exclude='.git/' "$RUNNER_TEMP/daedong-preview/" ./
+          node <<'NODE'
+          const fs = require('node:fs');
+          const files = ['CNAME','index.html','final-experience.js','store-share-deep-link-regression-test.mjs'];
+          for (const file of files) {
+            let source = fs.readFileSync(file, 'utf8');
+            source = source.replaceAll('preview.daedongmap.com', 'daedongmap.com');
+            source = source.replaceAll('preview\\.daedongmap\\.com', 'daedongmap\\.com');
+            source = source.replaceAll('현재 서비스 중인 .com 호스트', '운영 .com 호스트');
+            fs.writeFileSync(file, source);
+          }
+          if (fs.readFileSync('CNAME','utf8').trim() !== 'daedongmap.com') throw new Error('CNAME mismatch');
+          for (const file of files) {
+            const source = fs.readFileSync(file,'utf8');
+            if (source.includes('preview.daedongmap.com') || source.includes('daedongmap.kr')) throw new Error(`forbidden domain in ${file}`);
+          }
+          const stores = JSON.parse(fs.readFileSync('data/stores.json','utf8'));
+          if (stores.length !== 701) throw new Error(`store count ${stores.length}`);
+          const campaigns = JSON.parse(fs.readFileSync('data/hero-campaigns.json','utf8')).campaigns;
+          if (campaigns['67a9e4f14c8c7ea4'].images.length !== 14) throw new Error('sonsugimbap campaign mismatch');
+          if (campaigns['cfde2617224f33a0'].slides.length !== 8) throw new Error('kongsanso campaign mismatch');
+          NODE
+          cmp data/stores.json "$RUNNER_TEMP/daedong-preview/data/stores.json"
+          cmp data/naver-map-runtime.json "$RUNNER_TEMP/daedong-preview/data/naver-map-runtime.json"
+          for file in app.js final-experience.js rc2-fixes.js rc3-fixes.js rc4-fixes.js rc5-fixes.js rc6-fixes.js rc7-address-map.js turtle-ship-hero.js store-list-horizontal-pager.js; do node --check "$file"; done
+          for test in community-intro-regression-test.mjs hero-carousel-forward-only-regression-test.mjs hero-store-direct-popup-regression-test.mjs kongsanso-family-hero-regression-test.mjs lower-promo-details-regression-test.mjs sonsugimbap-flyer-hero-regression-test.mjs store-share-deep-link-regression-test.mjs turtle-ship-hero-regression-test.mjs; do node "$test"; done
+          git config user.name 'daedongmap-launch-bot'
+          git config user.email 'actions@users.noreply.github.com'
+          git add -A
+          git diff --cached --quiet && { echo 'No launch changes'; exit 1; }
+          git commit -m 'Launch daedongmap.com from validated preview'
+          git push -u origin "$LAUNCH_BRANCH"

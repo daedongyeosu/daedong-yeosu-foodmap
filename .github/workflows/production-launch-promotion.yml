@@ -37,7 +37,7 @@ jobs:
           LAUNCH_BRANCH: agent/production-launch-20260726-staging
         run: |
           git switch -c "$LAUNCH_BRANCH"
-          rsync -a --delete --exclude='.git/' "$RUNNER_TEMP/daedong-preview/" ./
+          rsync -a --delete --exclude='.git/' --exclude='.github/' "$RUNNER_TEMP/daedong-preview/" ./
           node <<'NODE'
           const fs = require('node:fs');
           const files = ['CNAME','index.html','final-experience.js','store-share-deep-link-regression-test.mjs'];

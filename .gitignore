@@ -1,9 +1,0 @@
-node_modules/
-final-proof-logs/
-browser-mobile.png
-browser-mobile-failure.png
-browser-smoke-report.json
-static-validation-report.json
-data-validation-report.json
-final-integration-state.json
-npm-debug.log*

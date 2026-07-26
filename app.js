@@ -1080,7 +1080,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const requestedSharedStoreId = entryParams.get('store');
   const requestedHeroStoreId = entryParams.get('hero');
   const startupBypassHeroStoreIds = new Set(['67a9e4f14c8c7ea4','cfde2617224f33a0']);
-  if (!requestedSharedStoreId && !startupBypassHeroStoreIds.has(String(requestedHeroStoreId||'')) && localStorage.getItem('hideStartup') !== today) setTimeout(openStartupAd, 600);
+  const startupAdEnabled = false; // Opening-day decision: keep the recruitment startup popup disabled.\n  if (startupAdEnabled && !requestedSharedStoreId && !startupBypassHeroStoreIds.has(String(requestedHeroStoreId||'')) && localStorage.getItem('hideStartup') !== today) setTimeout(openStartupAd, 600);
   $('.startup-close').addEventListener('click', event => { event.preventDefault(); event.stopPropagation(); closeStartupAd(); });
   startupAd.addEventListener('click', event => { if (event.target === startupAd) closeStartupAd(); });
   $('.startup-card').addEventListener('click', event => event.stopPropagation());

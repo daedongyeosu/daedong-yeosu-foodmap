@@ -19,6 +19,10 @@ const ADDRESS_KEY = 'daedongDeliveryAddressV2';
 const ADDRESS_BOOK_KEY = 'daedongAddressBookV2';
 const FEEDBACK_FORM_URL = 'https://www.notion.so/8ae3728176e344fdaee3475a97d03740';
 const SMALL_BUSINESS_ASSOCIATION_URL = 'https://bit.ly/여수시소상공인연합회공지';
+const ANALYTICS_ENDPOINT = 'https://daedong-yeosu-admin.sisakim.chatgpt.site/api/events';
+const ANALYTICS_SESSION_KEY = 'daedongAnalyticsSessionV1';
+let analyticsFallbackVisitorId = '';
+let analyticsFallbackSessionId = '';
 
 const APP_META = {
   direct: {label: '가게바로주문', icon: '🏪'},
@@ -149,6 +153,109 @@ function visitorKey() {
   let key = localStorage.getItem(VISITOR_KEY);
   if (!key) { key = globalThis.crypto?.randomUUID?.() || `visitor-${Date.now()}-${Math.random().toString(36).slice(2)}`; localStorage.setItem(VISITOR_KEY, key); }
   return key;
+}
+function analyticsRandomId(prefix) {
+  return globalThis.crypto?.randomUUID?.() || `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+}
+function analyticsVisitorId() {
+  try { return visitorKey(); }
+  catch {
+    if (!analyticsFallbackVisitorId) analyticsFallbackVisitorId = analyticsRandomId('visitor');
+    return analyticsFallbackVisitorId;
+  }
+}
+function analyticsSessionId() {
+  try {
+    let value = sessionStorage.getItem(ANALYTICS_SESSION_KEY);
+    if (!value) { value = analyticsRandomId('session'); sessionStorage.setItem(ANALYTICS_SESSION_KEY, value); }
+    return value;
+  } catch {
+    if (!analyticsFallbackSessionId) analyticsFallbackSessionId = analyticsRandomId('session');
+    return analyticsFallbackSessionId;
+  }
+}
+function analyticsEntryContext() {
+  const params = new URLSearchParams(location.search);
+  const explicit = String(params.get('source') || params.get('utm_source') || '').trim().toLowerCase();
+  const storeId = String(params.get('hero') || params.get('store') || '').trim();
+  let entrySource = 'direct';
+  if (explicit === 'bitly' || explicit === 'legacy-bitly') entrySource = 'legacy-bitly';
+  else if (explicit === 'store_qr_legacy') entrySource = 'store_qr_legacy';
+  else if (explicit === 'store_qr') entrySource = 'store_qr';
+  else if (params.has('hero')) entrySource = 'store_qr';
+  else if (params.has('store')) entrySource = 'shared_link';
+  else {
+    try {
+      const referrerHost = document.referrer ? new URL(document.referrer).hostname.toLowerCase() : '';
+      if (referrerHost === 'bit.ly' || referrerHost.endsWith('.bitly.com')) entrySource = 'legacy-bitly';
+    } catch {}
+  }
+  return {entrySource, storeId};
+}
+function sendAnalyticsEvent(eventType, details = {}) {
+  const entry = analyticsEntryContext();
+  const payload = {
+    eventId: analyticsRandomId('event'),
+    eventType,
+    visitorId: analyticsVisitorId(),
+    sessionId: analyticsSessionId(),
+    entrySource: entry.entrySource,
+    storeId: String(details.storeId || '').slice(0, 80),
+    storeName: String(details.storeName || '').slice(0, 120),
+    channel: String(details.channel || '').slice(0, 40),
+    surface: String(details.surface || '').slice(0, 60),
+    clientTime: new Date().toISOString()
+  };
+  const body = JSON.stringify(payload);
+  try {
+    if (navigator.sendBeacon?.(ANALYTICS_ENDPOINT, new Blob([body], {type: 'text/plain;charset=UTF-8'}))) return;
+  } catch {}
+  try {
+    fetch(ANALYTICS_ENDPOINT, {
+      method: 'POST',
+      body,
+      headers: {'Content-Type': 'text/plain;charset=UTF-8'},
+      mode: 'cors',
+      credentials: 'omit',
+      keepalive: true
+    }).catch(() => {});
+  } catch {}
+}
+function analyticsStoreForElement(element) {
+  const id = String(
+    element?.dataset?.phoneRouteStoreId ||
+    element?.dataset?.storeId ||
+    element?.closest?.('[data-store-id]')?.dataset?.storeId ||
+    $('#modal')?.dataset?.activeStoreId ||
+    ''
+  );
+  const store = stores.find(item => String(item.id) === id);
+  return {storeId: id, storeName: store?.name || ''};
+}
+function analyticsChannelForElement(element) {
+  const raw = String(
+    element?.dataset?.routeKey ||
+    element?.dataset?.communityOriginal ||
+    element?.dataset?.detailOnly ||
+    element?.dataset?.finalAppChannel ||
+    (element?.hasAttribute?.('data-phone-route-store-id') || element?.hasAttribute?.('data-rc3-final-phone') ? 'phone' : '')
+  );
+  return raw === 'happy' ? 'happyorder' : raw;
+}
+function trackAnalyticsRouteClick(event) {
+  if (!(event.target instanceof Element)) return;
+  const route = event.target.closest(
+    'a[data-route-key],a[data-community-original],a[data-final-app-channel],a[data-detail-only],a[data-phone-route-store-id],a[data-rc3-final-phone]'
+  );
+  if (!route) return;
+  const channel = analyticsChannelForElement(route);
+  if (!channel) return;
+  const store = analyticsStoreForElement(route);
+  sendAnalyticsEvent(['naver', 'chak'].includes(channel) ? 'utility_click' : 'order_click', {
+    ...store,
+    channel,
+    surface: route.closest('#feeGuidePanel') ? 'order_guide' : 'store_detail'
+  });
 }
 function selectedOrderSnapshot() {
   const candidates = [window.DaedongSelectedOrderApp, readLocalJson(SELECTED_EXTERNAL_KEY, null), readLocalJson(SELECTED_ORDER_COMPAT_KEY, null)];
@@ -905,6 +1012,7 @@ function openCommunityChoice(store, key, options = {}) {
 }
 function openStore(store) {
   addRecentStore(store);
+  sendAnalyticsEvent('store_open', {storeId: store.id, storeName: store.name, surface: 'store_detail'});
   const selectedRoute = selectedExternalForStore(store);
   const quick = [];
   if (store.naverMap && store.naverMap !== '#') quick.push(`<a class="detail-quick-link" data-detail-only="naver" href="${escapeHtml(store.naverMap)}" target="_blank" rel="noopener"><span class="quick-icon">🗺️</span><span>네이버지도</span></a>`);
@@ -965,6 +1073,9 @@ function resetFilters() {
 
 document.addEventListener('error', event => { if (event.target instanceof HTMLImageElement) handleImageError(event.target); }, true);
 document.addEventListener('DOMContentLoaded', () => {
+  const entry = analyticsEntryContext();
+  sendAnalyticsEvent('visit', {storeId: entry.storeId, surface: entry.storeId ? 'store_entry' : 'home'});
+  document.addEventListener('click', trackAnalyticsRouteClick, true);
   initialize();
   $('#mainSearch').addEventListener('input', () => $('#clearMainSearch').hidden = !$('#mainSearch').value);
   $('#mainSearch').addEventListener('keydown', event => { if (event.key === 'Enter') $('#searchBtn').click(); });

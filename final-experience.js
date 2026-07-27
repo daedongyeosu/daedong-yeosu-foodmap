@@ -356,7 +356,7 @@ fxRc2Script.onload=()=>{
   fxRc4Script.async=false;
   fxRc4Script.onload=()=>{
    const fxRc5Script=document.createElement('script');
-   fxRc5Script.src='rc5-fixes.js?v=category-first-paint-1';
+   fxRc5Script.src='rc5-fixes.js?v=category-first-paint-1-category-more-card-touch-1';
    fxRc5Script.async=false;
    fxRc5Script.onload=()=>{
     const css=document.createElement('link');css.rel='stylesheet';css.href='rc6-fixes.css?v=location-store-hero-1-handsu-copy-spacing-1';document.head.append(css);

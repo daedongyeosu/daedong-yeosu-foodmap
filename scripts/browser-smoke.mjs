@@ -55,6 +55,28 @@ try {
   await check(page.locator('#storeGrid .store-card').count().then(count => count > 0), '가게 목록 표시');
   await check(page.locator('#startupAd').isHidden(), '첫 접속 모집 팝업 중단');
   await check(page.getByText('가게카드 보기', {exact: true}).count().then(count => count === 0), '가게카드 보기 문구 제거');
+  const categoryMoreName = '국밥/찜/탕/찌개/조림';
+  await page.locator(`[data-cat="${categoryMoreName}"]`).click();
+  await page.waitForSelector('#loadMoreBtn[data-rc5-more]', {timeout: 5000});
+  await page.locator('#loadMoreBtn[data-rc5-more]').click();
+  await page.waitForSelector('#modal:not([hidden]) .rc4-category-all-list .store-card[data-id]', {timeout: 5000});
+  const categoryMoreCard = page.locator('#modal .rc4-category-all-list .store-card[data-id]').first();
+  const categoryMoreStoreId = await categoryMoreCard.getAttribute('data-id');
+  const categoryMoreStoreName = (await categoryMoreCard.locator('h3').innerText()).trim();
+  const categoryMoreFavorite = categoryMoreCard.locator('[data-favorite-store]');
+  const categoryMoreFavoriteBefore = await categoryMoreFavorite.getAttribute('aria-pressed');
+  await categoryMoreFavorite.click();
+  const categoryMoreFavoriteAfter = await categoryMoreFavorite.getAttribute('aria-pressed');
+  await check(
+    Promise.resolve(categoryMoreFavoriteAfter !== categoryMoreFavoriteBefore && await page.locator('#modal .rc4-category-all').count() === 1),
+    `${categoryMoreName} 더보기 찜하기 버튼 기존 동작 유지`
+  );
+  await categoryMoreFavorite.click();
+  await categoryMoreCard.locator('.store-photo,.photo-placeholder-card').first().click();
+  await check(
+    page.locator(`#modal:not([hidden]) .store-detail[data-store-id="${categoryMoreStoreId}"]`).count().then(count => count === 1),
+    `${categoryMoreName} 더보기 가게카드 터치로 상세 열기: ${categoryMoreStoreName}`
+  );
   await checkPizzaPriority({
     label: '오림동',
     area: '오림동',

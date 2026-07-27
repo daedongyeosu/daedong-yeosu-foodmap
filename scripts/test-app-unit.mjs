@@ -3,6 +3,8 @@ import {execFileSync} from 'node:child_process';
 
 const app = fs.readFileSync('app.js', 'utf8');
 const index = fs.readFileSync('index.html', 'utf8');
+const finalExperience = fs.readFileSync('final-experience.js', 'utf8');
+const rc5 = fs.readFileSync('rc5-fixes.js', 'utf8');
 const assert = (condition, message) => {
   if (!condition) throw new Error(message);
   console.log('PASS', message);
@@ -15,6 +17,10 @@ assert(app.includes("entrySource = 'shared_link'"), 'store 주소를 공유 링�
 assert(app.includes("entrySource = 'legacy-bitly'"), '기존 Bitly 유입 분류');
 assert(app.includes("['naver', 'chak'].includes(channel) ? 'utility_click' : 'order_click'"), '지도 클릭과 주문 클릭 분리');
 assert(index.includes('app.js?v=') && index.includes('anonymous-analytics-1'), '브라우저 캐시 갱신');
+assert(rc5.includes("event.target.closest('#modal .rc4-category-all-list .store-card[data-id]')"), '카테고리 더보기 모달 가게카드 터치 연결');
+assert(rc5.includes('const store=fxStoreById(modalStore.dataset.id);if(store)openStore(store)'), '카테고리 더보기 카드에서 가게 상세 열기');
+assert(finalExperience.includes('rc5-fixes.js?v=category-first-paint-1-category-more-card-touch-1'), '카테고리 더보기 터치 수정 스크립트 캐시 갱신');
+assert(index.includes('category-more-card-touch-1'), '카테고리 더보기 터치 수정 홈페이지 캐시 갱신');
 
 let baseApp = '';
 try {

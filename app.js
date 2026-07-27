@@ -299,6 +299,26 @@ function loadSavedLocation() {
   } catch { return null; }
 }
 const savedLocation = loadSavedLocation();
+const LOCATION_CATEGORY_PRIORITY_OVERRIDES = {
+  "피자": {
+    "scope": "selected-neighborhoods",
+    "neighborhoods": [
+      "여서동",
+      "문수동",
+      "오림동"
+    ],
+    "orderedStoreIds": [
+      "dc638b23f8cf3c5b",
+      "a089d1d54720b48e",
+      "abb76aa470e26f7a"
+    ],
+    "labels": {
+      "dc638b23f8cf3c5b": "도미노피자 문수점",
+      "a089d1d54720b48e": "외계인피자 여수점",
+      "abb76aa470e26f7a": "피자스쿨 여문점"
+    }
+  }
+};
 const state = {
   query: '', category: '전체', brandId: '', visibleCount: 40,
   location: savedLocation?.area || localStorage.getItem('location') || '여수시 전체',
@@ -319,7 +339,7 @@ let photoResolver = null;
 let addressDraft = null;
 let yeosuNeighborhoods = [];
 let neighborhoodByName = new Map();
-let categoryPriorityOverrides = {};
+let categoryPriorityOverrides = {...LOCATION_CATEGORY_PRIORITY_OVERRIDES};
 let modalHistoryActive = false;
 let ignoreNextPop = false;
 
@@ -393,16 +413,38 @@ function categoriesFromStores(list) {
   const ordered = categories.filter(category => available.has(category));
   return [...ordered, ...[...available].filter(category => !ordered.includes(category)).sort((a, b) => a.localeCompare(b, 'ko'))];
 }
+function customerNeighborhoodForPriority() {
+  const selected = neighborhoodFor(state.location) || neighborhoodFor(state.addressLabel);
+  if (selected || !state.coords) return selected;
+  return yeosuNeighborhoods
+    .map(item => ({name: item.name, point: neighborhoodPoint(item.name)}))
+    .filter(item => item.point)
+    .map(item => ({...item, distance: haversine(state.coords, item.point)}))
+    .sort((a, b) => a.distance - b.distance)[0]?.name || '';
+}
+function categoryPriorityRule(category) {
+  const rule = categoryPriorityOverrides?.[String(category || '')];
+  if (!rule) return null;
+  const scopedNeighborhoods = (rule.neighborhoods || []).map(String);
+  if (scopedNeighborhoods.length && !scopedNeighborhoods.includes(customerNeighborhoodForPriority())) return null;
+  return rule;
+}
+function categoryPriorityOrderedStoreIds(category) {
+  return (categoryPriorityRule(category)?.orderedStoreIds || []).map(String);
+}
 function applyCategoryPriorityOverrides(list, category) {
   const input = Array.isArray(list) ? list : [];
-  const rule = categoryPriorityOverrides?.[String(category || '')];
+  const rule = categoryPriorityRule(category);
   if (!rule) return input;
+  const ordered = new Map((rule.orderedStoreIds || []).map((id, index) => [String(id), index]));
   const top = new Set((rule.topStoreIds || []).map(String));
   const bottom = new Set((rule.bottomStoreIds || []).map(String));
   return input.map((item, index) => {
     const store = item?.store || item;
     const id = String(store?.id || store?.store_id || '');
-    return {item, index, tier: top.has(id) ? 0 : bottom.has(id) ? 2 : 1};
+    const orderedRank = ordered.get(id);
+    const tier = orderedRank !== undefined ? orderedRank : ordered.size + (top.has(id) ? 0 : bottom.has(id) ? 2 : 1);
+    return {item, index, tier};
   }).sort((a, b) => a.tier - b.tier || a.index - b.index).map(row => row.item);
 }
 function normalizedStore(raw, index) {

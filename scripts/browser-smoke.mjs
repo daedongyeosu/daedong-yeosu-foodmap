@@ -20,6 +20,27 @@ const check = async (condition, message) => {
   report.checks.push({message, ok});
   if (!ok) throw new Error(message);
 };
+const expectedPizzaPriority = ['도미노피자 문수점', '외계인피자 여수점', '피자스쿨 여문점'];
+const checkPizzaPriority = async (savedLocation, message) => {
+  await page.evaluate(location => {
+    localStorage.setItem('savedLocation', JSON.stringify(location));
+    localStorage.setItem('location', location.area);
+  }, savedLocation);
+  await page.reload({waitUntil: 'domcontentloaded'});
+  await page.waitForSelector('#storeGrid .store-card', {timeout: 15000});
+  await page.locator('[data-cat="피자"]').click();
+  await page.waitForTimeout(1500);
+  const cards = await page.locator('#storeGrid').evaluate(grid => [...grid.children].slice(0, 3).map(card => ({
+    className: card.className,
+    name: card.innerText.split('\n').map(value => value.trim()).find(Boolean) || ''
+  })));
+  const names = cards.map(card => card.name);
+  const gridText = await page.locator('#storeGrid').innerText();
+  await check(
+    Promise.resolve(JSON.stringify(names) === JSON.stringify(expectedPizzaPriority)),
+    `${message}: ${names.join(' → ') || `${cards.map(card => card.className).join(', ')} / ${gridText.slice(0, 120)}`}`
+  );
+};
 
 try {
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
@@ -30,7 +51,23 @@ try {
   await check(page.locator('#storeGrid .store-card').count().then(count => count > 0), '가게 목록 표시');
   await check(page.locator('#startupAd').isHidden(), '첫 접속 모집 팝업 중단');
   await check(page.getByText('가게카드 보기', {exact: true}).count().then(count => count === 0), '가게카드 보기 문구 제거');
-  await page.locator('#storeGrid .store-card').first().click();
+  await checkPizzaPriority({
+    label: '오림동',
+    area: '오림동',
+    address: '오림동',
+    detail: '',
+    coords: null,
+    sortByDistance: false
+  }, '오림동 주소 선택 시 피자 1·2·3위 우선노출');
+  await checkPizzaPriority({
+    label: '현재 위치',
+    area: '여수시 전체',
+    address: '현재 위치',
+    detail: '',
+    coords: {lat: 34.7558625400933, lng: 127.716615186282},
+    sortByDistance: true
+  }, '오림동 GPS 위치 시 피자 1·2·3위 실시간 우선노출');
+  await page.locator('#storeGrid > *').first().click();
   await page.waitForSelector('#modal:not([hidden])', {timeout: 5000});
   await check(page.locator('#modalContent').isVisible(), '가게 상세 팝업 작동');
   await page.locator('.modal-close').click();
@@ -44,7 +81,8 @@ try {
       cancelAnimationFrame(id);
     }
   });
-  await page.locator('.topbar').screenshot({path: 'browser-mobile.png'});
+  const topbarBox = await page.locator('.topbar').boundingBox();
+  if (topbarBox) await page.screenshot({path: 'browser-mobile.png', clip: topbarBox});
   report.success = report.errors.length === 0;
 } catch (error) {
   report.failure = error.stack || String(error);

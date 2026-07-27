@@ -21,6 +21,25 @@ const FEEDBACK_FORM_URL = 'https://www.notion.so/8ae3728176e344fdaee3475a97d0374
 const SMALL_BUSINESS_ASSOCIATION_URL = 'https://bit.ly/여수시소상공인연합회공지';
 const ANALYTICS_ENDPOINT = 'https://daedong-yeosu-admin.sisakim.chatgpt.site/api/events';
 const ANALYTICS_SESSION_KEY = 'daedongAnalyticsSessionV1';
+const ANALYTICS_REGION_1_ALIASES = new Map([
+  ['서울', '서울특별시'], ['서울시', '서울특별시'], ['서울특별시', '서울특별시'],
+  ['부산', '부산광역시'], ['부산시', '부산광역시'], ['부산광역시', '부산광역시'],
+  ['대구', '대구광역시'], ['대구시', '대구광역시'], ['대구광역시', '대구광역시'],
+  ['인천', '인천광역시'], ['인천시', '인천광역시'], ['인천광역시', '인천광역시'],
+  ['광주', '광주광역시'], ['광주시', '광주광역시'], ['광주광역시', '광주광역시'],
+  ['대전', '대전광역시'], ['대전시', '대전광역시'], ['대전광역시', '대전광역시'],
+  ['울산', '울산광역시'], ['울산시', '울산광역시'], ['울산광역시', '울산광역시'],
+  ['세종', '세종특별자치시'], ['세종시', '세종특별자치시'], ['세종특별자치시', '세종특별자치시'],
+  ['경기', '경기도'], ['경기도', '경기도'],
+  ['강원', '강원특별자치도'], ['강원도', '강원특별자치도'], ['강원특별자치도', '강원특별자치도'],
+  ['충북', '충청북도'], ['충청북도', '충청북도'],
+  ['충남', '충청남도'], ['충청남도', '충청남도'],
+  ['전북', '전북특별자치도'], ['전라북도', '전북특별자치도'], ['전북특별자치도', '전북특별자치도'],
+  ['전남', '전라남도'], ['전라남도', '전라남도'],
+  ['경북', '경상북도'], ['경상북도', '경상북도'],
+  ['경남', '경상남도'], ['경상남도', '경상남도'],
+  ['제주', '제주특별자치도'], ['제주도', '제주특별자치도'], ['제주특별자치도', '제주특별자치도']
+]);
 let analyticsFallbackVisitorId = '';
 let analyticsFallbackSessionId = '';
 
@@ -192,8 +211,55 @@ function analyticsEntryContext() {
   }
   return {entrySource, storeId};
 }
+function analyticsRegionPart(value, depth) {
+  const region = String(value || '').trim().replace(/\s+/g, ' ').slice(0, 40);
+  if (!region || !/^[가-힣0-9·\s-]+$/.test(region)) return '';
+  if (depth === 1) return ANALYTICS_REGION_1_ALIASES.get(region) || '';
+  if (depth === 2) return /(?:시|군|구)$/.test(region) ? region : '';
+  return /(?:동|읍|면|리|가)$/.test(region) ? region : '';
+}
+function analyticsCoarseRegion(input = {}) {
+  const text = [input.address, input.label, input.area].filter(Boolean).join(' ').replace(/\s+/g, ' ').trim();
+  let region1 = analyticsRegionPart(input.region1, 1);
+  let region2 = analyticsRegionPart(input.region2, 2);
+  let region3 = analyticsRegionPart(input.region3, 3);
+  if (!region1) {
+    region1 = ANALYTICS_REGION_1_ALIASES.get(text.split(/\s+/)[0]) || '';
+  }
+  if (!region2) {
+    const match = text.match(/([가-힣]+시(?:\s+[가-힣]+구)?|[가-힣]+군|[가-힣]+구)(?=\s|$)/);
+    region2 = analyticsRegionPart(match?.[1], 2);
+  }
+  if (!region3) {
+    const matches = [...text.matchAll(/([가-힣0-9]+(?:동|읍|면|리|가))(?=\s|$)/g)];
+    region3 = analyticsRegionPart(matches.at(-1)?.[1], 3);
+  }
+  const area = analyticsRegionPart(input.area, 3);
+  if (!region3 && area) region3 = area;
+  if (region3 && !region2 && (text.includes('여수') || input.area === region3)) {
+    region1 ||= '전라남도';
+    region2 = '여수시';
+  }
+  const rawSource = String(input.regionSource || '').trim();
+  const allowedSources = new Set(['address_search', 'browser_geolocation', 'map_selection', 'saved_address']);
+  const regionSource = allowedSources.has(rawSource)
+    ? rawSource
+    : input.type === 'current'
+      ? 'browser_geolocation'
+      : input.type === 'map'
+        ? 'map_selection'
+        : input.type === 'postcode'
+          ? 'address_search'
+          : 'saved_address';
+  return {region1, region2, region3, regionSource};
+}
+function analyticsRegionContext() {
+  const selected = readLocalJson(ADDRESS_KEY, null) || readLocalJson('savedLocation', null) || {};
+  return analyticsCoarseRegion(selected);
+}
 function sendAnalyticsEvent(eventType, details = {}) {
   const entry = analyticsEntryContext();
+  const region = analyticsRegionContext();
   const payload = {
     eventId: analyticsRandomId('event'),
     eventType,
@@ -204,6 +270,10 @@ function sendAnalyticsEvent(eventType, details = {}) {
     storeName: String(details.storeName || '').slice(0, 120),
     channel: String(details.channel || '').slice(0, 40),
     surface: String(details.surface || '').slice(0, 60),
+    region1: region.region1,
+    region2: region.region2,
+    region3: region.region3,
+    regionSource: region.regionSource,
     clientTime: new Date().toISOString()
   };
   const body = JSON.stringify(payload);
@@ -1001,7 +1071,8 @@ function getAddressBook() { return readLocalJson(ADDRESS_BOOK_KEY, []); }
 function saveAddressBook(list) { writeLocalJson(ADDRESS_BOOK_KEY, list.slice(0, 12)); }
 function shortAddress(text = '') { const value = String(text).trim() || '여수시 전체'; return value.length > 18 ? `${value.slice(0,18)}…` : value; }
 function saveLocationState(label, coords = null, sortByDistance = false, meta = {}) {
-  const saved = {label, area:meta.area || label, address:meta.address || label, detail:meta.detail || '', type:meta.type || 'recent', coords, sortByDistance, savedAt:new Date().toISOString()};
+  const region = analyticsCoarseRegion(meta);
+  const saved = {label, area:meta.area || label, address:meta.address || label, detail:meta.detail || '', type:meta.type || 'recent', coords, sortByDistance, ...region, savedAt:new Date().toISOString()};
   localStorage.setItem('savedLocation', JSON.stringify(saved)); localStorage.setItem('location', saved.area);
 }
 function addressAreas() { return ['여수시 전체', ...new Set(stores.map(store => store.area).filter(Boolean))].sort((a,b)=>a==='여수시 전체'?-1:a.localeCompare(b,'ko')); }
@@ -1025,12 +1096,12 @@ function areaModal() {
   openModal(`<section class="address-single-sheet" data-address-single><header><h2 id="modalTitle">배달 주소 설정</h2><p>주소 검색·상세주소·최근주소·현재 위치·선택 완료를 이 화면에서 한 번에 처리합니다.</p></header><div class="address-search-row"><div class="searchbox"><input id="addressSearchInput" placeholder="예: 여서동, 웅천동, 쌍봉로 368" autocomplete="street-address"><button id="clearAddressSearch" class="input-clear" type="button" hidden>×</button></div><button id="addressSearchBtn" type="button">주소검색</button></div><div id="addressSearchResults" class="address-search-results"></div><button id="gpsLocationBtn" class="current-location-btn" type="button">⌖ <span>현재 위치 사용</span></button><div id="addressSelectedPreview" class="address-selected-preview"></div><label class="address-detail-label">상세주소<input id="addressDetailInput" value="${escapeHtml(addressDraft?.detail || '')}" placeholder="동·호수, 건물명, 상세 위치" autocomplete="address-line2"></label><section class="address-recent"><div class="address-section-title"><h3>최근 주소</h3><span>최대 12개 저장</span></div><div class="address-recent-list">${recent.length?recent.map((item,index)=>`<button type="button" data-address-recent="${index}"><span>${item.type==='current'?'⌖':'📍'}</span><b>${escapeHtml(item.label||item.address)}</b><small>${escapeHtml([item.address,item.detail].filter(Boolean).join(' '))}</small></button>`).join(''):'<p class="address-empty">아직 저장된 주소가 없습니다.</p>'}</div></section><button id="addressConfirmBtn" class="address-confirm-btn" type="button">이 주소로 선택 완료</button></section>`);
   $('#addressSearchInput').value = addressDraft?.address || ''; renderAddressResults(addressDraft?.address || ''); renderAddressDraft();
 }
-function chooseAddressBase(value, extra={}) { addressDraft={...(addressDraft||{}),address:String(value).trim(),area:extra.area||addressAreaFor(value),coords:extra.coords||null,sortByDistance:Boolean(extra.sortByDistance),type:extra.type||'recent'}; renderAddressDraft(); }
+function chooseAddressBase(value, extra={}) { addressDraft={...(addressDraft||{}),address:String(value).trim(),area:extra.area||addressAreaFor(value),coords:extra.coords||null,sortByDistance:Boolean(extra.sortByDistance),type:extra.type||'recent',region1:extra.region1||'',region2:extra.region2||'',region3:extra.region3||'',regionSource:extra.regionSource||''}; renderAddressDraft(); }
 function commitAddressSelection() {
   const base=String(addressDraft?.address || $('#addressSearchInput')?.value || '').trim(); if(!base){$('#addressSearchInput')?.focus();return;}
   const detail=String($('#addressDetailInput')?.value||'').trim(), full=[base,detail].filter(Boolean).join(' '), coords=addressDraft?.coords||null, sortByDistance=Boolean(addressDraft?.sortByDistance&&coords);
   const inferredArea=addressAreaFor(base), area=inferredArea!=='여수시 전체'?inferredArea:(addressDraft?.area||'여수시 전체');
-  const item={type:addressDraft?.type||'recent',address:base,detail,label:full,area,coords,sortByDistance,createdAt:new Date().toISOString()};
+  const item={type:addressDraft?.type||'recent',address:base,detail,label:full,area,coords,sortByDistance,...analyticsCoarseRegion(addressDraft),createdAt:new Date().toISOString()};
   writeLocalJson(ADDRESS_KEY,item); saveAddressBook([item,...getAddressBook().filter(old=>old.label!==item.label||old.type!==item.type)]);
   state.location=item.area||'여수시 전체'; state.addressLabel=item.label; state.coords=coords; state.sortByDistance=sortByDistance;
   saveLocationState(item.label,coords,sortByDistance,item); $('#locationText').textContent=shortAddress(item.label); hardClose(); setTimeout(showHomeAfterAddressCommit,60);

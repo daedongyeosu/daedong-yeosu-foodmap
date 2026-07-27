@@ -312,6 +312,8 @@ const LOCATION_CATEGORY_PRIORITY_OVERRIDES = {
       "a089d1d54720b48e",
       "abb76aa470e26f7a"
     ],
+    "rotation": "time-cycle",
+    "rotationIntervalMs": 60000,
     "labels": {
       "dc638b23f8cf3c5b": "도미노피자 문수점",
       "a089d1d54720b48e": "외계인피자 여수점",
@@ -429,14 +431,21 @@ function categoryPriorityRule(category) {
   if (scopedNeighborhoods.length && !scopedNeighborhoods.includes(customerNeighborhoodForPriority())) return null;
   return rule;
 }
+function categoryPriorityOrderedIdsForRule(rule, now = Date.now()) {
+  const ids = (rule?.orderedStoreIds || []).map(String);
+  if (rule?.rotation !== 'time-cycle' || ids.length < 2) return ids;
+  const interval = Math.max(1000, Number(rule.rotationIntervalMs) || 60000);
+  const offset = Math.floor(Number(now) / interval) % ids.length;
+  return [...ids.slice(offset), ...ids.slice(0, offset)];
+}
 function categoryPriorityOrderedStoreIds(category) {
-  return (categoryPriorityRule(category)?.orderedStoreIds || []).map(String);
+  return categoryPriorityOrderedIdsForRule(categoryPriorityRule(category));
 }
 function applyCategoryPriorityOverrides(list, category) {
   const input = Array.isArray(list) ? list : [];
   const rule = categoryPriorityRule(category);
   if (!rule) return input;
-  const ordered = new Map((rule.orderedStoreIds || []).map((id, index) => [String(id), index]));
+  const ordered = new Map(categoryPriorityOrderedIdsForRule(rule).map((id, index) => [id, index]));
   const top = new Set((rule.topStoreIds || []).map(String));
   const bottom = new Set((rule.bottomStoreIds || []).map(String));
   return input.map((item, index) => {

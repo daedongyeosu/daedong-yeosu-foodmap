@@ -19,7 +19,9 @@ const rule = JSON.parse(configMatch[1])?.[CATEGORY];
 assert(rule, 'pizza priority rule is missing');
 assert.equal(rule.scope, 'selected-neighborhoods', 'pizza priority must remain neighborhood-scoped');
 assert.deepEqual(rule.neighborhoods, TARGET_NEIGHBORHOODS, 'pizza target neighborhoods changed');
-assert.deepEqual(rule.orderedStoreIds, ORDERED_IDS, 'pizza priority order changed');
+assert.deepEqual(rule.orderedStoreIds, ORDERED_IDS, 'pizza rotation members changed');
+assert.equal(rule.rotation, 'time-cycle', 'pizza priority must rotate by time');
+assert.equal(rule.rotationIntervalMs, 60000, 'pizza priority rotation interval changed');
 
 ORDERED_IDS.forEach((id, index) => {
   const store = byId.get(id);
@@ -29,10 +31,16 @@ ORDERED_IDS.forEach((id, index) => {
 });
 
 const pizzas = stores.filter(store => store.categories?.includes(CATEGORY));
-function applyRule(list, category, neighborhood) {
+function rotatedIds(current, phase) {
+  const ids = (current?.orderedStoreIds || []).map(String);
+  if (current?.rotation !== 'time-cycle' || ids.length < 2) return ids;
+  const offset = phase % ids.length;
+  return [...ids.slice(offset), ...ids.slice(0, offset)];
+}
+function applyRule(list, category, neighborhood, phase = 0) {
   const current = category === CATEGORY ? rule : null;
   if (!current || (current.neighborhoods?.length && !current.neighborhoods.includes(neighborhood))) return list;
-  const order = new Map((current.orderedStoreIds || []).map((id, index) => [String(id), index]));
+  const order = new Map(rotatedIds(current, phase).map((id, index) => [id, index]));
   return list.map((store, index) => ({
     store,
     index,
@@ -40,14 +48,31 @@ function applyRule(list, category, neighborhood) {
   })).sort((a, b) => a.tier - b.tier || a.index - b.index).map(row => row.store);
 }
 
+const EXPECTED_CYCLES = EXPECTED_NAMES.map((_, offset) => [
+  ...EXPECTED_NAMES.slice(offset),
+  ...EXPECTED_NAMES.slice(0, offset)
+]);
 for (const neighborhood of TARGET_NEIGHBORHOODS) {
   const baseline = [...pizzas].sort((a, b) => a.name.localeCompare(b.name, 'ko'));
-  const ranked = applyRule(baseline, CATEGORY, neighborhood);
-  assert.deepEqual(ranked.slice(0, 3).map(store => store.name), EXPECTED_NAMES, `${neighborhood}: pizza top 3 order is wrong`);
+  const firstPlaceStores = [];
+  for (const [phase, expectedCycle] of EXPECTED_CYCLES.entries()) {
+    const ranked = applyRule(baseline, CATEGORY, neighborhood, phase);
+    assert.deepEqual(
+      ranked.slice(0, 3).map(store => store.name),
+      expectedCycle,
+      `${neighborhood}: pizza rotation phase ${phase} is wrong`
+    );
+    assert.deepEqual(
+      ranked.slice(3).map(idOf),
+      baseline.map(idOf).filter(id => !ORDERED_IDS.includes(id)),
+      `${neighborhood}: ordinary pizza order changed at phase ${phase}`
+    );
+    firstPlaceStores.push(ranked[0].name);
+  }
   assert.deepEqual(
-    ranked.slice(3).map(idOf),
-    baseline.map(idOf).filter(id => !ORDERED_IDS.includes(id)),
-    `${neighborhood}: ordinary pizza order changed`
+    firstPlaceStores,
+    EXPECTED_NAMES,
+    `${neighborhood}: all three pizza stores must take first place once per cycle`
   );
 }
 
@@ -70,8 +95,10 @@ assert.deepEqual(
 for (const required of [
   'function customerNeighborhoodForPriority()',
   'function categoryPriorityRule(category)',
+  'function categoryPriorityOrderedIdsForRule(rule, now = Date.now())',
   'function categoryPriorityOrderedStoreIds(category)',
-  'const ordered = new Map((rule.orderedStoreIds || [])',
+  "rule?.rotation !== 'time-cycle'",
+  'const ordered = new Map(categoryPriorityOrderedIdsForRule(rule)',
 ]) assert(appSource.includes(required), `app pizza priority wiring missing: ${required}`);
 
 for (const required of [
@@ -80,8 +107,8 @@ for (const required of [
   'stores.find(store=>String(store.id)===id)',
 ]) assert(rc6Source.includes(required), `runtime pizza priority wiring missing: ${required}`);
 
-assert.match(indexSource, /app\.js\?v=[^"']*pizza-priority-1/, 'app cache version missing');
-assert.match(indexSource, /final-experience\.js\?v=[^"']*pizza-priority-1/, 'final-experience cache version missing');
+assert.match(indexSource, /app\.js\?v=[^"']*pizza-priority-2/, 'app cache version missing');
+assert.match(indexSource, /final-experience\.js\?v=[^"']*pizza-priority-2/, 'final-experience cache version missing');
 
 const routeCount = stores.reduce((sum, store) => sum + (store.routes || []).length, 0);
 assert.equal(stores.length, 701, 'store count changed');
@@ -90,7 +117,9 @@ assert.equal(routeCount, 4917, 'order-route count changed');
 console.log(JSON.stringify({
   category: CATEGORY,
   neighborhoods: TARGET_NEIGHBORHOODS,
-  orderedStores: EXPECTED_NAMES,
+  rotatingStores: EXPECTED_NAMES,
+  firstPlaceCycle: EXPECTED_NAMES,
+  rotationIntervalMs: rule.rotationIntervalMs,
   stores: stores.length,
   routes: routeCount,
   otherNeighborhoodsUnchanged: true,

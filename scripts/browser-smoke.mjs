@@ -21,6 +21,10 @@ const check = async (condition, message) => {
   if (!ok) throw new Error(message);
 };
 const expectedPizzaPriority = ['도미노피자 문수점', '외계인피자 여수점', '피자스쿨 여문점'];
+const expectedPizzaCycles = expectedPizzaPriority.map((_, offset) => [
+  ...expectedPizzaPriority.slice(offset),
+  ...expectedPizzaPriority.slice(0, offset)
+]);
 const checkPizzaPriority = async (savedLocation, message) => {
   await page.evaluate(location => {
     localStorage.setItem('savedLocation', JSON.stringify(location));
@@ -37,8 +41,8 @@ const checkPizzaPriority = async (savedLocation, message) => {
   const names = cards.map(card => card.name);
   const gridText = await page.locator('#storeGrid').innerText();
   await check(
-    Promise.resolve(JSON.stringify(names) === JSON.stringify(expectedPizzaPriority)),
-    `${message}: ${names.join(' → ') || `${cards.map(card => card.className).join(', ')} / ${gridText.slice(0, 120)}`}`
+    Promise.resolve(expectedPizzaCycles.some(order => JSON.stringify(names) === JSON.stringify(order))),
+    `${message} 순환 상단 3곳: ${names.join(' → ') || `${cards.map(card => card.className).join(', ')} / ${gridText.slice(0, 120)}`}`
   );
 };
 
@@ -58,7 +62,7 @@ try {
     detail: '',
     coords: null,
     sortByDistance: false
-  }, '오림동 주소 선택 시 피자 1·2·3위 우선노출');
+  }, '오림동 주소 선택 시 피자 1·2·3위 순환 우선노출');
   await checkPizzaPriority({
     label: '현재 위치',
     area: '여수시 전체',
@@ -66,7 +70,7 @@ try {
     detail: '',
     coords: {lat: 34.7558625400933, lng: 127.716615186282},
     sortByDistance: true
-  }, '오림동 GPS 위치 시 피자 1·2·3위 실시간 우선노출');
+  }, '오림동 GPS 위치 시 피자 1·2·3위 실시간 순환 우선노출');
   await page.locator('#storeGrid > *').first().click();
   await page.waitForSelector('#modal:not([hidden])', {timeout: 5000});
   await check(page.locator('#modalContent').isVisible(), '가게 상세 팝업 작동');

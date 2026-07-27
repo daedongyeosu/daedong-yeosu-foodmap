@@ -72,6 +72,6 @@ assert.match(addressMap, /region2: data\.sigungu/);
 assert.match(addressMap, /data\.bname/);
 assert.match(addressMap, /nominatim\.openstreetmap\.org\/reverse/);
 assert.match(addressMap, /Math\.hypot\(latDistance, lngDistance\) <= 12/);
-assert.match(html, /anonymous-analytics-2-coarse-region-1/);
+assert.match(html, /anonymous-analytics-1-coarse-region-1/);
 
 console.log('coarse region analytics regression: PASS');

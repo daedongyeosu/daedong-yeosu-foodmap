@@ -64,6 +64,9 @@ jobs:
       - name: Run unit and link-preservation tests
         run: node scripts/test-app-unit.mjs
 
+      - name: Verify neighborhood pizza priority
+        run: node pizza-neighborhood-priority-regression-test.mjs
+
       - name: Run data validation
         run: node scripts/validate-data.mjs
 

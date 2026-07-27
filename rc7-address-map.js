@@ -64,9 +64,49 @@
   }
 
   function currentAreaForCoords(coords) {
-    if (!validCoords(coords)) return '';
-    if (typeof rc6ClosestNeighborhood === 'function') return rc6ClosestNeighborhood(coords);
+    const point = validCoords(coords);
+    if (!point || typeof rc6ClosestNeighborhood !== 'function') return '';
+    const area = rc6ClosestNeighborhood(point);
+    const anchor = typeof neighborhoodPoint === 'function' ? validCoords(neighborhoodPoint(area)) : null;
+    if (!anchor) return '';
+    const latDistance = (point.lat - anchor.lat) * 111;
+    const lngDistance = (point.lng - anchor.lng) * 111 * Math.cos(point.lat * Math.PI / 180);
+    if (Math.hypot(latDistance, lngDistance) <= 12) return area;
     return '';
+  }
+
+  async function reverseRegionForCoords(coords) {
+    const point = validCoords(coords);
+    if (!point) return {};
+    try {
+      const params = new URLSearchParams({
+        format: 'jsonv2',
+        lat: String(point.lat),
+        lon: String(point.lng),
+        zoom: '18',
+        addressdetails: '1',
+        'accept-language': 'ko'
+      });
+      const response = await fetch(`https://nominatim.openstreetmap.org/reverse?${params}`, {
+        headers: {accept: 'application/json'},
+        signal: AbortSignal.timeout(5000)
+      });
+      if (!response.ok) return {};
+      const data = await response.json();
+      const address = data?.address || {};
+      const city = address.city || address.county || address.municipality || '';
+      const district = address.city_district || address.borough || '';
+      const region2 = [city, district].filter((value, index, list) => value && list.indexOf(value) === index).join(' ');
+      const region3 = address.suburb || address.quarter || address.neighbourhood || address.town || address.village || '';
+      return analyticsCoarseRegion({
+        region1: address.province || address.state || '',
+        region2,
+        region3,
+        regionSource: 'browser_geolocation'
+      });
+    } catch {
+      return {};
+    }
   }
 
   function syncMainAddress() {
@@ -120,6 +160,9 @@
     const address = String(value || '').trim();
     const coords = validCoords(extra.coords);
     const area = extra.area || addressAreaFor(address);
+    const regionValue = key => Object.prototype.hasOwnProperty.call(extra, key)
+      ? String(extra[key] || '')
+      : String(addressDraft?.[key] || '');
     addressDraft = {
       ...(addressDraft || {}),
       address,
@@ -127,7 +170,11 @@
       coords,
       sortByDistance: Boolean(coords && extra.sortByDistance !== false),
       type: extra.type || 'recent',
-      coordinateSource: extra.coordinateSource || (coords ? 'selected-location' : '')
+      coordinateSource: extra.coordinateSource || (coords ? 'selected-location' : ''),
+      region1: regionValue('region1'),
+      region2: regionValue('region2'),
+      region3: regionValue('region3'),
+      regionSource: regionValue('regionSource')
     };
     const input = document.querySelector('#addressSearchInput');
     if (input) input.value = address;
@@ -142,7 +189,8 @@
   function mapLocationSelected(coords) {
     const point = validCoords(coords);
     if (!point) return;
-    const area = currentAreaForCoords(point) || addressDraft?.area || '여수시 전체';
+    const localArea = currentAreaForCoords(point);
+    const area = localArea || addressDraft?.area || '여수시 전체';
     const currentAddress = String(addressDraft?.address || '').trim();
     addressDraft = {
       ...(addressDraft || {}),
@@ -151,7 +199,11 @@
       coords: point,
       sortByDistance: true,
       type: addressDraft?.type === 'postcode' ? 'postcode' : 'map',
-      coordinateSource: 'map-selection'
+      coordinateSource: 'map-selection',
+      region1: localArea ? '전라남도' : (addressDraft?.region1 || ''),
+      region2: localArea ? '여수시' : (addressDraft?.region2 || ''),
+      region3: localArea || addressDraft?.region3 || '',
+      regionSource: 'map_selection'
     };
     const hint = document.querySelector('#rc7MapHint');
     if (hint) hint.textContent = '지도 가운데 핀의 위치가 배달 위치로 선택되었습니다.';
@@ -271,7 +323,11 @@
             area,
             coords: null,
             sortByDistance: false,
-            type: 'postcode'
+            type: 'postcode',
+            region1: data.sido || '',
+            region2: data.sigungu || '',
+            region3: data.bname || data.bname2 || data.bname1 || '',
+            regionSource: 'address_search'
           });
           const label = form.querySelector('[data-rc5-postcode-open] span');
           if (label) label.textContent = address;
@@ -308,13 +364,32 @@
     }
     button.disabled = true;
     button.innerHTML = '<span class="rc7-gps-symbol rc7-gps-loading" aria-hidden="true">⌖</span><span>현재 위치를 확인하고 있습니다…</span>';
-    navigator.geolocation.getCurrentPosition(position => {
-      button.disabled = false;
+    navigator.geolocation.getCurrentPosition(async position => {
       const coords = {lat: position.coords.latitude, lng: position.coords.longitude};
       const accuracy = Number(position.coords.accuracy || Infinity);
-      const area = currentAreaForCoords(coords) || '여수시 전체';
+      const localArea = currentAreaForCoords(coords);
+      const region = localArea
+        ? {
+            region1: '전라남도',
+            region2: '여수시',
+            region3: localArea,
+            regionSource: 'browser_geolocation'
+          }
+        : await reverseRegionForCoords(coords);
+      const area = region.region3 || region.region2 || '여수시 전체';
+      button.disabled = false;
       button.innerHTML = `<span class="rc7-gps-symbol" aria-hidden="true">✓</span><span>${accuracy <= 300 ? '현재 위치 확인 완료' : '위치 확인 완료 · 지도에서 한 번 확인해 주세요'}</span>`;
-      chooseAddress(`현재 위치${area !== '여수시 전체' ? ` · ${area}` : ''}`, {area, coords, sortByDistance: true, type: 'current', coordinateSource: 'browser-geolocation'});
+      chooseAddress(`현재 위치${area !== '여수시 전체' ? ` · ${area}` : ''}`, {
+        area,
+        coords,
+        sortByDistance: true,
+        type: 'current',
+        coordinateSource: 'browser-geolocation',
+        region1: region.region1 || '',
+        region2: region.region2 || '',
+        region3: region.region3 || '',
+        regionSource: 'browser_geolocation'
+      });
       const hint = document.querySelector('#rc7MapHint');
       if (hint) hint.textContent = accuracy <= 300 ? '휴대전화의 현재 위치로 지도를 이동했습니다.' : `위치 오차가 약 ${Math.round(accuracy)}m입니다. 지도를 움직여 조정할 수 있습니다.`;
     }, error => {
@@ -363,6 +438,7 @@
       coords,
       sortByDistance: Boolean(coords),
       coordinateSource: addressDraft?.coordinateSource || '',
+      ...analyticsCoarseRegion(addressDraft),
       createdAt: new Date().toISOString()
     };
     writeLocalJson(ADDRESS_KEY, item);

@@ -85,6 +85,8 @@ function notionPageIdFromHref(href) {
     if (
       hostname !== 'notion.so' &&
       !hostname.endsWith('.notion.so') &&
+      hostname !== 'notion.com' &&
+      !hostname.endsWith('.notion.com') &&
       hostname !== 'notion.site' &&
       !hostname.endsWith('.notion.site') &&
       hostname !== 'app.notion.com'
@@ -103,7 +105,12 @@ function blockNotionPageIds(block) {
     .filter(Array.isArray);
   return richTextCollections
     .flat()
-    .map(item => notionPageIdFromHref(item?.href || item?.text?.link?.url || ''))
+    .map(item => {
+      if (item?.mention?.type === 'page') {
+        return String(item.mention.page?.id || '').replaceAll('-', '');
+      }
+      return notionPageIdFromHref(item?.href || item?.text?.link?.url || '');
+    })
     .filter(Boolean);
 }
 

@@ -13,19 +13,22 @@ const context = await browser.newContext({
 });
 await context.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
 await context.route('**/*.woff2', route => route.abort());
-const page = await context.newPage();
-page.on('pageerror', error => report.errors.push(error.message));
 
 try {
-  await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
-  await page.waitForSelector('#storeGrid .store-card', {timeout: 15000});
-
   for (const definition of NEW_NOTION_STORES) {
+    const page = await context.newPage();
+    page.on('pageerror', error => report.errors.push(`${definition.name}: ${error.message}`));
+    await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
+    await page.waitForSelector('#storeGrid .store-card', {timeout: 15000});
+    await page.waitForFunction(
+      () => typeof window.rc6Initialize === 'function' && typeof window.rc7Initialize === 'function',
+      {timeout: 15000}
+    );
     await page.locator('#mainSearch').fill(definition.name);
     await page.locator('#searchBtn').click();
-    const card = page.locator(`#storeGrid .store-card[data-id="${definition.id}"]`);
-    await card.waitFor({state: 'visible', timeout: 8000});
-    await card.locator('.store-photo').click();
+    const searchCard = page.locator(`#fxSearchResults [data-search-store-id="${definition.id}"]`);
+    await searchCard.waitFor({state: 'visible', timeout: 8000});
+    await searchCard.click();
 
     const detail = page.locator(`#modal:not([hidden]) .store-detail[data-store-id="${definition.id}"]`);
     await detail.waitFor({state: 'visible', timeout: 5000});
@@ -56,7 +59,7 @@ try {
       altTexts,
       arrowChangedPhoto: true
     });
-    await page.locator('.modal-close').click();
+    await page.close();
   }
   report.success = report.stores.length === NEW_NOTION_STORES.length && report.errors.length === 0;
 } catch (error) {

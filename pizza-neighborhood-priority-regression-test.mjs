@@ -111,8 +111,8 @@ assert.match(indexSource, /app\.js\?v=[^"']*pizza-priority-2/, 'app cache versio
 assert.match(indexSource, /final-experience\.js\?v=[^"']*pizza-priority-2/, 'final-experience cache version missing');
 
 const routeCount = stores.reduce((sum, store) => sum + (store.routes || []).length, 0);
-assert.equal(stores.length, 701, 'store count changed');
-assert.equal(routeCount, 4917, 'order-route count changed');
+assert.equal(stores.length, 710, 'store count changed');
+assert.equal(routeCount, 4981, 'order-route count changed');
 
 console.log(JSON.stringify({
   category: CATEGORY,

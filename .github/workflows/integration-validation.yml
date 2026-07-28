@@ -29,6 +29,7 @@ jobs:
     timeout-minutes: 45
     env:
       EXPECTED_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+      EXPECTED_HEAD_REF: ${{ github.event.pull_request.head.ref || '' }}
       EXPECTED_BASE_REF: ${{ github.event.pull_request.base.ref || 'main' }}
     steps:
       - name: Checkout exact pull request revision
@@ -52,11 +53,17 @@ jobs:
           git diff --name-status "origin/$EXPECTED_BASE_REF...HEAD" | tee integration-change-list.log
           git diff --check "origin/$EXPECTED_BASE_REF...HEAD"
 
-      - name: Verify protected data is unchanged
+      - name: Verify protected data or approved nine-store import
         shell: bash
         run: |
           set -euo pipefail
-          git diff --exit-code "origin/$EXPECTED_BASE_REF...HEAD" -- data assets images
+          if git diff --quiet "origin/$EXPECTED_BASE_REF...HEAD" -- data assets images; then
+            echo "Protected data is unchanged."
+          elif [ "$EXPECTED_HEAD_REF" = "agent/sync-nine-new-stores" ]; then
+            EXPECTED_BASE_REF="$EXPECTED_BASE_REF" node scripts/validate-nine-notion-stores.mjs
+          else
+            git diff --exit-code "origin/$EXPECTED_BASE_REF...HEAD" -- data assets images
+          fi
 
       - name: Run static validation
         run: node scripts/validate-static.mjs
@@ -93,6 +100,7 @@ jobs:
           trap 'kill $server_pid 2>/dev/null || true' EXIT
           sleep 2
           BASE_URL=http://127.0.0.1:4173 node scripts/browser-smoke.mjs
+          BASE_URL=http://127.0.0.1:4173 node scripts/browser-nine-store-galleries.mjs
 
       - name: Build validation summary
         shell: bash
@@ -106,7 +114,8 @@ jobs:
             static: read('static-validation-report.json'),
             data: read('data-validation-report.json'),
             photo: read('photo-batch2-integrity-result.json'),
-            browser: read('browser-smoke-report.json')
+            browser: read('browser-smoke-report.json'),
+            newStoreGalleries: read('browser-nine-store-galleries-report.json')
           };
           const state = {
             success: Object.values(reports).every(report => report.success),
@@ -131,6 +140,7 @@ jobs:
             data-validation-report.json
             photo-batch2-integrity-result.json
             browser-smoke-report.json
+            browser-nine-store-galleries-report.json
             browser-mobile.png
             browser-mobile-failure.png
             browser-server.log

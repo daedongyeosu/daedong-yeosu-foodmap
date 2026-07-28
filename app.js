@@ -373,9 +373,25 @@ function rememberSelectedExternal(store, key) {
 }
 function hydrateSelectedOrderApp() { const selected = selectedOrderSnapshot(); if (selected) window.DaedongSelectedOrderApp = selected; }
 
+function isExplicitOutsideYeosuCurrent(item = {}) {
+  if (String(item.type || '').trim() !== 'current') return false;
+  const region2 = String(item.region2 || '').trim();
+  return Boolean(region2) && !/(?:여수|yeosu)/i.test(region2);
+}
+function normalizeOutsideYeosuCurrent(item) {
+  if (!item || typeof item !== 'object' || !isExplicitOutsideYeosuCurrent(item)) return item;
+  return {
+    ...item,
+    label: '여수 외 지역 · 전체 가게 보기',
+    address: '여수 외 지역 · 전체 가게 보기',
+    area: '여수시 전체',
+    coords: null,
+    sortByDistance: false
+  };
+}
 function loadSavedLocation() {
   try {
-    const saved = JSON.parse(localStorage.getItem('savedLocation') || 'null');
+    const saved = normalizeOutsideYeosuCurrent(JSON.parse(localStorage.getItem('savedLocation') || 'null'));
     if (!saved || typeof saved !== 'object') return null;
     const lat = Number(saved.coords?.lat), lng = Number(saved.coords?.lng);
     return {
@@ -1086,8 +1102,8 @@ function brandsModal() {
 function allCategoriesModal() {
   openModal(`<h2 id="modalTitle">전체 음식 카테고리</h2><div class="all-category-list">${categories.map(name => `<button type="button" data-modal-cat="${escapeHtml(name)}">${categoryIcon(name, 'category-modal-icon')}<b>${escapeHtml(name)}</b></button>`).join('')}</div>`);
 }
-function getSavedAddress() { return readLocalJson(ADDRESS_KEY, null); }
-function getAddressBook() { return readLocalJson(ADDRESS_BOOK_KEY, []); }
+function getSavedAddress() { return normalizeOutsideYeosuCurrent(readLocalJson(ADDRESS_KEY, null)); }
+function getAddressBook() { return readLocalJson(ADDRESS_BOOK_KEY, []).map(normalizeOutsideYeosuCurrent); }
 function saveAddressBook(list) { writeLocalJson(ADDRESS_BOOK_KEY, list.slice(0, 12)); }
 function shortAddress(text = '') { const value = String(text).trim() || '여수시 전체'; return value.length > 18 ? `${value.slice(0,18)}…` : value; }
 function saveLocationState(label, coords = null, sortByDistance = false, meta = {}) {

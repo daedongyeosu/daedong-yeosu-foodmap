@@ -21,6 +21,8 @@ const FEEDBACK_FORM_URL = 'https://www.notion.so/8ae3728176e344fdaee3475a97d0374
 const SMALL_BUSINESS_ASSOCIATION_URL = 'https://bit.ly/여수시소상공인연합회공지';
 const ANALYTICS_ENDPOINT = 'https://daedong-yeosu-admin.sisakim.chatgpt.site/api/events';
 const ANALYTICS_SESSION_KEY = 'daedongAnalyticsSessionV1';
+const ANALYTICS_OWNER_EXCLUSION_KEY = 'daedongAnalyticsOwnerExcludedV1';
+const ANALYTICS_OWNER_MODE_PARAM = 'owner_stats';
 const ANALYTICS_REGION_1_ALIASES = new Map([
   ['서울', '서울특별시'], ['서울시', '서울특별시'], ['서울특별시', '서울특별시'],
   ['부산', '부산광역시'], ['부산시', '부산광역시'], ['부산광역시', '부산광역시'],
@@ -193,6 +195,23 @@ function analyticsSessionId() {
     return analyticsFallbackSessionId;
   }
 }
+function analyticsOwnerExcluded() {
+  try { return localStorage.getItem(ANALYTICS_OWNER_EXCLUSION_KEY) === '1'; }
+  catch { return false; }
+}
+function applyAnalyticsOwnerMode() {
+  const params = new URLSearchParams(location.search);
+  const mode = String(params.get(ANALYTICS_OWNER_MODE_PARAM) || '').trim().toLowerCase();
+  if (mode !== 'exclude' && mode !== 'include') return;
+  try {
+    if (mode === 'exclude') localStorage.setItem(ANALYTICS_OWNER_EXCLUSION_KEY, '1');
+    else localStorage.removeItem(ANALYTICS_OWNER_EXCLUSION_KEY);
+  } catch {}
+  params.delete(ANALYTICS_OWNER_MODE_PARAM);
+  const query = params.toString();
+  const cleanUrl = `${location.pathname}${query ? `?${query}` : ''}${location.hash}`;
+  try { history.replaceState(history.state, '', cleanUrl); } catch {}
+}
 function analyticsEntryContext() {
   const params = new URLSearchParams(location.search);
   const explicit = String(params.get('source') || params.get('utm_source') || '').trim().toLowerCase();
@@ -258,6 +277,7 @@ function analyticsRegionContext() {
   return analyticsCoarseRegion(selected);
 }
 function sendAnalyticsEvent(eventType, details = {}) {
+  if (analyticsOwnerExcluded()) return;
   const entry = analyticsEntryContext();
   const region = analyticsRegionContext();
   const payload = {
@@ -1195,6 +1215,7 @@ function resetFilters() {
 
 document.addEventListener('error', event => { if (event.target instanceof HTMLImageElement) handleImageError(event.target); }, true);
 document.addEventListener('DOMContentLoaded', () => {
+  applyAnalyticsOwnerMode();
   const entry = analyticsEntryContext();
   sendAnalyticsEvent('visit', {storeId: entry.storeId, surface: entry.storeId ? 'store_entry' : 'home'});
   document.addEventListener('click', trackAnalyticsRouteClick, true);

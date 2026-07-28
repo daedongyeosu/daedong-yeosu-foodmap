@@ -78,14 +78,45 @@ function pageCoverUrl(page) {
   return '';
 }
 
+function notionPageIdFromHref(href) {
+  try {
+    const url = new URL(href);
+    const hostname = url.hostname.toLowerCase();
+    if (
+      hostname !== 'notion.so' &&
+      !hostname.endsWith('.notion.so') &&
+      hostname !== 'notion.site' &&
+      !hostname.endsWith('.notion.site') &&
+      hostname !== 'app.notion.com'
+    ) return '';
+    const compactPath = url.pathname.replaceAll('-', '');
+    const matches = compactPath.match(/[0-9a-f]{32}/ig);
+    return matches?.at(-1) || '';
+  } catch {
+    return '';
+  }
+}
+
+function blockNotionPageIds(block) {
+  const payload = block?.[block.type] || {};
+  const richTextCollections = [payload.rich_text, payload.caption]
+    .filter(Array.isArray);
+  return richTextCollections
+    .flat()
+    .map(item => notionPageIdFromHref(item?.href || item?.text?.link?.url || ''))
+    .filter(Boolean);
+}
+
 async function pageMediaReport(pageId, page) {
   const imageUrls = [];
   const fileUrls = [];
+  const linkedPageIds = [];
   const blockTypes = new Map();
   async function walk(parentId, depth = 0) {
     if (depth > 6) throw new Error(`${pageId}: 이미지 블록 중첩 깊이가 너무 큽니다.`);
     for (const block of await childBlocks(parentId)) {
       blockTypes.set(block.type, (blockTypes.get(block.type) || 0) + 1);
+      linkedPageIds.push(...blockNotionPageIds(block));
       const url = imageUrl(block);
       if (url) imageUrls.push(url);
       const attachmentUrl = fileUrl(block);
@@ -96,10 +127,32 @@ async function pageMediaReport(pageId, page) {
     }
   }
   await walk(pageId);
+  const normalizedPageId = pageId.replaceAll('-', '').toLowerCase();
+  const uniqueLinkedPageIds = [...new Set(linkedPageIds)]
+    .filter(id => id.toLowerCase() !== normalizedPageId);
+  const linkedPageCovers = [];
+  for (const linkedPageId of uniqueLinkedPageIds) {
+    const linkedPage = await notion(`/pages/${linkedPageId}`);
+    const coverUrl = pageCoverUrl(linkedPage);
+    if (coverUrl) {
+      linkedPageCovers.push({
+        pageId: linkedPageId,
+        title: titleFromPage(linkedPage),
+        url: coverUrl
+      });
+    }
+  }
+  const coverUrls = [...new Set([
+    pageCoverUrl(page),
+    ...linkedPageCovers.map(item => item.url)
+  ].filter(Boolean))];
   return {
     imageUrls: [...new Set(imageUrls)],
     fileUrls: [...new Set(fileUrls)],
     coverUrl: pageCoverUrl(page),
+    linkedPageIds: uniqueLinkedPageIds,
+    linkedPageCovers,
+    coverUrls,
     blockTypes: Object.fromEntries([...blockTypes.entries()].sort(([left], [right]) => left.localeCompare(right)))
   };
 }
@@ -218,28 +271,45 @@ async function main() {
     }
 
     const media = await pageMediaReport(definition.pageId, page);
-    mediaReports.push({definition, ...media});
+    const usesBodyImages = media.imageUrls.length === 3;
+    const usesPageCovers = media.imageUrls.length === 0 && media.coverUrls.length === 3;
+    const photoUrls = usesBodyImages
+      ? media.imageUrls
+      : (usesPageCovers ? media.coverUrls : []);
+    const photoSource = usesBodyImages ? '본문 사진' : (usesPageCovers ? '연결된 페이지 표지' : '확인 불가');
+    mediaReports.push({definition, ...media, photoUrls, photoSource});
     console.log(
       `[노션 사진 진단] ${definition.name}: 이미지 블록 ${media.imageUrls.length}장, ` +
       `파일 첨부 ${media.fileUrls.length}개, 표지 ${media.coverUrl ? '1개' : '없음'}, ` +
+      `연결 페이지 ${media.linkedPageIds.length}개, 연결 표지 ${media.linkedPageCovers.length}개, ` +
+      `선택 ${photoSource} ${photoUrls.length}장, ` +
       `블록 ${JSON.stringify(media.blockTypes)}`
     );
   }
 
-  const invalidMedia = mediaReports.filter(report => report.imageUrls.length !== 3);
+  const invalidMedia = mediaReports.filter(report => report.photoUrls.length !== 3);
   if (invalidMedia.length > 0) {
     throw new Error(
-      `노션 본문에 사진 3장이 확인되지 않은 가게: ` +
-      invalidMedia.map(report => `${report.definition.name}(${report.imageUrls.length}장)`).join(', ')
+      `노션에서 사진 3장이 확인되지 않은 가게: ` +
+      invalidMedia.map(report => (
+        `${report.definition.name}` +
+        `(본문 ${report.imageUrls.length}, 대표·연결 표지 ${report.coverUrls.length})`
+      )).join(', ')
     );
   }
 
-  for (const {definition, imageUrls: urls} of mediaReports) {
+  for (const {definition, photoUrls: urls, photoSource} of mediaReports) {
     const photoDir = `assets/notion-store-photos/${definition.id.slice(0, 14)}`;
     await fs.mkdir(photoDir, {recursive: false});
     const imagePaths = [];
     for (let index = 0; index < urls.length; index += 1) {
       imagePaths.push(await downloadImage(urls[index], `${photoDir}/${String(index + 1).padStart(2, '0')}`));
+    }
+    const contentHashes = await Promise.all(
+      imagePaths.map(async imagePath => sha256(await fs.readFile(imagePath)))
+    );
+    if (new Set(contentHashes).size !== 3) {
+      throw new Error(`${definition.name}: 서로 다른 사진 3장이 아닙니다.`);
     }
 
     stores.push(makeStore(definition, imagePaths));
@@ -252,7 +322,7 @@ async function main() {
       classification: 'food',
       blocked: false
     });
-    console.log(`${definition.name}: 노션 사진 3장 등록`);
+    console.log(`${definition.name}: 노션 ${photoSource} 3장 등록`);
   }
 
   await fs.writeFile(STORES_PATH, `${JSON.stringify(stores, null, 2)}\n`, 'utf8');

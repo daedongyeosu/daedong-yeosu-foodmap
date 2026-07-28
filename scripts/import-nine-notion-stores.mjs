@@ -114,7 +114,7 @@ function blockNotionPageIds(block) {
     .filter(Boolean);
 }
 
-async function pageMediaReport(pageId, page) {
+async function pageMediaReport(pageId, page, configuredLinkedPageIds = []) {
   const imageUrls = [];
   const fileUrls = [];
   const linkedPageIds = [];
@@ -135,7 +135,7 @@ async function pageMediaReport(pageId, page) {
   }
   await walk(pageId);
   const normalizedPageId = pageId.replaceAll('-', '').toLowerCase();
-  const uniqueLinkedPageIds = [...new Set(linkedPageIds)]
+  const uniqueLinkedPageIds = [...new Set([...linkedPageIds, ...configuredLinkedPageIds])]
     .filter(id => id.toLowerCase() !== normalizedPageId);
   const linkedPageCovers = [];
   for (const linkedPageId of uniqueLinkedPageIds) {
@@ -277,7 +277,14 @@ async function main() {
       throw new Error(`${definition.name}: 노션 제목 불일치 (${actualTitle || '제목 없음'})`);
     }
 
-    const media = await pageMediaReport(definition.pageId, page);
+    const configuredLinkedPageIds = definition.routes
+      .filter(routeItem => ['가게바로주문', '전화주문'].includes(routeItem.name))
+      .map(routeItem => notionPageIdFromHref(routeItem.url))
+      .filter(Boolean);
+    if (configuredLinkedPageIds.length !== 2) {
+      throw new Error(`${definition.name}: 사진용 연결 페이지가 정확히 2개가 아닙니다.`);
+    }
+    const media = await pageMediaReport(definition.pageId, page, configuredLinkedPageIds);
     const usesBodyImages = media.imageUrls.length === 3;
     const usesPageCovers = media.imageUrls.length === 0 && media.coverUrls.length === 3;
     const photoUrls = usesBodyImages

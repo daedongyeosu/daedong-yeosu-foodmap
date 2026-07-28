@@ -65,20 +65,43 @@ function imageUrl(block) {
   return '';
 }
 
-async function pageImageUrls(pageId) {
-  const urls = [];
+function fileUrl(block) {
+  if (block?.type !== 'file') return '';
+  if (block.file?.type === 'file') return block.file.file?.url || '';
+  if (block.file?.type === 'external') return block.file.external?.url || '';
+  return '';
+}
+
+function pageCoverUrl(page) {
+  if (page?.cover?.type === 'file') return page.cover.file?.url || '';
+  if (page?.cover?.type === 'external') return page.cover.external?.url || '';
+  return '';
+}
+
+async function pageMediaReport(pageId, page) {
+  const imageUrls = [];
+  const fileUrls = [];
+  const blockTypes = new Map();
   async function walk(parentId, depth = 0) {
     if (depth > 6) throw new Error(`${pageId}: 이미지 블록 중첩 깊이가 너무 큽니다.`);
     for (const block of await childBlocks(parentId)) {
+      blockTypes.set(block.type, (blockTypes.get(block.type) || 0) + 1);
       const url = imageUrl(block);
-      if (url) urls.push(url);
+      if (url) imageUrls.push(url);
+      const attachmentUrl = fileUrl(block);
+      if (attachmentUrl) fileUrls.push(attachmentUrl);
       if (block.has_children && !['child_page', 'child_database'].includes(block.type)) {
         await walk(block.id, depth + 1);
       }
     }
   }
   await walk(pageId);
-  return [...new Set(urls)];
+  return {
+    imageUrls: [...new Set(imageUrls)],
+    fileUrls: [...new Set(fileUrls)],
+    coverUrl: pageCoverUrl(page),
+    blockTypes: Object.fromEntries([...blockTypes.entries()].sort(([left], [right]) => left.localeCompare(right)))
+  };
 }
 
 function extensionFor(contentType, url) {
@@ -186,6 +209,7 @@ async function main() {
     if (manifestIds.has(definition.id)) throw new Error(`${definition.name}: 사진 manifest가 이미 존재합니다.`);
   }
 
+  const mediaReports = [];
   for (const definition of NEW_NOTION_STORES) {
     const page = await notion(`/pages/${definition.pageId}`);
     const actualTitle = titleFromPage(page);
@@ -193,11 +217,24 @@ async function main() {
       throw new Error(`${definition.name}: 노션 제목 불일치 (${actualTitle || '제목 없음'})`);
     }
 
-    const urls = await pageImageUrls(definition.pageId);
-    if (urls.length !== 3) {
-      throw new Error(`${definition.name}: 노션 사진이 정확히 3장이 아닙니다. 발견 ${urls.length}장`);
-    }
+    const media = await pageMediaReport(definition.pageId, page);
+    mediaReports.push({definition, ...media});
+    console.log(
+      `[노션 사진 진단] ${definition.name}: 이미지 블록 ${media.imageUrls.length}장, ` +
+      `파일 첨부 ${media.fileUrls.length}개, 표지 ${media.coverUrl ? '1개' : '없음'}, ` +
+      `블록 ${JSON.stringify(media.blockTypes)}`
+    );
+  }
 
+  const invalidMedia = mediaReports.filter(report => report.imageUrls.length !== 3);
+  if (invalidMedia.length > 0) {
+    throw new Error(
+      `노션 본문에 사진 3장이 확인되지 않은 가게: ` +
+      invalidMedia.map(report => `${report.definition.name}(${report.imageUrls.length}장)`).join(', ')
+    );
+  }
+
+  for (const {definition, imageUrls: urls} of mediaReports) {
     const photoDir = `assets/notion-store-photos/${definition.id.slice(0, 14)}`;
     await fs.mkdir(photoDir, {recursive: false});
     const imagePaths = [];

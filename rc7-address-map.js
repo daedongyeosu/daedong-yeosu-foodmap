@@ -133,6 +133,11 @@
     return '';
   }
 
+  function isYeosuRegion(region = {}) {
+    if (region.isYeosu === true) return true;
+    return /(?:여수|yeosu)/i.test([region.region1, region.region2, region.region3].filter(Boolean).join(' '));
+  }
+
   async function reverseRegionForCoords(coords) {
     const point = validCoords(coords);
     if (!point) return {};
@@ -156,12 +161,15 @@
       const district = address.city_district || address.borough || '';
       const region2 = [city, district].filter((value, index, list) => value && list.indexOf(value) === index).join(' ');
       const region3 = address.suburb || address.quarter || address.neighbourhood || address.town || address.village || '';
-      return analyticsCoarseRegion({
-        region1: address.province || address.state || '',
-        region2,
-        region3,
-        regionSource: 'browser_geolocation'
-      });
+      return {
+        ...analyticsCoarseRegion({
+          region1: address.province || address.state || '',
+          region2,
+          region3,
+          regionSource: 'browser_geolocation'
+        }),
+        isYeosu: /(?:여수|yeosu)/i.test([city, district, address.county, address.municipality].filter(Boolean).join(' '))
+      };
     } catch {
       return {};
     }
@@ -443,6 +451,26 @@
             regionSource: 'browser_geolocation'
           }
         : await reverseRegionForCoords(coords);
+      const outsideYeosu = !localArea && !isYeosuRegion(region);
+      if (outsideYeosu) {
+        button.disabled = false;
+        hideLocationRecovery();
+        button.innerHTML = '<span class="rc7-gps-symbol" aria-hidden="true">✓</span><span>여수 외 지역 · 전체 가게 보기</span>';
+        chooseAddress('여수 외 지역 · 전체 가게 보기', {
+          area: '여수시 전체',
+          coords: null,
+          sortByDistance: false,
+          type: 'current',
+          coordinateSource: 'browser-geolocation',
+          region1: region.region1 || '',
+          region2: region.region2 || '',
+          region3: region.region3 || '',
+          regionSource: 'browser_geolocation'
+        });
+        const hint = document.querySelector('#rc7MapHint');
+        if (hint) hint.textContent = '현재 위치가 여수 외 지역이라 여수 전체 가게를 보여드립니다.';
+        return;
+      }
       const area = region.region3 || region.region2 || '여수시 전체';
       button.disabled = false;
       hideLocationRecovery();

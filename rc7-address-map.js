@@ -9,6 +9,64 @@
   let renderedAddresses = [];
   let installed = false;
 
+  function inAppBrowserInfo() {
+    const userAgent = String(navigator.userAgent || '');
+    const android = /Android/i.test(userAgent);
+    if (/KAKAOTALK/i.test(userAgent)) return {name: '카카오톡', android};
+    if (/(FBAN|FBAV|FB_IAB)/i.test(userAgent)) return {name: '페이스북', android};
+    if (/Instagram/i.test(userAgent)) return {name: '인스타그램', android};
+    return null;
+  }
+
+  function chromeIntentUrl() {
+    const current = new URL(window.location.href);
+    const scheme = current.protocol.replace(':', '') || 'https';
+    const target = `${current.host}${current.pathname}${current.search}${current.hash}`;
+    return `intent://${target}#Intent;scheme=${scheme};package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(current.href)};end`;
+  }
+
+  function inAppBrowserNoticeMarkup() {
+    const browser = inAppBrowserInfo();
+    if (!browser) return '';
+    const action = browser.android
+      ? '<button type="button" data-rc7-open-chrome>Chrome에서 열기</button>'
+      : '<span>브라우저 메뉴에서 외부 브라우저로 열어 주세요.</span>';
+    return `<aside class="rc7-inapp-notice" role="note">
+      <span class="rc7-inapp-symbol" aria-hidden="true">!</span>
+      <span><b>${browser.name} 안에서 열렸습니다.</b><small>내부 브라우저에서는 위치 권한창이 나타나지 않을 수 있습니다.</small></span>
+      ${action}
+    </aside>`;
+  }
+
+  async function geolocationPermissionState() {
+    try {
+      if (!navigator.permissions?.query) return 'unknown';
+      const permission = await navigator.permissions.query({name: 'geolocation'});
+      return String(permission?.state || 'unknown');
+    } catch {
+      return 'unknown';
+    }
+  }
+
+  function showLocationRecovery(message, permissionState = 'unknown') {
+    const recovery = document.querySelector('#rc7LocationRecovery');
+    const copy = document.querySelector('#rc7LocationRecoveryCopy');
+    if (!recovery || !copy) return;
+    const browser = inAppBrowserInfo();
+    const denied = permissionState === 'denied';
+    copy.textContent = browser
+      ? `${browser.name} 내부 브라우저에서는 위치 권한창이 보이지 않을 수 있습니다. Chrome에서 다시 열거나 주소 검색·지도 선택을 이용해 주세요.`
+      : denied
+        ? '브라우저 설정에서 위치 권한을 허용한 뒤 다시 누르거나, 주소 검색·지도 선택을 이용해 주세요.'
+        : `${message} 주소 검색이나 지도 선택으로도 배달 위치를 바로 정할 수 있습니다.`;
+    recovery.hidden = false;
+  }
+
+  function hideLocationRecovery() {
+    const recovery = document.querySelector('#rc7LocationRecovery');
+    if (recovery) recovery.hidden = true;
+  }
+
   function validCoords(value) {
     const lat = Number(value?.lat), lng = Number(value?.lng);
     return Number.isFinite(lat) && Number.isFinite(lng) ? {lat, lng} : null;
@@ -257,11 +315,17 @@
     openModal(`<section class="address-single-sheet rc7-address-sheet" data-address-single>
       <div class="rc5-address-form rc7-address-main">
         <header class="rc7-address-head"><span>배달 위치</span><h2 id="modalTitle">주소 설정</h2><p>지도와 저장 주소로 원하는 위치를 빠르게 바꿀 수 있습니다.</p></header>
+        ${inAppBrowserNoticeMarkup()}
         <div id="addressSelectedPreview" class="address-selected-preview rc7-selected-preview"></div>
         <button class="rc5-address-launch rc7-address-search" type="button" data-rc5-postcode-open>
           <span>${escapeHtml(addressDraft.address || '도로명, 건물명 또는 지번으로 검색')}</span><b>검색</b>
         </button>
-        <button id="gpsLocationBtn" class="current-location-btn rc7-current-location" type="button"><span class="rc7-gps-symbol" aria-hidden="true">⌖</span><span>현재 위치로 찾기</span></button>
+        <button id="gpsLocationBtn" class="current-location-btn rc7-current-location" type="button"><span class="rc7-gps-symbol" aria-hidden="true">⌖</span><span>현재 위치 다시 확인</span></button>
+        <section id="rc7LocationRecovery" class="rc7-location-recovery" hidden role="status">
+          <span class="rc7-location-recovery-symbol" aria-hidden="true">!</span>
+          <span><b>위치 확인이 어려운가요?</b><small id="rc7LocationRecoveryCopy">주소 검색이나 지도 선택으로도 배달 위치를 정할 수 있습니다.</small></span>
+          <div><button type="button" data-rc5-postcode-open>주소 검색</button><button type="button" data-rc7-map-select>지도에서 선택</button></div>
+        </section>
         <section class="rc7-map-section" aria-labelledby="rc7MapTitle">
           <header><div><small>지도에서 위치 조정</small><h3 id="rc7MapTitle">핀을 배달 위치에 맞춰 주세요</h3></div><button type="button" data-rc7-map-current aria-label="현재 위치로 지도 이동">⌖</button></header>
           <div class="rc7-map-wrap"><div id="deliveryAddressMap" aria-label="배달 위치 선택 지도"></div><div class="rc7-center-pin" aria-hidden="true"><span></span></div></div>
@@ -355,13 +419,16 @@
     }
   }
 
-  function useGps() {
+  async function useGps() {
     const button = document.querySelector('#gpsLocationBtn');
     if (!button) return;
     if (!navigator.geolocation) {
       button.innerHTML = '<span class="rc7-gps-symbol" aria-hidden="true">⌖</span><span>이 기기는 위치 기능을 지원하지 않습니다</span>';
+      showLocationRecovery('이 기기는 위치 기능을 지원하지 않습니다.');
       return;
     }
+    const permissionState = await geolocationPermissionState();
+    hideLocationRecovery();
     button.disabled = true;
     button.innerHTML = '<span class="rc7-gps-symbol rc7-gps-loading" aria-hidden="true">⌖</span><span>현재 위치를 확인하고 있습니다…</span>';
     navigator.geolocation.getCurrentPosition(async position => {
@@ -378,6 +445,7 @@
         : await reverseRegionForCoords(coords);
       const area = region.region3 || region.region2 || '여수시 전체';
       button.disabled = false;
+      hideLocationRecovery();
       button.innerHTML = `<span class="rc7-gps-symbol" aria-hidden="true">✓</span><span>${accuracy <= 300 ? '현재 위치 확인 완료' : '위치 확인 완료 · 지도에서 한 번 확인해 주세요'}</span>`;
       chooseAddress(`현재 위치${area !== '여수시 전체' ? ` · ${area}` : ''}`, {
         area,
@@ -395,6 +463,7 @@
     }, error => {
       button.disabled = false;
       button.innerHTML = `<span class="rc7-gps-symbol" aria-hidden="true">!</span><span>${error.code === 1 ? '위치 권한을 허용한 뒤 다시 눌러 주세요' : '현재 위치를 확인하지 못했습니다'}</span>`;
+      showLocationRecovery(error.code === 1 ? '위치 권한이 허용되지 않았습니다.' : '현재 위치를 확인하지 못했습니다.', permissionState);
     }, {enableHighAccuracy: true, timeout: 12000, maximumAge: 120000});
   }
 
@@ -454,6 +523,23 @@
   }
 
   function handleClick(event) {
+    const chrome = event.target.closest('[data-rc7-open-chrome]');
+    if (chrome) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      window.location.href = chromeIntentUrl();
+      return;
+    }
+    const mapSelect = event.target.closest('[data-rc7-map-select]');
+    if (mapSelect) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const section = document.querySelector('.rc7-map-section');
+      section?.scrollIntoView({behavior: 'smooth', block: 'start'});
+      const hint = document.querySelector('#rc7MapHint');
+      if (hint) hint.textContent = '지도를 움직이거나 원하는 곳을 눌러 위치를 선택하세요.';
+      return;
+    }
     const gps = event.target.closest('#gpsLocationBtn');
     if (gps) {
       event.preventDefault();

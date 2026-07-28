@@ -1,6 +1,7 @@
 name: Import nine Notion stores
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - agent/sync-nine-new-stores

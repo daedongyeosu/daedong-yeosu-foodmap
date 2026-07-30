@@ -8,6 +8,7 @@
   let activeStore = null;
   let activeMenu = null;
   let lastFocused = null;
+  let lastMenuSelection = null;
   let menuChromeRevealTimer = 0;
 
   const escapeMenuHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({
@@ -152,7 +153,7 @@
   function menuCardMarkup(item) {
     const searchText = `${item.name} ${item.description} ${item.category}`.toLowerCase();
     return `
-      <article class="store-menu-card" data-menu-card data-menu-id="${escapeMenuHtml(item.id)}" data-category="${escapeMenuHtml(item.category)}" data-search="${escapeMenuHtml(searchText)}">
+      <article class="store-menu-card" role="button" tabindex="0" aria-label="${escapeMenuHtml(item.name)} 주문방법 보기" data-menu-card data-menu-select data-menu-id="${escapeMenuHtml(item.id)}" data-category="${escapeMenuHtml(item.category)}" data-search="${escapeMenuHtml(searchText)}">
         <div class="store-menu-photo">
           <img src="${escapeMenuHtml(item.image)}" alt="${escapeMenuHtml(item.name)}" loading="lazy" decoding="async">
           ${item.adultOnly ? '<span>19세 이상</span>' : ''}
@@ -161,6 +162,7 @@
           <p>${escapeMenuHtml(item.category)}</p>
           <h3>${escapeMenuHtml(item.name)}</h3>
           ${item.description ? `<div>${escapeMenuHtml(item.description)}</div>` : ''}
+          <span class="store-menu-card-action"><b>이 메뉴 주문하기</b><i aria-hidden="true">›</i></span>
         </div>
       </article>
     `;
@@ -244,6 +246,30 @@
             ${phoneLink ? `<a class="phone" href="${phoneLink}"><img src="assets/ui/phone.svg" alt="">전화주문하기<small>통화 중 메뉴 보기</small></a>` : ''}
           </div>
         ` : ''}
+
+        <div class="menu-order-sheet" data-menu-order-sheet hidden>
+          <button class="menu-order-sheet-backdrop" type="button" data-menu-order-sheet-close aria-label="주문방법 선택 닫기"></button>
+          <section class="menu-order-sheet-panel" role="dialog" aria-modal="true" aria-labelledby="selectedMenuOrderTitle">
+            <header>
+              <span>선택한 메뉴 주문하기</span>
+              <button type="button" data-menu-order-sheet-close aria-label="주문방법 선택 닫기">×</button>
+            </header>
+            <div class="menu-order-selected">
+              <img data-selected-menu-image src="" alt="">
+              <div>
+                <small data-selected-menu-category></small>
+                <h2 id="selectedMenuOrderTitle" data-selected-menu-name></h2>
+                <p>가격과 주문 가능 여부는 이동한 주문 화면에서 확인할 수 있습니다.</p>
+              </div>
+            </div>
+            <div class="menu-order-sheet-copy">
+              <h3>어디서 주문할까요?</h3>
+              <p>원하는 주문방법을 누르면 이 가게의 주문 화면으로 이동합니다.</p>
+            </div>
+            <div class="menu-order-grid">${primaryOrderMarkup(store)}</div>
+            ${otherOrderMarkup(store)}
+          </section>
+        </div>
       </section>
     `;
   }
@@ -316,8 +342,43 @@
     document.body.classList.remove('store-menu-open');
     activeStore = null;
     activeMenu = null;
+    lastMenuSelection = null;
     lastFocused?.focus?.();
     lastFocused = null;
+  }
+
+  function openMenuOrderSheet(card) {
+    const preview = card?.closest('.store-menu-preview');
+    const sheet = preview?.querySelector('[data-menu-order-sheet]');
+    const item = activeMenu?.items.find(menuItem => String(menuItem.id) === card?.dataset.menuId);
+    if (!preview || !sheet || !item) return;
+    const image = sheet.querySelector('[data-selected-menu-image]');
+    const category = sheet.querySelector('[data-selected-menu-category]');
+    const name = sheet.querySelector('[data-selected-menu-name]');
+    if (image) {
+      image.src = item.image;
+      image.alt = item.name;
+    }
+    if (category) category.textContent = item.category;
+    if (name) name.textContent = item.name;
+    preview.querySelector('[data-menu-search]')?.blur();
+    showMenuChrome(preview);
+    lastMenuSelection = card;
+    sheet.hidden = false;
+    preview.classList.add('menu-order-sheet-open');
+    window.requestAnimationFrame(() => {
+      sheet.querySelector('.menu-order-sheet-panel [data-menu-order-sheet-close]')?.focus();
+    });
+  }
+
+  function closeMenuOrderSheet(preview, {restoreFocus = true} = {}) {
+    const sheet = preview?.querySelector('[data-menu-order-sheet]');
+    if (!sheet || sheet.hidden) return false;
+    sheet.hidden = true;
+    preview.classList.remove('menu-order-sheet-open');
+    if (restoreFocus) lastMenuSelection?.focus?.();
+    lastMenuSelection = null;
+    return true;
   }
 
   function highlightedMenuHtml(value, query) {
@@ -426,6 +487,16 @@
       closeMenuPreview();
       return;
     }
+    const closeOrderSheet = event.target.closest('[data-menu-order-sheet-close]');
+    if (closeOrderSheet) {
+      closeMenuOrderSheet(closeOrderSheet.closest('.store-menu-preview'));
+      return;
+    }
+    const selectedMenu = event.target.closest('[data-menu-select]');
+    if (selectedMenu) {
+      openMenuOrderSheet(selectedMenu);
+      return;
+    }
     const clearSearch = event.target.closest('[data-menu-search-clear]');
     if (clearSearch) {
       const preview = clearSearch.closest('.store-menu-preview');
@@ -480,9 +551,18 @@
   document.addEventListener('keydown', event => {
     if (!document.body.classList.contains('store-menu-open')) return;
     const preview = document.querySelector('.store-menu-preview');
+    if ((event.key === 'Enter' || event.key === ' ') && event.target.matches('[data-menu-select]')) {
+      event.preventDefault();
+      openMenuOrderSheet(event.target);
+      return;
+    }
     if (event.key === 'Enter' && event.target.matches('[data-menu-search]')) {
       event.preventDefault();
       event.target.blur();
+      return;
+    }
+    if (event.key === 'Escape' && closeMenuOrderSheet(preview)) {
+      event.preventDefault();
       return;
     }
     if (event.key === 'Escape' && preview?.classList.contains('menu-search-active')) {

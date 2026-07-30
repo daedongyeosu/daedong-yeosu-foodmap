@@ -561,10 +561,11 @@ body.store-menu-open {
   flex-wrap: wrap;
   background: #102649;
 }
-.store-menu-sticky-actions img {
+.store-menu-sticky-actions img,
+.store-menu-sticky-actions svg {
   width: 21px;
   height: 21px;
-  filter: brightness(0) invert(1);
+  flex: 0 0 auto;
 }
 .store-menu-sticky-actions small {
   width: 100%;

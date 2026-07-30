@@ -51,7 +51,20 @@ try {
   await check(page.locator('[data-menu-card]:visible h3').innerText().then(value => value.includes('베지테리언')), '검색 결과 메뉴를 즉시 확인');
   await check(page.locator('[data-menu-card]:visible mark').count().then(count => count > 0), '메뉴명에서 일치 검색어 강조');
   await check(page.locator('[data-menu-card]:visible').boundingBox().then(box => Boolean(box && box.y < 500)), '키보드 위에서도 첫 검색 결과가 보이는 위치에 표시');
+  await check(page.locator('[data-menu-card]:visible .store-menu-card-action').evaluate(node => getComputedStyle(node).display !== 'none'), '검색 결과에 주문 연결 동작 표시');
+  const directOrderHref = await page.locator('.store-menu-sticky-actions .primary').getAttribute('href');
+  await page.locator('[data-menu-card]:visible').click();
+  await check(page.locator('[data-menu-order-sheet]').evaluate(node => !node.hidden), '검색 결과 메뉴 터치 시 주문방법 선택창 열림');
+  await check(page.locator('[data-selected-menu-name]').innerText().then(value => value.includes('베지테리언')), '선택한 메뉴명을 주문방법 선택창에 유지');
+  await check(page.locator('[data-selected-menu-image]').getAttribute('src').then(value => Boolean(value)), '선택한 메뉴 사진을 주문방법 선택창에 유지');
+  await check(page.locator('[data-menu-order-sheet] [data-menu-order="direct"]').getAttribute('href').then(value => value === directOrderHref), '기존 가게바로주문 링크 그대로 연결');
+  await check(page.locator('[data-menu-order-sheet] [data-menu-order="phone"]').getAttribute('href').then(value => String(value).startsWith('tel:')), '전화주문 링크 제공');
+  await check(search.evaluate(node => document.activeElement !== node), '메뉴 선택 시 검색 키보드 닫힘');
   await page.screenshot({path: 'browser-alien-pizza-menu-search.png', fullPage: false});
+
+  await page.locator('.menu-order-sheet-panel [data-menu-order-sheet-close]').click();
+  await check(page.locator('[data-menu-order-sheet]').evaluate(node => node.hidden), '주문방법 선택창 닫기');
+  await check(preview.evaluate(node => node.classList.contains('menu-search-active')), '주문방법 선택창을 닫아도 검색 결과 유지');
 
   await page.locator('[data-menu-search-clear]').click();
   await check(page.locator('[data-menu-result-count]').innerText().then(value => value.trim() === '53'), '검색어 지우기 시 전체 53개 메뉴 복원');

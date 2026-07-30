@@ -57,9 +57,19 @@ try {
   await check(page.locator('[data-menu-order-sheet]').evaluate(node => !node.hidden), '검색 결과 메뉴 터치 시 주문방법 선택창 열림');
   await check(page.locator('[data-selected-menu-name]').innerText().then(value => value.includes('베지테리언')), '선택한 메뉴명을 주문방법 선택창에 유지');
   await check(page.locator('[data-selected-menu-image]').getAttribute('src').then(value => Boolean(value)), '선택한 메뉴 사진을 주문방법 선택창에 유지');
+  await check(page.locator('[data-menu-order-sheet] .menu-order-more-tip').innerText().then(value => value.includes('다른 메뉴도 함께 주문할 수 있어요')), '주문앱에서 다른 메뉴도 추가할 수 있음을 안내');
   await check(page.locator('[data-menu-order-sheet] [data-menu-order="direct"]').getAttribute('href').then(value => value === directOrderHref), '기존 가게바로주문 링크 그대로 연결');
+  await check(page.locator('[data-menu-order-sheet] [data-menu-order="direct"] .menu-order-icon svg path').count().then(count => count === 2), '가게바로주문 아이콘을 외부 파일 없이 표시');
   await check(page.locator('[data-menu-order-sheet] [data-menu-order="phone"]').getAttribute('href').then(value => String(value).startsWith('tel:')), '전화주문 링크 제공');
   await check(search.evaluate(node => document.activeElement !== node), '메뉴 선택 시 검색 키보드 닫힘');
+
+  const otherToggle = page.locator('[data-menu-order-sheet] [data-menu-other-toggle]');
+  await otherToggle.click();
+  await page.waitForTimeout(350);
+  await check(otherToggle.getAttribute('aria-expanded').then(value => value === 'true'), '다른 주문앱 버튼의 펼침 상태 표시');
+  await check(page.locator('[data-menu-order-sheet] [data-menu-other-list]').isVisible(), '다른 주문앱 목록을 즉시 표시');
+  await check(page.locator('[data-menu-order-sheet] [data-menu-other-list] a').count().then(count => count === 3), '등록된 다른 주문앱 3개 표시');
+  await check(page.locator('[data-menu-order-sheet] [data-menu-other-list]').boundingBox().then(box => Boolean(box && box.y >= 0 && box.y < 700)), '펼친 다른 주문앱을 현재 화면 안으로 이동');
   await page.screenshot({path: 'browser-alien-pizza-menu-search.png', fullPage: false});
 
   await page.locator('.menu-order-sheet-panel [data-menu-order-sheet-close]').click();

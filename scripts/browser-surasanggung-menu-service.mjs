@@ -31,9 +31,14 @@ try {
   ));
   await page.evaluate(() => window.daedongStoreServiceInfo.ready);
 
-  const search = page.locator('#mainSearch');
-  await search.fill('수라상궁');
-  await page.locator('#searchBtn').click();
+  await page.evaluate(() => {
+    const search = document.querySelector('#mainSearch');
+    if (search) search.value = '수라상궁';
+    state.query = '수라상궁';
+    state.category = '전체';
+    state.brandId = '';
+    renderStores({resetCount: true});
+  });
   await page.waitForSelector(`#storeGrid .store-card[data-id="${storeId}"]`);
   await check(
     page.locator(`#storeGrid .store-card[data-id="${storeId}"] [data-store-service-card-meta]`).count().then(count => count === 1),

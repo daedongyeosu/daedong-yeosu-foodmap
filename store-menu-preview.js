@@ -2,7 +2,7 @@
 
 (() => {
   const MENU_STORES = Object.freeze({
-    a089d1d54720b48e: 'data/store-menus/a089d1d54720b48e.json'
+    a089d1d54720b48e: 'store-menu-content/a089d1d54720b48e/menu.json'
   });
   const menuCache = new Map();
   let activeStore = null;
@@ -40,7 +40,7 @@
       if (!target) continue;
       target.insertAdjacentHTML('beforebegin', `
         <button class="store-menu-preview-entry" type="button" data-store-menu-preview="${storeId}">
-          <img src="assets/store-menus/${storeId}/main.jpg" alt="">
+          <img src="store-menu-content/${storeId}/main.jpg" alt="">
           <span>
             <b>음식보기</b>
             <small>사진과 설명으로 전체 메뉴 미리보기 · 가격 미표시</small>

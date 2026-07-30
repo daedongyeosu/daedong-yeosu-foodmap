@@ -5,7 +5,7 @@ import fs from 'node:fs';
 const read = path => fs.readFileSync(path);
 const text = path => read(path).toString('utf8');
 const sha256 = path => crypto.createHash('sha256').update(read(path)).digest('hex');
-const menu = JSON.parse(text('data/store-menus/a089d1d54720b48e.json'));
+const menu = JSON.parse(text('store-menu-content/a089d1d54720b48e/menu.json'));
 const stores = JSON.parse(text('data/stores.json'));
 const index = text('index.html');
 const script = text('store-menu-preview.js');

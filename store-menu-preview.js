@@ -8,6 +8,7 @@
   let activeStore = null;
   let activeMenu = null;
   let lastFocused = null;
+  let menuChromeRevealTimer = 0;
 
   const escapeMenuHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({
     '&': '&amp;',
@@ -243,6 +244,27 @@
     `;
   }
 
+  function showMenuChrome(preview) {
+    window.clearTimeout(menuChromeRevealTimer);
+    menuChromeRevealTimer = 0;
+    preview?.classList.remove('menu-chrome-hidden');
+  }
+
+  function handleMenuScroll(scrollRoot) {
+    const preview = scrollRoot.closest('.store-menu-preview');
+    if (!preview) return;
+    if (!window.matchMedia('(max-width: 720px)').matches || scrollRoot.scrollTop <= 8) {
+      showMenuChrome(preview);
+      return;
+    }
+    preview.classList.add('menu-chrome-hidden');
+    window.clearTimeout(menuChromeRevealTimer);
+    menuChromeRevealTimer = window.setTimeout(() => {
+      preview.classList.remove('menu-chrome-hidden');
+      menuChromeRevealTimer = 0;
+    }, 700);
+  }
+
   async function openMenuPreview(storeId, trigger) {
     const store = storeById(storeId);
     if (!store) return;
@@ -262,6 +284,8 @@
       activeStore = store;
       activeMenu = menu;
       overlay.innerHTML = previewMarkup(menu, store);
+      const scrollRoot = overlay.querySelector('.store-menu-scroll');
+      scrollRoot?.addEventListener('scroll', () => handleMenuScroll(scrollRoot), {passive: true});
       overlay.querySelector('[data-menu-preview-close]')?.focus();
     } catch (error) {
       overlay.innerHTML = `
@@ -274,6 +298,8 @@
   }
 
   function closeMenuPreview() {
+    window.clearTimeout(menuChromeRevealTimer);
+    menuChromeRevealTimer = 0;
     const overlay = document.querySelector('[data-store-menu-overlay]');
     if (overlay) {
       overlay.hidden = true;
@@ -316,6 +342,7 @@
     const category = event.target.closest('[data-menu-category]');
     if (category) {
       const preview = category.closest('.store-menu-preview');
+      showMenuChrome(preview);
       preview.querySelectorAll('[data-menu-category]').forEach(button => button.classList.toggle('active', button === category));
       filterMenus(preview);
       return;
@@ -330,11 +357,21 @@
   });
 
   document.addEventListener('input', event => {
-    if (event.target.matches('[data-menu-search]')) filterMenus(event.target.closest('.store-menu-preview'));
+    if (event.target.matches('[data-menu-search]')) {
+      const preview = event.target.closest('.store-menu-preview');
+      showMenuChrome(preview);
+      filterMenus(preview);
+    }
   });
 
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && document.body.classList.contains('store-menu-open')) closeMenuPreview();
+  });
+
+  window.addEventListener('resize', () => {
+    if (!window.matchMedia('(max-width: 720px)').matches) {
+      showMenuChrome(document.querySelector('.store-menu-preview'));
+    }
   });
 
   new MutationObserver(ensureMenuEntryButton).observe(document.documentElement, {childList: true, subtree: true});

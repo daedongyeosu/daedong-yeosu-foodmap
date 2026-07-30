@@ -75,14 +75,23 @@
     return routePhone ? `tel:${routePhone}` : url;
   }
 
+  function storeIconMarkup() {
+    return `
+      <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <path d="M12 27v24h40V27M9 24l6-13h34l6 13" fill="none" stroke="#ff4d1f" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"></path>
+        <path d="M9 24c0 7 11 7 11 0 0 7 12 7 12 0 0 7 12 7 12 0 0 7 11 7 11 0M25 51V38h14v13" fill="none" stroke="#ff4d1f" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    `;
+  }
+
   function channelIcon(key, channel) {
     if (key === 'direct') {
-      return '<svg aria-hidden="true"><use href="assets/ui/ui-icons.svg#store"></use></svg>';
+      return storeIconMarkup();
     }
     if (key === 'brand') {
       return channel?.icon
         ? `<img src="${escapeMenuHtml(channel.icon)}" alt="">`
-        : '<svg aria-hidden="true"><use href="assets/ui/ui-icons.svg#store"></use></svg>';
+        : storeIconMarkup();
     }
     if (key === 'mukkebi') return '<img src="assets/mukkebi-v7.png" alt="">';
     if (key === 'ddangyo') return '<img src="assets/ddangyo-v7.png" alt="">';
@@ -135,10 +144,8 @@
     if (!definitions.length) return '';
     return `
       <div class="menu-other-orders">
-        <button type="button" data-menu-other-toggle aria-expanded="false">
-          다른 주문앱 보기 <span>${definitions.length}개</span>
-        </button>
-        <div class="menu-other-order-list" data-menu-other-list hidden>
+        <div class="menu-other-order-list" data-menu-other-list aria-live="polite" hidden>
+          <p>다른 주문앱을 선택하세요</p>
           ${definitions.map(([label, channel]) => `
             <a href="${escapeMenuHtml(channelUrl(channel))}" target="_blank" rel="noopener">
               <span>${label}</span><b>›</b>
@@ -146,6 +153,10 @@
           `).join('')}
           <small>앱 이름은 주문 경로 안내를 위해 표시되며, 공식 제휴·후원을 의미하지 않습니다.</small>
         </div>
+        <button type="button" data-menu-other-toggle aria-expanded="false">
+          <strong data-menu-other-label>다른 주문앱 보기</strong>
+          <span><b>${definitions.length}개</b><i aria-hidden="true">⌄</i></span>
+        </button>
       </div>
     `;
   }
@@ -262,6 +273,10 @@
                 <p>가격과 주문 가능 여부는 이동한 주문 화면에서 확인할 수 있습니다.</p>
               </div>
             </div>
+            <p class="menu-order-more-tip">
+              <b>다른 메뉴도 함께 주문할 수 있어요</b>
+              <span>주문앱으로 이동한 뒤 원하는 메뉴를 더 추가해 함께 주문하세요.</span>
+            </p>
             <div class="menu-order-sheet-copy">
               <h3>어디서 주문할까요?</h3>
               <p>원하는 주문방법을 누르면 이 가게의 주문 화면으로 이동합니다.</p>
@@ -522,9 +537,18 @@
     const other = event.target.closest('[data-menu-other-toggle]');
     if (other) {
       const list = other.parentElement.querySelector('[data-menu-other-list]');
+      if (!list) return;
       const expanded = other.getAttribute('aria-expanded') !== 'true';
       other.setAttribute('aria-expanded', String(expanded));
+      other.classList.toggle('is-expanded', expanded);
       list.hidden = !expanded;
+      const label = other.querySelector('[data-menu-other-label]');
+      if (label) label.textContent = expanded ? '다른 주문앱 접기' : '다른 주문앱 보기';
+      if (expanded) {
+        window.requestAnimationFrame(() => {
+          list.scrollIntoView({behavior: 'smooth', block: 'center'});
+        });
+      }
     }
   });
 

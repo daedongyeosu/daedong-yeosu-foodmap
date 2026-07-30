@@ -40,13 +40,20 @@ assert.equal(
   '22f21699710ccd27de9dc73d4521fb79fac13c2a209be73e8e34519f58f087f1'
 );
 
-assert.match(index, /store-menu-preview\.css\?v=alien-pizza-5/);
-assert.match(index, /store-menu-preview\.js\?v=alien-pizza-5/);
+assert.match(index, /store-menu-preview\.css\?v=alien-pizza-6/);
+assert.match(index, /store-menu-preview\.js\?v=alien-pizza-6/);
 assert.match(script, /data-store-menu-preview/);
 assert.match(script, /가게바로주문 결제하기/);
 assert.match(script, /통화 중에도 이 메뉴를 계속 볼 수 있어요/);
 assert.match(script, /다른 주문앱 보기/);
-assert.match(script, /data-menu-other-list hidden/);
+assert.match(script, /data-menu-other-list[^>]*hidden/);
+assert.match(script, /다른 메뉴도 함께 주문할 수 있어요/);
+assert.match(script, /원하는 메뉴를 더 추가해 함께 주문하세요/);
+assert.match(script, /storeIconMarkup/);
+assert.match(script, /stroke="#ff4d1f"/);
+assert.doesNotMatch(script, /ui-icons\.svg#store/);
+assert.match(script, /다른 주문앱 접기/);
+assert.match(script, /scrollIntoView\(\{behavior: 'smooth', block: 'center'\}\)/);
 assert.match(script, /assets\/mukkebi-v7\.png/);
 assert.match(script, /assets\/ddangyo-v7\.png/);
 assert.match(script, /assets\/ui\/phone\.svg/);
@@ -77,6 +84,9 @@ assert.match(style, /\.store-menu-copy mark/);
 assert.match(style, /\.store-menu-card-action/);
 assert.match(style, /\.menu-order-sheet-panel/);
 assert.match(style, /\.menu-order-sheet\[hidden\]/);
+assert.match(style, /\.menu-order-more-tip/);
+assert.match(style, /\.menu-other-orders > button\.is-expanded/);
+assert.match(style, /border: 2px solid #ff8b6d/);
 assert.doesNotMatch(style, /\.store-menu-preview\.menu-chrome-hidden\s*\{\s*grid-template-rows/);
 assert.doesNotMatch(style, /\.store-menu-preview\.menu-chrome-hidden \.store-menu-tools\s*\{[^}]*max-height/s);
 assert.match(style, /translate\(-50%, calc\(100% \+ 32px\)\)/);

@@ -182,7 +182,7 @@ function fxOpenStoreShare(store,target){
  const mobileShare=fxPlatform()!=='other'&&Boolean(navigator.share);
  openModal(`<section class="home-share-sheet store-share-sheet" data-store-share-id="${escapeHtml(store.id)}">
   <h2 id="modalTitle">${escapeHtml(store.name)} 공유하기</h2>
-  <p>전단지 QR·Bitly의 목적지에는 아래 가게 주소를 사용하세요.</p>
+  <p>가게 주소를 복사해 카카오톡·문자 등으로 공유해보세요.</p>
   <div class="home-share-preview store-share-preview">${photo?`<img src="${escapeHtml(photo)}" alt="${escapeHtml(store.name)}">`:`<img src="assets/logo.png" alt="대동여수음식지도">`}<span><b>${escapeHtml(store.name)}</b><small>가게를 바로 여는 대동여수음식지도 주소</small></span></div>
   <label class="store-share-url-label" for="storeShareUrl">가게 공유주소</label>
   <div class="store-share-url-row">
@@ -190,7 +190,7 @@ function fxOpenStoreShare(store,target){
    <button class="store-share-copy glass-action" type="button" data-store-share-copy="${escapeHtml(store.id)}">링크 복사</button>
   </div>
   <div class="home-share-actions">${mobileShare?`<button class="home-share-secondary glass-action" type="button" data-store-share-action="${escapeHtml(store.id)}">휴대폰 공유창 열기</button>`:''}</div>
-  <p class="home-share-status" role="status" aria-live="polite" data-store-share-status>PC에서는 링크 복사를 누른 뒤 Bitly에 붙여넣으면 됩니다.</p>
+  <p class="home-share-status" role="status" aria-live="polite" data-store-share-status>링크 복사 버튼을 누르면 가게 주소가 복사됩니다.</p>
  </section>`);
  requestAnimationFrame(()=>document.querySelector('[data-store-share-url]')?.select());
 }
@@ -206,7 +206,7 @@ async function fxCopyStoreShareUrl(storeId){
    const copied=document.execCommand('copy');
    if(!copied)throw new Error('copy failed');
   }
-  fxSetStoreShareStatus('가게 링크를 복사했습니다. Bitly 목적지 주소에 붙여넣어 주세요.');
+  fxSetStoreShareStatus('가게 링크를 복사했습니다. 원하는 곳에 붙여넣어 공유해 주세요.');
   fxShareToast(`${store.name} 가게 링크를 복사했습니다.`);
  }catch{
   document.querySelector('[data-store-share-url]')?.select();

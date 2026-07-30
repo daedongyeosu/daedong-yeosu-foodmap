@@ -102,6 +102,7 @@ jobs:
           BASE_URL=http://127.0.0.1:4173 node scripts/browser-smoke.mjs
           BASE_URL=http://127.0.0.1:4173 node scripts/browser-nine-store-galleries.mjs
           BASE_URL=http://127.0.0.1:4173 node scripts/browser-alien-pizza-menu-search.mjs
+          BASE_URL=http://127.0.0.1:4173 node scripts/browser-domino-menu-preview.mjs
 
       - name: Build validation summary
         shell: bash
@@ -117,7 +118,8 @@ jobs:
             photo: read('photo-batch2-integrity-result.json'),
             browser: read('browser-smoke-report.json'),
             newStoreGalleries: read('browser-nine-store-galleries-report.json'),
-            menuSearch: read('browser-alien-pizza-menu-search-report.json')
+            menuSearch: read('browser-alien-pizza-menu-search-report.json'),
+            dominoMenu: read('browser-domino-menu-preview-report.json')
           };
           const state = {
             success: Object.values(reports).every(report => report.success),
@@ -148,6 +150,9 @@ jobs:
             browser-alien-pizza-menu-search-report.json
             browser-alien-pizza-menu-search.png
             browser-alien-pizza-menu-search-failure.png
+            browser-domino-menu-preview-report.json
+            browser-domino-menu-preview.png
+            browser-domino-menu-preview-failure.png
             browser-server.log
             integration-change-list.log
           if-no-files-found: warn

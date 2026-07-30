@@ -16,7 +16,9 @@ assert.match(finalExperience,/function fxShare\(store,target\)\{fxOpenStoreShare
 assert.match(finalExperience,/data-store-share-url/,'가게 공유주소를 화면에서 직접 확인할 수 있어야 합니다.');
 assert.match(finalExperience,/data-store-share-copy/,'PC에서 가게 공유주소를 복사할 수 있어야 합니다.');
 assert.match(finalExperience,/fxPlatform\(\)!=='other'&&Boolean\(navigator\.share\)/,'휴대폰에서만 운영체제 공유창 버튼을 표시해야 합니다.');
-assert.match(finalExperience,/Bitly 목적지 주소에 붙여넣어 주세요/,'복사 뒤 Bitly 사용 안내를 표시해야 합니다.');
+assert.doesNotMatch(finalExperience,/Bitly|전단지 QR/,'고객 공유화면에 운영자용 Bitly·QR 문구가 노출되면 안 됩니다.');
+assert.match(finalExperience,/가게 주소를 복사해 카카오톡·문자 등으로 공유해보세요/,'고객에게 공유 방법을 자연스럽게 안내해야 합니다.');
+assert.match(finalExperience,/원하는 곳에 붙여넣어 공유해 주세요/,'복사 완료 뒤 고객용 안내를 표시해야 합니다.');
 assert.match(finalExperience,/new URLSearchParams\(location\.search\)\.get\(FX_STORE_SHARE_PARAM\)/,'진입 URL에서 공유 가게 ID를 읽어야 합니다.');
 assert.match(finalExperience,/await fxOpenSharedStoreFromUrl\(\)/,'초기화가 끝난 뒤 공유된 가게를 열어야 합니다.');
 assert.match(app,/!requestedSharedStoreId && !startupBypassHeroStoreIds\.has\(String\(requestedHeroStoreId\|\|''\)\) && localStorage\.getItem\('hideStartup'\)/,'공유 가게 진입 때 시작 광고가 팝업을 덮으면 안 됩니다.');

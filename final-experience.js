@@ -172,24 +172,69 @@ function fxStoreShareUrl(store){
  url.searchParams.set(FX_STORE_SHARE_PARAM,String(store.id));
  return url.href;
 }
-async function fxShare(store,target){
+function fxSetStoreShareStatus(message){
+ const status=document.querySelector('[data-store-share-status]');
+ if(status)status.textContent=message;
+}
+function fxOpenStoreShare(store,target){
  fxGull(target,false);
- const url=fxStoreShareUrl(store),title=`${store.name} · 대동여수음식지도`;
- const payload={title,text:`${store.name} 가게 정보를 대동여수음식지도에서 확인해보세요.`,url};
- if(navigator.share&&(!navigator.canShare||navigator.canShare(payload))){
-  try{await navigator.share(payload);return;}catch(error){if(error?.name==='AbortError')return;}
- }
+ const url=fxStoreShareUrl(store),photo=fxPhoto(store);
+ const mobileShare=fxPlatform()!=='other'&&Boolean(navigator.share);
+ openModal(`<section class="home-share-sheet store-share-sheet" data-store-share-id="${escapeHtml(store.id)}">
+  <h2 id="modalTitle">${escapeHtml(store.name)} 공유하기</h2>
+  <p>전단지 QR·Bitly의 목적지에는 아래 가게 주소를 사용하세요.</p>
+  <div class="home-share-preview store-share-preview">${photo?`<img src="${escapeHtml(photo)}" alt="${escapeHtml(store.name)}">`:`<img src="assets/logo.png" alt="대동여수음식지도">`}<span><b>${escapeHtml(store.name)}</b><small>가게를 바로 여는 대동여수음식지도 주소</small></span></div>
+  <label class="store-share-url-label" for="storeShareUrl">가게 공유주소</label>
+  <div class="store-share-url-row">
+   <input id="storeShareUrl" class="store-share-url" type="text" readonly value="${escapeHtml(url)}" data-store-share-url>
+   <button class="store-share-copy glass-action" type="button" data-store-share-copy="${escapeHtml(store.id)}">링크 복사</button>
+  </div>
+  <div class="home-share-actions">${mobileShare?`<button class="home-share-secondary glass-action" type="button" data-store-share-action="${escapeHtml(store.id)}">휴대폰 공유창 열기</button>`:''}</div>
+  <p class="home-share-status" role="status" aria-live="polite" data-store-share-status>PC에서는 링크 복사를 누른 뒤 Bitly에 붙여넣으면 됩니다.</p>
+ </section>`);
+ requestAnimationFrame(()=>document.querySelector('[data-store-share-url]')?.select());
+}
+async function fxCopyStoreShareUrl(storeId){
+ const store=fxStoreById(storeId);
+ if(!store)return;
+ const url=fxStoreShareUrl(store);
  try{
   if(navigator.clipboard?.writeText)await navigator.clipboard.writeText(url);
   else{
-   const input=document.createElement('textarea');input.value=url;input.setAttribute('readonly','');input.style.position='fixed';input.style.opacity='0';
-   document.body.append(input);input.select();document.execCommand('copy');input.remove();
+   const input=document.querySelector('[data-store-share-url]');
+   input?.select();
+   const copied=document.execCommand('copy');
+   if(!copied)throw new Error('copy failed');
   }
+  fxSetStoreShareStatus('가게 링크를 복사했습니다. Bitly 목적지 주소에 붙여넣어 주세요.');
   fxShareToast(`${store.name} 가게 링크를 복사했습니다.`);
  }catch{
-  fxShareToast(`가게 공유 링크: ${url}`);
+  document.querySelector('[data-store-share-url]')?.select();
+  fxSetStoreShareStatus('자동 복사가 차단되었습니다. 위 주소를 직접 복사해 주세요.');
  }
 }
+async function fxShareStore(storeId,target){
+ const store=fxStoreById(storeId);
+ if(!store)return;
+ const url=fxStoreShareUrl(store),title=`${store.name} · 대동여수음식지도`;
+ const payload={title,text:`${store.name} 가게 정보를 대동여수음식지도에서 확인해보세요.`,url};
+ if(!navigator.share||(navigator.canShare&&!navigator.canShare(payload))){
+  await fxCopyStoreShareUrl(store.id);
+  return;
+ }
+ try{
+  if(target)target.disabled=true;
+  fxSetStoreShareStatus('휴대폰 공유창을 여는 중입니다…');
+  await navigator.share(payload);
+  fxSetStoreShareStatus('공유가 완료되었습니다.');
+ }catch(error){
+  if(error?.name==='AbortError')fxSetStoreShareStatus('공유를 취소했습니다. 가게 주소는 위에서 언제든 복사할 수 있습니다.');
+  else await fxCopyStoreShareUrl(store.id);
+ }finally{
+  if(target?.isConnected)target.disabled=false;
+ }
+}
+function fxShare(store,target){fxOpenStoreShare(store,target);}
 function fxShareToast(message){
  document.querySelector('.home-share-toast')?.remove();
  const toast=document.createElement('div');toast.className='home-share-toast';toast.setAttribute('role','status');toast.setAttribute('aria-live','polite');toast.textContent=message;
@@ -269,6 +314,10 @@ function fxHandleHomeShareClick(event){
  if(homeShare){event.preventDefault();event.stopImmediatePropagation();fxOpenHomeShare(homeShare);return;}
  const homeShareAction=event.target.closest('[data-home-share-action]');
  if(homeShareAction){event.preventDefault();event.stopImmediatePropagation();fxShareHome(homeShareAction);}
+ const storeShareCopy=event.target.closest('[data-store-share-copy]');
+ if(storeShareCopy){event.preventDefault();event.stopImmediatePropagation();fxCopyStoreShareUrl(storeShareCopy.dataset.storeShareCopy);return;}
+ const storeShareAction=event.target.closest('[data-store-share-action]');
+ if(storeShareAction){event.preventDefault();event.stopImmediatePropagation();fxShareStore(storeShareAction.dataset.storeShareAction,storeShareAction);}
 }
 document.addEventListener('click',fxHandleHomeShareClick,true);
 

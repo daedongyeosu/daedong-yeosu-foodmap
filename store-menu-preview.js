@@ -253,7 +253,7 @@
   function handleMenuScroll(scrollRoot) {
     const preview = scrollRoot.closest('.store-menu-preview');
     if (!preview) return;
-    if (!window.matchMedia('(max-width: 720px)').matches || scrollRoot.scrollTop <= 8) {
+    if (!window.matchMedia('(max-width: 720px)').matches || scrollRoot.scrollTop <= 56) {
       showMenuChrome(preview);
       return;
     }
@@ -262,7 +262,7 @@
     menuChromeRevealTimer = window.setTimeout(() => {
       preview.classList.remove('menu-chrome-hidden');
       menuChromeRevealTimer = 0;
-    }, 700);
+    }, 500);
   }
 
   async function openMenuPreview(storeId, trigger) {

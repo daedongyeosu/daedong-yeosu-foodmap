@@ -513,8 +513,8 @@ body.store-menu-open {
 
 @media (max-width: 720px) {
   .store-menu-preview {
-    grid-template-rows: 54px minmax(0, 1fr);
-    transition: grid-template-rows .18s ease;
+    position: relative;
+    display: block;
   }
   .store-menu-preview-entry {
     grid-template-columns: 58px minmax(0, 1fr) auto;
@@ -527,10 +527,17 @@ body.store-menu-open {
     font-size: 12px;
   }
   .store-menu-topbar {
+    position: absolute;
+    inset: 0 0 auto;
     height: 54px;
     min-height: 0;
     overflow: hidden;
     transition: opacity .16s ease, transform .18s ease;
+  }
+  .store-menu-scroll {
+    height: 100%;
+    box-sizing: border-box;
+    padding-top: 54px;
   }
   .store-menu-hero {
     display: block;
@@ -558,16 +565,13 @@ body.store-menu-open {
     grid-template-columns: repeat(2, 1fr);
   }
   .store-menu-tools {
-    max-height: 150px;
+    top: 54px;
     padding: 8px;
     gap: 7px;
-    overflow: hidden;
     transition:
-      max-height .2s ease,
-      padding .2s ease,
-      gap .2s ease,
       opacity .14s ease,
       transform .2s ease,
+      top .2s ease,
       border-color .2s ease;
   }
   .store-menu-tools label {
@@ -619,21 +623,15 @@ body.store-menu-open {
     min-height: 54px;
     font-size: 13px;
   }
-  .store-menu-preview.menu-chrome-hidden {
-    grid-template-rows: 0 minmax(0, 1fr);
-  }
   .store-menu-preview.menu-chrome-hidden .store-menu-topbar {
     opacity: 0;
     transform: translateY(-100%);
     pointer-events: none;
   }
   .store-menu-preview.menu-chrome-hidden .store-menu-tools {
-    max-height: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    gap: 0;
+    top: 0;
     opacity: 0;
-    transform: translateY(-12px);
+    transform: translateY(-100%);
     border-bottom-color: transparent;
     pointer-events: none;
   }

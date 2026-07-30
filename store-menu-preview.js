@@ -2,7 +2,21 @@
 
 (() => {
   const MENU_STORES = Object.freeze({
-    a089d1d54720b48e: 'store-menu-content/a089d1d54720b48e/menu.json'
+    a089d1d54720b48e: Object.freeze({
+      path: 'store-menu-content/a089d1d54720b48e/menu.json',
+      entryImage: 'store-menu-content/a089d1d54720b48e/main.jpg',
+      itemCount: 53
+    }),
+    '2f4c3cfb0866c4a4': Object.freeze({
+      path: 'store-menu-content/domino/menu.json',
+      entryImage: 'store-menu-content/domino/main.jpg',
+      itemCount: 70
+    }),
+    dc638b23f8cf3c5b: Object.freeze({
+      path: 'store-menu-content/domino/menu.json',
+      entryImage: 'store-menu-content/domino/main.jpg',
+      itemCount: 70
+    })
   });
   const menuCache = new Map();
   let activeStore = null;
@@ -41,18 +55,19 @@
 
   function ensureMenuEntryButton() {
     for (const storeId of Object.keys(MENU_STORES)) {
+      const menuStore = MENU_STORES[storeId];
       const detail = document.querySelector(`#modalContent .store-detail[data-store-id="${storeId}"]`);
       if (!detail || detail.querySelector('[data-store-menu-preview]')) continue;
       const target = detail.querySelector('.detail-routes') || detail.querySelector('.detail-personal-actions');
       if (!target) continue;
       target.insertAdjacentHTML('beforebegin', `
         <button class="store-menu-preview-entry" type="button" data-store-menu-preview="${storeId}">
-          <img src="store-menu-content/${storeId}/main.jpg" alt="">
+          <img src="${menuStore.entryImage}" alt="">
           <span>
             <b>음식보기</b>
             <small>사진과 설명으로 전체 메뉴 미리보기 · 가격 미표시</small>
           </span>
-          <strong>53개 ›</strong>
+          <strong>${menuStore.itemCount}개 ›</strong>
         </button>
       `);
     }
@@ -60,7 +75,7 @@
 
   async function loadMenu(storeId) {
     if (menuCache.has(storeId)) return menuCache.get(storeId);
-    const response = await fetch(MENU_STORES[storeId], {cache: 'no-store'});
+    const response = await fetch(MENU_STORES[storeId].path, {cache: 'no-store'});
     if (!response.ok) throw new Error(`메뉴 정보를 불러오지 못했습니다. (${response.status})`);
     const menu = await response.json();
     menuCache.set(storeId, menu);
@@ -230,6 +245,7 @@
       result[item.category] = (result[item.category] || 0) + 1;
       return result;
     }, {});
+    const featuredCategories = menu.categories.filter(category => category !== '전체').slice(0, 3);
     const direct = orderChannels(store).primaryOrder?.directOrder;
     const phone = orderChannels(store).primaryOrder?.phoneOrder;
     const directHref = escapeMenuHtml(channelUrl(direct));
@@ -247,14 +263,14 @@
             <img src="${escapeMenuHtml(menu.mainImage)}" alt="${escapeMenuHtml(menu.displayName)}" fetchpriority="high">
             <div>
               <span>대동여수음식지도 · 음식 미리보기</span>
-              <p>피자 · 세트 · 사이드</p>
+              <p>${featuredCategories.map(escapeMenuHtml).join(' · ')}</p>
               <h1 id="storeMenuTitle">${escapeMenuHtml(menu.displayName)}</h1>
               <p>주문방법을 고르기 전에 사진과 설명으로 메뉴를 먼저 살펴보세요.</p>
               <dl>
                 <div><dt>${menu.items.length}</dt><dd>전체 메뉴</dd></div>
-                <div><dt>${counts['피자'] || 0}</dt><dd>피자</dd></div>
-                <div><dt>${counts['세트'] || 0}</dt><dd>세트</dd></div>
-                <div><dt>${counts['사이드'] || 0}</dt><dd>사이드</dd></div>
+                ${featuredCategories.map(category => `
+                  <div><dt>${counts[category] || 0}</dt><dd>${escapeMenuHtml(category)}</dd></div>
+                `).join('')}
               </dl>
             </div>
           </section>
@@ -372,7 +388,7 @@
       document.body.append(overlay);
     }
     overlay.hidden = false;
-    overlay.innerHTML = '<div class="store-menu-loading" role="status">외계인피자 메뉴를 불러오는 중입니다…</div>';
+    overlay.innerHTML = `<div class="store-menu-loading" role="status">${escapeMenuHtml(store.name || '가게')} 메뉴를 불러오는 중입니다…</div>`;
     document.body.classList.add('store-menu-open');
     pushMenuHistory('preview');
     try {

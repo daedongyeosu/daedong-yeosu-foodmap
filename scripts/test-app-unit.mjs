@@ -53,3 +53,4 @@ if (baseApp) {
 console.log('PASS unit tests complete');
 await import('../alien-pizza-menu-preview-regression-test.mjs');
 await import('../domino-menu-preview-regression-test.mjs');
+await import('../surasanggung-menu-service-regression-test.mjs');

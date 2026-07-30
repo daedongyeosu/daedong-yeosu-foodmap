@@ -49,8 +49,8 @@ assert.equal(
   '22f21699710ccd27de9dc73d4521fb79fac13c2a209be73e8e34519f58f087f1'
 );
 
-assert.match(index, /store-menu-preview\.css\?v=store-menu-8/);
-assert.match(index, /store-menu-preview\.js\?v=store-menu-8/);
+assert.match(index, /store-menu-preview\.css\?v=store-menu-9/);
+assert.match(index, /store-menu-preview\.js\?v=store-menu-9/);
 assert.match(script, /itemCount: 70/);
 assert.match(script, /featuredCategories/);
 assert.match(script, /가게바로주문 결제하기/);

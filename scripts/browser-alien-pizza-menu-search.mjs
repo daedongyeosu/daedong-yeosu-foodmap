@@ -89,7 +89,10 @@ try {
 
   await page.locator('[data-menu-search-cancel]').click();
   await page.waitForFunction(() => !document.querySelector('.store-menu-preview')?.classList.contains('menu-search-active'));
-  await page.waitForTimeout(100);
+  await page.waitForFunction(expected => {
+    const node = document.querySelector('.store-menu-scroll');
+    return Boolean(node && Math.abs(node.scrollTop - expected) <= 2);
+  }, maxScroll, {timeout: 3000});
   await check(scroll.evaluate((node, expected) => Math.abs(node.scrollTop - expected) <= 2, maxScroll), '검색 취소 시 이전 메뉴 위치 복귀');
   await check(page.locator('[data-menu-card]:visible').count().then(count => count === 53), '검색 취소 후 전체 메뉴와 기존 분류 상태 복원');
   await check(page.locator('.store-menu-sticky-actions').evaluate(node => getComputedStyle(node).pointerEvents !== 'none'), '검색 취소 후 주문 버튼 복원');

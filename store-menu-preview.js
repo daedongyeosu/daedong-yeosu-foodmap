@@ -16,6 +16,11 @@
       path: 'store-menu-content/domino/menu.json',
       entryImage: 'store-menu-content/domino/main.jpg',
       itemCount: 70
+    }),
+    '7bc7239e6b509c44': Object.freeze({
+      path: 'store-menu-content/surasanggung/menu.json',
+      entryImage: 'store-menu-content/surasanggung/main.jpg',
+      itemCount: 46
     })
   });
   const menuCache = new Map();
@@ -224,10 +229,18 @@
 
   function menuCardMarkup(item) {
     const searchText = `${item.name} ${item.description} ${item.category}`.toLowerCase();
+    const photo = item.image
+      ? `<img src="${escapeMenuHtml(item.image)}" alt="${escapeMenuHtml(item.name)}" loading="lazy" decoding="async">`
+      : `
+        <div class="store-menu-photo-placeholder" role="img" aria-label="${escapeMenuHtml(item.name)} 사진 미제공">
+          <span aria-hidden="true">${item.adultOnly ? '19' : item.category === '음료' ? '🥤' : '🍲'}</span>
+          <small>사진 미제공</small>
+        </div>
+      `;
     return `
       <article class="store-menu-card" role="button" tabindex="0" aria-label="${escapeMenuHtml(item.name)} 주문방법 보기" data-menu-card data-menu-select data-menu-id="${escapeMenuHtml(item.id)}" data-category="${escapeMenuHtml(item.category)}" data-search="${escapeMenuHtml(searchText)}">
         <div class="store-menu-photo">
-          <img src="${escapeMenuHtml(item.image)}" alt="${escapeMenuHtml(item.name)}" loading="lazy" decoding="async">
+          ${photo}
           ${item.adultOnly ? '<span>19세 이상</span>' : ''}
         </div>
         <div class="store-menu-copy">
@@ -250,6 +263,7 @@
     const phone = orderChannels(store).primaryOrder?.phoneOrder;
     const directHref = escapeMenuHtml(channelUrl(direct));
     const phoneLink = escapeMenuHtml(phoneHref(phone));
+    const serviceSummary = window.daedongStoreServiceInfo?.menuMarkup?.(store.id) || '';
     return `
       <section class="store-menu-preview" role="dialog" aria-modal="true" aria-labelledby="storeMenuTitle">
         <header class="store-menu-topbar">
@@ -272,6 +286,7 @@
                   <div><dt>${counts[category] || 0}</dt><dd>${escapeMenuHtml(category)}</dd></div>
                 `).join('')}
               </dl>
+              ${serviceSummary}
             </div>
           </section>
 
@@ -294,6 +309,8 @@
             <p><span data-menu-result-label>전체 메뉴</span> <strong data-menu-result-count>${menu.items.length}</strong>개 · 가격은 표시하지 않습니다.</p>
           </section>
 
+          <p class="store-menu-photo-disclaimer">※ 음식 사진은 실제 조리된 음식과 다를 수 있습니다.</p>
+
           <section class="store-menu-grid" aria-live="polite">
             ${menu.items.map(menuCardMarkup).join('')}
           </section>
@@ -308,6 +325,7 @@
           </section>
 
           <footer class="store-menu-notice">
+            <p>음식 사진은 실제 조리된 음식과 다를 수 있습니다.</p>
             <p>주류는 만 19세 이상만 주문할 수 있습니다.</p>
             <p>메뉴 구성과 제공 여부는 가게 또는 주문앱 상황에 따라 달라질 수 있습니다.</p>
           </footer>
@@ -392,7 +410,10 @@
     document.body.classList.add('store-menu-open');
     pushMenuHistory('preview');
     try {
-      const menu = await loadMenu(storeId);
+      const [menu] = await Promise.all([
+        loadMenu(storeId),
+        window.daedongStoreServiceInfo?.ready || Promise.resolve()
+      ]);
       activeStore = store;
       activeMenu = menu;
       overlay.innerHTML = previewMarkup(menu, store);
@@ -431,11 +452,20 @@
     const item = activeMenu?.items.find(menuItem => String(menuItem.id) === card?.dataset.menuId);
     if (!preview || !sheet || !item) return;
     const image = sheet.querySelector('[data-selected-menu-image]');
+    const selected = sheet.querySelector('.menu-order-selected');
     const category = sheet.querySelector('[data-selected-menu-category]');
     const name = sheet.querySelector('[data-selected-menu-name]');
+    selected?.classList.toggle('no-image', !item.image);
     if (image) {
-      image.src = item.image;
-      image.alt = item.name;
+      if (item.image) {
+        image.src = item.image;
+        image.alt = item.name;
+        image.hidden = false;
+      } else {
+        image.removeAttribute('src');
+        image.alt = '';
+        image.hidden = true;
+      }
     }
     if (category) category.textContent = item.category;
     if (name) name.textContent = item.name;

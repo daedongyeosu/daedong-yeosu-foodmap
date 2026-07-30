@@ -1,0 +1,89 @@
+import assert from 'node:assert/strict';
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+
+const read = path => fs.readFileSync(path);
+const text = path => read(path).toString('utf8');
+const sha256 = path => crypto.createHash('sha256').update(read(path)).digest('hex');
+const menuPath = 'store-menu-content/surasanggung/menu.json';
+const menu = JSON.parse(text(menuPath));
+const service = JSON.parse(text('store-service-info.json'));
+const stores = JSON.parse(text('data/stores.json'));
+const index = text('index.html');
+const menuScript = text('store-menu-preview.js');
+const serviceScript = text('store-service-info.js');
+
+assert.equal(menu.storeId, '7bc7239e6b509c44');
+assert.equal(menu.displayName, '수라상궁 조선국밥');
+assert.equal(menu.items.length, 46);
+assert.deepEqual(
+  Object.fromEntries(menu.categories.slice(1).map(category => [
+    category,
+    menu.items.filter(item => item.category === category).length
+  ])),
+  {
+    '세트·정식': 6,
+    '국밥·탕': 12,
+    '수육': 4,
+    '만두·딤섬': 11,
+    '곁들임': 4,
+    '음료': 6,
+    '주류': 3
+  }
+);
+assert.equal(new Set(menu.items.map(item => item.id)).size, 46);
+assert.equal(menu.items.filter(item => item.adultOnly).length, 3);
+assert.equal(menu.items.filter(item => !item.image).length, 8);
+assert.ok(menu.items.every(item => !Object.hasOwn(item, 'price')));
+assert.doesNotMatch(text(menuPath), /\d{1,3}(?:,\d{3})*원/);
+assert.ok(menu.items.filter(item => item.image).every(item => fs.existsSync(item.image)));
+assert.ok(fs.existsSync(menu.mainImage));
+
+const store = stores.find(item => String(item.store_id || item.id) === menu.storeId);
+assert.ok(store);
+assert.equal(store.name, '수라상궁 조선국밥 여서점');
+assert.equal(store.routes.find(route => route.name === '가게바로주문')?.url, 'https://app.notion.com/p/398da158dd2a80b6ba32fa75d2f4c137');
+assert.equal(store.routes.find(route => route.name === '전화주문')?.url, 'https://bit.ly/tel0616543511');
+
+const info = service.stores[menu.storeId];
+assert.ok(info);
+assert.equal(info.verifiedAt, '2026-07-31');
+assert.deepEqual(info.hours.displayLines, [
+  '월–토 11:00–다음 날 01:00',
+  '일요일 15:00–다음 날 01:00',
+  '매월 둘째 수요일 휴무'
+]);
+assert.equal(info.hours.weekly.mon[0].open, '11:00');
+assert.equal(info.hours.weekly.mon[0].close, '01:00');
+assert.equal(info.hours.weekly.sun[0].open, '15:00');
+assert.deepEqual(info.hours.closures[0], {
+  type: 'monthly-weekday',
+  nth: 2,
+  weekday: 'wed',
+  label: '매월 둘째 수요일'
+});
+assert.deepEqual(info.payments, [{key: 'yeosu-seomseom-pay', status: 'accepted'}]);
+assert.ok(!info.payments.some(payment => ['high-oil-support', 'onnuri-gift-certificate'].includes(payment.key)));
+
+assert.equal(stores.length, 710);
+assert.equal(sha256('data/stores.json'), '2b976a0e05ad494e6723bc191962e1d8c66e8e1d93f98e6f0750baf25bdc6630');
+assert.equal(sha256('data/store-priority.json'), '2b91fa849797306d5f7d8e49de1d82bfbf28f85a235fee7cf0448104847b93f9');
+assert.equal(sha256('data/store-coordinates.json'), '22f21699710ccd27de9dc73d4521fb79fac13c2a209be73e8e34519f58f087f1');
+
+assert.match(index, /store-service-info\.css\?v=store-service-1/);
+assert.match(index, /store-service-info\.js\?v=store-service-1/);
+assert.match(index, /store-menu-preview\.css\?v=store-menu-9/);
+assert.match(index, /store-menu-preview\.js\?v=store-menu-9/);
+assert.match(menuScript, /store-menu-content\/surasanggung\/menu\.json/);
+assert.match(menuScript, /itemCount: 46/);
+assert.match(menuScript, /음식 사진은 실제 조리된 음식과 다를 수 있습니다/);
+assert.match(menuScript, /store-menu-photo-placeholder/);
+assert.match(menuScript, /daedongStoreServiceInfo\?\.ready/);
+assert.match(serviceScript, /Asia\/Seoul/);
+assert.match(serviceScript, /monthly-weekday/);
+assert.match(serviceScript, /영업·혜택 한눈에/);
+assert.match(serviceScript, /표시가 없으면 ‘사용 불가’가 아니라 아직 확인되지 않은 상태/);
+assert.match(serviceScript, /daedongStoreServiceOverview/);
+assert.doesNotMatch(serviceScript, /data\/stores\.json/);
+
+console.log('surasanggung-menu-service-regression-test: ok');

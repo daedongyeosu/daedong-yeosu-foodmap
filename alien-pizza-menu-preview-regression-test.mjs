@@ -40,8 +40,8 @@ assert.equal(
   '22f21699710ccd27de9dc73d4521fb79fac13c2a209be73e8e34519f58f087f1'
 );
 
-assert.match(index, /store-menu-preview\.css\?v=store-menu-8/);
-assert.match(index, /store-menu-preview\.js\?v=store-menu-8/);
+assert.match(index, /store-menu-preview\.css\?v=store-menu-9/);
+assert.match(index, /store-menu-preview\.js\?v=store-menu-9/);
 assert.match(script, /data-store-menu-preview/);
 assert.match(script, /가게바로주문 결제하기/);
 assert.match(script, /통화 중에도 이 메뉴를 계속 볼 수 있어요/);

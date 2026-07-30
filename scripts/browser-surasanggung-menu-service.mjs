@@ -1,0 +1,137 @@
+import fs from 'node:fs';
+import {chromium} from 'playwright';
+
+const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
+const storeId = '7bc7239e6b509c44';
+const report = {success: false, checks: [], errors: []};
+const browser = await chromium.launch({headless: true});
+const context = await browser.newContext({
+  viewport: {width: 390, height: 844},
+  locale: 'ko-KR',
+  timezoneId: 'Asia/Seoul'
+});
+await context.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
+await context.route('**/*.woff2', route => route.abort());
+const page = await context.newPage();
+page.on('pageerror', error => report.errors.push(error.message));
+
+const check = async (condition, message) => {
+  const ok = await condition;
+  report.checks.push({message, ok});
+  if (!ok) throw new Error(message);
+};
+
+try {
+  await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
+  await page.waitForSelector('#storeGrid .store-card', {timeout: 15000});
+  await page.waitForFunction(() => (
+    typeof fxStoreById === 'function'
+    && typeof openStore === 'function'
+    && window.daedongStoreServiceInfo
+  ));
+  await page.evaluate(() => window.daedongStoreServiceInfo.ready);
+
+  await page.evaluate(() => {
+    const search = document.querySelector('#mainSearch');
+    if (search) search.value = '수라상궁';
+    state.query = '수라상궁';
+    state.category = '전체';
+    state.brandId = '';
+    renderStores({resetCount: true});
+  });
+  await page.waitForSelector(`#storeGrid .store-card[data-id="${storeId}"]`);
+  await check(
+    page.locator(`#storeGrid .store-card[data-id="${storeId}"] [data-store-service-card-meta]`).count().then(count => count === 1),
+    '가게목록에 영업·결제 배지 표시'
+  );
+  await check(
+    page.locator(`#storeGrid .store-card[data-id="${storeId}"] [data-store-service-card-meta]`).innerText().then(value => value.includes('여수섬섬페이')),
+    '가게목록에 여수섬섬페이 확인 표시'
+  );
+
+  await page.evaluate(id => openStore(fxStoreById(id)), storeId);
+  await page.waitForSelector(`#modal:not([hidden]) .store-detail[data-store-id="${storeId}"]`);
+  await check(
+    page.locator(`[data-store-menu-preview="${storeId}"] strong`).innerText().then(value => value.trim() === '46개 ›'),
+    '수라상궁 음식보기 46개 표시'
+  );
+  await page.locator(`[data-store-menu-preview="${storeId}"]`).click();
+  await page.waitForSelector('.store-menu-preview', {timeout: 5000});
+  await check(page.locator('#storeMenuTitle').innerText().then(value => value.trim() === '수라상궁 조선국밥'), '수라상궁 음식보기 열림');
+  await check(page.locator('[data-menu-card]').count().then(count => count === 46), '정리된 고유 메뉴 46개 로드');
+  await check(
+    page.locator('[data-menu-category]').allInnerTexts().then(values => values.join('|') === '전체|세트·정식|국밥·탕|수육|만두·딤섬|곁들임|음료|주류'),
+    '수라상궁 전용 메뉴 분류 표시'
+  );
+  await check(page.locator('.store-menu-photo-placeholder').count().then(count => count === 8), '사진 미제공 메뉴를 정직한 대체표시로 구분');
+  await check(
+    page.locator('.store-menu-photo-disclaimer').innerText().then(value => value.includes('실제 조리된 음식과 다를 수 있습니다')),
+    '실제 음식과 다를 수 있다는 안내 표시'
+  );
+  await check(
+    page.locator('[data-store-service-menu-summary]').innerText().then(value => (
+      value.includes('여수섬섬페이')
+      && value.includes('오늘')
+    )),
+    '음식보기 상단에 현재 영업상태와 확인 결제수단 표시'
+  );
+  await page.locator('[data-store-service-menu-summary] summary').click();
+  await check(
+    page.locator('[data-store-service-menu-summary]').innerText().then(value => (
+      value.includes('월–토 11:00–다음 날 01:00')
+      && value.includes('매월 둘째 수요일 휴무')
+    )),
+    '상세 영업시간과 정기휴무 표시'
+  );
+
+  const menuSearch = page.locator('[data-menu-search]');
+  await menuSearch.focus();
+  await menuSearch.fill('갈비찜');
+  await check(page.locator('[data-menu-card]:visible').count().then(count => count === 1), '메뉴 검색 결과 한 개 표시');
+  await page.locator('[data-menu-card]:visible').click();
+  await check(page.locator('[data-menu-order-sheet]').evaluate(node => !node.hidden), '검색 메뉴 터치 시 주문방법 선택창 열림');
+  await check(page.locator('[data-menu-order-sheet] [data-selected-menu-image]').isHidden(), '사진 미제공 메뉴에 빈 이미지 노출 없음');
+  await check(
+    page.locator('[data-menu-order-sheet] [data-menu-order="direct"]').getAttribute('href')
+      .then(value => value === 'https://app.notion.com/p/398da158dd2a80b6ba32fa75d2f4c137'),
+    '기존 가게바로주문 링크 유지'
+  );
+  await check(
+    page.locator('[data-menu-order-sheet] [data-menu-order="phone"]').getAttribute('href')
+      .then(value => value === 'tel:0616543511'),
+    '기존 전화주문 번호 유지'
+  );
+  await page.goBack();
+  await page.waitForFunction(() => document.querySelector('[data-menu-order-sheet]')?.hidden === true);
+  await page.goBack();
+  await page.waitForFunction(() => !document.querySelector('.store-menu-preview')?.classList.contains('menu-search-active'));
+  await page.goBack();
+  await page.waitForFunction(() => document.querySelector('[data-store-menu-overlay]')?.hidden === true);
+  await check(
+    page.locator(`#modal:not([hidden]) .store-detail[data-store-id="${storeId}"]`).isVisible(),
+    '음식보기 뒤로가기 후 수라상궁 가게화면 유지'
+  );
+
+  await page.locator('#modal .modal-close').click();
+  await page.locator('[data-store-service-overview-open]').click();
+  await check(page.locator('.store-service-overview').isVisible(), '영업·혜택 한눈에 화면 열림');
+  await check(
+    page.locator(`[data-store-service-store-id="${storeId}"]`).innerText().then(value => value.includes('수라상궁') && value.includes('여수섬섬페이')),
+    '확인된 가게를 영업상태·혜택과 함께 표시'
+  );
+  await page.locator('[data-store-service-filter="onnuri-gift-certificate"]').click();
+  await check(page.locator('.store-service-overview-empty').isVisible(), '미확인 혜택을 사용 가능으로 오표시하지 않음');
+  await page.locator('[data-store-service-filter="yeosu-seomseom-pay"]').click();
+  await check(page.locator(`[data-store-service-store-id="${storeId}"]`).isVisible(), '여수섬섬페이 필터로 가게 확인');
+  await page.screenshot({path: 'browser-surasanggung-menu-service.png', fullPage: false});
+
+  report.success = report.errors.length === 0;
+} catch (error) {
+  report.failure = error.stack || String(error);
+  await page.screenshot({path: 'browser-surasanggung-menu-service-failure.png', fullPage: false}).catch(() => {});
+} finally {
+  fs.writeFileSync('browser-surasanggung-menu-service-report.json', `${JSON.stringify(report, null, 2)}\n`);
+  await browser.close();
+}
+
+if (!report.success) process.exit(1);

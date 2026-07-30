@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "updatedAt": "2026-07-31",
+  "programs": [
+    {
+      "key": "yeosu-seomseom-pay",
+      "label": "여수섬섬페이"
+    },
+    {
+      "key": "high-oil-support",
+      "label": "고유가 피해지원금"
+    },
+    {
+      "key": "onnuri-gift-certificate",
+      "label": "온누리상품권"
+    }
+  ],
+  "stores": {
+    "7bc7239e6b509c44": {
+      "verifiedAt": "2026-07-31",
+      "sourceLabel": "가게 주문화면 확인",
+      "hours": {
+        "timezone": "Asia/Seoul",
+        "displayLines": [
+          "월–토 11:00–다음 날 01:00",
+          "일요일 15:00–다음 날 01:00",
+          "매월 둘째 수요일 휴무"
+        ],
+        "weekly": {
+          "mon": [
+            {
+              "open": "11:00",
+              "close": "01:00"
+            }
+          ],
+          "tue": [
+            {
+              "open": "11:00",
+              "close": "01:00"
+            }
+          ],
+          "wed": [
+            {
+              "open": "11:00",
+              "close": "01:00"
+            }
+          ],
+          "thu": [
+            {
+              "open": "11:00",
+              "close": "01:00"
+            }
+          ],
+          "fri": [
+            {
+              "open": "11:00",
+              "close": "01:00"
+            }
+          ],
+          "sat": [
+            {
+              "open": "11:00",
+              "close": "01:00"
+            }
+          ],
+          "sun": [
+            {
+              "open": "15:00",
+              "close": "01:00"
+            }
+          ]
+        },
+        "closures": [
+          {
+            "type": "monthly-weekday",
+            "nth": 2,
+            "weekday": "wed",
+            "label": "매월 둘째 수요일"
+          }
+        ]
+      },
+      "payments": [
+        {
+          "key": "yeosu-seomseom-pay",
+          "status": "accepted"
+        }
+      ]
+    }
+  }
+}

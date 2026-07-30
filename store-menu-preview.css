@@ -165,7 +165,14 @@ body.store-menu-open {
   border-bottom: 1px solid #e4e8ef;
   backdrop-filter: blur(14px);
 }
-.store-menu-tools label {
+.store-menu-search-row {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.store-menu-search-box {
+  width: 100%;
   height: 46px;
   padding: 0 15px;
   display: flex;
@@ -175,7 +182,11 @@ body.store-menu-open {
   border: 1px solid #dfe4ec;
   border-radius: 14px;
 }
-.store-menu-tools label span {
+.store-menu-search-box:focus-within {
+  border-color: #8190a7;
+  box-shadow: 0 0 0 3px rgba(16, 38, 73, .08);
+}
+.store-menu-search-box > span {
   font-size: 24px;
 }
 .store-menu-tools input {
@@ -185,6 +196,30 @@ body.store-menu-open {
   border: 0;
   outline: 0;
   font: inherit;
+}
+.store-menu-tools input::-webkit-search-cancel-button {
+  display: none;
+}
+.store-menu-search-box > button {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  color: #fff;
+  background: #aab0ba;
+  border: 0;
+  border-radius: 50%;
+  font-size: 18px;
+  line-height: 1;
+}
+.store-menu-search-cancel {
+  display: none;
+  padding: 0 4px;
+  flex: 0 0 auto;
+  color: #152847;
+  background: transparent;
+  border: 0;
+  font-size: 15px;
+  font-weight: 800;
 }
 .store-menu-tools nav {
   display: flex;
@@ -283,6 +318,11 @@ body.store-menu-open {
   color: #687285;
   font-size: 14px;
   line-height: 1.6;
+}
+.store-menu-copy mark {
+  color: #1f6feb;
+  background: transparent;
+  font-weight: inherit;
 }
 .store-menu-no-results {
   margin: 40px;
@@ -574,7 +614,7 @@ body.store-menu-open {
       top .2s ease,
       border-color .2s ease;
   }
-  .store-menu-tools label {
+  .store-menu-search-box {
     height: 42px;
   }
   .store-menu-tools nav {
@@ -622,6 +662,81 @@ body.store-menu-open {
   .store-menu-sticky-actions a {
     min-height: 54px;
     font-size: 13px;
+  }
+  .store-menu-preview.menu-search-active .store-menu-scroll {
+    padding-top: 0;
+    padding-bottom: 18px;
+  }
+  .store-menu-preview.menu-search-active .store-menu-hero,
+  .store-menu-preview.menu-search-active .store-menu-order,
+  .store-menu-preview.menu-search-active .store-menu-notice {
+    display: none;
+  }
+  .store-menu-preview.menu-search-active .store-menu-tools {
+    top: 54px;
+    padding: 10px 12px 9px;
+    gap: 8px;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .store-menu-preview.menu-search-active .store-menu-search-cancel {
+    display: block;
+  }
+  .store-menu-preview.menu-search-active .store-menu-tools nav {
+    display: none;
+  }
+  .store-menu-preview.menu-search-active .store-menu-tools > p {
+    display: block;
+    color: #4e5b70;
+    font-size: 13px;
+  }
+  .store-menu-preview.menu-search-active .store-menu-tools > p strong {
+    color: #f04a22;
+    font-size: 15px;
+  }
+  .store-menu-preview.menu-search-active .store-menu-grid {
+    padding: 12px;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .store-menu-preview.menu-search-active .store-menu-card {
+    min-height: 142px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(104px, 30vw, 132px);
+    align-items: stretch;
+    border-radius: 16px;
+  }
+  .store-menu-preview.menu-search-active .store-menu-card[hidden] {
+    display: none;
+  }
+  .store-menu-preview.menu-search-active .store-menu-photo {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 10px;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+  }
+  .store-menu-preview.menu-search-active .store-menu-copy {
+    grid-column: 1;
+    grid-row: 1;
+    min-height: 0;
+    padding: 16px 4px 14px 16px;
+  }
+  .store-menu-preview.menu-search-active .store-menu-copy h3 {
+    font-size: 17px;
+  }
+  .store-menu-preview.menu-search-active .store-menu-copy div {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 13px;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+  .store-menu-preview.menu-search-active .store-menu-sticky-actions {
+    opacity: 0;
+    transform: translate(-50%, calc(100% + 32px));
+    pointer-events: none;
   }
   .store-menu-preview.menu-chrome-hidden .store-menu-topbar {
     opacity: 0;

@@ -152,7 +152,7 @@
   function menuCardMarkup(item) {
     const searchText = `${item.name} ${item.description} ${item.category}`.toLowerCase();
     return `
-      <article class="store-menu-card" data-menu-card data-category="${escapeMenuHtml(item.category)}" data-search="${escapeMenuHtml(searchText)}">
+      <article class="store-menu-card" data-menu-card data-menu-id="${escapeMenuHtml(item.id)}" data-category="${escapeMenuHtml(item.category)}" data-search="${escapeMenuHtml(searchText)}">
         <div class="store-menu-photo">
           <img src="${escapeMenuHtml(item.image)}" alt="${escapeMenuHtml(item.name)}" loading="lazy" decoding="async">
           ${item.adultOnly ? '<span>19세 이상</span>' : ''}
@@ -201,10 +201,14 @@
           </section>
 
           <section class="store-menu-tools">
-            <label>
-              <span aria-hidden="true">⌕</span>
-              <input type="search" data-menu-search placeholder="메뉴 이름 또는 설명 검색" autocomplete="off">
-            </label>
+            <div class="store-menu-search-row">
+              <div class="store-menu-search-box">
+                <span aria-hidden="true">⌕</span>
+                <input type="search" data-menu-search aria-label="메뉴 검색" placeholder="어떤 메뉴를 찾으시나요?" autocomplete="off">
+                <button type="button" data-menu-search-clear aria-label="검색어 지우기" hidden>×</button>
+              </div>
+              <button class="store-menu-search-cancel" type="button" data-menu-search-cancel>취소</button>
+            </div>
             <nav aria-label="메뉴 분류">
               ${menu.categories.map((category, index) => `
                 <button type="button" data-menu-category="${escapeMenuHtml(category)}" class="${index === 0 ? 'active' : ''}">
@@ -212,7 +216,7 @@
                 </button>
               `).join('')}
             </nav>
-            <p><strong data-menu-result-count>${menu.items.length}</strong>개 메뉴 · 가격은 표시하지 않습니다.</p>
+            <p><span data-menu-result-label>전체 메뉴</span> <strong data-menu-result-count>${menu.items.length}</strong>개 · 가격은 표시하지 않습니다.</p>
           </section>
 
           <section class="store-menu-grid" aria-live="polite">
@@ -253,6 +257,10 @@
   function handleMenuScroll(scrollRoot) {
     const preview = scrollRoot.closest('.store-menu-preview');
     if (!preview) return;
+    if (preview.classList.contains('menu-search-active')) {
+      showMenuChrome(preview);
+      return;
+    }
     if (!window.matchMedia('(max-width: 720px)').matches || scrollRoot.scrollTop <= 56) {
       showMenuChrome(preview);
       return;
@@ -312,21 +320,100 @@
     lastFocused = null;
   }
 
-  function filterMenus(root) {
+  function highlightedMenuHtml(value, query) {
+    const text = String(value || '');
+    const needle = String(query || '').trim();
+    if (!needle) return escapeMenuHtml(text);
+    const haystack = text.toLocaleLowerCase('ko-KR');
+    const lowerNeedle = needle.toLocaleLowerCase('ko-KR');
+    let cursor = 0;
+    let matchIndex = haystack.indexOf(lowerNeedle);
+    if (matchIndex < 0) return escapeMenuHtml(text);
+    let result = '';
+    while (matchIndex >= 0) {
+      result += escapeMenuHtml(text.slice(cursor, matchIndex));
+      result += `<mark>${escapeMenuHtml(text.slice(matchIndex, matchIndex + needle.length))}</mark>`;
+      cursor = matchIndex + needle.length;
+      matchIndex = haystack.indexOf(lowerNeedle, cursor);
+    }
+    return result + escapeMenuHtml(text.slice(cursor));
+  }
+
+  function updateMenuCardText(card, query) {
+    const item = activeMenu?.items.find(menuItem => String(menuItem.id) === card.dataset.menuId);
+    if (!item) return;
+    const category = card.querySelector('.store-menu-copy p');
+    const name = card.querySelector('.store-menu-copy h3');
+    const description = card.querySelector('.store-menu-copy div');
+    if (category) category.innerHTML = highlightedMenuHtml(item.category, query);
+    if (name) name.innerHTML = highlightedMenuHtml(item.name, query);
+    if (description) description.innerHTML = highlightedMenuHtml(item.description, query);
+  }
+
+  function enterMenuSearch(preview) {
+    if (!preview || !window.matchMedia('(max-width: 720px)').matches) return;
+    const scrollRoot = preview.querySelector('.store-menu-scroll');
+    if (!preview.classList.contains('menu-search-active')) {
+      preview.dataset.menuSearchReturn = String(scrollRoot?.scrollTop || 0);
+      preview.classList.add('menu-search-active');
+    }
+    showMenuChrome(preview);
+    filterMenus(preview, {revealResults: true});
+    window.requestAnimationFrame(() => {
+      if (scrollRoot) scrollRoot.scrollTop = 0;
+    });
+  }
+
+  function exitMenuSearch(preview, {restorePosition = true} = {}) {
+    if (!preview) return;
+    const scrollRoot = preview.querySelector('.store-menu-scroll');
+    const input = preview.querySelector('[data-menu-search]');
+    const returnPosition = Number(preview.dataset.menuSearchReturn || 0);
+    if (input) {
+      input.value = '';
+      input.blur();
+    }
+    preview.classList.remove('menu-search-active');
+    delete preview.dataset.menuSearchReturn;
+    showMenuChrome(preview);
+    filterMenus(preview);
+    if (restorePosition) {
+      window.requestAnimationFrame(() => {
+        if (scrollRoot) scrollRoot.scrollTop = returnPosition;
+        window.requestAnimationFrame(() => showMenuChrome(preview));
+      });
+    }
+  }
+
+  function filterMenus(root, {revealResults = false} = {}) {
     if (!root || !activeMenu) return;
-    const query = String(root.querySelector('[data-menu-search]')?.value || '').trim().toLowerCase();
-    const category = root.querySelector('[data-menu-category].active')?.dataset.menuCategory || '전체';
+    const rawQuery = String(root.querySelector('[data-menu-search]')?.value || '').trim();
+    const query = rawQuery.toLocaleLowerCase('ko-KR');
+    const category = root.classList.contains('menu-search-active')
+      ? '전체'
+      : root.querySelector('[data-menu-category].active')?.dataset.menuCategory || '전체';
     let visible = 0;
     root.querySelectorAll('[data-menu-card]').forEach(card => {
       const matchesCategory = category === '전체' || card.dataset.category === category;
       const matchesSearch = !query || card.dataset.search.includes(query);
       card.hidden = !(matchesCategory && matchesSearch);
+      updateMenuCardText(card, rawQuery);
       if (!card.hidden) visible += 1;
     });
     const count = root.querySelector('[data-menu-result-count]');
     if (count) count.textContent = String(visible);
+    const label = root.querySelector('[data-menu-result-label]');
+    if (label) label.textContent = rawQuery ? '검색 결과' : '전체 메뉴';
+    const clear = root.querySelector('[data-menu-search-clear]');
+    if (clear) clear.hidden = !rawQuery;
     const empty = root.querySelector('[data-menu-no-results]');
     if (empty) empty.hidden = visible !== 0;
+    if (revealResults && root.classList.contains('menu-search-active')) {
+      const scrollRoot = root.querySelector('.store-menu-scroll');
+      window.requestAnimationFrame(() => {
+        if (scrollRoot) scrollRoot.scrollTop = 0;
+      });
+    }
   }
 
   document.addEventListener('click', event => {
@@ -337,6 +424,20 @@
     }
     if (event.target.closest('[data-menu-preview-close]')) {
       closeMenuPreview();
+      return;
+    }
+    const clearSearch = event.target.closest('[data-menu-search-clear]');
+    if (clearSearch) {
+      const preview = clearSearch.closest('.store-menu-preview');
+      const input = preview?.querySelector('[data-menu-search]');
+      if (input) input.value = '';
+      filterMenus(preview, {revealResults: true});
+      input?.focus();
+      return;
+    }
+    const cancelSearch = event.target.closest('[data-menu-search-cancel]');
+    if (cancelSearch) {
+      exitMenuSearch(cancelSearch.closest('.store-menu-preview'));
       return;
     }
     const category = event.target.closest('[data-menu-category]');
@@ -356,21 +457,51 @@
     }
   });
 
+  document.addEventListener('focusin', event => {
+    if (event.target.matches('[data-menu-search]')) {
+      enterMenuSearch(event.target.closest('.store-menu-preview'));
+    }
+  });
+
   document.addEventListener('input', event => {
     if (event.target.matches('[data-menu-search]')) {
       const preview = event.target.closest('.store-menu-preview');
       showMenuChrome(preview);
-      filterMenus(preview);
+      if (!event.isComposing) filterMenus(preview, {revealResults: true});
+    }
+  });
+
+  document.addEventListener('compositionend', event => {
+    if (event.target.matches('[data-menu-search]')) {
+      filterMenus(event.target.closest('.store-menu-preview'), {revealResults: true});
     }
   });
 
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && document.body.classList.contains('store-menu-open')) closeMenuPreview();
+    if (!document.body.classList.contains('store-menu-open')) return;
+    const preview = document.querySelector('.store-menu-preview');
+    if (event.key === 'Enter' && event.target.matches('[data-menu-search]')) {
+      event.preventDefault();
+      event.target.blur();
+      return;
+    }
+    if (event.key === 'Escape' && preview?.classList.contains('menu-search-active')) {
+      event.preventDefault();
+      exitMenuSearch(preview);
+      return;
+    }
+    if (event.key === 'Escape') closeMenuPreview();
   });
 
   window.addEventListener('resize', () => {
     if (!window.matchMedia('(max-width: 720px)').matches) {
-      showMenuChrome(document.querySelector('.store-menu-preview'));
+      const preview = document.querySelector('.store-menu-preview');
+      if (preview?.classList.contains('menu-search-active')) {
+        preview.classList.remove('menu-search-active');
+        delete preview.dataset.menuSearchReturn;
+        filterMenus(preview);
+      }
+      showMenuChrome(preview);
     }
   });
 

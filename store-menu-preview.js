@@ -10,6 +10,11 @@
   let lastFocused = null;
   let lastMenuSelection = null;
   let menuChromeRevealTimer = 0;
+  const MENU_HISTORY = Object.freeze({
+    preview: 'daedongMenuPreview',
+    search: 'daedongMenuSearch',
+    order: 'daedongMenuOrder'
+  });
 
   const escapeMenuHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({
     '&': '&amp;',
@@ -84,6 +89,15 @@
     `;
   }
 
+  function phoneIconMarkup() {
+    return `
+      <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false">
+        <circle cx="14" cy="14" r="13" fill="#ff7756"></circle>
+        <path d="M9.2 7.8c.7-.7 1.7-.5 2.2.3l1.5 2.5c.4.7.3 1.5-.3 2l-1.2 1c1.1 2.2 2.8 3.9 5 5l1.1-1.2c.5-.6 1.3-.7 2-.3l2.5 1.5c.8.5 1 1.5.3 2.2l-1.2 1.2c-1.1 1.1-2.8 1.4-4.2.7-5.5-2.6-9-6.1-11.6-11.6-.7-1.4-.4-3.1.7-4.2Z" fill="#fff" stroke="#fff" stroke-width=".7" stroke-linejoin="round"></path>
+      </svg>
+    `;
+  }
+
   function channelIcon(key, channel) {
     if (key === 'direct') {
       return storeIconMarkup();
@@ -96,8 +110,40 @@
     if (key === 'mukkebi') return '<img src="assets/mukkebi-v7.png" alt="">';
     if (key === 'ddangyo') return '<img src="assets/ddangyo-v7.png" alt="">';
     if (key === 'ondongne') return '<img src="assets/ondongne.png" alt="">';
-    if (key === 'phone') return '<img src="assets/ui/phone.svg" alt="">';
+    if (key === 'phone') return phoneIconMarkup();
     return '';
+  }
+
+  function pushMenuHistory(layer) {
+    const nextState = {...(history.state || {}), [MENU_HISTORY.preview]: true};
+    if (layer === 'search') nextState[MENU_HISTORY.search] = true;
+    if (layer === 'order') nextState[MENU_HISTORY.order] = true;
+    try {
+      history.pushState(nextState, '', location.href);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  function requestMenuLayerBack(layer, fallback) {
+    if (history.state?.[MENU_HISTORY[layer]]) {
+      history.back();
+      return;
+    }
+    fallback();
+  }
+
+  function requestCloseMenuPreview() {
+    const state = history.state || {};
+    const depth = Number(Boolean(state[MENU_HISTORY.preview]))
+      + Number(Boolean(state[MENU_HISTORY.search]))
+      + Number(Boolean(state[MENU_HISTORY.order]));
+    if (depth > 0) {
+      history.go(-depth);
+      return;
+    }
+    closeMenuPreview();
   }
 
   function orderChannels(store) {
@@ -254,7 +300,7 @@
         ${(directHref || phoneLink) ? `
           <div class="store-menu-sticky-actions">
             ${directHref ? `<a class="primary" href="${directHref}" target="_blank" rel="noopener">가게바로주문 결제하기</a>` : ''}
-            ${phoneLink ? `<a class="phone" href="${phoneLink}"><img src="assets/ui/phone.svg" alt="">전화주문하기<small>통화 중 메뉴 보기</small></a>` : ''}
+            ${phoneLink ? `<a class="phone" href="${phoneLink}">${phoneIconMarkup()}전화주문하기<small>통화 중 메뉴 보기</small></a>` : ''}
           </div>
         ` : ''}
 
@@ -316,7 +362,7 @@
 
   async function openMenuPreview(storeId, trigger) {
     const store = storeById(storeId);
-    if (!store) return;
+    if (!store || document.body.classList.contains('store-menu-open')) return;
     lastFocused = trigger || document.activeElement;
     let overlay = document.querySelector('[data-store-menu-overlay]');
     if (!overlay) {
@@ -328,6 +374,7 @@
     overlay.hidden = false;
     overlay.innerHTML = '<div class="store-menu-loading" role="status">외계인피자 메뉴를 불러오는 중입니다…</div>';
     document.body.classList.add('store-menu-open');
+    pushMenuHistory('preview');
     try {
       const menu = await loadMenu(storeId);
       activeStore = store;
@@ -381,6 +428,7 @@
     lastMenuSelection = card;
     sheet.hidden = false;
     preview.classList.add('menu-order-sheet-open');
+    if (!history.state?.[MENU_HISTORY.order]) pushMenuHistory('order');
     window.requestAnimationFrame(() => {
       sheet.querySelector('.menu-order-sheet-panel [data-menu-order-sheet-close]')?.focus();
     });
@@ -432,6 +480,7 @@
     if (!preview.classList.contains('menu-search-active')) {
       preview.dataset.menuSearchReturn = String(scrollRoot?.scrollTop || 0);
       preview.classList.add('menu-search-active');
+      if (!history.state?.[MENU_HISTORY.search]) pushMenuHistory('search');
     }
     showMenuChrome(preview);
     filterMenus(preview, {revealResults: true});
@@ -499,12 +548,13 @@
       return;
     }
     if (event.target.closest('[data-menu-preview-close]')) {
-      closeMenuPreview();
+      requestCloseMenuPreview();
       return;
     }
     const closeOrderSheet = event.target.closest('[data-menu-order-sheet-close]');
     if (closeOrderSheet) {
-      closeMenuOrderSheet(closeOrderSheet.closest('.store-menu-preview'));
+      const preview = closeOrderSheet.closest('.store-menu-preview');
+      requestMenuLayerBack('order', () => closeMenuOrderSheet(preview));
       return;
     }
     const selectedMenu = event.target.closest('[data-menu-select]');
@@ -523,7 +573,8 @@
     }
     const cancelSearch = event.target.closest('[data-menu-search-cancel]');
     if (cancelSearch) {
-      exitMenuSearch(cancelSearch.closest('.store-menu-preview'));
+      const preview = cancelSearch.closest('.store-menu-preview');
+      requestMenuLayerBack('search', () => exitMenuSearch(preview));
       return;
     }
     const category = event.target.closest('[data-menu-category]');
@@ -585,17 +636,44 @@
       event.target.blur();
       return;
     }
-    if (event.key === 'Escape' && closeMenuOrderSheet(preview)) {
+    const orderSheet = preview?.querySelector('[data-menu-order-sheet]');
+    if (event.key === 'Escape' && orderSheet && !orderSheet.hidden) {
       event.preventDefault();
+      requestMenuLayerBack('order', () => closeMenuOrderSheet(preview));
       return;
     }
     if (event.key === 'Escape' && preview?.classList.contains('menu-search-active')) {
       event.preventDefault();
-      exitMenuSearch(preview);
+      requestMenuLayerBack('search', () => exitMenuSearch(preview));
       return;
     }
-    if (event.key === 'Escape') closeMenuPreview();
+    if (event.key === 'Escape') requestCloseMenuPreview();
   });
+
+  window.addEventListener('popstate', event => {
+    if (!document.body.classList.contains('store-menu-open')) return;
+    let handled = false;
+    const preview = document.querySelector('.store-menu-preview');
+    if (!preview) {
+      event.stopImmediatePropagation();
+      closeMenuPreview();
+      return;
+    }
+    const sheet = preview.querySelector('[data-menu-order-sheet]');
+    if (sheet && !sheet.hidden && !event.state?.[MENU_HISTORY.order]) {
+      closeMenuOrderSheet(preview);
+      handled = true;
+    }
+    if (preview.classList.contains('menu-search-active') && !event.state?.[MENU_HISTORY.search]) {
+      exitMenuSearch(preview);
+      handled = true;
+    }
+    if (!event.state?.[MENU_HISTORY.preview]) {
+      closeMenuPreview();
+      handled = true;
+    }
+    if (handled) event.stopImmediatePropagation();
+  }, true);
 
   window.addEventListener('resize', () => {
     if (!window.matchMedia('(max-width: 720px)').matches) {

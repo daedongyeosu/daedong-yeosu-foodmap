@@ -27,6 +27,7 @@ try {
   await page.waitForSelector('#modal:not([hidden]) .store-detail[data-store-id="a089d1d54720b48e"]', {timeout: 5000});
   await page.locator('[data-store-menu-preview="a089d1d54720b48e"]').click();
   await page.waitForSelector('.store-menu-preview', {timeout: 5000});
+  await check(page.evaluate(() => history.state?.daedongMenuPreview === true), '음식 미리보기를 브라우저 뒤로가기 단계로 등록');
 
   const preview = page.locator('.store-menu-preview');
   const scroll = page.locator('.store-menu-scroll');
@@ -61,6 +62,9 @@ try {
   await check(page.locator('[data-menu-order-sheet] [data-menu-order="direct"]').getAttribute('href').then(value => value === directOrderHref), '기존 가게바로주문 링크 그대로 연결');
   await check(page.locator('[data-menu-order-sheet] [data-menu-order="direct"] .menu-order-icon svg path').count().then(count => count === 2), '가게바로주문 아이콘을 외부 파일 없이 표시');
   await check(page.locator('[data-menu-order-sheet] [data-menu-order="phone"]').getAttribute('href').then(value => String(value).startsWith('tel:')), '전화주문 링크 제공');
+  await check(page.locator('[data-menu-order-sheet] [data-menu-order="phone"] .menu-order-icon svg circle').count().then(count => count === 1), '전화주문 아이콘을 주문방법 선택창에 표시');
+  await check(page.locator('.store-menu-sticky-actions .phone svg circle').count().then(count => count === 1), '전화주문 아이콘을 하단 고정 버튼에 표시');
+  await check(page.evaluate(() => history.state?.daedongMenuOrder === true), '주문방법 선택창을 브라우저 뒤로가기 단계로 등록');
   await check(search.evaluate(node => document.activeElement !== node), '메뉴 선택 시 검색 키보드 닫힘');
 
   const otherToggle = page.locator('[data-menu-order-sheet] [data-menu-other-toggle]');
@@ -72,8 +76,11 @@ try {
   await check(page.locator('[data-menu-order-sheet] [data-menu-other-list]').boundingBox().then(box => Boolean(box && box.y >= 0 && box.y < 700)), '펼친 다른 주문앱을 현재 화면 안으로 이동');
   await page.screenshot({path: 'browser-alien-pizza-menu-search.png', fullPage: false});
 
-  await page.locator('.menu-order-sheet-panel [data-menu-order-sheet-close]').click();
+  await page.goBack();
+  await page.waitForFunction(() => document.querySelector('[data-menu-order-sheet]')?.hidden === true);
   await check(page.locator('[data-menu-order-sheet]').evaluate(node => node.hidden), '주문방법 선택창 닫기');
+  await check(page.locator('.store-menu-preview').isVisible(), '휴대폰 뒤로가기 후 음식 미리보기 유지');
+  await check(page.locator('#modal:not([hidden]) .store-detail[data-store-id="a089d1d54720b48e"]').isVisible(), '휴대폰 뒤로가기 후 대동여수음식지도 가게화면 유지');
   await check(preview.evaluate(node => node.classList.contains('menu-search-active')), '주문방법 선택창을 닫아도 검색 결과 유지');
 
   await page.locator('[data-menu-search-clear]').click();
@@ -86,6 +93,10 @@ try {
   await check(scroll.evaluate((node, expected) => Math.abs(node.scrollTop - expected) <= 2, maxScroll), '검색 취소 시 이전 메뉴 위치 복귀');
   await check(page.locator('[data-menu-card]:visible').count().then(count => count === 53), '검색 취소 후 전체 메뉴와 기존 분류 상태 복원');
   await check(page.locator('.store-menu-sticky-actions').evaluate(node => getComputedStyle(node).pointerEvents !== 'none'), '검색 취소 후 주문 버튼 복원');
+
+  await page.goBack();
+  await page.waitForFunction(() => document.querySelector('[data-store-menu-overlay]')?.hidden === true);
+  await check(page.locator('#modal:not([hidden]) .store-detail[data-store-id="a089d1d54720b48e"]').isVisible(), '음식 미리보기에서 뒤로가기 시 가게화면으로 복귀');
 
   report.success = report.errors.length === 0;
 } catch (error) {

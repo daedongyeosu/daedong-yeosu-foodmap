@@ -40,8 +40,8 @@ assert.equal(
   '22f21699710ccd27de9dc73d4521fb79fac13c2a209be73e8e34519f58f087f1'
 );
 
-assert.match(index, /store-menu-preview\.css\?v=alien-pizza-2/);
-assert.match(index, /store-menu-preview\.js\?v=alien-pizza-2/);
+assert.match(index, /store-menu-preview\.css\?v=alien-pizza-3/);
+assert.match(index, /store-menu-preview\.js\?v=alien-pizza-3/);
 assert.match(script, /data-store-menu-preview/);
 assert.match(script, /가게바로주문 결제하기/);
 assert.match(script, /통화 중에도 이 메뉴를 계속 볼 수 있어요/);
@@ -52,11 +52,14 @@ assert.match(script, /assets\/ddangyo-v7\.png/);
 assert.match(script, /assets\/ui\/phone\.svg/);
 assert.match(script, /addEventListener\('scroll'.*\{passive: true\}/);
 assert.match(script, /menu-chrome-hidden/);
-assert.match(script, /}, 700\)/);
+assert.match(script, /scrollTop <= 56/);
+assert.match(script, /}, 500\)/);
 assert.doesNotMatch(script, /data\/stores\.json/);
 assert.match(style, /@media \(max-width: 560px\)/);
 assert.match(style, /\.store-menu-preview\.menu-chrome-hidden/);
-assert.match(style, /grid-template-rows: 0 minmax\(0, 1fr\)/);
+assert.match(style, /padding-top: 54px/);
+assert.doesNotMatch(style, /\.store-menu-preview\.menu-chrome-hidden\s*\{\s*grid-template-rows/);
+assert.doesNotMatch(style, /\.store-menu-preview\.menu-chrome-hidden \.store-menu-tools\s*\{[^}]*max-height/s);
 assert.match(style, /translate\(-50%, calc\(100% \+ 32px\)\)/);
 
 console.log('alien-pizza-menu-preview-regression-test: ok');

@@ -1,0 +1,54 @@
+name: Build Android test bundle
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "android/twa-manifest.json"
+      - "app-icon.svg"
+      - ".github/workflows/build-android-bundle.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-aab:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Install Bubblewrap
+        run: npm install --global @bubblewrap/cli@1.22.0
+      - name: Configure and generate Android project
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/bubblewrap" android-build
+          printf '{"jdkPath":"%s","androidSdkPath":"%s"}' "$JAVA_HOME" "$ANDROID_SDK_ROOT" > "$RUNNER_TEMP/bubblewrap/config.json"
+          cp android/twa-manifest.json android-build/twa-manifest.json
+          cd android-build
+          BUBBLEWRAP_CONFIG_DIR="$RUNNER_TEMP/bubblewrap" bubblewrap update
+      - name: Create temporary build key
+        shell: bash
+        run: |
+          set -euo pipefail
+          keytool -genkeypair -noprompt -keystore android-build/android.keystore -storetype PKCS12 -alias temporary-build -keyalg RSA -keysize 2048 -validity 1000 -dname "CN=Temporary CI Build" -storepass temporary-build-password -keypass temporary-build-password
+      - name: Build app bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd android-build
+          BUBBLEWRAP_CONFIG_DIR="$RUNNER_TEMP/bubblewrap" BUBBLEWRAP_KEYSTORE_PASSWORD=temporary-build-password BUBBLEWRAP_KEY_PASSWORD=temporary-build-password bubblewrap build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: daedong-yeosu-unsigned-source-bundle
+          path: android-build/*.aab
+          if-no-files-found: error
+          retention-days: 7

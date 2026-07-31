@@ -256,8 +256,9 @@
             const external = rawHref.startsWith('tel:') ? '' : ' target="_blank" rel="noopener"';
             const primaryIcon = channelIcon(key, channel);
             const icon = primaryIcon || `<span class="store-menu-sticky-app-mark" aria-hidden="true">${escapeMenuHtml(label.slice(0, 1))}</span>`;
+            const compatibilityClass = key === 'direct' ? ' primary' : key === 'phone' ? ' phone' : '';
             return `
-              <a class="is-${escapeMenuHtml(key)}" href="${escapeMenuHtml(rawHref)}"${external} data-menu-sticky-order="${escapeMenuHtml(key)}">
+              <a class="is-${escapeMenuHtml(key)}${compatibilityClass}" href="${escapeMenuHtml(rawHref)}"${external} data-menu-sticky-order="${escapeMenuHtml(key)}">
                 ${icon}<b>${escapeMenuHtml(label)}</b>
               </a>
             `;

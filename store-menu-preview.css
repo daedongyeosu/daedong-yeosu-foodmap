@@ -85,7 +85,7 @@ body.store-menu-open {
 .store-menu-scroll {
   overflow: auto;
   overscroll-behavior: contain;
-  padding-bottom: 118px;
+  padding-bottom: 220px;
 }
 .store-menu-hero {
   min-height: 410px;
@@ -561,37 +561,68 @@ body.store-menu-open {
   left: 50%;
   bottom: max(14px, env(safe-area-inset-bottom));
   width: min(720px, calc(100% - 28px));
-  padding: 8px;
+  padding: 10px;
   display: grid;
-  grid-template-columns: 1.25fr 1fr;
   gap: 8px;
   transform: translateX(-50%);
-  background: rgba(255, 255, 255, .94);
+  background: rgba(255, 255, 255, .96);
   border: 1px solid rgba(16, 38, 73, .12);
   border-radius: 18px;
   box-shadow: 0 18px 50px rgba(10, 30, 63, .24);
   backdrop-filter: blur(14px);
 }
+.store-menu-sticky-actions > header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  color: #102649;
+}
+.store-menu-sticky-actions > header b {
+  font-size: 13px;
+}
+.store-menu-sticky-actions > header small {
+  color: #6f7a8c;
+  font-size: 10px;
+}
+.store-menu-sticky-actions > nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(112px, 1fr));
+  gap: 7px;
+}
 .store-menu-sticky-actions a {
-  min-height: 58px;
-  padding: 8px 13px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 6px 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  color: #fff;
+  gap: 6px;
+  color: #173357;
   text-align: center;
   text-decoration: none;
-  border-radius: 13px;
-  font-size: 15px;
+  background: #eef3f8;
+  border: 1px solid #d8e1ec;
+  border-radius: 12px;
+  font-size: 11px;
   font-weight: 900;
+  line-height: 1.2;
 }
-.store-menu-sticky-actions .primary {
+.store-menu-sticky-actions a.is-direct {
+  color: #fff;
   background: linear-gradient(135deg, #ff5528, #f23818);
+  border-color: transparent;
 }
-.store-menu-sticky-actions .phone {
-  flex-wrap: wrap;
+.store-menu-sticky-actions a.is-phone {
+  color: #fff;
   background: #102649;
+  border-color: #102649;
+}
+.store-menu-sticky-actions a b {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .store-menu-sticky-actions img,
 .store-menu-sticky-actions svg {
@@ -599,12 +630,19 @@ body.store-menu-open {
   height: 21px;
   flex: 0 0 auto;
 }
-.store-menu-sticky-actions small {
-  width: 100%;
-  margin-top: -5px;
-  font-size: 10px;
-  opacity: .72;
+.store-menu-sticky-app-mark {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  background: #52657f;
+  border-radius: 7px;
+  font-size: 11px;
+  font-weight: 900;
 }
+
 .menu-order-sheet {
   position: fixed;
   z-index: 8;
@@ -868,9 +906,13 @@ body.store-menu-open {
     bottom: max(8px, env(safe-area-inset-bottom));
     transition: transform .22s ease, opacity .14s ease;
   }
+  .store-menu-sticky-actions > nav {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
   .store-menu-sticky-actions a {
-    min-height: 54px;
-    font-size: 13px;
+    min-height: 42px;
+    padding: 5px 4px;
+    font-size: 10px;
   }
   .store-menu-preview.menu-search-active .store-menu-scroll {
     padding-top: 0;

@@ -88,6 +88,30 @@ try {
   await page.evaluate(id => openStore(fxStoreById(id)), storeId);
   await page.waitForSelector(`#modal:not([hidden]) .store-detail[data-store-id="${storeId}"]`);
   await check(
+    page.locator(`#modal .store-detail[data-store-id="${storeId}"] [data-store-service-detail]`).isVisible(),
+    '가게 상세카드에 영업시간·상품권·무료배달 정보 표시'
+  );
+  await check(
+    page.locator(`#modal .store-detail[data-store-id="${storeId}"] [data-store-service-detail]`).innerText()
+      .then(value => (
+        value.includes('월–토 11:00–다음 날 01:00')
+        && value.includes('여수섬섬페이 사용 가능')
+        && value.includes('고유가 피해지원금 미확인')
+        && value.includes('온누리상품권 미확인')
+        && value.includes('무료배달 여부 미확인')
+      )),
+    '가게 상세카드에서 각 상품권과 무료배달 확인 상태를 구분'
+  );
+  await check(
+    page.evaluate(id => {
+      const detail = document.querySelector(`#modal .store-detail[data-store-id="${id}"]`);
+      const servicePanel = detail?.querySelector('[data-store-service-detail]');
+      const menuEntry = detail?.querySelector('[data-store-menu-preview]');
+      return Boolean(servicePanel && menuEntry && servicePanel.nextElementSibling === menuEntry);
+    }, storeId),
+    '가게 이용정보를 음식보기 바로 위에 배치'
+  );
+  await check(
     page.locator(`[data-store-menu-preview="${storeId}"] strong`).innerText().then(value => value.trim() === '46개 ›'),
     '수라상궁 음식보기 46개 표시'
   );
@@ -107,6 +131,22 @@ try {
   await check(
     page.locator('[data-store-service-menu-summary]').count().then(count => count === 0),
     '음식보기 안에는 영업시간·결제혜택 정보를 넣지 않음'
+  );
+  await check(
+    page.locator('[data-menu-sticky-order] > b').allInnerTexts().then(values => (
+      values.join('|') === '가게바로주문|먹깨비|땡겨요|전화주문|쿠팡이츠|배달의민족'
+    )),
+    '음식보기 하단에 등록된 주문방법을 모두 표시'
+  );
+  await check(
+    page.locator('[data-menu-sticky-order="direct"]').getAttribute('href')
+      .then(value => value === 'https://app.notion.com/p/398da158dd2a80b6ba32fa75d2f4c137'),
+    '음식보기 하단 가게바로주문 링크 유지'
+  );
+  await check(
+    page.locator('[data-menu-sticky-order="phone"]').getAttribute('href')
+      .then(value => value === 'tel:0616543511'),
+    '음식보기 하단 전화주문 번호 유지'
   );
 
   const menuSearch = page.locator('[data-menu-search]');

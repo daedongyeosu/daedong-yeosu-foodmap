@@ -1,0 +1,40 @@
+name: Build Android icon v3
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - ".github/workflows/build-android-icon-v3.yml"
+      - ".github/build/android-v3-source.zip.b64"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore Android source
+        run: |
+          base64 -d .github/build/android-v3-source.zip.b64 > /tmp/android-v3.zip
+          unzip -q /tmp/android-v3.zip
+          for density in mdpi hdpi xhdpi xxhdpi xxxhdpi; do
+            mkdir -p "android-app-v3/app/src/main/res/drawable-$density"
+            cp android-app-v3/app/src/main/res/mipmap-xxxhdpi/ic_maskable.png "android-app-v3/app/src/main/res/drawable-$density/splash.png"
+          done
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - name: Build unsigned release bundle
+        working-directory: android-app-v3
+        run: |
+          chmod +x gradlew
+          ./gradlew --no-daemon bundleRelease
+      - uses: actions/upload-artifact@v4
+        with:
+          name: daedong-android-v3-unsigned
+          path: android-app-v3/app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: error

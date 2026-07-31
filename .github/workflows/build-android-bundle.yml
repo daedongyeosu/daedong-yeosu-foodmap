@@ -34,7 +34,7 @@ jobs:
           printf '{"jdkPath":"%s","androidSdkPath":"%s"}' "$JAVA_HOME" "$ANDROID_SDK_ROOT" > "$RUNNER_TEMP/bubblewrap/config.json"
           cp android/twa-manifest.json android-build/twa-manifest.json
           cd android-build
-          BUBBLEWRAP_CONFIG_DIR="$RUNNER_TEMP/bubblewrap" bubblewrap update
+          bubblewrap --config="$RUNNER_TEMP/bubblewrap/config.json" update
       - name: Create temporary build key
         shell: bash
         run: |
@@ -45,7 +45,7 @@ jobs:
         run: |
           set -euo pipefail
           cd android-build
-          BUBBLEWRAP_CONFIG_DIR="$RUNNER_TEMP/bubblewrap" BUBBLEWRAP_KEYSTORE_PASSWORD=temporary-build-password BUBBLEWRAP_KEY_PASSWORD=temporary-build-password bubblewrap build
+          BUBBLEWRAP_KEYSTORE_PASSWORD=temporary-build-password BUBBLEWRAP_KEY_PASSWORD=temporary-build-password bubblewrap --config="$RUNNER_TEMP/bubblewrap/config.json" build
       - uses: actions/upload-artifact@v4
         with:
           name: daedong-yeosu-unsigned-source-bundle

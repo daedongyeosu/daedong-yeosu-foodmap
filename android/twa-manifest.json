@@ -1,0 +1,55 @@
+{
+  "packageId": "com.daedongyeosu.foodmap",
+  "host": "daedongmap.com",
+  "name": "대동여수음식지도",
+  "launcherName": "대동여수음식지도",
+  "display": "standalone",
+  "themeColor": "#FF5A1F",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#FFFFFF",
+  "enableNotifications": true,
+  "startUrl": "/?source=android-app",
+  "iconUrl": "http://127.0.0.1:8765/app-icon.svg",
+  "maskableIconUrl": "https://raw.githubusercontent.com/daedongyeosu/daedong-yeosu-foodmap/agent/android-pwa-foundation-20260731/app-icon.svg",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "android.keystore",
+    "alias": "temporary-build"
+  },
+  "appVersionName": "0.0.0",
+  "appVersionCode": 0,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "http://127.0.0.1:8765/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {
+    "locationDelegation": {
+      "enabled": true
+    }
+  },
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://daedongmap.com/",
+  "minSdkVersion": 21,
+  "orientation": "portrait-primary",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "protocolHandlers": [],
+  "fileHandlers": [],
+  "launchHandlerClientMode": "",
+  "displayOverride": [
+    "window-controls-overlay",
+    "standalone",
+    "minimal-ui"
+  ],
+  "appVersion": "0.0.0"
+}

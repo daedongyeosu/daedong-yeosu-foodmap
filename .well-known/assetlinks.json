@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.daedongyeosu.foodmap",
+      "sha256_cert_fingerprints": [
+        "E6:8F:39:ED:BC:54:DD:37:5E:5E:02:FB:A5:D7:66:6B:72:8F:0A:AF:D7:E9:6A:70:8B:4F:B3:02:D8:11:B2:1A"
+      ]
+    }
+  }
+]

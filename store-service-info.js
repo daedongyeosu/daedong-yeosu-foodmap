@@ -3,6 +3,7 @@
 (() => {
   const DATA_URL = 'store-service-info.json';
   const HISTORY_KEY = 'daedongStoreServiceOverview';
+  const CLOSING_SOON_MINUTES = 60;
   const WEEK_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
   const WEEK_FROM_SHORT = {
     Sun: 'sun',
@@ -23,10 +24,15 @@
     minute: '2-digit',
     hourCycle: 'h23'
   });
+
   let serviceData = {programs: [], stores: {}};
   let lastFocused = null;
   let pendingStoreId = '';
-  let activeFilter = 'all';
+  let activeStatus = 'all';
+  let activeBenefit = 'all';
+  let locationMode = 'nearby';
+  let selectedArea = '';
+  let overviewQuery = '';
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({
     '&': '&amp;',
@@ -35,6 +41,11 @@
     "'": '&#39;',
     '"': '&quot;'
   })[char]);
+
+  const normalize = value => String(value || '')
+    .normalize('NFKC')
+    .replace(/\s+/g, '')
+    .toLowerCase();
 
   function timeMinutes(value) {
     const [hour, minute] = String(value || '').split(':').map(Number);
@@ -82,19 +93,32 @@
     return `${open}–${crossesMidnight ? '다음 날 ' : ''}${close}`;
   }
 
+  function openStatus(period, remainingMinutes, today) {
+    const closingSoon = remainingMinutes > 0 && remainingMinutes <= CLOSING_SOON_MINUTES;
+    return {
+      state: closingSoon ? 'closing-soon' : 'open',
+      label: closingSoon ? '곧 영업 종료' : '영업 중',
+      detail: `${period.close}까지`,
+      today,
+      remainingMinutes
+    };
+  }
+
   function storeStatus(info, date = new Date()) {
     if (!info?.hours?.weekly) {
       return {
         state: 'unknown',
-        label: '영업시간 확인 필요',
-        detail: '확인된 영업시간이 없습니다.',
-        today: '영업시간 확인 필요'
+        label: '시간 미확인',
+        detail: '영업시간 확인 필요',
+        today: '확인된 영업시간이 없습니다.'
       };
     }
+
     const now = calendarParts(date);
     const minutes = (now.hour * 60) + now.minute;
     const previous = shiftCalendar(now, -1);
     const previousPeriods = info.hours.weekly[previous.weekday] || [];
+
     if (!closureFor(info.hours, previous)) {
       const overnight = previousPeriods.find(period => {
         const open = timeMinutes(period.open);
@@ -103,16 +127,16 @@
       });
       if (overnight) {
         const todayClosure = closureFor(info.hours, now);
-        return {
-          state: 'open',
-          label: '영업 중',
-          detail: `${overnight.close}까지`,
-          today: todayClosure
+        return openStatus(
+          overnight,
+          timeMinutes(overnight.close) - minutes,
+          todayClosure
             ? `${overnight.close}까지 영업 · 이후 정기휴무`
-            : `오늘 ${periodLabel((info.hours.weekly[now.weekday] || [])[0])}`
-        };
+            : `오늘 ${(info.hours.weekly[now.weekday] || []).map(periodLabel).join(', ') || '영업시간 없음'}`
+        );
       }
     }
+
     const closure = closureFor(info.hours, now);
     if (closure) {
       return {
@@ -122,22 +146,23 @@
         today: `오늘 ${closure.label || '휴무'}`
       };
     }
+
     const todayPeriods = info.hours.weekly[now.weekday] || [];
     for (const period of todayPeriods) {
       const open = timeMinutes(period.open);
       const close = timeMinutes(period.close);
-      const isOpen = close <= open
+      const crossesMidnight = close <= open;
+      const isOpen = crossesMidnight
         ? minutes >= open
         : minutes >= open && minutes < close;
       if (isOpen) {
-        return {
-          state: 'open',
-          label: '영업 중',
-          detail: `${period.close}까지`,
-          today: `오늘 ${periodLabel(period)}`
-        };
+        const remainingMinutes = crossesMidnight
+          ? (1440 - minutes) + close
+          : close - minutes;
+        return openStatus(period, remainingMinutes, `오늘 ${periodLabel(period)}`);
       }
     }
+
     const nextToday = todayPeriods
       .map(period => ({period, minutes: timeMinutes(period.open)}))
       .filter(item => item.minutes > minutes)
@@ -150,12 +175,23 @@
     };
   }
 
+  function sourceStores() {
+    if (typeof stores !== 'undefined' && Array.isArray(stores)) return stores;
+    if (typeof allStores !== 'undefined' && Array.isArray(allStores)) return allStores;
+    return [];
+  }
+
+  function storeIdOf(store) {
+    return String(store?.id ?? store?.store_id ?? '');
+  }
+
   function storeById(id) {
     if (typeof fxStoreById === 'function') return fxStoreById(id);
-    if (typeof stores !== 'undefined' && Array.isArray(stores)) {
-      return stores.find(store => String(store.id) === String(id)) || null;
-    }
-    return null;
+    return sourceStores().find(store => storeIdOf(store) === String(id)) || null;
+  }
+
+  function storeArea(store) {
+    return String(store?.area || store?.neighborhood || '동네 미확인').trim() || '동네 미확인';
   }
 
   function paymentLabels(info) {
@@ -165,54 +201,39 @@
       .map(payment => programMap.get(payment.key) || payment.key);
   }
 
+  function acceptsBenefit(info, key) {
+    return (info?.payments || []).some(payment => (
+      payment.key === key && payment.status === 'accepted'
+    ));
+  }
+
   function verifiedLabel(info) {
     const date = String(info?.verifiedAt || '').replaceAll('-', '.');
     return [info?.sourceLabel, date ? `${date} 확인` : ''].filter(Boolean).join(' · ');
   }
 
-  function menuMarkup(storeId) {
-    const info = serviceData.stores?.[String(storeId)];
-    if (!info) return '';
-    const status = storeStatus(info);
-    const payments = paymentLabels(info);
+  function cardMetaMarkup(status, payments) {
     return `
-      <section class="store-service-menu-summary" data-store-service-menu-summary>
-        <div class="store-service-menu-now">
-          <span class="store-service-status is-${escapeHtml(status.state)}"><i aria-hidden="true"></i>${escapeHtml(status.label)}</span>
-          <strong>${escapeHtml(status.detail)}</strong>
-          <small>${escapeHtml(status.today)}</small>
-        </div>
-        ${payments.length ? `
-          <div class="store-service-payment-badges" aria-label="확인된 사용 가능 결제수단">
-            ${payments.map(label => `<span>✓ ${escapeHtml(label)}</span>`).join('')}
-          </div>
-        ` : ''}
-        <details>
-          <summary>영업시간·결제정보 자세히 보기</summary>
-          <div>
-            <h3>영업시간</h3>
-            <ul>${(info.hours?.displayLines || []).map(line => `<li>${escapeHtml(line)}</li>`).join('')}</ul>
-            <p><b>사용 가능 확인</b> ${payments.length ? payments.map(escapeHtml).join(' · ') : '확인된 항목 없음'}</p>
-            <small>${escapeHtml(verifiedLabel(info))} · 영업시간과 사용 가능 여부는 가게 사정에 따라 달라질 수 있습니다.</small>
-          </div>
-        </details>
-      </section>
+      <span class="store-service-status is-${escapeHtml(status.state)}">
+        <i aria-hidden="true"></i>${escapeHtml(status.label)}
+      </span>
+      <span class="store-service-card-hours">${escapeHtml(status.detail)}</span>
+      ${payments.length
+        ? payments.slice(0, 2).map(label => `<span class="store-service-card-payment">✓ ${escapeHtml(label)}</span>`).join('')
+        : '<span class="store-service-card-unknown">결제·혜택 미확인</span>'}
     `;
   }
 
   function decorateStoreCards() {
     document.querySelectorAll('#storeGrid .store-card[data-id]').forEach(card => {
+      if (card.querySelector('[data-store-service-card-meta]')) return;
       const info = serviceData.stores?.[String(card.dataset.id)];
-      if (!info || card.querySelector('[data-store-service-card-meta]')) return;
       const status = storeStatus(info);
       const payments = paymentLabels(info);
       const meta = document.createElement('div');
       meta.className = 'store-service-card-meta';
       meta.dataset.storeServiceCardMeta = '';
-      meta.innerHTML = `
-        <span class="store-service-status is-${escapeHtml(status.state)}"><i aria-hidden="true"></i>${escapeHtml(status.label)}</span>
-        ${payments.slice(0, 2).map(label => `<span class="store-service-card-payment">✓ ${escapeHtml(label)}</span>`).join('')}
-      `;
+      meta.innerHTML = cardMetaMarkup(status, payments);
       const copy = card.querySelector('.store-info');
       const routes = copy?.querySelector('.miniapps');
       if (routes) routes.before(meta);
@@ -220,74 +241,300 @@
     });
   }
 
-  function ensureOverviewButton() {
-    if (document.querySelector('[data-store-service-overview-open]')) return;
-    const head = document.querySelector('#recommendSection .section-head');
-    if (!head) return;
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'store-service-overview-button';
-    button.dataset.storeServiceOverviewOpen = '';
-    button.innerHTML = '<span aria-hidden="true">◷</span><b>영업·혜택 한눈에</b>';
-    head.append(button);
+  function ensureOverviewButtons() {
+    if (!document.querySelector('[data-store-service-overview-open]')) {
+      const head = document.querySelector('#recommendSection .section-head');
+      if (head) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'store-service-overview-button';
+        button.dataset.storeServiceOverviewOpen = '';
+        button.innerHTML = '<span aria-hidden="true">◷</span><b>영업·혜택 한눈에</b>';
+        head.append(button);
+      }
+    }
+
+    if (!document.querySelector('[data-store-service-search-open]')) {
+      const searchRow = document.querySelector('.main-search-row');
+      if (searchRow) {
+        const entry = document.createElement('div');
+        entry.className = 'store-service-search-entry';
+        entry.innerHTML = `
+          <button type="button" data-store-service-search-open>
+            <span aria-hidden="true">◷</span>
+            <b>지금 영업하는 가게·결제혜택 찾기</b>
+            <small>섬섬페이 · 고유가 지원금 · 온누리상품권</small>
+            <i aria-hidden="true">›</i>
+          </button>
+        `;
+        searchRow.after(entry);
+      }
+    }
+  }
+
+  function neighborhoodRecords() {
+    if (typeof yeosuNeighborhoods !== 'undefined' && Array.isArray(yeosuNeighborhoods)) {
+      return yeosuNeighborhoods;
+    }
+    return [];
+  }
+
+  function neighborhoodRecord(area) {
+    const name = String(area || '').trim();
+    if (!name || name === '동네 미확인') return null;
+    if (typeof neighborhoodByName !== 'undefined' && neighborhoodByName instanceof Map) {
+      const direct = neighborhoodByName.get(name);
+      if (direct) return direct;
+    }
+    const needle = normalize(name);
+    return neighborhoodRecords().find(item => (
+      normalize(item.name) === needle
+      || (item.aliases || []).some(alias => normalize(alias) === needle)
+    )) || null;
+  }
+
+  function coordinateOf(record) {
+    const lat = Number(record?.latitude ?? record?.lat);
+    const lng = Number(record?.longitude ?? record?.lng);
+    return Number.isFinite(lat) && Number.isFinite(lng) ? {lat, lng} : null;
+  }
+
+  function referenceCoordinate() {
+    if (typeof state !== 'undefined') {
+      const current = coordinateOf(state.coords);
+      if (current) return current;
+      if (state.location && state.location !== '여수시 전체') {
+        return coordinateOf(neighborhoodRecord(state.location));
+      }
+    }
+    return null;
+  }
+
+  function distanceBetween(a, b) {
+    if (!a || !b) return Number.POSITIVE_INFINITY;
+    if (typeof haversine === 'function') return haversine(a, b);
+    const radius = 6371;
+    const radians = value => value * Math.PI / 180;
+    const dLat = radians(b.lat - a.lat);
+    const dLng = radians(b.lng - a.lng);
+    const value = Math.sin(dLat / 2) ** 2
+      + Math.cos(radians(a.lat)) * Math.cos(radians(b.lat)) * Math.sin(dLng / 2) ** 2;
+    return radius * 2 * Math.atan2(Math.sqrt(value), Math.sqrt(1 - value));
+  }
+
+  function availableAreas() {
+    const seen = new Set();
+    return sourceStores()
+      .map(storeArea)
+      .filter(area => {
+        if (area === '동네 미확인' || seen.has(area)) return false;
+        seen.add(area);
+        return true;
+      })
+      .sort((a, b) => a.localeCompare(b, 'ko'));
+  }
+
+  function ensureSelectedArea() {
+    const areas = availableAreas();
+    if (selectedArea && areas.includes(selectedArea)) return selectedArea;
+    const current = typeof state !== 'undefined' ? String(state.location || '') : '';
+    selectedArea = current && current !== '여수시 전체' && areas.includes(current)
+      ? current
+      : (areas[0] || '');
+    return selectedArea;
   }
 
   function overviewEntries() {
-    return Object.entries(serviceData.stores || {}).map(([storeId, info]) => ({
-      storeId,
-      info,
-      store: storeById(storeId),
-      status: storeStatus(info),
-      payments: paymentLabels(info)
-    }));
+    const reference = referenceCoordinate();
+    return sourceStores().map((store, index) => {
+      const storeId = storeIdOf(store);
+      const info = serviceData.stores?.[storeId];
+      const area = storeArea(store);
+      const areaCoordinate = coordinateOf(neighborhoodRecord(area));
+      return {
+        storeId,
+        store,
+        info,
+        area,
+        index,
+        areaDistance: reference ? distanceBetween(reference, areaCoordinate) : Number.POSITIVE_INFINITY,
+        status: storeStatus(info),
+        payments: paymentLabels(info)
+      };
+    });
+  }
+
+  function filteredOverviewEntries() {
+    const query = normalize(overviewQuery);
+    const scoped = overviewEntries().filter(entry => {
+      if (query && !normalize(`${entry.store?.name || ''} ${entry.area} ${(entry.store?.cat || []).join?.(' ') || entry.store?.cat || ''}`).includes(query)) {
+        return false;
+      }
+      if (locationMode === 'selected' && entry.area !== ensureSelectedArea()) return false;
+      if (activeStatus === 'open' && !['open', 'closing-soon'].includes(entry.status.state)) return false;
+      if (activeStatus !== 'all' && activeStatus !== 'open' && entry.status.state !== activeStatus) return false;
+      if (activeBenefit !== 'all' && !acceptsBenefit(entry.info, activeBenefit)) return false;
+      return true;
+    });
+
+    if (locationMode === 'nearby' && referenceCoordinate()) {
+      scoped.sort((a, b) => (
+        a.areaDistance - b.areaDistance
+        || a.area.localeCompare(b.area, 'ko')
+        || a.index - b.index
+      ));
+    } else {
+      scoped.sort((a, b) => a.index - b.index);
+    }
+    return scoped;
+  }
+
+  function statusCounts(entries) {
+    return entries.reduce((counts, entry) => {
+      counts.total += 1;
+      counts[entry.status.state] = (counts[entry.status.state] || 0) + 1;
+      if (['open', 'closing-soon'].includes(entry.status.state)) counts.openNow += 1;
+      return counts;
+    }, {total: 0, openNow: 0, open: 0, 'closing-soon': 0, closed: 0, unknown: 0});
+  }
+
+  function locationDescription() {
+    if (locationMode === 'all') return '여수 전체 · 기존 가게순서';
+    if (locationMode === 'selected') return `${ensureSelectedArea() || '선택한 동네'} 가게만`;
+    if (referenceCoordinate()) {
+      const label = typeof state !== 'undefined' && state.location && state.location !== '여수시 전체'
+        ? state.location
+        : '현재 위치';
+      return `${label} 기준 · 가까운 동네부터`;
+    }
+    return '상단에서 위치를 설정하면 가까운 동네부터 보여드립니다.';
+  }
+
+  function statusFilters(counts) {
+    return [
+      ['all', '전체', counts.total],
+      ['open', '지금 영업 중', counts.openNow],
+      ['closing-soon', '곧 종료', counts['closing-soon']],
+      ['closed', '영업 종료', counts.closed],
+      ['unknown', '시간 미확인', counts.unknown]
+    ];
+  }
+
+  function overviewCardMarkup(entry) {
+    const verified = verifiedLabel(entry.info);
+    return `
+      <button type="button" class="store-service-overview-card" data-store-service-store-id="${escapeHtml(entry.storeId)}">
+        <span class="store-service-overview-card-main">
+          <strong>${escapeHtml(entry.store?.name || '가게 정보')}</strong>
+          <small>${escapeHtml(entry.area)} · ${escapeHtml(entry.status.today)}</small>
+        </span>
+        <span class="store-service-status is-${escapeHtml(entry.status.state)}">
+          <i aria-hidden="true"></i>${escapeHtml(entry.status.label)}
+        </span>
+        <span class="store-service-overview-payments">
+          ${entry.payments.length
+            ? entry.payments.map(label => `<b>✓ ${escapeHtml(label)}</b>`).join('')
+            : '<b class="is-unknown">결제·혜택 미확인</b>'}
+          ${verified ? `<small>${escapeHtml(verified)}</small>` : ''}
+        </span>
+        <i aria-hidden="true">›</i>
+      </button>
+    `;
   }
 
   function overviewMarkup() {
-    const entries = overviewEntries().filter(entry => {
-      if (activeFilter === 'all') return true;
-      if (activeFilter === 'open') return entry.status.state === 'open';
-      return (entry.info.payments || []).some(payment => (
-        payment.key === activeFilter && payment.status === 'accepted'
-      ));
-    });
-    const filters = [
-      ['all', '전체'],
-      ['open', '지금 영업 중'],
+    ensureSelectedArea();
+    const allEntries = overviewEntries();
+    const locationAndBenefitEntries = allEntries.filter(entry => (
+      (locationMode !== 'selected' || entry.area === selectedArea)
+      && (activeBenefit === 'all' || acceptsBenefit(entry.info, activeBenefit))
+      && (!overviewQuery || normalize(`${entry.store?.name || ''} ${entry.area} ${(entry.store?.cat || []).join?.(' ') || entry.store?.cat || ''}`).includes(normalize(overviewQuery)))
+    ));
+    const counts = statusCounts(locationAndBenefitEntries);
+    const entries = filteredOverviewEntries();
+    const areas = availableAreas();
+    const benefitFilters = [
+      ['all', '전체 혜택'],
       ...(serviceData.programs || []).map(program => [program.key, program.label])
     ];
+
     return `
-      <section class="store-service-overview" role="dialog" aria-modal="true" aria-labelledby="storeServiceOverviewTitle">
+      <section class="store-service-overview" role="dialog" aria-modal="true" aria-labelledby="storeServiceOverviewTitle" data-store-service-source-count="${allEntries.length}">
         <header>
           <div>
-            <span>확인된 가게 정보</span>
-            <h2 id="storeServiceOverviewTitle">영업·혜택 한눈에</h2>
+            <span>가게 검색</span>
+            <h2 id="storeServiceOverviewTitle">영업시간·결제혜택 찾기</h2>
           </div>
-          <button type="button" data-store-service-overview-close aria-label="영업·혜택 정보 닫기">×</button>
+          <button type="button" data-store-service-overview-close aria-label="영업시간·결제혜택 찾기 닫기">×</button>
         </header>
-        <p class="store-service-overview-lead">사진·가게 확인 자료가 있는 정보만 표시합니다. 표시가 없으면 ‘사용 불가’가 아니라 아직 확인되지 않은 상태입니다.</p>
-        <nav aria-label="영업 및 결제혜택 필터">
-          ${filters.map(([key, label]) => `
-            <button type="button" data-store-service-filter="${escapeHtml(key)}" class="${key === activeFilter ? 'active' : ''}">${escapeHtml(label)}</button>
-          `).join('')}
-        </nav>
-        <div class="store-service-overview-list">
-          ${entries.length ? entries.map(entry => `
-            <button type="button" class="store-service-overview-card" data-store-service-store-id="${escapeHtml(entry.storeId)}">
-              <span class="store-service-overview-card-main">
-                <strong>${escapeHtml(entry.store?.name || '가게 정보')}</strong>
-                <small>${escapeHtml(entry.status.today)}</small>
-              </span>
-              <span class="store-service-status is-${escapeHtml(entry.status.state)}"><i aria-hidden="true"></i>${escapeHtml(entry.status.label)}</span>
-              <span class="store-service-overview-payments">
-                ${entry.payments.length ? entry.payments.map(label => `<b>✓ ${escapeHtml(label)}</b>`).join('') : '<b>확인된 혜택 없음</b>'}
-              </span>
-              <i aria-hidden="true">›</i>
-            </button>
-          `).join('') : '<p class="store-service-overview-empty">이 조건으로 확인된 가게가 아직 없습니다.</p>'}
+
+        <p class="store-service-overview-lead">
+          현재 위치에서 가까운 동네부터 볼 수 있습니다. 회색 ‘미확인’은 사용 불가가 아니라 아직 확인되지 않은 정보입니다.
+        </p>
+
+        <label class="store-service-overview-search">
+          <span aria-hidden="true">⌕</span>
+          <input type="search" value="${escapeHtml(overviewQuery)}" data-store-service-query placeholder="가게명·메뉴·동네 검색" aria-label="영업시간 및 결제혜택 가게 검색">
+          ${overviewQuery ? '<button type="button" data-store-service-query-clear aria-label="검색어 지우기">×</button>' : ''}
+        </label>
+
+        <section class="store-service-filter-block" aria-labelledby="storeServiceLocationLabel">
+          <div class="store-service-filter-title">
+            <b id="storeServiceLocationLabel">지역범위</b>
+            <small>${escapeHtml(locationDescription())}</small>
+          </div>
+          <div class="store-service-location-controls">
+            <button type="button" data-store-service-location-mode="nearby" class="${locationMode === 'nearby' ? 'active' : ''}">내 위치 가까운 순</button>
+            <button type="button" data-store-service-location-mode="selected" class="${locationMode === 'selected' ? 'active' : ''}">동네만 보기</button>
+            <button type="button" data-store-service-location-mode="all" class="${locationMode === 'all' ? 'active' : ''}">여수 전체</button>
+            <select data-store-service-area aria-label="볼 동네 선택">
+              ${areas.map(area => `<option value="${escapeHtml(area)}" ${area === selectedArea ? 'selected' : ''}>${escapeHtml(area)}</option>`).join('')}
+            </select>
+          </div>
+        </section>
+
+        <section class="store-service-filter-block" aria-labelledby="storeServiceStatusLabel">
+          <div class="store-service-filter-title">
+            <b id="storeServiceStatusLabel">영업상태</b>
+            <small>색상과 글자를 함께 표시합니다.</small>
+          </div>
+          <nav aria-label="영업상태 필터">
+            ${statusFilters(counts).map(([key, label, count]) => `
+              <button type="button" data-store-service-status="${escapeHtml(key)}" class="${key === activeStatus ? 'active' : ''}">
+                ${escapeHtml(label)} <small>${count}</small>
+              </button>
+            `).join('')}
+          </nav>
+        </section>
+
+        <section class="store-service-filter-block" aria-labelledby="storeServiceBenefitLabel">
+          <div class="store-service-filter-title">
+            <b id="storeServiceBenefitLabel">결제혜택</b>
+            <small>확인된 사용 가능 가게만 골라봅니다.</small>
+          </div>
+          <nav aria-label="결제혜택 필터">
+            ${benefitFilters.map(([key, label]) => `
+              <button type="button" data-store-service-benefit="${escapeHtml(key)}" class="${key === activeBenefit ? 'active' : ''}">
+                ${escapeHtml(label)}
+              </button>
+            `).join('')}
+          </nav>
+        </section>
+
+        <div class="store-service-overview-result" aria-live="polite">
+          <b>${entries.length}개 가게</b>
+          <span>${escapeHtml(locationDescription())}</span>
         </div>
+
+        <div class="store-service-overview-list">
+          ${entries.length
+            ? entries.map(overviewCardMarkup).join('')
+            : '<p class="store-service-overview-empty">이 조건으로 확인되는 가게가 아직 없습니다.<small>다른 영업상태·혜택·지역범위를 선택해 보세요.</small></p>'}
+        </div>
+
         <footer>
-          <p>가게가 추가될 때마다 같은 기준으로 자동 정리됩니다.</p>
-          <small>영업시간·사용 가능 여부는 변경될 수 있으므로 주문 전 가게에 다시 확인해 주세요.</small>
+          <p>사진으로 받은 정보는 가게를 확인한 뒤 검토·승인하여 반영합니다.</p>
+          <small>영업시간과 사용 가능 여부는 바뀔 수 있으므로 방문·주문 전 가게에 다시 확인해 주세요.</small>
         </footer>
       </section>
     `;
@@ -304,22 +551,33 @@
     return overlay;
   }
 
-  function renderOverview() {
+  function renderOverview({focusQuery = false} = {}) {
     const overlay = ensureOverviewOverlay();
+    const scrollTop = overlay.querySelector('.store-service-overview')?.scrollTop || 0;
     overlay.innerHTML = overviewMarkup();
+    const panel = overlay.querySelector('.store-service-overview');
+    if (panel) panel.scrollTop = scrollTop;
+    if (focusQuery) {
+      const input = overlay.querySelector('[data-store-service-query]');
+      input?.focus();
+      input?.setSelectionRange?.(input.value.length, input.value.length);
+    }
   }
 
   function showOverview(trigger) {
     const overlay = ensureOverviewOverlay();
     lastFocused = trigger || document.activeElement;
-    activeFilter = 'all';
+    activeStatus = 'all';
+    activeBenefit = 'all';
+    locationMode = 'nearby';
+    overviewQuery = '';
     renderOverview();
     overlay.hidden = false;
     document.body.classList.add('store-service-overview-open');
     try {
       history.pushState({...history.state, [HISTORY_KEY]: true}, '', location.href);
     } catch {
-      // The overlay still works when browser history is unavailable.
+      // The finder still works when browser history is unavailable.
     }
     overlay.querySelector('[data-store-service-overview-close]')?.focus();
   }
@@ -356,7 +614,7 @@
     })
     .then(data => {
       serviceData = data;
-      ensureOverviewButton();
+      ensureOverviewButtons();
       decorateStoreCards();
       return data;
     })
@@ -369,11 +627,24 @@
     ready,
     get: storeId => serviceData.stores?.[String(storeId)] || null,
     status: (storeId, date) => storeStatus(serviceData.stores?.[String(storeId)], date),
-    menuMarkup
+    showOverview
+  });
+
+  document.addEventListener('input', event => {
+    if (!event.target.matches('[data-store-service-query]')) return;
+    overviewQuery = event.target.value;
+    renderOverview({focusQuery: true});
+  });
+
+  document.addEventListener('change', event => {
+    if (!event.target.matches('[data-store-service-area]')) return;
+    selectedArea = event.target.value;
+    locationMode = 'selected';
+    renderOverview();
   });
 
   document.addEventListener('click', event => {
-    const opener = event.target.closest('[data-store-service-overview-open]');
+    const opener = event.target.closest('[data-store-service-overview-open], [data-store-service-search-open]');
     if (opener) {
       showOverview(opener);
       return;
@@ -382,9 +653,27 @@
       requestOverviewClose();
       return;
     }
-    const filter = event.target.closest('[data-store-service-filter]');
-    if (filter) {
-      activeFilter = filter.dataset.storeServiceFilter || 'all';
+    if (event.target.closest('[data-store-service-query-clear]')) {
+      overviewQuery = '';
+      renderOverview({focusQuery: true});
+      return;
+    }
+    const statusFilter = event.target.closest('[data-store-service-status]');
+    if (statusFilter) {
+      activeStatus = statusFilter.dataset.storeServiceStatus || 'all';
+      renderOverview();
+      return;
+    }
+    const benefitFilter = event.target.closest('[data-store-service-benefit]');
+    if (benefitFilter) {
+      activeBenefit = benefitFilter.dataset.storeServiceBenefit || 'all';
+      renderOverview();
+      return;
+    }
+    const locationFilter = event.target.closest('[data-store-service-location-mode]');
+    if (locationFilter) {
+      locationMode = locationFilter.dataset.storeServiceLocationMode || 'nearby';
+      if (locationMode === 'selected') ensureSelectedArea();
       renderOverview();
       return;
     }
@@ -413,8 +702,11 @@
   }, true);
 
   new MutationObserver(() => {
-    ensureOverviewButton();
+    ensureOverviewButtons();
     decorateStoreCards();
+    const overlay = document.querySelector('[data-store-service-overview-overlay]');
+    const renderedCount = Number(overlay?.querySelector('[data-store-service-source-count]')?.dataset.storeServiceSourceCount);
+    if (overlay && !overlay.hidden && renderedCount !== sourceStores().length) renderOverview();
   }).observe(document.documentElement, {childList: true, subtree: true});
 
   window.setInterval(() => {

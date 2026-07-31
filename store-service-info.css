@@ -22,7 +22,7 @@ body.store-service-overview-open {
 }
 
 .store-service-search-entry {
-  margin: -4px 0 15px;
+  margin: -4px 16px 15px;
 }
 
 .store-service-search-entry > button {
@@ -497,5 +497,12 @@ body.store-service-overview-open {
 
   .store-service-overview-card-main strong {
     font-size: 15px;
+  }
+}
+
+@media (max-width: 380px) {
+  .store-service-search-entry {
+    margin-right: 10px;
+    margin-left: 10px;
   }
 }

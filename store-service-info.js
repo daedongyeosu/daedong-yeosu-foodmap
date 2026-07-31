@@ -198,13 +198,36 @@
     const programMap = new Map((serviceData.programs || []).map(program => [program.key, program.label]));
     return (info?.payments || [])
       .filter(payment => payment.status === 'accepted')
-      .map(payment => programMap.get(payment.key) || payment.key);
+      .map(payment => ({
+        key: payment.key,
+        label: programMap.get(payment.key) || payment.key,
+        kind: 'payment'
+      }));
+  }
+
+  function deliveryLabels(info) {
+    const deliveryMap = new Map((serviceData.deliveryBenefits || []).map(benefit => [benefit.key, benefit.label]));
+    return (info?.delivery || [])
+      .filter(benefit => benefit.status === 'available')
+      .map(benefit => ({
+        key: benefit.key,
+        label: deliveryMap.get(benefit.key) || benefit.key,
+        kind: 'delivery'
+      }));
+  }
+
+  function benefitLabels(info) {
+    return [...paymentLabels(info), ...deliveryLabels(info)];
   }
 
   function acceptsBenefit(info, key) {
-    return (info?.payments || []).some(payment => (
+    const acceptsPayment = (info?.payments || []).some(payment => (
       payment.key === key && payment.status === 'accepted'
     ));
+    const offersDelivery = (info?.delivery || []).some(benefit => (
+      benefit.key === key && benefit.status === 'available'
+    ));
+    return acceptsPayment || offersDelivery;
   }
 
   function verifiedLabel(info) {
@@ -212,14 +235,19 @@
     return [info?.sourceLabel, date ? `${date} 확인` : ''].filter(Boolean).join(' · ');
   }
 
-  function cardMetaMarkup(status, payments) {
+  function benefitBadgeMarkup(benefit, className) {
+    const deliveryClass = benefit.kind === 'delivery' ? ' is-delivery' : '';
+    return `<span class="${className}${deliveryClass}">✓ ${escapeHtml(benefit.label)}</span>`;
+  }
+
+  function cardMetaMarkup(status, benefits) {
     return `
       <span class="store-service-status is-${escapeHtml(status.state)}">
         <i aria-hidden="true"></i>${escapeHtml(status.label)}
       </span>
       <span class="store-service-card-hours">${escapeHtml(status.detail)}</span>
-      ${payments.length
-        ? payments.slice(0, 2).map(label => `<span class="store-service-card-payment">✓ ${escapeHtml(label)}</span>`).join('')
+      ${benefits.length
+        ? benefits.slice(0, 3).map(benefit => benefitBadgeMarkup(benefit, 'store-service-card-payment')).join('')
         : '<span class="store-service-card-unknown">결제·혜택 미확인</span>'}
     `;
   }
@@ -229,11 +257,11 @@
       if (card.querySelector('[data-store-service-card-meta]')) return;
       const info = serviceData.stores?.[String(card.dataset.id)];
       const status = storeStatus(info);
-      const payments = paymentLabels(info);
+      const benefits = benefitLabels(info);
       const meta = document.createElement('div');
       meta.className = 'store-service-card-meta';
       meta.dataset.storeServiceCardMeta = '';
-      meta.innerHTML = cardMetaMarkup(status, payments);
+      meta.innerHTML = cardMetaMarkup(status, benefits);
       const copy = card.querySelector('.store-info');
       const routes = copy?.querySelector('.miniapps');
       if (routes) routes.before(meta);
@@ -262,8 +290,8 @@
         entry.innerHTML = `
           <button type="button" data-store-service-search-open>
             <span aria-hidden="true">◷</span>
-            <b>지금 영업하는 가게·결제혜택 찾기</b>
-            <small>섬섬페이 · 고유가 지원금 · 온누리상품권</small>
+            <b>지금 영업하는 가게·결제·배달혜택 찾기</b>
+            <small>섬섬페이 · 고유가 지원금 · 온누리상품권 · 무료배달</small>
             <i aria-hidden="true">›</i>
           </button>
         `;
@@ -359,7 +387,7 @@
         index,
         areaDistance: reference ? distanceBetween(reference, areaCoordinate) : Number.POSITIVE_INFINITY,
         status: storeStatus(info),
-        payments: paymentLabels(info)
+        benefits: benefitLabels(info)
       };
     });
   }
@@ -432,8 +460,11 @@
           <i aria-hidden="true"></i>${escapeHtml(entry.status.label)}
         </span>
         <span class="store-service-overview-payments">
-          ${entry.payments.length
-            ? entry.payments.map(label => `<b>✓ ${escapeHtml(label)}</b>`).join('')
+          ${entry.benefits.length
+            ? entry.benefits.map(benefit => {
+              const deliveryClass = benefit.kind === 'delivery' ? ' class="is-delivery"' : '';
+              return `<b${deliveryClass}>✓ ${escapeHtml(benefit.label)}</b>`;
+            }).join('')
             : '<b class="is-unknown">결제·혜택 미확인</b>'}
           ${verified ? `<small>${escapeHtml(verified)}</small>` : ''}
         </span>
@@ -455,7 +486,8 @@
     const areas = availableAreas();
     const benefitFilters = [
       ['all', '전체 혜택'],
-      ...(serviceData.programs || []).map(program => [program.key, program.label])
+      ...(serviceData.programs || []).map(program => [program.key, program.label]),
+      ...(serviceData.deliveryBenefits || []).map(benefit => [benefit.key, benefit.label])
     ];
     const isEntireStoreList = (
       locationMode !== 'selected'
@@ -469,9 +501,9 @@
         <header>
           <div>
             <span>가게 검색</span>
-            <h2 id="storeServiceOverviewTitle">영업시간·결제혜택 찾기</h2>
+            <h2 id="storeServiceOverviewTitle">영업시간·결제·배달혜택 찾기</h2>
           </div>
-          <button type="button" data-store-service-overview-close aria-label="영업시간·결제혜택 찾기 닫기">×</button>
+          <button type="button" data-store-service-overview-close aria-label="영업시간·결제·배달혜택 찾기 닫기">×</button>
         </header>
 
         <p class="store-service-overview-lead">
@@ -480,7 +512,7 @@
 
         <label class="store-service-overview-search">
           <span aria-hidden="true">⌕</span>
-          <input type="search" value="${escapeHtml(overviewQuery)}" data-store-service-query placeholder="가게명·메뉴·동네 검색" aria-label="영업시간 및 결제혜택 가게 검색">
+          <input type="search" value="${escapeHtml(overviewQuery)}" data-store-service-query placeholder="가게명·메뉴·동네 검색" aria-label="영업시간 및 결제·배달혜택 가게 검색">
           ${overviewQuery ? '<button type="button" data-store-service-query-clear aria-label="검색어 지우기">×</button>' : ''}
         </label>
 
@@ -515,10 +547,10 @@
 
         <section class="store-service-filter-block" aria-labelledby="storeServiceBenefitLabel">
           <div class="store-service-filter-title">
-            <b id="storeServiceBenefitLabel">결제혜택</b>
+            <b id="storeServiceBenefitLabel">결제·배달혜택</b>
             <small>확인된 사용 가능 가게만 골라봅니다.</small>
           </div>
-          <nav aria-label="결제혜택 필터">
+          <nav aria-label="결제 및 배달혜택 필터">
             ${benefitFilters.map(([key, label]) => `
               <button type="button" data-store-service-benefit="${escapeHtml(key)}" class="${key === activeBenefit ? 'active' : ''}">
                 ${escapeHtml(label)}
@@ -540,7 +572,7 @@
 
         <footer>
           <p>사진으로 받은 정보는 가게를 확인한 뒤 검토·승인하여 반영합니다.</p>
-          <small>영업시간과 사용 가능 여부는 바뀔 수 있으므로 방문·주문 전 가게에 다시 확인해 주세요.</small>
+          <small>영업시간과 사용 가능 여부는 바뀔 수 있습니다. 무료배달은 거리·주문금액·시간에 따라 달라질 수 있으므로 주문 전 다시 확인해 주세요.</small>
         </footer>
       </section>
     `;

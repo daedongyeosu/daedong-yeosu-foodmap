@@ -294,20 +294,19 @@
   function menuCardMarkup(item) {
     const searchText = `${item.name} ${item.description} ${item.category}`.toLowerCase();
     const photo = item.image
-      ? `<img src="${escapeMenuHtml(item.image)}" alt="${escapeMenuHtml(item.name)}" loading="lazy" decoding="async">`
-      : `
-        <div class="store-menu-photo-placeholder" role="img" aria-label="${escapeMenuHtml(item.name)} 사진 미제공">
-          <span aria-hidden="true">${item.adultOnly ? '19' : item.category === '음료' ? '🥤' : '🍲'}</span>
-          <small>사진 미제공</small>
-        </div>
-      `;
-    return `
-      <article class="store-menu-card" role="button" tabindex="0" aria-label="${escapeMenuHtml(item.name)} 주문방법 보기" data-menu-card data-menu-select data-menu-id="${escapeMenuHtml(item.id)}" data-category="${escapeMenuHtml(item.category)}" data-search="${escapeMenuHtml(searchText)}">
+      ? `
         <div class="store-menu-photo">
-          ${photo}
+          <img src="${escapeMenuHtml(item.image)}" alt="${escapeMenuHtml(item.name)}" loading="lazy" decoding="async">
           ${item.adultOnly ? '<span>19세 이상</span>' : ''}
         </div>
+      `
+      : '';
+    const textOnlyClass = item.image ? '' : ' is-text-only';
+    return `
+      <article class="store-menu-card${textOnlyClass}" role="button" tabindex="0" aria-label="${escapeMenuHtml(item.name)} 주문방법 보기" data-menu-card data-menu-select data-menu-id="${escapeMenuHtml(item.id)}" data-category="${escapeMenuHtml(item.category)}" data-search="${escapeMenuHtml(searchText)}" data-menu-has-photo="${item.image ? 'true' : 'false'}">
+        ${photo}
         <div class="store-menu-copy">
+          ${item.adultOnly && !item.image ? '<span class="store-menu-age-badge">19세 이상</span>' : ''}
           <p>${escapeMenuHtml(item.category)}</p>
           <h3>${escapeMenuHtml(item.name)}</h3>
           ${item.description ? `<div>${escapeMenuHtml(item.description)}</div>` : ''}

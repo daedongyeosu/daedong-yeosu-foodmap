@@ -123,7 +123,17 @@ try {
     page.locator('[data-menu-category]').allInnerTexts().then(values => values.join('|') === '전체|세트·정식|국밥·탕|수육|만두·딤섬|곁들임|음료|주류'),
     '수라상궁 전용 메뉴 분류 표시'
   );
-  await check(page.locator('.store-menu-photo-placeholder').count().then(count => count === 8), '사진 미제공 메뉴를 정직한 대체표시로 구분');
+  await check(
+    page.locator('.store-menu-photo-placeholder').count().then(count => count === 0)
+      .then(first => first && page.locator('[data-menu-card][data-menu-has-photo="false"]').count().then(count => count === 8))
+      .then(first => first && page.locator('[data-menu-card][data-menu-has-photo="false"] .store-menu-photo').count().then(count => count === 0)),
+    '사진 없는 메뉴는 빈 사진칸 없이 설명 카드로 표시'
+  );
+  await check(
+    page.locator('[data-menu-card][data-menu-has-photo="false"]').allInnerTexts()
+      .then(values => values.every(value => !value.includes('사진 미제공'))),
+    '사진 없는 메뉴에 사진 미제공 문구를 노출하지 않음'
+  );
   await check(
     page.locator('.store-menu-photo-disclaimer').innerText().then(value => value.includes('실제 조리된 음식과 다를 수 있습니다')),
     '실제 음식과 다를 수 있다는 안내 표시'

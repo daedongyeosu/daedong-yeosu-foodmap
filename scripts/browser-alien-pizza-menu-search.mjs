@@ -44,6 +44,8 @@ try {
   await check(scroll.evaluate(node => node.scrollTop === 0), '검색 모드 진입 시 결과 시작 위치로 이동');
   await check(page.locator('.store-menu-hero').evaluate(node => getComputedStyle(node).display === 'none'), '검색 중 가게 소개 영역 숨김');
   await check(page.locator('.store-menu-tools nav').evaluate(node => getComputedStyle(node).display === 'none'), '검색 중 카테고리 버튼 숨김');
+  await check(page.locator('.store-menu-sticky-actions').evaluate(node => getComputedStyle(node).pointerEvents === 'none'), '검색 중 주문 버튼이 결과를 가리지 않음');
+
   await search.fill('베지');
   await page.waitForFunction(() => document.querySelector('[data-menu-result-count]')?.textContent === '1');
   await check(page.locator('[data-menu-card]:visible').count().then(count => count === 1), '베지 검색 결과 한 개만 표시');
@@ -51,7 +53,7 @@ try {
   await check(page.locator('[data-menu-card]:visible mark').count().then(count => count > 0), '메뉴명에서 일치 검색어 강조');
   await check(page.locator('[data-menu-card]:visible').boundingBox().then(box => Boolean(box && box.y < 500)), '키보드 위에서도 첫 검색 결과가 보이는 위치에 표시');
   await check(page.locator('[data-menu-card]:visible .store-menu-card-action').evaluate(node => getComputedStyle(node).display !== 'none'), '검색 결과에 주문 연결 동작 표시');
-  const directOrderHref = await page.locator('.store-menu-order [data-menu-order="direct"]').getAttribute('href');
+  const directOrderHref = await page.locator('.store-menu-sticky-actions .primary').getAttribute('href');
   await page.locator('[data-menu-card]:visible').click();
   await check(page.locator('[data-menu-order-sheet]').evaluate(node => !node.hidden), '검색 결과 메뉴 터치 시 주문방법 선택창 열림');
   await check(page.locator('[data-selected-menu-name]').innerText().then(value => value.includes('베지테리언')), '선택한 메뉴명을 주문방법 선택창에 유지');
@@ -61,6 +63,7 @@ try {
   await check(page.locator('[data-menu-order-sheet] [data-menu-order="direct"] .menu-order-icon svg path').count().then(count => count === 2), '가게바로주문 아이콘을 외부 파일 없이 표시');
   await check(page.locator('[data-menu-order-sheet] [data-menu-order="phone"]').getAttribute('href').then(value => String(value).startsWith('tel:')), '전화주문 링크 제공');
   await check(page.locator('[data-menu-order-sheet] [data-menu-order="phone"] .menu-order-icon svg circle').count().then(count => count === 1), '전화주문 아이콘을 주문방법 선택창에 표시');
+  await check(page.locator('.store-menu-sticky-actions .phone svg circle').count().then(count => count === 1), '전화주문 아이콘을 하단 고정 버튼에 표시');
   await check(page.evaluate(() => history.state?.daedongMenuOrder === true), '주문방법 선택창을 브라우저 뒤로가기 단계로 등록');
   await check(search.evaluate(node => document.activeElement !== node), '메뉴 선택 시 검색 키보드 닫힘');
 
@@ -92,6 +95,7 @@ try {
   }, maxScroll, {timeout: 3000});
   await check(scroll.evaluate((node, expected) => Math.abs(node.scrollTop - expected) <= 2, maxScroll), '검색 취소 시 이전 메뉴 위치 복귀');
   await check(page.locator('[data-menu-card]:visible').count().then(count => count === 53), '검색 취소 후 전체 메뉴와 기존 분류 상태 복원');
+  await check(page.locator('.store-menu-sticky-actions').evaluate(node => getComputedStyle(node).pointerEvents !== 'none'), '검색 취소 후 주문 버튼 복원');
 
   await page.goBack();
   await page.waitForFunction(() => document.querySelector('[data-store-menu-overlay]')?.hidden === true);

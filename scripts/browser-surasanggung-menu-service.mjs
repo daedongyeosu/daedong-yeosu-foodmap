@@ -3,6 +3,8 @@ import {chromium} from 'playwright';
 
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
 const storeId = '7bc7239e6b509c44';
+const onnuriStoreId = 'dc42166bad88a929';
+const freeDeliveryStoreId = '11442d3b3328f951';
 const report = {success: false, checks: [], errors: []};
 const browser = await chromium.launch({headless: true});
 const context = await browser.newContext({
@@ -173,11 +175,23 @@ try {
     '확인된 가게를 영업상태·혜택과 함께 표시'
   );
   await page.locator('[data-store-service-benefit="onnuri-gift-certificate"]').click();
-  await check(page.locator('.store-service-overview-empty').isVisible(), '미확인 혜택을 사용 가능으로 오표시하지 않음');
+  await check(
+    page.locator(`[data-store-service-store-id="${onnuriStoreId}"]`).isVisible(),
+    '온누리상품권 확인 업장만 필터로 표시'
+  );
+  await page.locator('[data-store-service-benefit="free-delivery"]').click();
+  await check(
+    page.locator(`[data-store-service-store-id="${freeDeliveryStoreId}"]`).innerText()
+      .then(value => value.includes('무료배달 가능')),
+    '무료배달 확인 업장을 초록 배지와 필터로 표시'
+  );
+  await check(
+    page.locator(`[data-store-service-store-id="${freeDeliveryStoreId}"] .is-delivery`).isVisible(),
+    '무료배달을 결제상품권과 구분한 색상으로 표시'
+  );
   await page.locator('[data-store-service-benefit="yeosu-seomseom-pay"]').click();
   await check(
-    page.locator('[data-store-service-store-id]').count().then(count => count === 1)
-      .then(first => first && page.locator(`[data-store-service-store-id="${storeId}"]`).isVisible()),
+    page.locator(`[data-store-service-store-id="${storeId}"]`).isVisible(),
     '여수섬섬페이 가능 가게만 골라 표시'
   );
   await page.locator('[data-store-service-status="open"]').click();

@@ -48,6 +48,8 @@ assert.equal(store.routes.find(route => route.name === '전화주문')?.url, 'ht
 
 const info = service.stores[menu.storeId];
 assert.ok(info);
+assert.equal(service.version, 2);
+assert.deepEqual(service.deliveryBenefits, [{key: 'free-delivery', label: '무료배달 가능'}]);
 assert.equal(info.verifiedAt, '2026-07-31');
 assert.deepEqual(info.hours.displayLines, [
   '월–토 11:00–다음 날 01:00',
@@ -66,13 +68,27 @@ assert.deepEqual(info.hours.closures[0], {
 assert.deepEqual(info.payments, [{key: 'yeosu-seomseom-pay', status: 'accepted'}]);
 assert.ok(!info.payments.some(payment => ['high-oil-support', 'onnuri-gift-certificate'].includes(payment.key)));
 
+const onnuriStore = service.stores.dc42166bad88a929;
+assert.ok(onnuriStore.payments.some(payment => payment.key === 'onnuri-gift-certificate' && payment.status === 'accepted'));
+assert.ok(onnuriStore.payments.some(payment => payment.key === 'yeosu-seomseom-pay' && payment.status === 'accepted'));
+const supportStore = service.stores['0abd7147b7d6b1dd'];
+assert.ok(supportStore.payments.some(payment => payment.key === 'high-oil-support' && payment.status === 'accepted'));
+assert.ok(supportStore.payments.some(payment => payment.key === 'yeosu-seomseom-pay' && payment.status === 'accepted'));
+const freeDeliveryStore = service.stores['11442d3b3328f951'];
+assert.deepEqual(freeDeliveryStore.delivery, [{
+  key: 'free-delivery',
+  status: 'available',
+  note: '배달앱 표시 기준 · 거리·주문금액 등에 따라 달라질 수 있음'
+}]);
+assert.ok(Object.keys(service.stores).every(id => stores.some(item => String(item.store_id || item.id) === id)));
+
 assert.equal(stores.length, 710);
 assert.equal(sha256('data/stores.json'), '2b976a0e05ad494e6723bc191962e1d8c66e8e1d93f98e6f0750baf25bdc6630');
 assert.equal(sha256('data/store-priority.json'), '2b91fa849797306d5f7d8e49de1d82bfbf28f85a235fee7cf0448104847b93f9');
 assert.equal(sha256('data/store-coordinates.json'), '22f21699710ccd27de9dc73d4521fb79fac13c2a209be73e8e34519f58f087f1');
 
-assert.match(index, /store-service-info\.css\?v=store-service-3/);
-assert.match(index, /store-service-info\.js\?v=store-service-3/);
+assert.match(index, /store-service-info\.css\?v=store-service-4/);
+assert.match(index, /store-service-info\.js\?v=store-service-4/);
 assert.match(index, /store-menu-preview\.css\?v=store-menu-9/);
 assert.match(index, /store-menu-preview\.js\?v=store-menu-9/);
 assert.match(menuScript, /store-menu-content\/surasanggung\/menu\.json/);
@@ -84,7 +100,7 @@ assert.doesNotMatch(menuScript, /data-store-service-menu-summary/);
 assert.doesNotMatch(menuScript, /menuMarkup/);
 assert.match(serviceScript, /Asia\/Seoul/);
 assert.match(serviceScript, /monthly-weekday/);
-assert.match(serviceScript, /영업시간·결제혜택 찾기/);
+assert.match(serviceScript, /영업시간·결제·배달혜택 찾기/);
 assert.match(serviceScript, /내 위치 가까운 순/);
 assert.match(serviceScript, /동네만 보기/);
 assert.match(serviceScript, /여수 전체/);
@@ -94,6 +110,8 @@ assert.match(serviceScript, /결제·혜택 미확인/);
 assert.match(serviceScript, /회색 ‘미확인’은 사용 불가가 아니라 아직 확인되지 않은 정보/);
 assert.match(serviceScript, /sourceStores\(\)\.map/);
 assert.match(serviceScript, /data-store-service-benefit/);
+assert.match(serviceScript, /deliveryBenefits/);
+assert.match(serviceScript, /무료배달은 거리·주문금액·시간에 따라 달라질 수 있으므로/);
 assert.match(serviceScript, /data-store-service-status/);
 assert.match(serviceScript, /data-store-service-location-mode/);
 assert.match(serviceScript, /daedongStoreServiceOverview/);
@@ -102,6 +120,8 @@ assert.match(serviceScript, /isEntireStoreList \? '전체 가게'/);
 assert.match(serviceScript, /count === null \? ''/);
 assert.doesNotMatch(serviceScript, /data\/stores\.json/);
 assert.match(serviceStyle, /\.store-service-search-entry\s*\{\s*margin: -4px 16px 15px;/);
+assert.match(serviceStyle, /\.store-service-card-payment\.is-delivery/);
+assert.match(serviceStyle, /\.store-service-overview-payments b\.is-delivery/);
 assert.match(serviceStyle, /@media \(max-width: 380px\)[\s\S]*?margin-right: 10px;[\s\S]*?margin-left: 10px;/);
 
 console.log('surasanggung-menu-service-regression-test: ok');

@@ -13,7 +13,7 @@
   "backgroundColor": "#FFFFFF",
   "enableNotifications": true,
   "startUrl": "/?source=android-app",
-  "iconUrl": "https://raw.githubusercontent.com/daedongyeosu/daedong-yeosu-foodmap/agent/android-pwa-foundation-20260731/app-icon.svg",
+  "iconUrl": "http://127.0.0.1:8765/app-icon.svg",
   "maskableIconUrl": "https://raw.githubusercontent.com/daedongyeosu/daedong-yeosu-foodmap/agent/android-pwa-foundation-20260731/app-icon.svg",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
@@ -24,7 +24,7 @@
   "appVersionCode": 0,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
-  "webManifestUrl": "https://daedongmap.com/manifest.webmanifest",
+  "webManifestUrl": "http://127.0.0.1:8765/manifest.webmanifest",
   "fallbackType": "customtabs",
   "features": {
     "locationDelegation": {

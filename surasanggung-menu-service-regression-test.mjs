@@ -118,7 +118,7 @@ assert.match(serviceScript, /sourceStores\(\)\.map/);
 assert.match(serviceScript, /data-store-service-benefit/);
 assert.match(serviceScript, /deliveryBenefits/);
 assert.match(serviceScript, /무료배달은 거리·주문금액·시간에 따라 달라질 수 있으므로/);
-assert.match(serviceScript, /dataStoreServiceDetail/);
+assert.match(serviceScript, /dataset\.storeServiceDetail/);
 assert.match(serviceScript, /영업시간·상품권·무료배달/);
 assert.match(serviceScript, /무료배달 여부 미확인/);
 assert.match(serviceScript, /사용 불가가 아니라 아직 확인되지 않은 정보/);

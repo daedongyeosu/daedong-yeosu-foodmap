@@ -30,6 +30,18 @@ try {
     && window.daedongStoreServiceInfo
   ));
   await page.evaluate(() => window.daedongStoreServiceInfo.ready);
+  await check(
+    page.locator('[data-store-service-search-open]').isVisible(),
+    '검색영역에 영업시간·결제혜택 찾기 진입버튼 표시'
+  );
+  await check(
+    page.locator('#storeGrid .store-card [data-store-service-card-meta]').count().then(count => count > 0),
+    '일반 가게카드에 영업시간·결제혜택 상태 표시'
+  );
+  await check(
+    page.locator('#storeGrid .store-card [data-store-service-card-meta] .store-service-card-unknown').count().then(count => count > 0),
+    '미등록 혜택을 사용불가가 아닌 미확인으로 표시'
+  );
 
   await page.evaluate(() => {
     const search = document.querySelector('#mainSearch');
@@ -69,19 +81,8 @@ try {
     '실제 음식과 다를 수 있다는 안내 표시'
   );
   await check(
-    page.locator('[data-store-service-menu-summary]').innerText().then(value => (
-      value.includes('여수섬섬페이')
-      && value.includes('오늘')
-    )),
-    '음식보기 상단에 현재 영업상태와 확인 결제수단 표시'
-  );
-  await page.locator('[data-store-service-menu-summary] summary').click();
-  await check(
-    page.locator('[data-store-service-menu-summary]').innerText().then(value => (
-      value.includes('월–토 11:00–다음 날 01:00')
-      && value.includes('매월 둘째 수요일 휴무')
-    )),
-    '상세 영업시간과 정기휴무 표시'
+    page.locator('[data-store-service-menu-summary]').count().then(count => count === 0),
+    '음식보기 안에는 영업시간·결제혜택 정보를 넣지 않음'
   );
 
   const menuSearch = page.locator('[data-menu-search]');
@@ -113,16 +114,57 @@ try {
   );
 
   await page.locator('#modal .modal-close').click();
-  await page.locator('[data-store-service-overview-open]').click();
-  await check(page.locator('.store-service-overview').isVisible(), '영업·혜택 한눈에 화면 열림');
+  await page.locator('[data-store-service-search-open]').click();
+  await check(page.locator('.store-service-overview').isVisible(), '영업시간·결제혜택 찾기 화면 열림');
+  await check(
+    page.locator('[data-store-service-location-mode="nearby"].active').isVisible(),
+    '기본값을 내 위치 가까운 동네순으로 표시'
+  );
+  await check(
+    page.locator('[data-store-service-location-mode="selected"]').isVisible()
+      .then(first => first && page.locator('[data-store-service-location-mode="all"]').isVisible()),
+    '동네만 보기와 여수 전체 범위 제공'
+  );
+  await page.locator('[data-store-service-location-mode="all"]').click();
+  const publicStoreCount = await page.evaluate(() => stores.length);
+  report.publicStoreCount = publicStoreCount;
+  await check(
+    page.locator('[data-store-service-store-id]').count().then(count => (
+      count === publicStoreCount && publicStoreCount > 650
+    )),
+    '현재 공개된 여수 전체 가게를 기존 가게순서로 표시'
+  );
+  await check(
+    page.locator('.store-service-status.is-unknown').count().then(count => count > 0),
+    '시간 미등록 가게를 회색 미확인으로 표시'
+  );
   await check(
     page.locator(`[data-store-service-store-id="${storeId}"]`).innerText().then(value => value.includes('수라상궁') && value.includes('여수섬섬페이')),
     '확인된 가게를 영업상태·혜택과 함께 표시'
   );
-  await page.locator('[data-store-service-filter="onnuri-gift-certificate"]').click();
+  await page.locator('[data-store-service-benefit="onnuri-gift-certificate"]').click();
   await check(page.locator('.store-service-overview-empty').isVisible(), '미확인 혜택을 사용 가능으로 오표시하지 않음');
-  await page.locator('[data-store-service-filter="yeosu-seomseom-pay"]').click();
-  await check(page.locator(`[data-store-service-store-id="${storeId}"]`).isVisible(), '여수섬섬페이 필터로 가게 확인');
+  await page.locator('[data-store-service-benefit="yeosu-seomseom-pay"]').click();
+  await check(
+    page.locator('[data-store-service-store-id]').count().then(count => count === 1)
+      .then(first => first && page.locator(`[data-store-service-store-id="${storeId}"]`).isVisible()),
+    '여수섬섬페이 가능 가게만 골라 표시'
+  );
+  await page.locator('[data-store-service-status="open"]').click();
+  await check(
+    page.locator('[data-store-service-status="open"].active').isVisible(),
+    '영업상태와 결제혜택 필터를 함께 적용'
+  );
+  await check(
+    page.evaluate(id => window.daedongStoreServiceInfo.status(id, new Date('2026-08-01T15:30:00.000Z')).state, storeId)
+      .then(value => value === 'closing-soon'),
+    '마감 60분 이내를 곧 영업 종료로 계산'
+  );
+  await check(
+    page.evaluate(() => window.daedongStoreServiceInfo.status('unverified-store').state)
+      .then(value => value === 'unknown'),
+    '영업시간 미등록 가게를 미확인으로 계산'
+  );
   await page.screenshot({path: 'browser-surasanggung-menu-service.png', fullPage: false});
 
   report.success = report.errors.length === 0;

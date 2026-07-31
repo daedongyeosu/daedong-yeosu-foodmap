@@ -263,7 +263,6 @@
     const phone = orderChannels(store).primaryOrder?.phoneOrder;
     const directHref = escapeMenuHtml(channelUrl(direct));
     const phoneLink = escapeMenuHtml(phoneHref(phone));
-    const serviceSummary = window.daedongStoreServiceInfo?.menuMarkup?.(store.id) || '';
     return `
       <section class="store-menu-preview" role="dialog" aria-modal="true" aria-labelledby="storeMenuTitle">
         <header class="store-menu-topbar">
@@ -286,7 +285,6 @@
                   <div><dt>${counts[category] || 0}</dt><dd>${escapeMenuHtml(category)}</dd></div>
                 `).join('')}
               </dl>
-              ${serviceSummary}
             </div>
           </section>
 

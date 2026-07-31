@@ -74,6 +74,9 @@ jobs:
       - name: Verify neighborhood pizza priority
         run: node pizza-neighborhood-priority-regression-test.mjs
 
+      - name: Verify Sura menu and store service finder
+        run: node surasanggung-menu-service-regression-test.mjs
+
       - name: Run data validation
         run: node scripts/validate-data.mjs
 

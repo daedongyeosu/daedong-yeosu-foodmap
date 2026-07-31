@@ -134,9 +134,18 @@ try {
   );
   await check(
     page.locator('[data-menu-sticky-order] > b').allInnerTexts().then(values => (
-      values.join('|') === '가게바로주문|먹깨비|땡겨요|전화주문|쿠팡이츠|배달의민족'
+      values.join('|') === '가게바로주문|먹깨비|땡겨요|전화주문'
     )),
-    '음식보기 하단에 등록된 주문방법을 모두 표시'
+    '음식보기 하단에는 주요 주문방법을 먼저 표시'
+  );
+  await check(
+    page.locator('[data-menu-sticky-other-toggle]').isVisible(),
+    '외부 주문앱은 다른 주문앱 버튼으로 묶어 표시'
+  );
+  await check(
+    page.locator('[data-menu-sticky-external]').count().then(count => count === 2)
+      .then(first => first && page.locator('[data-menu-sticky-other-list]').evaluate(node => node.hidden)),
+    '등록된 외부 주문앱을 처음에는 숨김'
   );
   await check(
     page.locator('[data-menu-sticky-order="direct"]').getAttribute('href')
@@ -147,6 +156,17 @@ try {
     page.locator('[data-menu-sticky-order="phone"]').getAttribute('href')
       .then(value => value === 'tel:0616543511'),
     '음식보기 하단 전화주문 번호 유지'
+  );
+  await page.locator('[data-menu-sticky-other-toggle]').click();
+  await check(
+    page.locator('[data-menu-sticky-other-list]').evaluate(node => !node.hidden),
+    '다른 주문앱 버튼을 누르면 외부 주문앱을 펼침'
+  );
+  await check(
+    page.locator('[data-menu-sticky-external] > b').allInnerTexts().then(values => (
+      values.join('|') === '쿠팡이츠|배달의민족'
+    )),
+    '다른 주문앱 안에 실제 등록된 외부 주문앱만 표시'
   );
 
   const menuSearch = page.locator('[data-menu-search]');

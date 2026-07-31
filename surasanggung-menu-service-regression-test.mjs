@@ -70,8 +70,8 @@ assert.equal(sha256('data/stores.json'), '2b976a0e05ad494e6723bc191962e1d8c66e8e
 assert.equal(sha256('data/store-priority.json'), '2b91fa849797306d5f7d8e49de1d82bfbf28f85a235fee7cf0448104847b93f9');
 assert.equal(sha256('data/store-coordinates.json'), '22f21699710ccd27de9dc73d4521fb79fac13c2a209be73e8e34519f58f087f1');
 
-assert.match(index, /store-service-info\.css\?v=store-service-1/);
-assert.match(index, /store-service-info\.js\?v=store-service-1/);
+assert.match(index, /store-service-info\.css\?v=store-service-2/);
+assert.match(index, /store-service-info\.js\?v=store-service-2/);
 assert.match(index, /store-menu-preview\.css\?v=store-menu-9/);
 assert.match(index, /store-menu-preview\.js\?v=store-menu-9/);
 assert.match(menuScript, /store-menu-content\/surasanggung\/menu\.json/);
@@ -79,10 +79,22 @@ assert.match(menuScript, /itemCount: 46/);
 assert.match(menuScript, /음식 사진은 실제 조리된 음식과 다를 수 있습니다/);
 assert.match(menuScript, /store-menu-photo-placeholder/);
 assert.match(menuScript, /daedongStoreServiceInfo\?\.ready/);
+assert.doesNotMatch(menuScript, /data-store-service-menu-summary/);
+assert.doesNotMatch(menuScript, /menuMarkup/);
 assert.match(serviceScript, /Asia\/Seoul/);
 assert.match(serviceScript, /monthly-weekday/);
-assert.match(serviceScript, /영업·혜택 한눈에/);
-assert.match(serviceScript, /표시가 없으면 ‘사용 불가’가 아니라 아직 확인되지 않은 상태/);
+assert.match(serviceScript, /영업시간·결제혜택 찾기/);
+assert.match(serviceScript, /내 위치 가까운 순/);
+assert.match(serviceScript, /동네만 보기/);
+assert.match(serviceScript, /여수 전체/);
+assert.match(serviceScript, /지금 영업 중/);
+assert.match(serviceScript, /곧 영업 종료/);
+assert.match(serviceScript, /결제·혜택 미확인/);
+assert.match(serviceScript, /회색 ‘미확인’은 사용 불가가 아니라 아직 확인되지 않은 정보/);
+assert.match(serviceScript, /sourceStores\(\)\.map/);
+assert.match(serviceScript, /data-store-service-benefit/);
+assert.match(serviceScript, /data-store-service-status/);
+assert.match(serviceScript, /data-store-service-location-mode/);
 assert.match(serviceScript, /daedongStoreServiceOverview/);
 assert.doesNotMatch(serviceScript, /data\/stores\.json/);
 

@@ -252,6 +252,78 @@
     `;
   }
 
+  function detailBenefitItems(info) {
+    const payments = new Map((info?.payments || []).map(payment => [payment.key, payment.status]));
+    const delivery = new Map((info?.delivery || []).map(benefit => [benefit.key, benefit.status]));
+    return [
+      ...(serviceData.programs || []).map(program => {
+        const value = payments.get(program.key);
+        return {
+          key: program.key,
+          label: program.label,
+          kind: 'payment',
+          state: value === 'accepted' ? 'available' : value === 'unavailable' ? 'unavailable' : 'unknown'
+        };
+      }),
+      ...(serviceData.deliveryBenefits || []).map(benefit => {
+        const value = delivery.get(benefit.key);
+        return {
+          key: benefit.key,
+          label: benefit.label,
+          kind: 'delivery',
+          state: value === 'available' ? 'available' : value === 'unavailable' ? 'unavailable' : 'unknown'
+        };
+      })
+    ];
+  }
+
+  function detailBenefitMarkup(item) {
+    const isDelivery = item.kind === 'delivery';
+    const stateLabel = item.state === 'available'
+      ? (isDelivery ? item.label : `${item.label} 사용 가능`)
+      : item.state === 'unavailable'
+        ? (isDelivery ? '무료배달 불가' : `${item.label} 사용 불가`)
+        : (isDelivery ? '무료배달 여부 미확인' : `${item.label} 미확인`);
+    const symbol = item.state === 'available' ? '✓' : item.state === 'unavailable' ? '×' : '?';
+    return `
+      <span class="store-service-detail-benefit is-${escapeHtml(item.state)}${isDelivery ? ' is-delivery' : ''}">
+        <i aria-hidden="true">${symbol}</i>${escapeHtml(stateLabel)}
+      </span>
+    `;
+  }
+
+  function detailPanelMarkup(info, status) {
+    const displayLines = Array.isArray(info?.hours?.displayLines) ? info.hours.displayLines : [];
+    const verified = verifiedLabel(info);
+    return `
+      <header>
+        <div>
+          <span>가게 이용정보</span>
+          <h3>영업시간·상품권·무료배달</h3>
+        </div>
+        <span class="store-service-status is-${escapeHtml(status.state)}">
+          <i aria-hidden="true"></i>${escapeHtml(status.label)}
+        </span>
+      </header>
+      <p class="store-service-detail-today">
+        <b>${escapeHtml(status.detail)}</b>
+        <span>${escapeHtml(status.today)}</span>
+      </p>
+      <div class="store-service-detail-hours">
+        ${displayLines.length
+          ? displayLines.map(line => `<span>${escapeHtml(line)}</span>`).join('')
+          : '<span class="is-unknown">확인된 영업시간이 없습니다.</span>'}
+      </div>
+      <div class="store-service-detail-benefits" aria-label="상품권 및 무료배달 확인 상태">
+        ${detailBenefitItems(info).map(detailBenefitMarkup).join('')}
+      </div>
+      <footer>
+        <span>회색 미확인은 사용 불가가 아니라 아직 확인되지 않은 정보입니다.</span>
+        ${verified ? `<small>${escapeHtml(verified)}</small>` : ''}
+      </footer>
+    `;
+  }
+
   function decorateStoreCards() {
     document.querySelectorAll('#storeGrid .store-card[data-id]').forEach(card => {
       if (card.querySelector('[data-store-service-card-meta]')) return;
@@ -266,6 +338,35 @@
       const routes = copy?.querySelector('.miniapps');
       if (routes) routes.before(meta);
       else copy?.append(meta);
+    });
+  }
+
+  function decorateStoreDetails() {
+    document.querySelectorAll('#modalContent .store-detail[data-store-id]').forEach(detail => {
+      const storeId = String(detail.dataset.storeId || '');
+      const info = serviceData.stores?.[storeId];
+      const status = storeStatus(info);
+      const signature = JSON.stringify({
+        status,
+        info: info || null,
+        programs: serviceData.programs || [],
+        deliveryBenefits: serviceData.deliveryBenefits || []
+      });
+      let panel = detail.querySelector('[data-store-service-detail]');
+      if (!panel) {
+        panel = document.createElement('section');
+        panel.className = 'store-service-detail-panel';
+        panel.dataset.storeServiceDetail = '';
+      }
+      if (panel.dataset.storeServiceSignature !== signature) {
+        panel.dataset.storeServiceSignature = signature;
+        panel.innerHTML = detailPanelMarkup(info, status);
+      }
+      const target = detail.querySelector('[data-store-menu-preview]')
+        || detail.querySelector('.detail-routes')
+        || detail.querySelector('.detail-personal-actions');
+      if (target && panel.nextElementSibling !== target) target.before(panel);
+      else if (!target && !panel.isConnected) detail.append(panel);
     });
   }
 
@@ -654,6 +755,7 @@
       serviceData = data;
       ensureOverviewButtons();
       decorateStoreCards();
+      decorateStoreDetails();
       return data;
     })
     .catch(error => {
@@ -742,6 +844,7 @@
   new MutationObserver(() => {
     ensureOverviewButtons();
     decorateStoreCards();
+    decorateStoreDetails();
     const overlay = document.querySelector('[data-store-service-overview-overlay]');
     const renderedCount = Number(overlay?.querySelector('[data-store-service-source-count]')?.dataset.storeServiceSourceCount);
     if (overlay && !overlay.hidden && renderedCount !== sourceStores().length) renderOverview();
@@ -750,6 +853,7 @@
   window.setInterval(() => {
     document.querySelectorAll('[data-store-service-card-meta]').forEach(node => node.remove());
     decorateStoreCards();
+    decorateStoreDetails();
     const overlay = document.querySelector('[data-store-service-overview-overlay]');
     if (overlay && !overlay.hidden) renderOverview();
   }, 60000);

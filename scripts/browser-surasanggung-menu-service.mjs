@@ -36,13 +36,22 @@ try {
   );
   await check(
     page.evaluate(() => {
-      const searchRow = document.querySelector('.main-search-row')?.getBoundingClientRect();
-      const serviceEntry = document.querySelector('.store-service-search-entry')?.getBoundingClientRect();
+      const searchRowNode = document.querySelector('.main-search-row');
+      const serviceEntryNode = document.querySelector('.store-service-search-entry');
+      const searchRow = searchRowNode?.getBoundingClientRect();
+      const serviceEntry = serviceEntryNode?.getBoundingClientRect();
+      const searchRowStyle = searchRowNode ? getComputedStyle(searchRowNode) : null;
+      const contentLeft = searchRow
+        ? searchRow.left + Number.parseFloat(searchRowStyle?.paddingLeft || '0')
+        : 0;
+      const contentRight = searchRow
+        ? searchRow.right - Number.parseFloat(searchRowStyle?.paddingRight || '0')
+        : 0;
       return Boolean(
         searchRow
         && serviceEntry
-        && Math.abs(searchRow.left - serviceEntry.left) <= 1
-        && Math.abs(searchRow.right - serviceEntry.right) <= 1
+        && Math.abs(contentLeft - serviceEntry.left) <= 1
+        && Math.abs(contentRight - serviceEntry.right) <= 1
       );
     }),
     '영업시간·결제혜택 찾기 버튼을 기존 검색영역 세로선에 맞춤'

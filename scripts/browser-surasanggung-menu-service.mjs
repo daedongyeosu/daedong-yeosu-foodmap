@@ -133,7 +133,7 @@ try {
     '음식보기 안에는 영업시간·결제혜택 정보를 넣지 않음'
   );
   await check(
-    page.locator('[data-menu-sticky-order]').allInnerTexts().then(values => (
+    page.locator('[data-menu-sticky-order] > b').allInnerTexts().then(values => (
       values.join('|') === '가게바로주문|먹깨비|땡겨요|전화주문|쿠팡이츠|배달의민족'
     )),
     '음식보기 하단에 등록된 주문방법을 모두 표시'

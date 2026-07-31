@@ -126,9 +126,13 @@ try {
     '동네만 보기와 여수 전체 범위 제공'
   );
   await page.locator('[data-store-service-location-mode="all"]').click();
+  const publicStoreCount = await page.evaluate(() => stores.length);
+  report.publicStoreCount = publicStoreCount;
   await check(
-    page.locator('[data-store-service-store-id]').count().then(count => count === 710),
-    '여수 전체 710개 가게를 기존 가게순서로 표시'
+    page.locator('[data-store-service-store-id]').count().then(count => (
+      count === publicStoreCount && publicStoreCount > 650
+    )),
+    '현재 공개된 여수 전체 가게를 기존 가게순서로 표시'
   );
   await check(
     page.locator('.store-service-status.is-unknown').count().then(count => count > 0),

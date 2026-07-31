@@ -4,7 +4,7 @@ const CACHE_NAME = 'daedong-yeosu-app-shell-v1';
 const APP_SHELL = [
   '/',
   '/manifest.webmanifest',
-  '/assets/app-icon.svg',
+  '/app-icon.svg',
   '/assets/logo.png'
 ];
 

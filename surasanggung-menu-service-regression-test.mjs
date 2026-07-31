@@ -100,7 +100,7 @@ assert.doesNotMatch(menuScript, /data-store-service-menu-summary/);
 assert.doesNotMatch(menuScript, /menuMarkup/);
 assert.match(serviceScript, /Asia\/Seoul/);
 assert.match(serviceScript, /monthly-weekday/);
-assert.match(serviceScript, /영업시간·결제혜택 찾기/);
+assert.match(serviceScript, /영업시간·결제·배달혜택 찾기/);
 assert.match(serviceScript, /내 위치 가까운 순/);
 assert.match(serviceScript, /동네만 보기/);
 assert.match(serviceScript, /여수 전체/);

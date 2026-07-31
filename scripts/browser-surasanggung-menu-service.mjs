@@ -118,6 +118,7 @@ try {
   await page.locator(`[data-store-menu-preview="${storeId}"]`).click();
   await page.waitForSelector('.store-menu-preview', {timeout: 5000});
   await check(page.locator('#storeMenuTitle').innerText().then(value => value.trim() === '수라상궁 조선국밥'), '수라상궁 음식보기 열림');
+  await check(page.locator('.store-menu-order').count().then(count => count === 0), '메뉴 목록 끝의 중복 주문방법 영역을 표시하지 않음');
   await check(page.locator('[data-menu-card]').count().then(count => count === 46), '정리된 고유 메뉴 46개 로드');
   await check(
     page.locator('[data-menu-category]').allInnerTexts().then(values => values.join('|') === '전체|세트·정식|국밥·탕|수육|만두·딤섬|곁들임|음료|주류'),
@@ -143,23 +144,40 @@ try {
     '음식보기 안에는 영업시간·결제혜택 정보를 넣지 않음'
   );
   await check(
-    page.locator('.store-menu-sticky-actions').count().then(count => count === 0),
-    '음식보기 하단 고정 주문방법을 표시하지 않음'
+    page.locator('[data-menu-sticky-order] > b').allInnerTexts().then(values => (
+      values.join('|') === '가게바로주문|먹깨비|땡겨요|전화주문'
+    )),
+    '음식보기 하단에는 주요 주문방법을 먼저 표시'
   );
   await check(
-    page.locator('.store-menu-order [data-menu-order="direct"]').getAttribute('href')
+    page.locator('[data-menu-sticky-other-toggle]').isVisible(),
+    '외부 주문앱은 다른 주문앱 버튼으로 묶어 표시'
+  );
+  await check(
+    page.locator('[data-menu-sticky-external]').count().then(count => count === 2)
+      .then(first => first && page.locator('[data-menu-sticky-other-list]').evaluate(node => node.hidden)),
+    '등록된 외부 주문앱을 처음에는 숨김'
+  );
+  await check(
+    page.locator('[data-menu-sticky-order="direct"]').getAttribute('href')
       .then(value => value === 'https://app.notion.com/p/398da158dd2a80b6ba32fa75d2f4c137'),
-    '본문 가게바로주문 링크 유지'
+    '음식보기 하단 가게바로주문 링크 유지'
   );
   await check(
-    page.locator('.store-menu-order [data-menu-order="phone"]').getAttribute('href')
+    page.locator('[data-menu-sticky-order="phone"]').getAttribute('href')
       .then(value => value === 'tel:0616543511'),
-    '본문 전화주문 번호 유지'
+    '음식보기 하단 전화주문 번호 유지'
+  );
+  await page.locator('[data-menu-sticky-other-toggle]').click();
+  await check(
+    page.locator('[data-menu-sticky-other-list]').evaluate(node => !node.hidden),
+    '다른 주문앱 버튼을 누르면 외부 주문앱을 펼침'
   );
   await check(
-    page.locator('.store-menu-order [data-menu-other-list] a').count().then(count => count === 2)
-      .then(first => first && page.locator('.store-menu-order [data-menu-other-list]').evaluate(node => node.hidden)),
-    '본문 다른 주문앱에 실제 등록된 외부 주문앱을 숨겨서 유지'
+    page.locator('[data-menu-sticky-external] > b').allInnerTexts().then(values => (
+      values.join('|') === '쿠팡이츠|배달의민족'
+    )),
+    '다른 주문앱 안에 실제 등록된 외부 주문앱만 표시'
   );
 
   const menuSearch = page.locator('[data-menu-search]');

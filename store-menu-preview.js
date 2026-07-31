@@ -227,6 +227,70 @@
     `;
   }
 
+  function stickyOrderMarkup(store) {
+    const channels = orderChannels(store);
+    const primaryDefinitions = [
+      ['direct', channels.primaryOrder?.directOrder, '가게바로주문'],
+      ['brand', channels.primaryOrder?.brandApp, '브랜드앱'],
+      ['mukkebi', channels.primaryOrder?.mukkebi, '먹깨비'],
+      ['ddangyo', channels.primaryOrder?.ddangyo, '땡겨요'],
+      ['ondongne', channels.primaryOrder?.ondongne, '온동네'],
+      ['phone', channels.primaryOrder?.phoneOrder, '전화주문']
+    ].map(([key, channel, label]) => {
+      const rawHref = key === 'phone' ? phoneHref(channel) : channelUrl(channel);
+      return {key, channel, label, rawHref};
+    }).filter(item => Boolean(item.rawHref));
+    const externalDefinitions = [
+      ['yogiyo', channels.externalOrder?.yogiyo, '요기요'],
+      ['coupang-eats', channels.externalOrder?.coupangEats, '쿠팡이츠'],
+      ['baemin', channels.externalOrder?.baemin, '배달의민족']
+    ].map(([key, channel, label]) => {
+      const rawHref = channelUrl(channel);
+      return {key, channel, label, rawHref};
+    }).filter(item => Boolean(item.rawHref));
+
+    if (!primaryDefinitions.length && !externalDefinitions.length) return '';
+    return `
+      <section class="store-menu-sticky-actions" aria-label="이 가게 주문방법">
+        <header>
+          <b>주문방법</b>
+          <small>다른 주문앱은 버튼 안에 있습니다</small>
+        </header>
+        <nav>
+          ${primaryDefinitions.map(({key, channel, label, rawHref}) => {
+            const external = rawHref.startsWith('tel:') ? '' : ' target="_blank" rel="noopener"';
+            const icon = channelIcon(key, channel);
+            const compatibilityClass = key === 'direct' ? ' primary' : key === 'phone' ? ' phone' : '';
+            return `
+              <a class="is-${escapeMenuHtml(key)}${compatibilityClass}" href="${escapeMenuHtml(rawHref)}"${external} data-menu-sticky-order="${escapeMenuHtml(key)}">
+                ${icon}<b>${escapeMenuHtml(label)}</b>
+              </a>
+            `;
+          }).join('')}
+          ${externalDefinitions.length ? `
+            <button class="is-other" type="button" data-menu-sticky-other-toggle aria-expanded="false">
+              <span class="store-menu-sticky-other-icon" aria-hidden="true">＋</span>
+              <b>다른 주문앱</b>
+            </button>
+          ` : ''}
+        </nav>
+        ${externalDefinitions.length ? `
+          <section class="store-menu-sticky-other-list" data-menu-sticky-other-list hidden>
+            <p>다른 주문앱을 선택하세요</p>
+            <div>
+              ${externalDefinitions.map(({key, label, rawHref}) => `
+                <a href="${escapeMenuHtml(rawHref)}" target="_blank" rel="noopener" data-menu-sticky-external="${escapeMenuHtml(key)}">
+                  <b>${escapeMenuHtml(label)}</b><span aria-hidden="true">›</span>
+                </a>
+              `).join('')}
+            </div>
+            <small>앱 이름은 주문 경로 안내를 위해 표시되며, 공식 제휴·후원을 의미하지 않습니다.</small>
+          </section>
+        ` : ''}
+      </section>
+    `;
+  }
+
   function menuCardMarkup(item) {
     const searchText = `${item.name} ${item.description} ${item.category}`.toLowerCase();
     const photo = item.image
@@ -309,20 +373,14 @@
           </section>
           <p class="store-menu-no-results" data-menu-no-results hidden>검색 조건에 맞는 메뉴가 없습니다.</p>
 
-          <section class="store-menu-order">
-            <span>메뉴를 고르셨나요?</span>
-            <h2>어디서 주문할까요?</h2>
-            <p>이 가게에 실제로 등록된 주문 링크만 보여드립니다.</p>
-            <div class="menu-order-grid">${primaryOrderMarkup(store)}</div>
-            ${otherOrderMarkup(store)}
-          </section>
-
           <footer class="store-menu-notice">
             <p>음식 사진은 실제 조리된 음식과 다를 수 있습니다.</p>
             <p>주류는 만 19세 이상만 주문할 수 있습니다.</p>
             <p>메뉴 구성과 제공 여부는 가게 또는 주문앱 상황에 따라 달라질 수 있습니다.</p>
           </footer>
         </main>
+
+        ${stickyOrderMarkup(store)}
 
         <div class="menu-order-sheet" data-menu-order-sheet hidden>
           <button class="menu-order-sheet-backdrop" type="button" data-menu-order-sheet-close aria-label="주문방법 선택 닫기"></button>
@@ -617,6 +675,17 @@
       filterMenus(preview);
       return;
     }
+    const stickyOther = event.target.closest('[data-menu-sticky-other-toggle]');
+    if (stickyOther) {
+      const dock = stickyOther.closest('.store-menu-sticky-actions');
+      const list = dock?.querySelector('[data-menu-sticky-other-list]');
+      if (!list) return;
+      const expanded = stickyOther.getAttribute('aria-expanded') !== 'true';
+      stickyOther.setAttribute('aria-expanded', String(expanded));
+      stickyOther.classList.toggle('is-expanded', expanded);
+      list.hidden = !expanded;
+      return;
+    }
     const other = event.target.closest('[data-menu-other-toggle]');
     if (other) {
       const list = other.parentElement.querySelector('[data-menu-other-list]');
@@ -666,6 +735,16 @@
     if (event.key === 'Enter' && event.target.matches('[data-menu-search]')) {
       event.preventDefault();
       event.target.blur();
+      return;
+    }
+    const stickyOther = preview?.querySelector('[data-menu-sticky-other-toggle][aria-expanded="true"]');
+    if (event.key === 'Escape' && stickyOther) {
+      event.preventDefault();
+      stickyOther.setAttribute('aria-expanded', 'false');
+      stickyOther.classList.remove('is-expanded');
+      const list = preview.querySelector('[data-menu-sticky-other-list]');
+      if (list) list.hidden = true;
+      stickyOther.focus();
       return;
     }
     const orderSheet = preview?.querySelector('[data-menu-order-sheet]');

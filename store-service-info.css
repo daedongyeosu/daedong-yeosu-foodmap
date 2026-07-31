@@ -138,6 +138,11 @@ body.store-service-overview-open {
   background: #edf5ff;
 }
 
+.store-service-card-payment.is-delivery {
+  color: #17643a;
+  background: #e5f8ed;
+}
+
 .store-service-card-unknown {
   color: #697386;
   background: #f0f2f5;
@@ -406,6 +411,11 @@ body.store-service-overview-open {
   background: #edf5ff;
   border-radius: 999px;
   font-size: 11px;
+}
+
+.store-service-overview-payments b.is-delivery {
+  color: #17643a;
+  background: #e5f8ed;
 }
 
 .store-service-overview-payments b.is-unknown {

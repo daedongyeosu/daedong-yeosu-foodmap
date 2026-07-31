@@ -72,7 +72,7 @@ try {
   await page.locator('#modal [data-close-modal], #modal .close, #modal .modal-close').first().click().catch(() => {});
   await page.waitForTimeout(100);
   await openStore('dc638b23f8cf3c5b');
-  const secondDirectHref = await page.locator('.store-menu-sticky-actions .primary').getAttribute('href');
+  const secondDirectHref = await page.locator('.store-menu-order [data-menu-order="direct"]').getAttribute('href');
   await check(Promise.resolve(secondDirectHref === 'https://bit.ly/auto-domino'), '문수점 기존 가게바로주문 링크 유지');
   await check(Promise.resolve(secondDirectHref !== firstDirectHref), '두 지점의 주문 링크를 서로 섞지 않음');
   await page.screenshot({path: 'browser-domino-menu-preview.png', fullPage: false});

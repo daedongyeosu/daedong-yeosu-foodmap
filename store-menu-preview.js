@@ -227,6 +227,46 @@
     `;
   }
 
+  function stickyOrderMarkup(store) {
+    const channels = orderChannels(store);
+    const definitions = [
+      ['direct', channels.primaryOrder?.directOrder, '가게바로주문'],
+      ['brand', channels.primaryOrder?.brandApp, '브랜드앱'],
+      ['mukkebi', channels.primaryOrder?.mukkebi, '먹깨비'],
+      ['ddangyo', channels.primaryOrder?.ddangyo, '땡겨요'],
+      ['ondongne', channels.primaryOrder?.ondongne, '온동네'],
+      ['phone', channels.primaryOrder?.phoneOrder, '전화주문'],
+      ['yogiyo', channels.externalOrder?.yogiyo, '요기요'],
+      ['coupang-eats', channels.externalOrder?.coupangEats, '쿠팡이츠'],
+      ['baemin', channels.externalOrder?.baemin, '배달의민족']
+    ].map(([key, channel, label]) => {
+      const rawHref = key === 'phone' ? phoneHref(channel) : channelUrl(channel);
+      return {key, channel, label, rawHref};
+    }).filter(item => Boolean(item.rawHref));
+
+    if (!definitions.length) return '';
+    return `
+      <section class="store-menu-sticky-actions" aria-label="이 가게 주문방법">
+        <header>
+          <b>주문방법</b>
+          <small>등록된 방법을 모두 표시합니다</small>
+        </header>
+        <nav>
+          ${definitions.map(({key, channel, label, rawHref}) => {
+            const external = rawHref.startsWith('tel:') ? '' : ' target="_blank" rel="noopener"';
+            const primaryIcon = channelIcon(key, channel);
+            const icon = primaryIcon || `<span class="store-menu-sticky-app-mark" aria-hidden="true">${escapeMenuHtml(label.slice(0, 1))}</span>`;
+            return `
+              <a class="is-${escapeMenuHtml(key)}" href="${escapeMenuHtml(rawHref)}"${external} data-menu-sticky-order="${escapeMenuHtml(key)}">
+                ${icon}<b>${escapeMenuHtml(label)}</b>
+              </a>
+            `;
+          }).join('')}
+        </nav>
+      </section>
+    `;
+  }
+
   function menuCardMarkup(item) {
     const searchText = `${item.name} ${item.description} ${item.category}`.toLowerCase();
     const photo = item.image
@@ -259,10 +299,6 @@
       return result;
     }, {});
     const featuredCategories = menu.categories.filter(category => category !== '전체').slice(0, 3);
-    const direct = orderChannels(store).primaryOrder?.directOrder;
-    const phone = orderChannels(store).primaryOrder?.phoneOrder;
-    const directHref = escapeMenuHtml(channelUrl(direct));
-    const phoneLink = escapeMenuHtml(phoneHref(phone));
     return `
       <section class="store-menu-preview" role="dialog" aria-modal="true" aria-labelledby="storeMenuTitle">
         <header class="store-menu-topbar">
@@ -329,12 +365,7 @@
           </footer>
         </main>
 
-        ${(directHref || phoneLink) ? `
-          <div class="store-menu-sticky-actions">
-            ${directHref ? `<a class="primary" href="${directHref}" target="_blank" rel="noopener">가게바로주문 결제하기</a>` : ''}
-            ${phoneLink ? `<a class="phone" href="${phoneLink}">${phoneIconMarkup()}전화주문하기<small>통화 중 메뉴 보기</small></a>` : ''}
-          </div>
-        ` : ''}
+        ${stickyOrderMarkup(store)}
 
         <div class="menu-order-sheet" data-menu-order-sheet hidden>
           <button class="menu-order-sheet-backdrop" type="button" data-menu-order-sheet-close aria-label="주문방법 선택 닫기"></button>

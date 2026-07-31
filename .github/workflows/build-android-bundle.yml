@@ -31,6 +31,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/bubblewrap" android-build
+          if [ ! -e "$ANDROID_SDK_ROOT/bin" ]; then sudo ln -s "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" "$ANDROID_SDK_ROOT/bin"; fi
           printf '{"jdkPath":"%s","androidSdkPath":"%s"}' "$JAVA_HOME" "$ANDROID_SDK_ROOT" > "$RUNNER_TEMP/bubblewrap/config.json"
           cp android/twa-manifest.json android-build/twa-manifest.json
           python3 -m http.server 8765 >"$RUNNER_TEMP/pwa-http.log" 2>&1 &

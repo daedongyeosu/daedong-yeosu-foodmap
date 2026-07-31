@@ -12,6 +12,7 @@ const stores = JSON.parse(text('data/stores.json'));
 const index = text('index.html');
 const menuScript = text('store-menu-preview.js');
 const serviceScript = text('store-service-info.js');
+const serviceStyle = text('store-service-info.css');
 
 assert.equal(menu.storeId, '7bc7239e6b509c44');
 assert.equal(menu.displayName, '수라상궁 조선국밥');
@@ -70,8 +71,8 @@ assert.equal(sha256('data/stores.json'), '2b976a0e05ad494e6723bc191962e1d8c66e8e
 assert.equal(sha256('data/store-priority.json'), '2b91fa849797306d5f7d8e49de1d82bfbf28f85a235fee7cf0448104847b93f9');
 assert.equal(sha256('data/store-coordinates.json'), '22f21699710ccd27de9dc73d4521fb79fac13c2a209be73e8e34519f58f087f1');
 
-assert.match(index, /store-service-info\.css\?v=store-service-2/);
-assert.match(index, /store-service-info\.js\?v=store-service-2/);
+assert.match(index, /store-service-info\.css\?v=store-service-3/);
+assert.match(index, /store-service-info\.js\?v=store-service-3/);
 assert.match(index, /store-menu-preview\.css\?v=store-menu-9/);
 assert.match(index, /store-menu-preview\.js\?v=store-menu-9/);
 assert.match(menuScript, /store-menu-content\/surasanggung\/menu\.json/);
@@ -96,6 +97,11 @@ assert.match(serviceScript, /data-store-service-benefit/);
 assert.match(serviceScript, /data-store-service-status/);
 assert.match(serviceScript, /data-store-service-location-mode/);
 assert.match(serviceScript, /daedongStoreServiceOverview/);
+assert.match(serviceScript, /\['all', '전체', null\]/);
+assert.match(serviceScript, /isEntireStoreList \? '전체 가게'/);
+assert.match(serviceScript, /count === null \? ''/);
 assert.doesNotMatch(serviceScript, /data\/stores\.json/);
+assert.match(serviceStyle, /\.store-service-search-entry\s*\{\s*margin: -4px 16px 15px;/);
+assert.match(serviceStyle, /@media \(max-width: 380px\)[\s\S]*?margin-right: 10px;[\s\S]*?margin-left: 10px;/);
 
 console.log('surasanggung-menu-service-regression-test: ok');

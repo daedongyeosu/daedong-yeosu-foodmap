@@ -35,6 +35,28 @@ try {
     '검색영역에 영업시간·결제혜택 찾기 진입버튼 표시'
   );
   await check(
+    page.evaluate(() => {
+      const searchRowNode = document.querySelector('.main-search-row');
+      const serviceEntryNode = document.querySelector('.store-service-search-entry');
+      const searchRow = searchRowNode?.getBoundingClientRect();
+      const serviceEntry = serviceEntryNode?.getBoundingClientRect();
+      const searchRowStyle = searchRowNode ? getComputedStyle(searchRowNode) : null;
+      const contentLeft = searchRow
+        ? searchRow.left + Number.parseFloat(searchRowStyle?.paddingLeft || '0')
+        : 0;
+      const contentRight = searchRow
+        ? searchRow.right - Number.parseFloat(searchRowStyle?.paddingRight || '0')
+        : 0;
+      return Boolean(
+        searchRow
+        && serviceEntry
+        && Math.abs(contentLeft - serviceEntry.left) <= 1
+        && Math.abs(contentRight - serviceEntry.right) <= 1
+      );
+    }),
+    '영업시간·결제혜택 찾기 버튼을 기존 검색영역 세로선에 맞춤'
+  );
+  await check(
     page.locator('#storeGrid .store-card [data-store-service-card-meta]').count().then(count => count > 0),
     '일반 가게카드에 영업시간·결제혜택 상태 표시'
   );
@@ -127,12 +149,20 @@ try {
   );
   await page.locator('[data-store-service-location-mode="all"]').click();
   const publicStoreCount = await page.evaluate(() => stores.length);
-  report.publicStoreCount = publicStoreCount;
   await check(
     page.locator('[data-store-service-store-id]').count().then(count => (
       count === publicStoreCount && publicStoreCount > 650
     )),
     '현재 공개된 여수 전체 가게를 기존 가게순서로 표시'
+  );
+  await check(
+    page.locator('[data-store-service-status="all"] small').count().then(count => count === 0)
+      .then(first => first && page.locator('.store-service-overview-result b').innerText().then(value => value.trim() === '전체 가게')),
+    '전체 가게 수를 고객 화면에 표시하지 않음'
+  );
+  await check(
+    page.locator('[data-store-service-status="open"] small').innerText().then(value => /^\d+$/.test(value.trim())),
+    '지금 영업 중 가게 수는 그대로 표시'
   );
   await check(
     page.locator('.store-service-status.is-unknown').count().then(count => count > 0),

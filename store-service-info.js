@@ -412,7 +412,7 @@
 
   function statusFilters(counts) {
     return [
-      ['all', '전체', counts.total],
+      ['all', '전체', null],
       ['open', '지금 영업 중', counts.openNow],
       ['closing-soon', '곧 종료', counts['closing-soon']],
       ['closed', '영업 종료', counts.closed],
@@ -457,6 +457,12 @@
       ['all', '전체 혜택'],
       ...(serviceData.programs || []).map(program => [program.key, program.label])
     ];
+    const isEntireStoreList = (
+      locationMode !== 'selected'
+      && activeStatus === 'all'
+      && activeBenefit === 'all'
+      && !overviewQuery
+    );
 
     return `
       <section class="store-service-overview" role="dialog" aria-modal="true" aria-labelledby="storeServiceOverviewTitle" data-store-service-source-count="${allEntries.length}">
@@ -501,7 +507,7 @@
           <nav aria-label="영업상태 필터">
             ${statusFilters(counts).map(([key, label, count]) => `
               <button type="button" data-store-service-status="${escapeHtml(key)}" class="${key === activeStatus ? 'active' : ''}">
-                ${escapeHtml(label)} <small>${count}</small>
+                ${escapeHtml(label)}${count === null ? '' : ` <small>${count}</small>`}
               </button>
             `).join('')}
           </nav>
@@ -522,7 +528,7 @@
         </section>
 
         <div class="store-service-overview-result" aria-live="polite">
-          <b>${entries.length}개 가게</b>
+          <b>${isEntireStoreList ? '전체 가게' : `${entries.length}개 가게`}</b>
           <span>${escapeHtml(locationDescription())}</span>
         </div>
 

@@ -34,7 +34,7 @@ jobs:
           printf '{"jdkPath":"%s","androidSdkPath":"%s"}' "$JAVA_HOME" "$ANDROID_SDK_ROOT" > "$RUNNER_TEMP/bubblewrap/config.json"
           cp android/twa-manifest.json android-build/twa-manifest.json
           cd android-build
-          bubblewrap --config="$RUNNER_TEMP/bubblewrap/config.json" update
+          printf '1.0.0\n' | bubblewrap --config="$RUNNER_TEMP/bubblewrap/config.json" update
       - name: Create temporary build key
         shell: bash
         run: |

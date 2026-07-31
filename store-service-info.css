@@ -21,15 +21,60 @@ body.store-service-overview-open {
   font-size: 18px;
 }
 
+.store-service-search-entry {
+  margin: -4px 0 15px;
+}
+
+.store-service-search-entry > button {
+  width: 100%;
+  min-height: 52px;
+  padding: 10px 14px;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 2px 8px;
+  color: #173357;
+  text-align: left;
+  background: linear-gradient(135deg, #f5f9ff, #fff8f2);
+  border: 1px solid #cfdef0;
+  border-radius: 16px;
+  box-shadow: 0 7px 20px rgba(21, 49, 86, .07);
+}
+
+.store-service-search-entry > button > span {
+  grid-row: 1 / 3;
+  color: #f04a22;
+  font-size: 23px;
+}
+
+.store-service-search-entry > button > b {
+  font-size: 14px;
+}
+
+.store-service-search-entry > button > small {
+  grid-column: 2 / 4;
+  color: #617087;
+  font-size: 11px;
+}
+
+.store-service-search-entry > button > i {
+  grid-column: 4;
+  grid-row: 1 / 3;
+  font-size: 24px;
+  font-style: normal;
+}
+
 .store-service-card-meta {
   margin: 7px 0 8px;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 5px;
 }
 
 .store-service-status,
-.store-service-card-payment {
+.store-service-card-payment,
+.store-service-card-unknown {
   min-height: 24px;
   padding: 0 8px;
   display: inline-flex;
@@ -41,8 +86,8 @@ body.store-service-overview-open {
 }
 
 .store-service-status {
-  color: #42516a;
-  background: #eef1f5;
+  color: #566174;
+  background: #edf0f4;
 }
 
 .store-service-status i {
@@ -63,18 +108,39 @@ body.store-service-overview-open {
   box-shadow: 0 0 0 3px rgba(36, 166, 90, .13);
 }
 
+.store-service-status.is-closing-soon {
+  color: #815116;
+  background: #fff0cb;
+}
+
+.store-service-status.is-closing-soon i {
+  background: #e49416;
+  box-shadow: 0 0 0 3px rgba(228, 148, 22, .14);
+}
+
 .store-service-status.is-closed {
-  color: #81502d;
-  background: #fff0e3;
+  color: #8b3030;
+  background: #ffe8e8;
 }
 
 .store-service-status.is-closed i {
-  background: #dc7a37;
+  background: #d34a4a;
+}
+
+.store-service-card-hours {
+  color: #647087;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .store-service-card-payment {
   color: #315d91;
   background: #edf5ff;
+}
+
+.store-service-card-unknown {
+  color: #697386;
+  background: #f0f2f5;
 }
 
 .store-service-overview-overlay {
@@ -93,8 +159,8 @@ body.store-service-overview-open {
 }
 
 .store-service-overview {
-  width: min(860px, 100%);
-  max-height: min(88dvh, 920px);
+  width: min(900px, 100%);
+  max-height: min(92dvh, 960px);
   padding: 26px;
   overflow: auto;
   overscroll-behavior: contain;
@@ -119,7 +185,7 @@ body.store-service-overview-open {
 
 .store-service-overview h2 {
   margin: 5px 0 0;
-  font-size: clamp(28px, 5vw, 42px);
+  font-size: clamp(27px, 5vw, 40px);
   letter-spacing: -.04em;
 }
 
@@ -135,7 +201,7 @@ body.store-service-overview-open {
 }
 
 .store-service-overview-lead {
-  margin: 14px 0 18px;
+  margin: 14px 0 14px;
   padding: 12px 14px;
   color: #53627a;
   background: #eef5ff;
@@ -145,72 +211,181 @@ body.store-service-overview-open {
   line-height: 1.55;
 }
 
-.store-service-overview > nav {
-  margin-bottom: 16px;
+.store-service-overview-search {
+  min-height: 48px;
+  margin-bottom: 13px;
+  padding: 0 13px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: #fff;
+  border: 1px solid #d8dfe9;
+  border-radius: 14px;
+}
+
+.store-service-overview-search > span {
+  color: #173357;
+  font-size: 22px;
+}
+
+.store-service-overview-search input {
+  min-width: 0;
+  flex: 1;
+  padding: 12px 0;
+  color: #173357;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  font-size: 15px;
+}
+
+.store-service-overview-search button {
+  width: 30px;
+  height: 30px;
+  color: #657188;
+  background: #edf0f4;
+  border: 0;
+  border-radius: 50%;
+}
+
+.store-service-filter-block {
+  margin-bottom: 11px;
+  padding: 13px;
+  background: #fff;
+  border: 1px solid #e0e5ec;
+  border-radius: 16px;
+}
+
+.store-service-filter-title {
+  margin-bottom: 9px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.store-service-filter-title b {
+  font-size: 14px;
+}
+
+.store-service-filter-title small {
+  overflow: hidden;
+  color: #69758a;
+  font-size: 11px;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.store-service-filter-block nav,
+.store-service-location-controls {
   display: flex;
   gap: 7px;
   overflow-x: auto;
   scrollbar-width: none;
 }
 
-.store-service-overview > nav::-webkit-scrollbar {
+.store-service-filter-block nav::-webkit-scrollbar,
+.store-service-location-controls::-webkit-scrollbar {
   display: none;
 }
 
-.store-service-overview > nav button {
-  min-height: 38px;
-  padding: 0 13px;
+.store-service-filter-block nav button,
+.store-service-location-controls button,
+.store-service-location-controls select {
+  min-height: 36px;
+  padding: 0 12px;
   flex: 0 0 auto;
   color: #485873;
-  background: #fff;
+  background: #f8f9fb;
   border: 1px solid #dce2eb;
   border-radius: 999px;
+  font-size: 12px;
   font-weight: 750;
 }
 
-.store-service-overview > nav button.active {
+.store-service-filter-block nav button small {
+  margin-left: 3px;
+  font-size: 10px;
+  opacity: .8;
+}
+
+.store-service-filter-block nav button.active,
+.store-service-location-controls button.active {
   color: #fff;
   background: #173357;
   border-color: #173357;
 }
 
+.store-service-location-controls select {
+  max-width: 160px;
+  padding-right: 28px;
+  background-color: #fff;
+}
+
+.store-service-overview-result {
+  margin: 15px 2px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.store-service-overview-result b {
+  color: #173357;
+  font-size: 15px;
+}
+
+.store-service-overview-result span {
+  overflow: hidden;
+  color: #69758a;
+  font-size: 11px;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .store-service-overview-list {
   display: grid;
-  gap: 10px;
+  gap: 9px;
 }
 
 .store-service-overview-card {
   width: 100%;
-  min-height: 106px;
-  padding: 16px;
+  min-height: 98px;
+  padding: 14px 15px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto 28px;
+  grid-template-columns: minmax(0, 1fr) auto 22px;
   align-items: center;
-  gap: 10px 14px;
+  gap: 9px 13px;
   color: #14294b;
   text-align: left;
   background: #fff;
   border: 1px solid #dfe4ec;
-  border-radius: 18px;
-  box-shadow: 0 8px 22px rgba(18, 42, 74, .06);
+  border-radius: 17px;
+  box-shadow: 0 6px 18px rgba(18, 42, 74, .05);
 }
 
 .store-service-overview-card-main {
   min-width: 0;
   display: grid;
-  gap: 5px;
+  gap: 4px;
 }
 
 .store-service-overview-card-main strong {
   overflow: hidden;
-  font-size: 18px;
+  font-size: 16px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .store-service-overview-card-main small {
+  overflow: hidden;
   color: #66738a;
+  font-size: 11px;
   line-height: 1.4;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .store-service-overview-card > .store-service-status {
@@ -221,6 +396,7 @@ body.store-service-overview-open {
   grid-column: 1 / 3;
   display: flex;
   flex-wrap: wrap;
+  align-items: center;
   gap: 6px;
 }
 
@@ -232,20 +408,36 @@ body.store-service-overview-open {
   font-size: 11px;
 }
 
+.store-service-overview-payments b.is-unknown {
+  color: #697386;
+  background: #f0f2f5;
+}
+
+.store-service-overview-payments small {
+  color: #7a8495;
+  font-size: 10px;
+}
+
 .store-service-overview-card > i {
   grid-column: 3;
   grid-row: 1 / 3;
   justify-self: end;
-  font-size: 27px;
+  font-size: 25px;
   font-style: normal;
 }
 
 .store-service-overview-empty {
   padding: 40px 16px;
+  display: grid;
+  gap: 7px;
   color: #68758a;
   text-align: center;
   background: #fff;
   border-radius: 17px;
+}
+
+.store-service-overview-empty small {
+  font-size: 11px;
 }
 
 .store-service-overview > footer {
@@ -262,91 +454,15 @@ body.store-service-overview-open {
   font-weight: 750;
 }
 
-.store-service-menu-summary {
-  margin: 20px 0 0;
-  padding: 16px;
-  color: #193354;
-  background: rgba(255, 255, 255, .78);
-  border: 1px solid rgba(20, 54, 88, .13);
-  border-radius: 17px;
-}
-
-.store-service-menu-now {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 5px 9px;
-}
-
-.store-service-menu-now strong {
-  font-size: 14px;
-}
-
-.store-service-menu-now small {
-  grid-column: 1 / -1;
-  color: #5f6f84;
-}
-
-.store-service-payment-badges {
-  margin-top: 10px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.store-service-payment-badges span {
-  padding: 6px 9px;
-  color: #245b94;
-  background: #eaf4ff;
-  border-radius: 999px;
-  font-size: 11px;
-  font-weight: 800;
-}
-
-.store-service-menu-summary details {
-  margin-top: 11px;
-  border-top: 1px solid rgba(20, 54, 88, .12);
-}
-
-.store-service-menu-summary summary {
-  padding-top: 11px;
-  color: #213d60;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 800;
-}
-
-.store-service-menu-summary details > div {
-  margin-top: 10px;
-  padding: 12px;
-  background: #fff;
-  border-radius: 12px;
-}
-
-.store-service-menu-summary h3,
-.store-service-menu-summary p {
-  margin: 0 0 7px;
-}
-
-.store-service-menu-summary ul {
-  margin: 0 0 10px;
-  padding-left: 18px;
-  color: #52627a;
-  font-size: 12px;
-  line-height: 1.6;
-}
-
-.store-service-menu-summary details small {
-  color: #758095;
-  font-size: 10px;
-  line-height: 1.5;
-}
-
 @media (max-width: 720px) {
   .store-service-overview-button {
     min-height: 34px;
     padding: 0 10px;
     font-size: 11px;
+  }
+
+  .store-service-search-entry {
+    margin-top: -7px;
   }
 
   .store-service-overview-overlay {
@@ -356,22 +472,30 @@ body.store-service-overview-open {
 
   .store-service-overview {
     width: 100%;
-    max-height: 88dvh;
-    padding: 20px 14px max(20px, env(safe-area-inset-bottom));
+    max-height: 94dvh;
+    padding: 18px 12px max(18px, env(safe-area-inset-bottom));
     border-radius: 24px 24px 0 0;
   }
 
+  .store-service-overview h2 {
+    font-size: 26px;
+  }
+
+  .store-service-filter-title {
+    display: grid;
+    gap: 3px;
+  }
+
+  .store-service-filter-title small {
+    text-align: left;
+  }
+
   .store-service-overview-card {
-    grid-template-columns: minmax(0, 1fr) auto 20px;
-    padding: 14px;
+    grid-template-columns: minmax(0, 1fr) auto 18px;
+    padding: 13px;
   }
 
   .store-service-overview-card-main strong {
-    font-size: 16px;
-  }
-
-  .store-service-menu-summary {
-    margin-top: 16px;
-    padding: 13px;
+    font-size: 15px;
   }
 }

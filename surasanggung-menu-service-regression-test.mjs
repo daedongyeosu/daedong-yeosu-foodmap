@@ -90,8 +90,8 @@ assert.equal(sha256('data/store-coordinates.json'), '22f21699710ccd27de9dc73d452
 
 assert.match(index, /store-service-info\.css\?v=store-service-5/);
 assert.match(index, /store-service-info\.js\?v=store-service-5/);
-assert.match(index, /store-menu-preview\.css\?v=store-menu-12/);
-assert.match(index, /store-menu-preview\.js\?v=store-menu-12/);
+assert.match(index, /store-menu-preview\.css\?v=store-menu-13/);
+assert.match(index, /store-menu-preview\.js\?v=store-menu-13/);
 assert.match(menuScript, /store-menu-content\/surasanggung\/menu\.json/);
 assert.match(menuScript, /itemCount: 46/);
 assert.match(menuScript, /음식 사진은 실제 조리된 음식과 다를 수 있습니다/);
@@ -108,9 +108,7 @@ assert.match(menuScript, /channels\.externalOrder\?\.baemin/);
 assert.match(menuScript, /data-menu-sticky-other-toggle/);
 assert.match(menuScript, /data-menu-sticky-external/);
 assert.match(menuScript, /다른 주문앱은 버튼 안에 있습니다/);
-assert.match(menuStyle, /\.store-menu-sticky-actions > nav > a\.is-direct svg path/);
-assert.match(menuStyle, /\.store-menu-sticky-other-list\[hidden\]/);
-assert.match(menuStyle, /\.store-menu-sticky-other-list > div/);
+assert.doesNotMatch(menuScript, /stickyOrderMarkup|store-menu-sticky-actions|data-menu-sticky/);
 assert.match(menuStyle, /\.store-menu-card\.is-text-only/);
 assert.match(menuStyle, /\.store-menu-age-badge/);
 assert.match(menuStyle, /\.store-menu-preview\.menu-search-active \.store-menu-card\.is-text-only/);

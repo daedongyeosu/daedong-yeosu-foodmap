@@ -33,6 +33,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/bubblewrap" android-build
           printf '{"jdkPath":"%s","androidSdkPath":"%s"}' "$JAVA_HOME" "$ANDROID_SDK_ROOT" > "$RUNNER_TEMP/bubblewrap/config.json"
           cp android/twa-manifest.json android-build/twa-manifest.json
+          python3 -m http.server 8765 >"$RUNNER_TEMP/pwa-http.log" 2>&1 &
           cd android-build
           printf '1.0.0\n' | bubblewrap --config="$RUNNER_TEMP/bubblewrap/config.json" update
       - name: Create temporary build key

@@ -295,13 +295,22 @@ function fxRequestedSharedStoreId(){
  const value=new URLSearchParams(location.search).get(FX_STORE_SHARE_PARAM);
  return value?String(value).trim():'';
 }
+function fxSharedStoreHomeUrl(){
+ const url=new URL(location.href);
+ url.searchParams.delete(FX_STORE_SHARE_PARAM);
+ const query=url.searchParams.toString();
+ return `${url.pathname}${query?`?${query}`:''}${url.hash}`;
+}
 async function fxOpenSharedStoreFromUrl(){
  const storeId=fxRequestedSharedStoreId();
  if(!storeId)return false;
+ const sharedStoreUrl=`${location.pathname}${location.search}${location.hash}`;
  for(let attempt=0;attempt<50;attempt+=1){
   const store=fxStoreById(storeId);
   if(store&&fxVisible(store)){
+   history.replaceState(history.state,'',fxSharedStoreHomeUrl());
    openStore(store);
+   if(history.state?.daedongModal)history.replaceState(history.state,'',sharedStoreUrl);
    return true;
   }
   await new Promise(resolve=>setTimeout(resolve,100));

@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "batchId": "ddangyo-fingerprint-batch-01",
+  "createdAt": "2026-08-02T12:14:00+09:00",
+  "policies": {
+    "identityPrimaryKey": "exact-address",
+    "nameUsage": "reference-and-unique-fallback-only",
+    "preserveExistingValues": true,
+    "phoneSourcePriority": ["ddangyo", "mukkebi", "naver"],
+    "prohibitedPhoneSources": ["yogiyo", "coupang-eats", "baemin"],
+    "naverRule": "exact-store-and-address-only; omit-shop-in-shop-without-exact-listing",
+    "routeRule": "add-only-when-channel-is-missing",
+    "menuRule": "use-daedong-standard-preview-without-prices"
+  },
+  "stores": [
+    {
+      "recordId": "ddangyo-8rrtFnv",
+      "match": {
+        "names": ["쌀통닭 무선점"],
+        "address": "전남 여수시 화산2길 7 1층",
+        "addressVerified": true,
+        "createIfMissing": false
+      },
+      "additions": {
+        "address": "전남 여수시 화산2길 7 1층",
+        "district": "화장동",
+        "category": "치킨",
+        "searchAliases": ["쌀통닭 무선점", "쌀통닭 화장동"],
+        "naverMap": "https://naver.me/xXnBfBqh",
+        "naverStatus": "verified",
+        "phone": "",
+        "phoneSource": "",
+        "ddangyoLinks": [
+          "https://fdofd.ddangyo.com/gateway1.html?8rrtFnv",
+          "https://fdofd.ddangyo.com/gateway1.html?bMUAAyS"
+        ]
+      },
+      "evidence": {
+        "primarySource": "ddangyo-link-supplied-by-owner",
+        "addressSource": "previously-verified-store-record",
+        "phoneDecision": "pending-ddangyo-then-mukkebi-then-naver"
+      }
+    },
+    {
+      "recordId": "ddangyo-oZrHJMN",
+      "match": {
+        "storeId": "1a9ef3c649eefc17",
+        "names": [
+          "기영이숯불두마리치킨 여수여천점",
+          "기영이숯불두마리치킨 여천점(안산동)",
+          "기영이숯불두마리치킨 여천점"
+        ],
+        "address": "전남 여수시 안산1길 186-25",
+        "addressVerified": true,
+        "createIfMissing": false
+      },
+      "additions": {
+        "address": "전남 여수시 안산1길 186-25",
+        "district": "안산동",
+        "category": "치킨",
+        "searchAliases": ["기영이숯불두마리치킨 여수여천점", "기영이숯불두마리치킨 여천점"],
+        "naverMap": "https://naver.me/58NV0Opq",
+        "naverStatus": "verified",
+        "phone": "",
+        "phoneSource": "",
+        "ddangyoLinks": [
+          "https://fdofd.ddangyo.com/gateway1.html?oZrHJMN",
+          "https://fdofd.ddangyo.com/gateway1.html?2uVT3uw"
+        ]
+      },
+      "evidence": {
+        "primarySource": "ddangyo-link-supplied-by-owner",
+        "addressSource": "previously-verified-store-record",
+        "phoneDecision": "pending-ddangyo-then-mukkebi-then-naver"
+      }
+    },
+    {
+      "recordId": "ddangyo-LZJOYiQ",
+      "match": {
+        "names": ["아주커치킨 둔덕점", "아주커 치킨 둔덕점"],
+        "address": "전남 여수시 쌍봉로 363",
+        "addressVerified": true,
+        "createIfMissing": false
+      },
+      "additions": {
+        "address": "전남 여수시 쌍봉로 363",
+        "district": "둔덕동",
+        "category": "치킨",
+        "searchAliases": ["아주커치킨 둔덕점", "아주커 둔덕점"],
+        "naverMap": "https://naver.me/GGGB2iFG",
+        "naverStatus": "verified",
+        "phone": "",
+        "phoneSource": "",
+        "ddangyoLinks": [
+          "https://fdofd.ddangyo.com/gateway1.html?LZJOYiQ",
+          "https://fdofd.ddangyo.com/gateway1.html?m6K22Qq"
+        ]
+      },
+      "evidence": {
+        "primarySource": "ddangyo-link-supplied-by-owner",
+        "addressSource": "previously-verified-store-record",
+        "phoneDecision": "pending-ddangyo-then-mukkebi-then-naver"
+      }
+    },
+    {
+      "recordId": "ddangyo-h3rPiwO",
+      "match": {
+        "names": ["치킨아이 학동점"],
+        "address": "전남 여수시 학동서5길 10 102호",
+        "addressVerified": true,
+        "createIfMissing": false
+      },
+      "additions": {
+        "address": "전남 여수시 학동서5길 10 102호",
+        "district": "학동",
+        "category": "치킨",
+        "searchAliases": ["치킨아이 학동점"],
+        "naverMap": "https://naver.me/FDnnsGzQ",
+        "naverStatus": "verified",
+        "phone": "",
+        "phoneSource": "",
+        "ddangyoLinks": ["https://fdofd.ddangyo.com/gateway1.html?h3rPiwO"]
+      },
+      "evidence": {
+        "primarySource": "ddangyo-link-supplied-by-owner",
+        "addressSource": "previously-verified-store-record",
+        "phoneDecision": "pending-ddangyo-then-mukkebi-then-naver"
+      }
+    },
+    {
+      "recordId": "ddangyo-7qEHjBv",
+      "match": {
+        "storeId": "420af240943ff849",
+        "names": ["큰손닭강정 여수본점", "큰손닭강정 여수본점(학동)"],
+        "address": "전남 여수시 쌍봉로 35-2 1층",
+        "addressVerified": true,
+        "createIfMissing": false
+      },
+      "additions": {
+        "address": "전남 여수시 쌍봉로 35-2 1층",
+        "district": "학동",
+        "category": "치킨",
+        "searchAliases": ["큰손닭강정 여수본점", "큰손닭강정 학동"],
+        "naverMap": "https://naver.me/5QsrfK4C",
+        "naverStatus": "verified",
+        "phone": "",
+        "phoneSource": "",
+        "ddangyoLinks": ["https://fdofd.ddangyo.com/gateway1.html?7qEHjBv"]
+      },
+      "evidence": {
+        "primarySource": "ddangyo-link-supplied-by-owner",
+        "addressSource": "previously-verified-store-record",
+        "phoneDecision": "pending-ddangyo-then-mukkebi-then-naver"
+      }
+    }
+  ]
+}

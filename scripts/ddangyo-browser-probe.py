@@ -1,10 +1,9 @@
 import json
-import os
 import time
 from pathlib import Path
-from urllib.parse import urlparse
 
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 
 TARGETS = [
@@ -25,6 +24,7 @@ def safe_name(value: str) -> str:
 
 def make_driver() -> webdriver.Chrome:
     options = Options()
+    options.page_load_strategy = "none"
     options.add_argument("--headless=new")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
@@ -40,6 +40,7 @@ def make_driver() -> webdriver.Chrome:
     )
     options.set_capability("goog:loggingPrefs", {"performance": "ALL", "browser": "ALL"})
     driver = webdriver.Chrome(options=options)
+    driver.set_page_load_timeout(15)
     driver.execute_cdp_cmd("Network.enable", {})
     return driver
 
@@ -69,14 +70,13 @@ def capture_target(target):
     body_errors = []
 
     try:
-        driver.get(url)
-        for _ in range(20):
+        try:
+            driver.get(url)
+        except TimeoutException:
+            pass
+
+        for _ in range(8):
             time.sleep(1)
-            try:
-                if driver.execute_script("return document.readyState") == "complete":
-                    pass
-            except Exception:
-                pass
 
         html = driver.page_source
         (OUT / f"{token}-page.html").write_text(html, encoding="utf-8")
@@ -183,10 +183,7 @@ def capture_target(target):
         driver.quit()
 
 
-summary = []
-for target in TARGETS:
-    summary.append(capture_target(target))
-
+summary = [capture_target(target) for target in TARGETS]
 (OUT / "summary.json").write_text(
     json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8"
 )

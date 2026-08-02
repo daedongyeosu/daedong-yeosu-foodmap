@@ -11,6 +11,8 @@ on:
       - scripts/ddangyo-phone-api-discovery.mjs
       - scripts/ddangyo-enrich-phones.mjs
       - scripts/build-ddangyo-integration.mjs
+      - scripts/package-ddangyo-preview-assets.mjs
+      - ddangyo-preview-runtime.js
       - .github/workflows/ddangyo-gateway-probe.yml
   pull_request:
     branches:
@@ -22,6 +24,8 @@ on:
       - scripts/ddangyo-phone-api-discovery.mjs
       - scripts/ddangyo-enrich-phones.mjs
       - scripts/build-ddangyo-integration.mjs
+      - scripts/package-ddangyo-preview-assets.mjs
+      - ddangyo-preview-runtime.js
       - .github/workflows/ddangyo-gateway-probe.yml
 
 concurrency:
@@ -56,6 +60,9 @@ jobs:
 
       - name: Build integration package without publishing
         run: node scripts/build-ddangyo-integration.mjs
+
+      - name: Package preview menu UI and installer
+        run: node scripts/package-ddangyo-preview-assets.mjs
 
       - name: Upload phone discovery results
         if: always()

@@ -12,7 +12,15 @@ const existingOverrides = new Map([
   ['1171956', {storeId: 'ce40f493bcd2ca2b', storeName: '노랑통닭 죽림점', reason: 'same road address; Ddangyo omits 소라면'}],
   ['1159213', {storeId: 'c6b947813051ac38', storeName: '자담치킨 여수죽림점', reason: 'same road address; Ddangyo omits 소라면'}],
   ['1224280', {storeId: '8e930495e2e94c21', storeName: '교촌치킨 죽림무선점', reason: 'same road address; Ddangyo omits 소라면'}],
-  ['1238086', {storeId: '51b657cc3416c67d', storeName: '여수강촌토종닭숯불구이 죽림직영점', reason: 'same road address; Ddangyo omits 소라면'}]
+  ['1238086', {storeId: '51b657cc3416c67d', storeName: '여수강촌토종닭숯불구이 죽림직영점', reason: 'same road address; Ddangyo omits 소라면'}],
+  ['1212165', {storeId: '5535998cfac3846a', storeName: '김종구식 맛치킨 전기바베큐 옛날통닭 학동점', reason: 'same brand and 학동 branch; Ddangyo includes 여수 in branch name'}],
+  ['1120968', {storeId: '9846929c4427576a', storeName: '푸라닭치킨 여수문수점', reason: 'same 푸라닭 문수 branch; current name includes 치킨'}],
+  ['1216976', {storeId: '57ae8848b4ccc2a1', storeName: '본스치킨 미평점', reason: 'same brand and 미평 branch; Ddangyo includes 여수'}],
+  ['1130868', {storeId: '9a94c05bdeca2d9e', storeName: '아주커치킨 학동점', reason: 'same 아주커 학동 branch; Ddangyo uses 여천학동'}],
+  ['1147605', {storeId: '72e0104c30277686', storeName: '굽네치킨&피자 죽림점', reason: 'same brand and 죽림 branch; Ddangyo includes 여수'}],
+  ['1171853', {storeId: '724adc8d9593fe05', storeName: '가마치통닭 죽림점', reason: 'same brand and 죽림 branch; Ddangyo includes 여수'}],
+  ['1171100', {storeId: '87fd57845e1c58b5', storeName: '60계치킨 죽림점', reason: 'same brand and 죽림 branch; Ddangyo includes 여수'}],
+  ['1177925', {storeId: 'aea70baec8c61d25', storeName: '노랑통닭 웅천점', reason: 'same brand and 웅천 branch; Ddangyo includes 여수'}]
 ]);
 
 const newShopInShopOverrides = new Map([

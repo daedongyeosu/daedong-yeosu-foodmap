@@ -6,12 +6,14 @@ on:
       - work/ddangyo-fingerprint-batch-01
     paths:
       - scripts/ddangyo-gateway-probe.mjs
+      - scripts/ddangyo-browser-probe.py
       - .github/workflows/ddangyo-gateway-probe.yml
   pull_request:
     branches:
       - main
     paths:
       - scripts/ddangyo-gateway-probe.mjs
+      - scripts/ddangyo-browser-probe.py
       - .github/workflows/ddangyo-gateway-probe.yml
 
 permissions:
@@ -20,19 +22,22 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 8
     steps:
       - name: Check out branch
         uses: actions/checkout@v4
 
-      - name: Request original Ddangyo gateway URLs
-        run: node scripts/ddangyo-gateway-probe.mjs
+      - name: Install browser probe dependency
+        run: python -m pip install --disable-pip-version-check selenium
 
-      - name: Upload probe output
+      - name: Run Ddangyo in headless Chrome and capture network responses
+        run: python scripts/ddangyo-browser-probe.py
+
+      - name: Upload browser probe output
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ddangyo-gateway-probe
-          path: ddangyo-probe-output
+          name: ddangyo-browser-probe
+          path: ddangyo-browser-output
           if-no-files-found: error
           retention-days: 1

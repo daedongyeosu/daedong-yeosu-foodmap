@@ -21,19 +21,13 @@ for(const store of stores){
   const referer=`https://fdofd.ddangyo.com/gateway1.html?${store.token}`;
   try{
     const landing=await request(`/gateway1.html?${store.token}`);const cookie=cookies(landing.headers['set-cookie']||[]);
-    const search={login_mbr_id:'',patsto_no:store.patstoNo,admtn_dong_cd:'',map_latt:'',map_lngt:'',patsto_tab_div_cd:'01',exps_chan:'01',rest_patsto_yn:'N'};
+    const search={login_mbr_id:'',patsto_no:store.patstoNo,admtn_dong_cd:'4613078000',map_latt:'34.7600000',map_lngt:'127.6600000',patsto_tab_div_cd:'01',exps_chan:'01',rest_patsto_yn:'N'};
     const homeRes=await postApi('/shop/home',{dma_shop_search:search},{cookie,referer});const home=json(homeRes.body);const homeResult=resultOf(home);const homeInfo=homeResult.dma_shop_home_info||{};
     search.rest_patsto_yn=homeInfo.rest_patsto_yn||'N';
     const menuRes=await postApi('/shop/homemenu',{dma_shop_search:search},{cookie,referer});const menu=json(menuRes.body);const menuResult=resultOf(menu);
-    const row={
-      ...store,landingStatus:landing.status,homeStatus:homeRes.status,menuStatus:menuRes.status,
-      homeResultCode:home.result_code||'',menuResultCode:menu.result_code||'',
-      homeInfo,shopImages:homeResult.shop_img_list||[],shopVideo:homeResult.dma_shop_home_vd_od_info||{},
-      menuGroups:menuResult.menu_grp_list||[],menus:menuResult.menu_list||[],menuPrices:menuResult.menu_prc_list||[],
-      homeRaw:home,menuRaw:menu
-    };
+    const row={...store,requestSearch:search,landingStatus:landing.status,homeStatus:homeRes.status,menuStatus:menuRes.status,homeResultCode:home.result_code||'',menuResultCode:menu.result_code||'',homeInfo,shopImages:homeResult.shop_img_list||[],shopVideo:homeResult.dma_shop_home_vd_od_info||{},menuGroups:menuResult.menu_grp_list||[],menus:menuResult.menu_list||[],menuPrices:menuResult.menu_prc_list||[],homeRaw:home,menuRaw:menu};
     await fs.writeFile(path.join(out,`${store.patstoNo}.json`),JSON.stringify(row,null,2));
-    summary.push({patstoNo:store.patstoNo,name:store.name,homeStatus:homeRes.status,homeCode:home.result_code||'',returnedName:homeInfo.patsto_nm||'',address:homeInfo.bas_addr||'',menuStatus:menuRes.status,menuCode:menu.result_code||'',groups:row.menuGroups.length,menus:row.menus.length,images:row.menus.filter(m=>m.menu_img_file).length,phoneFields:Object.fromEntries(Object.entries(homeInfo).filter(([k])=>/tel|phone|cntc|call/i.test(k)))});
+    summary.push({patstoNo:store.patstoNo,name:store.name,homeStatus:homeRes.status,homeCode:home.result_code||'',homeMessage:home.message||'',returnedName:homeInfo.patsto_nm||'',address:homeInfo.bas_addr||'',menuStatus:menuRes.status,menuCode:menu.result_code||'',menuMessage:menu.message||'',groups:row.menuGroups.length,menus:row.menus.length,images:row.menus.filter(m=>m.menu_img_file).length,phoneFields:Object.fromEntries(Object.entries(homeInfo).filter(([k])=>/tel|phone|cntc|call/i.test(k)))});
   }catch(error){summary.push({...store,error:String(error?.stack||error)});}
 }
 await fs.writeFile(path.join(out,'summary.json'),JSON.stringify(summary,null,2));console.log(JSON.stringify(summary,null,2));

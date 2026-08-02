@@ -5,15 +5,13 @@ on:
     branches:
       - work/ddangyo-fingerprint-batch-01
     paths:
-      - scripts/ddangyo-gateway-probe.mjs
-      - scripts/ddangyo-browser-probe.py
+      - scripts/ddangyo-shorturl-direct-probe.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
   pull_request:
     branches:
       - main
     paths:
-      - scripts/ddangyo-gateway-probe.mjs
-      - scripts/ddangyo-browser-probe.py
+      - scripts/ddangyo-shorturl-direct-probe.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
 
 permissions:
@@ -22,22 +20,19 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 8
+    timeout-minutes: 5
     steps:
       - name: Check out branch
         uses: actions/checkout@v4
 
-      - name: Install browser probe dependency
-        run: python -m pip install --disable-pip-version-check selenium
+      - name: Resolve Ddangyo short URLs through the original API
+        run: node scripts/ddangyo-shorturl-direct-probe.mjs
 
-      - name: Run Ddangyo in headless Chrome and capture network responses
-        run: python scripts/ddangyo-browser-probe.py
-
-      - name: Upload browser probe output
+      - name: Upload short URL results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ddangyo-browser-probe
-          path: ddangyo-browser-output
+          name: ddangyo-shorturl-probe
+          path: ddangyo-shorturl-output
           if-no-files-found: error
           retention-days: 1

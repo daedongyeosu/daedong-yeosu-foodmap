@@ -9,6 +9,7 @@ on:
       - scripts/ddangyo-rematch-report.mjs
       - scripts/ddangyo-finalize-match-overrides.mjs
       - scripts/ddangyo-phone-api-discovery.mjs
+      - scripts/build-ddangyo-integration.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
   pull_request:
     branches:
@@ -18,6 +19,7 @@ on:
       - scripts/ddangyo-rematch-report.mjs
       - scripts/ddangyo-finalize-match-overrides.mjs
       - scripts/ddangyo-phone-api-discovery.mjs
+      - scripts/build-ddangyo-integration.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
 
 concurrency:
@@ -47,6 +49,9 @@ jobs:
       - name: Apply verified same-store and shop-in-shop decisions
         run: node scripts/ddangyo-finalize-match-overrides.mjs
 
+      - name: Build integration package without publishing
+        run: node scripts/build-ddangyo-integration.mjs
+
       - name: Upload phone discovery results
         if: always()
         uses: actions/upload-artifact@v4
@@ -62,5 +67,14 @@ jobs:
         with:
           name: ddangyo-shop-data
           path: ddangyo-shop-data-output
+          if-no-files-found: error
+          retention-days: 1
+
+      - name: Upload integration package
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ddangyo-integration-package
+          path: ddangyo-integration-output
           if-no-files-found: error
           retention-days: 1

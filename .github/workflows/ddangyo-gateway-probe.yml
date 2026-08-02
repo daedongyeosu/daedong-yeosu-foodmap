@@ -5,13 +5,13 @@ on:
     branches:
       - work/ddangyo-fingerprint-batch-01
     paths:
-      - scripts/ddangyo-shop-api-discovery.mjs
+      - scripts/ddangyo-shop-data-probe.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
   pull_request:
     branches:
       - main
     paths:
-      - scripts/ddangyo-shop-api-discovery.mjs
+      - scripts/ddangyo-shop-data-probe.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
 
 permissions:
@@ -25,14 +25,14 @@ jobs:
       - name: Check out branch
         uses: actions/checkout@v4
 
-      - name: Discover Ddangyo shop detail submissions
-        run: node scripts/ddangyo-shop-api-discovery.mjs
+      - name: Fetch Ddangyo shop details and full menus
+        run: node scripts/ddangyo-shop-data-probe.mjs
 
-      - name: Upload shop discovery results
+      - name: Upload shop data results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ddangyo-shop-discovery
-          path: ddangyo-shop-discovery-output
+          name: ddangyo-shop-data
+          path: ddangyo-shop-data-output
           if-no-files-found: error
           retention-days: 1

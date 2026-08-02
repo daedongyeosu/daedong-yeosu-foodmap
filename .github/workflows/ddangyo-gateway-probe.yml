@@ -8,6 +8,7 @@ on:
       - scripts/ddangyo-shop-data-probe.mjs
       - scripts/ddangyo-rematch-report.mjs
       - scripts/ddangyo-finalize-match-overrides.mjs
+      - scripts/ddangyo-phone-api-discovery.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
   pull_request:
     branches:
@@ -16,6 +17,7 @@ on:
       - scripts/ddangyo-shop-data-probe.mjs
       - scripts/ddangyo-rematch-report.mjs
       - scripts/ddangyo-finalize-match-overrides.mjs
+      - scripts/ddangyo-phone-api-discovery.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
 
 concurrency:
@@ -33,6 +35,9 @@ jobs:
       - name: Check out branch
         uses: actions/checkout@v4
 
+      - name: Discover Ddangyo phone information endpoint
+        run: node scripts/ddangyo-phone-api-discovery.mjs
+
       - name: Fetch Ddangyo shop details and full menus
         run: node scripts/ddangyo-shop-data-probe.mjs
 
@@ -41,6 +46,15 @@ jobs:
 
       - name: Apply verified same-store and shop-in-shop decisions
         run: node scripts/ddangyo-finalize-match-overrides.mjs
+
+      - name: Upload phone discovery results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ddangyo-phone-discovery
+          path: ddangyo-phone-discovery-output
+          if-no-files-found: error
+          retention-days: 1
 
       - name: Upload shop data results
         if: always()

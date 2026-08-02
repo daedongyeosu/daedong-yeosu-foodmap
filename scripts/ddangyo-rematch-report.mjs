@@ -24,6 +24,16 @@ function nameKey(value) {
     .replace(/[\s·&()\-_/.,]/g, '');
 }
 
+function looseNameKey(value) {
+  return nameKey(
+    cleanName(value)
+      .replace(/\([^)]*\)/g, ' ')
+      .replace(/피나치공/gi, '피자나라치킨공주')
+      .replace(/샵인샵|샵인점/gi, '')
+      .replace(/여수/g, '')
+  );
+}
+
 function addressBase(value) {
   return cleanAddress(value)
     .replace(/\s+(?:지하\s*)?\d+층(?:\s+.*)?$/i, '')
@@ -53,6 +63,13 @@ function storeAddress(row) {
 function compatibleName(left, right) {
   const a = nameKey(left);
   const b = nameKey(right);
+  if (!a || !b) return false;
+  return a === b || a.includes(b) || b.includes(a);
+}
+
+function compatibleLooseName(left, right) {
+  const a = looseNameKey(left);
+  const b = looseNameKey(right);
   if (!a || !b) return false;
   return a === b || a.includes(b) || b.includes(a);
 }
@@ -101,6 +118,7 @@ function summarizeCandidate(row) {
 function matchStore(shop) {
   const targetAddress = addressKey(shop.address);
   const targetName = nameKey(shop.name);
+  const targetLooseName = looseNameKey(shop.name);
   const byAddress = targetAddress
     ? indexedStores.filter(row => addressKey(row.address) === targetAddress)
     : [];
@@ -120,6 +138,14 @@ function matchStore(shop) {
         status: 'existing',
         method: 'shared-address-and-compatible-name',
         ...summarizeCandidate(compatible[0])
+      };
+    }
+    const looseCompatible = byAddress.filter(row => compatibleLooseName(row.name, shop.name));
+    if (looseCompatible.length === 1) {
+      return {
+        status: 'existing',
+        method: 'shared-address-and-normalized-name',
+        ...summarizeCandidate(looseCompatible[0])
       };
     }
     return {
@@ -147,12 +173,40 @@ function matchStore(shop) {
     };
   }
 
+  const normalizedName = indexedStores.filter(row => looseNameKey(row.name) === targetLooseName);
+  if (normalizedName.length === 1) {
+    const candidate = normalizedName[0];
+    if (!candidate.address) {
+      return {
+        status: 'existing',
+        method: 'unique-normalized-name-current-address-missing',
+        ...summarizeCandidate(candidate)
+      };
+    }
+    return {
+      status: 'review',
+      method: 'unique-normalized-name-address-unconfirmed',
+      ...summarizeCandidate(candidate),
+      ddangyoAddress: cleanAddress(shop.address)
+    };
+  }
+
   const compatible = indexedStores.filter(row => compatibleName(row.name, shop.name));
   if (compatible.length === 1) {
     return {
       status: 'review',
       method: 'unique-compatible-name-address-unconfirmed',
       ...summarizeCandidate(compatible[0]),
+      ddangyoAddress: cleanAddress(shop.address)
+    };
+  }
+
+  const looseCompatible = indexedStores.filter(row => compatibleLooseName(row.name, shop.name));
+  if (looseCompatible.length === 1) {
+    return {
+      status: 'review',
+      method: 'unique-loose-compatible-name-address-unconfirmed',
+      ...summarizeCandidate(looseCompatible[0]),
       ddangyoAddress: cleanAddress(shop.address)
     };
   }

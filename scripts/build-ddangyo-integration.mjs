@@ -91,6 +91,9 @@ for (const row of extracted) {
   if (isNew) newCount += 1;
   else existingCount += 1;
 
+  const phone = String(row.phone || '').replace(/\D/g, '');
+  const approvedPhone = /^0\d{8,10}$/.test(phone) && row.phoneSource === 'ddangyo' ? phone : '';
+
   enrichmentStores.push({
     targetStoreId: storeId,
     isNew,
@@ -103,8 +106,8 @@ for (const row of extracted) {
     mainImage,
     shopImages: unique(row.shopImages).slice(0, 3),
     ddangyoUrl: unique(row.sourceUrls)[0] || '',
-    phone: '',
-    phoneSource: '',
+    phone: approvedPhone,
+    phoneSource: approvedPhone ? 'ddangyo' : '',
     naverMap: '',
     naverEligible: row.naverEligible !== false && row.match.naverEligible !== false,
     sourceMatch: row.match
@@ -167,8 +170,8 @@ await fs.writeFile(
 );
 
 if (summary.stores !== 73) throw new Error(`expected 73 stores, got ${summary.stores}`);
-if (summary.existingStores !== 52) throw new Error(`expected 52 existing stores, got ${summary.existingStores}`);
-if (summary.newStores !== 21) throw new Error(`expected 21 new stores, got ${summary.newStores}`);
+if (summary.existingStores !== 46) throw new Error(`expected 46 existing stores, got ${summary.existingStores}`);
+if (summary.newStores !== 27) throw new Error(`expected 27 new stores, got ${summary.newStores}`);
 if (summary.totalMenuItems !== 4585) throw new Error(`expected 4585 menu items, got ${summary.totalMenuItems}`);
 if (summary.totalMenuImages !== 3294) throw new Error(`expected 3294 menu images, got ${summary.totalMenuImages}`);
 if (summary.duplicateStoreIds || summary.duplicatePatstoNumbers) throw new Error('duplicate identity detected');

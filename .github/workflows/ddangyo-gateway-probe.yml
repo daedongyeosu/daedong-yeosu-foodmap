@@ -7,6 +7,12 @@ on:
     paths:
       - scripts/ddangyo-gateway-probe.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - scripts/ddangyo-gateway-probe.mjs
+      - .github/workflows/ddangyo-gateway-probe.yml
 
 permissions:
   contents: read

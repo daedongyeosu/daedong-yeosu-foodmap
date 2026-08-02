@@ -1,0 +1,32 @@
+name: Temporary Ddangyo Gateway Probe
+
+on:
+  push:
+    branches:
+      - work/ddangyo-fingerprint-batch-01
+    paths:
+      - scripts/ddangyo-gateway-probe.mjs
+      - .github/workflows/ddangyo-gateway-probe.yml
+
+permissions:
+  contents: read
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@v4
+
+      - name: Request original Ddangyo gateway URLs
+        run: node scripts/ddangyo-gateway-probe.mjs
+
+      - name: Upload probe output
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ddangyo-gateway-probe
+          path: ddangyo-probe-output
+          if-no-files-found: error
+          retention-days: 1

@@ -5,13 +5,13 @@ on:
     branches:
       - work/ddangyo-fingerprint-batch-01
     paths:
-      - scripts/ddangyo-shorturl-direct-probe.mjs
+      - scripts/ddangyo-shop-api-discovery.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
   pull_request:
     branches:
       - main
     paths:
-      - scripts/ddangyo-shorturl-direct-probe.mjs
+      - scripts/ddangyo-shop-api-discovery.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
 
 permissions:
@@ -25,14 +25,14 @@ jobs:
       - name: Check out branch
         uses: actions/checkout@v4
 
-      - name: Resolve Ddangyo short URLs through the original API
-        run: node scripts/ddangyo-shorturl-direct-probe.mjs
+      - name: Discover Ddangyo shop detail submissions
+        run: node scripts/ddangyo-shop-api-discovery.mjs
 
-      - name: Upload short URL results
+      - name: Upload shop discovery results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: ddangyo-shorturl-probe
-          path: ddangyo-shorturl-output
+          name: ddangyo-shop-discovery
+          path: ddangyo-shop-discovery-output
           if-no-files-found: error
           retention-days: 1

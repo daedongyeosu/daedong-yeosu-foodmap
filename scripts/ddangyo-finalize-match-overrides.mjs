@@ -26,7 +26,13 @@ const existingOverrides = new Map([
 
 const newShopInShopOverrides = new Map([
   ['1273822', {reason: 'distinct Ddangyo shop at a shared address; no same-name current store', naverEligible: false}],
-  ['1304058', {reason: 'distinct shop-in-shop at a shared address; no same-name current store', naverEligible: false}]
+  ['1304058', {reason: 'distinct shop-in-shop at a shared address; no same-name current store', naverEligible: false}],
+  ['1206834', {reason: '새우치킨덤 is distinct from the current 여수오리날개튀김 store at the same address', naverEligible: false}],
+  ['1324646', {reason: '불로만치킨바베큐 is distinct from the current 김종구식 맛치킨 store at the same address', naverEligible: false}],
+  ['1202217', {reason: '순살 참잘튀기는집 is distinct from the current 탕참 store at the same address', naverEligible: false}],
+  ['1202198', {reason: '치코두마리파닭 is distinct from the current 탕참 store at the same address', naverEligible: false}],
+  ['1188831', {reason: '폭탄치밥 is distinct from the current 닥엔돈스 store at the same address', naverEligible: false}],
+  ['1188818', {reason: '닥엔돈스 직화바베큐치킨 is a separate shop-in-shop from 닥엔돈스 쪽갈비', naverEligible: false}]
 ]);
 
 const extracted = JSON.parse(await fs.readFile(normalizedPath, 'utf8'));
@@ -94,5 +100,9 @@ await fs.writeFile(
   path.join(outputDir, 'new-only.json'),
   JSON.stringify(stores.filter(row => row.match?.status === 'new'), null, 2)
 );
+
+if (matchSummary.existing !== 46 || matchSummary.new !== 27 || matchSummary.review !== 0 || matchSummary.failed !== 0) {
+  throw new Error(`unexpected final classification: ${JSON.stringify(matchSummary)}`);
+}
 
 console.log(JSON.stringify({manualDecisionCount: decisions.length, matchSummary}, null, 2));

@@ -6,12 +6,14 @@ on:
       - work/ddangyo-fingerprint-batch-01
     paths:
       - scripts/ddangyo-shop-data-probe.mjs
+      - scripts/ddangyo-rematch-report.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
   pull_request:
     branches:
       - main
     paths:
       - scripts/ddangyo-shop-data-probe.mjs
+      - scripts/ddangyo-rematch-report.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
 
 permissions:
@@ -27,6 +29,9 @@ jobs:
 
       - name: Fetch Ddangyo shop details and full menus
         run: node scripts/ddangyo-shop-data-probe.mjs
+
+      - name: Re-match stores with keyed coordinate addresses
+        run: node scripts/ddangyo-rematch-report.mjs
 
       - name: Upload shop data results
         if: always()

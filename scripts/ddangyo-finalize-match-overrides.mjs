@@ -20,7 +20,8 @@ const existingOverrides = new Map([
   ['1147605', {storeId: '72e0104c30277686', storeName: '굽네치킨&피자 죽림점', reason: 'same brand and 죽림 branch; Ddangyo includes 여수'}],
   ['1171853', {storeId: '724adc8d9593fe05', storeName: '가마치통닭 죽림점', reason: 'same brand and 죽림 branch; Ddangyo includes 여수'}],
   ['1171100', {storeId: '87fd57845e1c58b5', storeName: '60계치킨 죽림점', reason: 'same brand and 죽림 branch; Ddangyo includes 여수'}],
-  ['1177925', {storeId: 'aea70baec8c61d25', storeName: '노랑통닭 웅천점', reason: 'same brand and 웅천 branch; Ddangyo includes 여수'}]
+  ['1177925', {storeId: 'aea70baec8c61d25', storeName: '노랑통닭 웅천점', reason: 'same brand and 웅천 branch; Ddangyo includes 여수'}],
+  ['1154876', {storeId: '1894da97ed277235', storeName: '자담치킨 여수학동점', reason: 'same exact branch; current sources and Ddangyo confirm 소호로 658 while stored coordinate 662 is stale'}]
 ]);
 
 const newShopInShopOverrides = new Map([

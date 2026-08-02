@@ -9,6 +9,7 @@ on:
       - scripts/ddangyo-rematch-report.mjs
       - scripts/ddangyo-finalize-match-overrides.mjs
       - scripts/ddangyo-phone-api-discovery.mjs
+      - scripts/ddangyo-enrich-phones.mjs
       - scripts/build-ddangyo-integration.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
   pull_request:
@@ -19,6 +20,7 @@ on:
       - scripts/ddangyo-rematch-report.mjs
       - scripts/ddangyo-finalize-match-overrides.mjs
       - scripts/ddangyo-phone-api-discovery.mjs
+      - scripts/ddangyo-enrich-phones.mjs
       - scripts/build-ddangyo-integration.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
 
@@ -32,7 +34,7 @@ permissions:
 jobs:
   probe:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - name: Check out branch
         uses: actions/checkout@v4
@@ -48,6 +50,9 @@ jobs:
 
       - name: Apply verified same-store and shop-in-shop decisions
         run: node scripts/ddangyo-finalize-match-overrides.mjs
+
+      - name: Fetch verified Ddangyo phone numbers
+        run: node scripts/ddangyo-enrich-phones.mjs
 
       - name: Build integration package without publishing
         run: node scripts/build-ddangyo-integration.mjs

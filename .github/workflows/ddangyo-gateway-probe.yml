@@ -16,6 +16,10 @@ on:
       - scripts/ddangyo-rematch-report.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
 
+concurrency:
+  group: ddangyo-probe-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 

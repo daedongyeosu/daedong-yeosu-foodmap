@@ -7,6 +7,7 @@ on:
     paths:
       - scripts/ddangyo-shop-data-probe.mjs
       - scripts/ddangyo-rematch-report.mjs
+      - scripts/ddangyo-finalize-match-overrides.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
   pull_request:
     branches:
@@ -14,6 +15,7 @@ on:
     paths:
       - scripts/ddangyo-shop-data-probe.mjs
       - scripts/ddangyo-rematch-report.mjs
+      - scripts/ddangyo-finalize-match-overrides.mjs
       - .github/workflows/ddangyo-gateway-probe.yml
 
 concurrency:
@@ -36,6 +38,9 @@ jobs:
 
       - name: Re-match stores with keyed coordinate addresses
         run: node scripts/ddangyo-rematch-report.mjs
+
+      - name: Apply verified same-store and shop-in-shop decisions
+        run: node scripts/ddangyo-finalize-match-overrides.mjs
 
       - name: Upload shop data results
         if: always()

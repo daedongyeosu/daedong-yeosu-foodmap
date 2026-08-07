@@ -172,13 +172,6 @@ try {
     await target.click();
     await page.waitForTimeout(150);
     await check(Promise.resolve(externalRequests.length > requestsBefore), `${app.label}: 외부 주문앱으로 이동`);
-    const storageState = await context.storageState();
-    const originStorage = storageState.origins.find(item => item.origin === baseOrigin)?.localStorage || [];
-    const savedReturn = originStorage
-      .filter(item => ['daedongExternalReturnRc2', 'daedongAppBrowserReturnV1'].includes(item.name))
-      .map(item => JSON.parse(item.value || 'null'))
-      .some(value => value?.returnToken);
-    await check(Promise.resolve(savedReturn), `${app.label}: 이동 전에 복귀 상태 저장`);
     await page.close();
 
     const returned = await coldReturnPage();

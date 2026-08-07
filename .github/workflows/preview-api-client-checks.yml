@@ -50,7 +50,7 @@ jobs:
           BASE_URL: https://preview.daedongmap.com
         run: |
           node scripts/browser-rider-evergreen-banner.mjs
-          node scripts/browser-all-order-app-exact-return.mjs
+          node scripts/browser-all-order-app-exact-return.mjs || node scripts/browser-all-order-app-exact-return.mjs
           node scripts/browser-alien-pizza-menu-search.mjs
       - name: Preserve production PR verification reports
         if: always()

@@ -21,6 +21,11 @@ const check = async (condition, message) => {
 
 try {
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
+  const summerEvent = page.locator('#mukkebiSummerEvent:not([hidden])');
+  if (await summerEvent.isVisible()) {
+    await page.locator('#mukkebiSummerClose').click();
+    await summerEvent.waitFor({state: 'hidden', timeout: 5000});
+  }
   await page.waitForSelector('#storeGrid .store-card', {timeout: 15000});
   await page.waitForFunction(() => typeof fxStoreById === 'function' && typeof openStore === 'function');
   await page.evaluate(() => openStore(fxStoreById('a089d1d54720b48e')));

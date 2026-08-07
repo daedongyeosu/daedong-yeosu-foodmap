@@ -47,11 +47,11 @@ jobs:
 
           rm -f             .github/workflows/approved-ux-validation.yml             .github/workflows/integration-validation.yml             .github/workflows/notion-sync.yml
 
-          cp "$RUNNER_TEMP/approved-preview/.github/workflows/preview-api-client-checks.yml" .github/workflows/production-api-client-checks.yml
-          cp "$RUNNER_TEMP/approved-preview/.github/workflows/post-deploy-preview-checks.yml" .github/workflows/post-deploy-production-checks.yml
+          cp "$RUNNER_TEMP/approved-preview/.github/workflows/preview-api-client-checks.yml" .github/workflows/preview-api-client-checks.yml
+          cp "$RUNNER_TEMP/approved-preview/.github/workflows/post-deploy-preview-checks.yml" .github/workflows/post-deploy-preview-checks.yml
 
-          sed -i             -e 's/Verify preview API client/Verify production API client/g'             -e 's/verify-preview-api-client/verify-production-api-client/g'             -e 's/preview-pr-verification/production-pr-verification/g'             .github/workflows/production-api-client-checks.yml
-          sed -i             -e 's/Verify deployed preview/Verify deployed production/g'             -e 's/verify-deployed-preview/verify-deployed-production/g'             -e 's/deployed-preview-verification/deployed-production-verification/g'             .github/workflows/post-deploy-production-checks.yml
+          sed -i             -e 's/Verify preview API client/Verify production API client/g'             -e 's/verify-preview-api-client/verify-production-api-client/g'             -e 's/preview-pr-verification/production-pr-verification/g'             .github/workflows/preview-api-client-checks.yml
+          sed -i             -e 's/Verify deployed preview/Verify deployed production/g'             -e 's/verify-deployed-preview/verify-deployed-production/g'             -e 's/deployed-preview-verification/deployed-production-verification/g'             .github/workflows/post-deploy-preview-checks.yml
 
           find . -path './.git' -prune -o -type f -print0 | xargs -0 sed -i             -e 's#https://preview\.daedongmap\.com#https://daedongmap.com#g'             -e 's#https://daedong-yeosu-data-api-preview\.sisakim\.workers\.dev#https://daedong-yeosu-data-api.sisakim.workers.dev#g'             -e 's#daedong-preview-web-v1-20260804#daedong-production-web-v1-20260807#g'
 

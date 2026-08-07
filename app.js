@@ -1,7 +1,6 @@
 'use strict';
 
 const ASSET_VERSION = 'phone-route-restoration-1';
-const DATA_URL = `data/stores.json?v=${ASSET_VERSION}`;
 const PHOTO_MANIFEST_URL = 'data/photo-manifest.json';
 const PHOTO_POLICY_URL = 'data/photo-policy.json';
 const NEIGHBORHOOD_URL = 'data/yeosu-neighborhoods.json';
@@ -9,6 +8,12 @@ const EXTERNAL_APP_KEYS = ['yogiyo', 'coupang', 'baemin'];
 const LOW_FEE_KEYS = ['direct', 'mukkebi', 'ddangyo', 'ondongne', 'brand', 'phone'];
 const LOCAL_DETAIL_KEYS = ['direct', 'mukkebi', 'ddangyo', 'ondongne', 'brand'];
 const DETAIL_ONLY_KEYS = ['phone', 'chak'];
+const BLOCKED_STORE_ROUTE_KEYS = Object.freeze({
+  '09de7c8235046632': new Set(['phone']),
+  '0ad5341dc696d4f1': new Set(['phone']),
+  // 더벤티 여수국동항점에 다른 가게(배스킨라빈스)의 주문·전화 경로가 연결된 원본 데이터 차단.
+  '9ee73ce6168105ec': new Set(['direct', 'phone', 'yogiyo', 'coupang', 'baemin'])
+});
 const FAVORITE_KEY = 'daedongFavoriteStoresV2';
 const RECENT_KEY = 'daedongRecentStoresV2';
 const FEEDBACK_QUEUE_KEY = 'daedongFeedbackQueueV1';
@@ -17,6 +22,7 @@ const SELECTED_EXTERNAL_KEY = 'daedongSelectedExternalV1';
 const SELECTED_ORDER_COMPAT_KEY = 'DaedongSelectedOrderApp';
 const ADDRESS_KEY = 'daedongDeliveryAddressV2';
 const ADDRESS_BOOK_KEY = 'daedongAddressBookV2';
+const EXTERNAL_APP_DEPARTURE_KEY = 'daedongExternalAppDepartureV1';
 const FEEDBACK_FORM_URL = 'https://www.notion.so/8ae3728176e344fdaee3475a97d03740';
 const SMALL_BUSINESS_ASSOCIATION_URL = 'https://bit.ly/여수시소상공인연합회공지';
 const ANALYTICS_ENDPOINT = 'https://daedong-yeosu-admin.sisakim.chatgpt.site/api/events';
@@ -65,6 +71,11 @@ const GLOBAL_EXTERNAL_APPS = {
   baemin: {label: '배달의민족'}
 };
 const EXTERNAL_APP_NOTICE_TEXT = '앱 이름은 주문 경로 안내를 위해 표시되며, 대동여수음식지도와 해당 앱의 공식 제휴·후원을 의미하지 않습니다.';
+
+function markExternalAppDeparture() {
+  try { sessionStorage.setItem(EXTERNAL_APP_DEPARTURE_KEY, '1'); } catch {}
+}
+if (typeof window !== 'undefined') window.daedongMarkExternalAppDeparture = markExternalAppDeparture;
 
 const BRAND_GROUPS = [
   {name: '치킨·버거', brands: [
@@ -116,7 +127,7 @@ const HERO_BANNERS = Array.from({length: 17}, (_, index) => {
   return {desktop: `images/${number}.png`, mobile: `images/${number}.png`, fallback: `images/${number}.png`, alt: `대동여수음식지도 배너 ${index + 1}`};
 });
 const PROMOS = [
-  {kind: 'rider', title: '배송기사 모집', desc: '여수 지역 베테랑 기사님을 기다립니다.'},
+  {kind: 'rider', title: '배송기사님 상시모집', desc: '여수 지역 베테랑 기사님을 기다립니다.'},
   {kind: 'store', title: '배달대행 가맹점 모집', desc: '가게 사장님을 위한 주문·홍보·배달 연결'},
   {kind: 'join', title: '먹깨비·땡겨요·온동네 가입 안내', desc: '저수수료 주문경로를 한 번에 연결하세요.'},
   {kind: 'new', title: '신규 오픈 가게 광고', desc: '새로 문을 연 여수 가게를 빠르게 알립니다.'},
@@ -124,7 +135,7 @@ const PROMOS = [
 ];
 const PROMO_CAROUSEL_DETAILS = {
   rider: {
-    title: '배송기사님 모집',
+    title: '배송기사님 상시모집',
     image: 'assets/promos/rider-recruitment-portrait-v2.webp',
     imageAlt: '대동여수음식지도 배송기사 모집 안내',
     imageWidth: 853,
@@ -450,6 +461,17 @@ let neighborhoodByName = new Map();
 let categoryPriorityOverrides = {...LOCATION_CATEGORY_PRIORITY_OVERRIDES};
 let modalHistoryActive = false;
 let ignoreNextPop = false;
+let resolveCatalogReady;
+window.daedongCatalogReady = new Promise(resolve => { resolveCatalogReady = resolve; });
+function finishCatalogReady(value) {
+  resolveCatalogReady?.(value);
+  resolveCatalogReady = null;
+}
+window.setTimeout(() => {
+  if (!resolveCatalogReady) return;
+  console.warn('가게목록 준비 시간이 초과되어 나머지 화면을 먼저 엽니다.');
+  finishCatalogReady([]);
+}, 24000);
 
 function normalize(value) { return String(value ?? '').trim().toLowerCase().replace(/[\s·&()\-_/.,]/g, ''); }
 function canonicalSearchAliases(raw) {
@@ -469,7 +491,125 @@ function categoryIcon(name, className = 'category-inline-icon') {
 function categoryButtonMarkup(name) {
   return `<button type="button" class="category glass-action ${state.category === name ? 'active' : ''}" data-cat="${escapeHtml(name)}">${categoryIcon(name, 'category-main-icon')}<span>${escapeHtml(name)}</span></button>`;
 }
-function safeHref(value) { const raw=String(value??'').trim();if(!/^(?:https?:|tel:)/i.test(raw))return '#';try { const url = new URL(raw); return ['http:', 'https:', 'tel:'].includes(url.protocol) ? url.href : '#'; } catch { return '#'; } }
+function safeHref(value) { let raw=String(value??'').trim();if(/^http:\/\/(?:www\.)?mukkebi\.com\//i.test(raw))raw=raw.replace(/^http:/i,'https:');if(!/^(?:https?:|tel:)/i.test(raw))return '#';try { const url = new URL(raw); return ['http:', 'https:', 'tel:'].includes(url.protocol) ? url.href : '#'; } catch { return '#'; } }
+const DDANGYO_SHORT_HOST = 'fdofd.ddangyo.com';
+const DDANGYO_RESOLVE_URL = 'https://fdofd.ddangyo.com/shorturl/view';
+const DDANGYO_ANDROID_PACKAGE = 'com.shinhan.o2o';
+const DDANGYO_RETRY_INTENT_KEY = 'daedongDdangyoRetryIntentV1';
+function isAndroidBrowser() { return /Android/i.test(String(navigator.userAgent || '')); }
+function ddangyoShortCode(value) {
+  try {
+    const url = new URL(String(value || ''));
+    if (url.hostname !== DDANGYO_SHORT_HOST || !/\/gateway1\.html$/i.test(url.pathname)) return '';
+    return String(url.search || '').replace(/^\?/, '').split('&')[0].trim();
+  } catch { return ''; }
+}
+function ddangyoHelpUrl(originUrl = '', routeUrl = '') {
+  const url = new URL('ddangyo-open-help.html', location.href);
+  url.searchParams.set('v', 'ddangyo-retry-touch-1');
+  if (originUrl) url.searchParams.set('origin', originUrl);
+  if (routeUrl) url.searchParams.set('route', routeUrl);
+  return url.href;
+}
+async function resolveDdangyoOriginUrl(routeUrl) {
+  const shortCode = ddangyoShortCode(routeUrl);
+  if (!shortCode) throw new Error('invalid ddangyo short link');
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 4500);
+  try {
+    const response = await fetch(DDANGYO_RESOLVE_URL, {
+      method: 'POST', mode: 'cors', cache: 'no-store',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify({dma_request:{short_url:shortCode}}), signal: controller.signal
+    });
+    if (!response.ok) throw new Error(`ddangyo resolve HTTP ${response.status}`);
+    const data = await response.json();
+    const originUrl = String(data?.result?.dma_short_url_info?.origin_url || '').trim();
+    if (!originUrl.includes('menuUrl=') || !originUrl.includes('patsto_no=')) throw new Error('ddangyo store route unavailable');
+    if (/[#;]/.test(originUrl) || !/^[-A-Za-z0-9%._~=&/?+]+$/.test(originUrl)) throw new Error('unsafe ddangyo route');
+    return originUrl;
+  } finally { clearTimeout(timer); }
+}
+function ddangyoAndroidIntent(originUrl, routeUrl = '') {
+  const fallback = encodeURIComponent(ddangyoHelpUrl(originUrl, routeUrl));
+  return `intent://o2o/deeplink/${originUrl}#Intent;scheme=ddangyo;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=${DDANGYO_ANDROID_PACKAGE};S.browser_fallback_url=${fallback};end;`;
+}
+async function openDdangyoRoute(routeUrl) {
+  const href = safeHref(routeUrl);
+  if (href === '#') throw new Error('invalid ddangyo route');
+  if (!isAndroidBrowser()) { location.assign(href); return; }
+  try {
+    const originUrl = await resolveDdangyoOriginUrl(href);
+    const intent = ddangyoAndroidIntent(originUrl, href);
+    sessionStorage.setItem(DDANGYO_RETRY_INTENT_KEY, intent);
+    try { localStorage.setItem(DDANGYO_RETRY_INTENT_KEY, intent); } catch {}
+    location.assign(intent);
+  } catch (error) {
+    console.warn('땡겨요 앱 연결주소를 준비하지 못했습니다.', error);
+    location.assign(ddangyoHelpUrl('', href));
+  }
+}
+function handleDdangyoOrderLinkClick(event) {
+  if (!isAndroidBrowser() || !(event.target instanceof Element)) return;
+  const link = event.target.closest('a[href]');
+  if (!link) return;
+  const key = String(link.dataset.routeKey || link.dataset.communityOriginal || link.dataset.finalAppChannel || '');
+  if (key !== 'ddangyo') return;
+  const href = safeHref(link.getAttribute('href'));
+  if (href === '#') return;
+  event.preventDefault(); event.stopImmediatePropagation();
+  trackAnalyticsRouteClick(event);
+  markExternalAppDeparture();
+  if (typeof rc2RememberExternalReturn === 'function') rc2RememberExternalReturn();
+  void openDdangyoRoute(href);
+}
+document.addEventListener('click', handleDdangyoOrderLinkClick, true);
+const KAKAO_SAME_TAB_ORDER_KEYS = new Set(['mukkebi','ddangyo','ondongne','brand','happy','yogiyo','coupang','baemin']);
+function isKakaoInAppBrowser() { return /KAKAOTALK/i.test(String(navigator.userAgent || '')); }
+function handleKakaoOrderLinkClick(event) {
+  if (!isKakaoInAppBrowser() || !(event.target instanceof Element)) return;
+  const link = event.target.closest('a[href]');
+  if (!link) return;
+  const key = String(link.dataset.routeKey || link.dataset.communityOriginal || link.dataset.finalAppChannel || '');
+  if (!KAKAO_SAME_TAB_ORDER_KEYS.has(key)) return;
+  const href = safeHref(link.getAttribute('href'));
+  if (href === '#') return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  trackAnalyticsRouteClick(event);
+  markExternalAppDeparture();
+  if (typeof rc2RememberExternalReturn === 'function') rc2RememberExternalReturn();
+  window.location.assign(href);
+}
+document.addEventListener('click', handleKakaoOrderLinkClick, true);
+const MOBILE_SAME_TAB_ORDER_KEYS = new Set(['mukkebi','ddangyo','ondongne','brand','happy','yogiyo','coupang','baemin']);
+function mobileOrderRouteKey(link) {
+  const raw = String(
+    link?.dataset?.routeKey ||
+    link?.dataset?.communityOriginal ||
+    link?.dataset?.finalAppChannel ||
+    link?.dataset?.menuOrder ||
+    link?.dataset?.menuStickyOrder ||
+    link?.dataset?.menuStickyExternal ||
+    link?.dataset?.menuExternalKey ||
+    ''
+  );
+  return raw === 'coupang-eats' ? 'coupang' : raw;
+}
+function handleMobileOrderLinkClick(event) {
+  if (!/(?:android|iphone|ipad|ipod)/i.test(String(navigator.userAgent || '')) || !(event.target instanceof Element)) return;
+  const link = event.target.closest('a[href]');
+  if (!link || !MOBILE_SAME_TAB_ORDER_KEYS.has(mobileOrderRouteKey(link))) return;
+  const href = safeHref(link.getAttribute('href'));
+  if (href === '#') return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  trackAnalyticsRouteClick(event);
+  markExternalAppDeparture();
+  if (typeof rc2RememberExternalReturn === 'function') rc2RememberExternalReturn();
+  window.location.assign(href);
+}
+document.addEventListener('click', handleMobileOrderLinkClick, true);
 function routeKey(name) {
   const text = normalize(name);
   if (text.includes('가게바로')) return 'direct';
@@ -502,6 +642,21 @@ function neighborhoodPoint(name) { const item=neighborhoodByName.get(name);retur
 function districtCoordinate(value) {
   const points=neighborhoodsFor(value).map(neighborhoodPoint).filter(Boolean);if(!points.length)return null;
   return {lat:points.reduce((sum,point)=>sum+point.lat,0)/points.length,lng:points.reduce((sum,point)=>sum+point.lng,0)/points.length};
+}
+function closestNeighborhoodForCoordinates(coords) {
+  if (!coords || !Number.isFinite(Number(coords.lat)) || !Number.isFinite(Number(coords.lng))) return '';
+  const point = {lat:Number(coords.lat), lng:Number(coords.lng)};
+  return yeosuNeighborhoods
+    .map(item => ({name:item.name, point:neighborhoodPoint(item.name)}))
+    .filter(item => item.point)
+    .map(item => ({...item, distance:haversine(point,item.point)}))
+    .sort((a,b)=>a.distance-b.distance)[0]?.name || '';
+}
+function normalizedNeighborhoodNames(...values) {
+  return [...new Set(values.flatMap(value => {
+    if (Array.isArray(value)) return value.flatMap(item => neighborhoodsFor(item));
+    return neighborhoodsFor(value);
+  }).filter(Boolean))];
 }
 function imagePathFromValue(value) {
   if (typeof value === 'string') return value.trim();
@@ -547,6 +702,19 @@ function categoryPriorityOrderedIdsForRule(rule, now = Date.now()) {
 function categoryPriorityOrderedStoreIds(category) {
   return categoryPriorityOrderedIdsForRule(categoryPriorityRule(category));
 }
+function storeBusinessStatusPriority(store) {
+  const rank = window.daedongStoreServiceInfo?.statusPriority?.(store);
+  return Number.isFinite(rank) ? rank : 2;
+}
+function compareStoreBusinessStatus(a, b) {
+  return storeBusinessStatusPriority(a?.store || a) - storeBusinessStatusPriority(b?.store || b);
+}
+function sortStoresByBusinessStatus(list) {
+  return (Array.isArray(list) ? list : [])
+    .map((item, index) => ({item, index}))
+    .sort((a, b) => compareStoreBusinessStatus(a.item, b.item) || a.index - b.index)
+    .map(row => row.item);
+}
 function applyCategoryPriorityOverrides(list, category) {
   const input = Array.isArray(list) ? list : [];
   const rule = categoryPriorityRule(category);
@@ -560,14 +728,41 @@ function applyCategoryPriorityOverrides(list, category) {
     const orderedRank = ordered.get(id);
     const tier = orderedRank !== undefined ? orderedRank : ordered.size + (top.has(id) ? 0 : bottom.has(id) ? 2 : 1);
     return {item, index, tier};
-  }).sort((a, b) => a.tier - b.tier || a.index - b.index).map(row => row.item);
+  }).sort((a, b) => compareStoreBusinessStatus(a.item, b.item) || a.tier - b.tier || a.index - b.index).map(row => row.item);
+}
+function isCustomerUsableExternalRoute(key, value) {
+  if (!EXTERNAL_APP_KEYS.includes(key)) return true;
+  try {
+    const url = new URL(value);
+    const host = url.hostname.toLowerCase();
+    const genericHosts = {
+      baemin: new Set(['baemin.com', 'www.baemin.com']),
+      yogiyo: new Set(['yogiyo.co.kr', 'www.yogiyo.co.kr']),
+      coupang: new Set(['coupangeats.com', 'www.coupangeats.com', 'coupang.com', 'www.coupang.com'])
+    };
+    if (!genericHosts[key]?.has(host)) return true;
+    const path = url.pathname.replace(/\/+$/, '') || '/';
+    const genericPaths = key === 'yogiyo' ? new Set(['/', '/mobile']) : new Set(['/']);
+    if (!genericPaths.has(path)) return true;
+    const meaningfulQuery = [...url.searchParams.values()].some(item => String(item || '').trim());
+    const meaningfulHash = decodeURIComponent(url.hash || '').replace(/^#\/?/, '').trim();
+    return Boolean(meaningfulQuery || meaningfulHash);
+  } catch { return false; }
+}
+function isPlaceholderAreaLabel(value) {
+  const normalized = normalize(value);
+  return !normalized || /^(?:홈화면|전체|전체동네|동네미확인|미확인|없음)$/i.test(normalized);
 }
 function normalizedStore(raw, index) {
   const sourceRoutes = Array.isArray(raw?.routes) ? raw.routes : [];
   const routes = sourceRoutes
     .filter(route => route && route.enabled !== false && route.url && safeHref(route.url) !== '#')
-    .map(route => ({...route, key: routeKey(route.name), url: safeHref(route.url)}));
-  const area = raw.district || raw.area || '';
+    .map(route => {
+      const key = routeKey(route.name);
+      const url = safeHref(route.url);
+      return {...route, key, url, customerUsable: isCustomerUsableExternalRoute(key, url)};
+    });
+  const rawArea = String(raw.district || raw.area || '').trim();
   const rawLat = parseCoordinate(raw.latitude ?? raw.lat);
   const rawLng = parseCoordinate(raw.longitude ?? raw.lng);
   const lat = rawLat !== null && rawLng !== null ? rawLat : null;
@@ -585,28 +780,46 @@ function normalizedStore(raw, index) {
       .filter(Boolean)
   )];
   const searchAliases = canonicalSearchAliases(raw);
-  const searchIndex = normalize([name, raw.realBusinessName, brandName, branchName, area, primaryCategory, ...categoryValues, ...searchAliases, ...(raw.shopInShopNames || [])].filter(Boolean).join(' '));
   const addressNeighborhoods=/여수시/.test(String(raw.address||''))?neighborhoodsFor(raw.address):[];
   const branchText=[branchName,name].filter(Boolean).join(' '), branchNeighborhoods=/점|지점|항|지구/.test(branchText)?neighborhoodsFor(branchText):[];
-  const notionNeighborhoods=neighborhoodsFor(area);
+  const notionNeighborhoods=isPlaceholderAreaLabel(rawArea)?[]:neighborhoodsFor(rawArea);
+  const suppliedNeighborhoods=normalizedNeighborhoodNames(raw.neighborhoods||[]);
+  const coordinateNeighborhood=lat!==null&&lng!==null?closestNeighborhoodForCoordinates({lat,lng}):'';
   const inferredNeighborhoods=addressNeighborhoods.length
     ? addressNeighborhoods
-    : [...new Set([...branchNeighborhoods,...notionNeighborhoods])];
-  const locationSource=addressNeighborhoods.length?'verified-address':branchNeighborhoods.length?'store-name-branch':notionNeighborhoods.length?'notion-or-canonical-neighborhood':'unresolved';
+    : [...new Set([...suppliedNeighborhoods,...branchNeighborhoods,...notionNeighborhoods,...(coordinateNeighborhood?[coordinateNeighborhood]:[])])];
+  const locationSource=addressNeighborhoods.length?'verified-address':suppliedNeighborhoods.length?'catalog-neighborhood':branchNeighborhoods.length?'store-name-branch':notionNeighborhoods.length?'notion-or-canonical-neighborhood':coordinateNeighborhood?'catalog-coordinate-neighborhood':'unresolved';
+  const area=!rawArea||isPlaceholderAreaLabel(rawArea)?inferredNeighborhoods[0]||'여수':rawArea;
+  const searchIndex = normalize([name, raw.realBusinessName, brandName, branchName, area, primaryCategory, ...categoryValues, ...searchAliases, ...(raw.shopInShopNames || [])].filter(Boolean).join(' '));
   return {
     id, store_id: id, name, realBusinessName: raw.realBusinessName || '',
     notionPageId: raw.notionPageId || '', notionUrl: raw.notionUrl || '', brandName, branchName, searchAliases, searchIndex,
     shopInShopNames: raw.shopInShopNames || [], area, cat: primaryCategory, categories: categoryValues,
     address: raw.address || '', phone: raw.phone || '', naverMap: safeHref(raw.naverMap || ''),
     legacyImage: legacyImages[0] || '', legacyImages,
-    tags: [raw.category, raw.district, raw.address, ...(raw.shopInShopNames || [])].filter(Boolean), routes,
+    tags: [raw.category, area, raw.address, ...(raw.shopInShopNames || [])].filter(Boolean), routes,
     managed: Boolean(raw.managed), sharedManaged: Boolean(raw.sharedManaged), pinPosition: raw.pinPosition,
     forceBottom: Boolean(raw.forceBottom), lat, lng, coordinateSource,
-    neighborhoods: inferredNeighborhoods, locationSource, neighborhoodConfidence: locationSource==='store-name-branch'?'high':inferredNeighborhoods.length?'verified':'none', sourceType:raw.source?.type||''
+    channelKeys: Array.isArray(raw.channelKeys) ? [...new Set(raw.channelKeys.map(String))] : routes.map(route => route.key),
+    hasMenu: Boolean(raw.hasMenu),
+    neighborhoods: inferredNeighborhoods, primaryNeighborhood:inferredNeighborhoods[0]||'', locationSource, neighborhoodConfidence: locationSource==='store-name-branch'?'high':inferredNeighborhoods.length?'verified':'none', sourceType:raw.source?.type||'',
+    addedAt:raw.addedAt||raw.createdAt||raw.importedAt||''
   };
 }
 function storeText(store) { return store.searchIndex || normalize([store.name, store.realBusinessName, ...store.shopInShopNames, store.area, store.cat, ...store.tags].join(' ')); }
-function routeFor(store, key) { return (Array.isArray(store?.routes) ? store.routes : []).find(route => route?.key === key); }
+function storeRouteIsBlocked(store, key) {
+  return Boolean(BLOCKED_STORE_ROUTE_KEYS[String(store?.id || store?.store_id || '')]?.has(String(key || '')));
+}
+function routeFor(store, key) {
+  if (storeRouteIsBlocked(store, key)) return undefined;
+  return (Array.isArray(store?.routes) ? store.routes : []).find(route => route?.key === key && route?.customerUsable !== false);
+}
+function storeHasChannel(store, key) {
+  if (storeRouteIsBlocked(store, key)) return false;
+  if (routeFor(store, key)) return true;
+  if (store?.__secureDetailReady === true && EXTERNAL_APP_KEYS.includes(key)) return false;
+  return Boolean(store?.channelKeys?.includes?.(key));
+}
 function brandMatchesStore(store, brand) { const text = storeText(store); return brand.aliases.some(alias => text.includes(normalize(alias))); }
 function brandCount(brand) { return stores.filter(store => brandMatchesStore(store, brand)).length; }
 function haversine(a, b) {
@@ -810,8 +1023,12 @@ class InfiniteCarousel {
 }
 
 function renderHero() {
-  $('#heroTrack').innerHTML = HERO_BANNERS.map((banner, index) => `<article class="carousel-slide hero-slide" data-hero-index="${index}"><picture><source media="(max-width:520px)" srcset="${banner.mobile}"><img src="${banner.desktop}" alt="${banner.alt}" width="1200" height="700" decoding="async" fetchpriority="${index === 0 ? 'high' : 'auto'}" loading="${index === 0 ? 'eager' : 'lazy'}" onerror="this.onerror=null;this.src='${banner.fallback}'"></picture></article>`).join('');
-  heroCarousel = new InfiniteCarousel($('#heroCarousel'), {interval: 3500});
+  heroCarousel?.destroy();
+  heroCarousel = null;
+  if (window.daedongRestoreNotionHeroSnapshot?.()) return;
+  $('#heroTrack').innerHTML = '';
+  $('#heroCarousel .carousel-dots').innerHTML = '';
+  $('.hero').hidden = true;
 }
 function renderPromos() {
   $('#promoTrack').innerHTML = PROMOS.map(promo => {
@@ -881,7 +1098,12 @@ function relevance(store, query) {
   if (normalize(store.cat).includes(q)) return 70; if (normalize(store.area).includes(q)) return 60;
   return text.includes(q) ? 50 : 0;
 }
-function storeNeighborhoods(store) { return neighborhoodsFor([store?.area,store?.district,store?.address,store?.name].filter(Boolean).join(' ')); }
+function storeNeighborhoods(store) {
+  return normalizedNeighborhoodNames(
+    Array.isArray(store?.neighborhoods)?store.neighborhoods:[],
+    [store?.primaryNeighborhood,store?.area,store?.district,store?.address,store?.name].filter(Boolean).join(' ')
+  );
+}
 function storeMatchesLocation(store, location) {
   const selected=neighborhoodFor(location); if(!selected)return normalize(store.area).includes(normalize(location));
   return storeNeighborhoods(store).includes(selected);
@@ -894,6 +1116,8 @@ function filteredStores() {
     .filter(({store}) => storeMatchesCategory(store, state.category))
     .filter(({store}) => !brand || brandMatchesStore(store, brand))
     .sort((a, b) => {
+      const statusOrder = compareStoreBusinessStatus(a, b);
+      if (statusOrder) return statusOrder;
       if (state.sortByDistance) {
         if (a.distance !== null && b.distance !== null) return a.distance - b.distance;
         if (a.distance !== null) return -1;
@@ -911,7 +1135,7 @@ function filteredStores() {
 }
 function miniRoutes(store) {
   const keys = ['direct', 'mukkebi', 'ddangyo', 'ondongne', 'brand', 'yogiyo', 'coupang', 'baemin'];
-  return keys.filter(key => routeFor(store, key)).slice(0, 6).map(key => appIcon(key, 'miniapp-icon')).join('');
+  return keys.filter(key => storeHasChannel(store, key)).slice(0, 6).map(key => appIcon(key, 'miniapp-icon')).join('');
 }
 function storeCard(store) {
   const distanceLabel = store.coordinateSource === 'district-centroid' ? '동네 중심 기준 약' : '현재 위치에서 약';
@@ -1045,7 +1269,9 @@ function appBrowserPhoto(store) {
   return photo ? `<img class="app-browser-photo" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)}" loading="lazy" data-photo-kind="card">` : `<span class="app-browser-photo-placeholder">${categoryIcon(store.cat, 'category-placeholder-icon')}</span>`;
 }
 function appRegisteredStores(key) {
-  return stores.filter(store => routeFor(store, key)).map(store => ({store, distance: state.coords && store.lat !== null && store.lng !== null ? haversine(state.coords, {lat: store.lat, lng: store.lng}) : null})).sort((a, b) => {
+  return stores.filter(store => storeHasChannel(store, key)).map(store => ({store, distance: state.coords && store.lat !== null && store.lng !== null ? haversine(state.coords, {lat: store.lat, lng: store.lng}) : null})).sort((a, b) => {
+    const statusOrder = compareStoreBusinessStatus(a, b);
+    if (statusOrder) return statusOrder;
     if (a.distance !== null && b.distance !== null) return a.distance - b.distance;
     if (a.distance !== null) return -1; if (b.distance !== null) return 1;
     const aPin = Number.isFinite(Number(a.store.pinPosition)) ? Number(a.store.pinPosition) : 9999;
@@ -1105,7 +1331,13 @@ function allCategoriesModal() {
 function getSavedAddress() { return normalizeOutsideYeosuCurrent(readLocalJson(ADDRESS_KEY, null)); }
 function getAddressBook() { return readLocalJson(ADDRESS_BOOK_KEY, []).map(normalizeOutsideYeosuCurrent); }
 function saveAddressBook(list) { writeLocalJson(ADDRESS_BOOK_KEY, list.slice(0, 12)); }
-function shortAddress(text = '') { const value = String(text).trim() || '여수시 전체'; return value.length > 18 ? `${value.slice(0,18)}…` : value; }
+function shortAddress(text = '', area = '') {
+  const value = String(text).trim() || '여수시 전체';
+  const neighborhood = neighborhoodFor(area) || neighborhoodFor(value);
+  if (neighborhood) return `여수시 ${neighborhood}`;
+  const shortened = value.replace(/^(?:(?:전남광주|광주전남)통합특별시|전라남도|전남|광주광역시)\s*/u, '').trim() || value;
+  return shortened.length > 18 ? `${shortened.slice(0, 18)}…` : shortened;
+}
 function saveLocationState(label, coords = null, sortByDistance = false, meta = {}) {
   const region = analyticsCoarseRegion(meta);
   const saved = {label, area:meta.area || label, address:meta.address || label, detail:meta.detail || '', type:meta.type || 'recent', coords, sortByDistance, ...region, savedAt:new Date().toISOString()};
@@ -1140,7 +1372,7 @@ function commitAddressSelection() {
   const item={type:addressDraft?.type||'recent',address:base,detail,label:full,area,coords,sortByDistance,...analyticsCoarseRegion(addressDraft),createdAt:new Date().toISOString()};
   writeLocalJson(ADDRESS_KEY,item); saveAddressBook([item,...getAddressBook().filter(old=>old.label!==item.label||old.type!==item.type)]);
   state.location=item.area||'여수시 전체'; state.addressLabel=item.label; state.coords=coords; state.sortByDistance=sortByDistance;
-  saveLocationState(item.label,coords,sortByDistance,item); $('#locationText').textContent=shortAddress(item.label); hardClose(); setTimeout(showHomeAfterAddressCommit,60);
+  saveLocationState(item.label,coords,sortByDistance,item); $('#locationText').textContent=shortAddress(item.label,item.area); hardClose(); setTimeout(showHomeAfterAddressCommit,60);
 }
 function useCurrentLocation() {
   const button=$('#gpsLocationBtn'); if(!button)return;
@@ -1152,10 +1384,18 @@ function myPage() {
   openModal(`<h2 id="modalTitle">마이페이지</h2><p>로그인 없이 이 기기에 저장된 정보입니다.</p><div class="my-list"><button type="button" data-open-favorites>♡ 찜한 가게</button><button type="button" data-open-recent>◷ 최근 방문 가게</button><button type="button">📍 저장 지역 — ${escapeHtml(state.location)}</button><button type="button" data-open-guide>❓ 주문방법 안내</button><button type="button">✉ 광고 문의</button></div>`);
 }
 function routeLink(route, extraClass = '') {
+  if (route.key === 'direct') {
+    return `<button class="detail-route ${extraClass} detail-route-coming-soon" type="button" disabled data-route-key="direct" aria-label="가게바로주문 준비중">${appIcon(route.key, 'detail-route-icon')}<span>${escapeHtml(route.name)}<small>(준비중)</small></span><b aria-hidden="true">준비중</b></button>`;
+  }
   return `<a class="detail-route ${extraClass}" href="${escapeHtml(route.url)}" ${String(route.url).startsWith('http') ? 'target="_blank" rel="noopener"' : ''} data-route-key="${escapeHtml(route.key)}">${appIcon(route.key, 'detail-route-icon')}<span>${escapeHtml(route.name)}</span><b>›</b></a>`;
 }
 function orderAppContinueLabel(key, fallback = '') {
   return ({yogiyo:'요기요로',baemin:'배달의민족으로',coupang:'쿠팡이츠로',mukkebi:'먹깨비로',ddangyo:'땡겨요로',ondongne:'온동네로',direct:'가게바로주문으로'})[key] || `${fallback} 앱으로`;
+}
+function storeMenuPreviewEntryMarkup(store) {
+  if (store?.hasMenu !== true) return '';
+  const entryImage = photoResolver?.resolve?.(store)?.src || store.legacyImage || '';
+  return `<button class="store-menu-preview-entry" type="button" data-store-menu-preview="${escapeHtml(store.id)}">${entryImage ? `<img src="${escapeHtml(entryImage)}" alt="">` : ''}<span><b>음식보기</b><small>사진과 설명으로 전체 메뉴 미리보기 · 가격 미표시</small></span><strong>메뉴 보기 ›</strong></button>`;
 }
 function feeGuideMarkup(store, selectedRoute, {fromBrowser = false} = {}) {
   const localRoutes = LOW_FEE_KEYS.map(key => routeFor(store, key)).filter(Boolean);
@@ -1168,13 +1408,27 @@ function openCommunityChoice(store, key, options = {}) {
   const selected = rememberSelectedExternal(store,key);
   openModal(feeGuideMarkup(store,{...selectedRoute,url:selected?.url||selectedRoute.url},options));
 }
-function openStore(store) {
+async function openStore(store) {
+  if (!store) return false;
+  const secureDetail = window.daedongSecureStoreDetail;
+  if (store.__secureDetailReady !== true) {
+    if (!secureDetail || typeof secureDetail.enrich !== 'function') {
+      openModal('<section class="store-detail-load-error"><h2 id="modalTitle">주문방법을 불러오지 못했습니다</h2><p>페이지를 새로고침한 뒤 가게를 다시 열어 주세요.</p></section>');
+      return false;
+    }
+    try {
+      await secureDetail.enrich(store, normalizedStore);
+    } catch (error) {
+      console.warn('가게 상세정보를 불러오지 못했습니다.', error);
+      openModal('<section class="store-detail-load-error"><h2 id="modalTitle">주문방법을 불러오지 못했습니다</h2><p>잠시 후 가게를 다시 열어 주세요.</p></section>');
+      return false;
+    }
+  }
   addRecentStore(store);
   sendAnalyticsEvent('store_open', {storeId: store.id, storeName: store.name, surface: 'store_detail'});
   const selectedRoute = selectedExternalForStore(store);
   const quick = [];
   if (store.naverMap && store.naverMap !== '#') quick.push(`<a class="detail-quick-link" data-detail-only="naver" href="${escapeHtml(store.naverMap)}" target="_blank" rel="noopener"><span class="quick-icon">🗺️</span><span>네이버지도</span></a>`);
-  const chak = routeFor(store,'chak'); if (chak) quick.push(`<a class="detail-quick-link" data-detail-only="chak" href="${escapeHtml(chak.url)}" target="_blank" rel="noopener"><span class="quick-icon">💳</span><span>지역상품권앱</span></a>`);
   const local = LOCAL_DETAIL_KEYS.map(key=>routeFor(store,key)).filter(Boolean);
   const phoneDigits = String(store.phone || '').replace(/[^0-9]/g, '');
   const phoneVerified = /^02\d{7,8}$/.test(phoneDigits) || /^0(?:3[1-3]|4[1-4]|5[1-5]|6[1-4])\d{7,8}$/.test(phoneDigits) || /^01[016789]\d{7,8}$/.test(phoneDigits) || /^070\d{8}$/.test(phoneDigits);
@@ -1185,24 +1439,38 @@ function openStore(store) {
   const otherMenu = otherRoutes.length ? `<div class="store-other-wrap"><button class="detail-route store-other-toggle external-text-route" type="button"><span>다른 주문방법 보기</span><b>›</b></button><div class="store-other-popover" hidden><button type="button" class="store-other-close" aria-label="다른 주문방법 닫기">×</button>${otherRoutes.map(route => route.key === 'phone' ? routeLink(route,'store-other-link') : `<button type="button" class="store-other-link external-text-route" data-external-route-key="${route.key}"><span>${escapeHtml(route.name)}</span><b>›</b></button>`).join('')}${externalAppNoticeMarkup()}</div></div>` : '';
   const selectedCta = selectedRoute ? `<button type="button" class="selected-order-cta external-text-route" data-external-route-key="${selectedRoute.key}"><span>처음 선택한 ${escapeHtml(APP_META[selectedRoute.key].label)}로 주문하기</span><b>›</b></button>` : '';
   const favorite=isFavorite(store.id);
-  openModal(`<article class="store-detail" data-store-id="${escapeHtml(store.id)}"><h2 id="modalTitle">${escapeHtml(store.name)}</h2>${photoResolver.galleryMarkup(store)}<p class="detail-meta">${escapeHtml(store.area || '여수')} · ${escapeHtml(store.cat)}</p>${quick.length ? `<div class="detail-quick-links">${quick.join('')}</div>` : ''}<div class="detail-routes local-detail-routes">${local.map(route=>routeLink(route,'local-order-route')).join('') || '<p class="muted">등록된 지역 주문방법을 확인 중입니다.</p>'}</div>${otherMenu}${selectedCta}<div class="detail-personal-actions"><button type="button" class="detail-personal-btn ${favorite?'active':''}" data-favorite-store="${escapeHtml(store.id)}" aria-pressed="${favorite}">♥ <span data-favorite-label>${favorite?'찜 해제':'찜하기'}</span></button><button type="button" class="detail-personal-btn" data-feedback-store="${escapeHtml(store.id)}">정보 수정 요청</button></div></article>`);
+  const menuEntry = storeMenuPreviewEntryMarkup(store);
+  openModal(`<article class="store-detail" data-store-id="${escapeHtml(store.id)}"><h2 id="modalTitle">${escapeHtml(store.name)}</h2>${photoResolver.galleryMarkup(store)}<div class="detail-meta-row"><p class="detail-meta">${escapeHtml(store.area || '여수')} · ${escapeHtml(store.cat)}</p>${quick.length ? `<div class="detail-quick-links">${quick.join('')}</div>` : ''}</div>${menuEntry}<div class="detail-routes local-detail-routes">${local.map(route=>routeLink(route,'local-order-route')).join('') || '<p class="muted">등록된 지역 주문방법을 확인 중입니다.</p>'}</div>${otherMenu}${selectedCta}<div class="detail-personal-actions"><button type="button" class="detail-personal-btn ${favorite?'active':''}" data-favorite-store="${escapeHtml(store.id)}" aria-pressed="${favorite}">♥ <span data-favorite-label>${favorite?'찜 해제':'찜하기'}</span></button><button type="button" class="detail-personal-btn" data-feedback-store="${escapeHtml(store.id)}">정보 수정 요청</button></div></article>`);
   const carouselRoot = $('#detailPhotoCarousel'); if (carouselRoot) detailCarousel = new InfiniteCarousel(carouselRoot,{interval:3500});
   $('#modal').dataset.activeStoreId=store.id;
+  return true;
 }
 
 async function fetchJson(url, fallback) {
+  const controller = new AbortController();
+  const timeoutId = window.setTimeout(() => controller.abort(), 12000);
   try {
     const separator = url.includes('?') ? '&' : '?';
-    const response = await fetch(`${url}${separator}request=${Date.now()}`, {cache: 'no-store'});
+    const response = await fetch(`${url}${separator}request=${Date.now()}`, {cache: 'no-store', signal: controller.signal});
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     return await response.json();
   } catch (error) {
     console.error(`${url} 로딩 실패`, error); return fallback;
+  } finally {
+    window.clearTimeout(timeoutId);
   }
 }
 async function initialize() {
   renderHero(); renderPromos();
-  const [rawStores, manifest, policy, neighborhoodData] = await Promise.all([fetchJson(DATA_URL, []), fetchJson(PHOTO_MANIFEST_URL, {entries: []}), fetchJson(PHOTO_POLICY_URL, {}), fetchJson(NEIGHBORHOOD_URL,{neighborhoods:[]})]);
+  const [rawStores, manifest, policy, neighborhoodData] = await Promise.all([
+    window.daedongDataApi?.catalog?.({timeoutMs: 20000}).catch(error => {
+      console.error('보안 데이터 API에서 가게목록을 불러오지 못했습니다.', error);
+      return [];
+    }) || Promise.resolve([]),
+    fetchJson(PHOTO_MANIFEST_URL, {entries: []}),
+    fetchJson(PHOTO_POLICY_URL, {}),
+    fetchJson(NEIGHBORHOOD_URL,{neighborhoods:[]})
+  ]);
   yeosuNeighborhoods=neighborhoodData.neighborhoods||[];neighborhoodByName=new Map(yeosuNeighborhoods.map(item=>[item.name,item]));
   photoResolver = new PhotoResolver(manifest, policy);
   const safeRawStores = Array.isArray(rawStores) ? rawStores : [];
@@ -1220,7 +1488,7 @@ async function initialize() {
     return a.localeCompare(b, 'ko');
   });
   hydrateSelectedOrderApp();
-  $('#locationText').textContent = shortAddress(state.addressLabel || state.location);
+  $('#locationText').textContent = shortAddress(state.addressLabel || state.location, state.location);
   renderCategories(); renderStores();
 }
 function resetFilters() {
@@ -1235,7 +1503,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const entry = analyticsEntryContext();
   sendAnalyticsEvent('visit', {storeId: entry.storeId, surface: entry.storeId ? 'store_entry' : 'home'});
   document.addEventListener('click', trackAnalyticsRouteClick, true);
-  initialize();
+  initialize().then(result => finishCatalogReady(result)).catch(error => {
+    console.error('가게목록 초기화를 완료하지 못했습니다.', error);
+    finishCatalogReady([]);
+  });
   $('#mainSearch').addEventListener('input', () => $('#clearMainSearch').hidden = !$('#mainSearch').value);
   $('#mainSearch').addEventListener('keydown', event => { if (event.key === 'Enter') $('#searchBtn').click(); });
   $('#clearMainSearch').addEventListener('click', () => { $('#mainSearch').value = ''; state.query = ''; $('#clearMainSearch').hidden = true; renderStores({resetCount: true}); $('#mainSearch').focus(); });
@@ -1246,6 +1517,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#locationBtn').addEventListener('click', areaModal);
   $('#topFavoriteBtn').addEventListener('click', favoritesModal);
   $('#topRecentBtn').addEventListener('click', recentModal);
+  $('#riderRecruitmentBanner')?.addEventListener('click', () => openPromoCarouselDetail('rider'));
   const promoTrack = $('#promoTrack');
   const promoShell = $('#promoCarousel .carousel-shell');
   let promoTapStart = null;

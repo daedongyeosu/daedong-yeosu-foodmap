@@ -3,6 +3,10 @@
 /* RC2 fixes only. Frozen store, photo, route, brand-app, HappyOrder and banner data stay read-only. */
 const RC2_NAVER_AUDIT_URL = 'data/naver-map-runtime.json';
 const RC2_EXTERNAL_RETURN = 'daedongExternalReturnRc2';
+const RC2_APP_BROWSER_RETURN = 'daedongAppBrowserReturnV1';
+const RC2_RETURN_TOKEN_STATE = 'daedongExternalReturnToken';
+const RC2_RETURN_MAX_AGE = 30 * 60 * 1000;
+const RC2_RETURN_STORAGE_KEYS = [RC2_EXTERNAL_RETURN, RC2_APP_BROWSER_RETURN];
 const RC2_ICON_SPRITE = 'assets/ui/category-icons.svg';
 const rc2NativeOpenModal = openModal;
 const rc2NativeHardClose = hardClose;
@@ -14,6 +18,144 @@ let rc2ModalRestoring = false;
 let rc2ReplaceNextModal = false;
 let rc2AmbientTimers = [];
 let rc2PeriodicTimer = 0;
+let rc2DeferredStoreReturnPosition = null;
+
+function rc2FreshReturnState(saved) {
+  const age = Date.now() - Number(saved?.savedAt || 0);
+  return Boolean(saved && age >= 0 && age < RC2_RETURN_MAX_AGE);
+}
+
+function rc2ParseReturnState(storage, key) {
+  try { return JSON.parse(storage.getItem(key) || 'null'); } catch { return null; }
+}
+
+function rc2ReadReturnState(key) {
+  const sessionSaved = rc2ParseReturnState(sessionStorage, key);
+  if (rc2FreshReturnState(sessionSaved)) return sessionSaved;
+  const persistentSaved = rc2ParseReturnState(localStorage, key);
+  if (!rc2FreshReturnState(persistentSaved)) return null;
+  return persistentSaved.returnToken && persistentSaved.returnToken === history.state?.[RC2_RETURN_TOKEN_STATE]
+    ? persistentSaved
+    : null;
+}
+
+function rc2StoreReturnState(storage, key, payload) {
+  try {
+    storage.setItem(key, JSON.stringify(payload));
+    return;
+  } catch {}
+  const compact = {...payload};
+  delete compact.storeSnapshot;
+  delete compact.modalSnapshot;
+  try { storage.setItem(key, JSON.stringify(compact)); } catch {}
+}
+
+function rc2WriteReturnState(key, value) {
+  const returnToken = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const payload = {...value, returnToken, savedAt: Date.now()};
+  for (const storageKey of RC2_RETURN_STORAGE_KEYS) {
+    if (storageKey === key) continue;
+    try { sessionStorage.removeItem(storageKey); } catch {}
+    try { localStorage.removeItem(storageKey); } catch {}
+  }
+  try { history.replaceState({...history.state, [RC2_RETURN_TOKEN_STATE]: returnToken}, ''); } catch {}
+  rc2StoreReturnState(sessionStorage, key, payload);
+  rc2StoreReturnState(localStorage, key, payload);
+  return payload;
+}
+
+function rc2ClearReturnState(key, saved = null) {
+  try { sessionStorage.removeItem(key); } catch {}
+  try { localStorage.removeItem(key); } catch {}
+  const token = saved?.returnToken;
+  if (!token || history.state?.[RC2_RETURN_TOKEN_STATE] !== token) return;
+  try {
+    const next = {...history.state};
+    delete next[RC2_RETURN_TOKEN_STATE];
+    history.replaceState(next, '');
+  } catch {}
+}
+
+const RC2_RETURN_ANCHOR_ATTRIBUTES = [
+  'data-menu-id', 'data-app-store-order', 'data-app-store-info', 'data-store-menu-preview',
+  'data-store-service-menu-id', 'data-store-service-store-id', 'data-benefit-app', 'data-store-id'
+];
+const RC2_RETURN_ANCHOR_SELECTOR = [
+  '#modalTitle', '[data-menu-id]', '[data-app-store-order]', '[data-app-store-info]',
+  '[data-store-menu-preview]', '[data-store-service-menu-id]', '[data-store-service-store-id]',
+  '[data-benefit-app]', '.detail-meta-row', '.detail-routes', '.store-other-wrap',
+  '.brand-store-actions', '.detail-personal-actions'
+].join(',');
+
+function rc2ReturnAnchorDescriptor(element, card) {
+  if (!element || !card) return null;
+  const cardRect = card.getBoundingClientRect();
+  const rect = element.getBoundingClientRect();
+  if (element.id) return {kind: 'id', value: element.id, offset: rect.top - cardRect.top};
+  for (const attribute of RC2_RETURN_ANCHOR_ATTRIBUTES) {
+    if (!element.hasAttribute(attribute)) continue;
+    return {kind: 'attribute', name: attribute, value: element.getAttribute(attribute), offset: rect.top - cardRect.top};
+  }
+  const className = [...element.classList].find(value => /^[a-z][a-z0-9_-]+$/i.test(value));
+  if (!className) return null;
+  const matches = [...card.querySelectorAll(`.${CSS.escape(className)}`)];
+  return {kind: 'class', value: className, index: Math.max(0, matches.indexOf(element)), offset: rect.top - cardRect.top};
+}
+
+function rc2CaptureReturnAnchor(card, preferredElement = null) {
+  if (!card) return null;
+  if (preferredElement && card.contains(preferredElement)) return rc2ReturnAnchorDescriptor(preferredElement, card);
+  const cardRect = card.getBoundingClientRect();
+  const candidates = [...card.querySelectorAll(RC2_RETURN_ANCHOR_SELECTOR)]
+    .filter(element => {
+      const rect = element.getBoundingClientRect();
+      return rect.height > 0 && rect.bottom > cardRect.top + 4 && rect.top < cardRect.bottom - 4;
+    })
+    .sort((a, b) => Math.abs(a.getBoundingClientRect().top - cardRect.top) - Math.abs(b.getBoundingClientRect().top - cardRect.top));
+  return rc2ReturnAnchorDescriptor(candidates[0], card);
+}
+
+function rc2ResolveReturnAnchor(card, anchor) {
+  if (!card || !anchor) return null;
+  try {
+    if (anchor.kind === 'id') return card.querySelector(`#${CSS.escape(String(anchor.value || ''))}`);
+    if (anchor.kind === 'attribute' && RC2_RETURN_ANCHOR_ATTRIBUTES.includes(anchor.name)) {
+      return [...card.querySelectorAll(`[${anchor.name}]`)].find(element => element.getAttribute(anchor.name) === String(anchor.value ?? '')) || null;
+    }
+    if (anchor.kind === 'class') return card.querySelectorAll(`.${CSS.escape(String(anchor.value || ''))}`)[Number(anchor.index || 0)] || null;
+  } catch {}
+  return null;
+}
+
+function rc2ApplyReturnPosition(card, saved, useFallback = false) {
+  if (!card || !saved) return false;
+  if (useFallback) card.scrollTop = Math.max(0, Number(saved.modalScroll || saved.scrollTop || 0));
+  const anchor = rc2ResolveReturnAnchor(card, saved.anchor);
+  if (!anchor) return false;
+  const currentOffset = anchor.getBoundingClientRect().top - card.getBoundingClientRect().top;
+  const delta = currentOffset - Number(saved.anchor.offset || 0);
+  if (Math.abs(delta) > 0.5) card.scrollTop = Math.max(0, card.scrollTop + delta);
+  return true;
+}
+
+function rc2StabilizeReturnPosition(saved, card = $('#modal .modal-card')) {
+  if (!card || !saved) return;
+  let cancelled = false;
+  const cancel = () => { cancelled = true; };
+  for (const type of ['pointerdown', 'touchstart', 'wheel', 'keydown']) card.addEventListener(type, cancel, {once: true, passive: true});
+  const apply = useFallback => { if (!cancelled && card.isConnected) rc2ApplyReturnPosition(card, saved, useFallback); };
+  requestAnimationFrame(() => {
+    apply(true);
+    requestAnimationFrame(() => apply(false));
+  });
+  for (const delay of [120, 360, 800, 1600]) setTimeout(() => apply(false), delay);
+}
+
+window.daedongReadExternalReturnState = rc2ReadReturnState;
+window.daedongWriteExternalReturnState = rc2WriteReturnState;
+window.daedongClearExternalReturnState = rc2ClearReturnState;
+window.daedongCaptureReturnAnchor = rc2CaptureReturnAnchor;
+window.daedongStabilizeReturnPosition = rc2StabilizeReturnPosition;
 
 function rc2Icon(id, className = 'category-local-icon') {
   return `<svg class="${className}" aria-hidden="true"><use href="${RC2_ICON_SPRITE}#${id}"></use></svg>`;
@@ -59,6 +201,7 @@ function rc2SnapshotModal() {
     className: modal?.className || 'modal',
     dataset: modal ? {...modal.dataset} : {},
     scrollTop: card?.scrollTop || 0,
+    anchor: rc2CaptureReturnAnchor(card),
     pageScroll: Number(document.body.dataset.lockScrollY || window.scrollY || 0),
     photoIndex: detailCarousel?.logicalIndex?.() ?? 0
   };
@@ -77,10 +220,7 @@ function rc2RestoreSnapshot(snapshot) {
     detailCarousel = new InfiniteCarousel(carouselRoot, {interval: 3500});
     detailCarousel.goTo?.(snapshot.photoIndex || 0);
   }
-  requestAnimationFrame(() => {
-    const card = modal.querySelector('.modal-card');
-    if (card) card.scrollTop = snapshot.scrollTop || 0;
-  });
+  rc2StabilizeReturnPosition({modalScroll: snapshot.scrollTop || 0, anchor: snapshot.anchor}, modal.querySelector('.modal-card'));
   rc2ModalRestoring = false;
   rc2ScrubCustomerCounts(modal);
 }
@@ -210,7 +350,7 @@ function rc2RepresentativeMethod(store) {
   return '주문방법 확인';
 }
 
-const RC2_RAIL_RANDOM_SEED = String(Date.now()) + '-' + String(Math.random());
+const RC2_RAIL_RANDOM_SEED = new Date().toLocaleDateString('sv-SE', {timeZone: 'Asia/Seoul'});
 
 function rc2StringSeed(value) {
   let hash = 2166136261;
@@ -261,23 +401,22 @@ function rc2RailCandidates(spec, globallyUsed = new Set(), limit = 8, useCounts 
   const result = [];
   const groups = [];
   for (const store of fxRankStores(spec)) {
+    const status = storeBusinessStatusPriority(store);
     const bucket = Number.isFinite(store.rc6LocationBucket) ? store.rc6LocationBucket : 9;
     const tier = typeof rc6OwnershipTier === 'function' ? rc6OwnershipTier(store) : 2;
-    const key = `${bucket}:${tier}`;
+    const key = `${status}:${bucket}:${tier}`;
     const last = groups[groups.length - 1];
-    if (!last || last.key !== key) groups.push({key, bucket, stores: [store]});
+    if (!last || last.key !== key) groups.push({key, status, bucket, stores: [store]});
     else last.stores.push(store);
   }
   for (const group of groups) {
-    group.stores = rc2RandomizedRailStores(group.stores, spec, group.key);
+    group.stores = spec.kind === 'new' ? group.stores : rc2RandomizedRailStores(group.stores, spec, group.key);
   }
   const addStore = (store, relaxDiversity = false, allowReuse = false) => {
     const storeId = String(store.id);
     const useCount = useCounts.get(storeId) || 0;
     if (selectedIds.has(storeId)) return;
-    if (allowReuse) {
-      if (!spec.pattern || useCount < 1 || useCount >= 2) return;
-    } else if (globallyUsed.has(storeId) || useCount > 0) {
+    if (!allowReuse && (globallyUsed.has(storeId) || useCount > 0)) {
       return;
     }
     const brandKey = rc2BrandKey(store);
@@ -306,8 +445,9 @@ function rc2RailCandidates(spec, globallyUsed = new Set(), limit = 8, useCounts 
   };
   const localGroups = groups.filter(group => group.bucket === 0);
   const otherGroups = groups.filter(group => group.bucket !== 0);
+  const finish = () => sortStoresByBusinessStatus(result);
   if (spec.pattern && localGroups.length) {
-    if (fillGroups(localGroups)) return result;
+    if (fillGroups(localGroups)) return finish();
     const nearbyTarget = Math.min(limit, result.length + 2);
     const nearbyStores = otherGroups.flatMap(group => group.stores).sort((a, b) => {
       const aDistance = Number(a.rc6SortDistance ?? a.distance ?? a.rc6NeighborhoodDistance);
@@ -315,13 +455,42 @@ function rc2RailCandidates(spec, globallyUsed = new Set(), limit = 8, useCounts 
       return (Number.isFinite(aDistance) ? aDistance : Infinity) - (Number.isFinite(bDistance) ? bDistance : Infinity);
     });
     fillGroups([{stores: nearbyStores}], false, nearbyTarget);
-    if (result.length >= limit) return result;
-    if (fillGroups(localGroups, true)) return result;
+    if (result.length >= limit) return finish();
+    if (fillGroups(localGroups, true)) return finish();
     fillGroups(otherGroups);
-    return result;
+    return finish();
   }
   fillGroups(groups);
-  return result;
+  if (result.length < limit) fillGroups(groups, true);
+  return finish();
+}
+
+function rc2DiversifyRailLead(cards, recentLeads = []) {
+  const ordered = [...cards];
+  if (ordered.length < 2 || !recentLeads.length) return ordered;
+  const firstStatus = storeBusinessStatusPriority(ordered[0]);
+  const firstBucket = Number.isFinite(ordered[0].rc6LocationBucket) ? ordered[0].rc6LocationBucket : 9;
+  const ownershipTier = store => typeof rc6OwnershipTier === 'function' ? rc6OwnershipTier(store) : 2;
+  const firstTier = ownershipTier(ordered[0]);
+  const recentIds = new Set(recentLeads.map(store => String(store?.id || '')));
+  const recentPhotos = new Set(recentLeads.map(store => fxPhoto(store)).filter(Boolean));
+  const samePriorityBand = store => storeBusinessStatusPriority(store) === firstStatus
+    && (Number.isFinite(store.rc6LocationBucket) ? store.rc6LocationBucket : 9) === firstBucket
+    && ownershipTier(store) === firstTier;
+  let replacementIndex = ordered.findIndex((store, index) => index > 0
+    && samePriorityBand(store)
+    && !recentIds.has(String(store.id))
+    && !recentPhotos.has(fxPhoto(store)));
+  if (replacementIndex < 0) {
+    replacementIndex = ordered.findIndex((store, index) => index > 0
+      && samePriorityBand(store)
+      && !recentIds.has(String(store.id)));
+  }
+  if (replacementIndex > 0) {
+    const [replacement] = ordered.splice(replacementIndex, 1);
+    ordered.unshift(replacement);
+  }
+  return ordered;
 }
 
 function rc2RailCard(store) {
@@ -339,8 +508,13 @@ fxRenderRails = function rc2RenderRails() {
   root.hidden = false;
   const globallyUsed = new Set();
   const useCounts = new Map();
+  const recentLeads = [];
   root.innerHTML = fxSelectedRails().map(spec => {
-    const cards = rc2RailCandidates(spec, globallyUsed, 8, useCounts);
+    const cards = rc2DiversifyRailLead(rc2RailCandidates(spec, globallyUsed, 8, useCounts), recentLeads);
+    if (cards[0]) {
+      recentLeads.push(cards[0]);
+      if (recentLeads.length > 3) recentLeads.shift();
+    }
     const allCandidates = fxRankStores(spec);
     return `<section class="recommend-rail" data-rail="${spec.id}"><header class="recommend-rail-head"><div><h2>${escapeHtml(spec.title)}</h2><p>${escapeHtml(spec.desc)}</p></div>${allCandidates.length > cards.length ? `<button type="button" data-rail-more="${spec.id}">이 추천 가게 더보기</button>` : ''}</header><div class="recommend-track">${cards.map(rc2RailCard).join('') || '<p class="empty">추천 가게를 확인 중입니다.</p>'}</div></section>`;
   }).join('');
@@ -369,7 +543,7 @@ fxAppBrowserMarkup = function rc2AppBrowserMarkup(key, selectedCategory = '추�
   const list = applyCategoryPriorityOverrides(filtered, selectedCategory);
   const isExternal = EXTERNAL_APP_KEYS.includes(key);
   const chips = `<nav class="app-browser-category-chips"><button type="button" data-app-category="추천" class="${selectedCategory === '추천' ? 'active' : ''}">추천</button>${cats.map(cat => `<button type="button" data-app-category="${escapeHtml(cat)}" class="${selectedCategory === cat ? 'active' : ''}">${escapeHtml(cat)}</button>`).join('')}</nav>`;
-  const cards = list.map(store => `<button type="button" class="app-browser-card glass-action" data-app-store-id="${escapeHtml(store.id)}" data-app-key="${key}">${appBrowserPhoto(store)}<span class="app-browser-info"><strong>${escapeHtml(store.name)}</strong><small>${escapeHtml(store.area || '여수')} · ${escapeHtml(store.cat)}</small><span>${isExternal ? `<span class="external-app-card-label">${escapeHtml(meta.label)}</span>` : appIcon(key, 'app-browser-app-icon')}</span></span><b>›</b></button>`).join('');
+  const cards = list.map(store => fxRegisteredAppCardMarkup(store, key, isExternal)).join('');
   return `<section class="app-browser"><header class="app-browser-head${isExternal ? ' external-app-browser-head' : ''}">${isExternal ? '' : appIcon(key, 'app-browser-head-icon')}<div><h2 id="modalTitle">${escapeHtml(meta.label)} 등록 가게</h2><p>실제 주문주소가 등록된 가게만 보여드립니다.</p></div></header>${chips}${rc2SelectedCategoryMarkup(selectedCategory)}<div class="app-browser-list">${cards || '<div class="empty">해당 조건의 가게가 없습니다.</div>'}</div>${isExternal ? externalAppNoticeMarkup() : ''}</section>`;
 };
 
@@ -482,7 +656,7 @@ fxEnhanceStoreDetail = function rc2EnhanceStoreDetail(store) {
   if (!detail) return;
   const mapAudit = rc2NaverByStore.get(String(store.id));
   const naverLink = detail.querySelector('.detail-quick-link[data-detail-only="naver"]');
-  if (!mapAudit || mapAudit.status !== 'verified') naverLink?.remove();
+  if (rc2NaverByStore.size && (!mapAudit || mapAudit.status !== 'verified')) naverLink?.remove();
   const brand = fxBrandByStore.get(String(store.id));
   const happy = fxHappyByStore.get(String(store.id));
   if (brand || happy) {
@@ -501,11 +675,13 @@ fxEnhanceStoreDetail = function rc2EnhanceStoreDetail(store) {
   }
 };
 
-openStore = function rc2OpenStore(store) {
-  if (!fxVisible(store)) return;
-  fxOriginalOpenStore(store);
+openStore = async function rc2OpenStore(store) {
+  if (!fxVisible(store)) return false;
+  const opened = await fxOriginalOpenStore(store);
+  if (opened === false) return false;
   fxEnhanceStoreDetail(store);
   history.replaceState({...history.state, storeId: String(store.id)}, '');
+  return opened;
 };
 
 guide = function rc2Guide() {
@@ -606,33 +782,72 @@ function rc2StartAmbient(firstEntry = false) {
 }
 
 function rc2RememberExternalReturn() {
+  window.daedongMarkExternalAppDeparture?.();
   const modal = $('#modal');
-  const storeId = modal?.dataset.activeStoreId || modal?.querySelector('[data-store-id]')?.dataset.storeId || history.state?.storeId;
+  const menuState = window.daedongMenuReturn?.capture?.() || null;
+  const storeId = menuState?.storeId || modal?.dataset.activeStoreId || modal?.querySelector('[data-store-id]')?.dataset.storeId || history.state?.storeId;
   if (!storeId) return;
-  const card = modal.querySelector('.modal-card');
-  sessionStorage.setItem(RC2_EXTERNAL_RETURN, JSON.stringify({storeId: String(storeId), pageScroll: Number(document.body.dataset.lockScrollY || 0), modalScroll: card?.scrollTop || 0, savedAt: Date.now()}));
+  const current = rc2SnapshotModal();
+  const storeSnapshot = [current, ...rc2ModalStack.slice().reverse()].find(snapshot => {
+    if (!snapshot?.html) return false;
+    const template = document.createElement('template');
+    template.innerHTML = snapshot.html;
+    return String(template.content.querySelector('.store-detail[data-store-id]')?.dataset.storeId || '') === String(storeId);
+  });
+  const payload = {
+    storeId: String(storeId),
+    surface: menuState ? 'menu' : 'store',
+    pageScroll: Number(storeSnapshot?.pageScroll ?? document.body.dataset.lockScrollY ?? 0),
+    modalScroll: Number(storeSnapshot?.scrollTop || 0),
+    anchor: storeSnapshot?.anchor || null,
+    menuState,
+    storeSnapshot: storeSnapshot && storeSnapshot.html.length <= 500000 ? {
+      html: storeSnapshot.html,
+      scrollTop: Number(storeSnapshot.scrollTop || 0),
+      photoIndex: Number(storeSnapshot.photoIndex || 0),
+      anchor: storeSnapshot.anchor || null
+    } : null
+  };
+  rc2WriteReturnState(RC2_EXTERNAL_RETURN, payload);
 }
 
-function rc2OpenYogiyoSameTab(link) {
-  if (!link?.href) return false;
-  rc2RememberExternalReturn();
-  window.location.assign(link.href);
+async function rc2RestoreAfterExternalPage() {
+  const saved = rc2ReadReturnState(RC2_EXTERNAL_RETURN);
+  if (!saved) return false;
+  const modal = $('#modal');
+  const visibleStoreId = modal?.dataset.activeStoreId || modal?.querySelector('.store-detail[data-store-id]')?.dataset.storeId;
+  if (!modal?.hidden && modal.querySelector('.store-detail') && String(visibleStoreId || '') === String(saved.storeId)) {
+    rc2DeferredStoreReturnPosition = saved;
+    rc2StabilizeReturnPosition(saved);
+    if (saved.menuState) {
+      const restoredMenu = await window.daedongMenuReturn?.restore?.(saved.menuState);
+      if (!restoredMenu) return false;
+    }
+    rc2ClearReturnState(RC2_EXTERNAL_RETURN, saved);
+    return true;
+  }
+  const store = fxStoreById(saved.storeId);
+  if (!store) return false;
+  if (!modal?.hidden) {
+    rc2ModalStack.length = 0;
+    rc2NativeHardClose({fromPop: true});
+  }
+  scrollWindowInstant(Number(saved.pageScroll || 0));
+  const opened = await openStore(store);
+  if (opened === false) return false;
+  rc2DeferredStoreReturnPosition = saved;
+  rc2StabilizeReturnPosition(saved);
+  if (saved.menuState) {
+    const restoredMenu = await window.daedongMenuReturn?.restore?.(saved.menuState);
+    if (!restoredMenu) return false;
+  }
+  rc2ClearReturnState(RC2_EXTERNAL_RETURN, saved);
   return true;
 }
 
-function rc2RestoreAfterExternalPage() {
-  let saved = null;
-  try { saved = JSON.parse(sessionStorage.getItem(RC2_EXTERNAL_RETURN) || 'null'); } catch {}
-  if (!saved || Date.now() - Number(saved.savedAt || 0) > 30 * 60 * 1000) return;
-  if (!$('#modal')?.hidden) return;
-  const store = fxStoreById(saved.storeId);
-  if (!store) return;
-  openStore(store);
-  requestAnimationFrame(() => {
-    const card = $('#modal .modal-card');
-    if (card) card.scrollTop = Number(saved.modalScroll || 0);
-  });
-  sessionStorage.removeItem(RC2_EXTERNAL_RETURN);
+async function rc2RestoreExternalSurface() {
+  if (await rc2RestoreAfterExternalPage()) return true;
+  return Boolean(fxRestoreAppBrowserReturn?.());
 }
 
 fxOrderClick = function rc2OrderClick(button) {
@@ -671,6 +886,10 @@ fxInstallEvents = function rc2InstallEvents() {
     if (railStore) { event.preventDefault(); event.stopImmediatePropagation(); const store = fxStoreById(railStore.dataset.railStoreId); if (store) openStore(store); return; }
     const appCategory = event.target.closest('[data-app-category]');
     if (appCategory) { event.preventDefault(); event.stopImmediatePropagation(); openAppBrowser($('#modal').dataset.appBrowserKey, appCategory.dataset.appCategory); return; }
+    const appStoreInfo = event.target.closest('[data-app-store-info]');
+    if (appStoreInfo) { event.preventDefault(); event.stopImmediatePropagation(); const store = fxStoreById(appStoreInfo.dataset.appStoreInfo); if (store) openStore(store); return; }
+    const appStoreOrder = event.target.closest('[data-app-store-order]');
+    if (appStoreOrder) { event.preventDefault(); event.stopImmediatePropagation(); void fxOpenRegisteredAppOrder(appStoreOrder); return; }
     const appStore = event.target.closest('[data-app-store-id]');
     if (appStore) {
       event.preventDefault(); event.stopImmediatePropagation();
@@ -712,20 +931,13 @@ fxInstallEvents = function rc2InstallEvents() {
     }
     const favorite = event.target.closest('[data-favorite-store]');
     if (favorite) fxGull(favorite, true);
-    const yogiyoExternal = event.target.closest('a[data-community-original="yogiyo"]');
-    if (yogiyoExternal) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      rc2OpenYogiyoSameTab(yogiyoExternal);
-      return;
-    }
     const comparedExternal = event.target.closest('a[data-community-original]');
     if (comparedExternal && rc2ModalStack.at(-1)?.html.includes('class="store-detail"')) {
       event.preventDefault();
       event.stopImmediatePropagation();
       rc2RememberExternalReturn();
-      window.open(comparedExternal.href, '_blank', 'noopener');
-      history.back();
+      const href = safeHref(comparedExternal.getAttribute('href'));
+      if (href !== '#') window.location.assign(href);
       return;
     }
     const externalLink = event.target.closest('a[target="_blank"],a[data-final-app-channel],a[data-detail-only]');
@@ -741,14 +953,33 @@ fxInstallEvents = function rc2InstallEvents() {
   document.addEventListener('visibilitychange', () => {
     document.documentElement.classList.toggle('page-hidden', document.hidden);
     if (document.hidden) rc2StopAmbient();
-    else rc2StartAmbient(false);
+    else {
+      void rc2RestoreExternalSurface().then(restored => {
+        if (restored) window.daedongFinishExternalReturnBoot?.();
+        else rc2StartAmbient(false);
+      });
+    }
   });
-  window.addEventListener('pageshow', event => {
-    if (event.persisted || performance.getEntriesByType('navigation')[0]?.type === 'back_forward') rc2RestoreAfterExternalPage();
+  window.addEventListener('pageshow', () => {
+    void rc2RestoreExternalSurface().then(restored => {
+      if (restored) window.daedongFinishExternalReturnBoot?.();
+    });
   });
 };
 
 fxInitialize = async function rc2Initialize() {
+  rc2ScrubCustomerCounts(document);
+  let restoredStore = false;
+  let restoredAppBrowser = false;
+  try {
+    const restoredStoreResult = await rc2RestoreAfterExternalPage();
+    restoredStore = Boolean(restoredStoreResult);
+    if (!restoredStore) restoredAppBrowser = Boolean(fxRestoreAppBrowserReturn?.());
+    if (restoredStore || restoredAppBrowser) window.daedongFinishExternalReturnBoot?.();
+  } catch (error) {
+    console.warn('저장된 가게를 먼저 복원하지 못했습니다.', error);
+  }
+
   const [brand, supplement, happy, phone, naver] = await Promise.all([
     fetchJson(FX_BRAND_URL, {stores: [], brands: []}),
     fetchJson(FX_BRAND_SUPPLEMENT_URL, {storeMappings: [], directApps: []}),
@@ -764,9 +995,31 @@ fxInitialize = async function rc2Initialize() {
   rc2NaverByStore.clear();
   for (const item of naver.stores || []) rc2NaverByStore.set(String(item.store_id), item);
   APP_META.phone.icon = 'assets/ui/phone.svg';
+
+  if (restoredStore) {
+    const activeStore = fxStoreById($('#modal')?.dataset.activeStoreId);
+    if (activeStore) fxEnhanceStoreDetail(activeStore);
+    if (rc2DeferredStoreReturnPosition) rc2StabilizeReturnPosition(rc2DeferredStoreReturnPosition);
+  }
+  try {
+    if (!restoredStore && !restoredAppBrowser) {
+      restoredStore = Boolean(await rc2RestoreAfterExternalPage());
+      if (!restoredStore) restoredAppBrowser = Boolean(fxRestoreAppBrowserReturn?.());
+    }
+  } finally {
+    if (!restoredStore) {
+      const staleStoreReturn = rc2ReadReturnState(RC2_EXTERNAL_RETURN);
+      if (staleStoreReturn) rc2ClearReturnState(RC2_EXTERNAL_RETURN, staleStoreReturn);
+    }
+    if (!restoredAppBrowser) {
+      const staleBrowserReturn = rc2ReadReturnState(RC2_APP_BROWSER_RETURN);
+      if (staleBrowserReturn) rc2ClearReturnState(RC2_APP_BROWSER_RETURN, staleBrowserReturn);
+    }
+    window.daedongFinishExternalReturnBoot?.();
+  }
   renderCategories();
   fxRenderRails();
   await fxInitWeather();
-  rc2ScrubCustomerCounts(document);
-  rc2StartAmbient(true);
+  setTimeout(() => { rc2DeferredStoreReturnPosition = null; }, 2200);
+  rc2StartAmbient(!restoredStore && !restoredAppBrowser);
 };

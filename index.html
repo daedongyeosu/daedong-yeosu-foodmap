@@ -18,6 +18,50 @@
   <link rel="icon" href="/app-icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="/assets/logo.png">
   <title>대동여수음식지도</title>
+  <style id="externalReturnBootStyle">
+    html.daedong-external-return-pending body{min-height:100dvh;background:#103a5a}
+    html.daedong-external-return-pending body>*{visibility:hidden!important}
+    html.daedong-external-return-pending body::before,
+    html.daedong-external-return-pending body::after{visibility:visible!important;position:fixed;z-index:99999;pointer-events:none}
+    html.daedong-external-return-pending body::before{content:'보던 화면으로 바로 돌아가는 중';inset:0;display:grid;place-items:center;padding-top:72px;background:linear-gradient(180deg,#0d3554,#1d628d);color:#fff;font:900 18px/1.4 system-ui,-apple-system,'Noto Sans KR',sans-serif}
+    html.daedong-external-return-pending body::after{content:'';left:50%;top:calc(50% - 28px);width:34px;height:34px;margin:-17px;border:4px solid rgba(255,255,255,.34);border-top-color:#ff6a2e;border-radius:50%;animation:daedong-return-spin .75s linear infinite}
+    @keyframes daedong-return-spin{to{transform:rotate(360deg)}}
+  </style>
+  <script>
+    (() => {
+      const root = document.documentElement;
+      let released = false;
+      window.daedongFinishExternalReturnBoot = () => {
+        if (released) return;
+        released = true;
+        root.classList.remove('daedong-external-return-pending');
+      };
+      try {
+        const maxAge = 30 * 60 * 1000;
+        const tokenState = 'daedongExternalReturnToken';
+        const readSaved = key => {
+          let saved = null;
+          try { saved = JSON.parse(sessionStorage.getItem(key) || 'null'); } catch {}
+          let age = Date.now() - Number(saved?.savedAt || 0);
+          if (saved && age >= 0 && age < maxAge) return saved;
+          try { saved = JSON.parse(localStorage.getItem(key) || 'null'); } catch { saved = null; }
+          age = Date.now() - Number(saved?.savedAt || 0);
+          if (!saved || age < 0 || age >= maxAge) return null;
+          return saved.returnToken && saved.returnToken === history.state?.[tokenState] ? saved : null;
+        };
+        window.daedongReadEarlyExternalReturn = readSaved;
+        const candidates = [
+          ['daedongExternalReturnRc2', 'storeId'],
+          ['daedongAppBrowserReturnV1', 'key']
+        ];
+        const pending = candidates.map(([storageKey, requiredField]) => ({storageKey, requiredField, saved: readSaved(storageKey)}))
+          .find(item => Boolean(item.saved?.[item.requiredField]));
+        if (!pending) return;
+        window.daedongPendingExternalReturn = pending;
+        root.classList.add('daedong-external-return-pending');
+      } catch { window.daedongFinishExternalReturnBoot(); }
+    })();
+  </script>
   <link rel="preload" as="image" href="images/01.png">
   <link rel="preload" as="image" href="assets/ui/category-icons-color.svg?v=category-first-paint-1">
   <link rel="preload" as="image" href="assets/yeosu-rc6/dolsan-day-mobile.webp" media="(max-width: 767px)">
@@ -25,15 +69,15 @@
   <link rel="preload" as="image" href="assets/yeosu-ux/turtle-ship-northwest-mobile-v4.webp" media="(max-width: 767px)">
   <link rel="preload" as="image" href="assets/yeosu-ux/turtle-ship-northwest-v4.webp" media="(min-width: 768px)">
   <link rel="stylesheet" href="assets/vendor/leaflet/leaflet.css?v=1.9.4">
-  <link rel="stylesheet" href="app.css?v=selected-category-label-1-external-app-text-1-legacy-rail-button-hidden-1-lower-promo-details-5">
+  <link rel="stylesheet" href="app.css?v=selected-category-label-1-external-app-text-1-legacy-rail-button-hidden-1-lower-promo-details-5-direct-coming-soon-1-store-popup-native-order-1-app-list-direct-order-4-full-label-1-store-card-group-1-rider-evergreen-1">
   <link rel="stylesheet" href="store-list-horizontal-pager.css?v=1">
   <link rel="stylesheet" href="final-experience.css?v=category-first-paint-1-turtle-glass-1-search-button-horizontal-1-store-share-copy-2">
-  <link rel="stylesheet" href="rc6-fixes.css?v=location-store-hero-1">
-  <link rel="stylesheet" href="rc7-address-map.css?v=home-share-touch-3-inapp-location-recovery-1">
+  <link rel="stylesheet" href="rc6-fixes.css?v=location-store-hero-1-hero-clean-controls-1">
+  <link rel="stylesheet" href="rc7-address-map.css?v=home-share-touch-3-inapp-location-recovery-1-saved-address-first-1">
   <link rel="stylesheet" href="turtle-ship-hero.css?v=message-colors-popup-15s-1">
-  <link rel="stylesheet" href="store-service-info.css?v=store-service-5">
-  <link rel="stylesheet" href="store-menu-preview.css?v=store-menu-14">
-  <link rel="stylesheet" href="mukkebi-summer-event.css?v=20260801-1">
+  <link rel="stylesheet" href="store-service-info.css?v=store-service-13-search-status-order-1-card-status-1-search-store-boundary-1-category-heading-wrap-1">
+  <link rel="stylesheet" href="store-menu-preview.css?v=store-menu-14-direct-coming-soon-1">
+  <link rel="stylesheet" href="mukkebi-summer-event.css?v=20260807-viewport-fit-1-close-glow-removed-1">
 </head>
 <body>
   <div id="app">
@@ -134,6 +178,12 @@
         <div id="heroDots" class="carousel-dots" aria-label="배너 위치"></div>
       </div>
     </section>
+    <section class="rider-evergreen-strip" aria-label="배송기사님 상시모집">
+      <button id="riderRecruitmentBanner" class="rider-evergreen-button" type="button" aria-haspopup="dialog">
+        <span class="rider-evergreen-copy"><small>365일 상시</small><strong>배송기사님 상시모집</strong></span>
+        <span class="rider-evergreen-cta">모집내용 보기 <span aria-hidden="true">›</span></span>
+      </button>
+    </section>
     </div>
 
     <section class="section category-section">
@@ -165,18 +215,150 @@
     </section>
 
     <footer class="legal"><button type="button" data-open="guide">이용안내</button><button type="button" onclick="window.location.href='/privacy/'">개인정보처리방침</button><button type="button">광고 문의</button></footer>
-    <div class="build-mark">대동여수음식지도 RC6 온라인 검수 후보</div>
+    <div class="build-mark" hidden></div>
   </div>
 
   <nav class="bottom-nav"><button type="button" data-tab="home" class="active"><svg class="ui-icon" aria-hidden="true"><use href="assets/ui/ui-icons.svg#store"></use></svg><span>홈</span></button><button type="button" data-tab="search"><svg class="ui-icon" aria-hidden="true"><use href="assets/ui/ui-icons.svg#search"></use></svg><span>검색</span></button><button type="button" data-tab="favorite"><svg class="ui-icon" aria-hidden="true"><use href="assets/ui/ui-icons.svg#heart"></use></svg><span>찜한가게</span></button><button type="button" data-tab="recent"><svg class="ui-icon" aria-hidden="true"><use href="assets/ui/ui-icons.svg#recent"></use></svg><span>최근방문</span></button><button type="button" data-tab="mypage"><svg class="ui-icon" aria-hidden="true"><use href="assets/ui/ui-icons.svg#location"></use></svg><span>마이페이지</span></button></nav>
   <div id="overlay" class="overlay" hidden></div>
   <div id="modal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modalTitle"><div class="modal-card"><button class="modal-close" type="button" aria-label="닫기">×</button><div id="modalContent"></div></div></div>
+  <script id="notionHeroReturnSnapshotBoot">
+    (() => {
+      const storageKey = 'daedongNotionHeroReturnV1';
+      const readSnapshot = () => {
+        try {
+          const saved = JSON.parse(sessionStorage.getItem(storageKey) || 'null');
+          const age = Date.now() - Number(saved?.savedAt || 0);
+          const notionUrl = new URL(saved?.notionUrl || '', location.href);
+          const rawImage = String(saved?.image || '');
+          const inlineImage = /^data:image\/(?:png|jpe?g|webp|gif|avif);base64,/i.test(rawImage) && rawImage.length <= 500000;
+          const imageUrl = inlineImage ? null : new URL(rawImage, location.href);
+          if (age < 0 || age >= 30 * 60 * 1000 || notionUrl.protocol !== 'https:' || (!inlineImage && imageUrl.origin !== location.origin)) throw new Error('expired');
+          return {...saved, notionUrl:notionUrl.href, image:inlineImage ? rawImage : imageUrl.href};
+        } catch {
+          sessionStorage.removeItem(storageKey);
+          return null;
+        }
+      };
+      window.daedongRestoreNotionHeroSnapshot = () => {
+        const saved = readSnapshot();
+        const hero = document.querySelector('.hero');
+        const track = document.getElementById('heroTrack');
+        const dots = document.querySelector('#heroCarousel .carousel-dots');
+        if (!saved || !hero || !track || !dots) return false;
+        if (track.children.length > 1 && !track.querySelector('[data-rc6-notion-return-snapshot]')) {
+          sessionStorage.removeItem(storageKey);
+          hero.hidden = false;
+          return true;
+        }
+        const slide = document.createElement('button');
+        slide.type = 'button';
+        slide.className = 'carousel-slide hero-slide rc6-hero-target';
+        slide.dataset.heroIndex = String(Math.max(0, Number(saved.displayIndex) || 0));
+        slide.dataset.rc6BannerNotion = saved.notionUrl;
+        slide.dataset.rc6NotionReturnSnapshot = '1';
+        slide.setAttribute('aria-label', saved.alt || '노션에서 자세히 보기');
+        const image = document.createElement('img');
+        image.src = saved.image;
+        image.alt = saved.alt || '노션 광고';
+        image.width = 1200;
+        image.height = 675;
+        image.decoding = 'async';
+        image.loading = 'eager';
+        slide.append(image);
+        slide.addEventListener('click', () => location.assign(saved.notionUrl), {once:true});
+        track.classList.remove('is-animated');
+        track.style.transform = 'translate3d(0,0,0)';
+        track.replaceChildren(slide);
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'active';
+        dot.setAttribute('aria-label', '현재 슬라이드');
+        dots.replaceChildren(dot);
+        hero.hidden = false;
+        return true;
+      };
+      window.daedongRestoreNotionHeroSnapshot();
+      window.addEventListener('pageshow', () => window.daedongRestoreNotionHeroSnapshot?.());
+    })();
+  </script>
+  <script id="externalReturnSnapshotBoot">
+    (() => {
+      try {
+        const storeSaved = window.daedongReadEarlyExternalReturn?.('daedongExternalReturnRc2');
+        const browserSaved = storeSaved ? null : window.daedongReadEarlyExternalReturn?.('daedongAppBrowserReturnV1');
+        const saved = storeSaved || browserSaved;
+        const snapshot = storeSaved?.storeSnapshot || browserSaved?.modalSnapshot;
+        const surface = storeSaved ? 'store' : browserSaved ? 'app-browser' : '';
+        if (!saved || !snapshot?.html || snapshot.html.length > 500000) return;
+        const template = document.createElement('template');
+        template.innerHTML = String(snapshot.html);
+        if (surface === 'store') {
+          const detail = template.content.querySelector('.store-detail[data-store-id]');
+          if (String(detail?.dataset.storeId || '') !== String(saved.storeId)) return;
+        } else {
+          if (!saved.key || !template.content.querySelector('.app-browser')) return;
+        }
+        template.content.querySelectorAll('script,style,iframe,object,embed,base,meta').forEach(node => node.remove());
+        template.content.querySelectorAll('*').forEach(node => {
+          for (const attribute of [...node.attributes]) {
+            const name = attribute.name.toLowerCase();
+            const value = String(attribute.value || '').trim();
+            if (name.startsWith('on') || name === 'srcdoc' || ((name === 'href' || name === 'src' || name === 'xlink:href') && /^javascript:/i.test(value))) node.removeAttribute(attribute.name);
+          }
+        });
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modalContent');
+        const overlay = document.getElementById('overlay');
+        if (!modal || !modalContent || !overlay) return;
+        modalContent.replaceChildren(template.content.cloneNode(true));
+        modal.className = surface === 'store' ? 'modal store-modal' : 'modal app-browser-modal';
+        if (surface === 'store') modal.dataset.activeStoreId = String(saved.storeId);
+        else {
+          modal.dataset.appBrowserKey = String(saved.key);
+          modal.dataset.appBrowserCategory = String(saved.category || '추천');
+        }
+        overlay.hidden = false;
+        modal.hidden = false;
+        const pageScroll = Number.isFinite(Number(saved.pageScroll)) ? Math.max(0, Number(saved.pageScroll)) : 0;
+        document.body.dataset.lockScrollY = String(pageScroll);
+        document.documentElement.classList.add('modal-open');
+        document.body.classList.add('modal-open');
+        Object.assign(document.body.style, {position:'fixed', top:`-${pageScroll}px`, left:'0', right:'0', width:'100%', overflow:'hidden'});
+        const card = modal.querySelector('.modal-card');
+        const anchor = snapshot.anchor || saved.anchor;
+        const resolveAnchor = () => {
+          if (!card || !anchor) return null;
+          try {
+            if (anchor.kind === 'id') return card.querySelector(`#${CSS.escape(String(anchor.value || ''))}`);
+            if (anchor.kind === 'attribute' && /^data-[a-z0-9-]+$/i.test(anchor.name || '')) {
+              return [...card.querySelectorAll(`[${anchor.name}]`)].find(element => element.getAttribute(anchor.name) === String(anchor.value ?? '')) || null;
+            }
+            if (anchor.kind === 'class') return card.querySelectorAll(`.${CSS.escape(String(anchor.value || ''))}`)[Number(anchor.index || 0)] || null;
+          } catch {}
+          return null;
+        };
+        const align = () => {
+          const element = resolveAnchor();
+          if (!element) return;
+          const delta = element.getBoundingClientRect().top - card.getBoundingClientRect().top - Number(anchor.offset || 0);
+          if (Math.abs(delta) > 0.5) card.scrollTop = Math.max(0, card.scrollTop + delta);
+        };
+        if (card) {
+          card.scrollTop = Math.max(0, Number(snapshot.scrollTop || saved.modalScroll || 0));
+          requestAnimationFrame(align);
+        }
+        try { history.replaceState({...history.state, daedongModal:true, rc2ModalDepth:1, ...(surface === 'store' ? {storeId:String(saved.storeId)} : {})}, ''); } catch {}
+        if (surface === 'store') window.daedongImmediateExternalReturnStoreId = String(saved.storeId);
+        if (!storeSaved?.menuState) window.daedongFinishExternalReturnBoot?.();
+      } catch {}
+    })();
+  </script>
   <div id="startupAd" class="startup-ad" hidden><div class="startup-card"><button class="startup-close" type="button" aria-label="닫기">×</button><small>대동여수음식지도 안내</small><h2>배달기사·가맹점 모집</h2><p>기사 모집, 가게 모집, 주문앱 가입 안내, 신규 오픈 가게와 소상공인 소식을 알립니다.</p><div class="startup-actions"><button id="startupDetails" class="primary-btn" type="button">자세히 보기</button><button id="hideToday" type="button">오늘 그만 보기</button></div></div></div>
   <div id="mukkebiSummerEvent" class="mukkebi-summer-event" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="mukkebiSummerTitle">
     <div class="mukkebi-summer-card">
       <button id="mukkebiSummerClose" class="mukkebi-summer-close" type="button" aria-label="먹깨비 이벤트 안내 닫기">×</button>
       <div class="mukkebi-summer-head">
-        <p class="mukkebi-summer-partners">여수시 · 전남신용보증재단 · 먹깨비</p>
+        <p class="mukkebi-summer-partners"><span>여수시 · 전남신용보증재단</span><strong>먹깨비</strong></p>
         <p class="mukkebi-summer-kicker">여수시 여름휴가 기념</p>
         <h2 id="mukkebiSummerTitle">3천 원 할인</h2>
         <p class="mukkebi-summer-period">08.01.(토) ~ 08.31.(월)</p>
@@ -196,13 +378,15 @@
   </div>
   <noscript><p class="noscript">대동여수음식지도를 이용하려면 자바스크립트를 켜주세요.</p></noscript>
   <script src="assets/vendor/leaflet/leaflet.js?v=1.9.4" defer></script>
-  <script src="app.js?v=photo-viewer-removed-1-store-share-deep-link-1-phone-route-restoration-1-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-hero-forward-only-1-lower-promo-details-6-lotteria-hidden-1-kongsanso-store-family-1-store-badge-removed-1-startup-popup-disabled-1-anonymous-analytics-1-coarse-region-1-owner-exclusion-1-outside-yeosu-full-list-1" defer></script>
-  <script src="final-experience.js?v=selected-category-label-2-store-share-deep-link-2-phone-route-restoration-1-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-popup-utility-links-1-selected-store-top-1-rail-cross-section-dedupe-1-search-location-order-1-yogiyo-return-only-1-rail-local-repeat-fallback-1-lotteria-hidden-1-kongsanso-store-family-1-store-badge-removed-1-handsu-copy-spacing-1-hero-card-cta-removed-1-category-more-card-touch-1-inapp-location-recovery-1-outside-yeosu-full-list-1-store-share-copy-2-shared-store-back-home-1" defer></script>
+  <script src="data-api.js?v=cloudflare-preview-api-4-curated-menu-photos-1" defer></script>
+  <script src="data-api-runtime.js?v=cloudflare-preview-api-2" defer></script>
+  <script src="app.js?v=photo-viewer-removed-1-store-share-deep-link-1-phone-route-restoration-1-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-hero-forward-only-1-lower-promo-details-6-lotteria-hidden-1-kongsanso-store-family-1-store-badge-removed-1-startup-popup-disabled-1-anonymous-analytics-1-coarse-region-1-owner-exclusion-1-outside-yeosu-full-list-1-direct-coming-soon-1-home-address-short-1-secure-detail-core-1-store-popup-native-order-1-kakao-order-same-tab-1-ddangyo-direct-launch-1-location-ranking-unified-1-catalog-ready-watchdog-2-simple-app-return-1-ddangyo-retry-touch-1-business-status-ranking-1-release-readiness-1-hero-open-only-1-notion-hero-return-1-rider-evergreen-1" defer></script>
+  <script src="final-experience.js?v=selected-category-label-2-store-share-deep-link-2-phone-route-restoration-3-phone-card-markers-2-physical-map-recovery-2-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-popup-utility-links-1-selected-store-top-1-rail-cross-section-dedupe-1-search-location-order-1-yogiyo-return-only-1-rail-local-repeat-fallback-3-rail-adjacent-visual-dedupe-1-local-channel-marker-1-lotteria-hidden-1-kongsanso-store-family-1-store-badge-removed-1-handsu-copy-spacing-1-hero-card-cta-removed-1-category-more-card-touch-1-inapp-location-recovery-1-outside-yeosu-full-list-1-store-share-copy-2-shared-store-back-home-1-unified-menu-search-2-secure-detail-await-3-card-channel-keys-1-store-popup-native-order-1-app-list-direct-order-1-app-route-return-fix-1-app-browser-return-state-1-ddangyo-direct-launch-1-location-ranking-ready-1-location-ranking-watchdog-2-saved-address-first-1-simple-app-return-1-direct-return-no-home-1-business-status-ranking-1-nearby-status-final-1-recommend-status-final-1-release-readiness-1-external-return-fast-1-instant-store-snapshot-1-hero-open-only-clean-controls-1-three-main-ads-restored-1-notion-hero-return-1-all-order-app-exact-return-1" defer></script>
   <script src="store-list-horizontal-pager.js?v=1" defer></script>
   <script src="turtle-ship-hero.js?v=message-colors-popup-15s-1" defer></script>
-  <script src="store-service-info.js?v=store-service-5" defer></script>
-  <script src="store-menu-preview.js?v=store-menu-14" defer></script>
-  <script src="pwa-register.js?v=android-pwa-1" defer></script>
-  <script src="mukkebi-summer-event.js?v=20260801-1" defer></script>
+  <script src="store-service-info.js?v=store-service-25-menu-search-status-order-1-card-status-1-business-status-ranking-1-seomseom-merchant-label-1" defer></script>
+  <script src="store-menu-preview.js?v=store-menu-22-customer-popup-order-1-simple-app-return-1-all-order-app-exact-return-1" defer></script>
+  <script src="pwa-register.js?v=android-pwa-1-preview-redeploy-1-kakao-cache-reset-1-mobile-api-deadline-1" defer></script>
+  <script src="mukkebi-summer-event.js?v=20260801-1-simple-app-return-1" defer></script>
 </body>
 </html>

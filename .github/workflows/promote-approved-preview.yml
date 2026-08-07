@@ -73,6 +73,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          git add -A
           node --check data-api.js
           node --check data-api-runtime.js
           node --check app.js

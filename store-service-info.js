@@ -1,9 +1,15 @@
 'use strict';
 
 (() => {
-  const DATA_URL = 'store-service-info.json';
   const HISTORY_KEY = 'daedongStoreServiceOverview';
   const CLOSING_SOON_MINUTES = 60;
+  const MENU_MATCH_PREVIEW_LIMIT = 2;
+  const STATUS_SORT_PRIORITY = Object.freeze({
+    open: 0,
+    'closing-soon': 1,
+    unknown: 2,
+    closed: 3
+  });
   const WEEK_KEYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
   const WEEK_FROM_SHORT = {
     Sun: 'sun',
@@ -26,6 +32,10 @@
   });
 
   let serviceData = {programs: [], stores: {}};
+  let serviceLoadState = 'loading';
+  let catalogLoadState = 'loading';
+  let serviceReadyPromise = null;
+  let catalogReadyPromise = null;
   let lastFocused = null;
   let pendingStoreId = '';
   let activeStatus = 'all';
@@ -33,6 +43,13 @@
   let locationMode = 'nearby';
   let selectedArea = '';
   let overviewQuery = '';
+  let overviewQueryComposing = false;
+  let pendingMenuOpen = null;
+  let menuSearchData = {stores: {}};
+  let menuSearchState = 'idle';
+  let menuSearchPromise = null;
+  let menuSearchQuery = '';
+  let renderedSourceCount = 0;
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({
     '&': '&amp;',
@@ -46,6 +63,91 @@
     .normalize('NFKC')
     .replace(/\s+/g, '')
     .toLowerCase();
+
+  function formatCustomerHours24(value) {
+    const convert = (period, rawHour, rawMinute) => {
+      const marker = String(period || '').replace(/\./g, '').toLowerCase();
+      let hour = Number(rawHour);
+      if (marker === '오전' || marker === 'am') hour %= 12;
+      else if (marker === '오후' || marker === 'pm') hour = (hour % 12) + 12;
+      else if (marker === '낮') hour = hour === 12 ? 12 : (hour % 12) + 12;
+      else if (marker === '밤') hour = hour === 12 ? 24 : hour <= 5 ? hour : (hour % 12) + 12;
+      return `${String(hour).padStart(2, '0')}:${String(rawMinute).padStart(2, '0')}`;
+    };
+    return String(value ?? '')
+      .replace(/(오전|오후|낮|밤)\s*(\d{1,2})\s*:\s*(\d{2})/g, (_, period, hour, minute) => convert(period, hour, minute))
+      .replace(/\b(\d{1,2})\s*:\s*(\d{2})\s*(AM|PM)\b/gi, (_, hour, minute, period) => convert(period, hour, minute));
+  }
+
+  const MENU_FAMILIES = [
+    {key: '빙수', label: '빙수', matches: value => value.includes('빙수'), terms: ['빙수']},
+    {key: '족발', label: '족발', matches: value => value.includes('족발') || value.includes('불족'), terms: ['족발', '불족', '냉채족']},
+    {key: '치킨', label: '치킨', matches: value => ['치킨', '통닭', '닭강정'].some(term => value.includes(term)), terms: ['치킨', '통닭', '닭강정', '후라이드', '양념', '간장', '순살', '윙봉']},
+    {key: '커피', label: '커피', matches: value => ['커피', '아메리카노', '에스프레소', '콜드브루'].some(term => value.includes(term)), terms: ['커피', '아메리카노', '에스프레소', '카페라떼', '카푸치노', '마키아토', '콜드브루', '핸드드립']},
+    {key: '빵', label: '빵·베이커리', matches: value => value === '빵' || ['베이커리', '식빵', '소금빵', '크루아상', '크로와상', '바게트', '베이글', '도넛'].some(term => value.includes(term)), terms: ['빵', '식빵', '소금빵', '크루아상', '크로와상', '바게트', '베이글', '도넛', '단팥빵', '붕어빵']},
+    {key: '회', label: '회·사시미', matches: value => value === '회' || value.endsWith('회') || ['횟집', '사시미', '광어', '우럭', '참돔', '물회'].some(term => value.includes(term)), terms: ['회', '사시미', '광어', '우럭', '참돔', '도다리', '물회', '숙회', '육회']}
+  ];
+
+  function menuSearchSpec(query) {
+    const value = normalize(query);
+    const family = MENU_FAMILIES.find(item => item.matches(value));
+    if (family) return family;
+    return value ? {key: value, label: String(query || '').trim(), matches: () => true, terms: [value]} : null;
+  }
+
+  function menuItemMatches(item, spec, store) {
+    if (!spec) return false;
+    let text = normalize(`${item?.[1] || ''} ${item?.[2] || ''}`);
+    if (spec.key === '회') text = text.replace(/회오리|회복|회전/g, '');
+    if (spec.key === '치킨') {
+      const explicit = ['치킨', '통닭', '닭강정'].some(term => text.includes(term));
+      const chickenStore = normalize([store?.category, store?.cat, store?.categories].flat().join(' ')).includes('치킨');
+      return explicit || (chickenStore && spec.terms.some(term => text.includes(normalize(term))));
+    }
+    return spec.terms.some(term => text.includes(normalize(term)));
+  }
+
+  function menuMatchesForStore(storeId, query, store) {
+    if (normalize(menuSearchQuery) !== normalize(query)) return [];
+    const record = menuSearchData.stores?.[String(storeId)];
+    const spec = menuSearchSpec(query);
+    if (!record || !spec) return [];
+    return (record.i || [])
+      .filter(item => menuItemMatches(item, spec, store))
+      .map(item => ({
+        id: String(item[0] || ''),
+        name: String(item[1] || ''),
+        category: String(item[2] || ''),
+        image: String(item[3] || '')
+      }))
+      .sort((a, b) => Number(Boolean(b.image)) - Number(Boolean(a.image)));
+  }
+
+  function ensureMenuSearchData(query = overviewQuery) {
+    const requestedQuery = String(query || '').trim();
+    if (!requestedQuery) return Promise.resolve({stores: {}});
+    if (menuSearchPromise && normalize(menuSearchQuery) === normalize(requestedQuery)) return menuSearchPromise;
+    menuSearchQuery = requestedQuery;
+    menuSearchState = 'loading';
+    menuSearchData = {stores: {}};
+    menuSearchPromise = window.daedongDataApi.menuSearch(requestedQuery)
+      .then(data => {
+        if (normalize(menuSearchQuery) === normalize(requestedQuery)) {
+          menuSearchData = data?.stores ? data : {stores: {}};
+          menuSearchState = 'ready';
+        }
+        return menuSearchData;
+      })
+      .catch(error => {
+        if (normalize(menuSearchQuery) === normalize(requestedQuery)) menuSearchState = 'error';
+        console.warn(error);
+        return menuSearchData;
+      })
+      .finally(() => {
+        if (normalize(menuSearchQuery) === normalize(requestedQuery)) menuSearchPromise = null;
+      });
+    return menuSearchPromise;
+  }
 
   function timeMinutes(value) {
     const [hour, minute] = String(value || '').split(':').map(Number);
@@ -79,11 +181,28 @@
   }
 
   function closureFor(hours, parts) {
-    return (hours?.closures || []).find(rule => (
-      rule.type === 'monthly-weekday'
-      && rule.weekday === parts.weekday
-      && Number(rule.nth) === Math.ceil(parts.day / 7)
-    )) || null;
+    const dateKey = `${String(parts.year).padStart(4, '0')}-${String(parts.month).padStart(2, '0')}-${String(parts.day).padStart(2, '0')}`;
+    return (hours?.closures || []).find(rule => {
+      if (rule.type === 'weekly') return rule.weekday === parts.weekday;
+      if (rule.type === 'monthly-weekday') {
+        return rule.weekday === parts.weekday && Number(rule.nth) === Math.ceil(parts.day / 7);
+      }
+      if (rule.type === 'date-range') return dateKey >= rule.start && dateKey <= rule.end;
+      return false;
+    }) || null;
+  }
+
+  function breakFor(hours, parts) {
+    const minutes = (parts.hour * 60) + parts.minute;
+    return (hours?.breaks || []).find(rule => {
+      if (Array.isArray(rule.weekdays) && !rule.weekdays.includes(parts.weekday)) return false;
+      const open = timeMinutes(rule.open);
+      const close = timeMinutes(rule.close);
+      if (!Number.isFinite(open) || !Number.isFinite(close)) return false;
+      return close <= open
+        ? minutes >= open || minutes < close
+        : minutes >= open && minutes < close;
+    }) || null;
   }
 
   function periodLabel(period) {
@@ -119,6 +238,8 @@
     const previous = shiftCalendar(now, -1);
     const previousPeriods = info.hours.weekly[previous.weekday] || [];
 
+    const activeBreak = breakFor(info.hours, now);
+
     if (!closureFor(info.hours, previous)) {
       const overnight = previousPeriods.find(period => {
         const open = timeMinutes(period.open);
@@ -126,6 +247,14 @@
         return close <= open && minutes < close;
       });
       if (overnight) {
+        if (activeBreak) {
+          return {
+            state: 'closed',
+            label: '브레이크 타임',
+            detail: `${activeBreak.close}에 영업 재개`,
+            today: `오늘 ${(info.hours.weekly[now.weekday] || []).map(periodLabel).join(', ') || '영업시간 없음'}`
+          };
+        }
         const todayClosure = closureFor(info.hours, now);
         return openStatus(
           overnight,
@@ -141,9 +270,18 @@
     if (closure) {
       return {
         state: 'closed',
-        label: '정기휴무',
+        label: closure.type === 'date-range' ? '임시휴무' : '정기휴무',
         detail: closure.label || '오늘 휴무',
         today: `오늘 ${closure.label || '휴무'}`
+      };
+    }
+
+    if (activeBreak) {
+      return {
+        state: 'closed',
+        label: '브레이크 타임',
+        detail: `${activeBreak.close}에 영업 재개`,
+        today: `오늘 ${(info.hours.weekly[now.weekday] || []).map(periodLabel).join(', ') || '영업시간 없음'}`
       };
     }
 
@@ -175,6 +313,19 @@
     };
   }
 
+  function statusPriorityForStore(storeOrId, date = new Date()) {
+    const store = storeOrId?.store || storeOrId;
+    const storeId = typeof store === 'object' ? storeIdOf(store) : String(store || '');
+    return STATUS_SORT_PRIORITY[storeStatus(serviceData.stores?.[storeId], date).state] ?? STATUS_SORT_PRIORITY.unknown;
+  }
+
+  function sortStoresByStatusPriority(list, date = new Date()) {
+    return (Array.isArray(list) ? list : [])
+      .map((item, index) => ({item, index}))
+      .sort((a, b) => statusPriorityForStore(a.item, date) - statusPriorityForStore(b.item, date) || a.index - b.index)
+      .map(row => row.item);
+  }
+
   function sourceStores() {
     if (typeof stores !== 'undefined' && Array.isArray(stores)) return stores;
     if (typeof allStores !== 'undefined' && Array.isArray(allStores)) return allStores;
@@ -190,34 +341,105 @@
     return sourceStores().find(store => storeIdOf(store) === String(id)) || null;
   }
 
+  function storeAreas(store) {
+    const values = [
+      ...(Array.isArray(store?.neighborhoods) ? store.neighborhoods : []),
+      store?.primaryNeighborhood,
+      store?.area,
+      store?.neighborhood,
+      store?.district,
+      store?.address,
+      store?.name
+    ].filter(Boolean);
+    const names = typeof neighborhoodsFor === 'function'
+      ? values.flatMap(value => neighborhoodsFor(value))
+      : values.map(value => String(value || '').trim()).filter(value => neighborhoodRecord(value));
+    const unique = [...new Set(names.filter(Boolean))];
+    if (unique.length) return unique;
+    const point = coordinateOf(store);
+    if (!point) return [];
+    const closest = neighborhoodRecords()
+      .map(item => ({name:item.name, point:coordinateOf(item)}))
+      .filter(item => item.point)
+      .map(item => ({...item, distance:distanceBetween(point,item.point)}))
+      .sort((a,b)=>a.distance-b.distance)[0]?.name;
+    return closest ? [closest] : [];
+  }
+
   function storeArea(store) {
-    return String(store?.area || store?.neighborhood || '동네 미확인').trim() || '동네 미확인';
+    return storeAreas(store)[0] || '동네 미확인';
+  }
+
+  function benefitScope(entry, definition) {
+    const appKeys = Array.isArray(entry?.appKeys) && entry.appKeys.length
+      ? entry.appKeys
+      : Array.isArray(definition?.appKeys) ? definition.appKeys : [];
+    const appLabel = String(entry?.appLabel || definition?.appLabel || '').trim()
+      || '적용 주문앱 미확인';
+    return {appKeys, appLabel};
+  }
+
+  function benefitAppDisplayLabel(benefit) {
+    const appLabel = String(benefit?.appLabel || '적용 주문앱 미확인').trim();
+    if (benefit?.key !== 'yeosu-seomseom-pay') return appLabel;
+    const appKeys = Array.isArray(benefit?.appKeys) ? benefit.appKeys : [];
+    if (appKeys.includes('ddangyo') || normalize(appLabel).includes('땡겨요')) return '먹깨비·땡겨요';
+    if (appKeys.includes('mukkebi') || normalize(appLabel).includes('먹깨비')) return '먹깨비';
+    return appLabel;
+  }
+
+  function scopedBenefitLabel(benefit) {
+    const appLabel = benefitAppDisplayLabel(benefit);
+    if (benefit?.key === 'yeosu-seomseom-pay') return `${appLabel} 여수섬섬페이 가맹점`;
+    return `${appLabel} ${benefit.label}`.trim();
   }
 
   function paymentLabels(info) {
-    const programMap = new Map((serviceData.programs || []).map(program => [program.key, program.label]));
+    const programMap = new Map((serviceData.programs || []).map(program => [program.key, program]));
     return (info?.payments || [])
       .filter(payment => payment.status === 'accepted')
-      .map(payment => ({
-        key: payment.key,
-        label: programMap.get(payment.key) || payment.key,
-        kind: 'payment'
-      }));
+      .map(payment => {
+        const definition = programMap.get(payment.key) || {key: payment.key, label: payment.key};
+        const scope = benefitScope(payment, definition);
+        return {
+          key: payment.key,
+          label: definition.label || payment.key,
+          kind: 'payment',
+          ...scope
+        };
+      });
   }
 
   function deliveryLabels(info) {
-    const deliveryMap = new Map((serviceData.deliveryBenefits || []).map(benefit => [benefit.key, benefit.label]));
+    const deliveryMap = new Map((serviceData.deliveryBenefits || []).map(benefit => [benefit.key, benefit]));
     return (info?.delivery || [])
       .filter(benefit => benefit.status === 'available')
-      .map(benefit => ({
-        key: benefit.key,
-        label: deliveryMap.get(benefit.key) || benefit.key,
-        kind: 'delivery'
-      }));
+      .map(benefit => {
+        const definition = deliveryMap.get(benefit.key) || {key: benefit.key, label: benefit.key};
+        const scope = benefitScope(benefit, definition);
+        return {
+          key: benefit.key,
+          label: definition.label || benefit.key,
+          kind: 'delivery',
+          ...scope
+        };
+      });
   }
 
   function benefitLabels(info) {
     return [...paymentLabels(info), ...deliveryLabels(info)];
+  }
+
+  function hasVerifiedBenefitStatus(info) {
+    return [...(info?.payments || []), ...(info?.delivery || [])].some(item => (
+      ['accepted', 'available', 'unavailable'].includes(item?.status)
+    ));
+  }
+
+  function emptyBenefitLabel(info) {
+    return hasVerifiedBenefitStatus(info)
+      ? '현재 확인된 주문앱 혜택 없음'
+      : '주문앱별 혜택 미확인';
   }
 
   function acceptsBenefit(info, key) {
@@ -230,48 +452,51 @@
     return acceptsPayment || offersDelivery;
   }
 
-  function verifiedLabel(info) {
-    const date = String(info?.verifiedAt || '').replaceAll('-', '.');
-    return [info?.sourceLabel, date ? `${date} 확인` : ''].filter(Boolean).join(' · ');
-  }
-
   function benefitBadgeMarkup(benefit, className) {
     const deliveryClass = benefit.kind === 'delivery' ? ' is-delivery' : '';
-    return `<span class="${className}${deliveryClass}">✓ ${escapeHtml(benefit.label)}</span>`;
+    return `<span class="${className}${deliveryClass}" data-benefit-app="${escapeHtml((benefit.appKeys || []).join('-'))}">✓ ${escapeHtml(scopedBenefitLabel(benefit))}</span>`;
   }
 
-  function cardMetaMarkup(status, benefits) {
+  function cardMetaMarkup(status, benefits, info) {
     return `
       <span class="store-service-status is-${escapeHtml(status.state)}">
         <i aria-hidden="true"></i>${escapeHtml(status.label)}
       </span>
-      <span class="store-service-card-hours">${escapeHtml(status.detail)}</span>
+      <span class="store-service-card-hours">${escapeHtml(formatCustomerHours24(status.detail))}</span>
       ${benefits.length
         ? benefits.slice(0, 3).map(benefit => benefitBadgeMarkup(benefit, 'store-service-card-payment')).join('')
-        : '<span class="store-service-card-unknown">결제·혜택 미확인</span>'}
+        : `<span class="store-service-card-unknown">${escapeHtml(emptyBenefitLabel(info))}</span>`}
     `;
   }
 
+  function cardStatusMarkup(status) {
+    return `<span class="store-service-status is-${escapeHtml(status.state)}"><i aria-hidden="true"></i>${escapeHtml(status.label)}</span>`;
+  }
+
   function detailBenefitItems(info) {
-    const payments = new Map((info?.payments || []).map(payment => [payment.key, payment.status]));
-    const delivery = new Map((info?.delivery || []).map(benefit => [benefit.key, benefit.status]));
+    const payments = new Map((info?.payments || []).map(payment => [payment.key, payment]));
+    const delivery = new Map((info?.delivery || []).map(benefit => [benefit.key, benefit]));
     return [
       ...(serviceData.programs || []).map(program => {
-        const value = payments.get(program.key);
+        const entry = payments.get(program.key);
+        const value = entry?.status;
         return {
           key: program.key,
           label: program.label,
           kind: 'payment',
-          state: value === 'accepted' ? 'available' : value === 'unavailable' ? 'unavailable' : 'unknown'
+          state: value === 'accepted' ? 'available' : value === 'unavailable' ? 'unavailable' : 'unknown',
+          ...benefitScope(entry, program)
         };
       }),
       ...(serviceData.deliveryBenefits || []).map(benefit => {
-        const value = delivery.get(benefit.key);
+        const entry = delivery.get(benefit.key);
+        const value = entry?.status;
         return {
           key: benefit.key,
           label: benefit.label,
           kind: 'delivery',
-          state: value === 'available' ? 'available' : value === 'unavailable' ? 'unavailable' : 'unknown'
+          state: value === 'available' ? 'available' : value === 'unavailable' ? 'unavailable' : 'unknown',
+          ...benefitScope(entry, benefit)
         };
       })
     ];
@@ -279,11 +504,29 @@
 
   function detailBenefitMarkup(item) {
     const isDelivery = item.kind === 'delivery';
-    const stateLabel = item.state === 'available'
-      ? (isDelivery ? item.label : `${item.label} 사용 가능`)
-      : item.state === 'unavailable'
-        ? (isDelivery ? '무료배달 불가' : `${item.label} 사용 불가`)
-        : (isDelivery ? '무료배달 여부 미확인' : `${item.label} 미확인`);
+    const appLabel = item.appLabel || '적용 주문앱 미확인';
+    let stateLabel;
+    if (item.key === 'yeosu-seomseom-pay') {
+      stateLabel = item.state === 'available'
+        ? scopedBenefitLabel(item)
+        : item.state === 'unavailable'
+          ? `${benefitAppDisplayLabel(item)} 여수섬섬페이 가맹점 아님`
+          : `${benefitAppDisplayLabel(item)} 여수섬섬페이 가맹점 미확인`;
+    } else if (item.key === 'ddangyo-coupon') {
+      stateLabel = item.state === 'available'
+        ? `${appLabel} · 쿠폰 있음 확인`
+        : item.state === 'unavailable' ? `${appLabel} · 현재 쿠폰 없음 확인` : `${appLabel} · 쿠폰 미확인`;
+    } else if (item.key === 'ddangyo-timesale') {
+      stateLabel = item.state === 'available'
+        ? `${appLabel} · 타임세일 진행 확인`
+        : item.state === 'unavailable' ? `${appLabel} · 현재 타임세일 없음 확인` : `${appLabel} · 타임세일 미확인`;
+    } else {
+      stateLabel = item.state === 'available'
+        ? (isDelivery ? `${appLabel} · 무료배달 확인` : `${appLabel} · ${item.label} 사용 가능 확인`)
+        : item.state === 'unavailable'
+          ? (isDelivery ? `${appLabel} · 무료배달 없음 확인` : `${appLabel} · ${item.label} 사용 불가 확인`)
+          : (isDelivery ? `${appLabel} · 무료배달 여부 미확인` : `${appLabel} · ${item.label} 미확인`);
+    }
     const symbol = item.state === 'available' ? '✓' : item.state === 'unavailable' ? '×' : '?';
     return `
       <span class="store-service-detail-benefit is-${escapeHtml(item.state)}${isDelivery ? ' is-delivery' : ''}">
@@ -292,52 +535,91 @@
     `;
   }
 
-  function detailPanelMarkup(info, status) {
+  function detailPanelMarkup(info, status, giftRoute) {
     const displayLines = Array.isArray(info?.hours?.displayLines) ? info.hours.displayLines : [];
-    const verified = verifiedLabel(info);
+    const availableBenefits = detailBenefitItems(info).filter(item => item.state === 'available');
+    const giftAvailable = availableBenefits.some(item => item.key === 'yeosu-seomseom-pay');
     return `
       <header>
         <div>
           <span>가게 이용정보</span>
-          <h3>영업시간·상품권·무료배달</h3>
+          <h3>영업시간·주문앱별 혜택</h3>
         </div>
-        <span class="store-service-status is-${escapeHtml(status.state)}">
-          <i aria-hidden="true"></i>${escapeHtml(status.label)}
-        </span>
       </header>
       <p class="store-service-detail-today">
-        <b>${escapeHtml(status.detail)}</b>
-        <span>${escapeHtml(status.today)}</span>
+        <b>${escapeHtml(formatCustomerHours24(status.detail))}</b>
+        <span>${escapeHtml(formatCustomerHours24(status.today))}</span>
       </p>
       <div class="store-service-detail-hours">
         ${displayLines.length
-          ? displayLines.map(line => `<span>${escapeHtml(line)}</span>`).join('')
+          ? displayLines.map(line => `<span>${escapeHtml(formatCustomerHours24(line))}</span>`).join('')
           : '<span class="is-unknown">확인된 영업시간이 없습니다.</span>'}
       </div>
-      <div class="store-service-detail-benefits" aria-label="상품권 및 무료배달 확인 상태">
-        ${detailBenefitItems(info).map(detailBenefitMarkup).join('')}
-      </div>
-      <footer>
-        <span>회색 미확인은 사용 불가가 아니라 아직 확인되지 않은 정보입니다.</span>
-        ${verified ? `<small>${escapeHtml(verified)}</small>` : ''}
-      </footer>
+      ${availableBenefits.length ? `
+        <div class="store-service-detail-benefits" aria-label="현재 이용 가능한 주문앱별 혜택">
+          ${availableBenefits.map(detailBenefitMarkup).join('')}
+        </div>
+        <footer>
+          <span>표시된 상품권·쿠폰·무료배달은 혜택 옆에 적힌 주문앱에서 이용할 수 있습니다.</span>
+        </footer>
+      ` : ''}
+      ${giftAvailable && giftRoute?.url ? `<a class="store-service-gift-app-link" href="${escapeHtml(giftRoute.url)}" target="_blank" rel="noopener"><span aria-hidden="true">💳</span><b>지역상품권앱 열기</b><strong>›</strong></a>` : ''}
     `;
   }
 
   function decorateStoreCards() {
     document.querySelectorAll('#storeGrid .store-card[data-id]').forEach(card => {
-      if (card.querySelector('[data-store-service-card-meta]')) return;
       const info = serviceData.stores?.[String(card.dataset.id)];
       const status = storeStatus(info);
       const benefits = benefitLabels(info);
-      const meta = document.createElement('div');
-      meta.className = 'store-service-card-meta';
-      meta.dataset.storeServiceCardMeta = '';
-      meta.innerHTML = cardMetaMarkup(status, benefits);
+      const signature = JSON.stringify({status, benefits, empty: emptyBenefitLabel(info)});
+      let meta = card.querySelector('[data-store-service-card-meta]');
+      if (!meta) {
+        meta = document.createElement('div');
+        meta.className = 'store-service-card-meta';
+        meta.dataset.storeServiceCardMeta = '';
+      }
+      if (meta.dataset.storeServiceSignature !== signature) {
+        meta.dataset.storeServiceSignature = signature;
+        meta.innerHTML = cardMetaMarkup(status, benefits, info);
+      }
       const copy = card.querySelector('.store-info');
       const routes = copy?.querySelector('.miniapps');
-      if (routes) routes.before(meta);
-      else copy?.append(meta);
+      if (routes && meta.nextElementSibling !== routes) routes.before(meta);
+      else if (!routes && copy && !meta.isConnected) copy.append(meta);
+    });
+
+    const compactCards = new Map();
+    const addCompactCard = (card, id) => {
+      const storeId = String(id || '');
+      if (card && storeId && !compactCards.has(card)) compactCards.set(card, storeId);
+    };
+    document.querySelectorAll('.rail-card[data-rail-card-store]').forEach(card => addCompactCard(card, card.dataset.railCardStore));
+    document.querySelectorAll('.rail-card[data-rail-store-id]').forEach(card => addCompactCard(card, card.dataset.railStoreId));
+    document.querySelectorAll('.rc5-category-card[data-rc5-store]').forEach(card => addCompactCard(card, card.dataset.rc5Store));
+    document.querySelectorAll('.channel-store-card[data-channel-store-id]').forEach(card => addCompactCard(card, card.dataset.channelStoreId));
+    document.querySelectorAll('.app-browser-card[data-search-store-id]').forEach(card => addCompactCard(card, card.dataset.searchStoreId));
+    document.querySelectorAll('.app-browser-card[data-app-store-id]').forEach(card => addCompactCard(card, card.dataset.appStoreId));
+    document.querySelectorAll('.phone-order-card[data-phone-store-id]').forEach(card => addCompactCard(card, card.dataset.phoneStoreId));
+    document.querySelectorAll('.phone-order-card[data-phone-route-store-id]').forEach(card => addCompactCard(card, card.dataset.phoneRouteStoreId));
+    document.querySelectorAll('[data-app-store-order]').forEach(control => addCompactCard(control.closest('.app-browser-card') || control, control.dataset.appStoreOrder));
+
+    compactCards.forEach((storeId, card) => {
+      const status = storeStatus(serviceData.stores?.[storeId]);
+      const signature = `${status.state}:${status.label}`;
+      let badge = card.querySelector('[data-store-service-card-status-only]');
+      if (!badge) {
+        badge = document.createElement('span');
+        badge.className = 'store-service-card-status-only';
+        badge.dataset.storeServiceCardStatusOnly = '';
+      }
+      if (badge.dataset.storeServiceSignature !== signature) {
+        badge.dataset.storeServiceSignature = signature;
+        badge.innerHTML = cardStatusMarkup(status);
+      }
+      const target = card.querySelector('.rail-card-copy, .rc5-card-copy, .app-browser-info')
+        || card.querySelector(':scope > span');
+      if (target && badge.parentElement !== target) target.append(badge);
     });
   }
 
@@ -346,9 +628,12 @@
       const storeId = String(detail.dataset.storeId || '');
       const info = serviceData.stores?.[storeId];
       const status = storeStatus(info);
+      const store = storeById(storeId);
+      const giftRoute = typeof routeFor === 'function' ? routeFor(store, 'chak') : null;
       const signature = JSON.stringify({
         status,
         info: info || null,
+        giftUrl: giftRoute?.url || '',
         programs: serviceData.programs || [],
         deliveryBenefits: serviceData.deliveryBenefits || []
       });
@@ -360,13 +645,29 @@
       }
       if (panel.dataset.storeServiceSignature !== signature) {
         panel.dataset.storeServiceSignature = signature;
-        panel.innerHTML = detailPanelMarkup(info, status);
+        panel.innerHTML = detailPanelMarkup(info, status, giftRoute);
       }
-      const target = detail.querySelector('[data-store-menu-preview]')
+
+      let topStatus = detail.querySelector('[data-store-service-top-status]');
+      if (!topStatus) {
+        topStatus = document.createElement('span');
+        topStatus.dataset.storeServiceTopStatus = '';
+      }
+      const topStatusSignature = `${status.state}:${status.label}`;
+      if (topStatus.dataset.storeServiceStatusSignature !== topStatusSignature) {
+        topStatus.dataset.storeServiceStatusSignature = topStatusSignature;
+        topStatus.className = `store-service-status store-service-top-status is-${status.state}`;
+        topStatus.innerHTML = `<i aria-hidden="true"></i>${escapeHtml(status.label)}`;
+      }
+      const topStatusTarget = detail.querySelector('[data-store-menu-preview]')
         || detail.querySelector('.detail-routes')
         || detail.querySelector('.detail-personal-actions');
-      if (target && panel.nextElementSibling !== target) target.before(panel);
-      else if (!target && !panel.isConnected) detail.append(panel);
+      if (topStatusTarget && topStatus.nextElementSibling !== topStatusTarget) topStatusTarget.before(topStatus);
+      else if (!topStatusTarget && !topStatus.isConnected) detail.append(topStatus);
+
+      const actionsTarget = detail.querySelector('.detail-personal-actions');
+      if (actionsTarget && panel.nextElementSibling !== actionsTarget) actionsTarget.before(panel);
+      else if (!actionsTarget && !panel.isConnected) detail.append(panel);
     });
   }
 
@@ -378,25 +679,49 @@
         button.type = 'button';
         button.className = 'store-service-overview-button';
         button.dataset.storeServiceOverviewOpen = '';
-        button.innerHTML = '<span aria-hidden="true">◷</span><b>영업·혜택 한눈에</b>';
+        button.innerHTML = '<span aria-hidden="true">◷</span><b>주문앱별 혜택 한눈에</b>';
         head.append(button);
       }
     }
 
-    if (!document.querySelector('[data-store-service-search-open]')) {
-      const searchRow = document.querySelector('.main-search-row');
-      if (searchRow) {
-        const entry = document.createElement('div');
-        entry.className = 'store-service-search-entry';
-        entry.innerHTML = `
-          <button type="button" data-store-service-search-open>
-            <span aria-hidden="true">◷</span>
-            <b>지금 영업하는 가게·결제·배달혜택 찾기</b>
-            <small>섬섬페이 · 고유가 지원금 · 온누리상품권 · 무료배달</small>
-            <i aria-hidden="true">›</i>
-          </button>
-        `;
-        searchRow.after(entry);
+    const searchRow = document.querySelector('.main-search-row');
+    let entry = document.querySelector('[data-store-finder-quick]');
+    if (!entry && searchRow) {
+      entry = document.createElement('section');
+      entry.className = 'store-finder-quick';
+      entry.dataset.storeFinderQuick = '';
+      entry.innerHTML = `
+        <div class="store-finder-location">
+          <span aria-hidden="true">📍</span>
+          <b data-store-finder-location-label>주소를 설정하면 가까운 순</b>
+        </div>
+        <nav aria-label="빠른 가게 찾기 조건">
+          <button type="button" data-store-service-quick-status="open">🟢 지금 영업 중 <b data-store-finder-open-count></b></button>
+          <button type="button" data-store-service-quick-benefit>🎁 혜택 찾기</button>
+          <button type="button" data-store-service-quick-location="all">동네 선택</button>
+        </nav>
+      `;
+      searchRow.after(entry);
+    }
+    if (entry) {
+      const location = typeof state !== 'undefined' ? String(state.location || '') : '';
+      const hasLocation = location && location !== '여수시 전체';
+      const label = entry.querySelector('[data-store-finder-location-label]');
+      const nextLabel = hasLocation ? `${location} 기준 · 가까운 순` : '주소를 설정하면 가까운 순';
+      if (label && label.textContent !== nextLabel) label.textContent = nextLabel;
+      const source = sourceStores();
+      const count = source.reduce((total, store) => (
+        ['open', 'closing-soon'].includes(storeStatus(serviceData.stores?.[storeIdOf(store)]).state) ? total + 1 : total
+      ), 0);
+      const countNode = entry.querySelector('[data-store-finder-open-count]');
+      const countReady = serviceLoadState === 'ready' && source.length > 0;
+      const loadFailed = serviceLoadState === 'error' || catalogLoadState === 'error';
+      const nextCount = countReady ? String(count) : loadFailed ? '다시 확인' : '확인 중';
+      if (countNode && countNode.textContent !== nextCount) countNode.textContent = nextCount;
+      const quickStatus = entry.querySelector('[data-store-service-quick-status]');
+      if (quickStatus) {
+        quickStatus.dataset.storeServiceLoadState = countReady ? 'ready' : loadFailed ? 'error' : 'loading';
+        quickStatus.setAttribute('aria-busy', countReady || loadFailed ? 'false' : 'true');
       }
     }
   }
@@ -439,6 +764,27 @@
     return null;
   }
 
+  function activeNeighborhood() {
+    if (locationMode === 'selected') return ensureSelectedArea();
+    if (typeof state === 'undefined') return '';
+    const explicit = [state.location, state.addressLabel]
+      .filter(value => value && value !== '여수시 전체')
+      .flatMap(value => typeof neighborhoodsFor === 'function' ? neighborhoodsFor(value) : [String(value).trim()])
+      .find(Boolean);
+    if (explicit) return explicit;
+    const current = coordinateOf(state.coords);
+    return current && typeof closestNeighborhoodForCoordinates === 'function'
+      ? closestNeighborhoodForCoordinates(current)
+      : '';
+  }
+
+  function ownershipTier(store) {
+    if (typeof rc6OwnershipTier === 'function') return rc6OwnershipTier(store);
+    if (store?.managed) return 0;
+    if (store?.sharedManaged) return 1;
+    return 2;
+  }
+
   function distanceBetween(a, b) {
     if (!a || !b) return Number.POSITIVE_INFINITY;
     if (typeof haversine === 'function') return haversine(a, b);
@@ -454,7 +800,7 @@
   function availableAreas() {
     const seen = new Set();
     return sourceStores()
-      .map(storeArea)
+      .flatMap(storeAreas)
       .filter(area => {
         if (area === '동네 미확인' || seen.has(area)) return false;
         seen.add(area);
@@ -475,46 +821,167 @@
 
   function overviewEntries() {
     const reference = referenceCoordinate();
+    const neighborhood = activeNeighborhood();
     return sourceStores().map((store, index) => {
       const storeId = storeIdOf(store);
       const info = serviceData.stores?.[storeId];
-      const area = storeArea(store);
-      const areaCoordinate = coordinateOf(neighborhoodRecord(area));
+      const areas = storeAreas(store);
+      const area = areas[0] || '동네 미확인';
+      const storeCoordinate = coordinateOf(store);
+      const areaDistance = !reference
+        ? Number.POSITIVE_INFINITY
+        : storeCoordinate
+          ? distanceBetween(reference, storeCoordinate)
+          : Math.min(...areas.map(name => distanceBetween(reference, coordinateOf(neighborhoodRecord(name)))), Number.POSITIVE_INFINITY);
       return {
         storeId,
         store,
         info,
         area,
+        areas,
         index,
-        areaDistance: reference ? distanceBetween(reference, areaCoordinate) : Number.POSITIVE_INFINITY,
+        locationBucket: neighborhood && areas.includes(neighborhood) ? 0 : neighborhood ? 1 : 2,
+        ownershipTier: ownershipTier(store),
+        areaDistance,
         status: storeStatus(info),
-        benefits: benefitLabels(info)
+        benefits: benefitLabels(info),
+        menuMatches: menuMatchesForStore(storeId, overviewQuery, store)
       };
     });
   }
 
+  function searchTextValues(value) {
+  if (Array.isArray(value)) return value.flatMap(searchTextValues);
+  if (value && typeof value === 'object') return Object.values(value).flatMap(searchTextValues);
+  return [String(value || '')];
+}
+
+function overviewSearchText(entry) {
+  const store = entry.store || {};
+  return searchTextValues([
+    store.name,
+    store.realBusinessName,
+    store.brandName,
+    store.branchName,
+    entry.area,
+    store.area,
+    store.neighborhood,
+    store.category,
+    store.cat,
+    store.categories,
+    store.foodCategories,
+    store.menuCategories,
+    store.tags,
+    store.keywords,
+    store.searchAliases,
+    store.shopInShopNames,
+    store.storeAliases,
+    store.aliases,
+    store.searchIndex,
+    (entry.benefits || []).map(benefit => scopedBenefitLabel(benefit))
+  ]).filter(Boolean).join(' ');
+}
+
+  function benefitDefinitionForQuery(query) {
+    const compact = normalize(query);
+    if (!compact) return null;
+    return [
+      ...(serviceData.programs || []),
+      ...(serviceData.deliveryBenefits || [])
+    ].find(definition => {
+      const label = normalize(definition.label);
+      const searchable = normalize(`${definition.label || ''} ${definition.appLabel || ''} ${definition.key || ''}`);
+      return searchable.includes(compact) || (label && compact.includes(label));
+    }) || null;
+  }
+
+  function entryMatchesQuery(entry) {
+    const raw = String(overviewQuery || '').trim();
+    if (!raw) return true;
+    const text = normalize(overviewSearchText(entry));
+    const spec = menuSearchSpec(raw);
+    const compact = normalize(raw);
+    if (text.includes(compact)) return true;
+    const rawTokens = raw.split(/\s+/).map(normalize).filter(Boolean);
+    const familyTokens = spec && spec.key !== compact
+      ? rawTokens.filter(token => !spec.matches(token))
+      : [];
+    const contextTokens = familyTokens.length ? familyTokens : rawTokens;
+    const contextMatched = contextTokens.every(token => text.includes(token) || spec?.matches(token));
+    return contextMatched && (entry.menuMatches.length > 0 || rawTokens.every(token => text.includes(token)));
+  }
+
+  function overviewIdentityPriority(entry) {
+    const compact = normalize(overviewQuery);
+    if (!compact) return 0;
+    const store = entry.store || {};
+    const name = normalize(store.name);
+    if (name === compact) return 0;
+    if (name.startsWith(compact)) return 1;
+    if (name.includes(compact)) return 2;
+    const identity = normalize(searchTextValues([
+      store.realBusinessName,
+      store.brandName,
+      store.branchName,
+      store.shopInShopNames,
+      store.storeAliases,
+      store.aliases,
+      store.searchAliases
+    ]).join(' '));
+    if (identity.includes(compact)) return 3;
+    return 4;
+  }
+
+  function overviewStatusPriority(entry) {
+    return STATUS_SORT_PRIORITY[entry?.status?.state] ?? 4;
+  }
+
+  function overviewMenuEvidencePriority(entry) {
+    const matches = Array.isArray(entry?.menuMatches) ? entry.menuMatches : [];
+    if (matches.some(item => item.image)) return 0;
+    if (matches.length) return 1;
+    return 2;
+  }
+
+  function compareOverviewEntries(a, b) {
+    const hasQuery = Boolean(String(overviewQuery || '').trim());
+    const identityOrder = hasQuery ? overviewIdentityPriority(a) - overviewIdentityPriority(b) : 0;
+    const statusOrder = overviewStatusPriority(a) - overviewStatusPriority(b);
+    const menuEvidenceOrder = hasQuery
+      ? overviewMenuEvidencePriority(a) - overviewMenuEvidencePriority(b)
+      : 0;
+    if (locationMode === 'nearby' && referenceCoordinate()) {
+      return identityOrder
+        || statusOrder
+        || menuEvidenceOrder
+        || a.locationBucket - b.locationBucket
+        || a.ownershipTier - b.ownershipTier
+        || a.areaDistance - b.areaDistance
+        || a.area.localeCompare(b.area, 'ko')
+        || a.index - b.index;
+    }
+    if (locationMode === 'selected') {
+      return identityOrder
+        || statusOrder
+        || menuEvidenceOrder
+        || a.ownershipTier - b.ownershipTier
+        || a.areaDistance - b.areaDistance
+        || a.index - b.index;
+    }
+    return identityOrder || statusOrder || menuEvidenceOrder || a.index - b.index;
+  }
+
   function filteredOverviewEntries() {
-    const query = normalize(overviewQuery);
     const scoped = overviewEntries().filter(entry => {
-      if (query && !normalize(`${entry.store?.name || ''} ${entry.area} ${(entry.store?.cat || []).join?.(' ') || entry.store?.cat || ''}`).includes(query)) {
-        return false;
-      }
-      if (locationMode === 'selected' && entry.area !== ensureSelectedArea()) return false;
+      if (!entryMatchesQuery(entry)) return false;
+      if (locationMode === 'selected' && !entry.areas.includes(ensureSelectedArea())) return false;
       if (activeStatus === 'open' && !['open', 'closing-soon'].includes(entry.status.state)) return false;
       if (activeStatus !== 'all' && activeStatus !== 'open' && entry.status.state !== activeStatus) return false;
       if (activeBenefit !== 'all' && !acceptsBenefit(entry.info, activeBenefit)) return false;
       return true;
     });
 
-    if (locationMode === 'nearby' && referenceCoordinate()) {
-      scoped.sort((a, b) => (
-        a.areaDistance - b.areaDistance
-        || a.area.localeCompare(b.area, 'ko')
-        || a.index - b.index
-      ));
-    } else {
-      scoped.sort((a, b) => a.index - b.index);
-    }
+    scoped.sort(compareOverviewEntries);
     return scoped;
   }
 
@@ -544,78 +1011,133 @@
       ['all', '전체', null],
       ['open', '지금 영업 중', counts.openNow],
       ['closing-soon', '곧 종료', counts['closing-soon']],
-      ['closed', '영업 종료', counts.closed],
-      ['unknown', '시간 미확인', counts.unknown]
+      ['unknown', '시간 미확인', null],
+      ['closed', '영업 종료', null]
     ];
   }
 
   function overviewCardMarkup(entry) {
-    const verified = verifiedLabel(entry.info);
+    const menuSpec = menuSearchSpec(overviewQuery);
+    const menuMatches = entry.menuMatches || [];
+    const menuPreview = menuMatches.slice(0, MENU_MATCH_PREVIEW_LIMIT);
+    const menuMarkup = menuMatches.length ? `
+      <section class="store-service-menu-matches" aria-label="${escapeHtml(entry.store?.name || '가게')} 일치 메뉴">
+        <header>
+          <b>‘${escapeHtml(menuSpec?.label || overviewQuery)}’ 일치 메뉴</b>
+          <span>${menuMatches.length}개</span>
+        </header>
+        <div>
+          ${menuPreview.map(item => `
+            <button type="button" data-store-service-menu-open data-store-service-menu-store-id="${escapeHtml(entry.storeId)}" data-store-service-menu-id="${escapeHtml(item.id)}">
+              ${item.image ? `<img src="${escapeHtml(item.image)}" alt="" loading="lazy" decoding="async">` : '<span class="store-service-menu-image-empty" aria-hidden="true">메뉴</span>'}
+              <span>
+                <small>${escapeHtml(item.category || '메뉴')}</small>
+                <strong>${escapeHtml(item.name)}</strong>
+              </span>
+              <i aria-hidden="true">›</i>
+            </button>
+          `).join('')}
+        </div>
+        ${menuMatches.length > MENU_MATCH_PREVIEW_LIMIT ? `
+          <button type="button" class="store-service-menu-all" data-store-service-menu-open data-store-service-menu-store-id="${escapeHtml(entry.storeId)}">
+            이 가게의 ${escapeHtml(menuSpec?.label || '일치')} 메뉴 ${menuMatches.length}개 모두 보기
+          </button>
+        ` : ''}
+      </section>
+    ` : '';
     return `
-      <button type="button" class="store-service-overview-card" data-store-service-store-id="${escapeHtml(entry.storeId)}">
-        <span class="store-service-overview-card-main">
-          <strong>${escapeHtml(entry.store?.name || '가게 정보')}</strong>
-          <small>${escapeHtml(entry.area)} · ${escapeHtml(entry.status.today)}</small>
-        </span>
-        <span class="store-service-status is-${escapeHtml(entry.status.state)}">
-          <i aria-hidden="true"></i>${escapeHtml(entry.status.label)}
-        </span>
-        <span class="store-service-overview-payments">
-          ${entry.benefits.length
-            ? entry.benefits.map(benefit => {
-              const deliveryClass = benefit.kind === 'delivery' ? ' class="is-delivery"' : '';
-              return `<b${deliveryClass}>✓ ${escapeHtml(benefit.label)}</b>`;
-            }).join('')
-            : '<b class="is-unknown">결제·혜택 미확인</b>'}
-          ${verified ? `<small>${escapeHtml(verified)}</small>` : ''}
-        </span>
-        <i aria-hidden="true">›</i>
-      </button>
+      <article class="store-service-overview-group">
+        <button type="button" class="store-service-overview-card" data-store-service-store-id="${escapeHtml(entry.storeId)}">
+          <span class="store-service-overview-card-main">
+            <strong>${escapeHtml(entry.store?.name || '가게 정보')}</strong>
+            <small>${escapeHtml(entry.area)} · ${escapeHtml(formatCustomerHours24(entry.status.today))}</small>
+          </span>
+          <span class="store-service-status is-${escapeHtml(entry.status.state)}">
+            <i aria-hidden="true"></i>${escapeHtml(entry.status.label)}
+          </span>
+          <span class="store-service-overview-payments">
+            ${entry.benefits.length
+              ? entry.benefits.map(benefit => {
+                const deliveryClass = benefit.kind === 'delivery' ? ' class="is-delivery"' : '';
+                return `<b${deliveryClass}>✓ ${escapeHtml(scopedBenefitLabel(benefit))}</b>`;
+              }).join('')
+              : `<b class="is-unknown">${escapeHtml(emptyBenefitLabel(entry.info))}</b>`}
+          </span>
+          <i aria-hidden="true">›</i>
+        </button>
+        ${menuMarkup}
+      </article>
     `;
+  }
+
+  function overviewResultLabel(entries) {
+    const query = String(overviewQuery || '').trim();
+    if (query) {
+      const benefit = benefitDefinitionForQuery(query);
+      return benefit
+        ? `${benefit.label} 사용 가능 ${entries.length}곳`
+        : `‘${query}’ 검색 결과 ${entries.length}곳`;
+    }
+    if (activeStatus === 'open') return `지금 영업 중 ${entries.length}곳`;
+    if (activeStatus === 'closing-soon') return `곧 종료 ${entries.length}곳`;
+    if (activeStatus === 'closed') return '영업 종료 가게';
+    if (activeStatus === 'unknown') return '영업시간 미확인 가게';
+    const isEntireStoreList = locationMode !== 'selected'
+      && activeStatus === 'all'
+      && activeBenefit === 'all';
+    return isEntireStoreList ? '전체 가게' : `조건에 맞는 가게 ${entries.length}곳`;
+  }
+
+  function overviewListMarkup(entries) {
+    if (overviewQuery && menuSearchState === 'loading') {
+      return `${entries.map(overviewCardMarkup).join('')}<p class="store-service-menu-loading">등록된 메뉴판을 함께 검색하고 있습니다…</p>`;
+    }
+    if (entries.length) return entries.map(overviewCardMarkup).join('');
+    return '<p class="store-service-overview-empty">이 조건으로 확인되는 가게가 아직 없습니다.<small>다른 검색어·영업상태·혜택·지역범위를 선택해 보세요.</small></p>';
   }
 
   function overviewMarkup() {
     ensureSelectedArea();
     const allEntries = overviewEntries();
     const locationAndBenefitEntries = allEntries.filter(entry => (
-      (locationMode !== 'selected' || entry.area === selectedArea)
+      (locationMode !== 'selected' || entry.areas.includes(selectedArea))
       && (activeBenefit === 'all' || acceptsBenefit(entry.info, activeBenefit))
-      && (!overviewQuery || normalize(`${entry.store?.name || ''} ${entry.area} ${(entry.store?.cat || []).join?.(' ') || entry.store?.cat || ''}`).includes(normalize(overviewQuery)))
+      && entryMatchesQuery(entry)
     ));
     const counts = statusCounts(locationAndBenefitEntries);
     const entries = filteredOverviewEntries();
     const areas = availableAreas();
     const benefitFilters = [
       ['all', '전체 혜택'],
-      ...(serviceData.programs || []).map(program => [program.key, program.label]),
-      ...(serviceData.deliveryBenefits || []).map(benefit => [benefit.key, benefit.label])
+      ...(serviceData.programs || []).map(program => [program.key, scopedBenefitLabel(program)]),
+      ...(serviceData.deliveryBenefits || []).map(benefit => [benefit.key, scopedBenefitLabel(benefit)])
     ];
-    const isEntireStoreList = (
-      locationMode !== 'selected'
-      && activeStatus === 'all'
-      && activeBenefit === 'all'
-      && !overviewQuery
-    );
+    renderedSourceCount = allEntries.length;
 
     return `
-      <section class="store-service-overview" role="dialog" aria-modal="true" aria-labelledby="storeServiceOverviewTitle" data-store-service-source-count="${allEntries.length}">
+      <section class="store-service-overview" role="dialog" aria-modal="true" aria-labelledby="storeServiceOverviewTitle">
         <header>
           <div>
-            <span>가게 검색</span>
-            <h2 id="storeServiceOverviewTitle">영업시간·결제·배달혜택 찾기</h2>
+            <span>통합 가게 찾기</span>
+            <h2 id="storeServiceOverviewTitle">메뉴·가게·혜택 한 번에 찾기</h2>
           </div>
           <button type="button" data-store-service-overview-close aria-label="영업시간·결제·배달혜택 찾기 닫기">×</button>
         </header>
 
         <p class="store-service-overview-lead">
-          현재 위치에서 가까운 동네부터 볼 수 있습니다. 회색 ‘미확인’은 사용 불가가 아니라 아직 확인되지 않은 정보입니다.
+          메뉴·가게·동네·혜택을 검색할 수 있습니다. 상품권·쿠폰·무료배달은 각 혜택 배지에 적힌 앱에서 이용할 수 있습니다.
         </p>
 
-        <label class="store-service-overview-search">
+        <form class="store-service-overview-search" data-store-service-search-form role="search">
           <span aria-hidden="true">⌕</span>
-          <input type="search" value="${escapeHtml(overviewQuery)}" data-store-service-query placeholder="가게명·메뉴·동네 검색" aria-label="영업시간 및 결제·배달혜택 가게 검색">
-          ${overviewQuery ? '<button type="button" data-store-service-query-clear aria-label="검색어 지우기">×</button>' : ''}
-        </label>
+          <input type="search" value="${escapeHtml(overviewQuery)}" data-store-service-query placeholder="메뉴·가게·동네·혜택 검색" aria-label="메뉴·가게·동네·혜택 통합 검색" enterkeyhint="search" autocomplete="off">
+          <button type="button" data-store-service-query-clear aria-label="검색어 지우기" ${overviewQuery ? '' : 'hidden'}>×</button>
+        </form>
+
+        <div class="store-service-overview-result" aria-live="polite">
+          <b>${escapeHtml(overviewResultLabel(entries))}</b>
+          <span>${escapeHtml(locationDescription())}</span>
+        </div>
 
         <section class="store-service-filter-block" aria-labelledby="storeServiceLocationLabel">
           <div class="store-service-filter-title">
@@ -660,23 +1182,44 @@
           </nav>
         </section>
 
-        <div class="store-service-overview-result" aria-live="polite">
-          <b>${isEntireStoreList ? '전체 가게' : `${entries.length}개 가게`}</b>
-          <span>${escapeHtml(locationDescription())}</span>
-        </div>
-
         <div class="store-service-overview-list">
-          ${entries.length
-            ? entries.map(overviewCardMarkup).join('')
-            : '<p class="store-service-overview-empty">이 조건으로 확인되는 가게가 아직 없습니다.<small>다른 영업상태·혜택·지역범위를 선택해 보세요.</small></p>'}
+          ${overviewListMarkup(entries)}
         </div>
 
         <footer>
-          <p>사진으로 받은 정보는 가게를 확인한 뒤 검토·승인하여 반영합니다.</p>
-          <small>영업시간과 사용 가능 여부는 바뀔 수 있습니다. 무료배달은 거리·주문금액·시간에 따라 달라질 수 있으므로 주문 전 다시 확인해 주세요.</small>
+          <small>영업시간과 혜택은 바뀔 수 있습니다. 주문 전 해당 주문앱에서 다시 확인해 주세요.</small>
         </footer>
       </section>
     `;
+  }
+
+  function refreshOverviewQueryResults({scrollToResults = false} = {}) {
+    const overlay = document.querySelector('[data-store-service-overview-overlay]');
+    if (!overlay || overlay.hidden) return;
+    const requestedQuery = overviewQuery;
+    if (overviewQuery && !benefitDefinitionForQuery(overviewQuery)
+      && (menuSearchState === 'idle' || normalize(menuSearchQuery) !== normalize(overviewQuery))) {
+      ensureMenuSearchData(requestedQuery).then(() => {
+        if (overviewQuery === requestedQuery) refreshOverviewQueryResults();
+      });
+    }
+    const entries = filteredOverviewEntries();
+    const result = overlay.querySelector('.store-service-overview-result');
+    const list = overlay.querySelector('.store-service-overview-list');
+    const clear = overlay.querySelector('[data-store-service-query-clear]');
+    if (result) {
+      result.querySelector('b').textContent = overviewResultLabel(entries);
+      result.querySelector('span').textContent = locationDescription();
+    }
+    if (list) list.innerHTML = overviewListMarkup(entries);
+    if (clear) clear.hidden = !String(overviewQuery || '').trim();
+    if (scrollToResults) {
+      overlay.querySelector('[data-store-service-query]')?.blur();
+      window.requestAnimationFrame(() => {
+        const target = list?.querySelector('.store-service-overview-group, .store-service-overview-empty');
+        target?.scrollIntoView({block: 'start'});
+      });
+    }
   }
 
   function ensureOverviewOverlay() {
@@ -690,7 +1233,15 @@
     return overlay;
   }
 
-  function renderOverview({focusQuery = false} = {}) {
+  function renderOverview({focusQuery = false, focusSection = ''} = {}) {
+    if (overviewQuery && !benefitDefinitionForQuery(overviewQuery)
+      && (menuSearchState === 'idle' || normalize(menuSearchQuery) !== normalize(overviewQuery))) {
+      const requestedQuery = overviewQuery;
+      ensureMenuSearchData(requestedQuery).then(() => {
+        const currentOverlay = document.querySelector('[data-store-service-overview-overlay]');
+        if (currentOverlay && !currentOverlay.hidden && overviewQuery === requestedQuery) renderOverview();
+      });
+    }
     const overlay = ensureOverviewOverlay();
     const scrollTop = overlay.querySelector('.store-service-overview')?.scrollTop || 0;
     overlay.innerHTML = overviewMarkup();
@@ -701,15 +1252,19 @@
       input?.focus();
       input?.setSelectionRange?.(input.value.length, input.value.length);
     }
+    if (focusSection) {
+      const section = overlay.querySelector(`[aria-labelledby="${focusSection}"]`);
+      window.requestAnimationFrame(() => section?.scrollIntoView({block: 'start'}));
+    }
   }
 
-  function showOverview(trigger) {
+  function showOverview(trigger, options = {}) {
     const overlay = ensureOverviewOverlay();
     lastFocused = trigger || document.activeElement;
-    activeStatus = 'all';
-    activeBenefit = 'all';
-    locationMode = 'nearby';
-    overviewQuery = '';
+    activeStatus = options.status || 'all';
+    activeBenefit = options.benefit || 'all';
+    locationMode = options.locationMode || 'nearby';
+    overviewQuery = String(options.query || '').trim();
     renderOverview();
     overlay.hidden = false;
     document.body.classList.add('store-service-overview-open');
@@ -718,7 +1273,13 @@
     } catch {
       // The finder still works when browser history is unavailable.
     }
-    overlay.querySelector('[data-store-service-overview-close]')?.focus();
+    if (options.focusQuery === true) {
+      window.requestAnimationFrame(() => overlay.querySelector('[data-store-service-query]')?.focus());
+    } else if (options.focusSection) {
+      window.requestAnimationFrame(() => overlay.querySelector(`[aria-labelledby="${options.focusSection}"]`)?.scrollIntoView({block: 'start'}));
+    } else {
+      overlay.querySelector('[data-store-service-overview-close]')?.focus();
+    }
   }
 
   function hideOverview({restoreFocus = true} = {}) {
@@ -746,34 +1307,152 @@
     document.querySelector(`#storeGrid .store-card[data-id="${CSS.escape(storeId)}"]`)?.click();
   }
 
-  const ready = fetch(DATA_URL, {cache: 'no-store'})
-    .then(response => {
-      if (!response.ok) throw new Error(`영업·혜택 정보를 불러오지 못했습니다. (${response.status})`);
-      return response.json();
-    })
-    .then(data => {
-      serviceData = data;
-      ensureOverviewButtons();
-      decorateStoreCards();
-      decorateStoreDetails();
-      return data;
-    })
-    .catch(error => {
-      console.warn(error);
-      return serviceData;
+  function openMenuAfterOverview(request) {
+    if (!request?.storeId) return;
+    const spec = menuSearchSpec(request.query);
+    const query = spec?.key || request.query || '';
+    window.daedongMenuPreview?.open?.(request.storeId, {
+      query,
+      menuId: request.menuId || ''
     });
+  }
+
+  const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, milliseconds));
+
+  function settleWithin(promise, milliseconds) {
+    return new Promise(resolve => {
+      let settled = false;
+      const finish = result => {
+        if (settled) return;
+        settled = true;
+        window.clearTimeout(timeoutId);
+        resolve(result);
+      };
+      const timeoutId = window.setTimeout(() => finish({status: 'timeout'}), milliseconds);
+      Promise.resolve(promise).then(
+        value => finish({status: 'fulfilled', value}),
+        error => finish({status: 'rejected', error})
+      );
+    });
+  }
+
+  function refreshServiceSurfaces() {
+    ensureOverviewButtons();
+    decorateStoreCards();
+    decorateStoreDetails();
+  }
+
+  async function loadServiceData() {
+    let lastError = null;
+    for (const delay of [0, 1200]) {
+      if (delay) await wait(delay);
+      try {
+        return await window.daedongDataApi.services({timeoutMs: 20000});
+      } catch (error) {
+        lastError = error;
+      }
+    }
+    throw lastError || new Error('영업시간 정보를 불러오지 못했습니다.');
+  }
+
+  function beginServiceLoad() {
+    if (serviceLoadState === 'loading' && serviceReadyPromise) return serviceReadyPromise;
+    serviceLoadState = 'loading';
+    refreshServiceSurfaces();
+    serviceReadyPromise = loadServiceData()
+      .then(data => {
+        serviceData = data;
+        serviceLoadState = 'ready';
+        refreshServiceSurfaces();
+        if (typeof window.CustomEvent === 'function') {
+          window.dispatchEvent(new window.CustomEvent('daedong-store-service-ready'));
+        }
+        window.setTimeout(() => {
+          if (typeof renderStores === 'function') renderStores({resetCount: false});
+          if (typeof fxRenderRails === 'function') fxRenderRails();
+          if (typeof rc6RenderHero === 'function') {
+            rc6HeroRenderKey = '';
+            rc6RenderHero();
+          }
+        }, 0);
+        return data;
+      })
+      .catch(error => {
+        serviceLoadState = 'error';
+        console.warn(error);
+        refreshServiceSurfaces();
+        return serviceData;
+      })
+      .finally(() => {
+        serviceReadyPromise = null;
+      });
+    return serviceReadyPromise;
+  }
+
+  async function openQuickStatus(trigger) {
+    if (serviceLoadState === 'ready' && sourceStores().length) {
+      showOverview(trigger, {status: trigger.dataset.storeServiceQuickStatus || 'open'});
+      return;
+    }
+    trigger.setAttribute('aria-busy', 'true');
+    if (serviceLoadState === 'error') await beginServiceLoad();
+    else await (serviceReadyPromise || ready);
+    await catalogReadyPromise;
+    trigger.setAttribute('aria-busy', 'false');
+    if (serviceLoadState === 'ready' && sourceStores().length) {
+      showOverview(trigger, {status: trigger.dataset.storeServiceQuickStatus || 'open'});
+    } else if (catalogLoadState === 'error' && !sourceStores().length) {
+      window.location.reload();
+    } else {
+      showOverview(trigger, {status: 'all'});
+    }
+  }
+
+  const ready = beginServiceLoad();
+  catalogReadyPromise = settleWithin(window.daedongCatalogReady || Promise.resolve([]), 26000)
+    .then(result => {
+      catalogLoadState = result.status === 'fulfilled' && sourceStores().length ? 'ready' : 'error';
+      refreshServiceSurfaces();
+      return result;
+    });
+  settleWithin(window.daedongLocationRankingReady || Promise.resolve(false), 36000)
+    .then(() => refreshServiceSurfaces());
 
   window.daedongStoreServiceInfo = Object.freeze({
     ready,
     get: storeId => serviceData.stores?.[String(storeId)] || null,
     status: (storeId, date) => storeStatus(serviceData.stores?.[String(storeId)], date),
+    statusPriority: statusPriorityForStore,
+    sortByStatus: sortStoresByStatusPriority,
     showOverview
   });
 
-  document.addEventListener('input', event => {
-    if (!event.target.matches('[data-store-service-query]')) return;
-    overviewQuery = event.target.value;
-    renderOverview({focusQuery: true});
+  document.addEventListener('compositionstart', event => {
+  if (!event.target.matches('[data-store-service-query]')) return;
+  overviewQueryComposing = true;
+});
+
+document.addEventListener('compositionend', event => {
+  if (!event.target.matches('[data-store-service-query]')) return;
+  overviewQueryComposing = false;
+  overviewQuery = event.target.value;
+  refreshOverviewQueryResults();
+});
+
+document.addEventListener('input', event => {
+  if (!event.target.matches('[data-store-service-query]')) return;
+  overviewQuery = event.target.value;
+  refreshOverviewQueryResults();
+});
+
+  document.addEventListener('submit', event => {
+    const form = event.target.closest('[data-store-service-search-form]');
+    if (!form) return;
+    event.preventDefault();
+    const input = form.querySelector('[data-store-service-query]');
+    overviewQueryComposing = false;
+    overviewQuery = input?.value || '';
+    refreshOverviewQueryResults({scrollToResults: true});
   });
 
   document.addEventListener('change', event => {
@@ -789,13 +1468,31 @@
       showOverview(opener);
       return;
     }
+    const quickStatus = event.target.closest('[data-store-service-quick-status]');
+    if (quickStatus) {
+      openQuickStatus(quickStatus);
+      return;
+    }
+    const quickBenefit = event.target.closest('[data-store-service-quick-benefit]');
+    if (quickBenefit) {
+      showOverview(quickBenefit, {focusSection: 'storeServiceBenefitLabel'});
+      return;
+    }
+    const quickLocation = event.target.closest('[data-store-service-quick-location]');
+    if (quickLocation) {
+      showOverview(quickLocation, {locationMode: quickLocation.dataset.storeServiceQuickLocation || 'all'});
+      return;
+    }
     if (event.target.closest('[data-store-service-overview-close]')) {
       requestOverviewClose();
       return;
     }
     if (event.target.closest('[data-store-service-query-clear]')) {
       overviewQuery = '';
-      renderOverview({focusQuery: true});
+      const input = document.querySelector('[data-store-service-query]');
+      if (input) input.value = '';
+      refreshOverviewQueryResults();
+      input?.focus();
       return;
     }
     const statusFilter = event.target.closest('[data-store-service-status]');
@@ -817,6 +1514,22 @@
       renderOverview();
       return;
     }
+    const menuCard = event.target.closest('[data-store-service-menu-open]');
+    if (menuCard) {
+      pendingMenuOpen = {
+        storeId: menuCard.dataset.storeServiceMenuStoreId || '',
+        menuId: menuCard.dataset.storeServiceMenuId || '',
+        query: overviewQuery
+      };
+      if (history.state?.[HISTORY_KEY]) history.back();
+      else {
+        const request = pendingMenuOpen;
+        pendingMenuOpen = null;
+        hideOverview({restoreFocus: false});
+        openMenuAfterOverview(request);
+      }
+      return;
+    }
     const storeCard = event.target.closest('[data-store-service-store-id]');
     if (storeCard) {
       pendingStoreId = storeCard.dataset.storeServiceStoreId || '';
@@ -833,7 +1546,13 @@
     const overlay = document.querySelector('[data-store-service-overview-overlay]');
     if (!overlay || overlay.hidden || event.state?.[HISTORY_KEY]) return;
     event.stopImmediatePropagation();
-    hideOverview({restoreFocus: !pendingStoreId});
+    hideOverview({restoreFocus: !pendingStoreId && !pendingMenuOpen});
+    if (pendingMenuOpen) {
+      const request = pendingMenuOpen;
+      pendingMenuOpen = null;
+      window.setTimeout(() => openMenuAfterOverview(request), 0);
+      return;
+    }
     if (pendingStoreId) {
       const storeId = pendingStoreId;
       pendingStoreId = '';
@@ -846,11 +1565,13 @@
     decorateStoreCards();
     decorateStoreDetails();
     const overlay = document.querySelector('[data-store-service-overview-overlay]');
-    const renderedCount = Number(overlay?.querySelector('[data-store-service-source-count]')?.dataset.storeServiceSourceCount);
-    if (overlay && !overlay.hidden && renderedCount !== sourceStores().length) renderOverview();
+    if (overlay && !overlay.hidden && renderedSourceCount !== sourceStores().length) renderOverview();
   }).observe(document.documentElement, {childList: true, subtree: true});
 
   window.setInterval(() => {
+    if (serviceLoadState === 'ready' && typeof renderStores === 'function') {
+      renderStores({resetCount: false});
+    }
     document.querySelectorAll('[data-store-service-card-meta]').forEach(node => node.remove());
     decorateStoreCards();
     decorateStoreDetails();

@@ -2,7 +2,7 @@
 
 /* RC3 fixes only. Store, photo, route, brand-app, HappyOrder and banner data stay read-only. */
 const RC3_ICON_SPRITE = CATEGORY_ICON_SPRITE;
-const RC3_PHONE_INTERNAL_URL = 'data/phone-order-runtime.json?v=channel-recovery-06';
+const RC3_PHONE_INTERNAL_URL = 'data/phone-order-runtime.json?v=channel-recovery-07-card-markers';
 const RC3_APP_PARTICLE = Object.freeze({
   yogiyo: '요기요로',
   baemin: '배달의민족으로',
@@ -18,11 +18,32 @@ const RC3_FEEDBACK_CHANNELS = Object.freeze([
 ]);
 const RC3_BLOCKED_PHONE_ROUTE_STORES = new Set([
   '09de7c8235046632', // 불족대가 미평점: placeholder number
-  '0ad5341dc696d4f1'  // 맛있는 반찬: another store's placeholder page
+  '0ad5341dc696d4f1', // 맛있는 반찬: another store's placeholder page
+  '9ee73ce6168105ec'  // 더벤티 여수국동항점: another store's phone/order page
 ]);
 const rc3RailPointers = new Map();
+const rc3PhysicalMapPending = new Map();
 let rc3InternalPhoneByStore = new Map();
 let rc3EventsInstalled = false;
+let rc3ServiceReadyRefreshInstalled = false;
+
+function rc3RefreshRailsAfterServiceReady() {
+  if (rc3ServiceReadyRefreshInstalled) return;
+  const ready = window.daedongStoreServiceInfo?.ready;
+  if (!ready || typeof ready.then !== 'function') return;
+  rc3ServiceReadyRefreshInstalled = true;
+  Promise.resolve(ready).then(() => {
+    window.requestAnimationFrame(() => {
+      if (typeof fxRenderRails === 'function') fxRenderRails();
+    });
+  }).catch(error => console.error('store-service-rail-refresh-failed', error));
+}
+
+window.addEventListener('daedong-store-service-ready', () => {
+  window.requestAnimationFrame(() => {
+    if (typeof fxRenderRails === 'function') fxRenderRails();
+  });
+});
 
 function rc3Icon(id, className = 'category-color-icon') {
   return `<svg class="${className}" aria-hidden="true"><use href="${RC3_ICON_SPRITE}#${id}"></use></svg>`;
@@ -92,12 +113,21 @@ const RC3_CARD_PRIMARY_CHANNELS = Object.freeze([
   ['phone', 'phoneOrder']
 ]);
 
+function rc3CardChannelFallback(store, key) {
+  if (key === 'phone' && RC3_BLOCKED_PHONE_ROUTE_STORES.has(String(store?.id || ''))) return null;
+  if (key === 'phone' && fxPhoneByStore.has(String(store?.id || ''))) {
+    return {key, name: APP_META[key]?.label || key};
+  }
+  if (!storeHasChannel(store, key)) return null;
+  return {key, name: APP_META[key]?.label || key};
+}
+
 function rc3PrimaryCardChannels(store) {
   const channels = resolveStoreChannels(store);
   const primary = {...channels.primaryOrder};
   if (!primary.brandApp) primary.brandApp = routeFor(store, 'brand') || null;
   return RC3_CARD_PRIMARY_CHANNELS
-    .map(([key, field]) => ({key, channel: primary[field]}))
+    .map(([key, field]) => ({key, channel: primary[field] || rc3CardChannelFallback(store, key)}))
     .filter(item => Boolean(item.channel));
 }
 
@@ -139,8 +169,16 @@ fxRenderRails = function rc3RenderRails() {
   try {
     const globallyUsed = new Set();
     const useCounts = new Map();
+    const recentLeads = [];
     root.innerHTML = fxSelectedRails().map(spec => {
-      const cards = rc2RailCandidates(spec, globallyUsed, 8, useCounts);
+      const cards = rc2DiversifyRailLead(
+        sortStoresByBusinessStatus(rc2RailCandidates(spec, globallyUsed, 8, useCounts)),
+        recentLeads
+      );
+      if (cards[0]) {
+        recentLeads.push(cards[0]);
+        if (recentLeads.length > 3) recentLeads.shift();
+      }
       const allCandidates = fxRankStores(spec);
       return `<section class="recommend-rail" data-rail="${spec.id}"><header class="recommend-rail-head"><div><h2>${escapeHtml(spec.title)}</h2><p>${escapeHtml(spec.desc)}</p></div>${allCandidates.length > cards.length ? `<button type="button" data-rail-more="${spec.id}">이 추천 가게 더보기</button>` : ''}</header><div class="recommend-track" data-rc3-rail-track="${spec.id}">${cards.map(store=>rc3RailCard(store,spec)).join('') || '<p class="empty">현재 표시할 추천 가게가 없습니다.</p>'}</div></section>`;
     }).join('');
@@ -168,22 +206,88 @@ function rc3Digits(value) {
 function rc3VerifiedPhone(store) {
   const mapped = rc3InternalPhoneByStore.get(String(store?.id));
   const digits = rc3Digits(mapped?.phone || store?.phone);
-  const valid = /^(?:0\d{8,11}|1[568]\d{6,7})$/.test(digits);
+  const valid = /^02\d{7,8}$/.test(digits)
+    || /^0(?:3[1-3]|4[1-4]|5[1-5]|6[1-4])\d{7,8}$/.test(digits)
+    || /^050[2-8]\d{7,8}$/.test(digits)
+    || /^01[016789]\d{7,8}$/.test(digits)
+    || /^070\d{8}$/.test(digits)
+    || /^1[568]\d{6}$/.test(digits);
   return valid ? digits : '';
 }
 
 function rc3FormatPhone(value) {
   const digits = rc3Digits(value);
   if (/^02\d{7,8}$/.test(digits)) return digits.replace(/^(02)(\d{3,4})(\d{4})$/, '$1-$2-$3');
+  if (/^050[2-8]\d{7,8}$/.test(digits)) return digits.replace(/^(050[2-8])(\d{3,4})(\d{4})$/, '$1-$2-$3');
   if (/^01[016789]\d{7,8}$/.test(digits) || /^070\d{8}$/.test(digits)) return digits.replace(/^(\d{3})(\d{3,4})(\d{4})$/, '$1-$2-$3');
   return digits.replace(/^(\d{3})(\d{3,4})(\d{4})$/, '$1-$2-$3');
+}
+
+function rc3SamePhysicalPlace(left, right) {
+  if (!left || !right) return false;
+  if ([left.lat, left.lng, right.lat, right.lng].every(Number.isFinite)) {
+    return haversine({lat: left.lat, lng: left.lng}, {lat: right.lat, lng: right.lng}) <= 0.05;
+  }
+  const leftAddress = normalize(left.address || '');
+  const rightAddress = normalize(right.address || '');
+  return Boolean(leftAddress && rightAddress && leftAddress === rightAddress);
+}
+
+function rc3VerifiedPhysicalMap(store) {
+  const url = safeHref(store?.naverMap || '');
+  if (url === '#') return null;
+  const ownAudit = rc2NaverByStore.get(String(store?.id));
+  if (ownAudit?.status === 'verified') return {key: 'naver', name: '네이버지도', url};
+  if (store?.__verifiedPhysicalMapSource) return {key: 'naver', name: '네이버지도', url};
+  return null;
+}
+
+async function rc3RecoverVerifiedPhysicalMap(store) {
+  const id = String(store?.id || '');
+  if (!id || rc3VerifiedPhysicalMap(store) || rc3PhysicalMapPending.has(id)) return rc3PhysicalMapPending.get(id);
+  const phone = rc3VerifiedPhone(store);
+  if (!phone) return null;
+  const candidates = stores
+    .filter(candidate => String(candidate.id) !== id)
+    .filter(candidate => rc3Digits(rc3InternalPhoneByStore.get(String(candidate.id))?.phone) === phone)
+    .filter(candidate => rc2NaverByStore.get(String(candidate.id))?.status === 'verified')
+    .filter(candidate => {
+      if (![store.lat, store.lng, candidate.lat, candidate.lng].every(Number.isFinite)) return true;
+      return rc3SamePhysicalPlace(store, candidate);
+    });
+  if (!candidates.length) return null;
+  const pending = (async () => {
+    for (const candidate of candidates) {
+      try {
+        await window.daedongSecureStoreDetail?.enrich?.(candidate, normalizedStore);
+      } catch (error) {
+        console.warn('physical-map-candidate-load-failed', candidate.id, error);
+        continue;
+      }
+      if (rc3VerifiedPhone(candidate) !== phone || !rc3SamePhysicalPlace(store, candidate)) continue;
+      const verifiedMap = rc3VerifiedPhysicalMap(candidate);
+      if (!verifiedMap) continue;
+      store.naverMap = verifiedMap.url;
+      store.__verifiedPhysicalMapSource = String(candidate.id);
+      const activeDetail = $('#modalContent .store-detail');
+      if (activeDetail?.dataset.storeId === id) rc3EnhanceStoreDetail(store);
+      return verifiedMap;
+    }
+    return null;
+  })().finally(() => rc3PhysicalMapPending.delete(id));
+  rc3PhysicalMapPending.set(id, pending);
+  return pending;
 }
 
 fxPhoneStores = function rc3PhoneStores(category = '추천') {
   let list = stores
     .filter(fxVisible)
-    .map(store => ({store, phoneOrder: resolveStoreChannels(store).primaryOrder.phoneOrder}))
-    .filter(item => Boolean(item.phoneOrder));
+    .map(store => ({
+      store,
+      phoneOrder: resolveStoreChannels(store).primaryOrder.phoneOrder,
+      hasPhoneMarker: fxPhoneByStore.has(String(store.id)) && !RC3_BLOCKED_PHONE_ROUTE_STORES.has(String(store.id))
+    }))
+    .filter(item => Boolean(item.phoneOrder || item.hasPhoneMarker));
   if (category !== '추천') list = list.filter(item => storeMatchesCategory(item.store, category));
   return applyCategoryPriorityOverrides(list.sort((a, b) => (fxDistance(a.store) ?? 999) - (fxDistance(b.store) ?? 999) || a.store.name.localeCompare(b.store.name, 'ko')), category);
 };
@@ -196,7 +300,7 @@ fxOpenPhoneDirectory = function rc3OpenPhoneDirectory(category = '추천') {
   const chips = `<nav class="app-browser-category-chips"><button type="button" data-phone-category="추천" class="${category === '추천' ? 'active' : ''}">추천</button>${cats.map(cat => `<button type="button" data-phone-category="${escapeHtml(cat)}" class="${category === cat ? 'active' : ''}">${escapeHtml(cat)}</button>`).join('')}</nav>`;
   const cards = list.map(({store, phoneOrder}) => {
     const content = `${fxCardPhoto(store)}<span><strong>${escapeHtml(store.name)}</strong><small>${escapeHtml(store.area || '여수')} · ${escapeHtml(store.cat)}</small></span><b>›</b>`;
-    return phoneOrder.url
+    return phoneOrder?.url
       ? `<a class="phone-order-card glass-action" href="${escapeHtml(phoneOrder.url)}" target="_blank" rel="noopener" data-phone-route-store-id="${escapeHtml(store.id)}">${content}</a>`
       : `<button type="button" class="phone-order-card glass-action" data-phone-store-id="${escapeHtml(store.id)}">${content}</button>`;
   }).join('');
@@ -204,11 +308,19 @@ fxOpenPhoneDirectory = function rc3OpenPhoneDirectory(category = '추천') {
   rc2RevealSelectedCategory();
 };
 
-fxOpenPhoneConfirm = function rc3OpenPhoneConfirm(id) {
-  const item = fxPhoneByStore.get(String(id));
+fxOpenPhoneConfirm = async function rc3OpenPhoneConfirm(id) {
   const store = fxStoreById(id);
-  const phone = rc3VerifiedPhone(store);
-  if (!item?.clickableTel || !store || !phone) return;
+  if (!store || RC3_BLOCKED_PHONE_ROUTE_STORES.has(String(id))) return;
+  let phone = rc3VerifiedPhone(store);
+  if (!phone && fxPhoneByStore.has(String(id))) {
+    try {
+      await window.daedongSecureStoreDetail?.enrich?.(store, normalizedStore);
+      phone = rc3VerifiedPhone(store);
+    } catch (error) {
+      console.warn('phone-confirm-detail-load-failed', id, error);
+    }
+  }
+  if (!phone) return;
   openModal(`<section class="phone-order-confirm" data-store-id="${escapeHtml(store.id)}"><h2 id="modalTitle">${escapeHtml(store.name)} 전화주문</h2><div class="phone-confirm-photo">${fxCardPhoto(store)}</div><p>${escapeHtml(store.area || '여수')} · ${escapeHtml(store.cat)}</p>${rc3PopupUtilityLinks(store)}<p>가게를 선택해도 전화가 자동으로 걸리지 않습니다.<br>전화번호를 확인한 뒤 전화 걸기 버튼을 눌러주세요.</p><p class="verified-phone-number">${escapeHtml(rc3FormatPhone(phone))}</p><div class="phone-confirm-actions"><a class="phone-call-link" data-rc3-final-phone href="tel:${escapeHtml(phone)}">전화 걸기</a><button class="phone-cancel" type="button" data-phone-cancel>취소</button></div></section>`);
   $('#modal').dataset.activeStoreId = store.id;
   history.replaceState({...history.state, storeId: String(store.id)}, '');
@@ -226,14 +338,14 @@ function resolveStoreChannels(store) {
   const route = key => routeFor(safeStore, key) || null;
   const phone = rc3VerifiedPhone(safeStore);
   const phoneRoute = route('phone');
-  const phoneOrder = phone && fxPhoneByStore.get(String(safeStore.id))?.clickableTel
+  const phoneOrder = phone && !RC3_BLOCKED_PHONE_ROUTE_STORES.has(String(safeStore.id))
     ? {key: 'phone', name: '전화주문', phone}
     : phoneRoute && !RC3_BLOCKED_PHONE_ROUTE_STORES.has(String(safeStore.id))
       ? phoneRoute
       : null;
   return {
     utilities: {
-      naverMap: safeStore.naverMap && safeStore.naverMap !== '#' ? {key: 'naver', name: '네이버지도', url: safeStore.naverMap} : null,
+      naverMap: rc3VerifiedPhysicalMap(safeStore),
       localGiftApp: route('chak')
     },
     primaryOrder: {
@@ -289,8 +401,9 @@ function rc3EnhanceStoreDetail(store) {
   detail.querySelectorAll('.brand-store-actions').forEach(node => node.remove());
   detail.querySelector('.store-other-wrap')?.remove();
   const gallery = detail.querySelector('.detail-meta');
-  const utilities = [channels.utilities.naverMap, channels.utilities.localGiftApp].filter(Boolean).map(item => `<a class="detail-quick-link" data-detail-only="${escapeHtml(item.key)}" href="${escapeHtml(item.url)}" target="_blank" rel="noopener"><span class="quick-icon">${item.key === 'naver' ? '🗺️' : '💳'}</span><span>${escapeHtml(item.name === 'CHAK 지역상품권' ? '지역상품권앱' : item.name)}</span></a>`).join('');
-  const primary = [channels.primaryOrder.directOrder, channels.primaryOrder.mukkebi, channels.primaryOrder.ddangyo, channels.primaryOrder.ondongne].filter(Boolean).map(route => routeLink(route, 'local-order-route')).join('');
+  const utilities = [channels.utilities.naverMap].filter(Boolean).map(item => `<a class="detail-quick-link" data-detail-only="${escapeHtml(item.key)}" href="${escapeHtml(item.url)}" target="_blank" rel="noopener"><span class="quick-icon">🗺️</span><span>${escapeHtml(item.name)}</span></a>`).join('');
+  const direct = [channels.primaryOrder.directOrder].filter(Boolean).map(route => routeLink(route, 'local-order-route')).join('');
+  const community = [channels.primaryOrder.mukkebi, channels.primaryOrder.ddangyo, channels.primaryOrder.ondongne].filter(Boolean).map(route => routeLink(route, 'local-order-route')).join('');
   const phoneOrder = channels.primaryOrder.phoneOrder;
   const phone = phoneOrder?.url
     ? routeLink(phoneOrder, 'local-order-route')
@@ -300,13 +413,19 @@ function rc3EnhanceStoreDetail(store) {
   const apps = channels.primaryOrder.brandApp || channels.happyOrder ? `<div class="brand-store-actions">${channels.primaryOrder.brandApp ? fxAppAction(channels.primaryOrder.brandApp, 'brand') : ''}${channels.happyOrder ? fxAppAction(channels.happyOrder, 'happy') : ''}</div>` : '';
   const hasExternal = Object.values(channels.externalOrder).some(Boolean);
   const other = hasExternal ? `<div class="store-other-wrap"><button class="detail-route store-other-toggle rc3-order-methods-trigger" type="button" data-rc3-other-methods="${escapeHtml(store.id)}"><span>다른 주문방법 보기</span><b>›</b></button></div>` : '';
-  gallery?.insertAdjacentHTML('afterend', `${utilities ? `<div class="detail-quick-links">${utilities}</div>` : ''}<div class="detail-routes local-detail-routes">${primary}${apps}${phone || (!primary && !apps ? '<p class="muted">등록된 주문방법을 확인 중입니다.</p>' : '')}</div>${other}`);
+  if (utilities) gallery?.insertAdjacentHTML('afterend', `<div class="detail-quick-links">${utilities}</div>`);
+  const menuEntry = detail.querySelector('[data-store-menu-preview]');
+  const orderAnchor = menuEntry || detail.querySelector('.detail-meta-row') || gallery;
+  orderAnchor?.insertAdjacentHTML('afterend', `<div class="detail-routes local-detail-routes">${direct}${apps}${community}${phone || (!direct && !apps && !community ? '<p class="muted">등록된 주문방법을 확인 중입니다.</p>' : '')}</div>${other}`);
 }
 
 const rc3OpenStoreBase = openStore;
-openStore = function rc3OpenStore(store) {
-  rc3OpenStoreBase(store);
+openStore = async function rc3OpenStore(store) {
+  const opened = await rc3OpenStoreBase(store);
+  if (opened === false) return false;
   rc3EnhanceStoreDetail(store);
+  void rc3RecoverVerifiedPhysicalMap(store);
+  return opened;
 };
 
 feeGuideMarkup = function rc3FeeGuideMarkup(store, selectedRoute, {fromBrowser = false} = {}) {
@@ -496,9 +615,14 @@ fxInstallEvents = function rc3InstallEvents() {
 
 const rc3InitializeBase = fxInitialize;
 fxInitialize = async function rc3Initialize() {
+  rc3RefreshRailsAfterServiceReady();
   await rc3InitializeBase();
+  rc3RefreshRailsAfterServiceReady();
   const internalPhones = await fetchJson(RC3_PHONE_INTERNAL_URL, {stores: []});
   rc3InternalPhoneByStore = new Map((internalPhones.stores || []).map(item => [String(item.store_id), item]));
+  const activeStoreId = String($('#modalContent .store-detail')?.dataset.storeId || '');
+  const activeStore = activeStoreId ? fxStoreById(activeStoreId) : null;
+  if (activeStore) void rc3RecoverVerifiedPhysicalMap(activeStore);
   renderCategories();
   fxRenderRails();
 };

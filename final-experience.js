@@ -1,7 +1,7 @@
 'use strict';
 
 /* Final local experience layer. Frozen store/order datasets remain read-only. */
-const FX_PHONE_URL='data/phone-order-runtime.json?v=channel-recovery-06';
+const FX_PHONE_URL='data/phone-order-runtime.json?v=channel-recovery-07-card-markers';
 const FX_BRAND_URL='data/brand-app-mapping.json';
 const FX_BRAND_SUPPLEMENT_URL='data/brand-app-missing-nine-supplement.json';
 const FX_HAPPY_URL='data/happyorder-channel-research.json';
@@ -15,11 +15,21 @@ const FX_WEATHER_CACHE='daedongYeosuWeatherV1';
 const FX_HOME_SHARE_URL='https://daedongmap.com/';
 const FX_HOME_SHARE_TEXT='여수 음식점과 이용 가능한 주문방법을 한눈에 확인해보세요.';
 const FX_STORE_SHARE_PARAM='store';
+const FX_APP_BROWSER_RETURN='daedongAppBrowserReturnV1';
 const FX_HIDDEN_STORE_IDS=new Set([
  '6092aabddf5f7194', // 롯데리아 중앙점
  'e0c6949efb48f4b2' // 롯데리아 이마트점
 ]);
 window.DAEDONG_WEATHER_CONFIG=window.DAEDONG_WEATHER_CONFIG||{enabled:false,proxyUrl:'',cacheMinutes:18};
+
+let fxResolveLocationRankingReady;
+window.daedongLocationRankingReady=new Promise(resolve=>{fxResolveLocationRankingReady=resolve;});
+function fxFinishLocationRankingReady(value){fxResolveLocationRankingReady?.(value);fxResolveLocationRankingReady=null;}
+window.setTimeout(()=>{
+ if(!fxResolveLocationRankingReady)return;
+ console.warn('위치 기반 정렬 준비 시간이 초과되어 기본 목록을 먼저 엽니다.');
+ fxFinishLocationRankingReady(false);
+},35000);
 
 let fxBrandData={stores:[],brands:[]};
 let fxSupplement={storeMappings:[],directApps:[]};
@@ -54,8 +64,57 @@ appRegisteredStores=function(key){return fxOriginalAppRegisteredStores(key).filt
 function fxCategoryMarkup(name){return categoryButtonMarkup(name);}
 renderCategories=renderCategoryGrid;
 
+function fxRegisteredAppCardMarkup(store,key,isExternal=false){
+ const meta=APP_META[key]||{label:key};
+ const routeLabel=`${meta.label} 바로가기`;
+ return `<article class="app-browser-card app-browser-direct-card"><button type="button" class="app-browser-direct-link glass-action" data-app-store-order="${escapeHtml(store.id)}" data-app-key="${escapeHtml(key)}">${appBrowserPhoto(store)}<span class="app-browser-info"><strong>${escapeHtml(store.name)}</strong><small>${escapeHtml(store.area||'여수')} · ${escapeHtml(store.cat)}</small><span><b class="app-browser-direct-label">${escapeHtml(routeLabel)}</b></span></span><b class="app-browser-direct-arrow" aria-hidden="true">›</b></button><button type="button" class="app-browser-info-button" data-app-store-info="${escapeHtml(store.id)}"><span><b>가게정보 더보기</b><small>음식보기 · 영업시간 · 쿠폰 등</small></span><b aria-hidden="true">›</b></button></article>`;
+}
+function fxRememberAppBrowserReturn(key,anchorStoreId=''){
+ window.daedongMarkExternalAppDeparture?.();
+ const modal=$('#modal'),card=modal?.querySelector('.modal-card'),content=$('#modalContent');
+ const anchorCandidates=modal?[...modal.querySelectorAll('[data-app-store-order]')]:[];
+ const anchorElement=anchorStoreId?anchorCandidates.find(element=>String(element.dataset.appStoreOrder||'')===String(anchorStoreId)):null;
+ const anchor=window.daedongCaptureReturnAnchor?.(card,anchorElement)||null;
+ const html=content?.innerHTML||'';
+ const payload={key,category:modal?.dataset.appBrowserCategory||'추천',anchorStoreId:String(anchorStoreId||''),anchor,modalScroll:card?.scrollTop||0,pageScroll:Number(document.body.dataset.lockScrollY||window.scrollY||0),modalSnapshot:html&&html.length<=500000?{html}:null};
+ if(window.daedongWriteExternalReturnState)window.daedongWriteExternalReturnState(FX_APP_BROWSER_RETURN,payload);
+ else sessionStorage.setItem(FX_APP_BROWSER_RETURN,JSON.stringify({...payload,savedAt:Date.now()}));
+}
+function fxRestoreAppBrowserReturn(){
+ let saved=window.daedongReadExternalReturnState?.(FX_APP_BROWSER_RETURN)||null;
+ if(!saved){try{saved=JSON.parse(sessionStorage.getItem(FX_APP_BROWSER_RETURN)||'null');}catch{}}
+ if(!saved||Date.now()-Number(saved.savedAt||0)>30*60*1000){window.daedongClearExternalReturnState?.(FX_APP_BROWSER_RETURN,saved);try{sessionStorage.removeItem(FX_APP_BROWSER_RETURN);}catch{}return false;}
+ const modal=$('#modal');
+ if(!['direct','mukkebi','ddangyo','ondongne','yogiyo','coupang','baemin'].includes(saved.key)){window.daedongClearExternalReturnState?.(FX_APP_BROWSER_RETURN,saved);return false;}
+ if(!modal?.hidden&&modal.dataset.appBrowserKey===saved.key){window.daedongStabilizeReturnPosition?.(saved);window.daedongClearExternalReturnState?.(FX_APP_BROWSER_RETURN,saved);return true;}
+ if(!modal?.hidden)hardClose({fromPop:true});
+ window.scrollTo(0,Number(saved.pageScroll||0));
+ openAppBrowser(saved.key,saved.category||'추천');
+ window.daedongStabilizeReturnPosition?.(saved);
+ window.daedongClearExternalReturnState?.(FX_APP_BROWSER_RETURN,saved);return true;
+}
+async function fxOpenRegisteredAppOrder(button){
+ const store=fxStoreById(button.dataset.appStoreOrder),key=button.dataset.appKey;if(!store||!key)return;
+ if(button.dataset.routeBusy==='true')return;
+ button.dataset.routeBusy='true';button.setAttribute('aria-busy','true');
+ try{
+  if(store.__secureDetailReady!==true)await window.daedongSecureStoreDetail?.enrich?.(store,typeof normalizedStore==='function'?normalizedStore:undefined);
+  const route=routeFor(store,key),href=route?safeHref(route.url):'#';
+  if(!route||href==='#')throw new Error('order route unavailable');
+  if(EXTERNAL_APP_KEYS.includes(key))rememberSelectedExternal(store,key);
+  sendAnalyticsEvent('order_click',{storeId:store.id,storeName:store.name,channel:key,surface:'app_store_list'});
+  fxRememberAppBrowserReturn(key,store.id);
+  delete button.dataset.routeBusy;button.removeAttribute('aria-busy');
+  if(key==='ddangyo')await openDdangyoRoute(href);else location.assign(href);
+ }catch{window.alert(`${APP_META[key]?.label||'주문앱'} 주문주소를 불러오지 못했습니다. 잠시 후 다시 눌러 주세요.`);}finally{delete button.dataset.routeBusy;button.removeAttribute('aria-busy');}
+}
+
+function fxRestoreRegisteredAppButtons(){
+ $$('[data-app-store-order]').forEach(button=>{button.disabled=false;delete button.dataset.routeBusy;button.removeAttribute('aria-busy');});
+}
+
 function fxThemeMatch(store,spec){const text=storeText(store);return spec.pattern?spec.pattern.test(text):true;}
-function fxRankStores(spec){return stores.filter(fxVisible).filter(store=>fxThemeMatch(store,spec)).map(store=>{const distance=fxDistance(store);const low=['direct','mukkebi','ddangyo','ondongne'].some(key=>routeFor(store,key));let score=spec.pattern?80:20;if(distance!==null)score+=Math.max(0,32-distance*4);if(low)score+=12;if(store.managed)score+=8;else if(store.sharedManaged)score+=5;if(spec.kind==='near'&&distance!==null)score+=Math.max(0,120-distance*25);if(spec.kind==='local'&&low)score+=80;if(spec.kind==='new')score+=Math.max(0,500-(store.rawIndex||0));return{store,distance,score};}).sort((a,b)=>b.score-a.score||(a.distance??999)-(b.distance??999)||a.store.name.localeCompare(b.store.name,'ko')).map(item=>({...item.store,distance:item.distance}));}
+function fxRankStores(spec){return stores.filter(fxVisible).filter(store=>fxThemeMatch(store,spec)).map(store=>{const distance=fxDistance(store);const low=['direct','mukkebi','ddangyo','ondongne'].some(key=>storeHasChannel(store,key));let score=spec.pattern?80:20;if(distance!==null)score+=Math.max(0,32-distance*4);if(low)score+=12;if(store.managed)score+=8;else if(store.sharedManaged)score+=5;if(spec.kind==='near'&&distance!==null)score+=Math.max(0,120-distance*25);if(spec.kind==='local'&&low)score+=80;if(spec.kind==='new')score+=Number(store.rawIndex)||0;return{store,distance,score};}).sort((a,b)=>compareStoreBusinessStatus(a,b)||b.score-a.score||(a.distance??999)-(b.distance??999)||a.store.name.localeCompare(b.store.name,'ko')).map(item=>({...item.store,distance:item.distance}));}
 const FX_RAIL_SPECS=[
  {id:'near',kind:'near',title:'지금 가까운 가게',desc:'선택한 위치를 먼저 반영해요'},
  {id:'local',kind:'local',title:'여수에 힘이 되는 주문',desc:'지역 주문경로가 확인된 가게'},
@@ -77,7 +136,7 @@ function fxAppBrowserMarkup(key,selectedCategory='추천'){
  const meta=APP_META[key],all=appRegisteredStores(key),cats=categoriesFromStores(all);const filtered=selectedCategory==='추천'?all:all.filter(store=>storeMatchesCategory(store,selectedCategory)),list=applyCategoryPriorityOverrides(filtered,selectedCategory);
  const isExternal=EXTERNAL_APP_KEYS.includes(key);
  const chips=`<nav class="app-browser-category-chips"><button type="button" data-app-category="추천" class="${selectedCategory==='추천'?'active':''}">추천</button>${cats.map(cat=>`<button type="button" data-app-category="${escapeHtml(cat)}" class="${selectedCategory===cat?'active':''}">${escapeHtml(cat)}</button>`).join('')}</nav>`;
- const cards=list.map(store=>`<button type="button" class="app-browser-card glass-action" data-app-store-id="${escapeHtml(store.id)}" data-app-key="${key}">${appBrowserPhoto(store)}<span class="app-browser-info"><strong>${escapeHtml(store.name)}</strong><small>${escapeHtml(store.area||'여수')} · ${escapeHtml(store.cat)}</small><span>${isExternal?`<span class="external-app-card-label">${escapeHtml(meta.label)}</span>`:appIcon(key,'app-browser-app-icon')}</span></span><b>›</b></button>`).join('');
+ const cards=list.map(store=>fxRegisteredAppCardMarkup(store,key,isExternal)).join('');
  return `<section class="app-browser"><header class="app-browser-head${isExternal?' external-app-browser-head':''}">${isExternal?'':appIcon(key,'app-browser-head-icon')}<div><h2 id="modalTitle">${escapeHtml(meta.label)} 등록 가게</h2><p>실제 주문주소가 등록된 가게만 보여드립니다.</p></div></header>${chips}<div class="app-browser-list">${cards||'<div class="empty">해당 조건의 가게가 없습니다.</div>'}</div>${isExternal?externalAppNoticeMarkup():''}</section>`;
 }
 openAppBrowser=function(key,selectedCategory='추천'){if(!['direct','mukkebi','ddangyo','ondongne','yogiyo','coupang','baemin'].includes(key))return;openModal(fxAppBrowserMarkup(key,selectedCategory));$('#modal').dataset.appBrowserKey=key;$('#modal').dataset.appBrowserCategory=selectedCategory;};
@@ -124,7 +183,7 @@ brandsModal=function(){fxOpenBrandHub('channels');};
 
 function fxAppAction(item,type){const platform=fxPlatform(),isHappy=type==='happy';const label=isHappy?item.buttonLabel:'브랜드앱 설치·열기';if(platform==='ios')return `<div class="platform-note"><img src="${escapeHtml(item.icon)}" alt=""><span><b>${escapeHtml(label)}</b><small>현재 Android 앱만 확인됨</small></span><span>iPhone 안내</span></div>`;return `<a href="${escapeHtml(item.appLink)}" target="_blank" rel="noopener" data-final-app-channel="${type}"><img src="${escapeHtml(item.icon)}" alt=""><span><b>${escapeHtml(label)}</b><small>Android · 특정 지점 딥링크 아님</small></span><b>›</b></a>`;}
 function fxEnhanceStoreDetail(store){const detail=$('#modalContent .store-detail');if(!detail)return;const brand=fxBrandByStore.get(String(store.id)),happy=fxHappyByStore.get(String(store.id));if(brand||happy){const target=detail.querySelector('.store-other-wrap')||detail.querySelector('.detail-personal-actions');const html=`<div class="brand-store-actions">${brand?fxAppAction(brand,'brand'):''}${happy?fxAppAction(happy,'happy'):''}</div>`;target?.insertAdjacentHTML('beforebegin',html);}const quick=detail.querySelectorAll('.detail-quick-link .quick-icon');quick.forEach(icon=>{const text=icon.parentElement.textContent;icon.innerHTML=text.includes('네이버')?fxSvg('map'):fxSvg('card');});const actions=detail.querySelector('.detail-personal-actions');if(actions){actions.classList.add('final-personal-actions');actions.insertAdjacentHTML('beforeend',`<button type="button" class="detail-personal-btn glass-action" data-share-store="${escapeHtml(store.id)}">공유하기</button>`);}}
-openStore=function(store){if(!fxVisible(store))return;fxOriginalOpenStore(store);fxEnhanceStoreDetail(store);};
+openStore=async function(store){if(!fxVisible(store))return false;const opened=await fxOriginalOpenStore(store);if(opened===false)return false;fxEnhanceStoreDetail(store);return opened;};
 
 function fxDiversifySearchPhotos(items){const remaining=[...items],result=[];if(remaining.length)result.push(remaining.shift());while(remaining.length){const previous=fxPhoto(result.at(-1).store),counts=new Map();remaining.forEach(item=>counts.set(fxPhoto(item.store),(counts.get(fxPhoto(item.store))||0)+1));let index=-1,best=-1;remaining.forEach((item,i)=>{const photo=fxPhoto(item.store),count=counts.get(photo)||0;if(photo!==previous&&count>best){index=i;best=count;}});if(index<0)index=0;result.push(remaining.splice(index,1)[0]);}return result;}
 function fxRankSearchMatches(matches){
@@ -155,6 +214,7 @@ function fxRenderSearchResults(query=''){
 }
 function fxSearchModal(query=''){
  const q=String(query).trim(),current=$('#modal .search-popup');
+ if(window.daedongStoreServiceInfo?.showOverview){window.daedongStoreServiceInfo.showOverview(document.activeElement,{query:q,focusQuery:true});return;}
  if(current&&!$('#modal').hidden){const input=$('#fxSearchInput');if(input)input.value=q;fxRenderSearchResults(q);setTimeout(()=>input?.focus(),0);return;}
  openModal(`<section class="app-browser search-popup"><h2 id="modalTitle">메뉴·가게명·동네 검색</h2><div class="searchbox"><input id="fxSearchInput" value="${escapeHtml(q)}" placeholder="메뉴, 가게명, 동네 검색" autocomplete="off"><button id="fxSearchRun" class="primary-btn" type="button">검색</button></div><div id="fxSearchResults" class="app-browser-list" aria-live="polite"></div></section>`);
  const input=$('#fxSearchInput'),run=$('#fxSearchRun');run?.addEventListener('click',()=>fxRenderSearchResults(input?.value||''));
@@ -309,7 +369,8 @@ async function fxOpenSharedStoreFromUrl(){
   const store=fxStoreById(storeId);
   if(store&&fxVisible(store)){
    history.replaceState(history.state,'',fxSharedStoreHomeUrl());
-   openStore(store);
+   const opened=await openStore(store);
+   if(opened===false)return false;
    if(history.state?.daedongModal)history.replaceState(history.state,'',sharedStoreUrl);
    return true;
   }
@@ -351,6 +412,8 @@ function fxInstallEvents(){
   const directBrand=event.target.closest('[data-direct-brand]');if(directBrand){fxOpenBrandHub('direct-stores',directBrand.dataset.directBrand);return;}
   const happyCat=event.target.closest('[data-happy-category]');if(happyCat){fxOpenBrandHub('happy-brands',happyCat.dataset.happyCategory);return;}
   const happyBrand=event.target.closest('[data-happy-brand]');if(happyBrand){fxOpenBrandHub('happy-stores',happyBrand.dataset.happyBrand);return;}
+  const appStoreInfo=event.target.closest('[data-app-store-info]');if(appStoreInfo){const store=fxStoreById(appStoreInfo.dataset.appStoreInfo);if(store)openStore(store);return;}
+  const appStoreOrder=event.target.closest('[data-app-store-order]');if(appStoreOrder){event.preventDefault();event.stopImmediatePropagation();void fxOpenRegisteredAppOrder(appStoreOrder);return;}
   const channelStore=event.target.closest('[data-channel-store-id]');if(channelStore){const store=fxStoreById(channelStore.dataset.channelStoreId);if(store)openStore(store);return;}
   const searchStore=event.target.closest('[data-search-store-id]');if(searchStore){const store=fxStoreById(searchStore.dataset.searchStoreId);if(store)openStore(store);return;}
   const share=event.target.closest('[data-share-store]');if(share){const store=fxStoreById(share.dataset.shareStore);if(store)fxShare(store,share);return;}
@@ -358,7 +421,8 @@ function fxInstallEvents(){
   const finalLocal=event.target.closest('.detail-route[data-route-key="direct"],.detail-route[data-route-key="mukkebi"],.detail-route[data-route-key="ddangyo"],.detail-route[data-route-key="ondongne"],.community-choice-link');if(finalLocal)fxBattle();
  },true);
  document.addEventListener('keydown',event=>{if(event.key==='Enter'&&event.target.id==='fxSearchInput'){event.preventDefault();fxSearchModal(event.target.value);}});
- document.addEventListener('visibilitychange',()=>document.documentElement.classList.toggle('page-hidden',document.hidden));
+ window.addEventListener('pageshow',()=>{fxRestoreRegisteredAppButtons();fxRestoreAppBrowserReturn();});
+ document.addEventListener('visibilitychange',()=>{document.documentElement.classList.toggle('page-hidden',document.hidden);if(!document.hidden)fxRestoreRegisteredAppButtons();});
 }
 
 async function fxInitialize(){
@@ -367,6 +431,7 @@ async function fxInitialize(){
  APP_META.phone.icon='assets/ui/phone.svg';
  fxRenderRails();
  await fxInitWeather();
+ fxRestoreAppBrowserReturn();
  if(!sessionStorage.getItem(FX_ENTRY_SESSION)){sessionStorage.setItem(FX_ENTRY_SESSION,'1');setTimeout(()=>fxFireworks(false),280);}
 }
 
@@ -402,11 +467,11 @@ document.addEventListener('click',event=>{
 },true);
 
 const fxRc2Script=document.createElement('script');
-fxRc2Script.src='rc2-fixes.js?v=selected-category-label-2-store-share-deep-link-1-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-rail-cross-section-dedupe-1-yogiyo-same-tab-return-1-rail-local-repeat-fallback-1';
+fxRc2Script.src='rc2-fixes.js?v=selected-category-label-2-store-share-deep-link-1-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-rail-cross-section-dedupe-1-yogiyo-same-tab-return-1-rail-local-repeat-fallback-3-rail-adjacent-visual-dedupe-1-secure-detail-await-1-app-list-direct-order-1-all-app-return-state-1-location-stable-newest-1-simple-app-return-1-direct-return-no-home-1-nearby-status-final-1-external-return-fast-1-instant-store-snapshot-1-all-order-app-exact-return-1';
 fxRc2Script.async=false;
 fxRc2Script.onload=()=>{
  const fxRc3Script=document.createElement('script');
- fxRc3Script.src='rc3-fixes.js?v=selected-category-label-1-phone-route-restoration-1-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-popup-utility-links-1-selected-store-top-1-rail-use-counts-1';
+ fxRc3Script.src='rc3-fixes.js?v=selected-category-label-1-phone-route-restoration-3-phone-card-markers-2-physical-map-recovery-2-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-popup-utility-links-1-selected-store-top-1-rail-use-counts-1-secure-detail-await-1-card-channel-keys-1-store-popup-native-order-1-recommend-status-final-1-release-readiness-1';
  fxRc3Script.async=false;
  fxRc3Script.onload=()=>{
   const fxRc4Script=document.createElement('script');
@@ -417,24 +482,24 @@ fxRc2Script.onload=()=>{
    fxRc5Script.src='rc5-fixes.js?v=category-first-paint-1-category-more-card-touch-1';
    fxRc5Script.async=false;
    fxRc5Script.onload=()=>{
-    const css=document.createElement('link');css.rel='stylesheet';css.href='rc6-fixes.css?v=location-store-hero-1-handsu-copy-spacing-1';document.head.append(css);
-    const script=document.createElement('script');script.src='rc6-fixes.js?v=hero-store-direct-1-multi-category-1-hamburger-priority-1-pizza-priority-2-kongsanso-store-family-1-store-badge-removed-1-handsu-copy-spacing-1-hero-card-cta-removed-1';
+    const css=document.createElement('link');css.rel='stylesheet';css.href='rc6-fixes.css?v=location-store-hero-1-handsu-copy-spacing-1-hero-clean-controls-1';document.head.append(css);
+    const script=document.createElement('script');script.src='rc6-fixes.js?v=hero-store-direct-1-multi-category-1-hamburger-priority-1-pizza-priority-2-kongsanso-store-family-1-store-badge-removed-1-handsu-copy-spacing-1-hero-card-cta-removed-1-rain-mode-admin-1-local-channel-marker-1-location-coordinate-merge-1-business-status-ranking-1-release-readiness-1-hero-open-only-1-hero-area-label-removed-1-three-main-ads-restored-1-notion-hero-return-1';
     script.onload=()=>{
-     const addressScript=document.createElement('script');addressScript.src='rc7-address-map.js?v=address-home-return-1-coarse-region-1-inapp-location-recovery-1-outside-yeosu-full-list-1';
-     addressScript.onload=()=>{fxInstallEvents();setTimeout(async()=>{await fxInitialize();await rc6Initialize();window.rc7Initialize?.();await fxOpenSharedStoreFromUrl();},0);};
-     addressScript.onerror=()=>console.error('RC7 주소·지도 검수 레이어를 불러오지 못했습니다.');
+     const addressScript=document.createElement('script');addressScript.src='rc7-address-map.js?v=address-home-return-1-coarse-region-1-inapp-location-recovery-1-outside-yeosu-full-list-1-saved-address-first-1-release-readiness-1';
+     addressScript.onload=()=>{fxInstallEvents();setTimeout(async()=>{try{await window.daedongCatalogReady;await fxInitialize();await rc6Initialize();window.rc7Initialize?.();await fxOpenSharedStoreFromUrl();fxFinishLocationRankingReady(true);}catch(error){console.error('위치 기반 가게 정렬을 초기화하지 못했습니다.',error);fxFinishLocationRankingReady(false);}},0);};
+     addressScript.onerror=()=>{console.error('RC7 주소·지도 검수 레이어를 불러오지 못했습니다.');fxFinishLocationRankingReady(false);};
      document.head.append(addressScript);
     };
-    script.onerror=()=>console.error('RC6 검수 수정 레이어를 불러오지 못했습니다.');document.head.append(script);
+    script.onerror=()=>{console.error('RC6 검수 수정 레이어를 불러오지 못했습니다.');fxFinishLocationRankingReady(false);};document.head.append(script);
    };
-   fxRc5Script.onerror=()=>console.error('RC5 검수 수정 레이어를 불러오지 못했습니다.');
+   fxRc5Script.onerror=()=>{console.error('RC5 검수 수정 레이어를 불러오지 못했습니다.');fxFinishLocationRankingReady(false);};
    document.head.append(fxRc5Script);
   };
-  fxRc4Script.onerror=()=>console.error('RC4 검수 수정 레이어를 불러오지 못했습니다.');
+  fxRc4Script.onerror=()=>{console.error('RC4 검수 수정 레이어를 불러오지 못했습니다.');fxFinishLocationRankingReady(false);};
   document.head.append(fxRc4Script);
  };
- fxRc3Script.onerror=()=>console.error('RC3 검수 수정 레이어를 불러오지 못했습니다.');
+ fxRc3Script.onerror=()=>{console.error('RC3 검수 수정 레이어를 불러오지 못했습니다.');fxFinishLocationRankingReady(false);};
  document.head.append(fxRc3Script);
 };
-fxRc2Script.onerror=()=>console.error('RC2 검수 수정 레이어를 불러오지 못했습니다.');
+fxRc2Script.onerror=()=>{console.error('RC2 검수 수정 레이어를 불러오지 못했습니다.');fxFinishLocationRankingReady(false);};
 document.head.append(fxRc2Script);

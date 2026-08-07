@@ -1,0 +1,74 @@
+name: Verify production API client
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-production-api-client:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check JavaScript syntax
+        run: |
+          node --check data-api.js
+          node --check data-api-runtime.js
+          node --check app.js
+          node --check final-experience.js
+          node --check rc2-fixes.js
+          node --check rc3-fixes.js
+          node --check rc4-fixes.js
+          node --check rc5-fixes.js
+          node --check rc6-fixes.js
+          node --check rc7-address-map.js
+          node --check store-service-info.js
+          node --check store-menu-preview.js
+          node --check mukkebi-summer-event.js
+      - name: Verify production API client and public repository contract
+        run: |
+          node scripts/audit-public-repository.mjs
+          node cloudflare-data-api-regression-test.mjs
+          node scripts/validate-static.mjs
+          node scripts/validate-data.mjs
+      - name: Verify preserved customer experience
+        run: node scripts/run-regression-suite.mjs
+      - name: Install mobile browser checker
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Verify the approved preview mobile reference
+        env:
+          BASE_URL: https://preview.daedongmap.com
+        run: |
+          node scripts/browser-rider-evergreen-banner.mjs
+          node scripts/browser-all-order-app-exact-return.mjs
+          node scripts/browser-alien-pizza-menu-search.mjs
+      - name: Preserve production PR verification reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-pr-verification
+          path: |
+            static-validation-report.json
+            data-validation-report.json
+            regression-suite-report.json
+            browser-alien-pizza-menu-search-report.json
+            browser-alien-pizza-menu-search.png
+            browser-alien-pizza-menu-search-failure.png
+            browser-rider-evergreen-banner-report.json
+            browser-rider-evergreen-banner.png
+            browser-rider-evergreen-popup.png
+            browser-rider-evergreen-failure.png
+            browser-all-order-app-exact-return-report.json
+            browser-order-return-*.png
+          if-no-files-found: ignore
+          retention-days: 14

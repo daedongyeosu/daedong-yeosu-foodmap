@@ -30,6 +30,15 @@ try {
   const modal = page.locator('#modal:not([hidden]).promo-image-only-modal');
   await modal.waitFor({state: 'visible', timeout: 5000});
   const image = modal.locator('img[src*="rider-recruitment-portrait-v2.webp"]');
+  await image.waitFor({state: 'visible', timeout: 15000});
+  await page.waitForFunction(
+    () => {
+      const element = document.querySelector('#modal:not([hidden]).promo-image-only-modal img[src*="rider-recruitment-portrait-v2.webp"]');
+      return Boolean(element?.complete && element.naturalWidth > 0);
+    },
+    null,
+    {timeout: 15000}
+  );
   await check(image.isVisible(), '등록된 배송기사 모집 사진을 즉시 팝업으로 표시');
   await check(image.evaluate(element => element.complete && element.naturalWidth > 0), '배송기사 모집 사진 정상 로드');
   await check(modal.locator('.modal-close').isVisible(), '팝업 닫기 버튼 표시');

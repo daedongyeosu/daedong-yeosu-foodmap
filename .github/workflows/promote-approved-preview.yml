@@ -1,0 +1,103 @@
+name: Promote approved preview revision to production
+
+on:
+  push:
+    branches:
+      - agent/production-release-20260807
+    paths:
+      - .github/workflows/promote-approved-preview.yml
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out production release branch
+        uses: actions/checkout@v4
+        with:
+          ref: agent/production-release-20260807
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Fetch the exact approved preview revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          git clone --filter=blob:none --no-checkout https://github.com/daedongyeosu/daedong-yeosu-foodmap-preview.git "$RUNNER_TEMP/approved-preview"
+          git -C "$RUNNER_TEMP/approved-preview" checkout be22bdbdae070743e8a318328cf211a50a8b1d88
+          test "$(git -C "$RUNNER_TEMP/approved-preview" rev-parse HEAD)" = "be22bdbdae070743e8a318328cf211a50a8b1d88"
+
+      - name: Promote the approved tree while preserving production-only assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp CNAME "$RUNNER_TEMP/production-CNAME"
+          cp android/twa-manifest.json "$RUNNER_TEMP/production-twa-manifest.json"
+          cp .github/workflows/build-android-bundle.yml "$RUNNER_TEMP/build-android-bundle.yml"
+
+          rsync -a --delete             --exclude='.git/'             --exclude='.github/workflows/'             --exclude='CNAME'             --exclude='.pages-deploy-pr129'             "$RUNNER_TEMP/approved-preview/" ./
+
+          mkdir -p android .github/workflows
+          cp "$RUNNER_TEMP/production-CNAME" CNAME
+          cp "$RUNNER_TEMP/production-twa-manifest.json" android/twa-manifest.json
+          cp "$RUNNER_TEMP/build-android-bundle.yml" .github/workflows/build-android-bundle.yml
+
+          rm -f             .github/workflows/approved-ux-validation.yml             .github/workflows/integration-validation.yml             .github/workflows/notion-sync.yml
+
+          cp "$RUNNER_TEMP/approved-preview/.github/workflows/preview-api-client-checks.yml" .github/workflows/production-api-client-checks.yml
+          cp "$RUNNER_TEMP/approved-preview/.github/workflows/post-deploy-preview-checks.yml" .github/workflows/post-deploy-production-checks.yml
+
+          sed -i             -e 's/Verify preview API client/Verify production API client/g'             -e 's/verify-preview-api-client/verify-production-api-client/g'             -e 's/preview-pr-verification/production-pr-verification/g'             .github/workflows/production-api-client-checks.yml
+          sed -i             -e 's/Verify deployed preview/Verify deployed production/g'             -e 's/verify-deployed-preview/verify-deployed-production/g'             -e 's/deployed-preview-verification/deployed-production-verification/g'             .github/workflows/post-deploy-production-checks.yml
+
+          find . -path './.git' -prune -o -type f -print0 | xargs -0 sed -i             -e 's#https://preview\.daedongmap\.com#https://daedongmap.com#g'             -e 's#https://daedong-yeosu-data-api-preview\.sisakim\.workers\.dev#https://daedong-yeosu-data-api.sisakim.workers.dev#g'             -e 's#daedong-preview-web-v1-20260804#daedong-production-web-v1-20260807#g'
+
+          sed -i             -e 's/PASS Cloudflare preview API client contract/PASS Cloudflare production API client contract/'             -e 's/all 53 menu photos must remain in the preview bundle/all 53 menu photos must remain in the production bundle/'             cloudflare-data-api-regression-test.mjs
+
+          rm -f .github/workflows/promote-approved-preview.yml
+          test "$(cat CNAME)" = "daedongmap.com"
+          test -f android/twa-manifest.json
+          test ! -f data/stores.json
+          test ! -f store-service-info.json
+          test ! -f SHA256SUMS.txt
+          test ! -f .pages-deploy-pr129
+          grep -q "https://daedong-yeosu-data-api.sisakim.workers.dev" data-api.js
+          grep -q "daedong-production-web-v1-20260807" data-api.js
+          ! grep -R "daedong-yeosu-data-api-preview" --include='*.js' --include='*.mjs' --include='*.yml' .
+          ! grep -R "https://preview.daedongmap.com" --include='*.js' --include='*.mjs' --include='*.yml' .
+
+      - name: Run protected production release verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          node --check data-api.js
+          node --check data-api-runtime.js
+          node --check app.js
+          node --check final-experience.js
+          node --check rc2-fixes.js
+          node --check rc3-fixes.js
+          node --check rc4-fixes.js
+          node --check rc5-fixes.js
+          node --check rc6-fixes.js
+          node --check rc7-address-map.js
+          node --check store-service-info.js
+          node --check store-menu-preview.js
+          node scripts/audit-public-repository.mjs
+          node scripts/validate-static.mjs
+          node scripts/validate-data.mjs
+          node scripts/run-regression-suite.mjs
+
+      - name: Commit the reviewed production candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "daedong-production-release"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git diff --cached --quiet && { echo "No promotion changes"; exit 1; }
+          git commit -m "최신 프리뷰를 운영용 보안 API와 함께 승격 [promotion-complete]"
+          git push origin HEAD:agent/production-release-20260807

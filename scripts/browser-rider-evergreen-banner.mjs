@@ -17,6 +17,16 @@ const check = async (condition, message) => {
 
 try {
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
+
+  // Preview can legitimately show an existing promotional dialog on first load.
+  // Close it before testing the independent rider banner so it cannot intercept
+  // the synthetic pointer click. This changes test setup only, not customer UI.
+  const summerEvent = page.locator('#mukkebiSummerEvent[aria-hidden="false"]');
+  if (await summerEvent.isVisible().catch(() => false)) {
+    await page.locator('#mukkebiSummerClose').click();
+    await summerEvent.waitFor({state: 'hidden', timeout: 5000});
+  }
+
   const banner = page.locator('#riderRecruitmentBanner');
   await banner.waitFor({state: 'visible', timeout: 15000});
   await banner.scrollIntoViewIfNeeded();

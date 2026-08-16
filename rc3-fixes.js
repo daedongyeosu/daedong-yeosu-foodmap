@@ -393,6 +393,52 @@ function rc3OpenOrderMethods(store) {
   $('#modal').dataset.activeStoreId = store.id;
 }
 
+function rc3ActivateOrderMethodsTrigger(trigger, event) {
+  const store = fxStoreById(trigger?.dataset.rc3OtherMethods || $('#modal')?.dataset.activeStoreId);
+  if (!store) return false;
+  event?.preventDefault();
+  event?.stopImmediatePropagation();
+  rc3OpenOrderMethods(store);
+  return true;
+}
+
+let rc3OrderMethodsGhostClickUntil = 0;
+
+function rc3BindOrderMethodsTrigger(detail) {
+  const trigger = detail?.querySelector('[data-rc3-other-methods]');
+  if (!trigger || trigger.dataset.rc3DirectBound === '1') return;
+  trigger.dataset.rc3DirectBound = '1';
+  let touchPointer = null;
+  const clearTouchPointer = () => { touchPointer = null; };
+  trigger.addEventListener('pointerdown', event => {
+    if (event.pointerType !== 'touch' || event.isPrimary === false) return;
+    touchPointer = {id: event.pointerId, x: event.clientX, y: event.clientY, moved: false};
+  }, {passive: true});
+  trigger.addEventListener('pointermove', event => {
+    if (!touchPointer || touchPointer.id !== event.pointerId) return;
+    if (Math.hypot(event.clientX - touchPointer.x, event.clientY - touchPointer.y) > 10) touchPointer.moved = true;
+  }, {passive: true});
+  trigger.addEventListener('pointercancel', clearTouchPointer, {passive: true});
+  trigger.addEventListener('pointerup', event => {
+    if (event.pointerType !== 'touch' || !touchPointer || touchPointer.id !== event.pointerId || touchPointer.moved) {
+      clearTouchPointer();
+      return;
+    }
+    clearTouchPointer();
+    rc3OrderMethodsGhostClickUntil = Date.now() + 800;
+    trigger.dataset.rc3LastTouchActivation = String(Date.now());
+    rc3ActivateOrderMethodsTrigger(trigger, event);
+  }, {passive: false});
+  trigger.addEventListener('click', event => {
+    if (Date.now() - Number(trigger.dataset.rc3LastTouchActivation || 0) < 700) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
+    rc3ActivateOrderMethodsTrigger(trigger, event);
+  });
+}
+
 function rc3EnhanceStoreDetail(store) {
   const detail = $('#modalContent .store-detail');
   if (!detail) return;
@@ -413,11 +459,12 @@ function rc3EnhanceStoreDetail(store) {
       : '';
   const apps = channels.primaryOrder.brandApp || channels.happyOrder ? `<div class="brand-store-actions">${channels.primaryOrder.brandApp ? fxAppAction(channels.primaryOrder.brandApp, 'brand') : ''}${channels.happyOrder ? fxAppAction(channels.happyOrder, 'happy') : ''}</div>` : '';
   const hasExternal = Object.values(channels.externalOrder).some(Boolean);
-  const other = hasExternal ? `<div class="store-other-wrap"><button class="detail-route store-other-toggle rc3-order-methods-trigger" type="button" data-rc3-other-methods="${escapeHtml(store.id)}"><span>다른 주문방법 보기</span><b>›</b></button></div>` : '';
+  const other = hasExternal ? `<div class="store-other-wrap"><button class="detail-route rc3-order-methods-trigger" type="button" data-rc3-other-methods="${escapeHtml(store.id)}" aria-haspopup="dialog"><span>다른 주문방법 보기</span><b aria-hidden="true">›</b></button></div>` : '';
   if (utilities) gallery?.insertAdjacentHTML('afterend', `<div class="detail-quick-links">${utilities}</div>`);
   const menuEntry = detail.querySelector('[data-store-menu-preview]');
   const orderAnchor = menuEntry || detail.querySelector('.detail-meta-row') || gallery;
   orderAnchor?.insertAdjacentHTML('afterend', `<div class="detail-routes local-detail-routes">${direct}${apps}${community}${phone || (!direct && !apps && !community ? '<p class="muted">등록된 주문방법을 확인 중입니다.</p>' : '')}</div>${other}`);
+  rc3BindOrderMethodsTrigger(detail);
 }
 
 const rc3OpenStoreBase = openStore;
@@ -547,6 +594,11 @@ function rc3OnPointerEnd(event) {
 }
 
 function rc3HandleClick(event) {
+  if (Date.now() < rc3OrderMethodsGhostClickUntil) {
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    return;
+  }
   const allMain = event.target.closest('[data-cat="전체"]');
   if (allMain) {
     event.preventDefault();
@@ -572,9 +624,7 @@ function rc3HandleClick(event) {
   }
   const other = event.target.closest('[data-rc3-other-methods]');
   if (other) {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    rc3OpenOrderMethods(fxStoreById(other.dataset.rc3OtherMethods));
+    rc3ActivateOrderMethodsTrigger(other, event);
     return;
   }
   const phone = event.target.closest('[data-rc3-phone-store]');

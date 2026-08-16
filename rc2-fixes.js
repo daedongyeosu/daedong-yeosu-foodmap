@@ -965,6 +965,8 @@ fxOrderClick = function rc2OrderClick(button) {
 };
 
 fxInstallEvents = function rc2InstallEvents() {
+  if (window.daedongCoreEventsInstalled) return;
+  window.daedongCoreEventsInstalled = true;
   document.addEventListener('pointerdown', fxPressStart, true);
   document.addEventListener('pointerup', rc2ReleaseAllPresses, true);
   document.addEventListener('pointercancel', rc2ReleaseAllPresses, true);

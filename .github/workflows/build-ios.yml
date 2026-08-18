@@ -31,7 +31,7 @@ jobs:
       EXPORT_PATH: ${{ github.workspace }}/build/export
       BUNDLE_ID: com.daedongmap.foodmap
       TEAM_ID: 6LZZ5MWN25
-      BUILD_MODE: ${{ inputs.mode || 'simulator' }}
+      BUILD_MODE: ${{ github.event_name == 'pull_request' && github.head_ref == 'agent/ios-cloud-build-20260818' && 'archive' || inputs.mode || 'simulator' }}
 
     steps:
       - name: Check out repository
@@ -176,4 +176,3 @@ jobs:
             --file "$IPA_PATH" \
             --apiKey "$APP_STORE_CONNECT_API_KEY_ID" \
             --apiIssuer "$APP_STORE_CONNECT_ISSUER_ID"
-

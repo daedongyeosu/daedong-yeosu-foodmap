@@ -46,19 +46,7 @@ jobs:
           printf '{"jdkPath":"%s","androidSdkPath":"%s"}' "$JAVA_HOME" "$ANDROID_SDK_ROOT" > "$RUNNER_TEMP/bubblewrap/config.json"
           cp android/twa-manifest.json android-build/twa-manifest.json
           if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
-            python3 - <<'PY'
-import json
-import os
-from pathlib import Path
-
-manifest_path = Path("android-build/twa-manifest.json")
-manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-alias = os.environ.get("ANDROID_KEY_ALIAS", "").strip()
-if not alias:
-    raise SystemExit("ANDROID_KEY_ALIAS secret is empty")
-manifest["signingKey"]["alias"] = alias
-manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-PY
+            python3 -c 'import json, os; from pathlib import Path; p = Path("android-build/twa-manifest.json"); m = json.loads(p.read_text(encoding="utf-8")); a = os.environ.get("ANDROID_KEY_ALIAS", "").strip(); assert a, "ANDROID_KEY_ALIAS secret is empty"; m["signingKey"]["alias"] = a; p.write_text(json.dumps(m, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")'
           fi
           python3 -m http.server 8765 >"$RUNNER_TEMP/pwa-http.log" 2>&1 &
           cd android-build

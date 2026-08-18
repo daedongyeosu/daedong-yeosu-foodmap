@@ -24,4 +24,3 @@ SIZES
 
 echo "Generated iOS app icons in $OUTPUT_DIR"
 
-

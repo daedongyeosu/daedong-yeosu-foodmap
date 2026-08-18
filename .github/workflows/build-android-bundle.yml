@@ -1,4 +1,4 @@
-name: Build Android test bundle
+name: Build Android bundle
 
 on:
   pull_request:
@@ -24,33 +24,95 @@ jobs:
         with:
           distribution: temurin
           java-version: "17"
+      - name: Verify production signing context
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "Production signing is only allowed from main." >&2
+            exit 1
+          fi
       - name: Install Bubblewrap
         run: npm install --global @bubblewrap/cli@1.22.0
       - name: Configure and generate Android project
         shell: bash
+        env:
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/bubblewrap" android-build
           if [ ! -e "$ANDROID_SDK_ROOT/bin" ]; then sudo ln -s "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin" "$ANDROID_SDK_ROOT/bin"; fi
           printf '{"jdkPath":"%s","androidSdkPath":"%s"}' "$JAVA_HOME" "$ANDROID_SDK_ROOT" > "$RUNNER_TEMP/bubblewrap/config.json"
           cp android/twa-manifest.json android-build/twa-manifest.json
+          if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
+            python3 - <<'PY'
+import json
+import os
+from pathlib import Path
+
+manifest_path = Path("android-build/twa-manifest.json")
+manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+alias = os.environ.get("ANDROID_KEY_ALIAS", "").strip()
+if not alias:
+    raise SystemExit("ANDROID_KEY_ALIAS secret is empty")
+manifest["signingKey"]["alias"] = alias
+manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+PY
+          fi
           python3 -m http.server 8765 >"$RUNNER_TEMP/pwa-http.log" 2>&1 &
           cd android-build
           printf '1.0.0\n' | bubblewrap --config="$RUNNER_TEMP/bubblewrap/config.json" update
-      - name: Create temporary build key
+      - name: Create temporary test key
+        if: github.event_name == 'pull_request'
         shell: bash
         run: |
           set -euo pipefail
           keytool -genkeypair -noprompt -keystore android-build/android.keystore -storetype PKCS12 -alias temporary-build -keyalg RSA -keysize 2048 -validity 1000 -dname "CN=Temporary CI Build" -storepass temporary-build-password -keypass temporary-build-password
-      - name: Build app bundle
+      - name: Restore permanent upload key
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          test -n "$ANDROID_KEYSTORE_BASE64"
+          test -n "$ANDROID_KEYSTORE_PASSWORD"
+          test -n "$ANDROID_KEY_ALIAS"
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android-build/android.keystore
+          keytool -list -keystore android-build/android.keystore -storetype PKCS12 -alias "$ANDROID_KEY_ALIAS" -storepass "$ANDROID_KEYSTORE_PASSWORD" >/dev/null
+      - name: Build test app bundle
+        if: github.event_name == 'pull_request'
         shell: bash
         run: |
           set -euo pipefail
           cd android-build
           BUBBLEWRAP_KEYSTORE_PASSWORD=temporary-build-password BUBBLEWRAP_KEY_PASSWORD=temporary-build-password bubblewrap --config="$RUNNER_TEMP/bubblewrap/config.json" build
-      - uses: actions/upload-artifact@v4
+      - name: Build production app bundle
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        env:
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          cd android-build
+          BUBBLEWRAP_KEYSTORE_PASSWORD="$ANDROID_KEYSTORE_PASSWORD" BUBBLEWRAP_KEY_PASSWORD="$ANDROID_KEY_PASSWORD" bubblewrap --config="$RUNNER_TEMP/bubblewrap/config.json" build
+      - name: Upload test bundle
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
         with:
-          name: daedong-yeosu-unsigned-source-bundle
+          name: daedong-yeosu-test-bundle
+          path: android-build/*.aab
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload production bundle
+        if: github.event_name == 'workflow_dispatch'
+        uses: actions/upload-artifact@v4
+        with:
+          name: daedong-yeosu-play-bundle
           path: android-build/*.aab
           if-no-files-found: error
           retention-days: 7

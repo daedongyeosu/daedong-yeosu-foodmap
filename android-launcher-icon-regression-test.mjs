@@ -17,8 +17,8 @@ assert.match(icon, /#0b2b57/);
 
 assert.equal(twa.iconUrl, 'http://127.0.0.1:8765/app-icon.svg');
 assert.equal(twa.maskableIconUrl, twa.iconUrl, '일반·maskable 설치 아이콘은 같은 원본을 사용해야 합니다.');
-assert.equal(twa.appVersionCode, 11);
-assert.equal(twa.appVersionName, '1.0.9');
-assert.equal(twa.appVersion, '1.0.9');
+assert.equal(twa.appVersionCode, 12);
+assert.equal(twa.appVersionName, '1.0.10');
+assert.equal(twa.appVersion, '1.0.10');
 
 console.log('Android launcher icon parity regression: PASS');

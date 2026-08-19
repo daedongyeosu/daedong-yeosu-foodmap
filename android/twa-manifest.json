@@ -20,8 +20,8 @@
     "path": "android.keystore",
     "alias": "temporary-build"
   },
-  "appVersionName": "1.0.9",
-  "appVersionCode": 11,
+  "appVersionName": "1.0.10",
+  "appVersionCode": 12,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "http://127.0.0.1:8765/manifest.webmanifest",
@@ -51,5 +51,5 @@
     "standalone",
     "minimal-ui"
   ],
-  "appVersion": "1.0.9"
+  "appVersion": "1.0.10"
 }

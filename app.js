@@ -457,6 +457,7 @@ let heroCarousel = null;
 let promoCarousel = null;
 let detailCarousel = null;
 let photoResolver = null;
+const menuPhotoFallbackCache = new Map();
 let addressDraft = null;
 let yeosuNeighborhoods = [];
 let neighborhoodByName = new Map();
@@ -858,34 +859,43 @@ class PhotoResolver {
     const value = String(path || '').trim();
     return Boolean(value && !this.suspiciousPath(value, store) && /\.(png|jpe?g|webp|gif|avif)(\?|$)/i.test(value) && !/\.(pdf|docx?|xlsx?|txt)(\?|$)/i.test(value));
   }
+  usablePaths(paths, store) {
+    const failed = store?.__failedPhotoPaths instanceof Set ? store.__failedPhotoPaths : new Set();
+    return uniquePaths(paths)
+      .filter(path => this.validPath(path, store))
+      .filter(path => !failed.has(photoUrlKey(path)));
+  }
   resolveGallery(store) {
     const entry = this.entryFor(store);
     if (entry && this.classificationAllowed(entry)) {
-      const paths = uniquePaths([entry.src, ...(entry.additionalSrcs || []), ...(entry.gallery || [])]).filter(path => this.validPath(path, store));
+      const paths = this.usablePaths([entry.src, ...(entry.additionalSrcs || []), ...(entry.gallery || [])], store);
       if (paths.length) return paths.map(src => ({src, source: entry.source || 'manifest', classification: entry.classification}));
     }
-    return uniquePaths(store.legacyImages || [store.legacyImage])
-      .filter(path => this.validPath(path, store))
-      .map(src => ({src, source: 'verified-legacy-direct-file', classification: 'legacy_unclassified'}));
+    const legacyPaths = this.usablePaths(store.legacyImages || [store.legacyImage], store);
+    if (legacyPaths.length) {
+      return legacyPaths.map(src => ({src, source: 'verified-legacy-direct-file', classification: 'legacy_unclassified'}));
+    }
+    return this.usablePaths(store.__menuPhotoFallbacks || [], store)
+      .map(src => ({src, source: 'verified-menu-photo-fallback', classification: 'menu_photo'}));
   }
   resolve(store) { return this.resolveGallery(store)[0] || null; }
   markup(store, kind = 'card') {
     const photo = this.resolve(store);
     if (!photo) return placeholderMarkup(kind);
     const cls = kind === 'detail' ? 'detail-photo' : 'store-photo';
-    return `<img class="${cls}" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)}" loading="lazy" data-photo-kind="${kind}" data-photo-source="${escapeHtml(photo.source)}">`;
+    return `<img class="${cls}" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)}" loading="lazy" data-photo-kind="${kind}" data-photo-store-id="${escapeHtml(store.id)}" data-photo-source="${escapeHtml(photo.source)}">`;
   }
   galleryMarkup(store) {
     const photos = this.resolveGallery(store);
     if (!photos.length) return placeholderMarkup('detail');
     if (photos.length === 1) {
       const photo = photos[0];
-      return `<div class="detail-single-photo"><img class="detail-photo" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)} 사진 1" loading="lazy" data-photo-kind="detail" data-photo-source="${escapeHtml(photo.source)}"></div>`;
+      return `<div class="detail-single-photo"><img class="detail-photo" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)} 사진 1" loading="lazy" data-photo-kind="detail" data-photo-store-id="${escapeHtml(store.id)}" data-photo-source="${escapeHtml(photo.source)}"></div>`;
     }
     return `<div id="detailPhotoCarousel" class="carousel-controller detail-photo-carousel" data-original-count="${photos.length}">
       <div class="carousel-shell detail-photo-frame">
         <button class="carousel-arrow prev" type="button" data-carousel-prev aria-label="이전 가게사진">‹</button>
-        <div class="carousel-track">${photos.map((photo, index) => `<article class="carousel-slide detail-photo-slide"><img class="detail-photo" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)} 사진 ${index + 1}" loading="lazy" data-photo-kind="detail" data-photo-source="${escapeHtml(photo.source)}"></article>`).join('')}</div>
+        <div class="carousel-track">${photos.map((photo, index) => `<article class="carousel-slide detail-photo-slide"><img class="detail-photo" src="${escapeHtml(photo.src)}" alt="${escapeHtml(store.name)} 사진 ${index + 1}" loading="lazy" data-photo-kind="detail" data-photo-store-id="${escapeHtml(store.id)}" data-photo-source="${escapeHtml(photo.source)}"></article>`).join('')}</div>
         <button class="carousel-arrow next" type="button" data-carousel-next aria-label="다음 가게사진">›</button>
       </div><div class="carousel-dots" aria-label="가게사진 위치"></div></div>`;
   }
@@ -894,9 +904,73 @@ function placeholderMarkup(kind = 'card') {
   const cls = kind === 'detail' ? 'detail-photo-placeholder' : 'photo-placeholder-card';
   return `<div class="${cls}" role="img" aria-label="사진 준비 중"><span>🍽️</span><b>검수된 음식 사진 준비 중</b></div>`;
 }
-function handleImageError(image) {
-  if (!image.matches('[data-photo-kind]')) return;
-  image.replaceWith(document.createRange().createContextualFragment(placeholderMarkup(image.dataset.photoKind || 'card')));
+function photoUrlKey(value) {
+  const src = String(value || '').trim();
+  if (!src) return '';
+  try { return new URL(src, document.baseURI).href; } catch { return src; }
+}
+function storeForPhoto(image) {
+  const id = String(
+    image?.dataset?.photoStoreId
+    || image?.closest?.('[data-store-id]')?.dataset?.storeId
+    || image?.closest?.('.store-card')?.dataset?.id
+    || $('#modal')?.dataset?.activeStoreId
+    || ''
+  );
+  return allStores.find(item => String(item.id) === id)
+    || stores.find(item => String(item.id) === id)
+    || null;
+}
+async function loadMenuPhotoFallbacks(store) {
+  if (!store?.id || store.hasMenu !== true || typeof window.daedongDataApi?.menu !== 'function') return [];
+  const key = String(store.id);
+  if (!menuPhotoFallbackCache.has(key)) {
+    menuPhotoFallbackCache.set(key, Promise.resolve()
+      .then(() => window.daedongDataApi.menu(key))
+      .then(menu => uniquePaths([
+        menu?.mainImage,
+        ...(Array.isArray(menu?.items) ? menu.items.map(item => item?.image) : [])
+      ]).filter(path => photoResolver?.validPath?.(path, store)))
+      .catch(error => {
+        console.warn('대체 메뉴 사진을 불러오지 못했습니다.', store.name, error);
+        return [];
+      }));
+  }
+  const photos = await menuPhotoFallbackCache.get(key);
+  store.__menuPhotoFallbacks = photos;
+  return photos;
+}
+function finalImageFallback(image) {
+  if (!image?.isConnected) return;
+  const kind = image.dataset.photoKind || 'card';
+  if (kind === 'menu-entry') {
+    image.remove();
+    return;
+  }
+  image.replaceWith(document.createRange().createContextualFragment(placeholderMarkup(kind)));
+}
+async function handleImageError(image) {
+  if (!image.matches('[data-photo-kind]') || image.dataset.photoRecoveryPending === 'true') return;
+  const store = storeForPhoto(image);
+  if (!store) {
+    finalImageFallback(image);
+    return;
+  }
+  if (!(store.__failedPhotoPaths instanceof Set)) store.__failedPhotoPaths = new Set();
+  const failedKey = photoUrlKey(image.currentSrc || image.src);
+  if (failedKey) store.__failedPhotoPaths.add(failedKey);
+  image.dataset.photoRecoveryPending = 'true';
+  await loadMenuPhotoFallbacks(store);
+  if (!image.isConnected) return;
+  const next = photoResolver?.resolveGallery?.(store)
+    .find(photo => !store.__failedPhotoPaths.has(photoUrlKey(photo.src)));
+  delete image.dataset.photoRecoveryPending;
+  if (!next) {
+    finalImageFallback(image);
+    return;
+  }
+  image.dataset.photoSource = next.source;
+  image.src = next.src;
 }
 
 class InfiniteCarousel {
@@ -1397,7 +1471,7 @@ function orderAppContinueLabel(key, fallback = '') {
 function storeMenuPreviewEntryMarkup(store) {
   if (store?.hasMenu !== true) return '';
   const entryImage = photoResolver?.resolve?.(store)?.src || store.legacyImage || '';
-  return `<button class="store-menu-preview-entry" type="button" data-store-menu-preview="${escapeHtml(store.id)}">${entryImage ? `<img src="${escapeHtml(entryImage)}" alt="">` : ''}<span><b>음식보기</b><small>사진과 설명으로 전체 메뉴 미리보기 · 가격 미표시</small></span><strong>메뉴 보기 ›</strong></button>`;
+  return `<button class="store-menu-preview-entry" type="button" data-store-menu-preview="${escapeHtml(store.id)}">${entryImage ? `<img src="${escapeHtml(entryImage)}" alt="" data-photo-kind="menu-entry" data-photo-store-id="${escapeHtml(store.id)}">` : ''}<span><b>음식보기</b><small>사진과 설명으로 전체 메뉴 미리보기 · 가격 미표시</small></span><strong>메뉴 보기 ›</strong></button>`;
 }
 function feeGuideMarkup(store, selectedRoute, {fromBrowser = false} = {}) {
   const localRoutes = LOW_FEE_KEYS.map(key => routeFor(store, key)).filter(Boolean);

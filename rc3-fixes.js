@@ -402,11 +402,12 @@ function rc3ActivateOrderMethodsTrigger(trigger, event) {
   return true;
 }
 
-let rc3OrderMethodsGhostClickUntil = 0;
+const rc3BoundOrderMethodsTriggers = new WeakSet();
 
 function rc3BindOrderMethodsTrigger(detail) {
   const trigger = detail?.querySelector('[data-rc3-other-methods]');
-  if (!trigger || trigger.dataset.rc3DirectBound === '1') return;
+  if (!trigger || rc3BoundOrderMethodsTriggers.has(trigger)) return;
+  rc3BoundOrderMethodsTriggers.add(trigger);
   trigger.dataset.rc3DirectBound = '1';
   let touchPointer = null;
   const clearTouchPointer = () => { touchPointer = null; };
@@ -425,7 +426,6 @@ function rc3BindOrderMethodsTrigger(detail) {
       return;
     }
     clearTouchPointer();
-    rc3OrderMethodsGhostClickUntil = Date.now() + 800;
     trigger.dataset.rc3LastTouchActivation = String(Date.now());
     rc3ActivateOrderMethodsTrigger(trigger, event);
   }, {passive: false});
@@ -438,6 +438,16 @@ function rc3BindOrderMethodsTrigger(detail) {
     rc3ActivateOrderMethodsTrigger(trigger, event);
   });
 }
+
+function rc3RestoreModalInteractions(root = document) {
+  rc3RailPointers.clear();
+  root?.querySelectorAll?.('[data-rc3-gesture]').forEach(node => node.removeAttribute('data-rc3-gesture'));
+  root?.querySelectorAll?.('[data-rc3-last-touch-activation]').forEach(node => node.removeAttribute('data-rc3-last-touch-activation'));
+  const detail = root?.matches?.('.store-detail') ? root : root?.querySelector?.('.store-detail');
+  if (detail) rc3BindOrderMethodsTrigger(detail);
+}
+
+window.daedongRestoreModalInteractions = rc3RestoreModalInteractions;
 
 function rc3EnhanceStoreDetail(store) {
   const detail = $('#modalContent .store-detail');
@@ -594,11 +604,6 @@ function rc3OnPointerEnd(event) {
 }
 
 function rc3HandleClick(event) {
-  if (Date.now() < rc3OrderMethodsGhostClickUntil) {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    return;
-  }
   const allMain = event.target.closest('[data-cat="전체"]');
   if (allMain) {
     event.preventDefault();
@@ -624,6 +629,11 @@ function rc3HandleClick(event) {
   }
   const other = event.target.closest('[data-rc3-other-methods]');
   if (other) {
+    if (Date.now() - Number(other.dataset.rc3LastTouchActivation || 0) < 700) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
     rc3ActivateOrderMethodsTrigger(other, event);
     return;
   }
@@ -658,6 +668,10 @@ fxInstallEvents = function rc3InstallEvents() {
   document.addEventListener('pointerup', rc3OnPointerEnd, true);
   document.addEventListener('pointercancel', rc3OnPointerEnd, true);
   document.addEventListener('click', rc3HandleClick, true);
+  window.addEventListener('pageshow', () => rc3RestoreModalInteractions($('#modal')));
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) rc3RestoreModalInteractions($('#modal'));
+  });
   document.addEventListener('change', event => {
     const issueType = event.target.closest('[data-rc3-issue-type]');
     if (issueType) rc3ToggleApplicationFields(issueType);

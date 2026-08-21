@@ -244,6 +244,7 @@ function rc2RestoreSnapshot(snapshot) {
   rc2StabilizeReturnPosition({modalScroll: snapshot.scrollTop || 0, anchor: snapshot.anchor}, modal.querySelector('.modal-card'));
   rc2ModalRestoring = false;
   rc2ScrubCustomerCounts(modal);
+  window.daedongRestoreModalInteractions?.(modal);
 }
 
 openModal = function rc2OpenModal(html) {
@@ -902,6 +903,7 @@ async function rc2RestoreAfterExternalPage() {
     const modal = $('#modal');
     const visibleStoreId = modal?.dataset.activeStoreId || modal?.querySelector('.store-detail[data-store-id]')?.dataset.storeId;
     if (!modal?.hidden && modal.querySelector('.store-detail') && String(visibleStoreId || '') === String(saved.storeId)) {
+      window.daedongRestoreModalInteractions?.(modal);
       rc2DeferredStoreReturnPosition = saved;
       rc2StabilizeReturnPosition(saved);
       if (saved.menuState) {
@@ -922,6 +924,7 @@ async function rc2RestoreAfterExternalPage() {
     if (opened === false) return false;
     const restoredStoreId = modal?.dataset.activeStoreId || modal?.querySelector('.store-detail[data-store-id]')?.dataset.storeId;
     if (modal?.hidden || String(restoredStoreId || '') !== String(saved.storeId)) return false;
+    window.daedongRestoreModalInteractions?.(modal);
     rc2DeferredStoreReturnPosition = saved;
     rc2StabilizeReturnPosition(saved);
     if (saved.menuState) {

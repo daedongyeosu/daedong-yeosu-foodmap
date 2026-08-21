@@ -112,6 +112,25 @@ async function checkStore(storeName, screenshotName) {
     page.locator('.order-methods-sheet [data-rc3-external-route]').count().then(count => count > 0),
     `${storeName} 실제 등록된 외부 주문앱 선택지 표시`
   );
+
+  await page.locator('.order-methods-sheet [data-rc3-external-route]').first().tap();
+  await check(
+    page.locator('#modal:not([hidden]) .community-guide').isVisible(),
+    `${storeName} 외부 주문앱 확인창 열림`
+  );
+  await page.goBack();
+  await check(
+    page.locator('#modal:not([hidden]) .order-methods-sheet').isVisible(),
+    `${storeName} 첫 번째 뒤로가기로 주문방법 선택창 복원`
+  );
+  await page.goBack();
+  const restoredTrigger = page.locator('#modal:not([hidden]) [data-rc3-other-methods]');
+  await restoredTrigger.waitFor({state: 'visible', timeout: 10000});
+  await restoredTrigger.tap();
+  await check(
+    page.locator('#modal:not([hidden]) .order-methods-sheet').isVisible(),
+    `${storeName} 외부 주문화면 복귀 뒤 두 번째 터치로 선택창 다시 열림`
+  );
   await page.screenshot({path: screenshotName, fullPage: false});
 }
 

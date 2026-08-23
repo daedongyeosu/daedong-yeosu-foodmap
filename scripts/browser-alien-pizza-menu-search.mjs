@@ -10,6 +10,7 @@ const context = await browser.newContext({
 });
 await context.addInitScript(() => {
   try {
+    sessionStorage.setItem('daedongCommunityIntroPlayedV4', '1');
     sessionStorage.setItem('daedongMukkebiSummerEventSeenSessionV1', '1');
   } catch {}
 });

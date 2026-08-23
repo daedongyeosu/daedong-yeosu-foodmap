@@ -18,6 +18,14 @@ const check = async (condition, message) => {
 try {
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
 
+  // The community introduction intentionally covers the page on a first visit.
+  // Close it before exercising the independent rider banner.
+  const communityIntro = page.locator('#communityIntro:not([hidden])');
+  if (await communityIntro.isVisible().catch(() => false)) {
+    await page.locator('#communityIntroClose').click();
+    await communityIntro.waitFor({state: 'hidden', timeout: 5000});
+  }
+
   // Preview can legitimately show an existing promotional dialog on first load.
   // Close it before testing the independent rider banner so it cannot intercept
   // the synthetic pointer click. This changes test setup only, not customer UI.

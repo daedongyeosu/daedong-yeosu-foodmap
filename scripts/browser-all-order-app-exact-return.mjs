@@ -85,6 +85,7 @@ const context = await browser.newContext({
 await context.addInitScript(({origin}) => {
   if (location.origin !== origin) return;
   try {
+    sessionStorage.setItem('daedongCommunityIntroPlayedV4', '1');
     sessionStorage.setItem('daedongMukkebiSummerEventSeenSessionV1', '1');
     const keys = ['daedongExternalReturnRc2', 'daedongAppBrowserReturnV1'];
     const saved = keys.map(key => JSON.parse(localStorage.getItem(key) || 'null')).find(value => value?.returnToken);

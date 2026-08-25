@@ -1,6 +1,22 @@
-.store-pager-controls{display:grid;grid-template-columns:1fr;gap:9px;margin-top:14px}
-.store-pager-controls.both-directions{grid-template-columns:1fr 1fr}
+.store-pager-controls{display:grid;gap:9px;margin-top:14px}
+.store-pager-status{margin:0;text-align:center;color:#667085;font-size:13px;font-weight:800;line-height:1.4}
+.store-pager-buttons{display:grid;grid-template-columns:1fr;gap:9px}
+.store-pager-controls.both-directions .store-pager-buttons{grid-template-columns:1fr 1fr}
 .store-pager-controls[hidden]{display:none!important}
 .store-pager-controls .load-more{margin-top:0}
 .store-page-prev{color:#30343c}
 .store-page-next{color:#172330}
+
+.store-grid.store-pager-swipe-enabled{scroll-snap-type:none;-webkit-overflow-scrolling:touch;cursor:grab}
+.store-grid.store-pager-swipe-enabled:active{cursor:grabbing}
+.store-grid.store-pager-swipe-enabled + .store-pager-controls{display:none!important}
+
+/* Store lists follow the customer's finger and remain exactly where released. */
+.store-grid,
+.recommend-track,
+.rc4-category-result-track,
+.rc5-category-result-track{scroll-snap-type:none!important}
+.store-grid>.store-card,
+.recommend-track>.rail-card,
+.rc4-category-result-track>.rail-card,
+.rc5-category-result-track>.rc5-category-card{scroll-snap-align:none!important;scroll-snap-stop:normal!important}

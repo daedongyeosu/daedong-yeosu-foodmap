@@ -3,12 +3,17 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 
 const loadBrowserRuntime = async () => {
+  const executablePath = process.env.CODEX_BROWSER_EXECUTABLE_PATH || '';
   try {
-    return {playwright: await import('playwright'), launchOptions: {headless: true}};
+    return {
+      playwright: await import('playwright'),
+      launchOptions: {headless: true, ...(executablePath ? {executablePath} : {})}
+    };
   } catch {}
   const runtimeModules = process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES;
   if (!runtimeModules) throw new Error('playwright 패키지를 찾을 수 없습니다.');
   const playwright = await import(pathToFileURL(path.join(runtimeModules, 'playwright-core', 'index.mjs')).href);
+  if (executablePath) return {playwright, launchOptions: {headless: true, executablePath}};
   const sparticuz = await import(pathToFileURL(path.join(runtimeModules, '@sparticuz', 'chromium', 'build', 'esm', 'index.js')).href);
   const chromiumBinary = sparticuz.default;
   chromiumBinary.setGraphicsMode = false;
@@ -85,7 +90,6 @@ const context = await browser.newContext({
 await context.addInitScript(({origin}) => {
   if (location.origin !== origin) return;
   try {
-    sessionStorage.setItem('daedongCommunityIntroPlayedV4', '1');
     sessionStorage.setItem('daedongMukkebiSummerEventSeenSessionV1', '1');
     const keys = ['daedongExternalReturnRc2', 'daedongAppBrowserReturnV1'];
     const saved = keys.map(key => JSON.parse(localStorage.getItem(key) || 'null')).find(value => value?.returnToken);
@@ -121,12 +125,12 @@ await context.route('**/api/store/*', route => {
     body: JSON.stringify(detail || {error: 'not found'})
   });
 });
-const externalRequests = [];
 for (const pattern of ['https://orders.example.test/**', 'https://fdofd.ddangyo.com/**', 'https://www.yogiyo.co.kr/**', 'https://www.coupangeats.com/**', 'https://www.baemin.com/**']) {
-  await context.route(pattern, route => {
-    externalRequests.push(route.request().url());
-    return route.abort();
-  });
+  await context.route(pattern, route => route.fulfill({
+    status: 200,
+    contentType: 'text/html; charset=utf-8',
+    body: '<!doctype html><meta name="viewport" content="width=device-width"><title>주문앱</title><p>외부 주문앱 화면</p>'
+  }));
 }
 
 const check = async (condition, message) => {
@@ -169,10 +173,9 @@ try {
         modalScroll: modalCard.scrollTop
       };
     });
-    const requestsBefore = externalRequests.length;
     await target.click();
-    await page.waitForTimeout(150);
-    await check(Promise.resolve(externalRequests.length > requestsBefore), `${app.label}: 외부 주문앱으로 이동`);
+    await page.waitForURL(url => url.origin !== baseOrigin, {timeout: 10000});
+    await check(Promise.resolve(true), `${app.label}: 외부 주문앱으로 이동`);
     await page.close();
 
     const returned = await coldReturnPage();
@@ -216,10 +219,8 @@ try {
   const orderSheet = menuPreview.locator('[data-menu-order-sheet]:not([hidden])');
   await orderSheet.waitFor({state: 'visible', timeout: 5000});
   await orderSheet.locator('[data-menu-other-toggle]').click();
-  const menuRequestsBefore = externalRequests.length;
   await orderSheet.locator('[data-menu-external-key="baemin"]').click();
-  await menuPage.waitForTimeout(150);
-  await check(Promise.resolve(externalRequests.length > menuRequestsBefore), '음식보기 주문앱 외부 이동 요청');
+  await menuPage.waitForURL(url => url.origin !== baseOrigin, {timeout: 10000});
   await menuPage.close();
 
   const returnedMenu = await coldReturnPage();

@@ -27,10 +27,10 @@
 
 ## 배포 경계
 
-- [ ] 이 PR의 대상은 preview 저장소다.
-- [ ] 운영 `daedongmap.com`과 운영 저장소를 변경하지 않았다.
+- [ ] 이 PR의 대상은 운영 저장소다.
+- [ ] Preview에서 승인·검증된 변경만 운영용으로 이식했다.
 - [ ] 사용자 병합 승인 전에는 병합하지 않는다.
-- [ ] 병합 뒤 GitHub Pages와 `preview.daedongmap.com`을 확인한다.
+- [ ] 병합 뒤 GitHub Pages와 `daedongmap.com`을 확인한다.
 
 ## 휴대전화 확인
 

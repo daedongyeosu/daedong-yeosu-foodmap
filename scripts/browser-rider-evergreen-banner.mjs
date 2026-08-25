@@ -3,8 +3,16 @@ import {chromium} from 'playwright';
 
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
 const report = {success: false, viewport: {width: 390, height: 844}, checks: [], errors: []};
-const browser = await chromium.launch({headless: true});
+const browserExecutablePath = process.env.CODEX_BROWSER_EXECUTABLE_PATH || '';
+const browser = await chromium.launch({
+  headless: true,
+  ...(browserExecutablePath ? {executablePath: browserExecutablePath} : {})
+});
 const context = await browser.newContext({viewport: report.viewport, locale: 'ko-KR'});
+await context.addInitScript(() => {
+  sessionStorage.setItem('daedongCommunityIntroPlayedV4', '1');
+  sessionStorage.setItem('daedongMukkebiSummerEventSeenSessionV1', '1');
+});
 await context.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
 const page = await context.newPage();
 page.on('pageerror', error => report.errors.push(error.message));
@@ -17,24 +25,6 @@ const check = async (condition, message) => {
 
 try {
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
-
-  // The community introduction intentionally covers the page on a first visit.
-  // Close it before exercising the independent rider banner.
-  const communityIntro = page.locator('#communityIntro:not([hidden])');
-  if (await communityIntro.isVisible().catch(() => false)) {
-    await page.locator('#communityIntroClose').click();
-    await communityIntro.waitFor({state: 'hidden', timeout: 5000});
-  }
-
-  // Preview can legitimately show an existing promotional dialog on first load.
-  // Close it before testing the independent rider banner so it cannot intercept
-  // the synthetic pointer click. This changes test setup only, not customer UI.
-  const summerEvent = page.locator('#mukkebiSummerEvent[aria-hidden="false"]');
-  if (await summerEvent.isVisible().catch(() => false)) {
-    await page.locator('#mukkebiSummerClose').click();
-    await summerEvent.waitFor({state: 'hidden', timeout: 5000});
-  }
-
   const banner = page.locator('#riderRecruitmentBanner');
   await banner.waitFor({state: 'visible', timeout: 15000});
   await banner.scrollIntoViewIfNeeded();
@@ -48,16 +38,16 @@ try {
   const modal = page.locator('#modal:not([hidden]).promo-image-only-modal');
   await modal.waitFor({state: 'visible', timeout: 5000});
   const image = modal.locator('img[src*="rider-recruitment-portrait-v2.webp"]');
-  await image.waitFor({state: 'visible', timeout: 15000});
-  await page.waitForFunction(
-    () => {
-      const element = document.querySelector('#modal:not([hidden]).promo-image-only-modal img[src*="rider-recruitment-portrait-v2.webp"]');
-      return Boolean(element?.complete && element.naturalWidth > 0);
-    },
-    null,
-    {timeout: 15000}
-  );
+  await image.waitFor({state: 'visible', timeout: 5000});
   await check(image.isVisible(), '등록된 배송기사 모집 사진을 즉시 팝업으로 표시');
+  await page.waitForFunction(
+    selector => {
+      const element = document.querySelector(selector);
+      return element instanceof HTMLImageElement && element.complete && element.naturalWidth > 0;
+    },
+    '#modal:not([hidden]).promo-image-only-modal img[src*="rider-recruitment-portrait-v2.webp"]',
+    {timeout: 10000}
+  );
   await check(image.evaluate(element => element.complete && element.naturalWidth > 0), '배송기사 모집 사진 정상 로드');
   await check(modal.locator('.modal-close').isVisible(), '팝업 닫기 버튼 표시');
   await page.screenshot({path: 'browser-rider-evergreen-popup.png', fullPage: false});

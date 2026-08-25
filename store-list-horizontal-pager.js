@@ -8,11 +8,21 @@ let storeListPagerFrame=0;
 let storeListPagerScrollFrame=0;
 let storeListPagerProgrammatic=false;
 let storeListPagerObserver=null;
+let storeListPagerCustomerInteracted=false;
+
+function markStoreListPagerCustomerInteraction(){
+  storeListPagerCustomerInteracted=true;
+}
+function hasStoreListPagerCustomerInteraction(){
+  return storeListPagerCustomerInteracted;
+}
+window.daedongHasHomeInteraction=hasStoreListPagerCustomerInteraction;
 
 function storeListPagerElements(){
   return {
     controls:document.getElementById('storePagerControls'),
     grid:document.getElementById('storeGrid'),
+    status:document.getElementById('storePagerStatus'),
     prev:document.getElementById('storePrevBtn'),
     next:document.getElementById('loadMoreBtn')
   };
@@ -33,11 +43,13 @@ function storeListPagerMetrics(grid){
   return{cards,total,pageSize,maxPage:Math.max(0,Math.ceil(total/pageSize)-1)};
 }
 function applyStoreListPager(){
-  const {controls,grid,prev,next}=storeListPagerElements();
-  if(!controls||!grid||!prev||!next)return;
+  const {controls,grid,status,prev,next}=storeListPagerElements();
+  if(!controls||!grid||!status||!prev||!next)return;
   if(!storeListPagerEligible(grid)){
     storeListPagerPage=0;
     storeListPagerContext='';
+    status.textContent='';
+    grid.classList.remove('store-pager-swipe-enabled');
     prev.hidden=true;
     controls.classList.remove('both-directions');
     controls.hidden=next.hidden;
@@ -49,13 +61,17 @@ function applyStoreListPager(){
     storeListPagerPage=0;
     grid.scrollLeft=0;
   }
-  const {maxPage}=storeListPagerMetrics(grid);
+  const {total,pageSize,maxPage}=storeListPagerMetrics(grid);
   storeListPagerPage=Math.max(0,Math.min(storeListPagerPage,maxPage));
+  const rangeStart=storeListPagerPage*pageSize+1;
+  const rangeEnd=Math.min(total,rangeStart+pageSize-1);
+  status.textContent=`가게 ${rangeStart}–${rangeEnd} / 전체 ${total}곳`;
   prev.textContent=STORE_LIST_PAGER_PREV_LABEL;
   next.textContent=STORE_LIST_PAGER_NEXT_LABEL;
   prev.hidden=storeListPagerPage===0;
   next.hidden=storeListPagerPage>=maxPage;
-  controls.hidden=maxPage===0;
+  grid.classList.add('store-pager-swipe-enabled');
+  controls.hidden=true;
   controls.classList.toggle('both-directions',!prev.hidden&&!next.hidden);
 }
 function scheduleStoreListPager(){
@@ -83,7 +99,12 @@ function scheduleStoreListPagerScrollRead(){
   if(storeListPagerScrollFrame)cancelAnimationFrame(storeListPagerScrollFrame);
   storeListPagerScrollFrame=requestAnimationFrame(()=>{storeListPagerScrollFrame=0;readStoreListPagerScroll()});
 }
-function scrollStoreListPagerTo(page){
+function revealStoreListPagerResults(grid){
+  const top=Math.max(0,window.scrollY+grid.getBoundingClientRect().top-12);
+  if(typeof scrollWindowInstant==='function')scrollWindowInstant(top);
+  else window.scrollTo(0,top);
+}
+function scrollStoreListPagerTo(page,{reveal=false}={}){
   const {grid}=storeListPagerElements();
   if(!storeListPagerEligible(grid))return;
   const {cards,pageSize,maxPage}=storeListPagerMetrics(grid);
@@ -93,30 +114,75 @@ function scrollStoreListPagerTo(page){
   const left=Math.max(0,target.offsetLeft-cards[0].offsetLeft);
   storeListPagerPage=nextPage;
   storeListPagerProgrammatic=true;
+  grid.scrollLeft=left;
   applyStoreListPager();
-  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  grid.scrollTo({left,behavior:reduced?'auto':'smooth'});
-  window.setTimeout(()=>{storeListPagerProgrammatic=false;readStoreListPagerScroll()},460);
+  if(reveal)revealStoreListPagerResults(grid);
+  requestAnimationFrame(()=>{
+    storeListPagerProgrammatic=false;
+    readStoreListPagerScroll();
+  });
 }
-function moveStoreListPager(direction){
+function captureStoreListPagerState(){
+  const {grid}=storeListPagerElements();
+  return {
+    page:storeListPagerPage,
+    context:storeListPagerContext,
+    scrollLeft:grid?.scrollLeft||0,
+    visibleCount:Number(state.visibleCount||0)
+  };
+}
+function restoreStoreListPagerState(snapshot){
+  const {grid}=storeListPagerElements();
+  if(!grid||!snapshot||!storeListPagerEligible(grid))return false;
+  state.visibleCount=Math.max(Number(state.visibleCount||0),Number(snapshot.visibleCount||0));
+  storeListPagerContext=storeListPagerContextKey();
+  const {maxPage}=storeListPagerMetrics(grid);
+  storeListPagerPage=Math.max(0,Math.min(Number(snapshot.page||0),maxPage));
+  grid.scrollLeft=Math.max(0,Number(snapshot.scrollLeft||0));
+  applyStoreListPager();
+  return true;
+}
+window.daedongCaptureStorePagerState=captureStoreListPagerState;
+window.daedongRestoreStorePagerState=restoreStoreListPagerState;
+function moveStoreListPager(direction,{reveal=true,fromPage=storeListPagerPage}={}){
   const {grid}=storeListPagerElements();
   if(!storeListPagerEligible(grid))return false;
   const {cards,total,pageSize,maxPage}=storeListPagerMetrics(grid);
-  const targetPage=Math.max(0,Math.min(storeListPagerPage+(direction==='prev'?-1:1),maxPage));
-  if(targetPage===storeListPagerPage)return true;
+  const originPage=Math.max(0,Math.min(Number(fromPage||0),maxPage));
+  const targetPage=Math.max(0,Math.min(originPage+(direction==='prev'?-1:1),maxPage));
+  if(targetPage===originPage){
+    scrollStoreListPagerTo(originPage,{reveal});
+    return true;
+  }
   const targetIndex=targetPage*pageSize;
   if(targetIndex>=cards.length&&cards.length<total){
-    state.visibleCount=Math.min(total,Math.max(Number(state.visibleCount||0)+40,targetIndex+pageSize));
+    const previousVisibility=grid.style.visibility;
+    grid.style.visibility='hidden';
+    state.visibleCount=Math.min(total,Math.max(Number(state.visibleCount||0)+Math.max(4,pageSize*2),targetIndex+pageSize));
     renderStores();
-    requestAnimationFrame(()=>requestAnimationFrame(()=>scrollStoreListPagerTo(targetPage)));
-  }else scrollStoreListPagerTo(targetPage);
+    scrollStoreListPagerTo(targetPage,{reveal});
+    grid.style.visibility=previousVisibility;
+  }else scrollStoreListPagerTo(targetPage,{reveal});
   return true;
+}
+function handleStoreListPagerKeydown(event){
+  if(event.key!=='ArrowLeft'&&event.key!=='ArrowRight')return;
+  if(!storeListPagerEligible(storeListPagerElements().grid))return;
+  event.preventDefault();
+  moveStoreListPager(event.key==='ArrowLeft'?'prev':'next',{reveal:false});
 }
 function initializeStoreListPager(){
   const {grid}=storeListPagerElements();
   if(!grid||grid.dataset.storePagerReady==='1'){scheduleStoreListPager();return}
   grid.dataset.storePagerReady='1';
+  grid.tabIndex=0;
+  grid.setAttribute('aria-label','가게 목록. 좌우로 자유롭게 밀어 가게를 볼 수 있습니다.');
+  document.addEventListener('pointerdown',markStoreListPagerCustomerInteraction,{capture:true,passive:true});
+  document.addEventListener('touchstart',markStoreListPagerCustomerInteraction,{capture:true,passive:true});
+  document.addEventListener('wheel',markStoreListPagerCustomerInteraction,{capture:true,passive:true});
+  document.addEventListener('keydown',markStoreListPagerCustomerInteraction,true);
   grid.addEventListener('scroll',scheduleStoreListPagerScrollRead,{passive:true});
+  grid.addEventListener('keydown',handleStoreListPagerKeydown);
   storeListPagerObserver=new MutationObserver(scheduleStoreListPager);
   storeListPagerObserver.observe(grid,{childList:true});
   window.addEventListener('resize',scheduleStoreListPager,{passive:true});

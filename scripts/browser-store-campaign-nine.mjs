@@ -50,6 +50,10 @@ const context = await browser.newContext({
   viewport: report.viewport,
   isMobile: true,
   hasTouch: true,
+  // Keep every campaign page on the deterministic fixture. Otherwise the
+  // first page can register the production service worker, which serves the
+  // real data-api.js on later pages and makes CI repeatedly hit the live API.
+  serviceWorkers: 'block',
   locale: 'ko-KR',
   userAgent: 'Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 Chrome/140 Mobile Safari/537.36 KAKAOTALK 25.6.0',
 });

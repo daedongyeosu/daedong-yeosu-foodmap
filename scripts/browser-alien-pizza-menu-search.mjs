@@ -73,10 +73,33 @@ try {
   report.initialMenuCount = initialMenuCount;
   await check(initialMenuCount > 0 && initialMenuCount <= expectedMenuCount, '첫 화면에 메뉴를 즉시 표시');
   await check(page.locator('[data-menu-card][data-menu-has-photo="true"]').count().then(count => count === initialMenuCount), '첫 메뉴 묶음의 음식사진 복원');
+  const mobileOrderDock = await page.locator('.store-menu-sticky-actions').evaluate(node => ({
+    height: node.getBoundingClientRect().height,
+    headerDisplay: getComputedStyle(node.querySelector('header')).display,
+    navRows: getComputedStyle(node.querySelector('nav')).gridTemplateRows
+  }));
+  report.mobileOrderDock = mobileOrderDock;
+  await check(
+    mobileOrderDock.height <= 60 && mobileOrderDock.headerDisplay === 'none' && !String(mobileOrderDock.navRows).includes(' '),
+    `휴대폰 하단 주문창을 버튼 한 줄로 표시: ${JSON.stringify(mobileOrderDock)}`
+  );
 
   const preview = page.locator('.store-menu-preview');
   const scroll = page.locator('.store-menu-scroll');
   const search = page.locator('[data-menu-search]');
+  await scroll.evaluate(node => { node.scrollTop = 900; });
+  await page.waitForTimeout(1350);
+  await check(
+    preview.evaluate(node => node.classList.contains('menu-chrome-hidden')),
+    '아래로 메뉴를 읽고 멈춰도 주문창이 메뉴사진을 다시 가리지 않음'
+  );
+  await scroll.evaluate(node => { node.scrollTop = 600; });
+  await page.waitForTimeout(120);
+  await check(
+    preview.evaluate(node => !node.classList.contains('menu-chrome-hidden')),
+    '위로 이동하면 주문창을 다시 표시'
+  );
+  await scroll.evaluate(node => { node.scrollTop = 0; });
   const revealedMenuCount = await revealAllMenuCards(expectedMenuCount);
   report.revealedMenuCount = revealedMenuCount;
   await check(revealedMenuCount === expectedMenuCount, '스크롤하면 외계인피자 전체 메뉴 복원');

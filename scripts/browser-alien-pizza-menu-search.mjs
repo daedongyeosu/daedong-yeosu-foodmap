@@ -2,6 +2,8 @@ import fs from 'node:fs';
 import {chromium} from 'playwright';
 
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
+const proxyApiOrigin = process.env.PERF_PROXY_API_ORIGIN || '';
+const requestOrigin = process.env.PERF_REQUEST_ORIGIN || 'https://daedongmap.com';
 const report = {success: false, checks: [], errors: []};
 const browser = await chromium.launch({
   headless: true,
@@ -13,11 +15,20 @@ const context = await browser.newContext({
   viewport: {width: 390, height: 844},
   locale: 'ko-KR'
 });
+if (proxyApiOrigin) {
+  const localOrigin = new URL(baseURL).origin;
+  await context.route(`${proxyApiOrigin}/api/**`, async route => {
+    const response = await route.fetch({
+      headers: {...route.request().headers(), origin: requestOrigin}
+    });
+    await route.fulfill({
+      response,
+      headers: {...response.headers(), 'access-control-allow-origin': localOrigin}
+    });
+  });
+}
 await context.addInitScript(() => {
-  try {
-    sessionStorage.setItem('daedongCommunityIntroPlayedV4', '1');
-    sessionStorage.setItem('daedongMukkebiSummerEventSeenSessionV1', '1');
-  } catch {}
+  sessionStorage.setItem('daedongMukkebiSummerEventSeenSessionV1', '1');
 });
 await context.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
 await context.route('**/*.woff2', route => route.abort());
@@ -47,11 +58,6 @@ const revealAllMenuCards = async expectedCount => {
 
 try {
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
-  const summerEvent = page.locator('#mukkebiSummerEvent:not([hidden])');
-  if (await summerEvent.isVisible()) {
-    await page.locator('#mukkebiSummerClose').click();
-    await summerEvent.waitFor({state: 'hidden', timeout: 5000});
-  }
   await page.waitForSelector('#storeGrid .store-card', {timeout: 15000});
   await page.waitForFunction(() => typeof fxStoreById === 'function' && typeof openStore === 'function');
   await page.evaluate(() => openStore(fxStoreById('a089d1d54720b48e')));

@@ -1,9 +1,4 @@
 /* RC7: visible main address, full-button GPS touch target and map-first address sheet. */
-@font-face{
-  font-family:"Daedong Brush";
-  src:url("assets/fonts/daedong-nanum-brush-korean.woff2") format("woff2");
-  font-style:normal;font-weight:400;font-display:swap
-}
 .yeosu-night-shell{
   background-image:linear-gradient(180deg,rgba(7,47,78,.12),rgba(4,43,70,.18)),url('assets/yeosu-rc6/dolsan-day-mobile.webp')!important;
   background-size:cover!important;background-position:center top!important
@@ -60,22 +55,26 @@
 .topbar .brand-wordmark::before,.topbar .brand-wordmark::after{content:none!important;display:none!important}
 .topbar .brand-word{
   flex:0 0 auto;white-space:nowrap;color:#082f52;
-  font-family:"Daedong Brush","Nanum Brush Script","Nanum Pen Script",cursive;
-  font-size:41px;font-weight:400;line-height:1;letter-spacing:-.9px;
+  font-family:"Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  font-size:39px;font-weight:900;line-height:1;letter-spacing:-1.8px;
   -webkit-text-stroke:1px currentColor;
   text-shadow:
     0 0 2px rgba(255,255,255,.98),
     0 1px 0 rgba(255,255,255,.94),
     0 3px 6px rgba(2,28,52,.3)
 }
+.brand-font-ready .topbar .brand-word{
+  font-family:"Daedong Brush","Nanum Brush Script","Nanum Pen Script",cursive;
+  font-size:41px;font-weight:400;letter-spacing:-.9px
+}
 .topbar .brand-word b{font:inherit}.topbar .brand-word em{font:inherit;font-style:normal;color:#ef531d}
 .topbar .brand-symbol{
-  position:relative;flex:0 0 57px;width:57px;height:56px;overflow:hidden;border-radius:50%;
+  position:relative;flex:0 0 57px;width:57px;height:56px;overflow:hidden;border-radius:15px;
   background:#fff;border:1px solid rgba(255,115,55,.34);box-shadow:0 4px 13px rgba(11,48,76,.16)
 }
 .topbar .brand-symbol img{
-  position:absolute;left:50%;top:0;width:112px!important;height:75px!important;max-width:none!important;
-  border-radius:0!important;object-fit:fill!important;transform:translateX(-50%);filter:saturate(1.06) contrast(1.02)
+  display:block;width:100%!important;height:100%!important;max-width:none!important;
+  border-radius:14px!important;object-fit:contain!important;filter:none!important
 }
 .topbar .brand-word-right{letter-spacing:-1.3px}
 
@@ -240,7 +239,7 @@
   }
   .topbar .brand-word{font-size:40px;letter-spacing:-.9px}.topbar .brand-word-right{letter-spacing:-1.2px}
   .topbar .brand-symbol{flex-basis:56px;width:56px;height:55px}
-  .topbar .brand-symbol img{width:110px!important;height:74px!important}
+  .topbar .brand-symbol img{width:100%!important;height:100%!important}
   .topbar .location-chip{max-width:calc(100% - 112px)!important}
 }
 @media(max-width:520px){
@@ -258,7 +257,7 @@
   .topbar .brand-wordmark{width:calc(100vw - 12px);height:65px;bottom:2px;padding:1px;gap:6px}
   .topbar .brand-word{font-size:36px;letter-spacing:-.7px}.topbar .brand-word-right{letter-spacing:-1px}
   .topbar .brand-symbol{flex-basis:52px;width:52px;height:51px}
-  .topbar .brand-symbol img{width:102px!important;height:68px!important}
+  .topbar .brand-symbol img{width:100%!important;height:100%!important}
   .topbar-actions{gap:5px}
   .topbar-actions .icon-btn{width:42px;height:42px;min-width:42px}
   .topbar .location-chip{max-width:calc(100% - 96px)!important}
@@ -266,7 +265,7 @@
 @media(max-width:340px){
   .topbar .brand-word{font-size:33px}
   .topbar .brand-symbol{flex-basis:48px;width:48px;height:47px}
-  .topbar .brand-symbol img{width:94px!important;height:63px!important}
+  .topbar .brand-symbol img{width:100%!important;height:100%!important}
 }
 @media(max-height:720px){.rc7-map-wrap{height:205px}.rc7-saved-list{max-height:180px}}
 @media(min-width:768px){.yeosu-night-shell{background-image:linear-gradient(180deg,rgba(7,47,78,.1),rgba(4,43,70,.16)),url('assets/yeosu-rc6/dolsan-day-desktop.webp')!important;background-position:center center!important}}

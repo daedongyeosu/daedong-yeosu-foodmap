@@ -39,24 +39,27 @@ const bootScript = html.match(/<script>\s*([\s\S]*?daedongFinishExternalReturnBo
 assert.ok(bootScript, '첫 페인트 복귀 차단 스크립트를 찾아야 합니다.');
 assert.doesNotMatch(bootScript, /2500|setTimeout/, '복귀 준비 전 메인 화면을 시간만으로 노출하면 안 됩니다.');
 
-function bootContext(historyToken) {
+function bootContext({historyToken = '', urlToken = ''} = {}) {
   const classes = new Set();
   const saved = {key: 'baemin', returnToken: 'return-token-1', savedAt: Date.now()};
   const context = {
     document: {documentElement: {classList: {add: value => classes.add(value), remove: value => classes.delete(value)}}},
-    sessionStorage: {getItem() { return null; }},
-    localStorage: {getItem: key => key === 'daedongAppBrowserReturnV1' ? JSON.stringify(saved) : null},
-    history: {state: {daedongExternalReturnToken: historyToken}},
-    window: {}, Date, JSON
+    location: {href: `https://preview.daedongmap.com/${urlToken ? `?__ddret=${urlToken}` : ''}`},
+    sessionStorage: {getItem() { return null; }, removeItem() {}},
+    localStorage: {getItem: key => key === 'daedongAppBrowserReturnV1' ? JSON.stringify(saved) : null, removeItem() {}},
+    history: {state: historyToken ? {daedongExternalReturnToken: historyToken} : null, replaceState() {}},
+    window: {}, URL, String, Date, JSON
   };
   vm.createContext(context);
   vm.runInContext(bootScript, context);
   return classes;
 }
 
-assert.equal(bootContext('return-token-1').has('daedong-external-return-pending'), true,
+assert.equal(bootContext({historyToken: 'return-token-1'}).has('daedong-external-return-pending'), true,
   '앱 전환으로 sessionStorage가 사라져도 같은 방문 기록의 localStorage 복귀 상태를 사용해야 합니다.');
-assert.equal(bootContext('different-history-entry').has('daedong-external-return-pending'), false,
+assert.equal(bootContext({urlToken: 'return-token-1'}).has('daedong-external-return-pending'), true,
+  '안드로이드가 history를 잃어도 현재 주소의 일회용 복귀표식이 일치하면 복원해야 합니다.');
+assert.equal(bootContext({historyToken: 'different-history-entry'}).has('daedong-external-return-pending'), false,
   '새 방문에서 과거 localStorage 복귀 상태를 잘못 사용하면 안 됩니다.');
 
 const rememberSource = extractFunction(finalExperience, 'fxRememberAppBrowserReturn');
@@ -96,6 +99,7 @@ let stabilized = null;
 let cleared = null;
 const restoreContext = {
   window: {
+    __daedongCatalogProgress: {complete: true},
     daedongReadExternalReturnState: () => restoreSaved,
     daedongStabilizeReturnPosition: saved => { stabilized = saved; },
     daedongClearExternalReturnState: (key, saved) => { cleared = {key, saved}; },
@@ -124,10 +128,11 @@ assert.equal(fakeCard.scrollTop, 550, '비동기 렌더링으로 기준 항목�
 
 assert.match(rc2, /RC2_RETURN_STORAGE_KEYS = \[RC2_EXTERNAL_RETURN, RC2_APP_BROWSER_RETURN\]/);
 assert.match(rc2, /for \(const delay of \[120, 360, 800, 1600\]\)/, '사진·메뉴 렌더링 뒤 위치를 다시 맞춰야 합니다.');
-assert.match(rc2, /async function rc2RestoreExternalSurface\(\)[\s\S]*?rc2RestoreAfterExternalPage\(\)[\s\S]*?fxRestoreAppBrowserReturn/);
+assert.match(rc2, /async function rc2RestoreExternalSurface\(\{rebuildExisting = false\} = \{\}\)[\s\S]*?rc2RestoreAfterExternalPage\(\{rebuildExisting\}\)[\s\S]*?fxRestoreAppBrowserReturn/);
 assert.match(rc2, /if \(restored\) window\.daedongFinishExternalReturnBoot/);
-assert.doesNotMatch(rc2.match(/visibilitychange[\s\S]*?window\.addEventListener\('pageshow'/)?.[0] || '', /rc2StartAmbient\(false\);[\s\S]*?rc2Restore/,
-  '홈 효과를 먼저 시작한 뒤 복귀 화면을 열면 안 됩니다.');
+const nativeResumeLifecycle = rc2.match(/visibilitychange[\s\S]*?window\.addEventListener\('pageshow'/)?.[0] || '';
+assert.match(nativeResumeLifecycle, /rc2RestoreExternalSurface\(\{rebuildExisting: true\}\)[\s\S]*?if \(restored\)[\s\S]*?else rc2StartAmbient\(false\)/,
+  '복귀 화면 복원을 먼저 시도하고 저장 상태가 없을 때만 홈 효과를 시작해야 합니다.');
 
 if (menu) {
   assert.match(menu, /data-store-id="\$\{escapeMenuHtml\(store\.id\)\}"/);

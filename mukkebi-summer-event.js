@@ -2,6 +2,13 @@
 
 (() => {
   const eventLayer = document.getElementById('mukkebiSummerEvent');
+  if (window.DAEDONG_REGION?.code === 'goheung') {
+    if (eventLayer) {
+      eventLayer.hidden = true;
+      eventLayer.setAttribute('aria-hidden', 'true');
+    }
+    return;
+  }
   const closeButton = document.getElementById('mukkebiSummerClose');
   const hideTodayButton = document.getElementById('mukkebiSummerHideToday');
   const orderButton = document.getElementById('mukkebiSummerOrder');
@@ -37,8 +44,12 @@
     catch { return false; }
   }
 
+  function customerAlreadyInteracted() {
+    return window.daedongHasHomeInteraction?.() === true;
+  }
+
   function canOpen() {
-    if (opened || seenThisSession() || returningFromOrderApp() || Date.now() >= EVENT_END || hiddenToday()) return false;
+    if (opened || seenThisSession() || returningFromOrderApp() || customerAlreadyInteracted() || Date.now() >= EVENT_END || hiddenToday()) return false;
     if (new URLSearchParams(location.search).has('store')) return false;
     const modal = document.getElementById('modal');
     const startupAd = document.getElementById('startupAd');
@@ -59,11 +70,28 @@
     eventLayer.setAttribute('aria-hidden', 'true');
   }
 
-  function waitUntilExistingPopupCloses() {
-    if (canOpen()) window.setTimeout(openEvent, 220);
+  function dismissEventImmediately(event) {
+    event?.preventDefault();
+    event?.stopPropagation();
+    closeEvent();
   }
 
-  closeButton?.addEventListener('click', closeEvent);
+  function waitUntilExistingPopupCloses() {
+    if (canOpen()) window.setTimeout(openEvent, 0);
+  }
+
+  if (typeof window.installDaedongTapAction === 'function') {
+    window.installDaedongTapAction({
+      selector: '#mukkebiSummerClose',
+      activate(target, event) {
+        if (!opened || target !== closeButton) return false;
+        dismissEventImmediately(event);
+        return true;
+      }
+    });
+  } else {
+    closeButton?.addEventListener('click', dismissEventImmediately);
+  }
   hideTodayButton?.addEventListener('click', () => {
     try { localStorage.setItem(HIDE_DATE_KEY, localDateKey()); }
     catch {}
@@ -84,8 +112,8 @@
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => window.setTimeout(waitUntilExistingPopupCloses, 1100), {once:true});
+    document.addEventListener('DOMContentLoaded', () => window.setTimeout(waitUntilExistingPopupCloses, 0), {once:true});
   } else {
-    window.setTimeout(waitUntilExistingPopupCloses, 1100);
+    window.setTimeout(waitUntilExistingPopupCloses, 0);
   }
 })();

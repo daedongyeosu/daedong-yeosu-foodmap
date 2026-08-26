@@ -16,6 +16,7 @@ const parseJsonLd = (html, label) => {
 };
 
 assert.match(home, /href="\/guide\/"[^>]*>여수 여행가이드/);
+assert.doesNotMatch(home, /collector-review/, 'production home must not expose the Preview-only collector review entry');
 assert.match(hub, /rel="canonical" href="https:\/\/daedongmap\.com\/guide\/"/);
 assert.match(ko, /rel="canonical" href="https:\/\/daedongmap\.com\/guide\/yeosu-breakfast-restaurants\/"/);
 assert.match(en, /rel="canonical" href="https:\/\/daedongmap\.com\/en\/guide\/yeosu-breakfast-restaurants\/"/);

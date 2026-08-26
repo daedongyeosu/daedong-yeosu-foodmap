@@ -5,6 +5,7 @@
  * 데이터·가게 목록·주문 경로·팝업 이벤트에는 연결하지 않는다.
  */
 (() => {
+  if (window.DAEDONG_REGION?.code === 'goheung') return;
   const SEQUENCE_SESSION_KEY = 'daedongCommunityIntroPlayedV4';
   const INTRO_DURATION = 15000;
   const INTRO_CLOSE_DURATION = 240;
@@ -69,6 +70,10 @@
     } catch {}
   }
 
+  function customerAlreadyInteracted() {
+    return window.daedongHasHomeInteraction?.() === true;
+  }
+
   function homeIsClear() {
     const startupAd = document.getElementById('startupAd');
     const modal = document.getElementById('modal');
@@ -92,13 +97,17 @@
     sailWhenHomeIsClear();
   }
 
-  function finishIntro() {
+  function finishIntro({immediate = false} = {}) {
     if (introClosing) return;
     introClosing = true;
     clearTimeout(introTimer);
     clearTimeout(introCloseTimer);
     if (!intro) {
       sailWhenHomeIsClear();
+      return;
+    }
+    if (immediate) {
+      completeIntroClose();
       return;
     }
     intro.classList.remove('is-visible');
@@ -110,8 +119,19 @@
     );
   }
 
+  function dismissIntroImmediately(event) {
+    event?.preventDefault();
+    event?.stopPropagation();
+    finishIntro({immediate:true});
+  }
+
   function playIntroThenSail() {
     if (sequenceStarted || sequenceAlreadyPlayed()) return;
+    if (customerAlreadyInteracted()) {
+      sequenceStarted = true;
+      rememberSequence();
+      return;
+    }
     sequenceStarted = true;
     rememberSequence();
 
@@ -135,12 +155,22 @@
 
   function waitForClearHome() {
     if (new URLSearchParams(location.search).has('store')) return;
+    if (customerAlreadyInteracted()) {
+      sequenceStarted = true;
+      rememberSequence();
+      return;
+    }
     if (!homeIsClear()) return;
     window.setTimeout(() => {
+      if (customerAlreadyInteracted()) {
+        sequenceStarted = true;
+        rememberSequence();
+        return;
+      }
       if (!homeIsClear()) return;
       if (!sequenceStarted && !sequenceAlreadyPlayed()) playIntroThenSail();
       else if (sequenceStarted && intro?.hidden && !sailStarted) sailWhenHomeIsClear();
-    }, 320);
+    }, 0);
   }
 
   const layerObserver = new MutationObserver(waitForClearHome);
@@ -148,7 +178,18 @@
     if (layer) layerObserver.observe(layer, {attributes:true, attributeFilter:['hidden']});
   }
 
-  introClose?.addEventListener('click', finishIntro);
+  if (typeof window.installDaedongTapAction === 'function') {
+    window.installDaedongTapAction({
+      selector: '#communityIntroClose',
+      activate(target, event) {
+        if (!intro || intro.hidden || target !== introClose) return false;
+        dismissIntroImmediately(event);
+        return true;
+      }
+    });
+  } else {
+    introClose?.addEventListener('click', dismissIntroImmediately);
+  }
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && intro && !intro.hidden) finishIntro();
   });
@@ -167,11 +208,11 @@
     document.addEventListener('DOMContentLoaded', () => {
       syncPassageCenter();
       window.setTimeout(syncPassageCenter, 800);
-      window.setTimeout(waitForClearHome, 900);
+      window.setTimeout(waitForClearHome, 0);
     }, {once:true});
   } else {
     syncPassageCenter();
     window.setTimeout(syncPassageCenter, 800);
-    window.setTimeout(waitForClearHome, 900);
+    window.setTimeout(waitForClearHome, 0);
   }
 })();

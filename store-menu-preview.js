@@ -2,11 +2,24 @@
 
 (() => {
   const menuCache = new Map();
+  const menuPending = new Map();
+  const INITIAL_MENU_RENDER_COUNT = 12;
+  const MENU_RENDER_CHUNK_SIZE = 12;
   let activeStore = null;
   let activeMenu = null;
+  let activeMenuById = new Map();
   let lastFocused = null;
   let lastMenuSelection = null;
   let menuChromeRevealTimer = 0;
+  let menuRenderRun = 0;
+  let menuRenderObserver = null;
+  let menuImageObserver = null;
+  let menuImageQueue = [];
+  let activeMenuImageLoads = 0;
+  let menuImageLoadRun = 0;
+  const MAX_CONCURRENT_MENU_IMAGE_LOADS = 2;
+  let menuCloseActivatedAt = 0;
+  const menuCloseTouches = new Map();
   const MENU_HISTORY = Object.freeze({
     preview: 'daedongMenuPreview',
     search: 'daedongMenuSearch',
@@ -37,35 +50,42 @@
   }
 
   function ensureMenuEntryButton() {
-    const sourceStores = typeof stores !== 'undefined' && Array.isArray(stores) ? stores : [];
-    for (const store of sourceStores.filter(item => item?.hasMenu === true)) {
-      const storeId = String(store.id || store.store_id || '');
-      const detail = document.querySelector(`#modalContent .store-detail[data-store-id="${storeId}"]`);
-      if (!detail || detail.querySelector('[data-store-menu-preview]')) continue;
-      const topStatus = detail.querySelector('[data-store-service-top-status]');
-      const target = topStatus
-        || detail.querySelector('.detail-routes')
-        || detail.querySelector('.detail-personal-actions');
-      if (!target) continue;
-      const entryImage = photoResolver?.resolve?.(store)?.src || store.legacyImage || '';
-      target.insertAdjacentHTML(topStatus ? 'afterend' : 'beforebegin', `
-        <button class="store-menu-preview-entry" type="button" data-store-menu-preview="${storeId}">
-          ${entryImage ? `<img src="${escapeMenuHtml(entryImage)}" alt="" data-photo-kind="menu-entry" data-photo-store-id="${escapeMenuHtml(storeId)}">` : ''}
-          <span>
-            <b>음식보기</b>
-            <small>사진과 설명으로 전체 메뉴 미리보기 · 가격 미표시</small>
-          </span>
-          <strong>메뉴 보기 ›</strong>
-        </button>
-      `);
-    }
+    const detail = document.querySelector('#modalContent .store-detail[data-store-id]');
+    if (!detail) return;
+    const storeId = String(detail.dataset.storeId || '');
+    const store = storeById(storeId);
+    if (!store || store.hasMenu !== true) return;
+    // The detail skeleton is already visible, so warm the menu in parallel
+    // instead of waiting for a second network round trip after the tap.
+    if (!menuCache.has(storeId) && !menuPending.has(storeId)) void loadMenu(storeId).catch(() => {});
+    if (detail.querySelector('[data-store-menu-preview]')) return;
+    const topStatus = detail.querySelector('[data-store-service-top-status]');
+    const target = topStatus
+      || detail.querySelector('.detail-routes')
+      || detail.querySelector('.detail-personal-actions');
+    if (!target) return;
+    const entryImage = photoResolver?.resolve?.(store)?.src || store.legacyImage || '';
+    target.insertAdjacentHTML(topStatus ? 'afterend' : 'beforebegin', `
+      <button class="store-menu-preview-entry" type="button" data-store-menu-preview="${storeId}">
+        ${entryImage ? `<img src="${escapeMenuHtml(entryImage)}" alt="" data-photo-kind="menu-entry" data-photo-store-id="${escapeMenuHtml(storeId)}">` : ''}
+        <span>
+          <b>음식보기</b>
+          <small>사진과 설명으로 전체 메뉴 미리보기 · 가격 미표시</small>
+        </span>
+        <strong>메뉴 보기 ›</strong>
+      </button>
+    `);
   }
 
   async function loadMenu(storeId) {
     if (menuCache.has(storeId)) return menuCache.get(storeId);
-    const menu = await window.daedongDataApi.menu(storeId);
-    menuCache.set(storeId, menu);
-    return menu;
+    if (menuPending.has(storeId)) return menuPending.get(storeId);
+    const pending = window.daedongDataApi.menu(storeId).then(menu => {
+      menuCache.set(storeId, menu);
+      return menu;
+    }).finally(() => menuPending.delete(storeId));
+    menuPending.set(storeId, pending);
+    return pending;
   }
 
   function menuDisplayPriority(item) {
@@ -124,12 +144,15 @@
     }
     if (key === 'brand') {
       return channel?.icon
-        ? `<img src="${escapeMenuHtml(channel.icon)}" alt="">`
+        ? `<img src="${escapeMenuHtml(window.mobilePhotoPath?.(channel.icon) || channel.icon)}" alt="">`
         : storeIconMarkup();
     }
-    if (key === 'mukkebi') return '<img src="assets/mukkebi-v7.png" alt="">';
-    if (key === 'ddangyo') return '<img src="assets/ddangyo-v7.png" alt="">';
-    if (key === 'ondongne') return '<img src="assets/ondongne.png" alt="">';
+    if (key === 'mukkebi' || key === 'ddangyo') {
+      const compactHomeIcon = document.querySelector(`[data-order-key="${key}"] img`)?.getAttribute('src');
+      const fallback = key === 'mukkebi' ? 'assets/mukkebi-v7.mobile.webp' : 'assets/ddangyo-v7.mobile.webp';
+      return `<img src="${escapeMenuHtml(compactHomeIcon || fallback)}" alt="">`;
+    }
+    if (key === 'ondongne') return '<img src="assets/ondongne.mobile.webp" alt="">';
     if (key === 'phone') return phoneIconMarkup();
     return '';
   }
@@ -146,8 +169,20 @@
     }
   }
 
+  let menuCloseGestureTimer = 0;
+
+  function guardMenuCloseGesture() {
+    document.documentElement.dataset.daedongMenuCloseGesture = '1';
+    window.clearTimeout(menuCloseGestureTimer);
+    menuCloseGestureTimer = window.setTimeout(() => {
+      delete document.documentElement.dataset.daedongMenuCloseGesture;
+    }, 600);
+  }
+
   function requestMenuLayerBack(layer, fallback) {
     if (history.state?.[MENU_HISTORY[layer]]) {
+      fallback();
+      document.documentElement.dataset.daedongMenuHistoryClose = '1';
       history.back();
       return;
     }
@@ -156,14 +191,79 @@
 
   function requestCloseMenuPreview() {
     const state = history.state || {};
-    const depth = Number(Boolean(state[MENU_HISTORY.preview]))
-      + Number(Boolean(state[MENU_HISTORY.search]))
-      + Number(Boolean(state[MENU_HISTORY.order]));
-    if (depth > 0) {
-      history.go(-depth);
+    guardMenuCloseGesture();
+    closeMenuPreview();
+    if (state[MENU_HISTORY.preview] || state[MENU_HISTORY.search] || state[MENU_HISTORY.order]) {
+      const cleanState = {...state};
+      delete cleanState[MENU_HISTORY.preview];
+      delete cleanState[MENU_HISTORY.search];
+      delete cleanState[MENU_HISTORY.order];
+      try {
+        history.replaceState(cleanState, '', location.href);
+      } catch {
+        // The visual close must still win even if a restrictive webview rejects history replacement.
+      }
+    }
+  }
+
+  function activateMenuPreviewClose(event) {
+    const now = performance.now();
+    if (menuCloseActivatedAt > 0 && now - menuCloseActivatedAt < 700) return false;
+    menuCloseActivatedAt = now;
+    event?.preventDefault?.();
+    event?.stopImmediatePropagation?.();
+    requestCloseMenuPreview();
+    return true;
+  }
+
+  function menuPreviewCloseTarget(event) {
+    return event.target?.closest?.('[data-menu-preview-close]') || null;
+  }
+
+  function menuCloseTouchByIdentifier(list, identifier) {
+    return [...(list || [])].find(touch => touch.identifier === identifier) || null;
+  }
+
+  function onMenuCloseTouchStart(event) {
+    if (event.touches?.length !== 1) return;
+    const target = menuPreviewCloseTarget(event);
+    const touch = event.changedTouches?.[0] || event.touches[0];
+    if (!target || !touch) return;
+    menuCloseTouches.set(touch.identifier, {
+      target,
+      x: touch.clientX,
+      y: touch.clientY,
+      moved: false
+    });
+  }
+
+  function onMenuCloseTouchMove(event) {
+    for (const [identifier, state] of menuCloseTouches) {
+      const touch = menuCloseTouchByIdentifier(event.touches, identifier)
+        || menuCloseTouchByIdentifier(event.changedTouches, identifier);
+      if (!touch) continue;
+      if (Math.hypot(touch.clientX - state.x, touch.clientY - state.y) > 10) state.moved = true;
+    }
+  }
+
+  function onMenuCloseTouchCancel(event) {
+    for (const touch of [...(event.changedTouches || [])]) menuCloseTouches.delete(touch.identifier);
+  }
+
+  function onMenuCloseTouchEnd(event) {
+    for (const touch of [...(event.changedTouches || [])]) {
+      const state = menuCloseTouches.get(touch.identifier);
+      if (!state) continue;
+      menuCloseTouches.delete(touch.identifier);
+      if (state.moved || (menuCloseActivatedAt > 0 && performance.now() - menuCloseActivatedAt < 700)) continue;
+      const hit = document.elementFromPoint(touch.clientX, touch.clientY);
+      const target = hit?.closest?.('[data-menu-preview-close]')
+        || menuPreviewCloseTarget(event)
+        || (state.target?.isConnected ? state.target : null);
+      if (!target) continue;
+      activateMenuPreviewClose(event);
       return;
     }
-    closeMenuPreview();
   }
 
   function orderChannels(store) {
@@ -307,12 +407,12 @@
     `;
   }
 
-  function menuCardMarkup(item) {
+  function menuCardMarkup(item, query = '') {
     const searchText = `${item.name} ${item.description} ${item.category}`.toLowerCase();
     const photo = item.image
       ? `
         <div class="store-menu-photo">
-          <img src="${escapeMenuHtml(item.image)}" alt="${escapeMenuHtml(item.name)}" loading="lazy" decoding="async" data-photo-kind="card">
+          <img data-menu-image-src="${escapeMenuHtml(item.image)}" alt="${escapeMenuHtml(item.name)}" data-photo-kind="card" data-photo-crop-audit="yogiyo-menu" width="720" height="546" loading="lazy" decoding="async" fetchpriority="low">
           ${item.adultOnly ? '<span>19세 이상</span>' : ''}
         </div>
       `
@@ -323,13 +423,245 @@
         ${photo}
         <div class="store-menu-copy">
           ${item.adultOnly && !item.image ? '<span class="store-menu-age-badge">19세 이상</span>' : ''}
-          <p>${escapeMenuHtml(item.category)}</p>
-          <h3>${escapeMenuHtml(item.name)}</h3>
-          ${item.description ? `<div>${escapeMenuHtml(item.description)}</div>` : ''}
+          <p>${highlightedMenuHtml(item.category, query)}</p>
+          <h3>${highlightedMenuHtml(item.name, query)}</h3>
+          ${item.description ? `<div>${highlightedMenuHtml(item.description, query)}</div>` : ''}
           <span class="store-menu-card-action"><b>이 메뉴 주문하기</b><i aria-hidden="true">›</i></span>
         </div>
       </article>
     `;
+  }
+
+  function loadMenuImage(image) {
+    const source = String(image?.dataset?.menuImageSrc || '').trim();
+    if (!source || image.src) return;
+    image.src = source;
+    delete image.dataset.menuImageSrc;
+  }
+
+  function drainMenuImageQueue() {
+    while (activeMenuImageLoads < MAX_CONCURRENT_MENU_IMAGE_LOADS && menuImageQueue.length) {
+      const {image, run} = menuImageQueue.shift();
+      if (run !== menuImageLoadRun || !image?.isConnected || !image.dataset.menuImageSrc) continue;
+      activeMenuImageLoads += 1;
+      const release = () => {
+        if (run !== menuImageLoadRun) return;
+        activeMenuImageLoads = Math.max(0, activeMenuImageLoads - 1);
+        delete image.dataset.menuImageQueued;
+        drainMenuImageQueue();
+      };
+      image.addEventListener('load', release, {once: true});
+      image.addEventListener('error', release, {once: true});
+      loadMenuImage(image);
+    }
+  }
+
+  function queueMenuImage(image) {
+    if (!image?.dataset?.menuImageSrc || image.dataset.menuImageQueued === '1') return;
+    image.dataset.menuImageQueued = '1';
+    menuImageQueue.push({image, run: menuImageLoadRun});
+    drainMenuImageQueue();
+  }
+
+  function resetMenuImageLoading({cancelActive = false} = {}) {
+    menuImageLoadRun += 1;
+    menuImageQueue = [];
+    activeMenuImageLoads = 0;
+    menuImageObserver?.disconnect();
+    menuImageObserver = null;
+    if (!cancelActive) return;
+    document.querySelectorAll('[data-store-menu-overlay] img[src]').forEach(image => {
+      image.removeAttribute('src');
+      delete image.dataset.menuImageQueued;
+    });
+  }
+
+  function observeMenuImages(preview, {reset = false} = {}) {
+    if (!preview) return;
+    if (reset) {
+      resetMenuImageLoading();
+    }
+    const images = [...preview.querySelectorAll('img[data-menu-image-src]')];
+    if (!images.length) return;
+    if (typeof IntersectionObserver !== 'function') {
+      images.forEach(queueMenuImage);
+      return;
+    }
+    if (!menuImageObserver) {
+      menuImageObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          queueMenuImage(entry.target);
+          menuImageObserver?.unobserve(entry.target);
+        });
+      }, {
+        root: preview.querySelector('.store-menu-scroll'),
+        rootMargin: '160px 0px'
+      });
+    }
+    images.forEach(image => menuImageObserver.observe(image));
+  }
+
+  function scheduleMenuRenderTask(callback) {
+    if (typeof requestIdleCallback === 'function') {
+      requestIdleCallback(callback, {timeout: 180});
+      return;
+    }
+    window.setTimeout(() => callback(null), 0);
+  }
+
+  function restoreProgressiveMenuPosition(preview) {
+    const target = Number(preview?.__menuRestoreTarget);
+    const scrollRoot = preview?.querySelector('.store-menu-scroll');
+    if (!scrollRoot || !Number.isFinite(target) || target <= 0) return;
+    const maxScroll = Math.max(0, scrollRoot.scrollHeight - scrollRoot.clientHeight);
+    scrollRoot.scrollTop = Math.min(target, maxScroll);
+    if (maxScroll >= target - 1) {
+      showMenuChrome(preview);
+      window.clearTimeout(preview.__menuRestoreClearTimer);
+      preview.__menuRestoreClearTimer = window.setTimeout(() => {
+        delete preview.__menuRestoreTarget;
+        delete preview.__menuRestoreClearTimer;
+        showMenuChrome(preview);
+      }, 120);
+    }
+  }
+
+  function scheduleProgressiveMenuCards(preview, items, query = '') {
+    const grid = preview?.querySelector('[data-menu-grid]');
+    const status = preview?.querySelector('[data-menu-render-status]');
+    if (!grid) return;
+    menuRenderObserver?.disconnect();
+    menuRenderObserver = null;
+    const run = ++menuRenderRun;
+    const renderedIds = new Set(
+      [...grid.querySelectorAll('[data-menu-id]')].map(card => String(card.dataset.menuId || ''))
+    );
+    const pendingItems = items.filter(item => !renderedIds.has(String(item.id || '')));
+    preview.__menuRenderState?.cleanup?.();
+    const state = {run, renderedIds, pendingItems, cursor: 0, scrollChunkLocked: false, scrollUnlockTimer: 0};
+    preview.__menuRenderState = state;
+    grid.setAttribute('aria-busy', String(pendingItems.length > 0));
+    if (status) status.hidden = pendingItems.length === 0;
+    if (!pendingItems.length) return;
+
+    let chunkScheduled = false;
+    let chunkScheduleToken = 0;
+    const scrollRoot = preview.querySelector('.store-menu-scroll');
+    let onProgressiveScroll = null;
+    const cleanupProgressiveTriggers = () => {
+      menuRenderObserver?.disconnect();
+      menuRenderObserver = null;
+      if (onProgressiveScroll) scrollRoot?.removeEventListener('scroll', onProgressiveScroll);
+      onProgressiveScroll = null;
+      window.clearTimeout(state.scrollUnlockTimer);
+      state.scrollUnlockTimer = 0;
+    };
+    state.cleanup = cleanupProgressiveTriggers;
+    const appendChunk = deadline => {
+      chunkScheduled = false;
+      if (menuRenderRun !== run || !preview.isConnected || preview.__menuRenderState !== state) return;
+      const batch = [];
+      while (state.cursor < state.pendingItems.length && batch.length < MENU_RENDER_CHUNK_SIZE) {
+        if (batch.length >= 4 && deadline?.timeRemaining && deadline.timeRemaining() < 3) break;
+        const item = state.pendingItems[state.cursor++];
+        const id = String(item.id || '');
+        if (!id || state.renderedIds.has(id)) continue;
+        state.renderedIds.add(id);
+        batch.push(item);
+      }
+      if (batch.length) {
+        grid.insertAdjacentHTML('beforeend', batch.map(item => menuCardMarkup(item, query)).join(''));
+        observeMenuImages(preview);
+        restoreProgressiveMenuPosition(preview);
+      }
+      const complete = state.cursor >= state.pendingItems.length;
+      grid.setAttribute('aria-busy', String(!complete));
+      if (status) status.hidden = complete;
+      if (complete) {
+        cleanupProgressiveTriggers();
+      } else if (Number.isFinite(Number(preview.__menuRestoreTarget))) {
+        // Keep yielding between chunks, but do not stop halfway through a
+        // search-cancel return just because the sentinel moved below view.
+        scheduleNextChunk();
+      }
+    };
+    const scheduleNextChunk = (priority = 'idle') => {
+      if (chunkScheduled && priority !== 'interaction') return;
+      chunkScheduled = true;
+      const token = ++chunkScheduleToken;
+      const runChunk = deadline => {
+        if (token !== chunkScheduleToken) return;
+        appendChunk(deadline);
+      };
+      if (priority === 'interaction') {
+        // The chunk is intentionally capped at 12 cards. Rendering this small
+        // batch in the scroll task is more reliable than waiting for a frame or
+        // timer that a background/embedded WebView may throttle indefinitely.
+        runChunk(null);
+        return;
+      }
+      scheduleMenuRenderTask(runChunk);
+    };
+    if (typeof IntersectionObserver === 'function' && status) {
+      menuRenderObserver = new IntersectionObserver(entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        scheduleNextChunk();
+      }, {
+        root: scrollRoot,
+        rootMargin: '900px 0px'
+      });
+      menuRenderObserver.observe(status);
+      onProgressiveScroll = () => {
+        if (!scrollRoot || state.scrollChunkLocked) return;
+        // Layout height can still be settling while remote images and fonts
+        // decode. The first real scroll is a stronger intent signal than a
+        // transient distance calculation, so prepare exactly one small chunk.
+        state.scrollChunkLocked = true;
+        scheduleNextChunk('interaction');
+        window.clearTimeout(state.scrollUnlockTimer);
+        state.scrollUnlockTimer = window.setTimeout(() => {
+          state.scrollChunkLocked = false;
+          state.scrollUnlockTimer = 0;
+        }, 150);
+      };
+      scrollRoot?.addEventListener('scroll', onProgressiveScroll, {passive: true});
+      return;
+    }
+    const appendFallbackChunk = deadline => {
+      appendChunk(deadline);
+      if (state.cursor < state.pendingItems.length) window.setTimeout(() => scheduleMenuRenderTask(appendFallbackChunk), 120);
+    };
+    scheduleMenuRenderTask(appendFallbackChunk);
+  }
+
+  function resetProgressiveMenuCards(preview, items, query = '') {
+    const grid = preview?.querySelector('[data-menu-grid]');
+    if (!grid) return;
+    menuRenderRun += 1;
+    menuRenderObserver?.disconnect();
+    menuRenderObserver = null;
+    grid.innerHTML = items.slice(0, INITIAL_MENU_RENDER_COUNT)
+      .map(item => menuCardMarkup(item, query)).join('');
+    observeMenuImages(preview, {reset: true});
+    scheduleProgressiveMenuCards(preview, items, query);
+  }
+
+  function ensureMenuCardRendered(preview, menuId) {
+    const id = String(menuId || '');
+    if (!preview || !id) return null;
+    let card = [...preview.querySelectorAll('[data-menu-card]')]
+      .find(item => String(item.dataset.menuId || '') === id);
+    if (card) return card;
+    const item = activeMenuById.get(id);
+    const grid = preview.querySelector('[data-menu-grid]');
+    if (!item || !grid) return null;
+    grid.insertAdjacentHTML('beforeend', menuCardMarkup(item));
+    preview.__menuRenderState?.renderedIds?.add(id);
+    observeMenuImages(preview);
+    card = [...grid.querySelectorAll('[data-menu-card]')]
+      .find(candidate => String(candidate.dataset.menuId || '') === id);
+    return card || null;
   }
 
   function previewMarkup(menu, store) {
@@ -337,7 +669,8 @@
       result[item.category] = (result[item.category] || 0) + 1;
       return result;
     }, {});
-    const featuredCategories = menu.categories.filter(category => category !== '전체').slice(0, 3);
+    const categoryCandidates = menu.categories.filter(category => category !== '전체');
+    const featuredCategories = categoryCandidates.length > 1 ? categoryCandidates.slice(0, 3) : [];
     return `
       <section class="store-menu-preview" data-store-id="${escapeMenuHtml(store.id)}" role="dialog" aria-modal="true" aria-labelledby="storeMenuTitle">
         <header class="store-menu-topbar">
@@ -348,9 +681,9 @@
 
         <main class="store-menu-scroll">
           <section class="store-menu-hero">
-            <img src="${escapeMenuHtml(menu.mainImage)}" alt="${escapeMenuHtml(menu.displayName)}" fetchpriority="high" data-photo-kind="detail" data-photo-store-id="${escapeMenuHtml(store.id)}">
+            <img src="${escapeMenuHtml(menu.mainImage)}" alt="${escapeMenuHtml(menu.displayName)}" fetchpriority="high" data-photo-kind="detail" data-photo-crop-audit="yogiyo-menu" data-photo-store-id="${escapeMenuHtml(store.id)}">
             <div>
-              <span>대동여수음식지도 · 음식 미리보기</span>
+              <span>${escapeMenuHtml(window.DAEDONG_REGION?.mapName || '대동여수음식지도')} · 음식 미리보기</span>
               <p>${featuredCategories.map(escapeMenuHtml).join(' · ')}</p>
               <h1 id="storeMenuTitle">${escapeMenuHtml(menu.displayName)}</h1>
               <p>주문방법을 고르기 전에 사진과 설명으로 메뉴를 먼저 살펴보세요.</p>
@@ -384,9 +717,10 @@
 
           <p class="store-menu-photo-disclaimer">※ 음식 사진은 실제 조리된 음식과 다를 수 있습니다.</p>
 
-          <section class="store-menu-grid" aria-live="polite">
-            ${menu.items.map(menuCardMarkup).join('')}
+          <section class="store-menu-grid" data-menu-grid aria-live="polite" aria-busy="true">
+            ${menu.items.slice(0, INITIAL_MENU_RENDER_COUNT).map(item => menuCardMarkup(item)).join('')}
           </section>
+          <p class="store-menu-render-status" data-menu-render-status role="status">나머지 메뉴를 부드럽게 준비하고 있습니다…</p>
           <p class="store-menu-no-results" data-menu-no-results hidden>검색 조건에 맞는 메뉴가 없습니다.</p>
 
           <footer class="store-menu-notice">
@@ -503,6 +837,10 @@
   function handleMenuScroll(scrollRoot) {
     const preview = scrollRoot.closest('.store-menu-preview');
     if (!preview) return;
+    if (Number.isFinite(Number(preview.__menuRestoreTarget))) {
+      showMenuChrome(preview);
+      return;
+    }
     if (preview.classList.contains('menu-search-active')) {
       showMenuChrome(preview);
       return;
@@ -538,27 +876,31 @@
       overlay.dataset.storeMenuOverlay = '';
       document.body.append(overlay);
     }
+    menuCloseActivatedAt = 0;
+    menuCloseTouches.clear();
     overlay.hidden = false;
     overlay.innerHTML = `<div class="store-menu-loading" role="status">${escapeMenuHtml(store.name || '가게')} 메뉴를 불러오는 중입니다…</div>`;
     document.body.classList.add('store-menu-open');
     if (!history.state?.[MENU_HISTORY.preview]) pushMenuHistory('preview');
     try {
+      let detailPromise = Promise.resolve(store);
       if (store.__secureDetailReady !== true) {
         const secureDetail = window.daedongSecureStoreDetail;
         if (!secureDetail || typeof secureDetail.enrich !== 'function') {
           throw new Error('이 가게의 주문방법을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.');
         }
-        await secureDetail.enrich(store, typeof normalizedStore === 'function' ? normalizedStore : undefined);
+        detailPromise = secureDetail.enrich(store, typeof normalizedStore === 'function' ? normalizedStore : undefined);
       }
-      const [menu] = await Promise.all([
-        loadMenu(storeId),
-        window.daedongStoreServiceInfo?.ready || Promise.resolve()
-      ]);
+      const menuPromise = loadMenu(storeId);
+      const [, menu] = await Promise.all([detailPromise, menuPromise]);
       activeStore = store;
       activeMenu = orderedMenu(menu);
+      activeMenuById = new Map(activeMenu.items.map(item => [String(item.id || ''), item]));
       overlay.innerHTML = previewMarkup(activeMenu, store);
       const preview = overlay.querySelector('.store-menu-preview');
       const scrollRoot = overlay.querySelector('.store-menu-scroll');
+      observeMenuImages(preview, {reset: true});
+      scheduleProgressiveMenuCards(preview, activeMenu.items);
       scrollRoot?.addEventListener('scroll', () => handleMenuScroll(scrollRoot), {passive: true});
       const requestedQuery = String(options.query || '').trim();
       if (requestedQuery && preview) {
@@ -569,8 +911,7 @@
       }
       const requestedMenuId = String(options.menuId || '');
       if (requestedMenuId && preview) {
-        const card = [...preview.querySelectorAll('[data-menu-card]')]
-          .find(item => String(item.dataset.menuId || '') === requestedMenuId && !item.hidden);
+        const card = ensureMenuCardRendered(preview, requestedMenuId);
         if (card) window.requestAnimationFrame(() => openMenuOrderSheet(card));
       }
       if (options.returnState) applyMenuReturnState(preview, options.returnState);
@@ -590,14 +931,22 @@
   function closeMenuPreview() {
     window.clearTimeout(menuChromeRevealTimer);
     menuChromeRevealTimer = 0;
+    menuRenderRun += 1;
+    menuRenderObserver?.disconnect();
+    menuRenderObserver = null;
+    resetMenuImageLoading({cancelActive: true});
     const overlay = document.querySelector('[data-store-menu-overlay]');
     if (overlay) {
       overlay.hidden = true;
-      overlay.innerHTML = '';
+      // Keep the hidden menu subtree until the next open replaces it. Clearing
+      // hundreds of nodes here wakes global observers after the X tap and can
+      // turn an instant visual close into a multi-second main-thread stall.
     }
     document.body.classList.remove('store-menu-open');
     activeStore = null;
     activeMenu = null;
+    activeMenuById = new Map();
+    menuCloseTouches.clear();
     lastMenuSelection = null;
     lastFocused?.focus?.();
     lastFocused = null;
@@ -680,6 +1029,7 @@
   function enterMenuSearch(preview) {
     if (!preview || !window.matchMedia('(max-width: 720px)').matches) return;
     const scrollRoot = preview.querySelector('.store-menu-scroll');
+    delete preview.__menuRestoreTarget;
     if (!preview.classList.contains('menu-search-active')) {
       preview.dataset.menuSearchReturn = String(scrollRoot?.scrollTop || 0);
       preview.classList.add('menu-search-active');
@@ -703,11 +1053,13 @@
     }
     preview.classList.remove('menu-search-active');
     delete preview.dataset.menuSearchReturn;
+    if (restorePosition && returnPosition > 0) preview.__menuRestoreTarget = returnPosition;
+    else delete preview.__menuRestoreTarget;
     showMenuChrome(preview);
     filterMenus(preview);
     if (restorePosition) {
       window.requestAnimationFrame(() => {
-        if (scrollRoot) scrollRoot.scrollTop = returnPosition;
+        restoreProgressiveMenuPosition(preview);
         window.requestAnimationFrame(() => showMenuChrome(preview));
       });
     }
@@ -720,14 +1072,13 @@
     const category = root.classList.contains('menu-search-active')
       ? '전체'
       : root.querySelector('[data-menu-category].active')?.dataset.menuCategory || '전체';
-    let visible = 0;
-    root.querySelectorAll('[data-menu-card]').forEach(card => {
-      const matchesCategory = category === '전체' || card.dataset.category === category;
-      const matchesSearch = !query || card.dataset.search.includes(query);
-      card.hidden = !(matchesCategory && matchesSearch);
-      updateMenuCardText(card, rawQuery);
-      if (!card.hidden) visible += 1;
+    const matchingItems = activeMenu.items.filter(item => {
+      const matchesCategory = category === '전체' || String(item.category || '') === category;
+      const searchText = `${item.name || ''} ${item.description || ''} ${item.category || ''}`.toLocaleLowerCase('ko-KR');
+      return matchesCategory && (!query || searchText.includes(query));
     });
+    const visible = matchingItems.length;
+    resetProgressiveMenuCards(root, matchingItems, rawQuery);
     const count = root.querySelector('[data-menu-result-count]');
     if (count) count.textContent = String(visible);
     const label = root.querySelector('[data-menu-result-label]');
@@ -744,20 +1095,35 @@
     }
   }
 
+  document.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || !menuPreviewCloseTarget(event)) return;
+    activateMenuPreviewClose(event);
+  }, {capture: true});
+
+  document.addEventListener('touchstart', onMenuCloseTouchStart, {capture: true, passive: true});
+  document.addEventListener('touchmove', onMenuCloseTouchMove, {capture: true, passive: true});
+  document.addEventListener('touchend', onMenuCloseTouchEnd, {capture: true, passive: false});
+  document.addEventListener('touchcancel', onMenuCloseTouchCancel, {capture: true, passive: true});
+
+  window.installDaedongTapAction?.({
+    selector: '[data-menu-order-sheet-close]',
+    activate(target) {
+      const preview = target.closest('.store-menu-preview');
+      const sheet = target.closest('[data-menu-order-sheet]');
+      if (!preview || !sheet || sheet.hidden) return false;
+      requestMenuLayerBack('order', () => closeMenuOrderSheet(preview));
+      return true;
+    }
+  });
+
   document.addEventListener('click', event => {
     const entry = event.target.closest('[data-store-menu-preview]');
     if (entry) {
       openMenuPreview(entry.dataset.storeMenuPreview, entry);
       return;
     }
-    if (event.target.closest('[data-menu-preview-close]')) {
-      requestCloseMenuPreview();
-      return;
-    }
-    const closeOrderSheet = event.target.closest('[data-menu-order-sheet-close]');
-    if (closeOrderSheet) {
-      const preview = closeOrderSheet.closest('.store-menu-preview');
-      requestMenuLayerBack('order', () => closeMenuOrderSheet(preview));
+    if (menuPreviewCloseTarget(event)) {
+      activateMenuPreviewClose(event);
       return;
     }
     const selectedMenu = event.target.closest('[data-menu-select]');
@@ -920,6 +1286,7 @@
     restore: async saved => Boolean(await openMenuPreview(saved?.storeId, null, {returnState: saved}))
   });
 
-  new MutationObserver(ensureMenuEntryButton).observe(document.documentElement, {childList: true, subtree: true});
+  const menuEntryRoot = document.querySelector('#modalContent');
+  if (menuEntryRoot) new MutationObserver(ensureMenuEntryButton).observe(menuEntryRoot, {childList: true, subtree: true});
   ensureMenuEntryButton();
 })();

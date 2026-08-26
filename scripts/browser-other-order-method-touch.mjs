@@ -1,7 +1,22 @@
 import fs from 'node:fs';
-import {chromium} from 'playwright';
+import path from 'node:path';
+import {pathToFileURL} from 'node:url';
+
+const loadBrowserRuntime = async () => {
+  try {
+    const playwright = await import('playwright');
+    return {chromium: playwright.chromium, launchOptions: {headless: true}};
+  } catch {}
+  const runtimeModules = process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES;
+  if (!runtimeModules) throw new Error('playwright 패키지를 찾을 수 없습니다.');
+  const playwright = await import(pathToFileURL(path.join(runtimeModules, 'playwright', 'index.mjs')).href);
+  return {chromium: playwright.chromium, launchOptions: {headless: true}};
+};
+
+const {chromium, launchOptions} = await loadBrowserRuntime();
 
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
+const baseOrigin = new URL(baseURL).origin;
 const report = {success: false, viewport: {width: 390, height: 844}, checks: [], errors: [], stores: []};
 const stores = [
   {
@@ -27,15 +42,44 @@ const stores = [
       {name: '요기요', url: 'https://orders.example.test/yogiyo/handsu', enabled: true},
       {name: '배달의민족', url: 'https://orders.example.test/baemin/handsu', enabled: true}
     ]
+  },
+  {
+    store_id: 'a100000000000003',
+    name: '요기요 단독 검증가게',
+    district: '신기동',
+    category: '고기/구이',
+    categories: ['고기/구이'],
+    phone: '061-123-4567',
+    channelKeys: ['phone', 'yogiyo'],
+    routes: [
+      {name: '전화주문', url: 'tel:0611234567', enabled: true},
+      {name: '요기요', url: 'https://orders.example.test/yogiyo/only', enabled: true}
+    ]
+  },
+  {
+    store_id: 'a100000000000004',
+    name: '지역앱 추가 검증가게',
+    district: '신기동',
+    category: '고기/구이',
+    categories: ['고기/구이'],
+    channelKeys: ['mukkebi', 'yogiyo'],
+    routes: [
+      {name: '먹깨비', url: 'https://orders.example.test/mukkebi/added', enabled: true},
+      {name: '요기요', url: 'https://orders.example.test/yogiyo/with-local', enabled: true}
+    ]
   }
 ];
 const detailsById = new Map(stores.map(store => [store.store_id, store]));
-const browser = await chromium.launch({headless: true});
+const browser = await chromium.launch({
+  ...launchOptions,
+  ...(process.env.CODEX_BROWSER_EXECUTABLE_PATH ? {executablePath: process.env.CODEX_BROWSER_EXECUTABLE_PATH} : {})
+});
 const context = await browser.newContext({
   viewport: report.viewport,
   isMobile: true,
   hasTouch: true,
-  locale: 'ko-KR'
+  locale: 'ko-KR',
+  userAgent: 'Mozilla/5.0 (Linux; Android 15; SM-S938N Build/AP3A.240905.015.A2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Mobile Safari/537.36 KAKAOTALK 25.7.2'
 });
 await context.addInitScript(() => {
   sessionStorage.setItem('daedongCommunityIntroPlayedV4', '1');
@@ -43,6 +87,11 @@ await context.addInitScript(() => {
 });
 await context.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
 await context.route('**/*.woff2', route => route.abort());
+await context.route('https://orders.example.test/**', route => route.fulfill({
+  status: 200,
+  contentType: 'text/html; charset=utf-8',
+  body: '<!doctype html><html><title>외부 주문앱</title><body>외부 주문앱 화면</body></html>'
+}));
 await context.route('**/api/catalog', route => route.fulfill({
   status: 200,
   contentType: 'application/json',
@@ -71,8 +120,14 @@ const check = async (condition, message) => {
   if (!ok) throw new Error(message);
 };
 
-async function checkStore(storeName, screenshotName) {
+async function checkStore(storeName, screenshotName, {nativeResume = false} = {}) {
+  report.currentStore = storeName;
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
+  await page.waitForFunction(
+    () => window.daedongCatalogReady && typeof window.daedongCatalogReady.then === 'function',
+    null,
+    {polling: 25, timeout: 10000}
+  );
   await page.evaluate(() => window.daedongCatalogReady);
   await page.waitForFunction(() => typeof window.openStore === 'function', null, {timeout: 25000});
   await page.locator('#mainSearch').fill(storeName);
@@ -104,6 +159,11 @@ async function checkStore(storeName, screenshotName) {
   await check(trigger.isEnabled(), `${storeName} 다른 주문방법 보기 버튼 활성화`);
 
   await trigger.tap();
+  await page.waitForFunction(
+    () => document.querySelector('#modal:not([hidden]) .order-methods-sheet')?.getBoundingClientRect().height > 0,
+    null,
+    {polling: 25, timeout: 3000}
+  );
   await check(
     page.locator('#modal:not([hidden]) .order-methods-sheet').isVisible(),
     `${storeName} 첫 번째 터치로 다른 주문방법 선택창 열림`
@@ -112,32 +172,140 @@ async function checkStore(storeName, screenshotName) {
     page.locator('.order-methods-sheet [data-rc3-external-route]').count().then(count => count > 0),
     `${storeName} 실제 등록된 외부 주문앱 선택지 표시`
   );
-
-  await page.locator('.order-methods-sheet [data-rc3-external-route]').first().tap();
+  await page.locator('.order-methods-sheet [data-rc3-external-route]').first().evaluate(element => {
+    element.dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, detail: 1, view: window}));
+  });
   await check(
-    page.locator('#modal:not([hidden]) .community-guide').isVisible(),
-    `${storeName} 외부 주문앱 확인창 열림`
-  );
-  await page.goBack();
-  await check(
-    page.locator('#modal:not([hidden]) .order-methods-sheet').isVisible(),
-    `${storeName} 첫 번째 뒤로가기로 주문방법 선택창 복원`
-  );
-  await page.goBack();
-  const restoredTrigger = page.locator('#modal:not([hidden]) [data-rc3-other-methods]');
-  await restoredTrigger.waitFor({state: 'visible', timeout: 10000});
-  await restoredTrigger.tap();
-  await check(
-    page.locator('#modal:not([hidden]) .order-methods-sheet').isVisible(),
-    `${storeName} 외부 주문화면 복귀 뒤 두 번째 터치로 선택창 다시 열림`
+    Promise.all([
+      page.locator('#modal:not([hidden]) .order-methods-sheet').isVisible(),
+      page.locator('#modal:not([hidden]) .community-guide').count()
+    ]).then(([visible, guideCount]) => visible && guideCount === 0),
+    `${storeName} 잔여 합성 클릭이 첫 주문앱으로 새지 않음`
   );
   await page.screenshot({path: screenshotName, fullPage: false});
+
+  const externalRoute = page.locator('.order-methods-sheet [data-rc3-external-route="baemin"]');
+  await externalRoute.tap();
+  const guide = page.locator('#modal:not([hidden]) .community-guide');
+  await guide.waitFor({state: 'visible', timeout: 3000});
+  const externalLink = guide.locator('a[data-community-original]');
+  await externalLink.waitFor({state: 'visible', timeout: 3000});
+  const expectedExternalURL = await externalLink.getAttribute('href');
+
+  await page.evaluate(() => {
+    window.__testedMobileLaunches = [];
+    window.daedongLaunchMobileRoute = (key, href) => {
+      window.__testedMobileLaunches.push({key, href});
+    };
+  });
+  await externalLink.tap();
+  const launch = await page.evaluate(() => window.__testedMobileLaunches.at(-1) || null);
+  await check(
+    Promise.resolve(launch?.key === 'baemin' && launch?.href === expectedExternalURL),
+    `${storeName} 배달의민족 Android 앱 패키지 경로로 열기`
+  );
+  await check(
+    Promise.resolve(new URL(page.url()).origin === baseOrigin && context.pages().length === 1),
+    `${storeName} 외부 주문앱을 열 때 원본 Preview 현재 탭 보존`
+  );
+  const preparedTrigger = page.locator('#modal:not([hidden]) [data-rc3-other-methods]');
+  await preparedTrigger.waitFor({state: 'visible', timeout: 3000});
+  await preparedTrigger.evaluate(element => { element.dataset.testPreparedBeforeReturn = '1'; });
+  await check(
+    preparedTrigger.isVisible(),
+    `${storeName} 외부 주문앱이 열린 동안 원본 Preview를 가게 상세로 미리 안정화`
+  );
+  if (nativeResume) {
+    await page.evaluate(async () => {
+      let hidden = true;
+      Object.defineProperty(document, 'hidden', {configurable: true, get: () => hidden});
+      Object.defineProperty(document, 'visibilityState', {configurable: true, get: () => hidden ? 'hidden' : 'visible'});
+      document.dispatchEvent(new Event('visibilitychange'));
+      await new Promise(resolve => setTimeout(resolve, 30));
+      hidden = false;
+      document.dispatchEvent(new Event('visibilitychange'));
+      window.dispatchEvent(new Event('focus'));
+    });
+  } else {
+    await page.evaluate(() => window.dispatchEvent(new Event('focus')));
+  }
+  await page.waitForFunction(
+    id => {
+      const modal = document.querySelector('#modal:not([hidden])');
+      const detail = modal?.querySelector(`.store-detail[data-store-id="${CSS.escape(id)}"]`);
+      const button = detail?.querySelector('[data-rc3-other-methods]');
+      return Boolean(button && getComputedStyle(button).pointerEvents === 'auto');
+    },
+    storeName === '본스치킨 미평점' ? 'a100000000000001' : 'a100000000000002',
+    {polling: 25, timeout: 5000}
+  );
+
+  const returnedTrigger = page.locator('#modal:not([hidden]) [data-rc3-other-methods]');
+  await check(
+    returnedTrigger.evaluate(element => element.dataset.testPreparedBeforeReturn === '1'),
+    `${storeName} 복귀 뒤 준비된 가게 상세 DOM을 유지해 터치 중 재구성하지 않음`
+  );
+  const returnedHitTarget = await returnedTrigger.evaluate(element => {
+    const rect = element.getBoundingClientRect();
+    const hit = document.elementFromPoint(rect.left + rect.width / 2, rect.top + rect.height / 2);
+    return Boolean(hit && (hit === element || element.contains(hit)));
+  });
+  await check(Promise.resolve(returnedHitTarget), `${storeName} 복귀 뒤 버튼 위에 투명 가림막 없음`);
+
+  await returnedTrigger.tap();
+  await page.waitForFunction(
+    () => document.querySelector('#modal:not([hidden]) .order-methods-sheet')?.getBoundingClientRect().height > 0,
+    null,
+    {polling: 25, timeout: 3000}
+  );
+  await check(
+    page.locator('#modal:not([hidden]) .order-methods-sheet').isVisible(),
+    `${storeName} 외부 주문앱 복귀 뒤 두 번째 터치로 다시 열림`
+  );
+}
+
+async function checkConditionalOrderLabel(storeName, expectedLabel, {singleYogiyo = false} = {}) {
+  report.currentStore = storeName;
+  await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
+  await page.waitForFunction(
+    () => window.daedongCatalogReady && typeof window.daedongCatalogReady.then === 'function',
+    null,
+    {polling: 25, timeout: 10000}
+  );
+  await page.evaluate(() => window.daedongCatalogReady);
+  await page.waitForFunction(() => typeof window.openStore === 'function', null, {timeout: 25000});
+  await page.locator('#mainSearch').fill(storeName);
+  const card = page.locator('#storeGrid .store-card').filter({hasText: storeName}).first();
+  await card.waitFor({state: 'visible', timeout: 10000});
+  await card.tap();
+
+  const trigger = page.locator('#modal:not([hidden]) [data-rc3-other-methods]');
+  await trigger.waitFor({state: 'visible', timeout: 10000});
+  await check(trigger.locator('span').innerText().then(text => text.trim() === expectedLabel), `${storeName} 버튼 문구가 ${expectedLabel}`);
+  await check(
+    trigger.getAttribute('data-rc3-single-external').then(value => singleYogiyo ? value === 'yogiyo' : value === null),
+    `${storeName} 주문앱 구성에 맞는 버튼 동작 지정`
+  );
+  await trigger.tap();
+  if (singleYogiyo) {
+    await check(
+      page.locator('#modal:not([hidden]) .community-guide[data-selected-app="yogiyo"]').isVisible(),
+      `${storeName} 요기요 주문 안내로 바로 이동`
+    );
+  } else {
+    await check(
+      page.locator('#modal:not([hidden]) .order-methods-sheet').isVisible(),
+      `${storeName} 지역 주문앱 추가 뒤 다른 주문방법 선택창 유지`
+    );
+  }
 }
 
 try {
   await checkStore('본스치킨 미평점', 'browser-other-order-method-touch-vons.png');
-  await checkStore('손수김밥 양지점', 'browser-other-order-method-touch-handsu.png');
-  await check(Promise.resolve(report.errors.length === 0), '두 가게 모바일 터치 중 브라우저 오류 없음');
+  await checkStore('손수김밥 양지점', 'browser-other-order-method-touch-handsu.png', {nativeResume: true});
+  await checkConditionalOrderLabel('요기요 단독 검증가게', '요기요로 주문하기', {singleYogiyo: true});
+  await checkConditionalOrderLabel('지역앱 추가 검증가게', '다른 주문방법 보기');
+  await check(Promise.resolve(report.errors.length === 0), '네 가게 모바일 터치 중 브라우저 오류 없음');
   report.success = true;
 } catch (error) {
   report.failure = error.stack || String(error);
@@ -149,6 +317,7 @@ try {
   await page.screenshot({path: 'browser-other-order-method-touch-failure.png', fullPage: false}).catch(() => {});
 } finally {
   fs.writeFileSync('browser-other-order-method-touch-report.json', `${JSON.stringify(report, null, 2)}\n`);
+  console.log(JSON.stringify(report, null, 2));
   await browser.close();
 }
 

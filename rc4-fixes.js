@@ -11,6 +11,7 @@ const RC4_CATEGORY_ICON_MAP=Object.freeze([
  [/반찬/,'banchan'],[/베이커리|빵|떡/,'bakery'],[/한식/,'korean']
 ]);
 let rc4PostcodePromise=null;
+const rc4BrandKeyCache=new WeakMap();
 
 function rc4CategoryIconId(name){const value=String(name||'');return RC4_CATEGORY_ICON_MAP.find(([pattern])=>pattern.test(value))?.[1]||'other'}
 function rc4CategoryIcon(name,className='rc4-category-icon'){return `<svg class="${className}" aria-hidden="true"><use href="${RC4_CATEGORY_ICON_SPRITE}#${rc4CategoryIconId(name)}"></use></svg>`}
@@ -22,7 +23,7 @@ allCategoriesModal=function(){const names=['전체',...categories.filter(name=>n
 function rc4StoreHasRealCoordinates(store){return store?.coordinateSource==='store'&&Number.isFinite(store.lat)&&Number.isFinite(store.lng)}
 function rc4Distance(store){return state.coords&&rc4StoreHasRealCoordinates(store)?haversine(state.coords,{lat:store.lat,lng:store.lng}):null}
 fxDistance=rc4Distance;
-function rc4BrandKey(store){return rc2BrandKey(store)||normalize(store?.name||'').replace(/여수|본점|점/g,'').slice(0,12)}
+function rc4BrandKey(store){if(store&&rc4BrandKeyCache.has(store))return rc4BrandKeyCache.get(store);const key=rc2BrandKey(store)||normalize(store?.name||'').replace(/여수|본점|점/g,'').slice(0,12);if(store)rc4BrandKeyCache.set(store,key);return key}
 function rc4PhotoKey(store){return String(store?.photo||store?.photoFile||store?.image||'')}
 function rc4Diversify(list){const first=[],later=[],brands=new Set(),photos=new Set();for(const store of list){const brand=rc4BrandKey(store),photo=rc4PhotoKey(store);if(photo&&photos.has(photo))continue;if(!brands.has(brand)){first.push(store);brands.add(brand);if(photo)photos.add(photo)}else later.push(store)}for(const store of later){const photo=rc4PhotoKey(store);if(photo&&photos.has(photo))continue;const same=rc4BrandKey(store),lastThree=first.slice(-3).map(rc4BrandKey);if(first.length>=4&&!lastThree.includes(same)){first.push(store);if(photo)photos.add(photo)}}return first}
 function rc4LocationSort(list){const area=normalize(state.location||'');return [...list].sort((a,b)=>{const ad=rc4Distance(a),bd=rc4Distance(b);if(ad!==null||bd!==null)return ad===null?1:bd===null?-1:ad-bd;const am=area&&area!==normalize('여수시 전체')&&normalize(a.area).includes(area)?1:0,bm=area&&area!==normalize('여수시 전체')&&normalize(b.area).includes(area)?1:0;if(am!==bm)return bm-am;return 0})}
@@ -40,6 +41,6 @@ async function rc4OpenPostcode(){rc4AddressStatus('우편번호·도로명 주�
 
 areaModal=function(){const saved=getSavedAddress();addressDraft=saved?{...saved,coords:saved.coords||null}:{address:state.addressLabel==='여수시 전체'?'':state.addressLabel,detail:'',area:state.location,coords:state.coords,sortByDistance:false,type:'recent'};openModal(`<section class="address-single-sheet" data-address-single><header><h2 id="modalTitle">배달 주소 설정</h2></header><div class="address-search-row"><div class="searchbox"><input id="addressSearchInput" readonly inputmode="none" aria-label="우편번호·도로명 주소검색" placeholder="주소를 검색해 주세요"><button id="clearAddressSearch" class="input-clear" type="button" hidden>×</button></div><button id="addressSearchBtn" type="button">주소검색</button></div><div id="addressSearchResults" class="address-search-results"><p class="rc4-address-status">검색된 주소 선택</p></div><button id="gpsLocationBtn" class="current-location-btn" type="button">⌖ <span>현재 위치 사용</span></button><div id="addressSelectedPreview" class="address-selected-preview"></div><label class="address-detail-label">상세주소<input id="addressDetailInput" value="${escapeHtml(addressDraft?.detail||'')}" placeholder="동·호수, 건물명" autocomplete="address-line2"></label><button id="addressConfirmBtn" class="address-confirm-btn" type="button">이 주소로 선택 완료</button></section>`);const input=$('#addressSearchInput');input.value=addressDraft?.address||'';input.addEventListener('click',rc4OpenPostcode);if(input.value)rc4AddressStatus(`검색된 주소 선택: ${input.value}`);renderAddressDraft()};
 
-function rc4InstallEvents(){document.addEventListener('click',event=>{const search=event.target.closest('#addressSearchBtn');if(search){event.preventDefault();event.stopImmediatePropagation();rc4OpenPostcode();return}const more=event.target.closest('[data-rc4-category-more]');if(more){event.preventDefault();event.stopImmediatePropagation();rc4OpenCategoryAll()}},true);rc4LoadPostcode().catch(()=>{})}
+function rc4InstallEvents(){document.addEventListener('click',event=>{const search=event.target.closest('#addressSearchBtn');if(search){event.preventDefault();event.stopImmediatePropagation();rc4OpenPostcode();return}const more=event.target.closest('[data-rc4-category-more]');if(more){event.preventDefault();event.stopImmediatePropagation();rc4OpenCategoryAll()}},true)}
 const rc4InstallEventsBase=fxInstallEvents;
 fxInstallEvents=function(){rc4InstallEventsBase();rc4InstallEvents()};

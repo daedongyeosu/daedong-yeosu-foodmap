@@ -813,6 +813,7 @@
 
   function initialize() {
     if (installed) return;
+    if (window.DAEDONG_REGION?.code && window.DAEDONG_REGION.code !== 'yeosu') return;
     installed = true;
     const hardCloseBase = hardClose;
     const postcodeCloseBase = typeof rc5ClosePostcode === 'function' ? rc5ClosePostcode : null;
@@ -832,6 +833,15 @@
         showAddressStep('saved');
       };
     }
+    window.installDaedongTapAction?.({
+      selector: '[data-rc7-step-back]',
+      activate(target) {
+        const step = target.closest('[data-rc7-step]');
+        if (!step || step.hidden) return false;
+        showAddressStep(target.dataset.rc7StepBack || 'saved');
+        return true;
+      }
+    });
     document.addEventListener('click', handleClick, true);
     document.addEventListener('input', event => {
       if (event.target.id === 'addressDetailInput' || event.target.id === 'addressNicknameInput') renderDraft();

@@ -140,11 +140,14 @@ try {
       && !state.departureSession && !state.departureLocal
       && !state.durableCookie && !state.returnParam && !state.guardParam
   )), '새 접속 직후 가게카드를 눌러도 지연 복귀 상태가 홈으로 덮어쓰지 않음');
-  // This close only resets the fixture before the paging checks. A synthetic
-  // tap can be swallowed by Chromium's emulated touch pipeline, so invoke the
-  // already-covered close handler directly and keep this test focused on the
-  // store-card/home-reset race.
-  await page.evaluate(() => document.querySelector('.modal-close')?.click());
+  // This close only resets the fixture before the next card assertion. Invoke
+  // the already-covered close API directly so a slow CI runner cannot leave a
+  // synthetic button click queued behind hydration work.
+  await page.evaluate(() => {
+    for (let depth = 0; depth < 8 && document.querySelector('#modal')?.hidden === false; depth += 1) {
+      window.hardClose?.({fromPop: true});
+    }
+  });
   await page.waitForFunction(() => document.querySelector('#modal')?.hidden === true);
 
   await page.waitForSelector('[data-rc3-rail-open]');
@@ -172,7 +175,11 @@ try {
       && !state.departureSession && !state.departureLocal
       && !state.durableCookie
   )), '실제 카카오 터치 순서의 추천 가게카드도 상세를 열고 지연 홈 초기화를 차단함');
-  await page.evaluate(() => document.querySelector('.modal-close')?.click());
+  await page.evaluate(() => {
+    for (let depth = 0; depth < 8 && document.querySelector('#modal')?.hidden === false; depth += 1) {
+      window.hardClose?.({fromPop: true});
+    }
+  });
   await page.waitForFunction(() => document.querySelector('#modal')?.hidden === true);
 
   await page.evaluate(() => {

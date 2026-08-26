@@ -5,9 +5,14 @@ const RC2_NAVER_AUDIT_URL = 'data/naver-map-runtime.json';
 const RC2_EXTERNAL_RETURN = 'daedongExternalReturnRc2';
 const RC2_APP_BROWSER_RETURN = 'daedongAppBrowserReturnV1';
 const RC2_RETURN_TOKEN_STATE = 'daedongExternalReturnToken';
+const RC2_RETURN_GUARD_STATE = 'daedongExternalReturnGuard';
 const RC2_RETURN_TOKEN_PARAM = '__ddret';
+const RC2_RETURN_GUARD_PARAM = '__ddguard';
+const RC2_DURABLE_RETURN_COOKIE = 'daedongOrderReturnV1';
 const RC2_RETURN_MAX_AGE = 30 * 60 * 1000;
+const RC2_FOCUS_ONLY_RETURN_DELAY_MS = 650;
 const RC2_RETURN_STORAGE_KEYS = [RC2_EXTERNAL_RETURN, RC2_APP_BROWSER_RETURN];
+const RC2_NEEDS_EXTERNAL_HISTORY_GUARD = /Android/i.test(String(navigator.userAgent || ''));
 const RC2_ICON_SPRITE = 'assets/ui/category-icons.svg';
 const RC2_REGION = window.DAEDONG_REGION || {shortName: '여수', mapName: '대동여수음식지도'};
 const RC2_REGION_NAME = RC2_REGION.shortName || '여수';
@@ -25,6 +30,8 @@ let rc2AmbientTimers = [];
 let rc2DeferredStoreReturnPosition = null;
 let rc2StoreRestorePromise = null;
 let rc2SurfaceRestorePromise = null;
+let rc2ExternalDepartureBlurred = false;
+let rc2ExternalDepartureHidden = false;
 
 function rc2FreshReturnState(saved) {
   const age = Date.now() - Number(saved?.savedAt || 0);
@@ -42,16 +49,33 @@ function rc2ReadDepartureMarker() {
   return rc2FreshReturnState(persistentMarker) ? persistentMarker : null;
 }
 
+function rc2IsHistoryReentry() {
+  if (globalThis.daedongEntryIsHistoryReturn === true) return true;
+  try {
+    const navigationEntry = performance.getEntriesByType?.('navigation')?.[0];
+    return navigationEntry?.type === 'back_forward' || Number(performance.navigation?.type) === 2;
+  } catch {
+    return false;
+  }
+}
+
 function rc2ReadReturnState(key) {
   let urlToken = '';
   try { urlToken = new URL(location.href).searchParams.get(RC2_RETURN_TOKEN_PARAM) || ''; } catch {}
   const historyToken = String(history.state?.[RC2_RETURN_TOKEN_STATE] || '');
+  const departureToken = rc2IsHistoryReentry()
+    ? String(rc2ReadDepartureMarker()?.returnToken || '')
+    : '';
   for (const storage of [sessionStorage, localStorage]) {
     const saved = rc2ParseReturnState(storage, key);
     const savedToken = String(saved?.returnToken || '');
     if (
       rc2FreshReturnState(saved) && savedToken
-      && (savedToken === historyToken || savedToken === urlToken)
+      && (
+        savedToken === historyToken
+        || savedToken === urlToken
+        || savedToken === departureToken
+      )
     ) return saved;
   }
   return null;
@@ -68,7 +92,60 @@ function rc2StoreReturnState(storage, key, payload) {
   try { storage.setItem(key, JSON.stringify(compact)); } catch {}
 }
 
+function rc2ReadDurableReturn() {
+  try {
+    const prefix = `${RC2_DURABLE_RETURN_COOKIE}=`;
+    const raw = document.cookie.split('; ').find(item => item.startsWith(prefix));
+    return raw ? JSON.parse(decodeURIComponent(raw.slice(prefix.length))) : null;
+  } catch {
+    return null;
+  }
+}
+
+function rc2WriteDurableReturn(storageKey, payload) {
+  const compact = {...payload};
+  delete compact.storeSnapshot;
+  delete compact.modalSnapshot;
+  let container = {
+    storageKey,
+    returnToken: compact.returnToken,
+    savedAt: compact.savedAt,
+    payload: compact
+  };
+  let encoded = encodeURIComponent(JSON.stringify(container));
+  if (encoded.length > 3400) {
+    delete compact.anchor;
+    delete compact.searchState;
+    delete compact.menuState;
+    container = {...container, payload: compact};
+    encoded = encodeURIComponent(JSON.stringify(container));
+  }
+  if (encoded.length > 3400) return false;
+  try {
+    const secure = location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${RC2_DURABLE_RETURN_COOKIE}=${encoded}; Max-Age=1800; Path=/; SameSite=Lax${secure}`;
+    return rc2ReadDurableReturn()?.returnToken === compact.returnToken;
+  } catch {
+    return false;
+  }
+}
+
+function rc2ClearDurableReturn(returnToken = '') {
+  const saved = rc2ReadDurableReturn();
+  if (returnToken && String(saved?.returnToken || '') !== String(returnToken)) return;
+  try {
+    const secure = location.protocol === 'https:' ? '; Secure' : '';
+    document.cookie = `${RC2_DURABLE_RETURN_COOKIE}=; Max-Age=0; Path=/; SameSite=Lax${secure}`;
+  } catch {}
+}
+
+function rc2ResetExternalDepartureLifecycle() {
+  rc2ExternalDepartureBlurred = false;
+  rc2ExternalDepartureHidden = false;
+}
+
 function rc2WriteReturnState(key, value) {
+  rc2ResetExternalDepartureLifecycle();
   const returnToken = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
   const payload = {...value, returnToken, savedAt: Date.now()};
   globalThis.daedongLastValidatedExternalReturnAt = payload.savedAt;
@@ -80,17 +157,34 @@ function rc2WriteReturnState(key, value) {
   try {
     const returnUrl = new URL(location.href);
     returnUrl.searchParams.set(RC2_RETURN_TOKEN_PARAM, returnToken);
+    const protectedState = {...history.state, [RC2_RETURN_TOKEN_STATE]: returnToken};
+    const protectedUrl = `${returnUrl.pathname}${returnUrl.search}${returnUrl.hash}`;
     history.replaceState(
-      {...history.state, [RC2_RETURN_TOKEN_STATE]: returnToken},
+      protectedState,
       '',
-      `${returnUrl.pathname}${returnUrl.search}${returnUrl.hash}`
+      protectedUrl
     );
+    // Android in-app browsers can replace the current preview history entry
+    // with an order app's HTTP fallback page while resolving an intent. Keep a
+    // visibly distinct, sacrificial entry above the real return entry. Kakao
+    // can collapse same-URL pushState entries, so the guard must have its own
+    // one-shot URL as well as its own state marker.
+    if (RC2_NEEDS_EXTERNAL_HISTORY_GUARD) {
+      const guardUrl = new URL(returnUrl.href);
+      guardUrl.searchParams.set(RC2_RETURN_GUARD_PARAM, returnToken);
+      history.pushState(
+        {...protectedState, [RC2_RETURN_GUARD_STATE]: returnToken},
+        '',
+        `${guardUrl.pathname}${guardUrl.search}${guardUrl.hash}`
+      );
+    }
   } catch {}
   rc2StoreReturnState(sessionStorage, key, payload);
   rc2StoreReturnState(localStorage, key, payload);
   const departureMarker = {returnToken, savedAt: payload.savedAt};
   rc2StoreReturnState(sessionStorage, EXTERNAL_APP_DEPARTURE_KEY, departureMarker);
   rc2StoreReturnState(localStorage, EXTERNAL_APP_DEPARTURE_KEY, departureMarker);
+  rc2WriteDurableReturn(key, payload);
   return payload;
 }
 
@@ -104,19 +198,25 @@ function rc2ClearReturnState(key, saved = null) {
     try { sessionStorage.removeItem(EXTERNAL_APP_DEPARTURE_KEY); } catch {}
     try { localStorage.removeItem(EXTERNAL_APP_DEPARTURE_KEY); } catch {}
   }
+  if (token && rc2IsHistoryReentry()) rc2ClearDurableReturn(token);
   let urlToken = '';
+  let guardToken = '';
   let returnUrl = null;
   try {
     returnUrl = new URL(location.href);
     urlToken = returnUrl.searchParams.get(RC2_RETURN_TOKEN_PARAM) || '';
+    guardToken = returnUrl.searchParams.get(RC2_RETURN_GUARD_PARAM) || '';
   } catch {}
   const historyMatches = Boolean(token && history.state?.[RC2_RETURN_TOKEN_STATE] === token);
   const urlMatches = Boolean(token && urlToken === token);
-  if (!historyMatches && !urlMatches) return;
+  const guardMatches = Boolean(token && guardToken === token);
+  if (!historyMatches && !urlMatches && !guardMatches) return;
   try {
     const next = {...history.state};
     delete next[RC2_RETURN_TOKEN_STATE];
+    if (next[RC2_RETURN_GUARD_STATE] === token) delete next[RC2_RETURN_GUARD_STATE];
     if (urlMatches) returnUrl.searchParams.delete(RC2_RETURN_TOKEN_PARAM);
+    if (guardMatches) returnUrl.searchParams.delete(RC2_RETURN_GUARD_PARAM);
     history.replaceState(next, '', returnUrl ? `${returnUrl.pathname}${returnUrl.search}${returnUrl.hash}` : undefined);
   } catch {}
 }
@@ -984,6 +1084,36 @@ async function rc2RestoreExternalSurface({rebuildExisting = false} = {}) {
   }
 }
 
+function rc2PendingExternalReturnState() {
+  for (const key of RC2_RETURN_STORAGE_KEYS) {
+    const saved = rc2ReadReturnState(key);
+    if (saved) return saved;
+  }
+  return null;
+}
+
+function rc2RestoreAfterConfirmedResume({rebuildExisting = true} = {}) {
+  const saved = rc2PendingExternalReturnState();
+  if (!saved) return Promise.resolve(false);
+  const age = Date.now() - Number(saved.savedAt || 0);
+  const confirmed = rc2ExternalDepartureHidden
+    || (rc2ExternalDepartureBlurred && age >= RC2_FOCUS_ONLY_RETURN_DELAY_MS);
+  if (!confirmed) {
+    // Android/Kakao can briefly blur and focus the WebView while handing the
+    // intent to an order app. That is still the departure, not the return.
+    // Forget only that bounce; a real app switch emits another blur, hidden,
+    // or pagehide signal before the customer comes back.
+    if (rc2ExternalDepartureBlurred && age < RC2_FOCUS_ONLY_RETURN_DELAY_MS) {
+      rc2ExternalDepartureBlurred = false;
+    }
+    return Promise.resolve(false);
+  }
+  return rc2RestoreExternalSurface({rebuildExisting}).then(restored => {
+    if (restored) rc2ResetExternalDepartureLifecycle();
+    return restored;
+  });
+}
+
 fxOrderClick = function rc2OrderClick(button) {
   const key = button.dataset.orderKey;
   $$('.order-item').forEach(item => item.classList.remove('selected'));
@@ -1002,6 +1132,9 @@ fxInstallEvents = function rc2InstallEvents() {
   document.addEventListener('pointerup', rc2ReleaseAllPresses, true);
   document.addEventListener('pointercancel', rc2ReleaseAllPresses, true);
   window.addEventListener('blur', rc2ReleaseAllPresses);
+  window.addEventListener('blur', () => {
+    if (rc2PendingExternalReturnState()) rc2ExternalDepartureBlurred = true;
+  });
   document.addEventListener('click', event => {
     const order = event.target.closest('[data-order-key]');
     if (order) {
@@ -1092,22 +1225,34 @@ fxInstallEvents = function rc2InstallEvents() {
   });
   document.addEventListener('visibilitychange', () => {
     document.documentElement.classList.toggle('page-hidden', document.hidden);
-    if (document.hidden) rc2StopAmbient();
+    if (document.hidden) {
+      if (rc2PendingExternalReturnState()) rc2ExternalDepartureHidden = true;
+      rc2StopAmbient();
+      return;
+    }
     else {
-      void rc2RestoreExternalSurface({rebuildExisting: true}).then(restored => {
+      void rc2RestoreAfterConfirmedResume({rebuildExisting: true}).then(restored => {
         if (restored) window.daedongFinishExternalReturnBoot?.();
         else rc2StartAmbient(false);
       });
     }
   });
+  window.addEventListener('pagehide', () => {
+    if (rc2PendingExternalReturnState()) rc2ExternalDepartureHidden = true;
+  });
   const restoreAfterNativeResume = () => {
-    void rc2RestoreExternalSurface({rebuildExisting: true}).then(restored => {
+    void rc2RestoreAfterConfirmedResume({rebuildExisting: true}).then(restored => {
       if (restored) window.daedongFinishExternalReturnBoot?.();
     });
   };
   window.addEventListener('pageshow', restoreAfterNativeResume);
-  window.addEventListener('focus', restoreAfterNativeResume);
-  document.addEventListener('resume', restoreAfterNativeResume);
+  window.addEventListener('focus', () => rc2RestoreAfterConfirmedResume({rebuildExisting: true}).then(restored => {
+    if (restored) window.daedongFinishExternalReturnBoot?.();
+  }));
+  document.addEventListener('resume', () => {
+    if (rc2PendingExternalReturnState()) rc2ExternalDepartureHidden = true;
+    restoreAfterNativeResume();
+  });
 };
 
 fxInitialize = async function rc2Initialize() {

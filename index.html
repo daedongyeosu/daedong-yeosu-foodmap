@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+  <meta name="daedong-release" content="production-order-return-mukkebi-20260828-1">
   <meta name="theme-color" content="#ff5a1f">
   <meta name="description" content="여수 음식점과 주문방법을 한눈에 찾는 대동여수음식지도">
   <meta property="og:type" content="website">
@@ -35,14 +36,13 @@
     html.daedong-fresh-entry-settling,
     html.daedong-fresh-entry-settling body{scroll-behavior:auto!important;overflow-anchor:none;overflow-y:hidden!important}
     html.daedong-external-return-pending body{min-height:100dvh;background:#103a5a}
-    html.daedong-external-return-pending body>*{visibility:hidden!important}
     html.daedong-external-return-pending body::before,
     html.daedong-external-return-pending body::after{visibility:visible!important;position:fixed;z-index:99999;pointer-events:none}
     html.daedong-external-return-pending body::before{content:'보던 화면으로 바로 돌아가는 중';inset:0;display:grid;place-items:center;padding-top:72px;background:linear-gradient(180deg,#0d3554,#1d628d);color:#fff;font:900 18px/1.4 system-ui,-apple-system,'Noto Sans KR',sans-serif}
     html.daedong-external-return-pending body::after{content:'';left:50%;top:calc(50% - 28px);width:34px;height:34px;margin:-17px;border:4px solid rgba(255,255,255,.34);border-top-color:#ff6a2e;border-radius:50%;animation:daedong-return-spin .75s linear infinite}
     @keyframes daedong-return-spin{to{transform:rotate(360deg)}}
   </style>
-  <!-- entry-lifecycle-v2-late-webview-restore -->
+  <!-- entry-lifecycle-v3-delayed-kakao-scroll-restore -->
   <script data-daedong-fresh-entry-boot>
     (() => {
       const root = document.documentElement;
@@ -51,6 +51,7 @@
       const FRESH_ENTRY_OPENING_TAP_GRACE_MS = 3000;
       const FRESH_ENTRY_DRAG_DISTANCE = 12;
       let freshEntrySettling = false;
+      let freshEntryLateGuardActive = false;
       let freshEntryCatalogReady = false;
       let freshEntryLoadReady = document.readyState === 'complete';
       let freshEntrySafetyTimer = 0;
@@ -60,17 +61,24 @@
         if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
       } catch {}
 
-      const stopFreshEntrySettle = () => {
+      const stopFreshEntryGuard = () => {
         freshEntrySettling = false;
+        freshEntryLateGuardActive = false;
         if (freshEntrySafetyTimer) window.clearTimeout(freshEntrySafetyTimer);
         if (freshEntryStabilityTimer) window.clearTimeout(freshEntryStabilityTimer);
         freshEntrySafetyTimer = 0;
         freshEntryStabilityTimer = 0;
         root.classList.remove('daedong-fresh-entry-settling');
       };
+      const releaseFreshEntryVisualLock = () => {
+        freshEntrySettling = false;
+        if (freshEntryStabilityTimer) window.clearTimeout(freshEntryStabilityTimer);
+        freshEntryStabilityTimer = 0;
+        root.classList.remove('daedong-fresh-entry-settling');
+      };
       const markEarlyHomeInteraction = () => {
         window.daedongEarlyHomeInteraction = true;
-        stopFreshEntrySettle();
+        stopFreshEntryGuard();
       };
       // Deferred widgets can use this only after they have confirmed a real
       // customer gesture (for example, the horizontal store list actually
@@ -86,6 +94,8 @@
         freshEntryPointerStart = interactionPoint(event);
         // Kakao can pass the chat-link opening tap into the new WebView. That
         // tap is navigation, not an instruction to preserve an old scroll.
+        // Once that propagation window has passed, a new pointerdown is a real
+        // customer interaction and the late restore guard must stand down.
         if (performance.now() >= FRESH_ENTRY_OPENING_TAP_GRACE_MS) markEarlyHomeInteraction();
       };
       const markFreshEntryDrag = event => {
@@ -103,7 +113,7 @@
         document.addEventListener(type, markEarlyHomeInteraction, {capture:true, passive:true, once:true});
       }
       const keepFreshEntryAtTop = ({force = false} = {}) => {
-        if (!force && (!freshEntrySettling || window.daedongEarlyHomeInteraction === true)) return;
+        if (!force && (!freshEntryLateGuardActive || window.daedongEarlyHomeInteraction === true)) return;
         const scrollingElement = document.scrollingElement || root;
         if (scrollingElement) scrollingElement.scrollTop = 0;
         if (document.body) document.body.scrollTop = 0;
@@ -120,7 +130,10 @@
           window.requestAnimationFrame(() => {
             if (!freshEntrySettling || window.daedongEarlyHomeInteraction === true) return;
             keepFreshEntryAtTop({force:true});
-            stopFreshEntrySettle();
+            // Unlock the page as soon as the first screen is stable, but keep
+            // the event-driven guard alive. Kakao WebView can restore an old
+            // native offset several seconds after load/catalog completion.
+            releaseFreshEntryVisualLock();
           });
         });
       };
@@ -138,7 +151,7 @@
         }, FRESH_ENTRY_STABILITY_MS);
       };
       const blockLateFreshEntryRestore = () => {
-        if (!freshEntrySettling || window.daedongEarlyHomeInteraction === true) return;
+        if (!freshEntryLateGuardActive || window.daedongEarlyHomeInteraction === true) return;
         const scrollingElement = document.scrollingElement || root;
         const offset = Math.max(
           Number(scrollingElement?.scrollTop || 0),
@@ -149,7 +162,7 @@
         keepFreshEntryAtTop({force:true});
         // Stability starts again after every late native restoration. This is
         // event-driven, so it does not fight normal scrolling after release.
-        scheduleStableFreshEntryRelease();
+        if (freshEntrySettling) scheduleStableFreshEntryRelease();
       };
       window.addEventListener('scroll', blockLateFreshEntryRestore, {capture:true, passive:true});
       if (!freshEntryLoadReady) {
@@ -168,17 +181,18 @@
       };
       window.daedongArmFreshEntryTop = () => {
         if (window.daedongEarlyHomeInteraction === true) return;
-        stopFreshEntrySettle();
+        stopFreshEntryGuard();
         freshEntryCatalogReady = false;
         freshEntrySettling = true;
+        freshEntryLateGuardActive = true;
         root.classList.add('daedong-fresh-entry-settling');
         keepFreshEntryAtTop();
         // A broken catalog request must never leave the page locked. Normal
         // releases happen much earlier from the application bootstrap when the first list exists.
         freshEntrySafetyTimer = window.setTimeout(() => {
-          if (!freshEntrySettling) return;
+          if (!freshEntryLateGuardActive) return;
           keepFreshEntryAtTop({force:true});
-          stopFreshEntrySettle();
+          stopFreshEntryGuard();
         }, FRESH_ENTRY_SAFETY_RELEASE_MS);
       };
     })();
@@ -193,24 +207,51 @@
         root.classList.remove('daedong-external-return-pending');
         // The return marker is only valid for the single order-app round trip
         // that created it. Keep a separate immutable boot flag so deferred
-        // scripts can preserve this entry, then release the live marker so a
-        // later launcher/Kakao reopen starts from the home top.
+        // scripts can preserve this entry, then release the live marker. A
+        // recent Kakao link reopen after a detached order app is classified
+        // separately below; unrelated launches still start at the home top.
         window.daedongPendingExternalReturn = null;
       };
       try {
         const maxAge = 30 * 60 * 1000;
+        const detachedKakaoMaxAge = 5 * 60 * 1000;
         const tokenState = 'daedongExternalReturnToken';
         const tokenParam = '__ddret';
+        const appFallbackParam = '__ddappfallback';
+        const orderMethodReentryKey = 'daedongOrderMethodReentryV1';
+        const orderMethodReentryParam = '__ddom';
         const departureKey = 'daedongExternalAppDepartureV1';
         const durableReturnCookie = 'daedongOrderReturnV1';
         const storageKeys = ['daedongExternalReturnRc2', 'daedongAppBrowserReturnV1'];
         const entryUrl = new URL(location.href);
+        const orderMethodReentryToken = entryUrl.searchParams.get(orderMethodReentryParam) || '';
+        let orderMethodReentry = null;
+        try {
+          orderMethodReentry = JSON.parse(sessionStorage.getItem(orderMethodReentryKey) || 'null');
+        } catch {}
+        const orderMethodReentryAge = Date.now() - Number(orderMethodReentry?.savedAt || 0);
+        if (
+          !orderMethodReentryToken
+          || orderMethodReentryAge < 0
+          || orderMethodReentryAge > 2 * 60 * 1000
+          || String(orderMethodReentry?.token || '') !== orderMethodReentryToken
+          || String(orderMethodReentry?.storeId || '') !== String(entryUrl.searchParams.get('store') || '')
+        ) {
+          orderMethodReentry = null;
+          try { sessionStorage.removeItem(orderMethodReentryKey); } catch {}
+          if (orderMethodReentryToken) {
+            entryUrl.searchParams.delete(orderMethodReentryParam);
+            try { history.replaceState(history.state, '', `${entryUrl.pathname}${entryUrl.search}${entryUrl.hash}`); } catch {}
+          }
+        }
         const urlToken = entryUrl.searchParams.get(tokenParam) || '';
         const historyToken = String(history.state?.[tokenState] || '');
         const navigationEntry = performance.getEntriesByType?.('navigation')?.[0];
         const historyReentry = navigationEntry?.type === 'back_forward'
           || Number(performance.navigation?.type) === 2;
         window.daedongEntryIsHistoryReturn = historyReentry;
+        const kakaoInAppEntry = /KAKAOTALK/i.test(String(globalThis.navigator?.userAgent || ''));
+        const detachedKakaoEntry = kakaoInAppEntry && !historyReentry && !urlToken && !historyToken;
         const readDurableReturn = () => {
           try {
             const prefix = `${durableReturnCookie}=`;
@@ -232,32 +273,57 @@
         const durableStorageKey = String(durableReturn?.storageKey || '');
         const durableToken = String(durableReturn?.returnToken || '');
         const durableRequiredField = durableStorageKey === storageKeys[0] ? 'storeId' : 'key';
+        const hasDepartureToken = (savedToken, allowedAge = maxAge) => {
+          if (!savedToken) return false;
+          for (const storage of [sessionStorage, localStorage]) {
+            let marker = null;
+            try { marker = JSON.parse(storage.getItem(departureKey) || 'null'); } catch {}
+            const age = Date.now() - Number(marker?.savedAt || 0);
+            if (
+              marker && age >= 0 && age < allowedAge
+              && String(marker.returnToken || '') === savedToken
+            ) return true;
+          }
+          return false;
+        };
+        const detachedKakaoDurableReturn = Boolean(
+          detachedKakaoEntry
+          && durableAge >= 0 && durableAge < detachedKakaoMaxAge
+          && durableToken && durableToken === String(durablePayload?.returnToken || '')
+        );
         if (
-          historyReentry
+          (historyReentry || durableToken === urlToken || durableToken === historyToken || detachedKakaoDurableReturn)
           && storageKeys.includes(durableStorageKey)
           && durableAge >= 0 && durableAge < maxAge
           && durableToken && durableToken === String(durablePayload?.returnToken || '')
           && durablePayload?.[durableRequiredField]
         ) {
           const marker = JSON.stringify({returnToken: durableToken, savedAt: durableReturn.savedAt});
-          const saved = JSON.stringify(durablePayload);
+          // The cookie intentionally carries a compact fallback. Do not let it
+          // overwrite the richer local payload containing the already-rendered
+          // modal snapshot; that snapshot is what prevents Home or an intro
+          // popup from flashing before the catalog/API finishes loading.
+          let restoredPayload = durablePayload;
+          for (const storage of [sessionStorage, localStorage]) {
+            let existing = null;
+            try { existing = JSON.parse(storage.getItem(durableStorageKey) || 'null'); } catch {}
+            if (
+              String(existing?.returnToken || '') === durableToken
+              && (existing?.storeSnapshot?.html || existing?.modalSnapshot?.html)
+            ) {
+              restoredPayload = existing;
+              break;
+            }
+          }
+          const saved = JSON.stringify(restoredPayload);
           try { sessionStorage.setItem(durableStorageKey, saved); } catch {}
           try { localStorage.setItem(durableStorageKey, saved); } catch {}
           try { sessionStorage.setItem(departureKey, marker); } catch {}
           try { localStorage.setItem(departureKey, marker); } catch {}
         }
         const hasMatchingDepartureMarker = savedToken => {
-          if (!historyReentry || !savedToken) return false;
-          for (const storage of [sessionStorage, localStorage]) {
-            let marker = null;
-            try { marker = JSON.parse(storage.getItem(departureKey) || 'null'); } catch {}
-            const age = Date.now() - Number(marker?.savedAt || 0);
-            if (
-              marker && age >= 0 && age < maxAge
-              && String(marker.returnToken || '') === savedToken
-            ) return true;
-          }
-          return false;
+          if (!historyReentry && !detachedKakaoEntry) return false;
+          return hasDepartureToken(savedToken, historyReentry ? maxAge : detachedKakaoMaxAge);
         };
         const readSaved = key => {
           for (const storage of [sessionStorage, localStorage]) {
@@ -284,6 +350,11 @@
         const pending = candidates.map(([storageKey, requiredField]) => ({storageKey, requiredField, saved: readSaved(storageKey)}))
           .find(item => Boolean(item.saved?.[item.requiredField]));
         if (!pending) {
+          if (orderMethodReentry) {
+            window.daedongPendingOrderMethodReentry = orderMethodReentry;
+            root.classList.add('daedong-external-return-pending');
+            return;
+          }
           window.daedongArmFreshEntryTop?.();
           clearDurableReturn();
           for (const key of [...storageKeys, departureKey]) {
@@ -294,11 +365,14 @@
             const nextState = {...history.state};
             delete nextState[tokenState];
             entryUrl.searchParams.delete(tokenParam);
+            entryUrl.searchParams.delete(appFallbackParam);
             try { history.replaceState(nextState, '', `${entryUrl.pathname}${entryUrl.search}${entryUrl.hash}`); } catch {}
           }
           return;
         }
         window.daedongEntryHadExternalReturn = true;
+        window.daedongEntryIsDetachedKakaoReturn = detachedKakaoEntry && !historyReentry;
+        window.daedongEntryExternalReturnToken = String(pending.saved.returnToken || '');
         window.daedongPendingExternalReturn = pending;
         root.classList.add('daedong-external-return-pending');
       } catch {
@@ -658,15 +732,15 @@
   <noscript><p class="noscript">대동여수음식지도를 이용하려면 자바스크립트를 켜주세요.</p></noscript>
   <script src="assets/vendor/leaflet/leaflet.js?v=1.9.4" defer></script>
   <script src="region-config.js?v=korean-particle-fix-1" defer></script>
-  <script src="data-api.js?v=cloudflare-production-api-5-curated-menu-photos-1-detail-rate-limit-backoff-1" defer></script>
+  <script src="data-api.js?v=cloudflare-production-api-5-curated-menu-photos-1-detail-rate-limit-backoff-1-yogiyo-web-route-1" defer></script>
   <script src="data-api-runtime.js?v=cloudflare-production-api-3-yogiyo-duplicate-merge-2-trusted-naver-place-1" defer></script>
-  <script src="app.js?v=photo-viewer-removed-1-store-share-deep-link-1-phone-route-restoration-1-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-hero-forward-only-1-lower-promo-details-6-lotteria-hidden-1-kongsanso-store-family-1-store-badge-removed-1-startup-popup-disabled-1-anonymous-analytics-1-coarse-region-1-owner-exclusion-1-outside-yeosu-full-list-1-direct-coming-soon-1-home-address-short-1-secure-detail-core-1-store-popup-native-order-1-kakao-order-same-tab-1-ddangyo-direct-launch-1-location-ranking-unified-1-catalog-ready-watchdog-2-simple-app-return-1-ddangyo-retry-touch-1-business-status-ranking-1-release-readiness-1-hero-open-only-1-notion-hero-return-1-rider-evergreen-1-goheung-isolation-2-sequential-app-return-1-other-order-method-touch-1-instant-detail-shell-1-instant-hero-loading-1-performance-assets-1-instant-modal-close-5-detail-return-2-mobile-photo-delivery-1-early-catalog-2-progressive-catalog-2-brand-font-after-interaction-1-catalog-background-stable-1-manual-history-scroll-1-brand-alias-cache-1-deferred-photo-hydration-1-broken-photo-menu-fallback-1-detail-photo-menu-fallback-refresh-1-kakao-community-separate-context-1-modal-touch-close-1-yogiyo-duplicate-merge-2-detail-degraded-fallback-1-mobile-photo-original-fallback-2-fresh-entry-top-1-first-hero-webp-1-fresh-entry-explicit-return-1-detail-native-swipe-1-photo-black-band-auto-crop-1-mobile-customer-qa-1-external-return-lifecycle-1-launcher-resume-gap-1-kakao-pointer-resume-1-entry-lifecycle-isolation-1" defer></script>
-  <script src="final-experience.js?v=selected-category-label-2-store-share-deep-link-2-phone-route-restoration-3-phone-card-markers-2-physical-map-recovery-2-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-popup-utility-links-1-selected-store-top-1-rail-cross-section-dedupe-1-search-location-order-1-yogiyo-return-only-1-rail-local-repeat-fallback-3-rail-adjacent-visual-dedupe-1-local-channel-marker-1-lotteria-hidden-1-kongsanso-store-family-1-store-badge-removed-1-handsu-copy-spacing-1-hero-card-cta-removed-1-category-more-card-touch-1-inapp-location-recovery-1-outside-yeosu-full-list-1-store-share-copy-2-shared-store-back-home-1-unified-menu-search-2-secure-detail-await-3-card-channel-keys-1-store-popup-native-order-1-app-list-direct-order-1-app-route-return-fix-1-app-browser-return-state-1-ddangyo-direct-launch-1-location-ranking-ready-1-location-ranking-watchdog-2-saved-address-first-1-simple-app-return-1-direct-return-no-home-1-business-status-ranking-1-nearby-status-final-1-recommend-status-final-1-release-readiness-1-external-return-fast-1-instant-store-snapshot-1-hero-open-only-clean-controls-1-three-main-ads-restored-1-notion-hero-return-1-all-order-app-exact-return-1-managed-region-priority-3-goheung-isolation-2-goheung-launch-1-sequential-app-return-1-instant-external-interaction-1-other-order-method-touch-1-order-methods-return-touch-5-instant-hero-loading-1-keep-placeholder-1-daylight-effects-cleanup-1-postcode-on-demand-1-mobile-photo-delivery-1-brand-icon-delivery-1-rail-bootstrap-dedupe-1-weather-rail-dedupe-1-deferred-photo-hydration-1-reliable-card-photo-src-1-order-methods-return-stable-dom-1-yogiyo-history-return-2-app-browser-return-catalog-ready-1-list-position-stable-1-atomic-rail-refresh-1-trusted-naver-place-1-direct-phone-link-1-hero-photo-recovery-1-recommend-actionable-only-1-customer-action-gate-1-mobile-order-selection-ghost-2-order-method-copy-1-mobile-customer-qa-1-kakao-fresh-entry-token-1-store-campaign-nine-2-order-app-confirmed-resume-1-kakao-external-history-guard-1-android-distinct-history-guard-1-back-forward-departure-marker-1-durable-return-cookie-1" defer></script>
+  <script src="app.js?v=photo-viewer-removed-1-store-share-deep-link-1-phone-route-restoration-1-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-hero-forward-only-1-lower-promo-details-6-lotteria-hidden-1-kongsanso-store-family-1-store-badge-removed-1-startup-popup-disabled-1-anonymous-analytics-1-coarse-region-1-owner-exclusion-1-outside-yeosu-full-list-1-direct-coming-soon-1-home-address-short-1-secure-detail-core-1-store-popup-native-order-1-kakao-order-same-tab-1-ddangyo-direct-launch-1-location-ranking-unified-1-catalog-ready-watchdog-2-simple-app-return-1-ddangyo-retry-touch-1-business-status-ranking-1-release-readiness-1-hero-open-only-1-notion-hero-return-1-rider-evergreen-1-goheung-isolation-2-sequential-app-return-1-other-order-method-touch-1-instant-detail-shell-1-instant-hero-loading-1-performance-assets-1-instant-modal-close-5-detail-return-2-mobile-photo-delivery-1-early-catalog-2-progressive-catalog-2-brand-font-after-interaction-1-manual-history-scroll-1-brand-alias-cache-1-deferred-photo-hydration-1-broken-photo-menu-fallback-1-detail-photo-menu-fallback-refresh-1-kakao-community-separate-context-1-modal-touch-close-1-yogiyo-duplicate-merge-2-detail-degraded-fallback-1-mobile-photo-original-fallback-2-fresh-entry-top-1-first-hero-webp-1-fresh-entry-explicit-return-1-detail-native-swipe-1-photo-black-band-auto-crop-1-mobile-customer-qa-1-external-return-lifecycle-1-launcher-resume-gap-1-kakao-pointer-resume-1-entry-lifecycle-isolation-1-repeated-selected-app-return-1-selected-original-direct-launch-1-real-second-tap-after-sheet-1-kakao-coupang-preview-fallback-1-coupang-direct-store-deeplink-1-stable-separated-order-return-1" defer></script>
+  <script src="final-experience.js?v=selected-category-label-2-store-share-deep-link-2-phone-route-restoration-3-phone-card-markers-2-physical-map-recovery-2-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-popup-utility-links-1-selected-store-top-1-rail-cross-section-dedupe-1-search-location-order-1-yogiyo-return-only-1-rail-local-repeat-fallback-3-rail-adjacent-visual-dedupe-1-local-channel-marker-1-lotteria-hidden-1-kongsanso-store-family-1-store-badge-removed-1-handsu-copy-spacing-1-hero-card-cta-removed-1-category-more-card-touch-1-inapp-location-recovery-1-outside-yeosu-full-list-1-store-share-copy-2-shared-store-back-home-1-unified-menu-search-2-secure-detail-await-3-card-channel-keys-1-store-popup-native-order-1-app-list-direct-order-1-app-route-return-fix-1-app-browser-return-state-1-ddangyo-direct-launch-1-location-ranking-ready-1-location-ranking-watchdog-2-saved-address-first-1-simple-app-return-1-direct-return-no-home-1-business-status-ranking-1-nearby-status-final-1-recommend-status-final-1-release-readiness-1-external-return-fast-1-instant-store-snapshot-1-hero-open-only-clean-controls-1-three-main-ads-restored-1-notion-hero-return-1-all-order-app-exact-return-1-managed-region-priority-3-goheung-isolation-2-goheung-launch-1-sequential-app-return-1-instant-external-interaction-1-other-order-method-touch-1-order-methods-return-touch-5-instant-hero-loading-1-keep-placeholder-1-daylight-effects-cleanup-1-postcode-on-demand-1-mobile-photo-delivery-1-brand-icon-delivery-1-rail-bootstrap-dedupe-1-weather-rail-dedupe-1-deferred-photo-hydration-1-reliable-card-photo-src-1-order-methods-return-stable-dom-1-yogiyo-history-return-2-app-browser-return-catalog-ready-1-list-position-stable-1-atomic-rail-refresh-1-trusted-naver-place-1-direct-phone-link-1-hero-photo-recovery-1-recommend-actionable-only-1-customer-action-gate-1-mobile-order-selection-ghost-2-order-method-copy-1-mobile-customer-qa-1-kakao-fresh-entry-token-1-store-campaign-nine-2-order-app-confirmed-resume-1-kakao-external-history-guard-1-android-distinct-history-guard-1-back-forward-departure-marker-1-durable-return-cookie-1-store-card-intent-2-android-system-back-return-1-repeated-selected-app-return-1-selected-original-direct-launch-1-single-entry-return-1-anchor-lease-1-return-first-tap-2-return-activation-atomic-1-return-intent-cancel-1-return-early-tap-bridge-1-order-sheet-before-history-1-restored-button-direct-touch-1-visible-return-rebind-1-restored-inline-fallback-1-visible-return-detail-rebuild-1-visible-return-modal-reset-1-return-document-reload-1-return-document-navigation-1-reentered-order-method-surface-1-physical-order-reentry-document-1-physical-order-hit-surface-1-inline-order-methods-1-external-route-return-touch-1-stable-separated-order-return-2-direct-order-app-one-tap-1-keep-order-app-list-on-return-1-detached-kakao-order-return-1-restored-external-route-direct-touch-1-yogiyo-live-preview-task-1-yogiyo-kakao-https-return-1-yogiyo-kakao-web-return-1-yogiyo-native-bypass-form-1-yogiyo-android-browser-form-1-restored-open-order-methods-1-restored-open-order-methods-ready-1-catalog-refresh-route-fallback-1-yogiyo-native-app-return-1" defer></script>
   <script src="store-list-horizontal-pager.js?v=visible-results-1-free-scroll-1-early-interaction-2" defer></script>
-  <script src="turtle-ship-hero.js?v=message-colors-popup-15s-1-goheung-isolation-2-immediate-close-1-shared-touch-close-1-no-late-interrupt-1" defer></script>
-  <script src="store-service-info.js?v=store-service-26-deferred-bootstrap-1-menu-search-status-order-1-card-status-1-business-status-ranking-1-seomseom-merchant-label-1-recent-search-return-1-targeted-surface-observer-1-surface-scoped-refresh-1-observer-reentry-guard-1-shared-touch-close-1-confirmed-hours-fallback-1-yogiyo-duplicate-merge-2-ime-debounce-1-progressive-results-1-detail-search-return-1-service-overview-manifest-photo-1-mobile-customer-qa-1-home-open-count-1-real-phone-benefit-touch-1" defer></script>
+  <script src="mukkebi-summer-event.js?v=20260801-1-simple-app-return-1-goheung-isolation-2-immediate-close-1-shared-touch-close-1-no-late-interrupt-3-scroll-cancel-1-layer-guard-1-auto-popup-disabled-1-fresh-entry-popup-1-kakao-opening-touch-1-startup-order-1-no-consecutive-popup-1" defer></script>
+  <script src="turtle-ship-hero.js?v=message-colors-popup-15s-1-goheung-isolation-2-immediate-close-1-shared-touch-close-1-no-late-interrupt-1-external-return-guard-1-mukkebi-order-1" defer></script>
+  <script src="store-service-info.js?v=store-service-26-deferred-bootstrap-1-menu-search-status-order-1-card-status-1-business-status-ranking-1-seomseom-merchant-label-1-recent-search-return-1-targeted-surface-observer-1-surface-scoped-refresh-1-observer-reentry-guard-1-shared-touch-close-1-confirmed-hours-fallback-1-yogiyo-duplicate-merge-2-ime-debounce-1-progressive-results-1-detail-search-return-1-service-overview-manifest-photo-1-mobile-customer-qa-1-home-open-count-1-real-phone-benefit-touch-1-store-card-intent-1" defer></script>
   <script src="store-menu-preview.js?v=store-menu-22-customer-popup-order-1-simple-app-return-1-all-order-app-exact-return-1-performance-assets-1-service-unblock-1-parallel-load-1-instant-close-2-progressive-render-1-detail-return-3-mobile-photo-delivery-1-touch-reliability-1-menu-prefetch-2-active-detail-observer-1-image-queue-1-scroll-fallback-1-interaction-priority-1-history-clean-1-retain-hidden-dom-1-direct-scroll-chunk-1-scroll-intent-chunk-1-scroll-chunk-lock-1-history-replace-close-1-progressive-scroll-restore-1-layer-pop-suppress-1-broken-photo-fallback-1-kakao-touch-close-1-order-sheet-touch-close-1-mobile-customer-qa-2-directional-order-dock-1" defer></script>
   <script src="pwa-register.js?v=android-pwa-1-preview-redeploy-1-kakao-cache-reset-1-mobile-api-deadline-1-runtime-static-cache-1" defer></script>
-  <script src="mukkebi-summer-event.js?v=20260801-1-simple-app-return-1-goheung-isolation-2-immediate-close-1-shared-touch-close-1-no-late-interrupt-3-scroll-cancel-1-layer-guard-1-auto-popup-disabled-1" defer></script>
 </body>
 </html>

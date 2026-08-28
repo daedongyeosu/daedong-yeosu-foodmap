@@ -20,7 +20,7 @@ function makeStorage(initial = {}) {
   };
 }
 
-function runBoot({href = 'https://preview.daedongmap.com/', historyState = null, session = {}, local = {}, navigationType = 'navigate', cookie = ''} = {}) {
+function runBoot({href = 'https://preview.daedongmap.com/', historyState = null, session = {}, local = {}, navigationType = 'navigate', cookie = '', userAgent = 'Mozilla/5.0 Chrome/140 Mobile Safari/537.36'} = {}) {
   const classes = new Set();
   const replaced = [];
   const sessionStorage = makeStorage(session);
@@ -42,6 +42,7 @@ function runBoot({href = 'https://preview.daedongmap.com/', historyState = null,
     sessionStorage,
     localStorage,
     history,
+    navigator: {userAgent},
     window: {},
     URL,
     String,
@@ -61,19 +62,32 @@ const now = Date.now();
 const saved = JSON.stringify({storeId: 'store-1', returnToken: 'return-token-1', savedAt: now});
 const marker = JSON.stringify({returnToken: 'return-token-1', savedAt: now});
 
-const freshKakao = runBoot({
+const freshBrowserEntry = runBoot({
   session: {daedongExternalReturnRc2: saved},
   local: {
     daedongExternalReturnRc2: saved,
     daedongExternalAppDepartureV1: marker
   }
 });
-assert.equal(freshKakao.classes.has('daedong-external-return-pending'), false,
-  '카카오톡의 일반 루트 링크는 과거 주문앱 복귀 기록이 남아 있어도 새 방문이어야 합니다.');
-assert.equal(freshKakao.sessionStorage.has('daedongExternalReturnRc2'), false,
+assert.equal(freshBrowserEntry.classes.has('daedong-external-return-pending'), false,
+  '일반 브라우저의 루트 링크는 과거 주문앱 복귀 기록이 남아 있어도 새 방문이어야 합니다.');
+assert.equal(freshBrowserEntry.sessionStorage.has('daedongExternalReturnRc2'), false,
   '새 방문에서 세션 복귀 기록을 지워 이후의 잘못된 중간 화면 복원을 막아야 합니다.');
-assert.equal(freshKakao.localStorage.has('daedongExternalAppDepartureV1'), false,
+assert.equal(freshBrowserEntry.localStorage.has('daedongExternalAppDepartureV1'), false,
   '새 방문에서 과거 주문앱 출발 표식을 지워야 합니다.');
+
+const detachedKakaoLinkReturn = runBoot({
+  userAgent: 'Mozilla/5.0 Chrome/140 Mobile Safari/537.36 KAKAOTALK 25.6.0',
+  session: {daedongExternalReturnRc2: saved},
+  local: {
+    daedongExternalReturnRc2: saved,
+    daedongExternalAppDepartureV1: marker
+  }
+});
+assert.equal(detachedKakaoLinkReturn.classes.has('daedong-external-return-pending'), true,
+  '요기요가 Preview를 끊어도 5분 안에 카카오톡 링크를 다시 누르면 보던 가게를 복원해야 합니다.');
+assert.equal(detachedKakaoLinkReturn.window.daedongEntryIsDetachedKakaoReturn, true,
+  '런타임도 새 문서형 카카오 복귀임을 이어서 판별할 수 있어야 합니다.');
 
 const cleanBackForwardReturn = runBoot({
   navigationType: 'back_forward',
@@ -102,6 +116,13 @@ assert.equal(storageLostBackForwardReturn.sessionStorage.has('daedongExternalRet
 assert.equal(storageLostBackForwardReturn.localStorage.has('daedongExternalAppDepartureV1'), true,
   '복원 전에 쿠키 토큰과 같은 출발 표식을 다시 세워야 합니다.');
 
+const storageLostUrlReturn = runBoot({
+  href: 'https://preview.daedongmap.com/?__ddret=return-token-1',
+  cookie: `daedongOrderReturnV1=${durableCookieValue}`
+});
+assert.equal(storageLostUrlReturn.classes.has('daedong-external-return-pending'), true,
+  'Web Storage가 사라져도 URL과 내구성 쿠키의 일회용 토큰이 같으면 복귀 화면을 보호해야 합니다.');
+
 const freshEntryWithDurableCookie = runBoot({
   cookie: `daedongOrderReturnV1=${durableCookieValue}`
 });
@@ -109,6 +130,60 @@ assert.equal(freshEntryWithDurableCookie.classes.has('daedong-external-return-pe
   '일반 새 링크는 내구성 쿠키가 남아 있어도 홈 최상단이어야 합니다.');
 assert.match(freshEntryWithDurableCookie.document.cookie, /Max-Age=0/,
   '일반 새 링크는 오래된 내구성 쿠키를 즉시 만료시켜야 합니다.');
+
+const storageLostDetachedKakaoReturn = runBoot({
+  userAgent: 'Mozilla/5.0 Chrome/140 Mobile Safari/537.36 KAKAOTALK 25.6.0',
+  cookie: `daedongOrderReturnV1=${durableCookieValue}`
+});
+assert.equal(storageLostDetachedKakaoReturn.classes.has('daedong-external-return-pending'), true,
+  '카카오가 저장소를 잃어도 5분 내 링크 재진입은 내구성 쿠키로 보던 가게를 복원해야 합니다.');
+
+const staleDetachedSaved = JSON.stringify({storeId: 'store-1', returnToken: 'stale-detached-token', savedAt: now - (6 * 60 * 1000)});
+const staleDetachedMarker = JSON.stringify({returnToken: 'stale-detached-token', savedAt: now - (6 * 60 * 1000)});
+const staleDetachedKakaoEntry = runBoot({
+  userAgent: 'Mozilla/5.0 Chrome/140 Mobile Safari/537.36 KAKAOTALK 25.6.0',
+  local: {
+    daedongExternalReturnRc2: staleDetachedSaved,
+    daedongExternalAppDepartureV1: staleDetachedMarker
+  }
+});
+assert.equal(staleDetachedKakaoEntry.classes.has('daedong-external-return-pending'), false,
+  '5분이 지난 카카오 링크 재진입은 이전 가게 대신 홈에서 새로 시작해야 합니다.');
+
+const staleDetachedCookie = encodeURIComponent(JSON.stringify({
+  storageKey: 'daedongExternalReturnRc2',
+  returnToken: 'stale-detached-token',
+  savedAt: now - (6 * 60 * 1000),
+  payload: JSON.parse(staleDetachedSaved)
+}));
+const staleCookieKakaoEntry = runBoot({
+  userAgent: 'Mozilla/5.0 Chrome/140 Mobile Safari/537.36 KAKAOTALK 25.6.0',
+  cookie: `daedongOrderReturnV1=${staleDetachedCookie}`
+});
+assert.equal(staleCookieKakaoEntry.classes.has('daedong-external-return-pending'), false,
+  'Web Storage 없이 쿠키만 남았어도 5분이 지난 링크 재진입은 홈에서 시작해야 합니다.');
+
+const sixMinuteHistoryReturn = runBoot({
+  navigationType: 'back_forward',
+  session: {
+    daedongExternalReturnRc2: staleDetachedSaved,
+    daedongExternalAppDepartureV1: staleDetachedMarker
+  }
+});
+assert.equal(sixMinuteHistoryReturn.classes.has('daedong-external-return-pending'), true,
+  '실제 뒤로가기는 링크 재접속 제한과 구분해 기존 30분 복원을 유지해야 합니다.');
+
+const expiredSaved = JSON.stringify({storeId: 'store-1', returnToken: 'expired-token', savedAt: now - (31 * 60 * 1000)});
+const expiredMarker = JSON.stringify({returnToken: 'expired-token', savedAt: now - (31 * 60 * 1000)});
+const expiredKakaoEntry = runBoot({
+  userAgent: 'Mozilla/5.0 Chrome/140 Mobile Safari/537.36 KAKAOTALK 25.6.0',
+  local: {
+    daedongExternalReturnRc2: expiredSaved,
+    daedongExternalAppDepartureV1: expiredMarker
+  }
+});
+assert.equal(expiredKakaoEntry.classes.has('daedong-external-return-pending'), false,
+  '30분이 지난 카카오 링크 재진입은 오래된 가게 화면을 되살리지 않아야 합니다.');
 
 const urlReturn = runBoot({
   href: 'https://preview.daedongmap.com/?__ddret=return-token-1',
@@ -150,11 +225,19 @@ assert.match(rc2, /rc2WriteDurableReturn\(key, payload\)/,
   '카카오가 Web Storage를 잃는 실제 휴대전화에서는 최소 복귀정보를 일회용 자사 쿠키에도 남겨야 합니다.');
 assert.match(rc2, /savedToken === historyToken[\s\S]*?savedToken === urlToken[\s\S]*?savedToken === departureToken/,
   '저장소에 값이 있다는 이유만으로 복귀하지 말고 URL·history 또는 실제 뒤로가기 출발 표식이 일치해야 합니다.');
+assert.match(rc2, /daedongEntryIsDetachedKakaoReturn === true/,
+  '새 문서로 다시 열린 카카오 복귀에서도 초기 부트가 검증한 출발 표식을 런타임이 이어받아야 합니다.');
 assert.doesNotMatch(rc2, /if \(rc2FreshReturnState\(sessionSaved\)\) return sessionSaved/,
   '과거 세션 값만으로 카카오톡 새 방문을 중간 위치로 보내면 안 됩니다.');
 assert.match(html, /final-experience\.js\?v=[^"\n]*kakao-fresh-entry-token-1/);
+assert.match(html, /final-experience\.js\?v=[^"\n]*detached-kakao-order-return-1/,
+  '카카오 링크 재진입 수정본을 즉시 받도록 최종 런타임 주소를 갱신해야 합니다.');
+assert.match(html, /name="daedong-release" content="production-order-return-mukkebi-20260828-1"/,
+  '주문앱 복귀·먹깨비 수정 배포본을 CDN에서 구분할 표시가 필요합니다.');
 assert.match(html, /app\.js\?v=[^"\n]*external-return-lifecycle-1/,
   '기존 휴대폰 런타임 캐시에 남은 app.js와 구분되는 주소가 필요합니다.');
 assert.match(finalExperience, /rc2-fixes\.js\?v=[^'\n]*kakao-fresh-entry-token-1/);
+assert.match(finalExperience, /rc2-fixes\.js\?v=[^'\n]*detached-kakao-order-return-1/,
+  '카카오 링크 재진입을 이어받는 RC2 수정본의 캐시 주소가 달라야 합니다.');
 
 console.log('kakao-fresh-entry-scroll-regression-test: pass');

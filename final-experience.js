@@ -26,6 +26,8 @@ const FX_WEATHER_CACHE='daedongYeosuWeatherV1';
 const FX_HOME_SHARE_URL=FX_REGION.code==='yeosu'?'https://daedongmap.com/':new URL(window.daedongRegionUrl?.(FX_REGION.code)||window.location.href,window.location.origin).href;
 const FX_HOME_SHARE_TEXT=`${FX_REGION_NAME} 음식점과 이용 가능한 주문방법을 한눈에 확인해보세요.`;
 const FX_STORE_SHARE_PARAM='store';
+const FX_ORDER_METHOD_REENTRY='daedongOrderMethodReentryV1';
+const FX_ORDER_METHOD_REENTRY_PARAM='__ddom';
 const FX_APP_BROWSER_RETURN='daedongAppBrowserReturnV1';
 const FX_HIDDEN_STORE_IDS=new Set([
  '6092aabddf5f7194', // 롯데리아 중앙점
@@ -111,7 +113,7 @@ function fxRestoreAppBrowserReturn(){
  if(!['direct','mukkebi','ddangyo','ondongne','yogiyo','coupang','baemin'].includes(saved.key)){window.daedongClearExternalReturnState?.(FX_APP_BROWSER_RETURN,saved);return false;}
  const visibleSameApp=!modal?.hidden&&modal.dataset.appBrowserKey===saved.key;
  const restoredCards=visibleSameApp?modal.querySelectorAll('[data-app-store-order]').length:0;
- if(visibleSameApp&&restoredCards>0){window.daedongStabilizeReturnPosition?.(saved);window.daedongClearExternalReturnState?.(FX_APP_BROWSER_RETURN,saved);return true;}
+ if(visibleSameApp&&restoredCards>0){window.daedongStabilizeReturnPosition?.(saved);window.daedongArmRestoredReturnLease?.(FX_APP_BROWSER_RETURN,saved);return true;}
  // Kakao may recreate this page after the order app was opened. In that cold
  // return, pageshow/focus can run before the catalog has finished loading. Do
  // not replace a missing snapshot with a false "no stores" result or consume
@@ -122,7 +124,7 @@ function fxRestoreAppBrowserReturn(){
  openAppBrowser(saved.key,saved.category||'추천');
  if(modal?.hidden||modal.dataset.appBrowserKey!==saved.key)return false;
  window.daedongStabilizeReturnPosition?.(saved);
- window.daedongClearExternalReturnState?.(FX_APP_BROWSER_RETURN,saved);return true;
+ window.daedongArmRestoredReturnLease?.(FX_APP_BROWSER_RETURN,saved);return true;
 }
 async function fxOpenRegisteredAppOrder(button){
  const store=fxStoreById(button.dataset.appStoreOrder),key=button.dataset.appKey;if(!store||!key)return;
@@ -441,22 +443,57 @@ function fxSharedStoreHomeUrl(){
  const query=url.searchParams.toString();
  return `${url.pathname}${query?`?${query}`:''}${url.hash}`;
 }
+function fxPendingOrderMethodReentry(storeId){
+ const saved=window.daedongPendingOrderMethodReentry;
+ const token=new URLSearchParams(location.search).get(FX_ORDER_METHOD_REENTRY_PARAM)||'';
+ const age=Date.now()-Number(saved?.savedAt||0);
+ return saved&&age>=0&&age<2*60*1000&&String(saved.storeId||'')===String(storeId||'')&&String(saved.token||'')===token?saved:null;
+}
+function fxPrepareOrderMethodReentryUrl(saved){
+ if(!saved)return false;
+ try{
+  const url=new URL(location.href);
+  url.searchParams.delete(FX_ORDER_METHOD_REENTRY_PARAM);
+  history.replaceState(history.state,'',`${url.pathname}${url.search}${url.hash}`);
+  return true;
+ }catch{return false;}
+}
+function fxFinishOrderMethodReentry(saved,{restorePosition=false}={}){
+ if(!saved)return;
+ if(restorePosition){
+  const card=document.querySelector('#modal:not([hidden]) .modal-card');
+  const align=()=>{if(card)card.scrollTop=Math.max(0,Number(saved.modalScroll||0));};
+  align();requestAnimationFrame(()=>{align();requestAnimationFrame(align);});
+ }
+ try{sessionStorage.removeItem(FX_ORDER_METHOD_REENTRY);}catch{}
+ window.daedongPendingOrderMethodReentry=null;
+ // The store detail was built normally behind the opaque boot cover. Give its
+ // native hit-test surface two painted frames before removing that cover.
+ requestAnimationFrame(()=>requestAnimationFrame(()=>window.daedongFinishExternalReturnBoot?.()));
+}
 async function fxOpenSharedStoreFromUrl(){
  const storeId=fxRequestedSharedStoreId();
  if(!storeId)return false;
+ const orderMethodReentry=fxPendingOrderMethodReentry(storeId);
+ // URL mutation after openStore() leaves correct pixels but a dead native
+ // button surface in Samsung Kakao WebView. Strip the one-time marker before
+ // the modal DOM exists; every later history entry is then already clean.
+ fxPrepareOrderMethodReentryUrl(orderMethodReentry);
  const sharedStoreUrl=`${location.pathname}${location.search}${location.hash}`;
  for(let attempt=0;attempt<50;attempt+=1){
   const store=fxStoreById(storeId);
   if(store&&fxVisible(store)){
    history.replaceState(history.state,'',fxSharedStoreHomeUrl());
    const opened=await openStore(store);
-   if(opened===false)return false;
+   if(opened===false){fxFinishOrderMethodReentry(orderMethodReentry);return false;}
    if(history.state?.daedongModal)history.replaceState(history.state,'',sharedStoreUrl);
+   fxFinishOrderMethodReentry(orderMethodReentry,{restorePosition:true});
    return true;
   }
   await new Promise(resolve=>setTimeout(resolve,100));
  }
  console.warn('공유된 가게를 찾지 못했습니다.',storeId);
+ fxFinishOrderMethodReentry(orderMethodReentry);
  return false;
 }
 function fxHandleHomeShareClick(event){
@@ -524,7 +561,7 @@ fxRc2Style.href='rc2-fixes.css?v=phone-route-restoration-1-daylight-effects-clea
 document.head.append(fxRc2Style);
 const fxRc3Style=document.createElement('link');
 fxRc3Style.rel='stylesheet';
-fxRc3Style.href='rc3-fixes.css?v=selected-category-label-1-popup-utility-links-1-selected-store-top-1-order-methods-return-touch-5';
+fxRc3Style.href='rc3-fixes.css?v=selected-category-label-1-popup-utility-links-1-selected-store-top-1-order-methods-return-touch-5-inline-order-methods-1-restored-external-route-direct-touch-1';
 document.head.append(fxRc3Style);
 const fxRc4Style=document.createElement('link');
 fxRc4Style.rel='stylesheet';
@@ -549,14 +586,45 @@ document.addEventListener('click',event=>{
  if(typeof allCategoriesModal==='function')allCategoriesModal();
 },true);
 
+// Register this bridge before the dynamically loaded return layers. Samsung
+// Kakao WebView can resume a history entry with the restored store DOM visible
+// while a later delegated click listener is still behind a native resume
+// event. The shared tap action completes on pointerup/touchend, so the first
+// real tap opens the order-method sheet without depending on a synthetic click.
+window.installDaedongTapAction?.({
+ selector:'[data-rc3-other-methods]',
+ activate(target,event){
+  // Use the same ghost-click guard as the button's direct and inline paths.
+  // Without it, one physical pointerup can open two identical sheets, leaving
+  // a hidden duplicate in the modal history when the customer goes back.
+  const activate=window.daedongActivateOrderMethodsFallback;
+  return typeof activate==='function'?activate(target,event):false;
+ }
+});
+window.installDaedongTapAction?.({
+ selector:'[data-rc3-order-methods-close]',
+ activate(target,event){
+  const close=window.daedongCloseInlineOrderMethods;
+  return typeof close==='function'?close(target,event):false;
+ }
+});
+window.installDaedongTapAction?.({
+ selector:'[data-rc3-external-route]',
+ activate(target,event){
+  const activate=window.daedongActivateExternalOrderRouteFallback;
+  return typeof activate==='function'?activate(target,event):false;
+ }
+});
+
 const fxRc2Script=document.createElement('script');
-fxRc2Script.src='rc2-fixes.js?v=selected-category-label-2-store-share-deep-link-1-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-rail-cross-section-dedupe-1-yogiyo-same-tab-return-1-rail-local-repeat-fallback-3-rail-adjacent-visual-dedupe-1-secure-detail-await-1-app-list-direct-order-1-all-app-return-state-1-location-stable-newest-1-simple-app-return-1-direct-return-no-home-1-nearby-status-final-1-external-return-fast-1-instant-store-snapshot-1-all-order-app-exact-return-1-managed-region-priority-3-goheung-isolation-2-goheung-launch-1-sequential-app-return-1-instant-external-interaction-1-daylight-effects-cleanup-1-mobile-photo-delivery-1-brand-key-cache-1-ranked-input-1-order-methods-return-stable-dom-1-yogiyo-history-return-2-mobile-customer-qa-1-kakao-fresh-entry-token-1-order-app-confirmed-resume-1-kakao-external-history-guard-1-android-distinct-history-guard-1-back-forward-departure-marker-1-durable-return-cookie-1';
+fxRc2Script.src='rc2-fixes.js?v=selected-category-label-2-store-share-deep-link-1-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-rail-cross-section-dedupe-1-yogiyo-same-tab-return-1-rail-local-repeat-fallback-3-rail-adjacent-visual-dedupe-1-secure-detail-await-1-app-list-direct-order-1-all-app-return-state-1-location-stable-newest-1-simple-app-return-1-direct-return-no-home-1-nearby-status-final-1-external-return-fast-1-instant-store-snapshot-1-all-order-app-exact-return-1-managed-region-priority-3-goheung-isolation-2-goheung-launch-1-sequential-app-return-1-instant-external-interaction-1-daylight-effects-cleanup-1-mobile-photo-delivery-1-brand-key-cache-1-ranked-input-1-order-methods-return-stable-dom-1-yogiyo-history-return-2-mobile-customer-qa-1-kakao-fresh-entry-token-1-order-app-confirmed-resume-1-kakao-external-history-guard-1-android-distinct-history-guard-1-back-forward-departure-marker-1-durable-return-cookie-1-store-card-intent-2-android-system-back-return-1-repeated-selected-app-return-1-selected-original-direct-launch-1-single-entry-return-1-anchor-lease-1-return-first-tap-2-return-activation-atomic-1-return-intent-cancel-1-return-early-tap-bridge-1-restored-button-direct-touch-1-visible-return-rebind-1-visible-return-detail-rebuild-1-visible-return-modal-reset-1-return-document-reload-1-return-document-navigation-1-reentered-order-method-surface-1-physical-order-reentry-document-1-stable-separated-order-return-1-direct-order-app-one-tap-1-detached-kakao-order-return-1-yogiyo-live-preview-task-1-yogiyo-kakao-https-return-1-yogiyo-kakao-web-return-1-yogiyo-native-bypass-form-1-yogiyo-android-browser-form-1-restored-open-order-methods-1-restored-open-order-methods-ready-1-catalog-refresh-route-fallback-1-yogiyo-native-app-return-1';
 fxRc2Script.async=false;
 fxRc2Script.onload=()=>{
  fxInstallEvents();
  const fxRc3Script=document.createElement('script');
- fxRc3Script.src='rc3-fixes.js?v=selected-category-label-1-phone-route-restoration-3-phone-card-markers-2-physical-map-recovery-2-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-popup-utility-links-1-selected-store-top-1-rail-use-counts-1-secure-detail-await-1-card-channel-keys-1-store-popup-native-order-1-recommend-status-final-1-release-readiness-1-managed-region-priority-3-goheung-isolation-2-other-order-method-touch-1-order-methods-return-touch-5-mobile-photo-delivery-1-single-rank-per-rail-1-progressive-rails-1-single-yogiyo-cta-1-trusted-naver-place-1-direct-phone-link-1-mobile-order-selection-ghost-2-order-method-copy-1';
- fxRc3Script.src+='-atomic-rail-refresh-1';
+ fxRc3Script.src='rc3-fixes.js?v=selected-category-label-1-phone-route-restoration-3-phone-card-markers-2-physical-map-recovery-2-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-popup-utility-links-1-selected-store-top-1-rail-use-counts-1-secure-detail-await-1-card-channel-keys-1-store-popup-native-order-1-recommend-status-final-1-release-readiness-1-managed-region-priority-3-goheung-isolation-2-other-order-method-touch-1-order-methods-return-touch-5-mobile-photo-delivery-1-single-rank-per-rail-1-progressive-rails-1-single-yogiyo-cta-1-trusted-naver-place-1-direct-phone-link-1-mobile-order-selection-ghost-2-order-method-copy-1-restored-inline-fallback-1-inline-order-methods-1-external-route-return-touch-1-stable-separated-order-return-2-direct-order-app-one-tap-1-keep-order-app-list-on-return-1-restored-open-order-methods-1-restored-open-order-methods-ready-1-catalog-refresh-route-fallback-1';
+ fxRc3Script.src+='-atomic-rail-refresh-1-store-card-intent-2-return-activation-atomic-1-return-intent-cancel-1-return-early-tap-bridge-1-order-sheet-before-history-1-restored-button-direct-touch-1';
+ fxRc3Script.src+='-restored-external-route-direct-touch-1';
  fxRc3Script.async=false;
  fxRc3Script.onload=()=>{
   const fxRc4Script=document.createElement('script');

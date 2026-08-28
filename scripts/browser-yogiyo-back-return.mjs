@@ -14,7 +14,6 @@ const loadBrowserRuntime = async () => {
 };
 
 const {chromium, launchOptions} = await loadBrowserRuntime();
-
 const baseURL = process.env.BASE_URL || 'https://daedongmap.com/';
 const baseOrigin = new URL(baseURL).origin;
 const store = {
@@ -23,9 +22,11 @@ const store = {
   district: '미평동',
   category: '치킨',
   categories: ['치킨'],
+  lat: 34.7523658,
+  lng: 127.7031405,
   channelKeys: ['yogiyo', 'coupang', 'baemin'],
   routes: [
-    {name: '요기요', url: 'https://orders.example.test/yogiyo/return-test', enabled: true},
+    {name: '요기요', url: 'https://ws.yogiyo.co.kr/48zrgs', enabled: true},
     {name: '쿠팡이츠', url: 'https://orders.example.test/coupang/return-test', enabled: true},
     {name: '배달의민족', url: 'https://orders.example.test/baemin/return-test', enabled: true}
   ]
@@ -37,27 +38,58 @@ const context = await browser.newContext({
   isMobile: true,
   hasTouch: true,
   locale: 'ko-KR',
-  userAgent: 'Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 Chrome/140 Mobile Safari/537.36 KAKAOTALK 25.6.0'
+  userAgent: 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/30.0 Chrome/143.0.0.0 Mobile Safari/537.36'
 });
-await context.addInitScript(() => sessionStorage.setItem('daedongMukkebiSummerEventSeenSessionV1', '1'));
+await context.addInitScript(() => sessionStorage.setItem('daedongMukkebiSummerEventSeenSessionV2', '1'));
+await context.addInitScript(({previewOrigin}) => {
+  window.addEventListener('pageshow', () => {
+    if (location.origin !== previewOrigin || !sessionStorage.getItem('daedongExternalReturnRc2')) return;
+    const trigger = document.querySelector('[data-rc3-other-methods]');
+    const panel = document.querySelector('[data-rc3-inline-order-methods]');
+    if (!trigger || !panel || panel.hidden) return;
+    // Samsung Internet can revive the same detail DOM with the inline panel's
+    // native visibility reset. Reproduce that real-device resume before the
+    // application's pageshow restore handler runs.
+    panel.hidden = true;
+    trigger.setAttribute('aria-expanded', 'false');
+    trigger.querySelector('span').textContent = '다른 주문방법 보기';
+    trigger.querySelector('b').textContent = '›';
+    const restoreInline = window.daedongRestoreInlineOrderMethodsOpen;
+    if (typeof restoreInline === 'function') {
+      delete window.daedongRestoreInlineOrderMethodsOpen;
+      setTimeout(() => { window.daedongRestoreInlineOrderMethodsOpen = restoreInline; }, 150);
+    }
+  }, true);
+}, {previewOrigin: baseOrigin});
 if (process.env.PATCH_RC2_FROM_LOCAL === '1') {
   const patchedRc2 = fs.readFileSync(new URL('../rc2-fixes.js', import.meta.url), 'utf8');
+  const patchedRc3 = fs.readFileSync(new URL('../rc3-fixes.js', import.meta.url), 'utf8');
+  const patchedDataApi = fs.readFileSync(new URL('../data-api.js', import.meta.url), 'utf8');
   await context.route('**/rc2-fixes.js*', route => route.fulfill({status: 200, contentType: 'text/javascript; charset=utf-8', body: patchedRc2}));
+  await context.route('**/rc3-fixes.js*', route => route.fulfill({status: 200, contentType: 'text/javascript; charset=utf-8', body: patchedRc3}));
+  await context.route('**/data-api.js*', route => route.fulfill({status: 200, contentType: 'text/javascript; charset=utf-8', body: patchedDataApi}));
 }
 await context.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
 await context.route('**/*.woff2', route => route.abort());
 await context.route('**/api/catalog', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify([store])}));
 await context.route('**/api/services', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify({programs: [], stores: {}})}));
-await context.route('**/api/store/*', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(store)}));
-await context.route('https://orders.example.test/**', route => route.fulfill({status: 200, contentType: 'text/html; charset=utf-8', body: '<!doctype html><title>주문앱</title><p>외부 주문앱 화면</p>'}));
+await context.route('**/api/store/**', route => {
+  return route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    headers: {'Access-Control-Allow-Origin': baseOrigin},
+    body: JSON.stringify(store)
+  });
+});
 
 const check = async (condition, message) => {
   const ok = await condition;
   report.checks.push({message, ok});
   if (!ok) throw new Error(message);
 };
-const openGuide = async (page, key) => {
-  await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
+
+const openOrderMethodsRoute = async (page, {allowOpen = true} = {}) => {
+  if (new URL(page.url()).origin !== baseOrigin) await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
   await page.waitForFunction(
     () => window.daedongCatalogReady && typeof window.daedongCatalogReady.then === 'function',
     null,
@@ -65,67 +97,103 @@ const openGuide = async (page, key) => {
   );
   await page.evaluate(() => window.daedongCatalogReady);
   await page.waitForFunction(
-    storeId => typeof window.openStore === 'function' &&
-      typeof window.fxStoreById === 'function' &&
-      Boolean(window.fxStoreById(storeId)),
+    storeId => typeof window.openStore === 'function' && typeof window.fxStoreById === 'function' && Boolean(window.fxStoreById(storeId)),
     store.store_id,
     {timeout: 20000}
   );
+  await page.waitForFunction(() => typeof window.daedongActivateOrderMethodsFallback === 'function', null, {timeout: 10000});
   const restoredDetail = page.locator(`#modal:not([hidden]) .store-detail[data-store-id="${store.store_id}"]`);
   if (!await restoredDetail.isVisible()) {
-    await page.locator('#mainSearch').fill(store.name);
-    const card = page.locator('#storeGrid .store-card').filter({hasText: store.name}).first();
-    await card.waitFor({state: 'visible', timeout: 10000});
-    await card.tap();
+    await page.evaluate(storeId => window.openStore(window.fxStoreById(storeId)), store.store_id);
     await restoredDetail.waitFor({state: 'visible', timeout: 10000}).catch(async () => {
       await page.evaluate(storeId => window.openStore(window.fxStoreById(storeId)), store.store_id);
       await restoredDetail.waitFor({state: 'visible', timeout: 10000});
     });
   }
+  if (!await restoredDetail.locator('[data-rc3-other-methods]').count()) {
+    await page.evaluate(storeId => window.openStore(window.fxStoreById(storeId)), store.store_id);
+  }
   const otherMethods = page.locator('#modal:not([hidden]) [data-rc3-other-methods]');
   await otherMethods.waitFor({state: 'visible', timeout: 10000});
-  await otherMethods.click();
-  await page.locator(`.order-methods-sheet [data-rc3-external-route="${key}"]`).click({timeout: 5000});
-  const guide = page.locator(`#modal:not([hidden]) .community-guide[data-selected-app="${key}"]`);
-  await guide.waitFor({state: 'visible', timeout: 5000});
-  return guide.locator(`a[data-community-original="${key}"]`);
+  const orderMethodsSheet = page.locator('#modal:not([hidden]) .order-methods-sheet');
+  if (!await orderMethodsSheet.isVisible()) {
+    if (allowOpen) await otherMethods.tap();
+    else await orderMethodsSheet.waitFor({state: 'visible', timeout: 2000}).catch(() => {});
+  }
+  const route = page.locator('.order-methods-sheet [data-rc3-external-route="yogiyo"]');
+  if (allowOpen || await orderMethodsSheet.isVisible()) await route.waitFor({state: 'visible', timeout: 5000});
+  if (!await otherMethods.evaluate(element => Boolean(element.dataset.testStableReturn))) {
+    await otherMethods.evaluate(element => { element.dataset.testStableReturn = 'yogiyo'; });
+  }
+  return {route, restoredDetail, otherMethods, orderMethodsSheet};
 };
 
 try {
-  for (const key of ['yogiyo', 'coupang', 'baemin']) {
-    const page = await context.newPage();
-    page.on('pageerror', error => report.errors.push(error.message));
-    const link = await openGuide(page, key);
+  const page = await context.newPage();
+  page.on('pageerror', error => report.errors.push(error.message));
+  page.on('dialog', async dialog => {
+    report.errors.push(`dialog: ${dialog.message()}`);
+    await dialog.dismiss();
+  });
+  await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
+  let surface = await openOrderMethodsRoute(page);
+  await page.evaluate(() => {
+    window.__yogiyoNativeLaunches = [];
+    window.daedongLaunchMobileRoute = async (key, href) => {
+      window.__yogiyoNativeLaunches.push({key, href});
+    };
+  });
+
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    if (attempt > 1) await page.waitForTimeout(900);
+    if (attempt === 1) {
+      await check(
+        surface.route.evaluate(element => /^https:\/\//.test(String(element.dataset.rc3ExternalHref || ''))),
+        '주문앱 버튼이 전체 카탈로그 교체 후에도 쓸 자체 주문 URL을 보존'
+      );
+      await page.evaluate(storeId => {
+        const originalLookup = window.fxStoreById;
+        const current = originalLookup(storeId);
+        const catalogOnlyStore = {...current, routes: [], __secureDetailReady: false};
+        window.fxStoreById = id => String(id) === String(storeId)
+          ? catalogOnlyStore
+          : originalLookup(id);
+      }, store.store_id);
+    }
+    await surface.route.tap();
+    await page.waitForFunction(expected => window.__yogiyoNativeLaunches?.length === expected, attempt);
+    await check(page.evaluate(({attempt, href}) => {
+      const launch = window.__yogiyoNativeLaunches?.[attempt - 1];
+      return launch?.key === 'yogiyo' && launch?.href === href;
+    }, {attempt, href: store.routes[0].url}), `${attempt}회차: 원본 요기요 가게 링크를 네이티브 앱 실행기로 전달`);
+    await check(Promise.resolve(new URL(page.url()).origin === baseOrigin), `${attempt}회차: Preview 문서를 웹 요기요로 교체하지 않음`);
+
     await page.evaluate(() => {
-      window.__testedMobileLaunches = [];
-      window.daedongLaunchMobileRoute = (routeKey, href) => {
-        window.__testedMobileLaunches.push({key: routeKey, href});
-      };
-    });
-    await link.click();
-    const launch = await page.evaluate(() => window.__testedMobileLaunches.at(-1) || null);
-    await check(Promise.resolve(launch?.key === key), `${key}: 올바른 Android 앱 패키지 경로 선택`);
-    await check(Promise.resolve(new URL(await page.url()).origin === baseOrigin), `${key}: 원본 Preview 현재 탭 보존`);
-    await check(Promise.resolve(context.pages().length === 1), `${key}: 불필요한 외부 웹 팝업을 만들지 않음`);
-    await page.evaluate(() => {
+      window.dispatchEvent(new PageTransitionEvent('pageshow', {persisted: true}));
       document.dispatchEvent(new Event('visibilitychange'));
       window.dispatchEvent(new Event('focus'));
-      window.dispatchEvent(new PageTransitionEvent('pageshow', {persisted: true}));
     });
-    await page.locator(`#modal:not([hidden]) .store-detail[data-store-id="${store.store_id}"]`).waitFor({state: 'visible', timeout: 10000});
-    await check(Promise.resolve(true), `${key}: 앱 복귀 수명주기 뒤 보던 가게 상세 유지`);
-    if (key === 'yogiyo') await page.screenshot({path: 'browser-yogiyo-back-return.png', fullPage: false});
-    await page.close();
+    surface = await openOrderMethodsRoute(page, {allowOpen: false});
+    await check(surface.restoredDetail.isVisible(), `${attempt}회차: 앱 복귀 뒤 원래 가게 상세 복원`);
+    await check(surface.orderMethodsSheet.isVisible(), `${attempt}회차: 요기요·쿠팡이츠·배달의민족 목록 열린 상태 유지`);
+    await check(surface.otherMethods.evaluate(element => element.dataset.testStableReturn === 'yogiyo'), `${attempt}회차: 새 화면이 아닌 동일 상세 DOM 유지`);
+    await check(surface.route.isEnabled(), `${attempt}회차: 복귀한 요기요 버튼 재터치 가능`);
   }
+
+  await page.screenshot({path: 'browser-yogiyo-back-return.png', fullPage: false});
   report.success = report.errors.length === 0;
+  await page.close();
 } catch (error) {
   report.failure = error.stack || String(error);
-  report.debug = await context.pages().at(-1)?.evaluate(() => ({
+  const page = context.pages().at(-1);
+  report.debug = await page?.evaluate(() => ({
+    url: location.href,
     modalHidden: document.querySelector('#modal')?.hidden,
     modalText: document.querySelector('#modal')?.innerText?.slice(0, 1200) || '',
-    modalHtml: document.querySelector('#modal')?.innerHTML?.slice(0, 4000) || ''
+    dataApiMethods: Object.keys(window.daedongDataApi || {}),
+    store: window.fxStoreById?.('a200000000000001')
   })).catch(() => null);
-  await context.pages().at(-1)?.screenshot({path: 'browser-yogiyo-back-return-failure.png', fullPage: false}).catch(() => {});
+  await page?.screenshot({path: 'browser-yogiyo-back-return-failure.png', fullPage: false}).catch(() => {});
 } finally {
   fs.writeFileSync('browser-yogiyo-back-return-report.json', `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report, null, 2));

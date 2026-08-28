@@ -92,7 +92,7 @@ if (proxyApiOrigin) {
   });
 }
 await context.addInitScript(() => {
-  sessionStorage.setItem('daedongMukkebiSummerEventSeenSessionV1', '1');
+  sessionStorage.setItem('daedongMukkebiSummerEventSeenSessionV2', '1');
   window.__qaLongTasks = [];
   window.__qaRawPhotoMutations = [];
   const recordRawPhotos = (root) => {

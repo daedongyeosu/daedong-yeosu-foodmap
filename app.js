@@ -196,6 +196,16 @@ function rememberDaedongGhostClick(event) {
   };
 }
 
+// A synthetic click has no new pointer/touch start. If the customer really
+// starts a second tap after a sheet replaced the first button, that is a new
+// intent even when the new control happens to occupy nearly the same screen
+// coordinates. Clear the coordinate-only guard before that real tap finishes.
+function clearDaedongGhostClickOnNewPress() {
+  daedongGhostClick = null;
+}
+document.addEventListener('pointerdown', clearDaedongGhostClickOnNewPress, true);
+document.addEventListener('touchstart', clearDaedongGhostClickOnNewPress, {capture: true, passive: true});
+
 document.addEventListener('click', event => {
   const guard = daedongGhostClick;
   if (!guard || performance.now() > guard.until) {
@@ -1019,7 +1029,7 @@ function handleDdangyoOrderLinkClick(event) {
   event.preventDefault(); event.stopImmediatePropagation();
   trackAnalyticsRouteClick(event);
   markExternalAppDeparture();
-  if (typeof rc2RememberExternalReturn === 'function') rc2RememberExternalReturn();
+  if (typeof rc2RememberExternalReturn === 'function') rc2RememberExternalReturn(link);
   void openDdangyoRoute(href);
 }
 document.addEventListener('click', handleDdangyoOrderLinkClick, true);
@@ -1031,14 +1041,50 @@ const ANDROID_ROUTE_PACKAGES = Object.freeze({
   baemin: 'com.woowahan.bros',
   naver: 'com.nhn.android.nmap'
 });
+const KAKAO_APP_FALLBACK_PARAM = '__ddappfallback';
+function kakaoPreviewFallbackUrl(key) {
+  if (key !== 'coupang' || !isKakaoInAppBrowser()) return '';
+  try {
+    const fallbackUrl = new URL(location.href);
+    fallbackUrl.searchParams.set(KAKAO_APP_FALLBACK_PARAM, key);
+    return fallbackUrl.href;
+  } catch {
+    return '';
+  }
+}
+function coupangDirectStoreIntent(url, browserFallbackUrl) {
+  if (
+    url.hostname.toLowerCase() !== 'web.coupangeats.com'
+    || url.pathname.replace(/\/+$/, '') !== '/share'
+  ) return '';
+  const storeId = String(url.searchParams.get('storeId') || '');
+  const rawDishId = String(url.searchParams.get('dishId') || '');
+  if (!/^\d{1,12}$/.test(storeId) || (rawDishId && !/^\d{1,12}$/.test(rawDishId))) return '';
+  const dishId = rawDishId || 'null';
+  // Coupang Eats only registers the public web host for its auth callback.
+  // Its store links are resolved by the web fallback into this installed-app
+  // route. Build that route directly so Kakao never inserts the
+  // third-party resolver page into the customer's Android Back stack.
+  return `intent://storedetail/?storeId=${encodeURIComponent(storeId)}&dishId=${encodeURIComponent(dishId)}#Intent;scheme=coupangeats;action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=${ANDROID_ROUTE_PACKAGES.coupang};S.browser_fallback_url=${encodeURIComponent(browserFallbackUrl)};end;`;
+}
 function androidPackageIntent(key, href) {
   if (!isAndroidBrowser() || !ANDROID_ROUTE_PACKAGES[key]) return '';
   try {
     const url = new URL(href, location.href);
     if (!['http:', 'https:'].includes(url.protocol)) return '';
+    // Kakao on Samsung can retain the fallback page as an extra browser
+    // history entry even after Coupang Eats opens successfully. Returning
+    // through that third-party page leaves the old Preview Activity visible
+    // but unable to deliver taps. Keep the fallback in the already-tokenized
+    // Preview document so Android Back returns to a fresh first-party surface.
+    const browserFallbackUrl = kakaoPreviewFallbackUrl(key) || url.href;
+    if (key === 'coupang') {
+      const directStoreIntent = coupangDirectStoreIntent(url, browserFallbackUrl);
+      if (directStoreIntent) return directStoreIntent;
+    }
     const scheme = url.protocol.slice(0, -1);
     const path = `${url.host}${url.pathname}${url.search}${url.hash}`;
-    return `intent://${path}#Intent;scheme=${scheme};action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=${ANDROID_ROUTE_PACKAGES[key]};S.browser_fallback_url=${encodeURIComponent(url.href)};end;`;
+    return `intent://${path}#Intent;scheme=${scheme};action=android.intent.action.VIEW;category=android.intent.category.BROWSABLE;package=${ANDROID_ROUTE_PACKAGES[key]};S.browser_fallback_url=${encodeURIComponent(browserFallbackUrl)};end;`;
   } catch {
     return '';
   }
@@ -1065,8 +1111,8 @@ function handleKakaoOrderLinkClick(event) {
   event.stopImmediatePropagation();
   trackAnalyticsRouteClick(event);
   markExternalAppDeparture();
-  if (typeof rc2RememberExternalReturn === 'function') rc2RememberExternalReturn();
-  void launchMobileRoute(key, href);
+  if (typeof rc2RememberExternalReturn === 'function') rc2RememberExternalReturn(link);
+  void window.daedongLaunchMobileRoute(key, href);
 }
 document.addEventListener('click', handleKakaoOrderLinkClick, true);
 const MOBILE_SAME_TAB_ORDER_KEYS = new Set(['mukkebi','ddangyo','ondongne','brand','happy','yogiyo','coupang','baemin']);
@@ -1094,8 +1140,8 @@ function handleMobileOrderLinkClick(event) {
   event.stopImmediatePropagation();
   trackAnalyticsRouteClick(event);
   markExternalAppDeparture();
-  if (typeof rc2RememberExternalReturn === 'function') rc2RememberExternalReturn();
-  void launchMobileRoute(mobileOrderRouteKey(link), href);
+  if (typeof rc2RememberExternalReturn === 'function') rc2RememberExternalReturn(link);
+  void window.daedongLaunchMobileRoute(mobileOrderRouteKey(link), href);
 }
 document.addEventListener('click', handleMobileOrderLinkClick, true);
 function handleAndroidMapLinkClick(event) {
@@ -2205,7 +2251,7 @@ async function openStore(store) {
   const external = EXTERNAL_APP_KEYS.map(key=>routeFor(store,key)).filter(Boolean);
   const otherRoutes = [phoneRoute,...external].filter(Boolean);
   const otherMenu = otherRoutes.length ? `<div class="store-other-wrap"><button class="detail-route store-other-toggle external-text-route" type="button"><span>다른 주문방법 보기</span><b>›</b></button><div class="store-other-popover" hidden><button type="button" class="store-other-close" aria-label="다른 주문방법 닫기">×</button>${otherRoutes.map(route => route.key === 'phone' ? routeLink(route,'store-other-link') : `<button type="button" class="store-other-link external-text-route" data-external-route-key="${route.key}"><span>${escapeHtml(route.name)}</span><b>›</b></button>`).join('')}${externalAppNoticeMarkup()}</div></div>` : '';
-  const selectedCta = selectedRoute ? `<button type="button" class="selected-order-cta external-text-route" data-external-route-key="${selectedRoute.key}"><span>처음 선택한 ${escapeHtml(APP_META[selectedRoute.key].label)}로 주문하기</span><b>›</b></button>` : '';
+  const selectedCta = selectedRoute ? `<a class="selected-order-cta external-text-route" href="${escapeHtml(selectedRoute.url)}" data-community-original="${selectedRoute.key}" target="_blank" rel="noopener"><span>${escapeHtml(APP_META[selectedRoute.key].label)}로 바로 주문하기</span><b>›</b></a>` : '';
   const favorite=isFavorite(store.id);
   const menuEntry = storeMenuPreviewEntryMarkup(store);
   if (typeof rc2ReplaceModal === 'function') rc2ReplaceModal();
@@ -2469,7 +2515,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!event.target.closest('.store-other-wrap')) $$('.store-other-popover').forEach(item => item.hidden = true);
   });
 
-  $('#storeGrid').addEventListener('click', event => { if(event.target.closest('button,a'))return; const card = event.target.closest('.store-card'); if (!card) return; const store = stores.find(item => item.id === card.dataset.id); if (store) openStore(store); });
+  $('#storeGrid').addEventListener('click', event => { if(event.target.closest('button,a'))return; const card = event.target.closest('.store-card'); if (!card) return; const store = stores.find(item => item.id === card.dataset.id); if (store) { window.daedongConfirmIntentionalStoreOpen?.(); openStore(store); } });
   $('#noticeBtn').addEventListener('click', () => openModal(`<h2 id="modalTitle">알림</h2><div class="my-list">${PROMOS.map(promo => `<button type="button" data-notice-promo="${escapeHtml(promo.kind)}">${escapeHtml(promo.title)}</button>`).join('')}</div>`));
   $('.bottom-nav').addEventListener('click', event => {
     const button = event.target.closest('button'); if (!button) return;

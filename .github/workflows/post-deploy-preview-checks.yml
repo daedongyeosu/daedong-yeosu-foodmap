@@ -38,6 +38,10 @@ jobs:
         env:
           BASE_URL: https://daedongmap.com
         run: node scripts/browser-rider-evergreen-banner.mjs
+      - name: Verify safe deployed Mukkebi popup on fresh home entry
+        env:
+          BASE_URL: https://daedongmap.com
+        run: node scripts/browser-mukkebi-safe-fresh-entry.mjs
       - name: Verify nine deployed store campaign maps
         env:
           BASE_URL: https://daedongmap.com
@@ -70,6 +74,9 @@ jobs:
             browser-rider-evergreen-banner.png
             browser-rider-evergreen-popup.png
             browser-rider-evergreen-failure.png
+            browser-mukkebi-safe-fresh-entry-report.json
+            browser-mukkebi-safe-fresh-entry-popup.png
+            browser-mukkebi-safe-fresh-entry-menu.png
             browser-store-campaign-nine-report.json
             browser-store-campaign-nine.png
             browser-other-order-method-touch-report.json

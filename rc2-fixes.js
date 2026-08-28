@@ -5,14 +5,17 @@ const RC2_NAVER_AUDIT_URL = 'data/naver-map-runtime.json';
 const RC2_EXTERNAL_RETURN = 'daedongExternalReturnRc2';
 const RC2_APP_BROWSER_RETURN = 'daedongAppBrowserReturnV1';
 const RC2_RETURN_TOKEN_STATE = 'daedongExternalReturnToken';
-const RC2_RETURN_GUARD_STATE = 'daedongExternalReturnGuard';
 const RC2_RETURN_TOKEN_PARAM = '__ddret';
 const RC2_RETURN_GUARD_PARAM = '__ddguard';
+const RC2_APP_FALLBACK_PARAM = '__ddappfallback';
+const RC2_ORDER_METHOD_REENTRY = 'daedongOrderMethodReentryV1';
+const RC2_ORDER_METHOD_REENTRY_PARAM = '__ddom';
 const RC2_DURABLE_RETURN_COOKIE = 'daedongOrderReturnV1';
+const RC2_RETURN_DOCUMENT_RELOAD = 'daedongExternalReturnDocumentReloadV1';
 const RC2_RETURN_MAX_AGE = 30 * 60 * 1000;
 const RC2_FOCUS_ONLY_RETURN_DELAY_MS = 650;
+const RC2_RETURN_SETTLE_DELAY_MS = 500;
 const RC2_RETURN_STORAGE_KEYS = [RC2_EXTERNAL_RETURN, RC2_APP_BROWSER_RETURN];
-const RC2_NEEDS_EXTERNAL_HISTORY_GUARD = /Android/i.test(String(navigator.userAgent || ''));
 const RC2_ICON_SPRITE = 'assets/ui/category-icons.svg';
 const RC2_REGION = window.DAEDONG_REGION || {shortName: '여수', mapName: '대동여수음식지도'};
 const RC2_REGION_NAME = RC2_REGION.shortName || '여수';
@@ -32,6 +35,11 @@ let rc2StoreRestorePromise = null;
 let rc2SurfaceRestorePromise = null;
 let rc2ExternalDepartureBlurred = false;
 let rc2ExternalDepartureHidden = false;
+let rc2RestoredReturnLease = null;
+let rc2RestoredReturnSettleTimer = 0;
+let rc2ReturnLifecycleEpoch = 0;
+let rc2SnapshotSurfaceResetSequence = 0;
+const rc2PositionStabilizers = new WeakMap();
 
 function rc2FreshReturnState(saved) {
   const age = Date.now() - Number(saved?.savedAt || 0);
@@ -40,6 +48,33 @@ function rc2FreshReturnState(saved) {
 
 function rc2ParseReturnState(storage, key) {
   try { return JSON.parse(storage.getItem(key) || 'null'); } catch { return null; }
+}
+
+function rc2ReadReturnDocumentReload() {
+  const marker = rc2ParseReturnState(sessionStorage, RC2_RETURN_DOCUMENT_RELOAD);
+  return rc2FreshReturnState(marker) ? marker : null;
+}
+
+function rc2ClearReturnDocumentReload(returnToken = '') {
+  const marker = rc2ReadReturnDocumentReload();
+  if (returnToken && String(marker?.returnToken || '') !== String(returnToken)) return;
+  try { sessionStorage.removeItem(RC2_RETURN_DOCUMENT_RELOAD); } catch {}
+}
+
+function rc2NavigateReturnedDocumentOnce(saved) {
+  const returnToken = String(saved?.returnToken || '');
+  if (!returnToken || String(rc2ReadReturnDocumentReload()?.returnToken || '') === returnToken) return false;
+  try {
+    sessionStorage.setItem(RC2_RETURN_DOCUMENT_RELOAD, JSON.stringify({returnToken, savedAt: Date.now()}));
+    document.documentElement.classList.add('daedong-external-return-pending');
+    const returnUrl = new URL(location.href);
+    returnUrl.searchParams.set(RC2_RETURN_GUARD_PARAM, returnToken);
+    location.replace(`${returnUrl.pathname}${returnUrl.search}${returnUrl.hash}`);
+    return true;
+  } catch {
+    rc2ClearReturnDocumentReload(returnToken);
+    return false;
+  }
 }
 
 function rc2ReadDepartureMarker() {
@@ -63,7 +98,7 @@ function rc2ReadReturnState(key) {
   let urlToken = '';
   try { urlToken = new URL(location.href).searchParams.get(RC2_RETURN_TOKEN_PARAM) || ''; } catch {}
   const historyToken = String(history.state?.[RC2_RETURN_TOKEN_STATE] || '');
-  const departureToken = rc2IsHistoryReentry()
+  const departureToken = (rc2IsHistoryReentry() || globalThis.daedongEntryIsDetachedKakaoReturn === true)
     ? String(rc2ReadDepartureMarker()?.returnToken || '')
     : '';
   for (const storage of [sessionStorage, localStorage]) {
@@ -144,8 +179,82 @@ function rc2ResetExternalDepartureLifecycle() {
   rc2ExternalDepartureHidden = false;
 }
 
-function rc2WriteReturnState(key, value) {
+function rc2InvalidatePendingReturnRestores() {
+  rc2ReturnLifecycleEpoch += 1;
+  // A promise that already captured the previous epoch may still resolve, but
+  // it is no longer allowed to mutate the customer's newly selected surface.
+  rc2StoreRestorePromise = null;
+  rc2SurfaceRestorePromise = null;
+  return rc2ReturnLifecycleEpoch;
+}
+
+function rc2ReturnRestoreCancelled(epoch) {
+  return epoch !== rc2ReturnLifecycleEpoch;
+}
+window.daedongInvalidatePendingReturnRestores = rc2InvalidatePendingReturnRestores;
+
+const RC2_STORE_INTENT_SELECTOR = [
+  '[data-rc3-rail-open]',
+  '[data-rail-store-id]',
+  '#storeGrid .store-card[data-id]',
+  '[data-app-store-info]',
+  '[data-app-store-id]',
+  '[data-channel-store-id]',
+  '[data-search-store-id]'
+].join(',');
+let rc2LastStoreIntentStartAt = -Infinity;
+
+function rc2ConfirmIntentionalStoreOpen() {
+  // A real store-card click supersedes every delayed fresh-entry or external
+  // return task. Kakao can deliver those lifecycle callbacks after the click;
+  // leaving them armed lets a newly opened detail be replaced by home.
+  globalThis.daedongMarkHomeInteraction?.();
+  rc2InvalidatePendingReturnRestores();
   rc2ResetExternalDepartureLifecycle();
+  rc2CancelRestoredReturnSettlement();
+  for (const key of RC2_RETURN_STORAGE_KEYS) {
+    try { sessionStorage.removeItem(key); } catch {}
+    try { localStorage.removeItem(key); } catch {}
+  }
+  try { sessionStorage.removeItem(EXTERNAL_APP_DEPARTURE_KEY); } catch {}
+  try { localStorage.removeItem(EXTERNAL_APP_DEPARTURE_KEY); } catch {}
+  rc2ClearReturnDocumentReload();
+  rc2ClearDurableReturn();
+  try {
+    const url = new URL(location.href);
+    const next = {...history.state};
+    delete next[RC2_RETURN_TOKEN_STATE];
+    delete next.daedongExternalReturnGuard;
+    url.searchParams.delete(RC2_RETURN_TOKEN_PARAM);
+    url.searchParams.delete(RC2_RETURN_GUARD_PARAM);
+    url.searchParams.delete(RC2_APP_FALLBACK_PARAM);
+    history.replaceState(next, '', `${url.pathname}${url.search}${url.hash}`);
+  } catch {}
+  globalThis.daedongFinishExternalReturnBoot?.();
+}
+
+function rc2OpenStoreFromCustomer(store) {
+  if (!store) return false;
+  rc2ConfirmIntentionalStoreOpen();
+  return openStore(store);
+}
+
+function rc2PrepareStoreIntent(event) {
+  if (!event.target?.closest?.(RC2_STORE_INTENT_SELECTOR)) return;
+  const now = performance.now();
+  if (now - rc2LastStoreIntentStartAt < 120) return;
+  rc2LastStoreIntentStartAt = now;
+  rc2ConfirmIntentionalStoreOpen();
+}
+
+window.daedongConfirmIntentionalStoreOpen = rc2ConfirmIntentionalStoreOpen;
+window.daedongConfirmIntentionalSurfaceNavigation = rc2ConfirmIntentionalStoreOpen;
+
+function rc2WriteReturnState(key, value) {
+  rc2InvalidatePendingReturnRestores();
+  rc2CancelRestoredReturnSettlement();
+  rc2ResetExternalDepartureLifecycle();
+  rc2ClearReturnDocumentReload();
   const returnToken = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
   const payload = {...value, returnToken, savedAt: Date.now()};
   globalThis.daedongLastValidatedExternalReturnAt = payload.savedAt;
@@ -164,20 +273,11 @@ function rc2WriteReturnState(key, value) {
       '',
       protectedUrl
     );
-    // Android in-app browsers can replace the current preview history entry
-    // with an order app's HTTP fallback page while resolving an intent. Keep a
-    // visibly distinct, sacrificial entry above the real return entry. Kakao
-    // can collapse same-URL pushState entries, so the guard must have its own
-    // one-shot URL as well as its own state marker.
-    if (RC2_NEEDS_EXTERNAL_HISTORY_GUARD) {
-      const guardUrl = new URL(returnUrl.href);
-      guardUrl.searchParams.set(RC2_RETURN_GUARD_PARAM, returnToken);
-      history.pushState(
-        {...protectedState, [RC2_RETURN_GUARD_STATE]: returnToken},
-        '',
-        `${guardUrl.pathname}${guardUrl.search}${guardUrl.hash}`
-      );
-    }
+    // Keep the existing Preview entry in place. Adding a sacrificial history
+    // entry here made Kakao/Samsung deliver a delayed popstate after the app
+    // had already returned, which closed the restored modal and exposed Home.
+    // The exact URL token plus the first-party durable cookie already cover a
+    // true cross-document fallback without mutating the customer's Back stack.
   } catch {}
   rc2StoreReturnState(sessionStorage, key, payload);
   rc2StoreReturnState(localStorage, key, payload);
@@ -193,6 +293,7 @@ function rc2ClearReturnState(key, saved = null) {
   try { sessionStorage.removeItem(key); } catch {}
   try { localStorage.removeItem(key); } catch {}
   const token = saved?.returnToken;
+  if (token) rc2ClearReturnDocumentReload(token);
   const marker = rc2ReadDepartureMarker();
   if (token && marker?.returnToken === token) {
     try { sessionStorage.removeItem(EXTERNAL_APP_DEPARTURE_KEY); } catch {}
@@ -214,9 +315,9 @@ function rc2ClearReturnState(key, saved = null) {
   try {
     const next = {...history.state};
     delete next[RC2_RETURN_TOKEN_STATE];
-    if (next[RC2_RETURN_GUARD_STATE] === token) delete next[RC2_RETURN_GUARD_STATE];
     if (urlMatches) returnUrl.searchParams.delete(RC2_RETURN_TOKEN_PARAM);
     if (guardMatches) returnUrl.searchParams.delete(RC2_RETURN_GUARD_PARAM);
+    returnUrl.searchParams.delete(RC2_APP_FALLBACK_PARAM);
     history.replaceState(next, '', returnUrl ? `${returnUrl.pathname}${returnUrl.search}${returnUrl.hash}` : undefined);
   } catch {}
 }
@@ -285,15 +386,96 @@ function rc2ApplyReturnPosition(card, saved, useFallback = false) {
 
 function rc2StabilizeReturnPosition(saved, card = $('#modal .modal-card')) {
   if (!card || !saved) return;
+  rc2PositionStabilizers.get(card)?.();
   let cancelled = false;
-  const cancel = () => { cancelled = true; };
-  for (const type of ['pointerdown', 'touchstart', 'wheel', 'keydown']) card.addEventListener(type, cancel, {once: true, passive: true});
+  let queued = false;
+  let resizeObserver = null;
+  let mutationObserver = null;
+  let safetyTimer = 0;
   const apply = useFallback => { if (!cancelled && card.isConnected) rc2ApplyReturnPosition(card, saved, useFallback); };
+  const queueApply = () => {
+    if (cancelled || queued) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      apply(false);
+    });
+  };
+  const cancel = () => {
+    if (cancelled) return;
+    cancelled = true;
+    resizeObserver?.disconnect();
+    mutationObserver?.disconnect();
+    if (safetyTimer) clearTimeout(safetyTimer);
+    for (const type of ['pointerdown', 'touchstart', 'wheel', 'keydown']) card.removeEventListener(type, cancel);
+    card.removeEventListener('load', queueApply, true);
+    rc2PositionStabilizers.delete(card);
+  };
+  for (const type of ['pointerdown', 'touchstart', 'wheel', 'keydown']) card.addEventListener(type, cancel, {once: true, passive: true});
   requestAnimationFrame(() => {
     apply(true);
     requestAnimationFrame(() => apply(false));
   });
-  for (const delay of [120, 360, 800, 1600]) setTimeout(() => apply(false), delay);
+  for (const delay of [120, 360, 800, 1600, 3200]) setTimeout(() => apply(false), delay);
+  if (typeof ResizeObserver === 'function') {
+    resizeObserver = new ResizeObserver(queueApply);
+    resizeObserver.observe(card);
+    const content = card.firstElementChild;
+    if (content) resizeObserver.observe(content);
+  }
+  if (typeof MutationObserver === 'function') {
+    mutationObserver = new MutationObserver(queueApply);
+    mutationObserver.observe(card, {childList: true, subtree: true, attributes: true, attributeFilter: ['src', 'hidden', 'class']});
+  }
+  card.addEventListener('load', queueApply, true);
+  safetyTimer = setTimeout(cancel, 8000);
+  rc2PositionStabilizers.set(card, cancel);
+}
+
+function rc2ArmRestoredReturnLease(key, saved) {
+  if (!RC2_RETURN_STORAGE_KEYS.includes(key) || !saved?.returnToken) return false;
+  if (rc2RestoredReturnSettleTimer) {
+    clearTimeout(rc2RestoredReturnSettleTimer);
+    rc2RestoredReturnSettleTimer = 0;
+  }
+  rc2RestoredReturnLease = {key, saved};
+  globalThis.daedongLastValidatedExternalReturnAt = Date.now();
+  return true;
+}
+
+function rc2CancelRestoredReturnSettlement() {
+  if (rc2RestoredReturnSettleTimer) clearTimeout(rc2RestoredReturnSettleTimer);
+  rc2RestoredReturnSettleTimer = 0;
+  rc2RestoredReturnLease = null;
+}
+
+function rc2SettleRestoredReturnLease() {
+  const lease = rc2RestoredReturnLease;
+  if (!lease) return false;
+  const current = rc2ReadReturnState(lease.key);
+  if (String(current?.returnToken || '') !== String(lease.saved.returnToken || '')) {
+    rc2RestoredReturnLease = null;
+    return false;
+  }
+  rc2RestoredReturnLease = null;
+  rc2ClearReturnState(lease.key, lease.saved);
+  rc2ClearDurableReturn(lease.saved.returnToken);
+  return true;
+}
+
+function rc2SettleRestoredReturnLeaseNow() {
+  if (rc2RestoredReturnSettleTimer) clearTimeout(rc2RestoredReturnSettleTimer);
+  rc2RestoredReturnSettleTimer = 0;
+  return rc2SettleRestoredReturnLease();
+}
+
+function rc2ScheduleRestoredReturnSettlement() {
+  if (!rc2RestoredReturnLease || rc2RestoredReturnSettleTimer) return false;
+  rc2RestoredReturnSettleTimer = setTimeout(() => {
+    rc2RestoredReturnSettleTimer = 0;
+    rc2SettleRestoredReturnLease();
+  }, RC2_RETURN_SETTLE_DELAY_MS);
+  return true;
 }
 
 window.daedongReadExternalReturnState = rc2ReadReturnState;
@@ -301,6 +483,8 @@ window.daedongWriteExternalReturnState = rc2WriteReturnState;
 window.daedongClearExternalReturnState = rc2ClearReturnState;
 window.daedongCaptureReturnAnchor = rc2CaptureReturnAnchor;
 window.daedongStabilizeReturnPosition = rc2StabilizeReturnPosition;
+window.daedongArmRestoredReturnLease = rc2ArmRestoredReturnLease;
+window.daedongSettleRestoredReturnLeaseNow = rc2SettleRestoredReturnLeaseNow;
 
 function rc2Icon(id, className = 'category-local-icon') {
   return `<svg class="${className}" aria-hidden="true"><use href="${RC2_ICON_SPRITE}#${id}"></use></svg>`;
@@ -368,6 +552,67 @@ function rc2RestoreSnapshot(snapshot) {
   rc2StabilizeReturnPosition({modalScroll: snapshot.scrollTop || 0, anchor: snapshot.anchor}, modal.querySelector('.modal-card'));
   rc2ModalRestoring = false;
   rc2ScrubCustomerCounts(modal);
+  // Snapshot restoration replaces the DOM nodes. Reattach interactions that
+  // intentionally live on the restored store button itself before departure.
+  window.daedongRebindOrderMethodsTrigger?.();
+}
+
+function rc2RestoreSnapshotAfterNativeSurfaceReset(snapshot) {
+  if (!snapshot) return;
+  const sequence = ++rc2SnapshotSurfaceResetSequence;
+  const root = document.documentElement;
+  const bootWasPending = root.classList.contains('daedong-external-return-pending');
+  root.classList.add('daedong-external-return-pending');
+  window.daedongResetOrderMethodsTouchState?.();
+  // Samsung Kakao WebView can keep the hit-test surface that belonged to the
+  // nested order-method sheet even after its HTML is replaced with the saved
+  // store detail. Scrolling then works natively, but every button in the
+  // restored detail is untappable. Lower the native modal for two rendered
+  // frames before restoring the snapshot so WebView rebuilds that surface.
+  rc2NativeHardClose({fromPop: true});
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (sequence !== rc2SnapshotSurfaceResetSequence) return;
+    try {
+      rc2RestoreSnapshot(snapshot);
+    } finally {
+      if (!bootWasPending) root.classList.remove('daedong-external-return-pending');
+    }
+  }));
+}
+
+function rc2NavigateOrderMethodReentry(snapshot) {
+  if (!snapshot?.html) return false;
+  const template = document.createElement('template');
+  template.innerHTML = String(snapshot.html);
+  const storeId = String(template.content.querySelector('.store-detail[data-store-id]')?.dataset.storeId || '');
+  if (!storeId) return false;
+  const token = globalThis.crypto?.randomUUID?.() || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const saved = {
+    token,
+    storeId,
+    modalScroll: Number(snapshot.scrollTop || 0),
+    pageScroll: Number(snapshot.pageScroll || 0),
+    savedAt: Date.now()
+  };
+  try {
+    sessionStorage.setItem(RC2_ORDER_METHOD_REENTRY, JSON.stringify(saved));
+    const url = new URL(location.href);
+    url.searchParams.set('store', storeId);
+    url.searchParams.set(RC2_ORDER_METHOD_REENTRY_PARAM, token);
+    url.searchParams.delete(RC2_RETURN_TOKEN_PARAM);
+    url.searchParams.delete(RC2_RETURN_GUARD_PARAM);
+    url.searchParams.delete(RC2_APP_FALLBACK_PARAM);
+    document.documentElement.classList.add('daedong-external-return-pending');
+    // Kakao can leave the entire restored modal without a native hit target.
+    // A same-document DOM rebuild and even a two-frame hide/show are not
+    // sufficient on a real finger path. Replace the document so WebView must
+    // create a new compositor and hit-test surface for the saved store.
+    location.replace(`${url.pathname}${url.search}${url.hash}`);
+    return true;
+  } catch {
+    try { sessionStorage.removeItem(RC2_ORDER_METHOD_REENTRY); } catch {}
+    return false;
+  }
 }
 
 openModal = function rc2OpenModal(html) {
@@ -388,8 +633,27 @@ openModal = function rc2OpenModal(html) {
 };
 
 hardClose = function rc2HardClose(options = {}) {
+  if (options.fromPop) {
+    const pendingReturn = rc2PendingExternalReturnState();
+    if (pendingReturn) {
+      // Kakao's bottom browser Back and Android's system Back do not resume the
+      // same way. On the system-Back path the original preview WebView resumes
+      // and then delivers a popstate to the still-open store modal. Treat that
+      // pop as the external-app return itself, not as a request to close the
+      // store detail and expose Home.
+      rc2ExternalDepartureHidden = true;
+      void rc2RestoreExternalSurface({rebuildExisting: true}).then(restored => {
+        if (!restored) return;
+        rc2ResetExternalDepartureLifecycle();
+        window.daedongFinishExternalReturnBoot?.();
+      });
+      return;
+    }
+  }
   if (options.fromPop && rc2ModalStack.length) {
-    rc2RestoreSnapshot(rc2ModalStack.pop());
+    const snapshot = rc2ModalStack.pop();
+    if ($('#modalContent .order-methods-sheet') && rc2NavigateOrderMethodReentry(snapshot)) return;
+    rc2RestoreSnapshotAfterNativeSurfaceReset(snapshot);
     return;
   }
   if (!options.fromPop && rc2ModalStack.length) {
@@ -949,7 +1213,10 @@ function rc2StartAmbient(firstEntry = false) {
 function rc2ExternalAppKey(element) {
   if (!element) return '';
   return String(
-    element.dataset?.routeKey
+    element.dataset?.communityOriginal
+    || element.dataset?.rc3ExternalRoute
+    || element.dataset?.rc3SingleExternal
+    || element.dataset?.routeKey
     || element.dataset?.finalAppChannel
     || element.dataset?.appKey
     || element.dataset?.menuExternalKey
@@ -971,7 +1238,9 @@ function rc2RememberExternalReturn(sourceElement = null) {
     template.innerHTML = snapshot.html;
     return String(template.content.querySelector('.store-detail[data-store-id]')?.dataset.storeId || '') === String(storeId);
   });
-  const prepareStoreSurface = Boolean(sourceElement?.matches?.('a[data-community-original]'));
+  const prepareStoreSurface = Boolean(sourceElement?.matches?.(
+    'a[data-community-original],[data-rc3-external-route],[data-rc3-single-external]'
+  ));
   const payload = {
     storeId: String(storeId),
     surface: menuState ? 'menu' : 'store',
@@ -1000,28 +1269,70 @@ function rc2RememberExternalReturn(sourceElement = null) {
   return payload;
 }
 
-function rc2LaunchComparedExternal(link, href) {
+async function rc2LaunchComparedExternal(link, href) {
   if (!link || href === '#') return false;
   const rawKey = String(
-    link?.dataset?.communityOriginal ||
-    link?.dataset?.routeKey ||
-    link?.dataset?.finalAppChannel ||
-    ''
+    link.dataset?.rc3ExternalRoute
+    || link.dataset?.rc3SingleExternal
+    || link.dataset?.communityOriginal
+    || link.dataset?.routeKey
+    || link.dataset?.finalAppChannel
+    || ''
   );
-  const key = rawKey === 'coupang-eats' ? 'coupang' : rawKey;
-  if (typeof window.daedongLaunchMobileRoute === 'function' && ['mukkebi', 'ddangyo', 'yogiyo', 'coupang', 'baemin'].includes(key)) {
-    void window.daedongLaunchMobileRoute(key, href);
-    return true;
+  const routeKey = rawKey === 'coupang-eats' ? 'coupang' : rawKey;
+  const androidBrowser = /Android/i.test(String(globalThis.navigator?.userAgent || ''));
+  if (routeKey === 'yogiyo' && androidBrowser) {
+    // The Preview return snapshot was already persisted by
+    // rc2RememberExternalReturn. Keep that document alive, but hand the
+    // original ws.yogiyo.co.kr store link to Yogiyo's installed Android app.
+    // Replacing it with Yogiyo's legacy mobile web page makes the customer see
+    // the wrong product and still does not make Android task return reliable.
+    if (typeof window.daedongLaunchMobileRoute === 'function') {
+      await window.daedongLaunchMobileRoute('yogiyo', href);
+      return true;
+    }
   }
+  // Keep the already prepared Preview store detail in its original Kakao
+  // WebView for order apps whose external context survives Kakao reliably.
   window.open(href, '_blank', 'noopener');
   return true;
 }
 
+function rc2SnapshotKeepsInlineOrderMethodsOpen(snapshot) {
+  const html = String(snapshot?.html || '');
+  if (!html) return false;
+  const template = document.createElement('template');
+  template.innerHTML = html;
+  const trigger = template.content.querySelector('[data-rc3-other-methods]');
+  const panel = template.content.querySelector('[data-rc3-inline-order-methods]');
+  return Boolean(
+    trigger
+    && panel
+    && trigger.getAttribute('aria-expanded') === 'true'
+    && !panel.hidden
+  );
+}
+
+function rc2RestoreOpenInlineOrderMethodsFromPendingState() {
+  const saved = rc2ReadReturnState(RC2_EXTERNAL_RETURN);
+  if (!saved || !rc2SnapshotKeepsInlineOrderMethodsOpen(saved.storeSnapshot)) return false;
+  const modal = $('#modal');
+  const detail = modal?.querySelector('.store-detail[data-store-id]');
+  if (
+    modal?.hidden
+    || !detail
+    || String(detail.dataset.storeId || '') !== String(saved.storeId || '')
+  ) return false;
+  return Boolean(window.daedongRestoreInlineOrderMethodsOpen?.(detail));
+}
+window.daedongRestoreOpenInlineOrderMethodsFromPendingState = rc2RestoreOpenInlineOrderMethodsFromPendingState;
+
 async function rc2RestoreAfterExternalPage({rebuildExisting = false} = {}) {
   if (rc2StoreRestorePromise) return rc2StoreRestorePromise;
+  const restoreEpoch = rc2ReturnLifecycleEpoch;
   const restoreTask = (async () => {
     const saved = rc2ReadReturnState(RC2_EXTERNAL_RETURN);
-    if (!saved) return false;
+    if (!saved || rc2ReturnRestoreCancelled(restoreEpoch)) return false;
     const modal = $('#modal');
     const visibleStoreId = modal?.dataset.activeStoreId || modal?.querySelector('.store-detail[data-store-id]')?.dataset.storeId;
     const visibleStoreMatches = Boolean(
@@ -1032,34 +1343,51 @@ async function rc2RestoreAfterExternalPage({rebuildExisting = false} = {}) {
     const store = fxStoreById(saved.storeId);
     if (!store) return false;
     if (visibleStoreMatches) {
+      if (rc2ReturnRestoreCancelled(restoreEpoch)) return false;
       window.daedongResetOrderMethodsTouchState?.();
+      // Preserve the prepared detail element exactly. Rebuilding or navigating
+      // this already-visible surface after an external app return is what made
+      // the real Kakao WebView's next physical tap disappear.
+      window.daedongRebindOrderMethodsTrigger?.();
+      if (rc2SnapshotKeepsInlineOrderMethodsOpen(saved.storeSnapshot)) {
+        window.daedongRestoreInlineOrderMethodsOpen?.(modal.querySelector('.store-detail'));
+      }
       rc2DeferredStoreReturnPosition = saved;
-      rc2StabilizeReturnPosition(saved);
+      rc2StabilizeReturnPosition(saved, $('#modal .modal-card'));
       if (saved.menuState) {
         const restoredMenu = await window.daedongMenuReturn?.restore?.(saved.menuState);
-        if (!restoredMenu) return false;
+        if (!restoredMenu || rc2ReturnRestoreCancelled(restoreEpoch)) return false;
       }
-      rc2ClearReturnState(RC2_EXTERNAL_RETURN, saved);
+      if (rc2ReturnRestoreCancelled(restoreEpoch)) return false;
+      rc2ArmRestoredReturnLease(RC2_EXTERNAL_RETURN, saved);
       return true;
     }
     if (!modal?.hidden) {
+      if (rc2ReturnRestoreCancelled(restoreEpoch)) return false;
       window.daedongResetOrderMethodsTouchState?.();
       rc2ModalStack.length = 0;
       rc2NativeHardClose({fromPop: true});
       await new Promise(resolve => requestAnimationFrame(() => resolve()));
+      if (rc2ReturnRestoreCancelled(restoreEpoch)) return false;
     }
+    if (rc2ReturnRestoreCancelled(restoreEpoch)) return false;
     scrollWindowInstant(Number(saved.pageScroll || 0));
     const opened = await openStore(store);
-    if (opened === false) return false;
+    if (opened === false || rc2ReturnRestoreCancelled(restoreEpoch)) return false;
     const restoredStoreId = modal?.dataset.activeStoreId || modal?.querySelector('.store-detail[data-store-id]')?.dataset.storeId;
     if (modal?.hidden || String(restoredStoreId || '') !== String(saved.storeId)) return false;
+    window.daedongRebindOrderMethodsTrigger?.();
+    if (rc2SnapshotKeepsInlineOrderMethodsOpen(saved.storeSnapshot)) {
+      window.daedongRestoreInlineOrderMethodsOpen?.(modal.querySelector('.store-detail'));
+    }
     rc2DeferredStoreReturnPosition = saved;
     rc2StabilizeReturnPosition(saved);
     if (saved.menuState) {
       const restoredMenu = await window.daedongMenuReturn?.restore?.(saved.menuState);
-      if (!restoredMenu) return false;
+      if (!restoredMenu || rc2ReturnRestoreCancelled(restoreEpoch)) return false;
     }
-    rc2ClearReturnState(RC2_EXTERNAL_RETURN, saved);
+    if (rc2ReturnRestoreCancelled(restoreEpoch)) return false;
+    rc2ArmRestoredReturnLease(RC2_EXTERNAL_RETURN, saved);
     return true;
   })();
   rc2StoreRestorePromise = restoreTask;
@@ -1072,8 +1400,10 @@ async function rc2RestoreAfterExternalPage({rebuildExisting = false} = {}) {
 
 async function rc2RestoreExternalSurface({rebuildExisting = false} = {}) {
   if (rc2SurfaceRestorePromise) return rc2SurfaceRestorePromise;
+  const restoreEpoch = rc2ReturnLifecycleEpoch;
   const restoreTask = (async () => {
-    if (await rc2RestoreAfterExternalPage({rebuildExisting})) return true;
+    if (await rc2RestoreAfterExternalPage({rebuildExisting})) return !rc2ReturnRestoreCancelled(restoreEpoch);
+    if (rc2ReturnRestoreCancelled(restoreEpoch)) return false;
     return Boolean(fxRestoreAppBrowserReturn?.());
   })();
   rc2SurfaceRestorePromise = restoreTask;
@@ -1109,7 +1439,9 @@ function rc2RestoreAfterConfirmedResume({rebuildExisting = true} = {}) {
     return Promise.resolve(false);
   }
   return rc2RestoreExternalSurface({rebuildExisting}).then(restored => {
-    if (restored) rc2ResetExternalDepartureLifecycle();
+    if (restored) {
+      rc2ResetExternalDepartureLifecycle();
+    }
     return restored;
   });
 }
@@ -1128,6 +1460,12 @@ fxOrderClick = function rc2OrderClick(button) {
 fxInstallEvents = function rc2InstallEvents() {
   if (window.daedongCoreEventsInstalled) return;
   window.daedongCoreEventsInstalled = true;
+  document.addEventListener('pointerdown', rc2PrepareStoreIntent, true);
+  document.addEventListener('touchstart', rc2PrepareStoreIntent, {capture: true, passive: true});
+  document.addEventListener('pointerup', rc2ScheduleRestoredReturnSettlement, true);
+  document.addEventListener('touchend', rc2ScheduleRestoredReturnSettlement, {capture: true, passive: true});
+  document.addEventListener('wheel', rc2ScheduleRestoredReturnSettlement, {capture: true, passive: true});
+  document.addEventListener('keyup', rc2ScheduleRestoredReturnSettlement, true);
   document.addEventListener('pointerdown', fxPressStart, true);
   document.addEventListener('pointerup', rc2ReleaseAllPresses, true);
   document.addEventListener('pointercancel', rc2ReleaseAllPresses, true);
@@ -1151,12 +1489,21 @@ fxInstallEvents = function rc2InstallEvents() {
     }
     const railMore = event.target.closest('[data-rail-more]');
     if (railMore) { event.preventDefault(); event.stopImmediatePropagation(); rc2OpenRailList(railMore.dataset.railMore); return; }
+    const rc3RailStore = event.target.closest('[data-rc3-rail-open]');
+    if (rc3RailStore) { event.preventDefault(); event.stopImmediatePropagation(); const store = fxStoreById(rc3RailStore.dataset.rc3RailOpen); if (store) rc2OpenStoreFromCustomer(store); return; }
     const railStore = event.target.closest('[data-rail-store-id]');
-    if (railStore) { event.preventDefault(); event.stopImmediatePropagation(); const store = fxStoreById(railStore.dataset.railStoreId); if (store) openStore(store); return; }
+    if (railStore) { event.preventDefault(); event.stopImmediatePropagation(); const store = fxStoreById(railStore.dataset.railStoreId); if (store) rc2OpenStoreFromCustomer(store); return; }
+    const homeStore = event.target.closest('#storeGrid .store-card[data-id]');
+    if (homeStore && !event.target.closest('button,a')) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      rc2OpenStoreFromCustomer(fxStoreById(homeStore.dataset.id));
+      return;
+    }
     const appCategory = event.target.closest('[data-app-category]');
     if (appCategory) { event.preventDefault(); event.stopImmediatePropagation(); openAppBrowser($('#modal').dataset.appBrowserKey, appCategory.dataset.appCategory); return; }
     const appStoreInfo = event.target.closest('[data-app-store-info]');
-    if (appStoreInfo) { event.preventDefault(); event.stopImmediatePropagation(); const store = fxStoreById(appStoreInfo.dataset.appStoreInfo); if (store) openStore(store); return; }
+    if (appStoreInfo) { event.preventDefault(); event.stopImmediatePropagation(); const store = fxStoreById(appStoreInfo.dataset.appStoreInfo); if (store) rc2OpenStoreFromCustomer(store); return; }
     const appStoreOrder = event.target.closest('[data-app-store-order]');
     if (appStoreOrder) { event.preventDefault(); event.stopImmediatePropagation(); void fxOpenRegisteredAppOrder(appStoreOrder); return; }
     const appStore = event.target.closest('[data-app-store-id]');
@@ -1166,7 +1513,7 @@ fxInstallEvents = function rc2InstallEvents() {
       const key = appStore.dataset.appKey;
       if (store) {
         if (['yogiyo', 'coupang', 'baemin'].includes(key)) openCommunityChoice(store, key, {fromBrowser: true});
-        else openStore(store);
+        else rc2OpenStoreFromCustomer(store);
       }
       return;
     }
@@ -1186,9 +1533,9 @@ fxInstallEvents = function rc2InstallEvents() {
     const happyBrand = event.target.closest('[data-happy-brand]');
     if (happyBrand) { event.preventDefault(); event.stopImmediatePropagation(); fxOpenBrandHub('happy-stores', happyBrand.dataset.happyBrand); return; }
     const channelStore = event.target.closest('[data-channel-store-id]');
-    if (channelStore) { event.preventDefault(); event.stopImmediatePropagation(); const store = fxStoreById(channelStore.dataset.channelStoreId); if (store) openStore(store); return; }
+    if (channelStore) { event.preventDefault(); event.stopImmediatePropagation(); const store = fxStoreById(channelStore.dataset.channelStoreId); if (store) rc2OpenStoreFromCustomer(store); return; }
     const searchStore = event.target.closest('[data-search-store-id]');
-    if (searchStore) { event.preventDefault(); event.stopImmediatePropagation(); const store = fxStoreById(searchStore.dataset.searchStoreId); if (store) openStore(store); return; }
+    if (searchStore) { event.preventDefault(); event.stopImmediatePropagation(); const store = fxStoreById(searchStore.dataset.searchStoreId); if (store) rc2OpenStoreFromCustomer(store); return; }
     if (event.target.id === 'fxSearchRun') { event.preventDefault(); event.stopImmediatePropagation(); fxSearchModal($('#fxSearchInput')?.value || ''); return; }
     const share = event.target.closest('[data-share-store]');
     if (share) {
@@ -1201,16 +1548,12 @@ fxInstallEvents = function rc2InstallEvents() {
     const favorite = event.target.closest('[data-favorite-store]');
     if (favorite) fxGull(favorite, true);
     const comparedExternal = event.target.closest('a[data-community-original]');
-    const hasStoreDetailInModalFlow = Boolean(
-      $('#modalContent .store-detail[data-store-id]')
-      || rc2ModalStack.some(snapshot => snapshot?.html?.includes('class="store-detail"'))
-    );
-    if (comparedExternal && hasStoreDetailInModalFlow) {
+    if (comparedExternal) {
       const href = safeHref(comparedExternal.getAttribute('href'));
       event.preventDefault();
       event.stopImmediatePropagation();
       rc2RememberExternalReturn(comparedExternal);
-      rc2LaunchComparedExternal(comparedExternal, href);
+      void rc2LaunchComparedExternal(comparedExternal, href);
       return;
     }
     const externalLink = event.target.closest('a[target="_blank"],a[data-final-app-channel],a[data-detail-only]');
@@ -1231,6 +1574,7 @@ fxInstallEvents = function rc2InstallEvents() {
       return;
     }
     else {
+      rc2RestoreOpenInlineOrderMethodsFromPendingState();
       void rc2RestoreAfterConfirmedResume({rebuildExisting: true}).then(restored => {
         if (restored) window.daedongFinishExternalReturnBoot?.();
         else rc2StartAmbient(false);
@@ -1241,14 +1585,18 @@ fxInstallEvents = function rc2InstallEvents() {
     if (rc2PendingExternalReturnState()) rc2ExternalDepartureHidden = true;
   });
   const restoreAfterNativeResume = () => {
+    rc2RestoreOpenInlineOrderMethodsFromPendingState();
     void rc2RestoreAfterConfirmedResume({rebuildExisting: true}).then(restored => {
       if (restored) window.daedongFinishExternalReturnBoot?.();
     });
   };
   window.addEventListener('pageshow', restoreAfterNativeResume);
-  window.addEventListener('focus', () => rc2RestoreAfterConfirmedResume({rebuildExisting: true}).then(restored => {
-    if (restored) window.daedongFinishExternalReturnBoot?.();
-  }));
+  window.addEventListener('focus', () => {
+    rc2RestoreOpenInlineOrderMethodsFromPendingState();
+    rc2RestoreAfterConfirmedResume({rebuildExisting: true}).then(restored => {
+      if (restored) window.daedongFinishExternalReturnBoot?.();
+    });
+  });
   document.addEventListener('resume', () => {
     if (rc2PendingExternalReturnState()) rc2ExternalDepartureHidden = true;
     restoreAfterNativeResume();

@@ -71,13 +71,19 @@
   }
 
   function customerAlreadyInteracted() {
-    return window.daedongHasHomeInteraction?.() === true;
+    return window.daedongHasHomeInteraction?.() === true
+      || window.daedongEntryHadExternalReturn === true
+      || document.documentElement.classList.contains('daedong-external-return-pending');
   }
 
   function homeIsClear() {
     const startupAd = document.getElementById('startupAd');
     const modal = document.getElementById('modal');
-    return (startupAd?.hidden ?? true) && (modal?.hidden ?? true);
+    const mukkebiEvent = document.getElementById('mukkebiSummerEvent');
+    return (startupAd?.hidden ?? true)
+      && (modal?.hidden ?? true)
+      && (mukkebiEvent?.hidden ?? true)
+      && window.daedongMukkebiAutoOpenPending !== true;
   }
 
   function sailWhenHomeIsClear() {
@@ -174,9 +180,14 @@
   }
 
   const layerObserver = new MutationObserver(waitForClearHome);
-  for (const layer of [document.getElementById('startupAd'), document.getElementById('modal')]) {
+  for (const layer of [
+    document.getElementById('startupAd'),
+    document.getElementById('modal'),
+    document.getElementById('mukkebiSummerEvent')
+  ]) {
     if (layer) layerObserver.observe(layer, {attributes:true, attributeFilter:['hidden']});
   }
+  window.addEventListener('daedong:mukkebi-auto-open-settled', waitForClearHome);
 
   if (typeof window.installDaedongTapAction === 'function') {
     window.installDaedongTapAction({

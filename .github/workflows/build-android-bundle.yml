@@ -6,6 +6,7 @@ on:
     paths:
       - "android/twa-manifest.json"
       - "app-icon.svg"
+      - "app-icon-maskable.svg"
       - ".github/workflows/build-android-bundle.yml"
   workflow_dispatch:
 

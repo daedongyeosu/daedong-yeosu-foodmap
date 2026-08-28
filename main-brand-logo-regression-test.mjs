@@ -32,7 +32,7 @@ assert.doesNotMatch(
 );
 assert.match(
   serviceWorker,
-  /CACHE_NAME = 'daedong-yeosu-app-shell-v27-store-card-touchstart-intent-guard'/,
+  /CACHE_NAME = 'daedong-yeosu-app-shell-v28-android-maskable-safe-zone'/,
   '기존 설치본도 새 메인 로고를 받도록 앱 셸 캐시 버전을 갱신해야 합니다.'
 );
 

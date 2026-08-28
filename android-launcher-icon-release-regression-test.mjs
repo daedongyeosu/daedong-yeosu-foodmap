@@ -19,5 +19,11 @@ assert.doesNotMatch(icon, /linearGradient|radialGradient/i, '무지개 테두리
 assert.match(workflow, /android\/twa-manifest\.json/);
 assert.match(workflow, /app-icon\.svg/);
 assert.match(workflow, /cp android\/twa-manifest\.json android-build\/twa-manifest\.json/);
+assert.match(workflow, /APP_VERSION_NAME=.*android-build\/twa-manifest\.json/,
+  'Android 표시 버전은 twa-manifest.json에서 읽어야 합니다.');
+assert.match(workflow, /printf '%s\\n' "\$APP_VERSION_NAME" \| bubblewrap/,
+  'Bubblewrap에는 manifest의 표시 버전을 전달해야 합니다.');
+assert.doesNotMatch(workflow, /printf '1\.0\.0\\n' \| bubblewrap/,
+  '표시 버전을 1.0.0으로 되돌리는 하드코딩을 허용하지 않습니다.');
 
 console.log('Android launcher icon release regression: PASS');

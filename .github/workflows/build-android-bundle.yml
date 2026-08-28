@@ -48,9 +48,20 @@ jobs:
           if [ "$GITHUB_EVENT_NAME" = "workflow_dispatch" ]; then
             python3 -c 'import json, os; from pathlib import Path; p = Path("android-build/twa-manifest.json"); m = json.loads(p.read_text(encoding="utf-8")); a = os.environ.get("ANDROID_KEY_ALIAS", "").strip(); assert a, "ANDROID_KEY_ALIAS secret is empty"; m["signingKey"]["alias"] = a; p.write_text(json.dumps(m, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")'
           fi
+          APP_VERSION_NAME="$(python3 -c 'import json; print(json.load(open("android-build/twa-manifest.json", encoding="utf-8"))["appVersionName"])')"
           python3 -m http.server 8765 >"$RUNNER_TEMP/pwa-http.log" 2>&1 &
           cd android-build
-          printf '1.0.0\n' | bubblewrap --config="$RUNNER_TEMP/bubblewrap/config.json" update
+          printf '%s\n' "$APP_VERSION_NAME" | bubblewrap --config="$RUNNER_TEMP/bubblewrap/config.json" update
+          python3 - "$APP_VERSION_NAME" <<'PY'
+          import json
+          import sys
+          from pathlib import Path
+
+          expected = sys.argv[1]
+          manifest = json.loads(Path("twa-manifest.json").read_text(encoding="utf-8"))
+          assert manifest["appVersionName"] == expected, (manifest["appVersionName"], expected)
+          assert manifest["appVersion"] == expected, (manifest["appVersion"], expected)
+          PY
       - name: Create temporary test key
         if: github.event_name == 'pull_request'
         shell: bash

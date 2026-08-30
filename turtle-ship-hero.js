@@ -100,6 +100,7 @@
       intro.classList.remove('is-visible', 'is-closing', 'is-reduced');
     }
     introClose?.blur();
+    window.dispatchEvent(new Event('daedong:community-intro-closed'));
     sailWhenHomeIsClear();
   }
 

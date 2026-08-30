@@ -76,6 +76,12 @@
     .replace(/\s+/g, '')
     .toLowerCase();
 
+  const formatStoreDisplayName = value => String(value || '가게 정보')
+    .replace(/([가-힣])\s*[-–—]+\s*(?=[가-힣])/g, '$1 ')
+    .replace(/\s+[-–—]\s+/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+
   function formatCustomerHours24(value) {
     const convert = (period, rawHour, rawMinute) => {
       const marker = String(period || '').replace(/\./g, '').toLowerCase();
@@ -92,7 +98,8 @@
   }
 
   const MENU_FAMILIES = [
-    {key: '빙수', label: '빙수', matches: value => value.includes('빙수'), terms: ['빙수']},
+    {key: '빙수', label: '빙수', matches: value => ['빙수', '설빙'].some(term => value.includes(term)), queries: ['빙수', '설빙'], terms: ['빙수', '설빙']},
+    {key: '김밥', label: '김밥', matches: value => ['김밥', '김빱', '주먹밥'].some(term => value.includes(term)), queries: ['김밥', '김빱', '주먹밥'], terms: ['김밥', '김빱', '꼬마김밥', '마약김밥', '충무김밥', '삼각김밥', '주먹밥']},
     {key: '족발', label: '족발', matches: value => value.includes('족발') || value.includes('불족'), terms: ['족발', '불족', '냉채족']},
     {key: '치킨', label: '치킨', matches: value => ['치킨', '통닭', '닭강정'].some(term => value.includes(term)), terms: ['치킨', '통닭', '닭강정', '후라이드', '양념', '간장', '순살', '윙봉']},
     {key: '커피', label: '커피', matches: value => ['커피', '아메리카노', '에스프레소', '콜드브루'].some(term => value.includes(term)), terms: ['커피', '아메리카노', '에스프레소', '카페라떼', '카푸치노', '마키아토', '콜드브루', '핸드드립']},
@@ -105,6 +112,29 @@
     const family = MENU_FAMILIES.find(item => item.matches(value));
     if (family) return family;
     return value ? {key: value, label: String(query || '').trim(), matches: () => true, terms: [value]} : null;
+  }
+
+  function menuSearchQueries(query) {
+    const spec = menuSearchSpec(query);
+    if (!spec || !MENU_FAMILIES.includes(spec)) return [String(query || '').trim()].filter(Boolean);
+    return [...new Set((spec.queries || [spec.key]).map(String).map(value => value.trim()).filter(Boolean))];
+  }
+
+  function mergeMenuSearchResults(results) {
+    const merged = {stores: {}};
+    (results || []).forEach(result => {
+      Object.entries(result?.stores || {}).forEach(([storeId, record]) => {
+        const target = merged.stores[storeId] ||= {i: []};
+        const seen = new Set(target.i.map(item => String(item?.[0] || '')));
+        (record?.i || []).forEach(item => {
+          const itemId = String(item?.[0] || '');
+          if (!itemId || seen.has(itemId)) return;
+          seen.add(itemId);
+          target.i.push(item);
+        });
+      });
+    });
+    return merged;
   }
 
   function menuItemMatches(item, spec, store) {
@@ -145,8 +175,12 @@
     menuSearchQuery = requestedQuery;
     menuSearchState = 'loading';
     menuSearchData = {stores: {}};
-    menuSearchPromise = window.daedongDataApi.menuSearch(requestedQuery, {signal: requestController.signal})
-      .then(data => {
+    const searchQueries = menuSearchQueries(requestedQuery);
+    menuSearchPromise = Promise.all(searchQueries.map(searchQuery => (
+      window.daedongDataApi.menuSearch(searchQuery, {signal: requestController.signal})
+    )))
+      .then(results => {
+        const data = mergeMenuSearchResults(results);
         if (normalize(menuSearchQuery) === normalize(requestedQuery)) {
           menuSearchData = data?.stores ? data : {stores: {}};
           menuSearchState = 'ready';
@@ -1004,6 +1038,28 @@ function overviewSearchText(entry) {
   ]).filter(Boolean).join(' ');
 }
 
+function overviewIdentitySearchText(entry) {
+  const store = entry.store || {};
+  return searchTextValues([
+    store.name,
+    store.realBusinessName,
+    store.brandName,
+    store.branchName,
+    store.shopInShopNames,
+    store.storeAliases,
+    store.aliases,
+    store.searchAliases
+  ]).filter(Boolean).join(' ');
+}
+
+function overviewMenuContextText(entry) {
+  return searchTextValues([
+    overviewIdentitySearchText(entry),
+    entry.area,
+    entry.areas
+  ]).filter(Boolean).join(' ');
+}
+
   function benefitDefinitionForQuery(query) {
     const compact = normalize(query);
     if (!compact) return null;
@@ -1021,10 +1077,20 @@ function overviewSearchText(entry) {
     const raw = String(overviewQuery || '').trim();
     if (!raw) return true;
     const text = normalize(overviewSearchText(entry));
+    const identityText = normalize(overviewIdentitySearchText(entry));
     const spec = menuSearchSpec(raw);
     const compact = normalize(raw);
-    if (text.includes(compact)) return true;
     const rawTokens = raw.split(/\s+/).map(normalize).filter(Boolean);
+    if (spec && MENU_FAMILIES.includes(spec)) {
+      const isExactFamilyQuery = compact === normalize(spec.key);
+      if (!isExactFamilyQuery && identityText.includes(compact)) return true;
+      const context = normalize(overviewMenuContextText(entry));
+      const contextTokens = rawTokens.filter(token => !spec.matches(token));
+      return entry.menuMatches.length > 0
+        && contextTokens.every(token => context.includes(token));
+    }
+    if (identityText.includes(compact)) return true;
+    if (text.includes(compact)) return true;
     const familyTokens = spec && spec.key !== compact
       ? rawTokens.filter(token => !spec.matches(token))
       : [];
@@ -1150,7 +1216,7 @@ function overviewSearchText(entry) {
     const storeImageSource = String(resolvedPhoto?.source || (rawImage ? 'verified-legacy-direct-file' : '')).trim();
     const hoursSummary = entry.status.label === '영업시간 확인' ? entry.status.detail : entry.status.today;
     const menuMarkup = menuMatches.length ? `
-      <section class="store-service-menu-matches" aria-label="${escapeHtml(entry.store?.name || '가게')} 일치 메뉴">
+      <section class="store-service-menu-matches" aria-label="${escapeHtml(formatStoreDisplayName(entry.store?.name || '가게'))} 일치 메뉴">
         <header>
           <b>‘${escapeHtml(menuSpec?.label || overviewQuery)}’ 일치 메뉴</b>
           <span>${menuMatches.length}개</span>
@@ -1182,7 +1248,7 @@ function overviewSearchText(entry) {
             ${storeImage ? `<img src="${escapeHtml(storeImage)}" alt="" loading="lazy" decoding="async" data-photo-kind="card" data-photo-store-id="${escapeHtml(entry.storeId)}" data-photo-source="${escapeHtml(storeImageSource)}">` : ''}
           </span>
           <span class="store-service-overview-card-main">
-            <strong>${escapeHtml(entry.store?.name || '가게 정보')}</strong>
+            <strong>${escapeHtml(formatStoreDisplayName(entry.store?.name))}</strong>
             <small>${escapeHtml(entry.area)} · ${escapeHtml(formatCustomerHours24(hoursSummary))}</small>
           </span>
           <span class="store-service-status is-${escapeHtml(entry.status.state)}">
@@ -1811,6 +1877,10 @@ document.addEventListener('input', event => {
       window.setTimeout(() => openStoreAfterOverview(storeId), 0);
     }
   }, true);
+
+  document.addEventListener('daedong:menu-preview-closed', () => {
+    if (history.state?.[HISTORY_KEY] && overviewSuspendedForChild) resumeOverviewAfterChild();
+  });
 
   const serviceSurfaceSelector = [
     '#storeGrid',

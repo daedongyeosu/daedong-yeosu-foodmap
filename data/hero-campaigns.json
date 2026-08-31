@@ -34,8 +34,8 @@
         13
       ]
     },
-    "421ecef35a879687": {
-      "storeId": "421ecef35a879687",
+    "2da10529e7fb987c": {
+      "storeId": "2da10529e7fb987c",
       "slug": "tamnaneun-pizza-yeosu",
       "label": "탐나는피자 여수점 전용 대동여수음식지도",
       "title": "탐나는피자 여수점",
@@ -197,6 +197,39 @@
           "meta": "문수동 · 한식·면요리"
         }
       ]
+    }
+  },
+  "virtualStores": {
+    "2da10529e7fb987c": {
+      "name": "탐나는피자 여수점",
+      "district": "문수동",
+      "category": "피자",
+      "categories": ["피자"],
+      "address": "전라남도 여수시 문수동 83-14 1층",
+      "phone": "061-652-0908",
+      "hasMenu": true,
+      "trustedDetail": true,
+      "image": "assets/campaigns/tamnaneun-pizza-yeosu/01.webp",
+      "images": [
+        "assets/campaigns/tamnaneun-pizza-yeosu/01.webp",
+        "assets/campaigns/tamnaneun-pizza-yeosu/02.webp",
+        "assets/campaigns/tamnaneun-pizza-yeosu/03.webp"
+      ],
+      "routes": [
+        {
+          "name": "요기요",
+          "key": "yogiyo",
+          "url": "https://ws.yogiyo.co.kr/n7tto2",
+          "enabled": true
+        },
+        {
+          "name": "전화주문",
+          "key": "phone",
+          "url": "tel:0616520908",
+          "enabled": true
+        }
+      ],
+      "channelKeys": ["yogiyo", "phone"]
     }
   }
 }

@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 const expected = [
   ['67a9e4f14c8c7ea4', '손수김밥 양지점'],
   ['cfde2617224f33a0', '콩산소 (음식 연구소)'],
-  ['421ecef35a879687', '탐나는피자 여수점'],
+  ['2da10529e7fb987c', '탐나는피자 여수점'],
   ['068b2ae8fe32874a', '1인피자 피자먹다 여수여서점'],
   ['0abd7147b7d6b1dd', '비비큐 미평둔덕점'],
   ['f8a71a5a2344ee7f', '프랭크버거 미평점'],
@@ -31,8 +31,9 @@ for (const [storeId, name] of expected) {
   const item = manifest.campaigns.find((entry) => entry.storeId === storeId);
   const campaign = heroData.campaigns[storeId];
   assert.ok(item, `${name}: campaign link is missing.`);
-  assert.equal(item.url, `https://daedongmap.com/?hero=${storeId}`, `${name}: production link is wrong.`);
-  assert.equal(item.previewUrl, `https://preview.daedongmap.com/?hero=${storeId}`, `${name}: preview link is wrong.`);
+  const entryParam = item.entryMode === 'store' ? 'store' : 'hero';
+  assert.equal(item.url, `https://daedongmap.com/?${entryParam}=${storeId}`, `${name}: production link is wrong.`);
+  assert.equal(item.previewUrl, `https://preview.daedongmap.com/?${entryParam}=${storeId}`, `${name}: preview link is wrong.`);
   assert.ok(campaign, `${name}: hero campaign is missing.`);
   assert.equal(campaign.storeId, storeId, `${name}: hero campaign points at another store.`);
   assert.ok((campaign.images?.length || campaign.slides?.length) > 0, `${name}: hero campaign has no photo.`);
@@ -52,8 +53,8 @@ for (const campaign of Object.values(heroData.campaigns)) {
   }
 }
 
-assert.match(rc6, /hero-campaigns\.json\?v=store-campaign-nine-2/, 'The hero campaign data cache must be refreshed.');
-assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*store-campaign-nine-2/, 'The RC6 script cache must be refreshed.');
-assert.match(index, /final-experience\.js\?v=[^"\n]*store-campaign-nine-2/, 'The final loader cache must be refreshed.');
+assert.match(rc6, /hero-campaigns\.json\?v=tamnaneun-canonical-1/, 'The hero campaign data cache must be refreshed.');
+assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*tamnaneun-canonical-1/, 'The RC6 script cache must be refreshed.');
+assert.match(index, /final-experience\.js\?v=[^"\n]*tamnaneun-canonical-1/, 'The final loader cache must be refreshed.');
 
 console.log('store-campaign-nine-regression-test: pass');

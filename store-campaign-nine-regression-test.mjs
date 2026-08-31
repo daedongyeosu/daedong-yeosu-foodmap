@@ -52,8 +52,16 @@ for (const campaign of Object.values(heroData.campaigns)) {
   }
 }
 
-assert.match(rc6, /hero-campaigns\.json\?v=store-campaign-nine-2/, 'The hero campaign data cache must be refreshed.');
-assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*store-campaign-nine-2/, 'The RC6 script cache must be refreshed.');
-assert.match(index, /final-experience\.js\?v=[^"\n]*store-campaign-nine-2/, 'The final loader cache must be refreshed.');
+const tamnaneun = heroData.campaigns['421ecef35a879687'];
+assert.deepEqual(
+  tamnaneun.entryStoreIds,
+  ['421ecef35a879687', '2da10529e7fb987c'],
+  '탐나는피자의 통합 ID와 이전 요기요 QR ID가 함께 연결되어야 합니다.',
+);
+assert.match(rc6, /params\.get\('hero'\)\|\|params\.get\('store'\)/, '가게 상세 QR도 전용 배너 모드로 인식해야 합니다.');
+assert.match(loader, /daedongResolveHeroCampaignStoreId/, '가게 상세 QR은 통합 가게 ID로 교정되어야 합니다.');
+assert.match(rc6, /hero-campaigns\.json\?v=store-campaign-nine-3/, 'The hero campaign data cache must be refreshed.');
+assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*store-campaign-nine-3/, 'The RC6 script cache must be refreshed.');
+assert.match(index, /final-experience\.js\?v=[^"\n]*store-campaign-nine-3/, 'The final loader cache must be refreshed.');
 
 console.log('store-campaign-nine-regression-test: pass');

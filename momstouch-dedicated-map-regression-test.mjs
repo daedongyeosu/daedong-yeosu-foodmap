@@ -36,6 +36,10 @@ assert.match(rc6Css, /\.rc6-store-hero-copy\{[^}]*top:clamp\(18px,5vw,42px\);tra
   '모든 메인배너의 가게명과 메뉴명은 음식 중앙이 아니라 왼쪽 위에 배치해야 합니다.');
 assert.ok(rc6Css.includes('.rc6-store-hero-copy{left:20px;top:18px;width:78%}'),
   '휴대전화 메인배너에서도 가게명과 메뉴명을 왼쪽 위에 고정해야 합니다.');
+assert.match(rc6Css, /\.rc6-store-hero-media::after\{[^}]*radial-gradient\(ellipse 90% 65% at 0 0,rgba\(3,23,38,\.58\)[^}]*transparent 100%\)/,
+  '메인배너 음영은 사진 왼쪽 전체가 아니라 글자가 있는 왼쪽 위에만 약하게 적용해야 합니다.');
+assert.doesNotMatch(rc6Css, /\.rc6-store-hero-media::after\{[^}]*linear-gradient\(90deg,rgba\(3,23,38,\.88\)/,
+  '사진 왼쪽 전체를 짙게 가리는 기존 음영을 다시 사용하면 안 됩니다.');
 
 const link = links.campaigns.find(entry => entry.storeId === storeId);
 assert.equal(link?.url, `https://daedongmap.com/?hero=${storeId}`);

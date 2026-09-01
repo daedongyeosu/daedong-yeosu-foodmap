@@ -113,7 +113,8 @@ function rc6HeroOrderFooter(store){
   const icon=item.key==='brand'&&item.icon?`<img class="rc6-hero-order-icon" src="${escapeHtml(mobilePhotoPath(item.icon))}" alt="">`:appIcon(item.key,'rc6-hero-order-icon');
   return `<span class="rc6-hero-order-method">${icon}<b>${escapeHtml(item.label)}</b></span>`;
  }).join('');
- return methods.length?`<span class="rc6-hero-order-footer" style="--rc6-order-count:${methods.length}" aria-label="이 가게에서 주문 가능한 주문 방법: ${escapeHtml(labels)}">${items}</span>`:'';
+ const density=methods.length>=4?'dense':'normal';
+ return methods.length?`<span class="rc6-hero-order-footer" data-order-density="${density}" style="--rc6-order-count:${methods.length}" aria-label="이 가게에서 주문 가능한 주문 방법: ${escapeHtml(labels)}">${items}</span>`:'';
 }
 function rc6HeroSpecialFooter(){return '<span class="rc6-hero-order-footer rc6-hero-info-footer" aria-hidden="true"><span>여수 지역 소식 · 자세히 보기</span></span>';}
 function rc6ManagedStoreHeroEntries(){

@@ -113,6 +113,25 @@ assert.ok(
   ppongtteurakCampaign.slides.every(slide => slide.storeId === 'aa0a00258c22f377'),
   '뽕뜨락피자 전용 배너에는 다른 가게가 섞이면 안 됩니다.',
 );
+const auditedStoreSlideCounts = new Map([
+  ['67a9e4f14c8c7ea4', 14],
+  ['421ecef35a879687', 14],
+  ['068b2ae8fe32874a', 14],
+  ['0abd7147b7d6b1dd', 1],
+  ['f8a71a5a2344ee7f', 14],
+  ['fb798d3119a28415', 14],
+  ['a089d1d54720b48e', 14],
+  ['aa0a00258c22f377', 14],
+  ['10db3b0db6ebf8c5', 14],
+  ['cfde2617224f33a0', 8],
+]);
+for (const [storeId, expectedSlideCount] of auditedStoreSlideCounts) {
+  assert.equal(
+    heroData.campaigns[storeId].slides.length,
+    expectedSlideCount,
+    `${heroData.campaigns[storeId].title}: 검증 사진 보유량에 맞춘 표준 배너 수를 유지해야 합니다.`,
+  );
+}
 assert.deepEqual(
   new Set(ppongtteurak.routes.filter(route => route.enabled).map(route => route.key)),
   new Set(['direct', 'mukkebi', 'ddangyo', 'chak', 'phone', 'yogiyo', 'coupang', 'baemin']),
@@ -128,5 +147,8 @@ assert.match(index, /final-experience\.js\?v=[^"\n]*dedicated-hero-14-plus-3-1/,
 assert.match(rc6, /hero-campaigns\.json\?v=[^'\n]*ppongtteurak-14-1/, 'The fourteen-photo Bbungtteurak data cache must be refreshed.');
 assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*ppongtteurak-14-1/, 'The RC6 loader cache must include the fourteen-photo Bbungtteurak release.');
 assert.match(index, /final-experience\.js\?v=[^"\n]*ppongtteurak-14-1/, 'The page loader cache must include the fourteen-photo Bbungtteurak release.');
+assert.match(rc6, /hero-campaigns\.json\?v=[^'\n]*all-photo-capacity-audit-1/, 'The audited campaign data cache must be refreshed.');
+assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*all-photo-capacity-audit-1/, 'The RC6 loader cache must include the audited campaign release.');
+assert.match(index, /final-experience\.js\?v=[^"\n]*all-photo-capacity-audit-1/, 'The page loader cache must include the audited campaign release.');
 
 console.log('store-campaign-nine-regression-test: pass');

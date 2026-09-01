@@ -20,7 +20,9 @@ assert.match(indexSource, /app\.css\?v=[^"]*stable-scroll-position-1/, 'customer
 assert.match(cssSource, /html,body\{[^}]*overflow-anchor:none/, 'browser scroll anchoring must not move the customer viewport');
 assert.doesNotMatch(finalSource, /scrollWindowInstant\(window\.scrollY\+delta\)/, 'late recommendation rendering must not force the customer viewport');
 assert.match(rc6Source, /const RC6_HERO_AUTOPLAY_MS=5500/, 'main slides must use the approved 5.5 second rotation');
-assert.match(rc6Source, /new InfiniteCarousel\(document\.querySelector\('#heroCarousel'\),\{interval:RC6_HERO_AUTOPLAY_MS\}\)/, 'main slides must rotate automatically');
+assert.match(rc6Source, /function rc6EnsureHeroAutoplay\(\)[\s\S]*?setInterval\([\s\S]*?heroCarousel\.move\(1\)[\s\S]*?RC6_HERO_AUTOPLAY_MS/, 'main slides must use one stable autoplay clock across rerenders');
+assert.match(rc6Source, /new InfiniteCarousel\(document\.querySelector\('#heroCarousel'\),\{interval:0\}\)/, 'rerendered carousels must not start duplicate timers');
+assert.match(rc6Source, /const previousHeroIndex=Number\(heroCarousel\?\.logicalIndex\?\.\(\)\|\|0\)[\s\S]*?previousHeroIndex\+1/, 'data refreshes must preserve the visible hero instead of jumping back to the first slide');
 assert.match(rc6Source, /neighborhoodFor\(state\.location\)\|\|neighborhoodFor\(state\.addressLabel\)/, 'customer neighborhood priority must remain connected');
 assert.match(rc6Source, /RC6_DAILY_STORE_HERO_LIMIT=12/, 'the 12 location-ranked store banners must remain unchanged');
 

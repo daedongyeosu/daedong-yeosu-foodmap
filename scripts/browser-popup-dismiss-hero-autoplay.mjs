@@ -44,6 +44,25 @@ try {
 
   await page.goto(`${baseURL}?hero=${storeId}`, {waitUntil: 'domcontentloaded'});
   await page.locator(`.rc6-campaign-hero[data-rc6-banner-store="${storeId}"]`).first().waitFor({timeout: 15000});
+  await page.locator(`#modal:not([hidden]) .store-detail[data-store-id="${storeId}"]`).waitFor({timeout: 15000});
+  await page.locator('#modal .modal-close').tap();
+  await page.waitForFunction((expectedStoreId) => {
+    const params = new URLSearchParams(location.search);
+    return document.querySelector('#modal')?.hidden
+      && params.get('hero') === expectedStoreId
+      && !params.has('store');
+  }, storeId, {timeout: 5000});
+  await page.waitForTimeout(7000);
+  const heroDismissal = await page.evaluate((expectedStoreId) => ({
+    hidden: Boolean(document.querySelector('#modal')?.hidden),
+    heroParam: new URLSearchParams(location.search).get('hero'),
+    storeParam: new URLSearchParams(location.search).get('store'),
+    expectedStoreId,
+  }), storeId);
+  if (!heroDismissal.hidden || heroDismissal.storeParam || heroDismissal.heroParam !== storeId) {
+    throw new Error(`전용 QR 팝업을 닫은 뒤 상태가 유지되지 않았습니다: ${JSON.stringify(heroDismissal)}`);
+  }
+  report.checks.push('전용 QR 가게 팝업 자동 열림 및 닫은 뒤 7초간 재등장 없음');
   await page.waitForFunction(() => !document.documentElement.classList.contains('daedong-fresh-entry-settling'), null, {timeout: 10000});
   await page.waitForTimeout(500);
   const scrollState = await page.evaluate(() => ({

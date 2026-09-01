@@ -143,6 +143,15 @@ try {
       { timeout: 15000 },
     );
 
+    const entryDetail = page.locator(`#modal:not([hidden]) .store-detail[data-store-id="${entry.storeId}"]`);
+    await entryDetail.waitFor({ state: 'visible', timeout: 15000 });
+    await page.locator('#modal:not([hidden]) .modal-close').first().click();
+    await entryDetail.waitFor({ state: 'hidden', timeout: 10000 });
+    const closedEntryUrl = new URL(page.url());
+    if (closedEntryUrl.searchParams.get('hero') !== entry.storeId || closedEntryUrl.searchParams.has('store')) {
+      throw new Error(`${entry.name}: 첫 상세를 닫은 뒤 전용 배너 주소가 유지되지 않습니다.`);
+    }
+
     const campaign = heroData.campaigns[entry.storeId];
     if (!Array.isArray(campaign.slides) || !campaign.slides.length || campaign.images?.length) {
       throw new Error(`${entry.name}: 탐나는피자 표준 slides 구조가 아닙니다.`);
@@ -229,6 +238,7 @@ try {
       generalAdCount,
       totalSlideCount,
       targetMatched: true,
+      entryPopupOpened: true,
       mobileWidth: Math.round(box.width),
       detailOpened: true,
       menuNamesMatched: true,
@@ -311,6 +321,8 @@ try {
     url: location.href,
     stores: (() => { try { return eval('stores').map((store) => ({ id: store.id, name: store.name })); } catch { return null; } })(),
     requestedHero: new URLSearchParams(location.search).get('hero'),
+    requestedSharedStore: (() => { try { return eval('fxRequestedSharedStoreId()'); } catch (error) { return String(error); } })(),
+    requestedSharedStoreSource: (() => { try { return String(eval('fxRequestedSharedStoreId')); } catch (error) { return String(error); } })(),
     campaignCount: (() => { try { return Object.keys(eval('rc6HeroCampaigns')?.campaigns || {}).length; } catch { return -1; } })(),
     catalogProgress: window.__daedongCatalogProgress || null,
     dataApiSource: String(window.daedongDataApi?.catalog || '').slice(0, 200),

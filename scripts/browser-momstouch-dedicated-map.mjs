@@ -74,6 +74,15 @@ try {
       scrollWidth: label.scrollWidth,
     })),
     dense: card.querySelector('.rc6-hero-order-footer')?.dataset.orderDensity === 'dense',
+    copy: (() => {
+      const media = card.querySelector('.rc6-store-hero-media')?.getBoundingClientRect();
+      const copy = card.querySelector('.rc6-store-hero-copy')?.getBoundingClientRect();
+      return media && copy ? {
+        topGap: Math.round(copy.top - media.top),
+        leftGap: Math.round(copy.left - media.left),
+        copyBottomRatio: Number(((copy.bottom - media.top) / media.height).toFixed(2)),
+      } : null;
+    })(),
   }));
   if (!footerState.dense || footerState.labels.some(label => label.scrollWidth > label.clientWidth)) {
     throw new Error(`344px 화면에서 주문방법 이름이 잘렸습니다: ${JSON.stringify(footerState)}`);
@@ -81,7 +90,14 @@ try {
   if (!footerState.labels.some(label => label.text === '전화주문') || !footerState.labels.some(label => label.text === '브랜드앱')) {
     throw new Error(`필수 주문방법 이름이 온전히 표시되지 않았습니다: ${JSON.stringify(footerState.labels)}`);
   }
+  if (!footerState.copy || footerState.copy.topGap > 24 || footerState.copy.leftGap > 24 || footerState.copy.copyBottomRatio > 0.48) {
+    throw new Error(`가게명·메뉴명이 음식 중앙을 가리지 않고 왼쪽 위에 있어야 합니다: ${JSON.stringify(footerState.copy)}`);
+  }
   report.checks.push('344px 휴대전화에서도 전화주문·브랜드앱 이름을 생략 없이 표시');
+  report.checks.push('모든 메인배너 공통 가게명·메뉴명을 사진 왼쪽 위에 표시');
+  if (process.env.SCREENSHOT_PATH) {
+    await page.screenshot({path: process.env.SCREENSHOT_PATH, fullPage: false});
+  }
   await page.waitForTimeout(7000);
   const homeState = await page.evaluate(expected => ({
     introHidden: document.querySelector('#communityIntro')?.hidden,

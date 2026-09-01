@@ -32,6 +32,10 @@ assert.match(rc6Css, /\.rc6-hero-order-footer\[data-order-density="dense"\] \.rc
   '좁은 휴대전화에서는 아이콘과 주문방법명을 세로로 배치해야 합니다.');
 assert.match(rc6Css, /\.rc6-hero-order-footer\[data-order-density="dense"\] \.rc6-hero-order-method b\{overflow:visible;text-overflow:clip\}/,
   '전화주문과 브랜드앱 이름을 말줄임하면 안 됩니다.');
+assert.match(rc6Css, /\.rc6-store-hero-copy\{[^}]*top:clamp\(18px,5vw,42px\);transform:none/,
+  '모든 메인배너의 가게명과 메뉴명은 음식 중앙이 아니라 왼쪽 위에 배치해야 합니다.');
+assert.ok(rc6Css.includes('.rc6-store-hero-copy{left:20px;top:18px;width:78%}'),
+  '휴대전화 메인배너에서도 가게명과 메뉴명을 왼쪽 위에 고정해야 합니다.');
 
 const link = links.campaigns.find(entry => entry.storeId === storeId);
 assert.equal(link?.url, `https://daedongmap.com/?hero=${storeId}`);

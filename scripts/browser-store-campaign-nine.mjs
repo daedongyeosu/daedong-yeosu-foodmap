@@ -23,10 +23,9 @@ for (const campaign of Object.values(heroData.campaigns)) {
     }
   }
 }
-// The deployed preview catalog can expose a newly unified store detail before
-// the catalog list itself is refreshed. Omit Tamnaneun's canonical ID from the
-// fixture so this check exercises the campaign virtual-store fallback used by
-// real QR visitors instead of accidentally masking it with fixture data.
+// The deployed catalog can expose a dedicated campaign before the base list is
+// refreshed. Omit the two campaign-owned virtual stores so this check exercises
+// the same fallback that real QR visitors use.
 const routeKeysByStoreId = new Map([
   ['67a9e4f14c8c7ea4', ['direct', 'mukkebi', 'ddangyo', 'phone', 'yogiyo', 'baemin', 'coupang']],
   ['068b2ae8fe32874a', ['direct', 'mukkebi', 'ddangyo', 'phone', 'yogiyo', 'baemin', 'coupang']],
@@ -54,7 +53,8 @@ const fixtureRoute = key => ({
   url: key === 'phone' ? 'tel:0610000000' : `https://${key}.example/store`,
   enabled: true,
 });
-const stores = campaignDefinitions.filter(entry => entry.storeId !== '421ecef35a879687').map((entry, index) => {
+const virtualCampaignStoreIds = new Set(['421ecef35a879687', 'aa0a00258c22f377']);
+const stores = campaignDefinitions.filter(entry => !virtualCampaignStoreIds.has(entry.storeId)).map((entry, index) => {
   const channelKeys = routeKeysByStoreId.get(entry.storeId) || ['phone'];
   return {
     store_id: entry.storeId,
@@ -147,7 +147,9 @@ try {
     if (!Array.isArray(campaign.slides) || !campaign.slides.length || campaign.images?.length) {
       throw new Error(`${entry.name}: 탐나는피자 표준 slides 구조가 아닙니다.`);
     }
-    const expectedSlides = campaign.slides.length;
+    const expectedSlides = Math.min(campaign.slides.length, 14);
+    const expectedGeneralAds = 3;
+    const expectedTotalSlides = expectedSlides + expectedGeneralAds;
     const campaignSlides = page.locator('.rc6-campaign-hero');
     const slideIndexes = await campaignSlides.evaluateAll((slides) => slides.map((slide) => slide.dataset.heroIndex));
     const slideCount = new Set(slideIndexes).size;
@@ -166,7 +168,7 @@ try {
       });
       return [...unique.values()].sort((a, b) => a.index - b.index);
     });
-    const expectedCopy = campaign.slides.map(slide => ({
+    const expectedCopy = campaign.slides.slice(0, expectedSlides).map(slide => ({
       storeId: String(slide.storeId || campaign.storeId),
       storeName: slide.title,
       menuName: slide.meta,
@@ -182,11 +184,21 @@ try {
     if (allowedStoreIds.size !== expectedAllowedCount || (expectedAllowedCount === 1 && !allowedStoreIds.has(entry.storeId))) {
       throw new Error(`${entry.name}: 전용지도 허용 가게 구성이 잘못되었습니다.`);
     }
-    const foreignSlideCount = await page.locator(
-      '#heroTrack > .hero-slide:not(.rc6-campaign-hero), #heroTrack > .rc6-campaign-hero:not([data-rc6-banner-store])',
-    ).count();
+    const generalAdCount = await page.locator('#heroTrack > .hero-slide[data-rc6-banner-notion]').evaluateAll(slides => (
+      new Set(slides.map(slide => slide.dataset.heroIndex)).size
+    ));
+    if (generalAdCount !== expectedGeneralAds) {
+      throw new Error(`${entry.name}: 일반광고 수가 ${generalAdCount}/${expectedGeneralAds}입니다.`);
+    }
+    const totalSlideCount = await page.locator('#heroTrack > .hero-slide').evaluateAll(slides => (
+      new Set(slides.map(slide => slide.dataset.heroIndex)).size
+    ));
+    if (totalSlideCount !== expectedTotalSlides) {
+      throw new Error(`${entry.name}: 전체 배너 수가 ${totalSlideCount}/${expectedTotalSlides}입니다.`);
+    }
+    const foreignSlideCount = await page.locator('#heroTrack > .rc6-campaign-hero:not([data-rc6-banner-store])').count();
     if (foreignSlideCount) {
-      throw new Error(`${entry.name}: 전용지도에 일반 광고나 연결되지 않은 가게가 섞였습니다.`);
+      throw new Error(`${entry.name}: 전용지도에 연결되지 않은 가게가 섞였습니다.`);
     }
 
     const first = page.locator('.rc6-campaign-hero[data-hero-index="0"]').first();
@@ -214,6 +226,8 @@ try {
       storeId: entry.storeId,
       name: entry.name,
       slideCount,
+      generalAdCount,
+      totalSlideCount,
       targetMatched: true,
       mobileWidth: Math.round(box.width),
       detailOpened: true,
@@ -228,15 +242,18 @@ try {
     ), entry.storeId, { timeout: 5000 });
     const closedCampaign = await page.evaluate((allowedIds) => ({
       slideCount: new Set([...document.querySelectorAll('#heroTrack > .rc6-campaign-hero')].map(slide => slide.dataset.heroIndex)).size,
-      ordinarySlides: document.querySelectorAll('#heroTrack > .hero-slide:not(.rc6-campaign-hero)').length,
+      ordinarySlides: new Set([...document.querySelectorAll('#heroTrack > .hero-slide[data-rc6-banner-notion]')].map(slide => slide.dataset.heroIndex)).size,
       foreignSlides: [...document.querySelectorAll('#heroTrack > .rc6-campaign-hero')]
         .filter(slide => !allowedIds.includes(slide.dataset.rc6BannerStore)).length,
     }), [...allowedStoreIds]);
-    if (closedCampaign.slideCount !== expectedSlides || closedCampaign.ordinarySlides || closedCampaign.foreignSlides) {
+    if (closedCampaign.slideCount !== expectedSlides || closedCampaign.ordinarySlides !== expectedGeneralAds || closedCampaign.foreignSlides) {
       throw new Error(`${entry.name}: 상세를 닫은 뒤 전용 배너 구성이 유지되지 않습니다.`);
     }
     if (entry.storeId === '068b2ae8fe32874a') {
       await page.screenshot({ path: 'browser-store-campaign-nine.png', fullPage: false });
+    }
+    if (entry.storeId === 'aa0a00258c22f377') {
+      await page.screenshot({ path: 'browser-ppongtteurak-campaign.png', fullPage: false });
     }
     await page.close();
   }
@@ -253,16 +270,17 @@ try {
   const initialLegacyHome = await legacyPage.evaluate((storeId) => ({
     slideCount: new Set([...document.querySelectorAll('#heroTrack > .hero-slide')].map(slide => slide.dataset.heroIndex)).size,
     campaignSlideCount: new Set([...document.querySelectorAll(`#heroTrack > .rc6-campaign-hero[data-rc6-banner-store="${storeId}"]`)].map(slide => slide.dataset.heroIndex)).size,
-    foreignSlideCount: document.querySelectorAll(`#heroTrack > .hero-slide:not(.rc6-campaign-hero), #heroTrack > .rc6-campaign-hero:not([data-rc6-banner-store="${storeId}"])`).length,
+    foreignSlideCount: new Set([...document.querySelectorAll(`#heroTrack > .hero-slide:not(.rc6-campaign-hero), #heroTrack > .rc6-campaign-hero:not([data-rc6-banner-store="${storeId}"])`)].map(slide => slide.dataset.heroIndex)).size,
     openedStoreId: document.querySelector('#modal:not([hidden]) .store-detail')?.dataset.storeId || '',
   }), canonicalStoreId);
   const tamnaneunCampaign = heroData.campaigns[canonicalStoreId];
-  const expectedTamnaneunSlides = tamnaneunCampaign.slides?.length || tamnaneunCampaign.images?.length || 0;
+  const expectedTamnaneunSlides = Math.min(tamnaneunCampaign.slides?.length || tamnaneunCampaign.images?.length || 0, 14);
+  const expectedTamnaneunTotal = expectedTamnaneunSlides + 3;
   if (initialLegacyHome.openedStoreId !== canonicalStoreId) {
     throw new Error('탐나는피자 이전 QR이 통합 가게 상세를 열지 못합니다.');
   }
-  if (initialLegacyHome.slideCount !== expectedTamnaneunSlides || initialLegacyHome.campaignSlideCount !== expectedTamnaneunSlides || initialLegacyHome.foreignSlideCount) {
-    throw new Error('탐나는피자 이전 QR의 홈 배너에 다른 광고가 섞였습니다.');
+  if (initialLegacyHome.slideCount !== expectedTamnaneunTotal || initialLegacyHome.campaignSlideCount !== expectedTamnaneunSlides || initialLegacyHome.foreignSlideCount !== 3) {
+    throw new Error('탐나는피자 이전 QR의 홈 배너 표준 구성이 다릅니다.');
   }
   await legacyPage.locator('#modal .modal-close').tap();
   await legacyPage.waitForFunction((storeId) => (
@@ -274,9 +292,9 @@ try {
     search: location.search,
     slideCount: new Set([...document.querySelectorAll('#heroTrack > .hero-slide')].map(slide => slide.dataset.heroIndex)).size,
     campaignSlideCount: new Set([...document.querySelectorAll(`#heroTrack > .rc6-campaign-hero[data-rc6-banner-store="${storeId}"]`)].map(slide => slide.dataset.heroIndex)).size,
-    foreignSlideCount: document.querySelectorAll(`#heroTrack > .hero-slide:not(.rc6-campaign-hero), #heroTrack > .rc6-campaign-hero:not([data-rc6-banner-store="${storeId}"])`).length,
+    foreignSlideCount: new Set([...document.querySelectorAll(`#heroTrack > .hero-slide:not(.rc6-campaign-hero), #heroTrack > .rc6-campaign-hero:not([data-rc6-banner-store="${storeId}"])`)].map(slide => slide.dataset.heroIndex)).size,
   }), canonicalStoreId);
-  if (closedLegacyHome.slideCount !== expectedTamnaneunSlides || closedLegacyHome.campaignSlideCount !== expectedTamnaneunSlides || closedLegacyHome.foreignSlideCount) {
+  if (closedLegacyHome.slideCount !== expectedTamnaneunTotal || closedLegacyHome.campaignSlideCount !== expectedTamnaneunSlides || closedLegacyHome.foreignSlideCount !== 3) {
     throw new Error('탐나는피자 상세를 닫은 뒤 전용 배너가 일반 광고로 바뀝니다.');
   }
   report.legacyTamnaneunQr = {

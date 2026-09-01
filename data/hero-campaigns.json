@@ -267,6 +267,71 @@
         }
       ],
       "channelKeys": ["mukkebi", "ddangyo", "yogiyo", "coupang", "baemin", "phone"]
+    },
+    "aa0a00258c22f377": {
+      "name": "뽕뜨락피자 여수여서점",
+      "district": "여서동",
+      "category": "피자",
+      "categories": ["피자"],
+      "address": "전라남도 여수시 여서동1길 46-1 2층",
+      "phone": "061-655-1082",
+      "hasMenu": true,
+      "trustedDetail": true,
+      "image": "assets/notion-recovery-180/aa0a00258c22f377/01.jpg",
+      "images": [
+        "assets/notion-recovery-180/aa0a00258c22f377/01.jpg"
+      ],
+      "routes": [
+        {
+          "name": "가게바로주문",
+          "key": "direct",
+          "url": "https://bit.ly/4dN1g4l",
+          "enabled": true
+        },
+        {
+          "name": "먹깨비",
+          "key": "mukkebi",
+          "url": "https://bit.ly/4v7f8gW",
+          "enabled": true
+        },
+        {
+          "name": "땡겨요",
+          "key": "ddangyo",
+          "url": "https://fdofd.ddangyo.com/gateway1.html?kFTAG4O",
+          "enabled": true
+        },
+        {
+          "name": "CHAK 지역상품권",
+          "key": "chak",
+          "url": "https://bit.ly/chak-yeosu",
+          "enabled": true
+        },
+        {
+          "name": "전화주문",
+          "key": "phone",
+          "url": "tel:0616551082",
+          "enabled": true
+        },
+        {
+          "name": "요기요",
+          "key": "yogiyo",
+          "url": "https://bit.ly/4nUIQn8",
+          "enabled": true
+        },
+        {
+          "name": "쿠팡이츠",
+          "key": "coupang",
+          "url": "https://bit.ly/4vhmpLp",
+          "enabled": true
+        },
+        {
+          "name": "배달의민족",
+          "key": "baemin",
+          "url": "https://bit.ly/4dJaY9r",
+          "enabled": true
+        }
+      ],
+      "channelKeys": ["direct", "mukkebi", "ddangyo", "chak", "phone", "yogiyo", "coupang", "baemin"]
     }
   }
 }

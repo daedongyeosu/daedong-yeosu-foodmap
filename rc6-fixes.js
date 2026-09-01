@@ -37,6 +37,7 @@ function rc6ApplyRainExposure(candidates,limit){
 function rc6RandomizeGull(gull){const curve=()=>`${Math.round(-20+Math.random()*40)}px`,bank=()=>`${Math.round(-11+Math.random()*22)}deg`;['a','b','c','d','e'].forEach(key=>gull.style.setProperty(`--curve-${key}`,curve()));['start','a','b','c','d','end'].forEach(key=>gull.style.setProperty(`--bank-${key}`,bank()));gull.style.setProperty('--flap',`${(.44+Math.random()*.34).toFixed(2)}s`);}
 function rc6Gulls(){const shell=document.querySelector('.yeosu-night-shell');if(!shell||shell.querySelector('.rc6-gulls'))return;const layer=document.createElement('div');layer.className='rc6-gulls';layer.setAttribute('aria-hidden','true');[[12,22,11,-2,.8],[20,29,13,-6,1],[27,18,9,-9,.7],[33,25,14,-3,.9]].forEach(([y,size,duration,delay,scale],i)=>{layer.insertAdjacentHTML('beforeend',`<svg class="rc6-gull" style="--y:${y}%;--size:${size}px;--duration:${duration}s;--delay:${delay}s;--scale:${scale};--x:${62+i*8}%" viewBox="0 0 32 14"><g class="rc6-gull-flap"><path d="M2 10 Q9 2 16 9 Q23 2 30 10"/></g></svg>`);const gull=layer.lastElementChild;rc6RandomizeGull(gull);gull.addEventListener('animationiteration',event=>{if(event.target===gull)rc6RandomizeGull(gull);});});shell.prepend(layer);}
 const RC6_DAILY_HERO_LIMIT=15,RC6_DAILY_STORE_HERO_LIMIT=12;
+const RC6_HERO_AUTOPLAY_MS=5500;
 const RC6_MAIN_SPECIAL_HERO_KEYS=new Set(['18','19','20']);
 const RC6_HERO_LOW_FEE_CHANNEL_KEYS=['direct','ondongne','mukkebi','ddangyo','phone'];
 const RC6_NOTION_HERO_RETURN='daedongNotionHeroReturnV1';
@@ -198,7 +199,7 @@ function rc6RenderHero(){
    firstImage.addEventListener('error',finishLoading,{once:true});
   }
  }
- if(entries.length){heroCarousel=new InfiniteCarousel(document.querySelector('#heroCarousel'),{interval:0});if(notionReturn){const slides=[...track.querySelectorAll(':scope > [data-rc6-banner-notion]')],returnIndex=slides.findIndex(slide=>{try{return new URL(slide.dataset.rc6BannerNotion,location.href).href===notionReturn.notionUrl;}catch{return false;}});const displayIndex=returnIndex>=0?Number(slides[returnIndex].dataset.heroIndex):Number(notionReturn.displayIndex);if(Number.isInteger(displayIndex)&&displayIndex>=0&&displayIndex<entries.length&&heroCarousel.count>1){heroCarousel.current=displayIndex+1;heroCarousel.jump(false);}sessionStorage.removeItem(RC6_NOTION_HERO_RETURN);}}
+ if(entries.length){heroCarousel=new InfiniteCarousel(document.querySelector('#heroCarousel'),{interval:RC6_HERO_AUTOPLAY_MS});if(notionReturn){const slides=[...track.querySelectorAll(':scope > [data-rc6-banner-notion]')],returnIndex=slides.findIndex(slide=>{try{return new URL(slide.dataset.rc6BannerNotion,location.href).href===notionReturn.notionUrl;}catch{return false;}});const displayIndex=returnIndex>=0?Number(slides[returnIndex].dataset.heroIndex):Number(notionReturn.displayIndex);if(Number.isInteger(displayIndex)&&displayIndex>=0&&displayIndex<entries.length&&heroCarousel.count>1){heroCarousel.current=displayIndex+1;heroCarousel.jump(false);}sessionStorage.removeItem(RC6_NOTION_HERO_RETURN);}}
 }
 function rc6WatchHeroDay(){
  rc6ActiveHeroDay=rc6SeoulDay().key;if(rc6HeroDayTimer)clearInterval(rc6HeroDayTimer);

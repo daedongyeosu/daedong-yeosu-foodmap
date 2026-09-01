@@ -56,6 +56,8 @@ assert.doesNotMatch(index, /daedong-external-return-pending body>\*\{visibility:
 assert.match(index, /daedong-external-return-pending body::before,[\s\S]*?pointer-events:none/, '복귀 보호화면은 실제 상세를 숨기지 않고 비대화형 불투명 커버로만 가려야 합니다.');
 assert.match(finalExperience, /function fxPrepareOrderMethodReentryUrl\(saved\)[\s\S]*?searchParams\.delete\(FX_ORDER_METHOD_REENTRY_PARAM\)[\s\S]*?history\.replaceState/, '일회용 재진입 URL 표식은 상세 모달을 만들기 전에 제거해야 합니다.');
 assert.match(finalExperience, /function fxOpenSharedStoreFromUrl\(\)[\s\S]*?fxPrepareOrderMethodReentryUrl\(orderMethodReentry\)[\s\S]*?openStore\(store\)/, '삼성 카카오 히트테스트를 보존하려면 URL 정리가 openStore보다 먼저 실행되어야 합니다.');
+assert.match(finalExperience, /function fxConsumeSharedStoreEntry\(storeId=''\)[\s\S]*?fxSharedStoreHomeUrl\(requestedStoreId\)[\s\S]*?history\.replaceState/, '닫은 가게 팝업이 다시 뜨지 않도록 일회용 store 진입 표식을 즉시 제거해야 합니다.');
+assert.match(rc2, /hardClose = function rc2HardClose[\s\S]*?daedongConsumeSharedStoreEntry[\s\S]*?rc2NativeHardClose/, '공유·QR 가게 팝업은 닫기 전에 URL 진입 표식을 먼저 소모해야 합니다.');
 assert.match(finalExperience, /function fxFinishOrderMethodReentry\(saved[\s\S]*?sessionStorage\.removeItem\(FX_ORDER_METHOD_REENTRY\)[\s\S]*?requestAnimationFrame\(\(\)=>requestAnimationFrame\([\s\S]*?daedongFinishExternalReturnBoot/, '새 상세가 두 프레임 그려진 뒤 복귀 보호화면을 해제해야 합니다.');
 const finishOrderReentry = finalExperience.match(/function fxFinishOrderMethodReentry\(saved[\s\S]*?\n\}/)?.[0] || '';
 assert.doesNotMatch(finishOrderReentry, /history\.replaceState/, '상세 모달을 만든 뒤 history를 바꾸면 실제 버튼 표면이 다시 죽을 수 있습니다.');

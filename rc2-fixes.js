@@ -661,6 +661,13 @@ hardClose = function rc2HardClose(options = {}) {
     return;
   }
   rc2ModalStack.length = 0;
+  if (!options.fromPop) {
+    window.daedongConsumeSharedStoreEntry?.(
+      $('#modal')?.dataset.activeStoreId
+      || $('#modal:not([hidden]) .store-detail')?.dataset.storeId
+      || ''
+    );
+  }
   rc2NativeHardClose(options);
 };
 closeModal = hardClose;

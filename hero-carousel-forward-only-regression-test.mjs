@@ -15,12 +15,12 @@ assert.match(source, /constructor\(root, \{interval = 0, onChange = null\} = \{\
 assert.match(source, /Math\.abs\(deltaX\) > Math\.abs\(deltaY\) \* 1\.15/, 'vertical scrolling must not become a slide swipe');
 assert.match(source, /removeEventListener\(type, handler, options\)/, 'destroy must detach all carousel listeners');
 assert.match(indexSource, /app\.js\?v=[^"]*hero-forward-only-1/, 'app.js cache version must expose the fix');
-assert.match(indexSource, /app\.js\?v=[^"]*manual-carousels-1/, 'customers must receive the manual-only carousel build');
+assert.match(indexSource, /app\.js\?v=[^"]*hero-autoplay-1/, 'customers must receive the hero autoplay build');
 assert.match(indexSource, /app\.css\?v=[^"]*stable-scroll-position-1/, 'customers must receive the stable scroll build');
 assert.match(cssSource, /html,body\{[^}]*overflow-anchor:none/, 'browser scroll anchoring must not move the customer viewport');
 assert.doesNotMatch(finalSource, /scrollWindowInstant\(window\.scrollY\+delta\)/, 'late recommendation rendering must not force the customer viewport');
-assert.match(rc6Source, /interval:0/, 'main slides must move only after customer input');
-assert.doesNotMatch(source, /new InfiniteCarousel\([^\n]+interval:\s*3500/, 'app carousel autoplay remained');
+assert.match(rc6Source, /const RC6_HERO_AUTOPLAY_MS=5500/, 'main slides must use the approved 5.5 second rotation');
+assert.match(rc6Source, /new InfiniteCarousel\(document\.querySelector\('#heroCarousel'\),\{interval:RC6_HERO_AUTOPLAY_MS\}\)/, 'main slides must rotate automatically');
 assert.match(rc6Source, /neighborhoodFor\(state\.location\)\|\|neighborhoodFor\(state\.addressLabel\)/, 'customer neighborhood priority must remain connected');
 assert.match(rc6Source, /RC6_DAILY_STORE_HERO_LIMIT=12/, 'the 12 location-ranked store banners must remain unchanged');
 
@@ -147,6 +147,16 @@ assert.equal(still.shell.listenerCount(), 0, 'destroy left shell listeners behin
 assert.equal(still.track.listenerCount(), 0, 'destroy left track listeners behind');
 assert.equal(still.root.listenerCount(), 0, 'destroy left root listeners behind');
 
+const automatic = makeRoot();
+const automaticCarousel = new InfiniteCarousel(automatic.root, {interval: 5500});
+assert.equal(intervals.size, 1, 'hero autoplay timer did not start');
+const automaticTimer = [...intervals.values()][0];
+assert.equal(automaticTimer.delay, 5500, 'hero autoplay interval changed');
+automaticTimer.callback();
+assert.equal(automaticCarousel.logicalIndex(), 1, 'hero autoplay did not advance exactly one slide');
+assert.match(automatic.track.style.transform, /translate3d/, 'hero autoplay must use an in-place transform');
+automaticCarousel.destroy();
+
 const gestures = makeRoot();
 const gestureCarousel = new InfiniteCarousel(gestures.root, {interval: 0});
 gestures.shell.emit('pointerdown', {clientX: 200, clientY: 100, pointerId: 1});
@@ -162,8 +172,9 @@ gestures.shell.emit('pointerup', {clientX: 130, clientY: 105, pointerId: 3});
 assert.equal(gestureCarousel.logicalIndex(), stoppedIndex, 'destroyed carousel still reacted to gestures');
 
 console.log(JSON.stringify({
-  staysStillWithoutInput: true,
-  intervalMs: 0,
+  staysStillByDefault: true,
+  heroAutoplay: true,
+  intervalMs: 5500,
   verticalScrollIgnored: true,
   oldListenersRemoved: true,
   neighborhoodRankingUntouched: true,

@@ -138,12 +138,20 @@
       "title": "맘스터치 문수점",
       "meta": "문수동 · 햄버거·치킨",
       "slides": [
-        {
-          "storeId": "10db3b0db6ebf8c5",
-          "image": "images/14.png",
-          "title": "맘스터치 문수점",
-          "meta": "버거·치킨·사이드 대표메뉴"
-        }
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/08/002bac60-672b-457b-bfb1-8a4808999d3d.jpg","title":"맘스터치 문수점","meta":"싸이버거 세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/08/3f3eaafd-7ee2-414e-a94a-ceba06ca143f.jpg","title":"맘스터치 문수점","meta":"언빌리버블버거 세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/08/c90f315a-cd6b-4624-9e5f-cf91297adea1.jpg","title":"맘스터치 문수점","meta":"화이트갈릭버거 세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/08/eeb67151-1a68-4c7a-9456-710b95918c64.jpg","title":"맘스터치 문수점","meta":"딥치즈버거 세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/04/d5284994-5a57-49b2-8982-2fe70f4f3a56.jpg","title":"맘스터치 문수점","meta":"매직풍싸이버거 세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/08/3b04058e-38ac-46e6-9673-fcb4efae979a.jpg","title":"맘스터치 문수점","meta":"통새우버거 세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/07/7004e4cf-81e4-4d61-932b-9f8569361f87.jpg","title":"맘스터치 문수점","meta":"갓빠삭치킨(순살)"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/05/059f02ea-7ab2-431c-9029-9318e5381007.jpg","title":"맘스터치 문수점","meta":"핫치즈치킨(순살)"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/05/86b65985-bef5-4ff4-b7c2-caba01987efd.jpg","title":"맘스터치 문수점","meta":"후라이드치킨(순살)"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/05/4cf26ffc-383c-4677-b86a-e1e2c1c103ed.jpg","title":"맘스터치 문수점","meta":"맘스양념치킨(순살)"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/05/3c88ece2-2bd3-4756-a44e-e6484b68ff36.jpg","title":"맘스터치 문수점","meta":"치킨&버거세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/06/7c090a85-450d-44be-a7d9-f0f1a14e45bb.jpg","title":"맘스터치 문수점","meta":"떡강정세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/05/7bff5bf4-a14d-449e-9565-e14a5dab85c0.jpg","title":"맘스터치 문수점","meta":"케이준양념감자"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/05/d4da1da4-2a24-4d27-a430-ae565ff49771.jpg","title":"맘스터치 문수점","meta":"바삭크림치즈볼"}
       ]
     },
     "cfde2617224f33a0": {

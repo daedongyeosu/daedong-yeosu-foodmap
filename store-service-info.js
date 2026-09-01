@@ -278,6 +278,14 @@
   }
 
   function storeStatus(info, date = new Date()) {
+    if (serviceLoadState === 'error') {
+      return {
+        state: 'unknown',
+        label: '정보 연결 지연',
+        detail: '영업시간 정보를 불러오지 못했습니다.',
+        today: '주문앱 또는 전화로 확인해 주세요.'
+      };
+    }
     if (!info?.hours?.weekly) {
       const displayLines = Array.isArray(info?.hours?.displayLines)
         ? info.hours.displayLines.map(line => String(line || '').trim()).filter(Boolean)
@@ -709,6 +717,9 @@
 
   function detailPanelMarkup(info, status, giftRoute) {
     const displayLines = Array.isArray(info?.hours?.displayLines) ? info.hours.displayLines : [];
+    const missingHoursCopy = serviceLoadState === 'error'
+      ? '영업시간 정보를 불러오지 못했습니다.'
+      : '확인된 영업시간이 없습니다.';
     const availableBenefits = detailBenefitItems(info).filter(item => item.state === 'available');
     const giftAvailable = availableBenefits.some(item => item.key === 'yeosu-seomseom-pay');
     return `
@@ -725,7 +736,7 @@
       <div class="store-service-detail-hours">
         ${displayLines.length
           ? displayLines.map(line => `<span>${escapeHtml(formatCustomerHours24(line))}</span>`).join('')
-          : '<span class="is-unknown">확인된 영업시간이 없습니다.</span>'}
+          : `<span class="is-unknown">${escapeHtml(missingHoursCopy)}</span>`}
       </div>
       ${availableBenefits.length ? `
         <div class="store-service-detail-benefits" aria-label="현재 이용 가능한 주문앱별 혜택">

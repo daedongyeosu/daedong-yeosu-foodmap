@@ -102,6 +102,17 @@ const ppongtteurak = heroData.virtualStores['aa0a00258c22f377'];
 assert.ok(ppongtteurak, '뽕뜨락피자는 기본 목록 반영이 늦어도 전용 화면에서 열리는 보조 가게정보가 있어야 합니다.');
 assert.equal(ppongtteurak.phone, '061-655-1082', '뽕뜨락피자 전화번호가 실제 가게 번호와 일치해야 합니다.');
 assert.equal(ppongtteurak.trustedDetail, true, '뽕뜨락피자 전용 화면은 검증된 주문경로를 즉시 사용해야 합니다.');
+const ppongtteurakCampaign = heroData.campaigns['aa0a00258c22f377'];
+assert.equal(ppongtteurakCampaign.slides.length, 14, '뽕뜨락피자는 검증된 메뉴사진 14장을 모두 사용해야 합니다.');
+assert.equal(
+  new Set(ppongtteurakCampaign.slides.map(slide => slide.image)).size,
+  14,
+  '뽕뜨락피자 배너에는 같은 메뉴사진을 중복 사용하면 안 됩니다.',
+);
+assert.ok(
+  ppongtteurakCampaign.slides.every(slide => slide.storeId === 'aa0a00258c22f377'),
+  '뽕뜨락피자 전용 배너에는 다른 가게가 섞이면 안 됩니다.',
+);
 assert.deepEqual(
   new Set(ppongtteurak.routes.filter(route => route.enabled).map(route => route.key)),
   new Set(['direct', 'mukkebi', 'ddangyo', 'chak', 'phone', 'yogiyo', 'coupang', 'baemin']),
@@ -114,5 +125,8 @@ assert.match(rc6, /RC6_CAMPAIGN_SPECIAL_HERO_KEYS\.map\(/, '가게별 설정 누
 assert.match(rc6, /hero-campaigns\.json\?v=store-campaign-standard-1-dedicated-hero-14-plus-3-1/, 'The standardized campaign data cache must be refreshed.');
 assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*dedicated-hero-14-plus-3-1/, 'The RC6 loader cache must include the standardized campaign release.');
 assert.match(index, /final-experience\.js\?v=[^"\n]*dedicated-hero-14-plus-3-1/, 'The page loader cache must include the standardized campaign release.');
+assert.match(rc6, /hero-campaigns\.json\?v=[^'\n]*ppongtteurak-14-1/, 'The fourteen-photo Bbungtteurak data cache must be refreshed.');
+assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*ppongtteurak-14-1/, 'The RC6 loader cache must include the fourteen-photo Bbungtteurak release.');
+assert.match(index, /final-experience\.js\?v=[^"\n]*ppongtteurak-14-1/, 'The page loader cache must include the fourteen-photo Bbungtteurak release.');
 
 console.log('store-campaign-nine-regression-test: pass');

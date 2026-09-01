@@ -649,7 +649,7 @@ fxRc2Script.onload=()=>{
    fxRc5Script.src='rc5-fixes.js?v=category-first-paint-1-category-more-card-touch-1-brand-key-cache-1-postcode-touch-back-1';
    fxRc5Script.async=false;
    fxRc5Script.onload=()=>{
-    const css=document.createElement('link');css.rel='stylesheet';css.href='rc6-fixes.css?v=location-store-hero-1-handsu-copy-spacing-1-hero-clean-controls-1-hero-order-footer-2-dense-mobile-labels-1-all-copy-top-left-1';document.head.append(css);
+    const css=document.createElement('link');css.rel='stylesheet';css.href='rc6-fixes.css?v=location-store-hero-1-handsu-copy-spacing-1-hero-clean-controls-1-hero-order-footer-2-dense-mobile-labels-1-all-copy-top-left-1-light-copy-overlay-1';document.head.append(css);
     const script=document.createElement('script');script.src='rc6-fixes.js?v=hero-store-direct-1-multi-category-1-hamburger-priority-1-pizza-priority-2-kongsanso-store-family-1-store-badge-removed-1-handsu-copy-spacing-1-hero-card-cta-removed-1-rain-mode-admin-1-local-channel-marker-1-location-coordinate-merge-1-business-status-ranking-1-release-readiness-1-hero-open-only-1-hero-area-label-removed-1-three-main-ads-restored-1-notion-hero-return-1-goheung-isolation-2-instant-hero-loading-1-keep-placeholder-1-coordinate-yield-1-pager-stable-refresh-1-hero-photo-recovery-1-store-campaign-nine-2-tamnaneun-menu-hero-4-store-campaign-standard-1-hero-stable-height-1-hero-autoplay-stable-clock-1-momstouch-dedicated-entry-1-momstouch-multi-menu-hero-1';
     script.onload=()=>{
      const addressScript=document.createElement('script');addressScript.src='rc7-address-map.js?v=address-home-return-1-coarse-region-1-inapp-location-recovery-1-outside-yeosu-full-list-1-saved-address-first-1-release-readiness-1-step-touch-back-1';

@@ -1,7 +1,7 @@
 const RC6_RAIN_MODE_URL='https://daedong-yeosu-admin.sisakim.chatgpt.site/api/rain-mode';
 const RC6_REGION_CODE=window.DAEDONG_REGION?.code||'yeosu',RC6_IS_GOHEUNG=RC6_REGION_CODE==='goheung';
 const RC6_REGION_NAME=window.DAEDONG_REGION?.shortName||'여수',RC6_DEFAULT_AREA=window.DAEDONG_REGION?.defaultArea||'여수시 전체';
-let rc6Coordinates={},rc6BannerTargets={},rc6StorePriority={},rc6HeroCampaigns={campaigns:{},virtualStores:{}},rc6RainMode='normal',rc6CampaignVirtualStores=new Map(),rc6StoreByIdBase=null,rc6ManagedStoreIds=new Set(),rc6SharedManagedStoreIds=new Set(),rc6Pointer=null,rc6LocationCache={key:'',stores:[]},rc6ChannelSortingInstalled=false,rc6HeroRenderKey='',rc6HeroDayTimer=0,rc6ActiveHeroDay='';
+let rc6Coordinates={},rc6BannerTargets={},rc6StorePriority={},rc6HeroCampaigns={campaigns:{},virtualStores:{}},rc6RainMode='normal',rc6CampaignVirtualStores=new Map(),rc6StoreByIdBase=null,rc6ManagedStoreIds=new Set(),rc6SharedManagedStoreIds=new Set(),rc6Pointer=null,rc6LocationCache={key:'',stores:[]},rc6ChannelSortingInstalled=false,rc6HeroRenderKey='',rc6HeroDayTimer=0,rc6HeroAutoplayTimer=0,rc6ActiveHeroDay='';
 const rc6AppRegisteredStoresBase=appRegisteredStores;
 const rc6PhoneStoresBase=fxPhoneStores;
 const rc6DirectBrandsBase=fxDirectBrands;
@@ -41,6 +41,15 @@ const RC6_HERO_AUTOPLAY_MS=5500;
 const RC6_MAIN_SPECIAL_HERO_KEYS=new Set(['18','19','20']);
 const RC6_HERO_LOW_FEE_CHANNEL_KEYS=['direct','ondongne','mukkebi','ddangyo','phone'];
 const RC6_NOTION_HERO_RETURN='daedongNotionHeroReturnV1';
+function rc6EnsureHeroAutoplay(){
+ if(rc6HeroAutoplayTimer)return;
+ rc6HeroAutoplayTimer=setInterval(()=>{
+  const root=document.querySelector('#heroCarousel');
+  if(document.hidden||!root||!heroCarousel||heroCarousel.destroyed||heroCarousel.count<=1)return;
+  if(heroCarousel.dragStart!==null||root.contains(document.activeElement))return;
+  heroCarousel.move(1);
+ },RC6_HERO_AUTOPLAY_MS);
+}
 function rc6ReadNotionHeroReturn(){
  try{const saved=JSON.parse(sessionStorage.getItem(RC6_NOTION_HERO_RETURN)||'null'),age=Date.now()-Number(saved?.savedAt||0);if(!saved?.notionUrl||!saved?.image||age<0||age>=30*60*1000){sessionStorage.removeItem(RC6_NOTION_HERO_RETURN);return null;}return saved;}catch{sessionStorage.removeItem(RC6_NOTION_HERO_RETURN);return null;}
 }
@@ -186,7 +195,7 @@ function rc6RenderHero(){
   }
   return;
  }
- if(rc6HeroRenderKey===renderKey&&track.children.length)return;rc6HeroRenderKey=renderKey;if(heroCarousel)heroCarousel.destroy();
+ if(rc6HeroRenderKey===renderKey&&track.children.length)return;const previousHeroIndex=Number(heroCarousel?.logicalIndex?.()||0);rc6HeroRenderKey=renderKey;if(heroCarousel)heroCarousel.destroy();
  track.innerHTML=entries.map((item,displayIndex)=>{const{banner,target,store}=item,isNotion=item.kind==='notion',isPhoto=['photo','campaign-photo'].includes(item.presentation),isCampaign=item.presentation==='campaign-photo',showCampaignCopy=!isCampaign||item.campaignShowCopy!==false,label=isNotion?`${target.label} 노션에서 자세히 보기`:`${store.name} 가게 상세 보기`,targetAttr=isNotion?`data-rc6-banner-notion="${escapeHtml(target.notionUrl)}"`:`data-rc6-banner-store="${escapeHtml(store.id)}"`;let media;if(isNotion){media=`<img src="${banner.desktop}" alt="${escapeHtml(label)}" width="1200" height="700" decoding="async" loading="${displayIndex?'lazy':'eager'}"${displayIndex?'':' fetchpriority="high"'}>${rc6HeroSpecialFooter()}`;}else if(isPhoto){const title=item.campaignTitle||store.name,meta=item.campaignMeta||[store.area,store.cat].filter(Boolean).join(' · '),copy=showCampaignCopy?`<span class="rc6-store-hero-copy"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(meta)}</span></span>`:'';media=`<span class="rc6-store-hero-media${isCampaign?' rc6-campaign-hero-media':''}${showCampaignCopy?'':' rc6-campaign-photo-only'}"><img src="${escapeHtml(banner.desktop)}" alt="${escapeHtml(title)}" width="1200" height="700" decoding="async" loading="${displayIndex?'lazy':'eager'}"${displayIndex?'':' fetchpriority="high"'} data-photo-kind="card" data-photo-store-id="${escapeHtml(store.id)}" data-photo-source="hero">${copy}</span>${rc6HeroOrderFooter(store)}`;}else{media=`<picture><source media="(max-width:520px)" srcset="${banner.mobile}"><img src="${banner.desktop}" alt="${escapeHtml(label)}" width="1200" height="700" decoding="async" loading="${displayIndex?'lazy':'eager'}"${displayIndex?'':' fetchpriority="high"'}></picture>${rc6HeroOrderFooter(store)}`;}return `<button type="button" class="carousel-slide hero-slide rc6-hero-target${isCampaign?' rc6-campaign-hero':''}" data-hero-index="${displayIndex}" ${targetAttr} aria-label="${escapeHtml(label)}">${media}</button>`}).join('');
  if(hero){
   hero.hidden=false;
@@ -199,7 +208,7 @@ function rc6RenderHero(){
    firstImage.addEventListener('error',finishLoading,{once:true});
   }
  }
- if(entries.length){heroCarousel=new InfiniteCarousel(document.querySelector('#heroCarousel'),{interval:RC6_HERO_AUTOPLAY_MS});if(notionReturn){const slides=[...track.querySelectorAll(':scope > [data-rc6-banner-notion]')],returnIndex=slides.findIndex(slide=>{try{return new URL(slide.dataset.rc6BannerNotion,location.href).href===notionReturn.notionUrl;}catch{return false;}});const displayIndex=returnIndex>=0?Number(slides[returnIndex].dataset.heroIndex):Number(notionReturn.displayIndex);if(Number.isInteger(displayIndex)&&displayIndex>=0&&displayIndex<entries.length&&heroCarousel.count>1){heroCarousel.current=displayIndex+1;heroCarousel.jump(false);}sessionStorage.removeItem(RC6_NOTION_HERO_RETURN);}}
+ if(entries.length){heroCarousel=new InfiniteCarousel(document.querySelector('#heroCarousel'),{interval:0});if(notionReturn){const slides=[...track.querySelectorAll(':scope > [data-rc6-banner-notion]')],returnIndex=slides.findIndex(slide=>{try{return new URL(slide.dataset.rc6BannerNotion,location.href).href===notionReturn.notionUrl;}catch{return false;}});const displayIndex=returnIndex>=0?Number(slides[returnIndex].dataset.heroIndex):Number(notionReturn.displayIndex);if(Number.isInteger(displayIndex)&&displayIndex>=0&&displayIndex<entries.length&&heroCarousel.count>1){heroCarousel.current=displayIndex+1;heroCarousel.jump(false);}sessionStorage.removeItem(RC6_NOTION_HERO_RETURN);}else if(previousHeroIndex>0&&previousHeroIndex<entries.length&&heroCarousel.count>1){heroCarousel.current=previousHeroIndex+1;heroCarousel.jump(false);}rc6EnsureHeroAutoplay();}
 }
 function rc6WatchHeroDay(){
  rc6ActiveHeroDay=rc6SeoulDay().key;if(rc6HeroDayTimer)clearInterval(rc6HeroDayTimer);

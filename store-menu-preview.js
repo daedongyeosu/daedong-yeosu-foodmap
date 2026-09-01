@@ -18,6 +18,7 @@
   let activeMenuImageLoads = 0;
   let menuImageLoadRun = 0;
   const MAX_CONCURRENT_MENU_IMAGE_LOADS = 2;
+  const OFFICIAL_MENU_PLACEHOLDER_IMAGE = 'assets/app-icons/daedong-app-icon-512.png?v=official-brand-20260830-1';
   let menuCloseActivatedAt = 0;
   const menuCloseTouches = new Map();
   const MENU_HISTORY = Object.freeze({
@@ -33,6 +34,33 @@
     "'": '&#39;',
     '"': '&quot;'
   })[char]);
+
+  function isQuarantinedMenuImage(value) {
+    const clean = String(value || '').split(/[?#]/, 1)[0].replace(/\\/g, '/');
+    return /\/api\/media\/coupang-menu\/v1\/[a-f0-9]{64}\.jpg$/i.test(clean);
+  }
+
+  function menuWithoutQuarantinedImages(menu) {
+    if (!menu || typeof menu !== 'object') return menu;
+    return {
+      ...menu,
+      mainImage: isQuarantinedMenuImage(menu.mainImage) ? '' : menu.mainImage,
+      items: (Array.isArray(menu.items) ? menu.items : []).map(item => (
+        isQuarantinedMenuImage(item?.image) ? {...item, image: ''} : item
+      ))
+    };
+  }
+
+  function menuHeroImage(menu) {
+    const candidates = [menu?.mainImage, ...(Array.isArray(menu?.items) ? menu.items.map(item => item?.image) : [])];
+    return candidates
+      .map(value => String(value || '').trim())
+      .find(image => image
+        && !isQuarantinedMenuImage(image)
+        && !/^(?:\.\/|\/)?assets\/logo\.png(?:[?#].*)?$/i.test(image)
+        && !/(?:^|\/)assets\/app-icons\/daedong-app-icon(?:-maskable)?-(?:192|512)\.png(?:[?#].*)?$/i.test(image))
+      || OFFICIAL_MENU_PLACEHOLDER_IMAGE;
+  }
 
   function storeById(id) {
     if (typeof fxStoreById === 'function') {
@@ -64,7 +92,7 @@
       || detail.querySelector('.detail-routes')
       || detail.querySelector('.detail-personal-actions');
     if (!target) return;
-    const entryImage = photoResolver?.resolve?.(store)?.src || store.legacyImage || '';
+    const entryImage = photoResolver?.resolve?.(store)?.src || '';
     target.insertAdjacentHTML(topStatus ? 'afterend' : 'beforebegin', `
       <button class="store-menu-preview-entry" type="button" data-store-menu-preview="${storeId}">
         ${entryImage ? `<img src="${escapeMenuHtml(entryImage)}" alt="" data-photo-kind="menu-entry" data-photo-store-id="${escapeMenuHtml(storeId)}">` : ''}
@@ -81,8 +109,9 @@
     if (menuCache.has(storeId)) return menuCache.get(storeId);
     if (menuPending.has(storeId)) return menuPending.get(storeId);
     const pending = window.daedongDataApi.menu(storeId).then(menu => {
-      menuCache.set(storeId, menu);
-      return menu;
+      const safeMenu = menuWithoutQuarantinedImages(menu);
+      menuCache.set(storeId, safeMenu);
+      return safeMenu;
     }).finally(() => menuPending.delete(storeId));
     menuPending.set(storeId, pending);
     return pending;
@@ -671,6 +700,7 @@
     }, {});
     const categoryCandidates = menu.categories.filter(category => category !== '전체');
     const featuredCategories = categoryCandidates.length > 1 ? categoryCandidates.slice(0, 3) : [];
+    const heroImage = menuHeroImage(menu);
     return `
       <section class="store-menu-preview" data-store-id="${escapeMenuHtml(store.id)}" role="dialog" aria-modal="true" aria-labelledby="storeMenuTitle">
         <header class="store-menu-topbar">
@@ -681,7 +711,7 @@
 
         <main class="store-menu-scroll">
           <section class="store-menu-hero">
-            <img src="${escapeMenuHtml(menu.mainImage)}" alt="${escapeMenuHtml(menu.displayName)}" fetchpriority="high" data-photo-kind="detail" data-photo-crop-audit="yogiyo-menu" data-photo-store-id="${escapeMenuHtml(store.id)}">
+            <img src="${escapeMenuHtml(heroImage)}" alt="${escapeMenuHtml(menu.displayName)}" fetchpriority="high" data-photo-kind="detail" data-photo-crop-audit="yogiyo-menu" data-photo-store-id="${escapeMenuHtml(store.id)}">
             <div>
               <span>${escapeMenuHtml(window.DAEDONG_REGION?.mapName || '대동여수음식지도')} · 음식 미리보기</span>
               <p>${featuredCategories.map(escapeMenuHtml).join(' · ')}</p>

@@ -303,7 +303,13 @@
     const now = calendarParts(date);
     const minutes = (now.hour * 60) + now.minute;
     const previous = shiftCalendar(now, -1);
-    const previousPeriods = info.hours.weekly[previous.weekday] || [];
+    const observedWeekdays = Array.isArray(info.hours.observedWeekdays)
+      ? info.hours.observedWeekdays.map(value => String(value || '').toLowerCase())
+      : [];
+    const isPartialWeekly = info.hours.partialWeekly === true && observedWeekdays.length > 0;
+    const previousPeriods = !isPartialWeekly || observedWeekdays.includes(previous.weekday)
+      ? info.hours.weekly[previous.weekday] || []
+      : [];
 
     const activeBreak = breakFor(info.hours, now);
 
@@ -331,6 +337,18 @@
             : `오늘 ${(info.hours.weekly[now.weekday] || []).map(periodLabel).join(', ') || '영업시간 없음'}`
         );
       }
+    }
+
+    if (isPartialWeekly && !observedWeekdays.includes(now.weekday)) {
+      const displayLines = Array.isArray(info.hours.displayLines)
+        ? info.hours.displayLines.map(line => String(line || '').trim()).filter(Boolean)
+        : [];
+      return {
+        state: 'unknown',
+        label: '영업시간 확인',
+        detail: displayLines[0] || '요기요에서 확인된 다른 요일 영업시간 있음',
+        today: '오늘 영업시간은 주문앱에서 확인'
+      };
     }
 
     const closure = closureFor(info.hours, now);
@@ -1212,8 +1230,19 @@ function overviewMenuContextText(entry) {
       ? photoResolver.resolve(entry.store)
       : null;
     const rawImage = String(entry.store?.legacyImage || entry.store?.legacyImages?.[0] || '').trim();
-    const storeImage = String(resolvedPhoto?.src || rawImage).trim();
-    const storeImageSource = String(resolvedPhoto?.source || (rawImage ? 'verified-legacy-direct-file' : '')).trim();
+    const resolvedStoreImage = String(resolvedPhoto?.src || rawImage).trim();
+    const matchedMenuImage = String(menuMatches.find(item => item.image
+      && !(typeof isQuarantinedCollectedPhoto === 'function' && isQuarantinedCollectedPhoto(item.image)))?.image || '').trim();
+    const rawIsOfficialPlaceholder = typeof isOfficialStorePlaceholderImage === 'function'
+      && isOfficialStorePlaceholderImage(resolvedStoreImage);
+    const rawIsQuarantinedPhoto = typeof isQuarantinedCollectedPhoto === 'function'
+      && isQuarantinedCollectedPhoto(resolvedStoreImage);
+    const storeImage = rawIsOfficialPlaceholder || rawIsQuarantinedPhoto
+      ? matchedMenuImage
+      : (resolvedStoreImage || matchedMenuImage);
+    const storeImageSource = storeImage === matchedMenuImage
+      ? 'verified-menu-search-fallback'
+      : String(resolvedPhoto?.source || (rawImage ? 'verified-legacy-direct-file' : '')).trim();
     const hoursSummary = entry.status.label === '영업시간 확인' ? entry.status.detail : entry.status.today;
     const menuMarkup = menuMatches.length ? `
       <section class="store-service-menu-matches" aria-label="${escapeHtml(formatStoreDisplayName(entry.store?.name || '가게'))} 일치 메뉴">

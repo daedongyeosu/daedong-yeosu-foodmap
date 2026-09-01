@@ -1,15 +1,16 @@
 'use strict';
 
-const CACHE_NAME = 'daedong-yeosu-app-shell-v28-android-maskable-safe-zone';
-const RUNTIME_CACHE = 'daedong-yeosu-runtime-v2-mobile-photo-delivery';
+const CACHE_NAME = 'daedong-yeosu-app-shell-v31-yogiyo-representative-only';
+const RUNTIME_CACHE = 'daedong-yeosu-runtime-v4-yogiyo-representative-only';
 const CACHEABLE_DESTINATIONS = new Set(['image', 'style', 'script', 'font']);
 const APP_SHELL = [
   '/',
   '/manifest.webmanifest',
-  '/app-icon.svg',
-  '/assets/logo.png',
+  '/app-icon.svg?v=official-brand-20260830-1',
   '/assets/app-icons/daedong-app-icon-192.png',
+  '/assets/app-icons/daedong-app-icon-192.png?v=official-brand-20260830-1',
   '/assets/app-icons/daedong-app-icon-512.png',
+  '/assets/app-icons/daedong-app-icon-512.png?v=official-brand-20260830-1',
   '/assets/app-icons/daedong-app-icon-maskable-192.png',
   '/assets/app-icons/daedong-app-icon-maskable-512.png'
 ];

@@ -31,11 +31,11 @@ assert.match(services, /const nextCount = countReady \? String\(count\) : loadFa
   '홈 바로가기는 전체 가게 수가 아닌 현재 영업 중 숫자만 준비 완료 후 표시해야 합니다.');
 assert.doesNotMatch(services, /data-store-finder-total-count/,
   '고객 화면에는 전체 등록 가게 수를 노출하면 안 됩니다.');
-assert.match(html, /cloudflare-production-api-5-curated-menu-photos-1/);
+assert.match(html, /cloudflare-production-api-6-curated-menu-photos-1/);
 assert.match(html, /catalog-ready-watchdog-2/);
 assert.match(html, /location-ranking-watchdog-2/);
 assert.match(html, /store-service-26-deferred-bootstrap-1-menu-search-status-order-1/);
-assert.match(serviceWorker, /daedong-yeosu-app-shell-v28-android-maskable-safe-zone/);
+assert.match(serviceWorker, /daedong-yeosu-app-shell-v31-yogiyo-representative-only/);
 assert.match(app, /const catalogBootPromise = initialize\(\)/,
   '가게목록 요청은 후속 지연 스크립트를 기다리지 않고 시작해야 합니다.');
 

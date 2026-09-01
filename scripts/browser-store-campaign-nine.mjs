@@ -84,6 +84,7 @@ const context = await browser.newContext({
   viewport: report.viewport,
   isMobile: true,
   hasTouch: true,
+  serviceWorkers: 'block',
   locale: 'ko-KR',
   userAgent: 'Mozilla/5.0 (Linux; Android 15) AppleWebKit/537.36 Chrome/140 Mobile Safari/537.36 KAKAOTALK 25.6.0',
 });
@@ -117,6 +118,11 @@ await context.route('https://dwdwaxgahvp6i.cloudfront.net/**', (route) => route.
   body: transparentPng,
 }));
 await context.route('https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/asset/**', (route) => route.fulfill({
+  status: 200,
+  contentType: 'image/png',
+  body: transparentPng,
+}));
+await context.route('https://daedong-yeosu-data-api.sisakim.workers.dev/api/media/**', (route) => route.fulfill({
   status: 200,
   contentType: 'image/png',
   body: transparentPng,

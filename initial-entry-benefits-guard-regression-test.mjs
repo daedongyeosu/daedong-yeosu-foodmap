@@ -65,8 +65,10 @@ assert.match(eventJs, /serviceOverview\?\.hidden[\s\S]*store-service-overview-op
   '주문앱별 혜택 화면이 열려 있으면 먹깨비 행사창을 열지 않아야 합니다.');
 assert.match(eventJs, /const AUTO_OPEN_ENABLED = true/,
   '먹깨비 행사창은 안전한 새 홈 진입에서 한 번 표시되어야 합니다.');
-assert.match(eventJs, /const RETURN_QUERY_KEYS = \['store', '__ddret', '__ddom', '__ddappfallback'\]/,
+assert.match(eventJs, /const RETURN_QUERY_KEYS = \['store', 'hero', '__ddret', '__ddom', '__ddappfallback'\]/,
   '가게 공유·주문앱 복귀·주문방법 재진입 주소에서는 행사창을 예약하면 안 됩니다.');
+assert.match(eventJs, /!globalThis\.daedongDedicatedEntryStoreId/,
+  '가게전용 진입 주소가 초기화 중 정리되어도 일반 행사창이 끼어들면 안 됩니다.');
 assert.match(eventJs, /const AUTO_OPEN_ELIGIBLE = AUTO_OPEN_ENABLED[\s\S]*?!globalThis\.daedongEntryHadExternalReturn[\s\S]*?!globalThis\.daedongEntryIsHistoryReturn[\s\S]*?!globalThis\.daedongEntryIsDetachedKakaoReturn[\s\S]*?!globalThis\.daedongPendingExternalReturn/,
   '문서 생성 시점의 주문앱 복귀 상태를 고정해 복원 도중 표식이 지워져도 행사창이 끼어들지 않아야 합니다.');
 assert.match(eventJs, /document\.wasDiscarded !== true[\s\S]*navigationType === 'navigate'/,

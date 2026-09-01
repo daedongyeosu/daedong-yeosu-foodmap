@@ -20,13 +20,14 @@
   const FOLLOWUP_CAMPAIGN_DELAY = 3000;
   const EVENT_END = new Date('2026-09-01T00:00:00+09:00').getTime();
   const AUTO_OPEN_ENABLED = true;
-  const RETURN_QUERY_KEYS = ['store', '__ddret', '__ddom', '__ddappfallback'];
+  const RETURN_QUERY_KEYS = ['store', 'hero', '__ddret', '__ddom', '__ddappfallback'];
   const entryUrl = new URL(location.href);
   const navigationType = performance.getEntriesByType?.('navigation')?.[0]?.type || '';
   // Decide once, while this document is being created. Return markers can be
   // consumed later by rc2, but that must never turn a resumed order-app page
   // into a fresh campaign entry after the requested store has been restored.
   const AUTO_OPEN_ELIGIBLE = AUTO_OPEN_ENABLED
+    && !globalThis.daedongDedicatedEntryStoreId
     && !globalThis.daedongEntryHadExternalReturn
     && !globalThis.daedongEntryIsHistoryReturn
     && !globalThis.daedongEntryIsDetachedKakaoReturn

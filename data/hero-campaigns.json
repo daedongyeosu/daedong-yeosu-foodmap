@@ -131,6 +131,21 @@
         {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/d45493ff-09de-4611-bb38-6fb54ff757b6.jpg","title":"뽕뜨락피자 여수여서점","meta":"콘치즈"}
       ]
     },
+    "10db3b0db6ebf8c5": {
+      "storeId": "10db3b0db6ebf8c5",
+      "slug": "momstouch-munsu",
+      "label": "맘스터치 문수점 전용 대동여수음식지도",
+      "title": "맘스터치 문수점",
+      "meta": "문수동 · 햄버거·치킨",
+      "slides": [
+        {
+          "storeId": "10db3b0db6ebf8c5",
+          "image": "images/14.png",
+          "title": "맘스터치 문수점",
+          "meta": "버거·치킨·사이드 대표메뉴"
+        }
+      ]
+    },
     "cfde2617224f33a0": {
       "storeId": "cfde2617224f33a0",
       "slug": "kongsanso-store-family",

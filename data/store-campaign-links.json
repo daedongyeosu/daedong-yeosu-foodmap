@@ -24,6 +24,13 @@
       "qrAsset": "assets/qr/tamnaneun-pizza-yeosu.svg"
     },
     {
+      "storeId": "10db3b0db6ebf8c5",
+      "name": "맘스터치 문수점",
+      "url": "https://daedongmap.com/?hero=10db3b0db6ebf8c5",
+      "previewUrl": "https://preview.daedongmap.com/?hero=10db3b0db6ebf8c5",
+      "qrAsset": "assets/qr/momstouch-munsu.svg"
+    },
+    {
       "storeId": "068b2ae8fe32874a",
       "name": "1인피자 피자먹다 여수여서점",
       "url": "https://daedongmap.com/?hero=068b2ae8fe32874a",

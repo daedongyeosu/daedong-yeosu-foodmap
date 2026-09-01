@@ -9,6 +9,7 @@
   const SEQUENCE_SESSION_KEY = 'daedongCommunityIntroPlayedV4';
   const INTRO_DURATION = 15000;
   const INTRO_CLOSE_DURATION = 240;
+  const dedicatedEntryStoreId = String(window.daedongDedicatedEntryStoreId || '').trim();
   const intro = document.getElementById('communityIntro');
   const introClose = document.getElementById('communityIntroClose');
   const scene = document.getElementById('turtleShipHeroScene');
@@ -162,6 +163,16 @@
 
   function waitForClearHome() {
     if (new URLSearchParams(location.search).has('store')) return;
+    if (dedicatedEntryStoreId) {
+      sequenceStarted = true;
+      rememberSequence();
+      if (intro && !intro.hidden) {
+        intro.hidden = true;
+        intro.setAttribute('aria-hidden', 'true');
+        intro.classList.remove('is-visible', 'is-closing', 'is-reduced');
+      }
+      return;
+    }
     if (customerAlreadyInteracted()) {
       sequenceStarted = true;
       rememberSequence();

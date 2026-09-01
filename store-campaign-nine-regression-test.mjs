@@ -5,6 +5,7 @@ const expected = [
   ['67a9e4f14c8c7ea4', '손수김밥 양지점'],
   ['cfde2617224f33a0', '콩산소 (음식 연구소)'],
   ['421ecef35a879687', '탐나는피자 여수점'],
+  ['10db3b0db6ebf8c5', '맘스터치 문수점'],
   ['068b2ae8fe32874a', '1인피자 피자먹다 여수여서점'],
   ['0abd7147b7d6b1dd', '비비큐 미평둔덕점'],
   ['f8a71a5a2344ee7f', '프랭크버거 미평점'],
@@ -30,8 +31,8 @@ const rc6 = readFileSync('rc6-fixes.js', 'utf8');
 const loader = readFileSync('final-experience.js', 'utf8');
 const index = readFileSync('index.html', 'utf8');
 
-assert.equal(manifest.campaigns.length, 9, 'The public campaign-link list must contain exactly nine approved stores.');
-assert.equal(Object.keys(heroData.campaigns).length, 9, 'Each approved store must have one hero campaign.');
+assert.equal(manifest.campaigns.length, 10, 'The public campaign-link list must contain exactly ten approved stores.');
+assert.equal(Object.keys(heroData.campaigns).length, 10, 'Each approved store must have one hero campaign.');
 assert.deepEqual(
   manifest.campaigns.map(({ storeId, name }) => [storeId, name]),
   expected,

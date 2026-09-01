@@ -870,6 +870,15 @@ function isKnownBlankDetailPhotoPath(path) {
   const clean = String(path || '').split(/[?#]/, 1)[0];
   return KNOWN_BLANK_DETAIL_PHOTO_IDS.has(clean.slice(clean.lastIndexOf('/') + 1).toLowerCase());
 }
+function isOfficialStorePlaceholderImage(path) {
+  const clean = String(path || '').split(/[?#]/, 1)[0].replace(/\\/g, '/');
+  return /(?:^|\/)assets\/logo\.png$/i.test(clean)
+    || /(?:^|\/)assets\/app-icons\/daedong-app-icon(?:-maskable)?-(?:192|512)\.png$/i.test(clean);
+}
+function isQuarantinedCollectedPhoto(path) {
+  const clean = String(path || '').split(/[?#]/, 1)[0].replace(/\\/g, '/');
+  return /\/api\/media\/coupang-menu\/v1\/[a-f0-9]{64}\.jpg$/i.test(clean);
+}
 function photoCropAuditAttributes(path) {
   return isYogiyoMenuPhotoPath(path)
     ? ' crossorigin="anonymous" data-photo-crop-audit="yogiyo-menu"'
@@ -1412,7 +1421,7 @@ class PhotoResolver {
   }
   validPath(path, store) {
     const value = String(path || '').trim();
-    return Boolean(value && !isKnownBlankDetailPhotoPath(value) && !this.suspiciousPath(value, store) && /\.(png|jpe?g|webp|gif|avif)(\?|$)/i.test(value) && !/\.(pdf|docx?|xlsx?|txt)(\?|$)/i.test(value));
+    return Boolean(value && !isKnownBlankDetailPhotoPath(value) && !isOfficialStorePlaceholderImage(value) && !isQuarantinedCollectedPhoto(value) && !this.suspiciousPath(value, store) && /\.(png|jpe?g|webp|gif|avif)(\?|$)/i.test(value) && !/\.(pdf|docx?|xlsx?|txt)(\?|$)/i.test(value));
   }
   usablePaths(paths, store) {
     const failed = store?.__failedPhotoPaths instanceof Set ? store.__failedPhotoPaths : new Set();
@@ -1495,8 +1504,13 @@ function recoverVisibleDetailPhoto(store) {
   const modal = $('#modal');
   const detail = $('#modalContent .store-detail[data-store-id]');
   if (!store || !modal || modal.hidden || String(modal.dataset.activeStoreId || '') !== String(store.id) || String(detail?.dataset.storeId || '') !== String(store.id)) return false;
+  const resolved = photoResolver.resolve(store);
+  const menuEntry = detail.querySelector('[data-store-menu-preview]');
+  if (resolved && menuEntry && !menuEntry.querySelector('img')) {
+    menuEntry.insertAdjacentHTML('afterbegin', `<img src="${escapeHtml(resolved.src)}" alt="" data-photo-kind="menu-entry" data-photo-store-id="${escapeHtml(store.id)}" data-photo-source="${escapeHtml(resolved.source)}">`);
+  }
   const placeholder = detail.querySelector('.detail-photo-placeholder');
-  if (!placeholder) return false;
+  if (!placeholder) return Boolean(resolved);
   const markup = photoResolver.galleryMarkup(store);
   if (!markup || markup.includes('detail-photo-placeholder')) return false;
   const currentPhotoSurface = placeholder.closest('.detail-single-photo, .detail-photo-carousel') || placeholder;
@@ -1504,7 +1518,7 @@ function recoverVisibleDetailPhoto(store) {
   const carouselRoot = $('#detailPhotoCarousel');
   if (carouselRoot) {
     detailCarousel?.destroy?.();
-    detailCarousel = new InfiniteCarousel(carouselRoot,{interval:3500});
+    detailCarousel = new InfiniteCarousel(carouselRoot,{interval:0});
   }
   return true;
 }
@@ -1615,7 +1629,7 @@ async function handleImageError(image) {
 }
 
 class InfiniteCarousel {
-  constructor(root, {interval = 3500, onChange = null} = {}) {
+  constructor(root, {interval = 0, onChange = null} = {}) {
     this.root = root;
     if (!root) return;
     this.shell = root.querySelector('.carousel-shell');
@@ -1815,7 +1829,7 @@ function renderPromos() {
     }
     return `<article class="carousel-slide promo-card ${promo.kind}">${content}</article>`;
   }).join('');
-  promoCarousel = new InfiniteCarousel($('#promoCarousel'), {interval: 3500});
+  promoCarousel = new InfiniteCarousel($('#promoCarousel'), {interval: 0});
 }
 function openPromoCarouselDetail(kind) {
   const promo = PROMOS.find(item => item.kind === kind);
@@ -2184,7 +2198,7 @@ function orderAppContinueLabel(key, fallback = '') {
 }
 function storeMenuPreviewEntryMarkup(store) {
   if (store?.hasMenu !== true) return '';
-  const entryImage = photoResolver?.resolve?.(store)?.src || store.legacyImage || '';
+  const entryImage = photoResolver?.resolve?.(store)?.src || '';
   return `<button class="store-menu-preview-entry" type="button" data-store-menu-preview="${escapeHtml(store.id)}">${entryImage ? `<img src="${escapeHtml(entryImage)}" alt="" data-photo-kind="menu-entry" data-photo-store-id="${escapeHtml(store.id)}">` : ''}<span><b>음식보기</b><small>사진과 설명으로 전체 메뉴 미리보기 · 가격 미표시</small></span><strong>메뉴 보기 ›</strong></button>`;
 }
 function feeGuideMarkup(store, selectedRoute, {fromBrowser = false} = {}) {
@@ -2256,7 +2270,7 @@ async function openStore(store) {
   const menuEntry = storeMenuPreviewEntryMarkup(store);
   if (typeof rc2ReplaceModal === 'function') rc2ReplaceModal();
   openModal(`<article class="store-detail" data-store-id="${escapeHtml(store.id)}"><h2 id="modalTitle">${escapeHtml(store.name)}</h2>${photoResolver.galleryMarkup(store)}<div class="detail-meta-row"><p class="detail-meta">${escapeHtml(store.area || REGION_SHORT_NAME)} · ${escapeHtml(store.cat)}</p>${quick.length ? `<div class="detail-quick-links">${quick.join('')}</div>` : ''}</div>${menuEntry}<div class="detail-routes local-detail-routes">${local.map(route=>routeLink(route,'local-order-route')).join('') || '<p class="muted">등록된 지역 주문방법을 확인 중입니다.</p>'}</div>${otherMenu}${selectedCta}<div class="detail-personal-actions"><button type="button" class="detail-personal-btn ${favorite?'active':''}" data-favorite-store="${escapeHtml(store.id)}" aria-pressed="${favorite}">♥ <span data-favorite-label>${favorite?'찜 해제':'찜하기'}</span></button><button type="button" class="detail-personal-btn" data-feedback-store="${escapeHtml(store.id)}">정보 수정 요청</button></div></article>`);
-  const carouselRoot = $('#detailPhotoCarousel'); if (carouselRoot) detailCarousel = new InfiniteCarousel(carouselRoot,{interval:3500});
+  const carouselRoot = $('#detailPhotoCarousel'); if (carouselRoot) detailCarousel = new InfiniteCarousel(carouselRoot,{interval:0});
   $('#modal').dataset.activeStoreId=store.id;
   return true;
 }

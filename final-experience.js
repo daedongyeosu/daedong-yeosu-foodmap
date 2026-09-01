@@ -174,17 +174,9 @@ const FX_RAIL_SPECS=[
 function fxSelectedRails(){const hour=new Date().getHours();const ids=fxRainState!=='clear'?['rain','near','local','warm','noodle','new']:hour>=17?['near','local','group','solo','mood','new']:['near','local','warm','appetite','sweet','new'];return ids.slice(0,6).map(id=>FX_RAIL_SPECS.find(spec=>spec.id===id));}
 let fxRailRenderVersion=0;
 function fxCommitRailsWithoutMovingActiveList(root,staging){
- const section=$('#recommendSection');
- const preserve=window.daedongHasHomeInteraction?.()===true&&section;
- const before=preserve?section.getBoundingClientRect().top:0;
  root.replaceChildren(...staging.childNodes);
  root.removeAttribute('aria-busy');
  observeDeferredPhotos(root);
- if(!preserve)return;
- const delta=section.getBoundingClientRect().top-before;
- if(Math.abs(delta)<.5)return;
- if(typeof scrollWindowInstant==='function')scrollWindowInstant(window.scrollY+delta);
- else window.scrollTo(0,window.scrollY+delta);
 }
 function fxRailMarkup(spec,used){
  const list=fxRankStores(spec).filter(store=>!used.has(String(store.id))).slice(0,8);
@@ -325,7 +317,7 @@ function fxOpenStoreShare(store,target){
  openModal(`<section class="home-share-sheet store-share-sheet" data-store-share-id="${escapeHtml(store.id)}">
   <h2 id="modalTitle">${escapeHtml(store.name)} 공유하기</h2>
   <p>가게 주소를 복사해 카카오톡·문자 등으로 공유해보세요.</p>
-  <div class="home-share-preview store-share-preview">${photo?`<img src="${escapeHtml(photo)}" alt="${escapeHtml(store.name)}">`:`<img src="assets/logo.png" alt="${escapeHtml(FX_MAP_NAME)}">`}<span><b>${escapeHtml(store.name)}</b><small>가게를 바로 여는 ${escapeHtml(FX_MAP_NAME)} 주소</small></span></div>
+  <div class="home-share-preview store-share-preview">${photo?`<img src="${escapeHtml(photo)}" alt="${escapeHtml(store.name)}">`:`<img src="assets/app-icons/daedong-app-icon-512.png?v=official-brand-20260830-1" alt="${escapeHtml(FX_MAP_NAME)}">`}<span><b>${escapeHtml(store.name)}</b><small>가게를 바로 여는 ${escapeHtml(FX_MAP_NAME)} 주소</small></span></div>
   <label class="store-share-url-label" for="storeShareUrl">가게 공유주소</label>
   <div class="store-share-url-row">
    <input id="storeShareUrl" class="store-share-url" type="text" readonly value="${escapeHtml(url)}" data-store-share-url>
@@ -405,7 +397,7 @@ function fxOpenHomeShare(target){
  openModal(`<section class="home-share-sheet">
   <h2 id="modalTitle">${escapeHtml(FX_MAP_NAME)} 공유하기</h2>
   <p>가게 한 곳이 아니라 ${escapeHtml(FX_MAP_NAME)} 홈 전체를 가족·지인에게 알려주세요.</p>
-  <div class="home-share-preview"><img src="assets/logo.png" alt=""><span><b>${escapeHtml(FX_MAP_NAME)}</b><small>${FX_HOME_SHARE_URL}</small></span></div>
+  <div class="home-share-preview"><img src="assets/app-icons/daedong-app-icon-512.png?v=official-brand-20260830-1" alt=""><span><b>${escapeHtml(FX_MAP_NAME)}</b><small>${FX_HOME_SHARE_URL}</small></span></div>
   <div class="home-share-actions">
    <button class="home-share-action glass-action" type="button" data-home-share-action>${escapeHtml(FX_MAP_NAME)} 공유하기</button>
   </div>
@@ -437,9 +429,11 @@ function fxRequestedSharedStoreId(){
  const value=new URLSearchParams(location.search).get(FX_STORE_SHARE_PARAM);
  return value?String(value).trim():'';
 }
-function fxSharedStoreHomeUrl(){
+function fxSharedStoreHomeUrl(storeId){
  const url=new URL(location.href);
  url.searchParams.delete(FX_STORE_SHARE_PARAM);
+ const campaignStoreId=window.daedongResolveHeroCampaignStoreId?.(storeId)||'';
+ if(campaignStoreId)url.searchParams.set('hero',campaignStoreId);
  const query=url.searchParams.toString();
  return `${url.pathname}${query?`?${query}`:''}${url.hash}`;
 }
@@ -472,18 +466,23 @@ function fxFinishOrderMethodReentry(saved,{restorePosition=false}={}){
  requestAnimationFrame(()=>requestAnimationFrame(()=>window.daedongFinishExternalReturnBoot?.()));
 }
 async function fxOpenSharedStoreFromUrl(){
- const storeId=fxRequestedSharedStoreId();
- if(!storeId)return false;
+ const requestedStoreId=fxRequestedSharedStoreId();
+ if(!requestedStoreId)return false;
+ const campaignStoreId=window.daedongResolveHeroCampaignStoreId?.(requestedStoreId)||'';
+ const storeId=campaignStoreId||requestedStoreId;
  const orderMethodReentry=fxPendingOrderMethodReentry(storeId);
  // URL mutation after openStore() leaves correct pixels but a dead native
  // button surface in Samsung Kakao WebView. Strip the one-time marker before
  // the modal DOM exists; every later history entry is then already clean.
  fxPrepareOrderMethodReentryUrl(orderMethodReentry);
- const sharedStoreUrl=`${location.pathname}${location.search}${location.hash}`;
+ const sharedUrl=new URL(location.href);
+ sharedUrl.searchParams.set(FX_STORE_SHARE_PARAM,storeId);
+ if(campaignStoreId)sharedUrl.searchParams.set('hero',campaignStoreId);
+ const sharedStoreUrl=`${sharedUrl.pathname}${sharedUrl.search}${sharedUrl.hash}`;
  for(let attempt=0;attempt<50;attempt+=1){
   const store=fxStoreById(storeId);
   if(store&&fxVisible(store)){
-   history.replaceState(history.state,'',fxSharedStoreHomeUrl());
+   history.replaceState(history.state,'',fxSharedStoreHomeUrl(requestedStoreId));
    const opened=await openStore(store);
    if(opened===false){fxFinishOrderMethodReentry(orderMethodReentry);return false;}
    if(history.state?.daedongModal)history.replaceState(history.state,'',sharedStoreUrl);
@@ -617,7 +616,7 @@ window.installDaedongTapAction?.({
 });
 
 const fxRc2Script=document.createElement('script');
-fxRc2Script.src='rc2-fixes.js?v=selected-category-label-2-store-share-deep-link-1-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-rail-cross-section-dedupe-1-yogiyo-same-tab-return-1-rail-local-repeat-fallback-3-rail-adjacent-visual-dedupe-1-secure-detail-await-1-app-list-direct-order-1-all-app-return-state-1-location-stable-newest-1-simple-app-return-1-direct-return-no-home-1-nearby-status-final-1-external-return-fast-1-instant-store-snapshot-1-all-order-app-exact-return-1-managed-region-priority-3-goheung-isolation-2-goheung-launch-1-sequential-app-return-1-instant-external-interaction-1-daylight-effects-cleanup-1-mobile-photo-delivery-1-brand-key-cache-1-ranked-input-1-order-methods-return-stable-dom-1-yogiyo-history-return-2-mobile-customer-qa-1-kakao-fresh-entry-token-1-order-app-confirmed-resume-1-kakao-external-history-guard-1-android-distinct-history-guard-1-back-forward-departure-marker-1-durable-return-cookie-1-store-card-intent-2-android-system-back-return-1-repeated-selected-app-return-1-selected-original-direct-launch-1-single-entry-return-1-anchor-lease-1-return-first-tap-2-return-activation-atomic-1-return-intent-cancel-1-return-early-tap-bridge-1-restored-button-direct-touch-1-visible-return-rebind-1-visible-return-detail-rebuild-1-visible-return-modal-reset-1-return-document-reload-1-return-document-navigation-1-reentered-order-method-surface-1-physical-order-reentry-document-1-stable-separated-order-return-1-direct-order-app-one-tap-1-detached-kakao-order-return-1-yogiyo-live-preview-task-1-yogiyo-kakao-https-return-1-yogiyo-kakao-web-return-1-yogiyo-native-bypass-form-1-yogiyo-android-browser-form-1-restored-open-order-methods-1-restored-open-order-methods-ready-1-catalog-refresh-route-fallback-1-yogiyo-native-app-return-1';
+fxRc2Script.src='rc2-fixes.js?v=selected-category-label-2-store-share-deep-link-1-multi-category-1-hamburger-priority-1-pizza-priority-2-external-app-text-1-rail-cross-section-dedupe-1-yogiyo-same-tab-return-1-rail-local-repeat-fallback-3-rail-adjacent-visual-dedupe-1-photo-qualified-new-store-1-secure-detail-await-1-app-list-direct-order-1-all-app-return-state-1-location-stable-newest-1-simple-app-return-1-direct-return-no-home-1-nearby-status-final-1-external-return-fast-1-instant-store-snapshot-1-all-order-app-exact-return-1-managed-region-priority-3-goheung-isolation-2-goheung-launch-1-sequential-app-return-1-instant-external-interaction-1-daylight-effects-cleanup-1-mobile-photo-delivery-1-brand-key-cache-1-ranked-input-1-order-methods-return-stable-dom-1-yogiyo-history-return-2-mobile-customer-qa-1-kakao-fresh-entry-token-1-order-app-confirmed-resume-1-kakao-external-history-guard-1-android-distinct-history-guard-1-back-forward-departure-marker-1-durable-return-cookie-1-store-card-intent-2-android-system-back-return-1-repeated-selected-app-return-1-selected-original-direct-launch-1-single-entry-return-1-anchor-lease-1-return-first-tap-2-return-activation-atomic-1-return-intent-cancel-1-return-early-tap-bridge-1-restored-button-direct-touch-1-visible-return-rebind-1-visible-return-detail-rebuild-1-visible-return-modal-reset-1-return-document-reload-1-return-document-navigation-1-reentered-order-method-surface-1-physical-order-reentry-document-1-stable-separated-order-return-1-direct-order-app-one-tap-1-detached-kakao-order-return-1-yogiyo-live-preview-task-1-yogiyo-kakao-https-return-1-yogiyo-kakao-web-return-1-yogiyo-native-bypass-form-1-yogiyo-android-browser-form-1-restored-open-order-methods-1-restored-open-order-methods-ready-1-catalog-refresh-route-fallback-1-yogiyo-native-app-return-1-manual-carousels-1';
 fxRc2Script.async=false;
 fxRc2Script.onload=()=>{
  fxInstallEvents();
@@ -635,8 +634,8 @@ fxRc2Script.onload=()=>{
    fxRc5Script.src='rc5-fixes.js?v=category-first-paint-1-category-more-card-touch-1-brand-key-cache-1-postcode-touch-back-1';
    fxRc5Script.async=false;
    fxRc5Script.onload=()=>{
-    const css=document.createElement('link');css.rel='stylesheet';css.href='rc6-fixes.css?v=location-store-hero-1-handsu-copy-spacing-1-hero-clean-controls-1';document.head.append(css);
-    const script=document.createElement('script');script.src='rc6-fixes.js?v=hero-store-direct-1-multi-category-1-hamburger-priority-1-pizza-priority-2-kongsanso-store-family-1-store-badge-removed-1-handsu-copy-spacing-1-hero-card-cta-removed-1-rain-mode-admin-1-local-channel-marker-1-location-coordinate-merge-1-business-status-ranking-1-release-readiness-1-hero-open-only-1-hero-area-label-removed-1-three-main-ads-restored-1-notion-hero-return-1-goheung-isolation-2-instant-hero-loading-1-keep-placeholder-1-coordinate-yield-1-pager-stable-refresh-1-hero-photo-recovery-1-store-campaign-nine-2-tamnaneun-canonical-1';
+    const css=document.createElement('link');css.rel='stylesheet';css.href='rc6-fixes.css?v=location-store-hero-1-handsu-copy-spacing-1-hero-clean-controls-1-hero-order-footer-2';document.head.append(css);
+    const script=document.createElement('script');script.src='rc6-fixes.js?v=hero-store-direct-1-multi-category-1-hamburger-priority-1-pizza-priority-2-kongsanso-store-family-1-store-badge-removed-1-handsu-copy-spacing-1-hero-card-cta-removed-1-rain-mode-admin-1-local-channel-marker-1-location-coordinate-merge-1-business-status-ranking-1-release-readiness-1-hero-open-only-1-hero-area-label-removed-1-three-main-ads-restored-1-notion-hero-return-1-goheung-isolation-2-instant-hero-loading-1-keep-placeholder-1-coordinate-yield-1-pager-stable-refresh-1-hero-photo-recovery-1-store-campaign-nine-2-tamnaneun-menu-hero-4-store-campaign-standard-1-hero-stable-height-1-manual-carousels-1';
     script.onload=()=>{
      const addressScript=document.createElement('script');addressScript.src='rc7-address-map.js?v=address-home-return-1-coarse-region-1-inapp-location-recovery-1-outside-yeosu-full-list-1-saved-address-first-1-release-readiness-1-step-touch-back-1';
      addressScript.onload=()=>{fxInstallEvents();setTimeout(async()=>{window.__daedongDeferRailRender=true;try{await window.daedongCatalogReady;await fxInitialize();await rc6Initialize();window.__daedongDeferRailRender=false;fxRenderRailsWithoutMovingActiveList();window.rc7Initialize?.();await fxOpenSharedStoreFromUrl();fxFinishLocationRankingReady(true);}catch(error){window.__daedongDeferRailRender=false;fxRenderRailsWithoutMovingActiveList();console.error('위치 기반 가게 정렬을 초기화하지 못했습니다.',error);fxFinishLocationRankingReady(false);}},0);};

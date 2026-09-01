@@ -94,6 +94,7 @@ assert.deepEqual(
 );
 assert.match(rc6, /params\.get\('hero'\)\|\|params\.get\('store'\)/, '가게 상세 QR도 전용 배너 모드로 인식해야 합니다.');
 assert.match(loader, /daedongResolveHeroCampaignStoreId/, '가게 상세 QR은 통합 가게 ID로 교정되어야 합니다.');
+assert.match(loader, /params\.get\(FX_STORE_SHARE_PARAM\)\|\|params\.get\('hero'\)/, '전용 hero QR도 가게 상세를 즉시 열어야 합니다.');
 assert.match(rc6, /hero-campaigns\.json\?v=store-campaign-standard-1/, 'The hero campaign data cache must be refreshed.');
 assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*store-campaign-standard-1/, 'The RC6 script cache must be refreshed.');
 assert.match(index, /final-experience\.js\?v=[^"\n]*store-campaign-standard-1/, 'The final loader cache must be refreshed.');
@@ -150,5 +151,6 @@ assert.match(index, /final-experience\.js\?v=[^"\n]*ppongtteurak-14-1/, 'The pag
 assert.match(rc6, /hero-campaigns\.json\?v=[^'\n]*all-photo-capacity-audit-1/, 'The audited campaign data cache must be refreshed.');
 assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*all-photo-capacity-audit-1/, 'The RC6 loader cache must include the audited campaign release.');
 assert.match(index, /final-experience\.js\?v=[^"\n]*all-photo-capacity-audit-1/, 'The page loader cache must include the audited campaign release.');
+assert.match(index, /final-experience\.js\?v=[^"\n]*hero-qr-auto-popup-1/, 'The page loader cache must include the hero QR popup release.');
 
 console.log('store-campaign-nine-regression-test: pass');

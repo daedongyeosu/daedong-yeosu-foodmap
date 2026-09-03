@@ -4,5 +4,6 @@ regression-suite-report.json
 browser-*-report.json
 browser-*.png
 node_modules/
+.wrangler/
 approved-ux-*.html
 approved-ux-*.json

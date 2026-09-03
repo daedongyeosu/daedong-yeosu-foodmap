@@ -42,20 +42,20 @@ vm.createContext(intentContext);
 vm.runInContext(`${app.slice(intentStart, intentEnd)}\nglobalThis.testAndroidPackageIntent = androidPackageIntent;`, intentContext);
 const previewFallback = 'https://preview.daedongmap.com/?__ddret=return-123&__ddappfallback=coupang#detail';
 const coupangWebShare = 'https://web.coupangeats.com/share?storeId=893791&dishId=&key=return-key';
+const encodedFallbackSuffix = value => `S.browser_fallback_url=${encodeURIComponent(value)};end;`;
 const coupangIntent = intentContext.testAndroidPackageIntent('coupang', coupangWebShare);
 assert.match(
   coupangIntent,
   /^intent:\/\/storedetail\/\?storeId=893791&dishId=null#Intent;scheme=coupangeats;/,
   '쿠팡 웹 공유 링크가 설치 앱의 동일 가게 상세 intent로 변환되지 않습니다.'
 );
-assert.match(
-  coupangIntent,
-  new RegExp(`S\\.browser_fallback_url=${encodeURIComponent(previewFallback).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')};end;$`),
+assert.ok(
+  coupangIntent.endsWith(encodedFallbackSuffix(previewFallback)),
   '카카오 쿠팡 intent가 토큰이 든 Preview 문서로 fallback하지 않습니다.'
 );
-assert.match(
-  intentContext.testAndroidPackageIntent('yogiyo', 'https://www.yogiyo.co.kr/mobile/#/123'),
-  new RegExp(`S\\.browser_fallback_url=${encodeURIComponent('https://www.yogiyo.co.kr/mobile/#/123').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')};end;$`),
+assert.ok(
+  intentContext.testAndroidPackageIntent('yogiyo', 'https://www.yogiyo.co.kr/mobile/#/123')
+    .endsWith(encodedFallbackSuffix('https://www.yogiyo.co.kr/mobile/#/123')),
   '쿠팡 외 주문앱의 원래 fallback URL을 바꾸면 안 됩니다.'
 );
 intentContext.isKakaoInAppBrowser = () => false;
@@ -65,14 +65,13 @@ assert.match(
   /^intent:\/\/storedetail\/\?storeId=893791&dishId=null#Intent;scheme=coupangeats;/,
   '일반 Android 브라우저도 쿠팡 가게 상세 앱 주소를 사용해야 합니다.'
 );
-assert.match(
-  regularBrowserCoupangIntent,
-  new RegExp(`S\\.browser_fallback_url=${encodeURIComponent(coupangWebShare).replace(/[.*+?^${}()|[\]\\]/g, '\\$&')};end;$`),
+assert.ok(
+  regularBrowserCoupangIntent.endsWith(encodedFallbackSuffix(coupangWebShare)),
   '일반 Android 브라우저의 쿠팡 미설치 fallback은 원래 웹 공유 링크여야 합니다.'
 );
-assert.match(
-  intentContext.testAndroidPackageIntent('coupang', 'https://www.coupangeats.com/store/123'),
-  new RegExp(`S\\.browser_fallback_url=${encodeURIComponent('https://www.coupangeats.com/store/123').replace(/[.*+?^${}()|[\]\\]/g, '\\$&')};end;$`),
+assert.ok(
+  intentContext.testAndroidPackageIntent('coupang', 'https://www.coupangeats.com/store/123')
+    .endsWith(encodedFallbackSuffix('https://www.coupangeats.com/store/123')),
   '일반 Android 브라우저의 쿠팡 fallback URL을 바꾸면 안 됩니다.'
 );
 

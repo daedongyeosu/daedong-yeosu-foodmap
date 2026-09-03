@@ -22,6 +22,7 @@ jobs:
         run: |
           node --check data-api.js
           node --check data-api-runtime.js
+          node --check posthog-observability.js
           node --check app.js
           node --check final-experience.js
           node --check rc2-fixes.js

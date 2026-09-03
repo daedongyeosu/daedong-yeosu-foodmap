@@ -366,6 +366,7 @@ const ANALYTICS_REGION_1_ALIASES = new Map([
 let analyticsFallbackVisitorId = '';
 let analyticsFallbackSessionId = '';
 let analyticsFlushPromise = null;
+let analyticsFallbackSequence = 0;
 
 const APP_META = {
   direct: {label: '가게바로주문', icon: '🏪'},
@@ -503,11 +504,15 @@ function addRecentStore(store) {
 }
 function visitorKey() {
   let key = localStorage.getItem(VISITOR_KEY);
-  if (!key) { key = globalThis.crypto?.randomUUID?.() || `visitor-${Date.now()}-${Math.random().toString(36).slice(2)}`; localStorage.setItem(VISITOR_KEY, key); }
+  if (!key) { key = analyticsRandomId('visitor'); localStorage.setItem(VISITOR_KEY, key); }
   return key;
 }
 function analyticsRandomId(prefix) {
-  return globalThis.crypto?.randomUUID?.() || `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  const uuid = globalThis.crypto?.randomUUID?.();
+  if (uuid) return uuid;
+  analyticsFallbackSequence += 1;
+  const monotonicPart = Math.max(0, Math.floor(globalThis.performance?.now?.() || 0));
+  return `${prefix}-${Date.now()}-${monotonicPart}-${analyticsFallbackSequence}`;
 }
 function analyticsVisitorId() {
   try { return visitorKey(); }
@@ -538,8 +543,12 @@ function applyAnalyticsOwnerMode() {
     if (mode === 'exclude') {
       localStorage.setItem(ANALYTICS_OWNER_EXCLUSION_KEY, '1');
       localStorage.removeItem(ANALYTICS_QUEUE_KEY);
+      window.daedongPostHogSetOwnerExcluded?.(true);
     }
-    else localStorage.removeItem(ANALYTICS_OWNER_EXCLUSION_KEY);
+    else {
+      localStorage.removeItem(ANALYTICS_OWNER_EXCLUSION_KEY);
+      window.daedongPostHogSetOwnerExcluded?.(false);
+    }
   } catch {}
   params.delete(ANALYTICS_OWNER_MODE_PARAM);
   const query = params.toString();
@@ -686,6 +695,15 @@ function sendAnalyticsEvent(eventType, details = {}) {
     regionSource: region.regionSource,
     clientTime: new Date().toISOString()
   };
+  window.daedongPostHogCapture?.(eventType, {
+    entrySource: payload.entrySource,
+    storeId: payload.storeId,
+    channel: payload.channel,
+    surface: payload.surface,
+    region1: payload.region1,
+    region2: payload.region2,
+    regionSource: payload.regionSource
+  });
   const queue = analyticsQueueRead();
   queue.push(payload);
   if (analyticsQueueWrite(queue)) void flushAnalyticsQueue();

@@ -118,7 +118,7 @@ const auditedStoreSlideCounts = new Map([
   ['67a9e4f14c8c7ea4', 14],
   ['421ecef35a879687', 14],
   ['068b2ae8fe32874a', 14],
-  ['0abd7147b7d6b1dd', 1],
+  ['0abd7147b7d6b1dd', 14],
   ['f8a71a5a2344ee7f', 14],
   ['fb798d3119a28415', 14],
   ['a089d1d54720b48e', 14],
@@ -151,6 +151,9 @@ assert.match(index, /final-experience\.js\?v=[^"\n]*ppongtteurak-14-1/, 'The pag
 assert.match(rc6, /hero-campaigns\.json\?v=[^'\n]*all-photo-capacity-audit-1/, 'The audited campaign data cache must be refreshed.');
 assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*all-photo-capacity-audit-1/, 'The RC6 loader cache must include the audited campaign release.');
 assert.match(index, /final-experience\.js\?v=[^"\n]*all-photo-capacity-audit-1/, 'The page loader cache must include the audited campaign release.');
+assert.match(rc6, /hero-campaigns\.json\?v=[^'\n]*bbq-menu-photos-14-1/, 'The BBQ fourteen-photo campaign data cache must be refreshed.');
+assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*bbq-menu-photos-14-1/, 'The RC6 loader cache must include the BBQ fourteen-photo release.');
+assert.match(index, /final-experience\.js\?v=[^"\n]*bbq-menu-photos-14-1/, 'The page loader cache must include the BBQ fourteen-photo release.');
 assert.match(index, /final-experience\.js\?v=[^"\n]*hero-qr-auto-popup-1/, 'The page loader cache must include the hero QR popup release.');
 
 console.log('store-campaign-nine-regression-test: pass');

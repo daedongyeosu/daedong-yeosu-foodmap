@@ -2,6 +2,8 @@
 
 /* RC3 fixes only. Store, photo, route, brand-app, HappyOrder and banner data stay read-only. */
 const RC3_ICON_SPRITE = CATEGORY_ICON_SPRITE;
+const RC3_REGION_NAME = window.DAEDONG_REGION?.shortName || '여수';
+const RC3_IS_GOHEUNG = window.DAEDONG_REGION?.code === 'goheung';
 const RC3_PHONE_INTERNAL_URL = 'data/phone-order-runtime.json?v=channel-recovery-07-card-markers';
 const RC3_APP_PARTICLE = Object.freeze({
   yogiyo: '요기요로',
@@ -134,7 +136,7 @@ function rc3PrimaryCardChannels(store) {
 function rc3PrimaryChannelIcon(key, channel, className) {
   const cls = escapeHtml(className);
   if (key === 'brand') {
-    if (channel?.icon) return `<img class="${cls}" src="${escapeHtml(channel.icon)}" alt="브랜드앱" title="브랜드앱">`;
+    if (channel?.icon) return `<img class="${cls}" src="${escapeHtml(mobilePhotoPath(channel.icon))}" alt="브랜드앱" title="브랜드앱">`;
     return `<svg class="${cls} rc3-order-channel-svg" role="img" aria-label="브랜드앱"><use href="assets/ui/ui-icons.svg#store"></use></svg>`;
   }
   if (key === 'phone') return `<img class="${cls}" src="assets/ui/phone.svg" alt="전화주문" title="전화주문">`;
@@ -155,41 +157,61 @@ function rc3RailCard(store, spec) {
   const distance=spec?.kind==='near'&&Number.isFinite(store.distance)?`약 ${store.distance<1?`${Math.round(store.distance*1000)}m`:`${store.distance.toFixed(1)}km`}`:'';
   const locationLabel=spec?.kind==='near'?(distance||store.proximityLabel||''):'';
   const channelIcons=rc3PrimaryCardIcons(store);
-  return `<article class="rail-card" data-rail-card-store="${escapeHtml(store.id)}" data-rc3-rail-open="${escapeHtml(store.id)}"><button type="button" class="rail-card-open rc3-rail-card-open glass-action">${fxCardPhoto(store)}<span class="rail-card-copy"><h3>${escapeHtml(store.name)}</h3><p>${locationLabel?`${escapeHtml(locationLabel)} · `:''}${escapeHtml(store.area || '여수')} · ${escapeHtml(store.cat)}</p></span></button><footer><span class="rail-channel-icons" aria-label="이용 가능한 기본 주문방법">${channelIcons||'<span class="rail-method">주문방법 확인</span>'}</span></footer></article>`;
+  return `<article class="rail-card" data-rail-card-store="${escapeHtml(store.id)}" data-rc3-rail-open="${escapeHtml(store.id)}"><button type="button" class="rail-card-open rc3-rail-card-open glass-action">${fxCardPhoto(store)}<span class="rail-card-copy"><h3>${escapeHtml(store.name)}</h3><p>${locationLabel?`${escapeHtml(locationLabel)} · `:''}${escapeHtml(store.area || RC3_REGION_NAME)} · ${escapeHtml(store.cat)}</p></span></button><footer><span class="rail-channel-icons" aria-label="이용 가능한 기본 주문방법">${channelIcons||'<span class="rail-method">주문방법 확인</span>'}</span></footer></article>`;
 }
+let rc3RailRenderVersion = 0;
 fxRenderRails = function rc3RenderRails() {
   const root = $('#recommendRails');
   if (!root) return;
+  const version = ++rc3RailRenderVersion;
+  if (window.__daedongDeferRailRender) return;
   if (state.category !== '전체' || state.query || state.brandId) {
     root.hidden = true;
     root.innerHTML = '';
+    root.removeAttribute('aria-busy');
     return;
   }
   root.hidden = false;
-  try {
-    const globallyUsed = new Set();
-    const useCounts = new Map();
-    const recentLeads = [];
-    root.innerHTML = fxSelectedRails().map(spec => {
+  root.setAttribute('aria-busy', 'true');
+  const staging = document.createElement('div');
+  const globallyUsed = new Set();
+  const useCounts = new Map();
+  const recentLeads = [];
+  const specs = fxSelectedRails();
+  let index = 0;
+  const renderNext = () => {
+    if (version !== rc3RailRenderVersion || window.__daedongDeferRailRender) return;
+    const spec = specs[index++];
+    if (!spec) {
+      staging.querySelectorAll('p').forEach(node => {
+        if (node.textContent.trim() === '추천 가게를 확인 중입니다.') node.remove();
+      });
+      fxCommitRailsWithoutMovingActiveList(root, staging);
+      return;
+    }
+    try {
+      const rankedStores = fxRankStores(spec);
       const diversifiedCards = rc2DiversifyRailLead(
-        sortStoresByBusinessStatus(rc2RailCandidates(spec, globallyUsed, 8, useCounts)),
+        sortStoresByBusinessStatus(rc2RailCandidates(spec, globallyUsed, 8, useCounts, rankedStores)),
         recentLeads
       );
-      const cards = rc2ApplyManagedRegionPriority(diversifiedCards, spec, 8, fxRankStores(spec));
+      const cards = rc2ApplyManagedRegionPriority(diversifiedCards, spec, 8, rankedStores);
       if (cards[0]) {
         recentLeads.push(cards[0]);
         if (recentLeads.length > 3) recentLeads.shift();
       }
-      const allCandidates = fxRankStores(spec);
-      return `<section class="recommend-rail" data-rail="${spec.id}"><header class="recommend-rail-head"><div><h2>${escapeHtml(spec.title)}</h2><p>${escapeHtml(spec.desc)}</p></div>${allCandidates.length > cards.length ? `<button type="button" data-rail-more="${spec.id}">이 추천 가게 더보기</button>` : ''}</header><div class="recommend-track" data-rc3-rail-track="${spec.id}">${cards.map(store=>rc3RailCard(store,spec)).join('') || '<p class="empty">현재 표시할 추천 가게가 없습니다.</p>'}</div></section>`;
-    }).join('');
-  } catch (error) {
-    console.error('recommendation-render-failed', error);
-    const fallback = (Array.isArray(stores) ? stores : []).slice(0, 8).map(store => rc3RailCard(store, {kind: 'fallback'})).join('');
-    root.innerHTML = `<section class="recommend-rail" data-rail="fallback"><header class="recommend-rail-head"><div><h2>오늘의 추천</h2><p>현재 확인 가능한 여수 가게</p></div></header><div class="recommend-track">${fallback || '<p class="empty">가게 정보를 다시 불러와 주세요.</p>'}</div></section>`;
-  } finally {
-    root.querySelectorAll('p').forEach(node => { if (node.textContent.trim() === '추천 가게를 확인 중입니다.') node.remove(); });
-  }
+      const allCandidates = rankedStores;
+      staging.insertAdjacentHTML('beforeend', `<section class="recommend-rail" data-rail="${spec.id}"><header class="recommend-rail-head"><div><h2>${escapeHtml(spec.title)}</h2><p>${escapeHtml(spec.desc)}</p></div>${allCandidates.length > cards.length ? `<button type="button" data-rail-more="${spec.id}">이 추천 가게 더보기</button>` : ''}</header><div class="recommend-track" data-rc3-rail-track="${spec.id}">${cards.map(store=>rc3RailCard(store,spec)).join('') || '<p class="empty">현재 표시할 추천 가게가 없습니다.</p>'}</div></section>`);
+    } catch (error) {
+      console.error('recommendation-render-failed', error);
+      if (!staging.children.length) {
+        const fallback = (Array.isArray(stores) ? stores : []).slice(0, 8).map(store => rc3RailCard(store, {kind: 'fallback'})).join('');
+        staging.innerHTML = `<section class="recommend-rail" data-rail="fallback"><header class="recommend-rail-head"><div><h2>오늘의 추천</h2><p>현재 확인 가능한 ${escapeHtml(RC3_REGION_NAME)} 가게</p></div></header><div class="recommend-track">${fallback || '<p class="empty">가게 정보를 다시 불러와 주세요.</p>'}</div></section>`;
+      }
+    }
+    window.setTimeout(renderNext, 0);
+  };
+  window.setTimeout(renderNext, 0);
 };
 
 renderStores = function rc3RenderStores(options = {}) {
@@ -300,7 +322,7 @@ fxOpenPhoneDirectory = function rc3OpenPhoneDirectory(category = '추천') {
   if (!$('#modal')?.hidden && $('#modalContent .phone-order-sheet')) rc2ReplaceModal();
   const chips = `<nav class="app-browser-category-chips"><button type="button" data-phone-category="추천" class="${category === '추천' ? 'active' : ''}">추천</button>${cats.map(cat => `<button type="button" data-phone-category="${escapeHtml(cat)}" class="${category === cat ? 'active' : ''}">${escapeHtml(cat)}</button>`).join('')}</nav>`;
   const cards = list.map(({store, phoneOrder}) => {
-    const content = `${fxCardPhoto(store)}<span><strong>${escapeHtml(store.name)}</strong><small>${escapeHtml(store.area || '여수')} · ${escapeHtml(store.cat)}</small></span><b>›</b>`;
+    const content = `${fxCardPhoto(store)}<span><strong>${escapeHtml(store.name)}</strong><small>${escapeHtml(store.area || RC3_REGION_NAME)} · ${escapeHtml(store.cat)}</small></span><b>›</b>`;
     return phoneOrder?.url
       ? `<a class="phone-order-card glass-action" href="${escapeHtml(phoneOrder.url)}" target="_blank" rel="noopener" data-phone-route-store-id="${escapeHtml(store.id)}">${content}</a>`
       : `<button type="button" class="phone-order-card glass-action" data-phone-store-id="${escapeHtml(store.id)}">${content}</button>`;
@@ -322,14 +344,16 @@ fxOpenPhoneConfirm = async function rc3OpenPhoneConfirm(id) {
     }
   }
   if (!phone) return;
-  openModal(`<section class="phone-order-confirm" data-store-id="${escapeHtml(store.id)}"><h2 id="modalTitle">${escapeHtml(store.name)} 전화주문</h2><div class="phone-confirm-photo">${fxCardPhoto(store)}</div><p>${escapeHtml(store.area || '여수')} · ${escapeHtml(store.cat)}</p>${rc3PopupUtilityLinks(store)}<p>가게를 선택해도 전화가 자동으로 걸리지 않습니다.<br>전화번호를 확인한 뒤 전화 걸기 버튼을 눌러주세요.</p><p class="verified-phone-number">${escapeHtml(rc3FormatPhone(phone))}</p><div class="phone-confirm-actions"><a class="phone-call-link" data-rc3-final-phone href="tel:${escapeHtml(phone)}">전화 걸기</a><button class="phone-cancel" type="button" data-phone-cancel>취소</button></div></section>`);
+  openModal(`<section class="phone-order-confirm" data-store-id="${escapeHtml(store.id)}"><h2 id="modalTitle">${escapeHtml(store.name)} 전화주문</h2><div class="phone-confirm-photo">${fxCardPhoto(store)}</div><p>${escapeHtml(store.area || RC3_REGION_NAME)} · ${escapeHtml(store.cat)}</p>${rc3PopupUtilityLinks(store)}<p>가게를 선택해도 전화가 자동으로 걸리지 않습니다.<br>전화번호를 확인한 뒤 전화 걸기 버튼을 눌러주세요.</p><p class="verified-phone-number">${escapeHtml(rc3FormatPhone(phone))}</p><div class="phone-confirm-actions"><a class="phone-call-link" data-rc3-final-phone href="tel:${escapeHtml(phone)}">전화 걸기</a><button class="phone-cancel" type="button" data-phone-cancel>취소</button></div></section>`);
   $('#modal').dataset.activeStoreId = store.id;
   history.replaceState({...history.state, storeId: String(store.id)}, '');
 };
 
 function rc3RouteButton(store, route) {
   if (['yogiyo', 'coupang', 'baemin'].includes(route.key)) {
-    return `<button type="button" class="detail-route external-text-route" data-rc3-external-route="${escapeHtml(route.key)}" data-store-id="${escapeHtml(store.id)}"><span>${escapeHtml(route.name)}</span><b>›</b></button>`;
+    const lat = Number.isFinite(Number(store?.lat)) ? String(store.lat) : '';
+    const lng = Number.isFinite(Number(store?.lng)) ? String(store.lng) : '';
+    return `<button type="button" class="detail-route external-text-route" data-rc3-external-route="${escapeHtml(route.key)}" data-rc3-external-href="${escapeHtml(safeHref(route.url))}" data-store-id="${escapeHtml(store.id)}" data-store-lat="${escapeHtml(lat)}" data-store-lng="${escapeHtml(lng)}" onclick="return window.daedongActivateExternalOrderRouteFallback ? window.daedongActivateExternalOrderRouteFallback(this, event) : false"><span>${escapeHtml(route.name)}</span><b>›</b></button>`;
   }
   return `<a class="detail-route" href="${escapeHtml(route.url)}" target="_blank" rel="noopener" data-route-key="${escapeHtml(route.key)}">${appIcon(route.key, 'detail-route-icon')}<span>${escapeHtml(route.name)}</span><b>›</b></a>`;
 }
@@ -340,7 +364,7 @@ function resolveStoreChannels(store) {
   const phone = rc3VerifiedPhone(safeStore);
   const phoneRoute = route('phone');
   const phoneOrder = phone && !RC3_BLOCKED_PHONE_ROUTE_STORES.has(String(safeStore.id))
-    ? {key: 'phone', name: '전화주문', phone}
+    ? {key: 'phone', name: '전화주문', phone, url: `tel:${phone}`}
     : phoneRoute && !RC3_BLOCKED_PHONE_ROUTE_STORES.has(String(safeStore.id))
       ? phoneRoute
       : null;
@@ -383,14 +407,79 @@ function rc3PopupUtilityLinks(store, {includeChak = true} = {}) {
   return `<div class="detail-quick-links popup-utility-links${utilities.length === 1 ? ' single' : ''}" aria-label="가게 이용 정보">${links}</div>`;
 }
 
-function rc3OpenOrderMethods(store) {
-  if (!store) return;
-  const channels = resolveStoreChannels(store);
-  const routes = Object.values(channels.externalOrder).filter(Boolean);
-  const routeMarkup = routes.map(route => rc3RouteButton(store, route)).join('');
-  if (!routeMarkup) return;
-  openModal(`<section class="order-methods-sheet" data-store-id="${escapeHtml(store.id)}"><h2 id="modalTitle">다른 주문방법 보기</h2><span>선택한 가게</span><strong class="selected-store-name">${escapeHtml(store.name)}</strong><div class="order-methods-list">${routeMarkup}</div>${externalAppNoticeMarkup()}</section>`);
-  $('#modal').dataset.activeStoreId = store.id;
+function rc3SetInlineOrderMethods(trigger, open) {
+  const wrap = trigger?.closest('.store-other-wrap');
+  const panel = wrap?.querySelector('[data-rc3-inline-order-methods]');
+  if (!trigger || !panel) return false;
+  panel.hidden = !open;
+  trigger.setAttribute('aria-expanded', String(open));
+  const label = trigger.querySelector('span');
+  const arrow = trigger.querySelector('b');
+  if (label) label.textContent = open ? '다른 주문방법 닫기' : String(trigger.dataset.rc3OrderMethodsLabel || '다른 주문방법 보기');
+  if (arrow) arrow.textContent = open ? '⌃' : '›';
+  return true;
+}
+
+function rc3OpenOrderMethods(store, trigger) {
+  if (!store || !trigger) return false;
+  const panel = trigger.closest('.store-other-wrap')?.querySelector('[data-rc3-inline-order-methods]');
+  if (!panel) return false;
+  return rc3SetInlineOrderMethods(trigger, panel.hidden);
+}
+
+function rc3RestoreInlineOrderMethodsOpen(detail = $('#modalContent .store-detail')) {
+  const trigger = detail?.querySelector?.('[data-rc3-other-methods]');
+  if (!trigger) return false;
+  return rc3SetInlineOrderMethods(trigger, true);
+}
+window.daedongRestoreInlineOrderMethodsOpen = rc3RestoreInlineOrderMethodsOpen;
+
+let rc3PendingOrderMethodsRestoreTimer = 0;
+function rc3SchedulePendingOrderMethodsRestore(attempt = 0) {
+  let hasReturnToken = false;
+  try { hasReturnToken = new URL(location.href).searchParams.has('__ddret'); } catch {}
+  if (!hasReturnToken) return;
+  clearTimeout(rc3PendingOrderMethodsRestoreTimer);
+  if (window.daedongRestoreOpenInlineOrderMethodsFromPendingState?.()) return;
+  if (attempt >= 50) return;
+  rc3PendingOrderMethodsRestoreTimer = setTimeout(
+    () => rc3SchedulePendingOrderMethodsRestore(attempt + 1),
+    100
+  );
+}
+rc3SchedulePendingOrderMethodsRestore();
+window.addEventListener('pageshow', () => rc3SchedulePendingOrderMethodsRestore(), true);
+window.addEventListener('focus', () => rc3SchedulePendingOrderMethodsRestore(), true);
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') rc3SchedulePendingOrderMethodsRestore();
+}, true);
+
+function rc3CloseInlineOrderMethods(closeButton, event) {
+  const trigger = closeButton?.closest('.store-other-wrap')?.querySelector('[data-rc3-other-methods]');
+  if (!trigger) return false;
+  event?.preventDefault?.();
+  event?.stopImmediatePropagation?.();
+  return rc3SetInlineOrderMethods(trigger, false);
+}
+window.daedongCloseInlineOrderMethods = rc3CloseInlineOrderMethods;
+
+function rc3OrderMethodsMode(channels) {
+  const primary = channels?.primaryOrder || {};
+  const external = channels?.externalOrder || {};
+  const hasLocalOrderApp = [primary.directOrder, primary.mukkebi, primary.ddangyo, primary.ondongne].some(Boolean);
+  const externalKeys = [
+    ['yogiyo', external.yogiyo],
+    ['coupang', external.coupangEats],
+    ['baemin', external.baemin]
+  ].filter(([, route]) => Boolean(route)).map(([key]) => key);
+  const singleExternalKey = !hasLocalOrderApp && externalKeys.length === 1 && externalKeys[0] === 'yogiyo'
+    ? 'yogiyo'
+    : '';
+  return {
+    hasExternal: externalKeys.length > 0,
+    singleExternalKey,
+    label: singleExternalKey ? '요기요로 주문하기' : '다른 주문방법 보기'
+  };
 }
 
 function rc3ActivateOrderMethodsTrigger(trigger, event) {
@@ -398,46 +487,356 @@ function rc3ActivateOrderMethodsTrigger(trigger, event) {
   if (!store) return false;
   event?.preventDefault();
   event?.stopImmediatePropagation();
-  rc3OpenOrderMethods(store);
+  // Cancel an older external-app restore before it can rebuild this same store
+  // detail after the customer's completed tap. This only invalidates async
+  // work; it does not replace the current DOM, URL, or history entry.
+  window.daedongInvalidatePendingReturnRestores?.();
+  const singleExternalKey = String(trigger?.dataset.rc3SingleExternal || '');
+  if (singleExternalKey) {
+    rc3LaunchExternalOrderRoute(store, singleExternalKey, trigger);
+  } else {
+    // Keep the same store-detail DOM and native hit-test surface. Replacing the
+    // modal, history entry, or document after close is what repeatedly leaves
+    // Samsung Kakao WebView with visible pixels but an untappable button.
+    rc3OpenOrderMethods(store, trigger);
+    setTimeout(() => window.daedongSettleRestoredReturnLeaseNow?.(), 0);
+  }
   return true;
 }
+window.daedongActivateOrderMethodsTrigger = rc3ActivateOrderMethodsTrigger;
+
+let rc3ExternalRouteActivationUntil = 0;
+let rc3ExternalRouteActivationKey = '';
+
+function rc3LaunchExternalOrderRoute(store, routeKey, sourceElement) {
+  const route = store ? routeFor(store, routeKey) : null;
+  const embeddedHref = safeHref(sourceElement?.dataset?.rc3ExternalHref || '');
+  const href = embeddedHref !== '#' ? embeddedHref : safeHref(route?.url);
+  if (href === '#') return false;
+  // Leave the app list expanded in the preserved Preview document. When the
+  // customer returns from one order app, the other apps stay one tap away.
+  rc2RememberExternalReturn(sourceElement);
+  return rc2LaunchComparedExternal(sourceElement, href);
+}
+
+function rc3ActivateExternalOrderRoute(external, event) {
+  const routeKey = String(external?.dataset.rc3ExternalRoute || '');
+  const storeId = String(external?.dataset.storeId || $('#modal')?.dataset.activeStoreId || '');
+  const activationKey = `${storeId}:${routeKey}`;
+  const store = fxStoreById(storeId);
+  if (!external || !routeKey) return false;
+
+  event?.preventDefault?.();
+  event?.stopImmediatePropagation?.();
+  if (Date.now() < rc3ExternalRouteActivationUntil && activationKey === rc3ExternalRouteActivationKey) return true;
+  rc3ExternalRouteActivationUntil = Date.now() + 800;
+  rc3ExternalRouteActivationKey = activationKey;
+
+  // Kakao WebView can resume an external-app return with only one of
+  // pointerup, touchend, or click reaching the restored route button. Treat
+  // every one of those as a complete customer activation; do not require a
+  // preceding pointerdown timestamp that may have been lost during resume.
+  window.daedongInvalidatePendingReturnRestores?.();
+  return rc3LaunchExternalOrderRoute(store, routeKey, external);
+}
+
+function rc3ActivateExternalOrderRouteFallback(external, event) {
+  return rc3ActivateExternalOrderRoute(external, event);
+}
+window.daedongActivateExternalOrderRouteFallback = rc3ActivateExternalOrderRouteFallback;
 
 let rc3OrderMethodsGhostClickUntil = 0;
+let rc3OrderMethodsGhostClickStoreId = '';
+const rc3OrderMethodsPointers = new Map();
+const rc3OrderMethodsTouches = new Map();
 
-function rc3BindOrderMethodsTrigger(detail) {
-  const trigger = detail?.querySelector('[data-rc3-other-methods]');
-  if (!trigger || trigger.dataset.rc3DirectBound === '1') return;
-  trigger.dataset.rc3DirectBound = '1';
-  let touchPointer = null;
-  const clearTouchPointer = () => { touchPointer = null; };
-  trigger.addEventListener('pointerdown', event => {
-    if (event.pointerType !== 'touch' || event.isPrimary === false) return;
-    touchPointer = {id: event.pointerId, x: event.clientX, y: event.clientY, moved: false};
-  }, {passive: true});
-  trigger.addEventListener('pointermove', event => {
-    if (!touchPointer || touchPointer.id !== event.pointerId) return;
-    if (Math.hypot(event.clientX - touchPointer.x, event.clientY - touchPointer.y) > 10) touchPointer.moved = true;
-  }, {passive: true});
-  trigger.addEventListener('pointercancel', clearTouchPointer, {passive: true});
-  trigger.addEventListener('pointerup', event => {
-    if (event.pointerType !== 'touch' || !touchPointer || touchPointer.id !== event.pointerId || touchPointer.moved) {
-      clearTouchPointer();
-      return;
-    }
-    clearTouchPointer();
-    rc3OrderMethodsGhostClickUntil = Date.now() + 800;
-    trigger.dataset.rc3LastTouchActivation = String(Date.now());
-    rc3ActivateOrderMethodsTrigger(trigger, event);
-  }, {passive: false});
-  trigger.addEventListener('click', event => {
-    if (Date.now() - Number(trigger.dataset.rc3LastTouchActivation || 0) < 700) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      return;
-    }
-    rc3ActivateOrderMethodsTrigger(trigger, event);
+function rc3OrderMethodsTriggerFromEvent(event) {
+  return event?.target?.closest?.('[data-rc3-other-methods]') || null;
+}
+
+function rc3ResetOrderMethodsTouchState() {
+  rc3OrderMethodsPointers.clear();
+  rc3OrderMethodsTouches.clear();
+  rc3OrderMethodsGhostClickUntil = 0;
+  rc3OrderMethodsGhostClickStoreId = '';
+  rc3ExternalRouteActivationUntil = 0;
+  rc3ExternalRouteActivationKey = '';
+}
+window.daedongResetOrderMethodsTouchState = rc3ResetOrderMethodsTouchState;
+
+function rc3OrderMethodsGhostActive(storeId) {
+  return Date.now() < rc3OrderMethodsGhostClickUntil
+    && String(storeId || '') === rc3OrderMethodsGhostClickStoreId;
+}
+
+function rc3MarkOrderMethodsActivation(storeId) {
+  rc3OrderMethodsGhostClickUntil = Date.now() + 800;
+  rc3OrderMethodsGhostClickStoreId = String(storeId || '');
+}
+
+function rc3ActivateOrderMethodsFallback(trigger, event) {
+  const storeId = String(trigger?.dataset.rc3OtherMethods || '');
+  if (rc3OrderMethodsGhostActive(storeId)) {
+    event?.preventDefault?.();
+    event?.stopImmediatePropagation?.();
+    return false;
+  }
+  rc3MarkOrderMethodsActivation(storeId);
+  return rc3ActivateOrderMethodsTrigger(trigger, event);
+}
+window.daedongActivateOrderMethodsFallback = rc3ActivateOrderMethodsFallback;
+
+function rc3OnOrderMethodsPointerDown(event) {
+  if (event.pointerType !== 'touch' || event.isPrimary === false) return;
+  const trigger = rc3OrderMethodsTriggerFromEvent(event);
+  if (!trigger) return;
+  rc3OrderMethodsPointers.set(event.pointerId, {
+    trigger,
+    storeId: String(trigger.dataset.rc3OtherMethods || ''),
+    x: event.clientX,
+    y: event.clientY,
+    moved: false
   });
 }
+
+function rc3OnOrderMethodsPointerMove(event) {
+  const state = rc3OrderMethodsPointers.get(event.pointerId);
+  if (!state) return;
+  if (Math.hypot(event.clientX - state.x, event.clientY - state.y) > 10) state.moved = true;
+}
+
+function rc3OnOrderMethodsPointerCancel(event) {
+  rc3OrderMethodsPointers.delete(event.pointerId);
+}
+
+function rc3OnOrderMethodsPointerUp(event) {
+  const state = rc3OrderMethodsPointers.get(event.pointerId);
+  if (!state) return;
+  rc3OrderMethodsPointers.delete(event.pointerId);
+  if (event.pointerType !== 'touch' || state.moved || rc3OrderMethodsGhostActive(state.storeId)) return;
+
+  const eventTrigger = rc3OrderMethodsTriggerFromEvent(event);
+  const trigger = eventTrigger?.dataset.rc3OtherMethods === state.storeId
+    ? eventTrigger
+    : state.trigger?.isConnected
+      ? state.trigger
+      : [...document.querySelectorAll('[data-rc3-other-methods]')]
+          .find(node => node.dataset.rc3OtherMethods === state.storeId);
+  if (!trigger) return;
+
+  rc3MarkOrderMethodsActivation(state.storeId);
+  rc3ActivateOrderMethodsTrigger(trigger, event);
+}
+
+function rc3TouchByIdentifier(list, identifier) {
+  return [...(list || [])].find(touch => touch.identifier === identifier) || null;
+}
+
+function rc3OnOrderMethodsTouchStart(event) {
+  if (event.touches?.length !== 1) return;
+  const trigger = rc3OrderMethodsTriggerFromEvent(event);
+  const touch = event.changedTouches?.[0] || event.touches[0];
+  if (!trigger || !touch) return;
+  rc3OrderMethodsTouches.set(touch.identifier, {
+    trigger,
+    storeId: String(trigger.dataset.rc3OtherMethods || ''),
+    x: touch.clientX,
+    y: touch.clientY,
+    moved: false
+  });
+}
+
+function rc3OnOrderMethodsTouchMove(event) {
+  for (const [identifier, state] of rc3OrderMethodsTouches) {
+    const touch = rc3TouchByIdentifier(event.touches, identifier)
+      || rc3TouchByIdentifier(event.changedTouches, identifier);
+    if (!touch) continue;
+    if (Math.hypot(touch.clientX - state.x, touch.clientY - state.y) > 10) state.moved = true;
+  }
+}
+
+function rc3OnOrderMethodsTouchCancel(event) {
+  for (const touch of [...(event.changedTouches || [])]) {
+    rc3OrderMethodsTouches.delete(touch.identifier);
+  }
+}
+
+function rc3OnOrderMethodsTouchEnd(event) {
+  for (const touch of [...(event.changedTouches || [])]) {
+    const state = rc3OrderMethodsTouches.get(touch.identifier);
+    if (!state) continue;
+    rc3OrderMethodsTouches.delete(touch.identifier);
+    if (state.moved || rc3OrderMethodsGhostActive(state.storeId)) continue;
+
+    const hit = document.elementFromPoint(touch.clientX, touch.clientY);
+    const hitTrigger = hit?.closest?.('[data-rc3-other-methods]');
+    const eventTrigger = rc3OrderMethodsTriggerFromEvent(event);
+    const trigger = hitTrigger?.dataset.rc3OtherMethods === state.storeId
+      ? hitTrigger
+      : eventTrigger?.dataset.rc3OtherMethods === state.storeId
+        ? eventTrigger
+        : state.trigger?.isConnected
+          ? state.trigger
+          : [...document.querySelectorAll('[data-rc3-other-methods]')]
+              .find(node => node.dataset.rc3OtherMethods === state.storeId);
+    if (!trigger) continue;
+
+    rc3MarkOrderMethodsActivation(state.storeId);
+    rc3ActivateOrderMethodsTrigger(trigger, event);
+    return;
+  }
+}
+
+function rc3BindOrderMethodsTrigger(detail, {force = false} = {}) {
+  let trigger = detail?.querySelector('[data-rc3-other-methods]');
+  if (!trigger) return;
+  // Old serialized detail snapshots can retain this marker even though their
+  // element listeners cannot survive reconstruction. Never trust or persist it.
+  trigger.removeAttribute('data-rc3-direct-bound');
+  if (force && trigger.__rc3DirectOrderMethodsBound) {
+    const replacement = trigger.cloneNode(true);
+    trigger.replaceWith(replacement);
+    trigger = replacement;
+  }
+  // rc2 serializes and rebuilds the store detail before an external app is
+  // launched. Data attributes survive that rebuild, DOM listeners do not, so
+  // use a non-serializable element property as the real binding guard.
+  if (trigger.__rc3DirectOrderMethodsBound) return;
+  trigger.__rc3DirectOrderMethodsBound = true;
+
+  let pointerStart = null;
+  let touchStart = null;
+  const consume = event => {
+    event?.preventDefault?.();
+    event?.stopImmediatePropagation?.();
+  };
+  const activateDirect = event => {
+    const storeId = String(trigger.dataset.rc3OtherMethods || '');
+    if (rc3OrderMethodsGhostActive(storeId)) {
+      consume(event);
+      return true;
+    }
+    rc3MarkOrderMethodsActivation(storeId);
+    return rc3ActivateOrderMethodsTrigger(trigger, event);
+  };
+
+  trigger.addEventListener('pointerdown', event => {
+    if (event.button !== 0 || event.isPrimary === false) return;
+    pointerStart = {x: event.clientX, y: event.clientY, moved: false};
+  });
+  trigger.addEventListener('pointermove', event => {
+    if (!pointerStart) return;
+    if (Math.hypot(event.clientX - pointerStart.x, event.clientY - pointerStart.y) > 10) pointerStart.moved = true;
+  });
+  trigger.addEventListener('pointercancel', () => { pointerStart = null; });
+  trigger.addEventListener('pointerup', event => {
+    const start = pointerStart;
+    pointerStart = null;
+    if (!start || start.moved) return;
+    activateDirect(event);
+  });
+
+  trigger.addEventListener('touchstart', event => {
+    if (event.touches?.length !== 1) return;
+    const touch = event.changedTouches?.[0] || event.touches[0];
+    if (!touch) return;
+    touchStart = {identifier: touch.identifier, x: touch.clientX, y: touch.clientY, moved: false};
+  }, {passive: true});
+  trigger.addEventListener('touchmove', event => {
+    if (!touchStart) return;
+    const touch = rc3TouchByIdentifier(event.touches, touchStart.identifier)
+      || rc3TouchByIdentifier(event.changedTouches, touchStart.identifier);
+    if (touch && Math.hypot(touch.clientX - touchStart.x, touch.clientY - touchStart.y) > 10) touchStart.moved = true;
+  }, {passive: true});
+  trigger.addEventListener('touchcancel', () => { touchStart = null; }, {passive: true});
+  trigger.addEventListener('touchend', event => {
+    const start = touchStart;
+    const touch = start ? rc3TouchByIdentifier(event.changedTouches, start.identifier) : null;
+    touchStart = null;
+    if (!start || !touch || start.moved) return;
+    activateDirect(event);
+  }, {passive: false});
+  trigger.addEventListener('click', event => activateDirect(event));
+}
+
+function rc3BindExternalOrderRoutes(detail, {force = false} = {}) {
+  const routes = [...(detail?.querySelectorAll('[data-rc3-external-route]') || [])];
+  for (let route of routes) {
+    if (force && route.__rc3DirectExternalRouteBound) {
+      const replacement = route.cloneNode(true);
+      route.replaceWith(replacement);
+      route = replacement;
+    }
+    if (route.__rc3DirectExternalRouteBound) continue;
+    route.__rc3DirectExternalRouteBound = true;
+    route.dataset.rc3DirectRouteBound = '1';
+
+    let pointerStart = null;
+    let touchStart = null;
+    const activateDirect = event => rc3ActivateExternalOrderRoute(route, event);
+
+    route.addEventListener('pointerdown', event => {
+      if (event.button !== 0 || event.isPrimary === false) return;
+      pointerStart = {x: event.clientX, y: event.clientY, moved: false};
+    });
+    route.addEventListener('pointermove', event => {
+      if (!pointerStart) return;
+      if (Math.hypot(event.clientX - pointerStart.x, event.clientY - pointerStart.y) > 10) pointerStart.moved = true;
+    });
+    route.addEventListener('pointercancel', () => { pointerStart = null; });
+    route.addEventListener('pointerup', event => {
+      const start = pointerStart;
+      pointerStart = null;
+      if (!start || start.moved) return;
+      activateDirect(event);
+    });
+
+    route.addEventListener('touchstart', event => {
+      if (event.touches?.length !== 1) return;
+      const touch = event.changedTouches?.[0] || event.touches[0];
+      if (!touch) return;
+      touchStart = {identifier: touch.identifier, x: touch.clientX, y: touch.clientY, moved: false};
+    }, {passive: true});
+    route.addEventListener('touchmove', event => {
+      if (!touchStart) return;
+      const touch = rc3TouchByIdentifier(event.touches, touchStart.identifier)
+        || rc3TouchByIdentifier(event.changedTouches, touchStart.identifier);
+      if (touch && Math.hypot(touch.clientX - touchStart.x, touch.clientY - touchStart.y) > 10) touchStart.moved = true;
+    }, {passive: true});
+    route.addEventListener('touchcancel', () => { touchStart = null; }, {passive: true});
+    route.addEventListener('touchend', event => {
+      const start = touchStart;
+      const touch = start ? rc3TouchByIdentifier(event.changedTouches, start.identifier) : null;
+      touchStart = null;
+      if (!start || !touch || start.moved) return;
+      activateDirect(event);
+    }, {passive: false});
+    route.addEventListener('click', event => activateDirect(event));
+  }
+}
+
+window.daedongRebindOrderMethodsTrigger = () => {
+  const detail = $('#modalContent .store-detail');
+  rc3BindOrderMethodsTrigger(detail, {force: true});
+  rc3BindExternalOrderRoutes(detail, {force: true});
+};
+
+let rc3RestoredControlsRebindFrame = 0;
+function rc3QueueRestoredOrderControlsRebind() {
+  if (rc3RestoredControlsRebindFrame) return;
+  rc3RestoredControlsRebindFrame = requestAnimationFrame(() => {
+    rc3RestoredControlsRebindFrame = 0;
+    const detail = $('#modalContent .store-detail');
+    rc3BindOrderMethodsTrigger(detail);
+    rc3BindExternalOrderRoutes(detail);
+  });
+}
+const rc3RestoredControlsRoot = $('#modalContent');
+const rc3RestoredControlsObserver = rc3RestoredControlsRoot && typeof MutationObserver === 'function'
+  ? new MutationObserver(rc3QueueRestoredOrderControlsRebind)
+  : null;
+rc3RestoredControlsObserver?.observe(rc3RestoredControlsRoot, {childList: true, subtree: true});
+rc3QueueRestoredOrderControlsRebind();
 
 function rc3EnhanceStoreDetail(store) {
   const detail = $('#modalContent .store-detail');
@@ -458,13 +857,19 @@ function rc3EnhanceStoreDetail(store) {
       ? `<button type="button" class="detail-route local-order-route" data-rc3-phone-store="${escapeHtml(store.id)}"><img class="detail-route-icon" src="assets/ui/phone.svg" alt=""><span>전화주문</span><b>›</b></button>`
       : '';
   const apps = channels.primaryOrder.brandApp || channels.happyOrder ? `<div class="brand-store-actions">${channels.primaryOrder.brandApp ? fxAppAction(channels.primaryOrder.brandApp, 'brand') : ''}${channels.happyOrder ? fxAppAction(channels.happyOrder, 'happy') : ''}</div>` : '';
-  const hasExternal = Object.values(channels.externalOrder).some(Boolean);
-  const other = hasExternal ? `<div class="store-other-wrap"><button class="detail-route rc3-order-methods-trigger" type="button" data-rc3-other-methods="${escapeHtml(store.id)}" aria-haspopup="dialog"><span>다른 주문방법 보기</span><b aria-hidden="true">›</b></button></div>` : '';
+  const orderMethodsMode = rc3OrderMethodsMode(channels);
+  const singleExternalAttribute = orderMethodsMode.singleExternalKey ? ` data-rc3-single-external="${escapeHtml(orderMethodsMode.singleExternalKey)}"` : '';
+  const externalRoutes = Object.values(channels.externalOrder).filter(Boolean);
+  const inlineMethods = !orderMethodsMode.singleExternalKey && externalRoutes.length
+    ? `<section class="order-methods-sheet rc3-order-methods-inline" data-rc3-inline-order-methods="${escapeHtml(store.id)}" data-store-id="${escapeHtml(store.id)}" hidden><div class="rc3-order-methods-inline-head"><span>선택한 가게</span><strong class="selected-store-name">${escapeHtml(store.name)}</strong><button type="button" class="rc3-order-methods-inline-close" data-rc3-order-methods-close aria-label="다른 주문방법 닫기" onclick="return window.daedongCloseInlineOrderMethods ? window.daedongCloseInlineOrderMethods(this, event) : false">×</button></div><div class="order-methods-list">${externalRoutes.map(route => rc3RouteButton(store, route)).join('')}</div>${externalAppNoticeMarkup()}</section>`
+    : '';
+  const other = orderMethodsMode.hasExternal ? `<div class="store-other-wrap"><button class="detail-route rc3-order-methods-trigger" type="button" data-rc3-other-methods="${escapeHtml(store.id)}" data-rc3-order-methods-label="${escapeHtml(orderMethodsMode.label)}"${singleExternalAttribute} aria-expanded="false"${orderMethodsMode.singleExternalKey ? ' aria-haspopup="dialog"' : ''} onclick="return window.daedongActivateOrderMethodsFallback ? window.daedongActivateOrderMethodsFallback(this, event) : false"><span>${escapeHtml(orderMethodsMode.label)}</span><b aria-hidden="true">›</b></button>${inlineMethods}</div>` : '';
   if (utilities) gallery?.insertAdjacentHTML('afterend', `<div class="detail-quick-links">${utilities}</div>`);
   const menuEntry = detail.querySelector('[data-store-menu-preview]');
   const orderAnchor = menuEntry || detail.querySelector('.detail-meta-row') || gallery;
   orderAnchor?.insertAdjacentHTML('afterend', `<div class="detail-routes local-detail-routes">${direct}${apps}${community}${phone || (!direct && !apps && !community ? '<p class="muted">등록된 주문방법을 확인 중입니다.</p>' : '')}</div>${other}`);
   rc3BindOrderMethodsTrigger(detail);
+  rc3BindExternalOrderRoutes(detail);
 }
 
 const rc3OpenStoreBase = openStore;
@@ -480,7 +885,7 @@ feeGuideMarkup = function rc3FeeGuideMarkup(store, selectedRoute, {fromBrowser =
   const localRoutes = LOW_FEE_KEYS.map(key => routeFor(store, key)).filter(Boolean);
   const selectedMeta = APP_META[selectedRoute.key] || {label: selectedRoute.name};
   const continueLabel = RC3_APP_PARTICLE[selectedRoute.key] || `${selectedMeta.label} 앱으로`;
-  return `<section id="feeGuidePanel" class="community-guide" data-selected-app="${selectedRoute.key}" data-store-id="${escapeHtml(store.id)}"><span class="community-order-kicker">같은 여수, 함께 이어가는 주문</span><div class="community-selected-store"><p class="community-original-label">선택한 가게</p><strong class="selected-store-name">${escapeHtml(store.name)}</strong></div><h2 id="modalTitle">주문하기 전에 이용 가능한 방법을 함께 확인해 보세요</h2><p class="community-order-lead">가격과 배달비를 비교해 고객님께 맞는 방법을 자유롭게 선택하세요.</p>${rc3PopupUtilityLinks(store, {includeChak: false})}<div class="community-choice-list">${localRoutes.length ? localRoutes.map(route => routeLink(route, 'community-choice-link low-fee-route')).join('') : '<p class="muted">이 가게에 등록된 지역 주문방법이 아직 없습니다.</p>'}</div><p class="community-original-label">처음 선택한 주문방법</p><a class="selected-app-continue community-choice-original external-text-route" href="${escapeHtml(selectedRoute.url)}" target="_blank" rel="noopener" data-community-original="${selectedRoute.key}"><span><b>${escapeHtml(store.name)}</b><small>${escapeHtml(continueLabel)} 계속 주문하기</small></span><b>›</b></a>${externalAppNoticeMarkup()}${fromBrowser ? `<button type="button" class="community-back" data-back-app-browser="${selectedRoute.key}">← ${escapeHtml(selectedMeta.label)} 가게목록으로</button>` : ''}<p class="community-order-note">어떤 주문방법을 선택해도 됩니다. 고객님의 비용과 편의를 먼저 확인해 주세요.</p></section>`;
+  return `<section id="feeGuidePanel" class="community-guide" data-selected-app="${selectedRoute.key}" data-store-id="${escapeHtml(store.id)}"><span class="community-order-kicker">같은 여수, 함께 이어가는 주문</span><div class="community-selected-store"><p class="community-original-label">선택한 가게</p><strong class="selected-store-name">${escapeHtml(store.name)}</strong></div><h2 id="modalTitle">주문하기 전에 이용 가능한 방법을 함께 확인해 보세요</h2><p class="community-order-lead">가격과 배달비를 비교해 고객님께 맞는 방법을 자유롭게 선택하세요.</p>${rc3PopupUtilityLinks(store, {includeChak: false})}<div class="community-choice-list">${localRoutes.length ? localRoutes.map(route => routeLink(route, 'community-choice-link low-fee-route')).join('') : '<p class="muted">이 가게에 등록된 지역 주문방법이 아직 없습니다.</p>'}</div><p class="community-original-label">선택한 주문앱</p><a class="selected-app-continue community-choice-original external-text-route" href="${escapeHtml(selectedRoute.url)}" target="_blank" rel="noopener" data-community-original="${selectedRoute.key}"><span><b>${escapeHtml(store.name)}</b><small>${escapeHtml(continueLabel)} 주문하기</small></span><b>›</b></a>${externalAppNoticeMarkup()}${fromBrowser ? `<button type="button" class="community-back" data-back-app-browser="${selectedRoute.key}">← ${escapeHtml(selectedMeta.label)} 가게목록으로</button>` : ''}<p class="community-order-note">어떤 주문방법을 선택해도 됩니다. 고객님의 비용과 편의를 먼저 확인해 주세요.</p></section>`;
 };
 
 function rc3FeedbackApplicationFields() {
@@ -489,7 +894,7 @@ function rc3FeedbackApplicationFields() {
 
 feedbackModal = function rc3FeedbackModal(store) {
   const appOptions = ['해당 없음', '먹깨비', '땡겨요', '온동네', '배달의민족', '쿠팡이츠', '요기요', '가게바로주문', '전화주문'];
-  openModal(`<section class="feedback-sheet" data-store-id="${escapeHtml(store.id)}"><h2 id="modalTitle">정보 수정 요청</h2><p>입력한 내용은 다른 고객에게 공개되지 않습니다.</p><form id="storeFeedbackForm"><label>가게명<input name="storeName" value="${escapeHtml(store.name)}" readonly required></label><label>요청 종류<select name="issueType" data-rc3-issue-type required><option value="">선택하세요</option><option>사진 오류</option><option>전화번호 오류</option><option>주문앱에서 가게 없음</option><option>폐업·휴업 의심</option><option>주소·위치 오류</option><option>사장님 주문앱 입점 신청</option></select></label><label data-rc3-related-app>관련 주문앱<select name="app">${appOptions.map(item => `<option>${item}</option>`).join('')}</select></label>${rc3FeedbackApplicationFields()}<button type="submit" class="feedback-submit">접수 내용 준비하기</button></form><small>전송 전 비공개 접수폼에서 내용을 다시 확인할 수 있습니다.</small></section>`);
+  openModal(`<section class="feedback-sheet" data-store-id="${escapeHtml(store.id)}"><h2 id="modalTitle">정보 수정 요청</h2><p>관리자가 확인할 수 있도록 바로 접수합니다. 입력한 내용은 다른 고객에게 공개되지 않습니다.</p><form id="storeFeedbackForm"><label>가게명<input name="storeName" value="${escapeHtml(store.name)}" readonly required></label><label>요청 종류<select name="issueType" data-rc3-issue-type required><option value="">선택하세요</option><option>사진 오류</option><option>전화번호 오류</option><option>주문앱에서 가게 없음</option><option>폐업·휴업 의심</option><option>주소·위치 오류</option><option>사장님 주문앱 입점 신청</option><option>기타</option></select></label><label data-rc3-related-app>관련 주문앱<select name="app">${appOptions.map(item => `<option>${item}</option>`).join('')}</select></label><label>수정할 내용<textarea name="details" maxlength="1200" rows="5" placeholder="잘못된 내용과 올바른 정보를 알려주세요." required></textarea></label>${rc3FeedbackApplicationFields()}<button type="submit" class="feedback-submit">관리자에게 수정 요청 보내기</button></form><small>서버에서 접수번호를 받은 경우에만 접수가 완료됩니다.</small></section>`);
 };
 
 function rc3ToggleApplicationFields(select) {
@@ -539,7 +944,13 @@ submitFeedback = async function rc3SubmitFeedback(form) {
     return;
   }
   if (error) error.hidden = true;
+  const submitButton = form.querySelector('[type="submit"]');
+  if (submitButton) {
+    submitButton.disabled = true;
+    submitButton.textContent = '접수 중…';
+  }
   const report = {
+    transport: 'direct-admin-v1',
     reportId: globalThis.crypto?.randomUUID?.() || `report-${Date.now()}`,
     storeId: String(store.id),
     storeName: store.name,
@@ -550,19 +961,18 @@ submitFeedback = async function rc3SubmitFeedback(form) {
     relationship: application ? String(data.get('relationship') || '') : '',
     channels,
     privacyConsent: application && data.get('privacyConsent') === '동의',
-    reporterKey: visitorKey(),
+    details: String(data.get('details') || '').trim(),
     pageUrl: location.href,
     createdAt: new Date().toISOString(),
     status: '접수 대기'
   };
-  writeLocalJson(FEEDBACK_QUEUE_KEY, [report, ...readLocalJson(FEEDBACK_QUEUE_KEY, [])].slice(0, 100));
-  try { await navigator.clipboard?.writeText(rc3FeedbackText(report)); } catch {}
-  openModal(`<section class="feedback-complete"><h2 id="modalTitle">접수 내용을 준비했습니다</h2><p>비공개 접수폼에서 내용을 확인한 뒤 직접 제출해 주세요. 이 화면만으로 접수가 완료되지는 않습니다.</p><a href="${FEEDBACK_FORM_URL}" target="_blank" rel="noopener">비공개 접수폼 열기</a><button type="button" data-feedback-copy="${escapeHtml(report.reportId)}">접수 내용 다시 복사</button></section>`);
-};
-
-copyQueuedReport = function rc3CopyQueuedReport(reportId) {
-  const report = readLocalJson(FEEDBACK_QUEUE_KEY, []).find(item => item.reportId === reportId);
-  if (report) navigator.clipboard?.writeText(rc3FeedbackText(report));
+  queueFeedback(report);
+  try {
+    await deliverFeedbackReport(report);
+    feedbackSuccessModal(report);
+  } catch (caught) {
+    feedbackFailureModal(report, caught instanceof Error ? caught.message : '수정 요청을 접수하지 못했습니다.');
+  }
 };
 
 function rc3RailPointerTarget(event) {
@@ -594,11 +1004,6 @@ function rc3OnPointerEnd(event) {
 }
 
 function rc3HandleClick(event) {
-  if (Date.now() < rc3OrderMethodsGhostClickUntil) {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    return;
-  }
   const allMain = event.target.closest('[data-cat="전체"]');
   if (allMain) {
     event.preventDefault();
@@ -619,12 +1024,26 @@ function rc3HandleClick(event) {
     event.stopImmediatePropagation();
     if (railOpen.dataset.rc3Gesture === 'drag') return;
     const store = fxStoreById(railOpen.dataset.rc3RailOpen);
-    if (store) openStore(store);
+    if (store) {
+      window.daedongConfirmIntentionalStoreOpen?.();
+      openStore(store);
+    }
     return;
   }
   const other = event.target.closest('[data-rc3-other-methods]');
   if (other) {
+    const storeId = String(other.dataset.rc3OtherMethods || '');
+    if (rc3OrderMethodsGhostActive(storeId)) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      return;
+    }
     rc3ActivateOrderMethodsTrigger(other, event);
+    return;
+  }
+  const inlineClose = event.target.closest('[data-rc3-order-methods-close]');
+  if (inlineClose) {
+    rc3CloseInlineOrderMethods(inlineClose, event);
     return;
   }
   const phone = event.target.closest('[data-rc3-phone-store]');
@@ -636,10 +1055,7 @@ function rc3HandleClick(event) {
   }
   const external = event.target.closest('[data-rc3-external-route]');
   if (external) {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    const store = fxStoreById(external.dataset.storeId || $('#modal').dataset.activeStoreId);
-    if (store) openCommunityChoice(store, external.dataset.rc3ExternalRoute);
+    rc3ActivateExternalOrderRoute(external, event);
     return;
   }
   if (event.target.closest('[data-rc3-final-phone]')) {
@@ -653,6 +1069,20 @@ fxInstallEvents = function rc3InstallEvents() {
   rc3InstallEventsBase();
   if (rc3EventsInstalled) return;
   rc3EventsInstalled = true;
+  document.addEventListener('pointerdown', rc3OnOrderMethodsPointerDown, true);
+  document.addEventListener('pointermove', rc3OnOrderMethodsPointerMove, true);
+  document.addEventListener('pointerup', rc3OnOrderMethodsPointerUp, true);
+  document.addEventListener('pointercancel', rc3OnOrderMethodsPointerCancel, true);
+  document.addEventListener('touchstart', rc3OnOrderMethodsTouchStart, {capture: true, passive: true});
+  document.addEventListener('touchmove', rc3OnOrderMethodsTouchMove, {capture: true, passive: true});
+  document.addEventListener('touchend', rc3OnOrderMethodsTouchEnd, {capture: true, passive: false});
+  document.addEventListener('touchcancel', rc3OnOrderMethodsTouchCancel, {capture: true, passive: true});
+  window.addEventListener('pageshow', rc3ResetOrderMethodsTouchState, true);
+  window.addEventListener('pagehide', rc3ResetOrderMethodsTouchState, true);
+  window.addEventListener('blur', rc3ResetOrderMethodsTouchState, true);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') rc3ResetOrderMethodsTouchState();
+  }, true);
   document.addEventListener('pointerdown', rc3OnPointerDown, true);
   document.addEventListener('pointermove', rc3OnPointerMove, true);
   document.addEventListener('pointerup', rc3OnPointerEnd, true);
@@ -669,7 +1099,7 @@ fxInitialize = async function rc3Initialize() {
   rc3RefreshRailsAfterServiceReady();
   await rc3InitializeBase();
   rc3RefreshRailsAfterServiceReady();
-  const internalPhones = await fetchJson(RC3_PHONE_INTERNAL_URL, {stores: []});
+  const internalPhones = RC3_IS_GOHEUNG ? {stores: []} : await fetchJson(RC3_PHONE_INTERNAL_URL, {stores: []});
   rc3InternalPhoneByStore = new Map((internalPhones.stores || []).map(item => [String(item.store_id), item]));
   const activeStoreId = String($('#modalContent .store-detail')?.dataset.storeId || '');
   const activeStore = activeStoreId ? fxStoreById(activeStoreId) : null;

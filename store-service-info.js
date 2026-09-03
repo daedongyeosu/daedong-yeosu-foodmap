@@ -2,8 +2,11 @@
 
 (() => {
   const HISTORY_KEY = 'daedongStoreServiceOverview';
+  const DEFAULT_AREA = window.DAEDONG_REGION?.defaultArea || '여수시 전체';
   const CLOSING_SOON_MINUTES = 60;
   const MENU_MATCH_PREVIEW_LIMIT = 2;
+  const OVERVIEW_RENDER_BATCH_SIZE = 36;
+  const OVERVIEW_QUERY_DEBOUNCE_MS = 180;
   const RECENT_SEARCH_LIMIT = 10;
   const RECENT_SEARCH_KEY = typeof window.DAEDONG_REGION?.storageKey === 'function'
     ? window.DAEDONG_REGION.storageKey('daedongRecentSearchStoresV1')
@@ -38,6 +41,7 @@
   let serviceData = {programs: [], stores: {}};
   let serviceLoadState = 'loading';
   let catalogLoadState = 'loading';
+  let suppressServiceSurfaceMutations = false;
   let serviceReadyPromise = null;
   let catalogReadyPromise = null;
   let lastFocused = null;
@@ -48,11 +52,15 @@
   let selectedArea = '';
   let overviewQuery = '';
   let overviewQueryComposing = false;
+  let overviewQueryTimer = 0;
+  let overviewVisibleCount = OVERVIEW_RENDER_BATCH_SIZE;
   let pendingMenuOpen = null;
+  let overviewSuspendedForChild = false;
   let menuSearchData = {stores: {}};
   let menuSearchState = 'idle';
   let menuSearchPromise = null;
   let menuSearchQuery = '';
+  let menuSearchAbortController = null;
   let renderedSourceCount = 0;
 
   const escapeHtml = value => String(value ?? '').replace(/[&<>'"]/g, char => ({
@@ -67,6 +75,12 @@
     .normalize('NFKC')
     .replace(/\s+/g, '')
     .toLowerCase();
+
+  const formatStoreDisplayName = value => String(value || '가게 정보')
+    .replace(/([가-힣])\s*[-–—]+\s*(?=[가-힣])/g, '$1 ')
+    .replace(/\s+[-–—]\s+/g, ' ')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
 
   function formatCustomerHours24(value) {
     const convert = (period, rawHour, rawMinute) => {
@@ -84,7 +98,8 @@
   }
 
   const MENU_FAMILIES = [
-    {key: '빙수', label: '빙수', matches: value => value.includes('빙수'), terms: ['빙수']},
+    {key: '빙수', label: '빙수', matches: value => ['빙수', '설빙'].some(term => value.includes(term)), queries: ['빙수', '설빙'], terms: ['빙수', '설빙']},
+    {key: '김밥', label: '김밥', matches: value => ['김밥', '김빱', '주먹밥'].some(term => value.includes(term)), queries: ['김밥', '김빱', '주먹밥'], terms: ['김밥', '김빱', '꼬마김밥', '마약김밥', '충무김밥', '삼각김밥', '주먹밥']},
     {key: '족발', label: '족발', matches: value => value.includes('족발') || value.includes('불족'), terms: ['족발', '불족', '냉채족']},
     {key: '치킨', label: '치킨', matches: value => ['치킨', '통닭', '닭강정'].some(term => value.includes(term)), terms: ['치킨', '통닭', '닭강정', '후라이드', '양념', '간장', '순살', '윙봉']},
     {key: '커피', label: '커피', matches: value => ['커피', '아메리카노', '에스프레소', '콜드브루'].some(term => value.includes(term)), terms: ['커피', '아메리카노', '에스프레소', '카페라떼', '카푸치노', '마키아토', '콜드브루', '핸드드립']},
@@ -97,6 +112,29 @@
     const family = MENU_FAMILIES.find(item => item.matches(value));
     if (family) return family;
     return value ? {key: value, label: String(query || '').trim(), matches: () => true, terms: [value]} : null;
+  }
+
+  function menuSearchQueries(query) {
+    const spec = menuSearchSpec(query);
+    if (!spec || !MENU_FAMILIES.includes(spec)) return [String(query || '').trim()].filter(Boolean);
+    return [...new Set((spec.queries || [spec.key]).map(String).map(value => value.trim()).filter(Boolean))];
+  }
+
+  function mergeMenuSearchResults(results) {
+    const merged = {stores: {}};
+    (results || []).forEach(result => {
+      Object.entries(result?.stores || {}).forEach(([storeId, record]) => {
+        const target = merged.stores[storeId] ||= {i: []};
+        const seen = new Set(target.i.map(item => String(item?.[0] || '')));
+        (record?.i || []).forEach(item => {
+          const itemId = String(item?.[0] || '');
+          if (!itemId || seen.has(itemId)) return;
+          seen.add(itemId);
+          target.i.push(item);
+        });
+      });
+    });
+    return merged;
   }
 
   function menuItemMatches(item, spec, store) {
@@ -131,11 +169,18 @@
     const requestedQuery = String(query || '').trim();
     if (!requestedQuery) return Promise.resolve({stores: {}});
     if (menuSearchPromise && normalize(menuSearchQuery) === normalize(requestedQuery)) return menuSearchPromise;
+    menuSearchAbortController?.abort();
+    const requestController = new AbortController();
+    menuSearchAbortController = requestController;
     menuSearchQuery = requestedQuery;
     menuSearchState = 'loading';
     menuSearchData = {stores: {}};
-    menuSearchPromise = window.daedongDataApi.menuSearch(requestedQuery)
-      .then(data => {
+    const searchQueries = menuSearchQueries(requestedQuery);
+    menuSearchPromise = Promise.all(searchQueries.map(searchQuery => (
+      window.daedongDataApi.menuSearch(searchQuery, {signal: requestController.signal})
+    )))
+      .then(results => {
+        const data = mergeMenuSearchResults(results);
         if (normalize(menuSearchQuery) === normalize(requestedQuery)) {
           menuSearchData = data?.stores ? data : {stores: {}};
           menuSearchState = 'ready';
@@ -143,12 +188,17 @@
         return menuSearchData;
       })
       .catch(error => {
-        if (normalize(menuSearchQuery) === normalize(requestedQuery)) menuSearchState = 'error';
-        console.warn(error);
+        if (normalize(menuSearchQuery) === normalize(requestedQuery)) {
+          menuSearchState = requestController.signal.aborted ? 'idle' : 'error';
+        }
+        if (!requestController.signal.aborted) console.warn(error);
         return menuSearchData;
       })
       .finally(() => {
-        if (normalize(menuSearchQuery) === normalize(requestedQuery)) menuSearchPromise = null;
+        if (normalize(menuSearchQuery) === normalize(requestedQuery)) {
+          menuSearchPromise = null;
+          if (menuSearchAbortController === requestController) menuSearchAbortController = null;
+        }
       });
     return menuSearchPromise;
   }
@@ -228,7 +278,28 @@
   }
 
   function storeStatus(info, date = new Date()) {
+    if (serviceLoadState === 'error') {
+      return {
+        state: 'unknown',
+        label: '정보 연결 지연',
+        detail: '영업시간 정보를 불러오지 못했습니다.',
+        today: '주문앱 또는 전화로 확인해 주세요.'
+      };
+    }
     if (!info?.hours?.weekly) {
+      const displayLines = Array.isArray(info?.hours?.displayLines)
+        ? info.hours.displayLines.map(line => String(line || '').trim()).filter(Boolean)
+        : [];
+      if (displayLines.length) {
+        const hoursLine = displayLines.find(line => /\d{1,2}:\d{2}/.test(line)) || displayLines[0];
+        const confirmedHours = hoursLine.replace(/^\d{4}-\d{2}-\d{2}\s*확인\s*/, '').trim();
+        return {
+          state: 'unknown',
+          label: '영업시간 확인',
+          detail: confirmedHours || '확인된 영업시간 있음',
+          today: '현재 영업 여부는 주문앱에서 확인'
+        };
+      }
       return {
         state: 'unknown',
         label: '시간 미확인',
@@ -240,7 +311,13 @@
     const now = calendarParts(date);
     const minutes = (now.hour * 60) + now.minute;
     const previous = shiftCalendar(now, -1);
-    const previousPeriods = info.hours.weekly[previous.weekday] || [];
+    const observedWeekdays = Array.isArray(info.hours.observedWeekdays)
+      ? info.hours.observedWeekdays.map(value => String(value || '').toLowerCase())
+      : [];
+    const isPartialWeekly = info.hours.partialWeekly === true && observedWeekdays.length > 0;
+    const previousPeriods = !isPartialWeekly || observedWeekdays.includes(previous.weekday)
+      ? info.hours.weekly[previous.weekday] || []
+      : [];
 
     const activeBreak = breakFor(info.hours, now);
 
@@ -268,6 +345,18 @@
             : `오늘 ${(info.hours.weekly[now.weekday] || []).map(periodLabel).join(', ') || '영업시간 없음'}`
         );
       }
+    }
+
+    if (isPartialWeekly && !observedWeekdays.includes(now.weekday)) {
+      const displayLines = Array.isArray(info.hours.displayLines)
+        ? info.hours.displayLines.map(line => String(line || '').trim()).filter(Boolean)
+        : [];
+      return {
+        state: 'unknown',
+        label: '영업시간 확인',
+        detail: displayLines[0] || '요기요에서 확인된 다른 요일 영업시간 있음',
+        today: '오늘 영업시간은 주문앱에서 확인'
+      };
     }
 
     const closure = closureFor(info.hours, now);
@@ -320,7 +409,7 @@
   function statusPriorityForStore(storeOrId, date = new Date()) {
     const store = storeOrId?.store || storeOrId;
     const storeId = typeof store === 'object' ? storeIdOf(store) : String(store || '');
-    return STATUS_SORT_PRIORITY[storeStatus(serviceData.stores?.[storeId], date).state] ?? STATUS_SORT_PRIORITY.unknown;
+    return STATUS_SORT_PRIORITY[storeStatus(serviceInfoForStore(store || storeId), date).state] ?? STATUS_SORT_PRIORITY.unknown;
   }
 
   function sortStoresByStatusPriority(list, date = new Date()) {
@@ -343,6 +432,35 @@
   function storeById(id) {
     if (typeof fxStoreById === 'function') return fxStoreById(id);
     return sourceStores().find(store => storeIdOf(store) === String(id)) || null;
+  }
+
+  function mergeServiceCollections(rows, key) {
+    const merged = new Map();
+    for (const row of rows) {
+      for (const item of Array.isArray(row?.[key]) ? row[key] : []) {
+        const identity = `${item?.key || ''}:${(item?.appKeys || []).map(String).sort().join(',')}`;
+        const existing = merged.get(identity);
+        if (!existing || (existing.status !== 'accepted' && item?.status === 'accepted')) merged.set(identity, item);
+      }
+    }
+    return [...merged.values()];
+  }
+
+  function serviceInfoForStore(storeOrId) {
+    const store = typeof storeOrId === 'object' ? storeOrId : storeById(storeOrId);
+    const storeId = storeIdOf(store) || String(storeOrId || '');
+    const ids = [...new Set([storeId, ...(store?.mergedStoreIds || [])].map(String).filter(Boolean))];
+    const rows = ids.map(id => serviceData.stores?.[id]).filter(Boolean);
+    if (!rows.length) return null;
+    if (rows.length === 1) return rows[0];
+    const weeklyHours = rows.find(row => row?.hours?.weekly)?.hours;
+    const confirmedHours = rows.find(row => Array.isArray(row?.hours?.displayLines) && row.hours.displayLines.length)?.hours;
+    return {
+      ...Object.assign({}, ...rows.slice().reverse()),
+      hours: weeklyHours || confirmedHours || rows.find(row => row?.hours)?.hours,
+      payments: mergeServiceCollections(rows, 'payments'),
+      delivery: mergeServiceCollections(rows, 'delivery')
+    };
   }
 
   function readRecentSearchStores() {
@@ -599,6 +717,9 @@
 
   function detailPanelMarkup(info, status, giftRoute) {
     const displayLines = Array.isArray(info?.hours?.displayLines) ? info.hours.displayLines : [];
+    const missingHoursCopy = serviceLoadState === 'error'
+      ? '영업시간 정보를 불러오지 못했습니다.'
+      : '확인된 영업시간이 없습니다.';
     const availableBenefits = detailBenefitItems(info).filter(item => item.state === 'available');
     const giftAvailable = availableBenefits.some(item => item.key === 'yeosu-seomseom-pay');
     return `
@@ -615,7 +736,7 @@
       <div class="store-service-detail-hours">
         ${displayLines.length
           ? displayLines.map(line => `<span>${escapeHtml(formatCustomerHours24(line))}</span>`).join('')
-          : '<span class="is-unknown">확인된 영업시간이 없습니다.</span>'}
+          : `<span class="is-unknown">${escapeHtml(missingHoursCopy)}</span>`}
       </div>
       ${availableBenefits.length ? `
         <div class="store-service-detail-benefits" aria-label="현재 이용 가능한 주문앱별 혜택">
@@ -631,7 +752,7 @@
 
   function decorateStoreCards() {
     document.querySelectorAll('#storeGrid .store-card[data-id]').forEach(card => {
-      const info = serviceData.stores?.[String(card.dataset.id)];
+      const info = serviceInfoForStore(String(card.dataset.id));
       const status = storeStatus(info);
       const benefits = benefitLabels(info);
       const signature = JSON.stringify({status, benefits, empty: emptyBenefitLabel(info)});
@@ -667,7 +788,7 @@
     document.querySelectorAll('[data-app-store-order]').forEach(control => addCompactCard(control.closest('.app-browser-card') || control, control.dataset.appStoreOrder));
 
     compactCards.forEach((storeId, card) => {
-      const status = storeStatus(serviceData.stores?.[storeId]);
+      const status = storeStatus(serviceInfoForStore(storeId));
       const signature = `${status.state}:${status.label}`;
       let badge = card.querySelector('[data-store-service-card-status-only]');
       if (!badge) {
@@ -688,7 +809,7 @@
   function decorateStoreDetails() {
     document.querySelectorAll('#modalContent .store-detail[data-store-id]').forEach(detail => {
       const storeId = String(detail.dataset.storeId || '');
-      const info = serviceData.stores?.[storeId];
+      const info = serviceInfoForStore(storeId);
       const status = storeStatus(info);
       const store = storeById(storeId);
       const giftRoute = typeof routeFor === 'function' ? routeFor(store, 'chak') : null;
@@ -758,7 +879,7 @@
           <b data-store-finder-location-label>주소를 설정하면 가까운 순</b>
         </div>
         <nav aria-label="빠른 가게 찾기 조건">
-          <button type="button" data-store-service-quick-status="open">🟢 지금 영업 중 <b data-store-finder-open-count></b></button>
+          <button type="button" data-store-service-quick-status="open">🟢 지금 영업 중 <b data-store-finder-open-count aria-live="polite">확인 중</b></button>
           <button type="button" data-store-service-quick-benefit>🎁 혜택 찾기</button>
           <button type="button" data-store-service-quick-location="all">동네 선택</button>
         </nav>
@@ -767,17 +888,19 @@
     }
     if (entry) {
       const location = typeof state !== 'undefined' ? String(state.location || '') : '';
-      const hasLocation = location && location !== '여수시 전체';
+      const hasLocation = location && location !== DEFAULT_AREA;
       const label = entry.querySelector('[data-store-finder-location-label]');
       const nextLabel = hasLocation ? `${location} 기준 · 가까운 순` : '주소를 설정하면 가까운 순';
       if (label && label.textContent !== nextLabel) label.textContent = nextLabel;
       const source = sourceStores();
-      const count = source.reduce((total, store) => (
-        ['open', 'closing-soon'].includes(storeStatus(serviceData.stores?.[storeIdOf(store)]).state) ? total + 1 : total
-      ), 0);
-      const countNode = entry.querySelector('[data-store-finder-open-count]');
       const countReady = serviceLoadState === 'ready' && source.length > 0;
       const loadFailed = serviceLoadState === 'error' || catalogLoadState === 'error';
+      const count = countReady
+        ? source.reduce((total, store) => (
+          ['open', 'closing-soon'].includes(storeStatus(serviceInfoForStore(store)).state) ? total + 1 : total
+        ), 0)
+        : 0;
+      const countNode = entry.querySelector('[data-store-finder-open-count]');
       const nextCount = countReady ? String(count) : loadFailed ? '다시 확인' : '확인 중';
       if (countNode && countNode.textContent !== nextCount) countNode.textContent = nextCount;
       const quickStatus = entry.querySelector('[data-store-service-quick-status]');
@@ -819,7 +942,7 @@
     if (typeof state !== 'undefined') {
       const current = coordinateOf(state.coords);
       if (current) return current;
-      if (state.location && state.location !== '여수시 전체') {
+      if (state.location && state.location !== DEFAULT_AREA) {
         return coordinateOf(neighborhoodRecord(state.location));
       }
     }
@@ -830,7 +953,7 @@
     if (locationMode === 'selected') return ensureSelectedArea();
     if (typeof state === 'undefined') return '';
     const explicit = [state.location, state.addressLabel]
-      .filter(value => value && value !== '여수시 전체')
+      .filter(value => value && value !== DEFAULT_AREA)
       .flatMap(value => typeof neighborhoodsFor === 'function' ? neighborhoodsFor(value) : [String(value).trim()])
       .find(Boolean);
     if (explicit) return explicit;
@@ -875,7 +998,7 @@
     const areas = availableAreas();
     if (selectedArea && areas.includes(selectedArea)) return selectedArea;
     const current = typeof state !== 'undefined' ? String(state.location || '') : '';
-    selectedArea = current && current !== '여수시 전체' && areas.includes(current)
+    selectedArea = current && current !== DEFAULT_AREA && areas.includes(current)
       ? current
       : (areas[0] || '');
     return selectedArea;
@@ -886,7 +1009,7 @@
     const neighborhood = activeNeighborhood();
     return sourceStores().map((store, index) => {
       const storeId = storeIdOf(store);
-      const info = serviceData.stores?.[storeId];
+      const info = serviceInfoForStore(store);
       const areas = storeAreas(store);
       const area = areas[0] || '동네 미확인';
       const storeCoordinate = coordinateOf(store);
@@ -944,6 +1067,28 @@ function overviewSearchText(entry) {
   ]).filter(Boolean).join(' ');
 }
 
+function overviewIdentitySearchText(entry) {
+  const store = entry.store || {};
+  return searchTextValues([
+    store.name,
+    store.realBusinessName,
+    store.brandName,
+    store.branchName,
+    store.shopInShopNames,
+    store.storeAliases,
+    store.aliases,
+    store.searchAliases
+  ]).filter(Boolean).join(' ');
+}
+
+function overviewMenuContextText(entry) {
+  return searchTextValues([
+    overviewIdentitySearchText(entry),
+    entry.area,
+    entry.areas
+  ]).filter(Boolean).join(' ');
+}
+
   function benefitDefinitionForQuery(query) {
     const compact = normalize(query);
     if (!compact) return null;
@@ -961,10 +1106,20 @@ function overviewSearchText(entry) {
     const raw = String(overviewQuery || '').trim();
     if (!raw) return true;
     const text = normalize(overviewSearchText(entry));
+    const identityText = normalize(overviewIdentitySearchText(entry));
     const spec = menuSearchSpec(raw);
     const compact = normalize(raw);
-    if (text.includes(compact)) return true;
     const rawTokens = raw.split(/\s+/).map(normalize).filter(Boolean);
+    if (spec && MENU_FAMILIES.includes(spec)) {
+      const isExactFamilyQuery = compact === normalize(spec.key);
+      if (!isExactFamilyQuery && identityText.includes(compact)) return true;
+      const context = normalize(overviewMenuContextText(entry));
+      const contextTokens = rawTokens.filter(token => !spec.matches(token));
+      return entry.menuMatches.length > 0
+        && contextTokens.every(token => context.includes(token));
+    }
+    if (identityText.includes(compact)) return true;
+    if (text.includes(compact)) return true;
     const familyTokens = spec && spec.key !== compact
       ? rawTokens.filter(token => !spec.matches(token))
       : [];
@@ -1060,7 +1215,7 @@ function overviewSearchText(entry) {
     if (locationMode === 'all') return '여수 전체 · 기존 가게순서';
     if (locationMode === 'selected') return `${ensureSelectedArea() || '선택한 동네'} 가게만`;
     if (referenceCoordinate()) {
-      const label = typeof state !== 'undefined' && state.location && state.location !== '여수시 전체'
+      const label = typeof state !== 'undefined' && state.location && state.location !== DEFAULT_AREA
         ? state.location
         : '현재 위치';
       return `${label} 기준 · 가까운 동네부터`;
@@ -1082,8 +1237,26 @@ function overviewSearchText(entry) {
     const menuSpec = menuSearchSpec(overviewQuery);
     const menuMatches = entry.menuMatches || [];
     const menuPreview = menuMatches.slice(0, MENU_MATCH_PREVIEW_LIMIT);
+    const resolvedPhoto = typeof photoResolver !== 'undefined' && typeof photoResolver?.resolve === 'function'
+      ? photoResolver.resolve(entry.store)
+      : null;
+    const rawImage = String(entry.store?.legacyImage || entry.store?.legacyImages?.[0] || '').trim();
+    const resolvedStoreImage = String(resolvedPhoto?.src || rawImage).trim();
+    const matchedMenuImage = String(menuMatches.find(item => item.image
+      && !(typeof isQuarantinedCollectedPhoto === 'function' && isQuarantinedCollectedPhoto(item.image)))?.image || '').trim();
+    const rawIsOfficialPlaceholder = typeof isOfficialStorePlaceholderImage === 'function'
+      && isOfficialStorePlaceholderImage(resolvedStoreImage);
+    const rawIsQuarantinedPhoto = typeof isQuarantinedCollectedPhoto === 'function'
+      && isQuarantinedCollectedPhoto(resolvedStoreImage);
+    const storeImage = rawIsOfficialPlaceholder || rawIsQuarantinedPhoto
+      ? matchedMenuImage
+      : (resolvedStoreImage || matchedMenuImage);
+    const storeImageSource = storeImage === matchedMenuImage
+      ? 'verified-menu-search-fallback'
+      : String(resolvedPhoto?.source || (rawImage ? 'verified-legacy-direct-file' : '')).trim();
+    const hoursSummary = entry.status.label === '영업시간 확인' ? entry.status.detail : entry.status.today;
     const menuMarkup = menuMatches.length ? `
-      <section class="store-service-menu-matches" aria-label="${escapeHtml(entry.store?.name || '가게')} 일치 메뉴">
+      <section class="store-service-menu-matches" aria-label="${escapeHtml(formatStoreDisplayName(entry.store?.name || '가게'))} 일치 메뉴">
         <header>
           <b>‘${escapeHtml(menuSpec?.label || overviewQuery)}’ 일치 메뉴</b>
           <span>${menuMatches.length}개</span>
@@ -1110,9 +1283,13 @@ function overviewSearchText(entry) {
     return `
       <article class="store-service-overview-group">
         <button type="button" class="store-service-overview-card" data-store-service-store-id="${escapeHtml(entry.storeId)}">
+          <span class="store-service-overview-card-image" aria-hidden="true">
+            <span>🍽️</span>
+            ${storeImage ? `<img src="${escapeHtml(storeImage)}" alt="" loading="lazy" decoding="async" data-photo-kind="card" data-photo-store-id="${escapeHtml(entry.storeId)}" data-photo-source="${escapeHtml(storeImageSource)}">` : ''}
+          </span>
           <span class="store-service-overview-card-main">
-            <strong>${escapeHtml(entry.store?.name || '가게 정보')}</strong>
-            <small>${escapeHtml(entry.area)} · ${escapeHtml(formatCustomerHours24(entry.status.today))}</small>
+            <strong>${escapeHtml(formatStoreDisplayName(entry.store?.name))}</strong>
+            <small>${escapeHtml(entry.area)} · ${escapeHtml(formatCustomerHours24(hoursSummary))}</small>
           </span>
           <span class="store-service-status is-${escapeHtml(entry.status.state)}">
             <i aria-hidden="true"></i>${escapeHtml(entry.status.label)}
@@ -1151,10 +1328,14 @@ function overviewSearchText(entry) {
   }
 
   function overviewListMarkup(entries) {
+    const visibleEntries = entries.slice(0, overviewVisibleCount);
+    const loadMore = entries.length > visibleEntries.length
+      ? `<button type="button" class="store-service-overview-more" data-store-service-load-more>가게 ${Math.min(OVERVIEW_RENDER_BATCH_SIZE, entries.length - visibleEntries.length)}곳 더 보기 <small>전체 ${entries.length}곳</small></button>`
+      : '';
     if (overviewQuery && menuSearchState === 'loading') {
-      return `${entries.map(overviewCardMarkup).join('')}<p class="store-service-menu-loading">등록된 메뉴판을 함께 검색하고 있습니다…</p>`;
+      return `${visibleEntries.map(overviewCardMarkup).join('')}${loadMore}<p class="store-service-menu-loading">등록된 메뉴판을 함께 검색하고 있습니다…</p>`;
     }
-    if (entries.length) return entries.map(overviewCardMarkup).join('');
+    if (entries.length) return `${visibleEntries.map(overviewCardMarkup).join('')}${loadMore}`;
     return '<p class="store-service-overview-empty">이 조건으로 확인되는 가게가 아직 없습니다.<small>다른 검색어·영업상태·혜택·지역범위를 선택해 보세요.</small></p>';
   }
 
@@ -1288,6 +1469,16 @@ function overviewSearchText(entry) {
     }
   }
 
+  function scheduleOverviewQueryRefresh({scrollToResults = false, immediate = false} = {}) {
+    window.clearTimeout(overviewQueryTimer);
+    overviewVisibleCount = OVERVIEW_RENDER_BATCH_SIZE;
+    if (overviewQueryComposing) return;
+    overviewQueryTimer = window.setTimeout(() => {
+      overviewQueryTimer = 0;
+      refreshOverviewQueryResults({scrollToResults});
+    }, immediate ? 0 : OVERVIEW_QUERY_DEBOUNCE_MS);
+  }
+
   function ensureOverviewOverlay() {
     let overlay = document.querySelector('[data-store-service-overview-overlay]');
     if (overlay) return overlay;
@@ -1331,6 +1522,7 @@ function overviewSearchText(entry) {
     activeBenefit = options.benefit || 'all';
     locationMode = options.locationMode || 'nearby';
     overviewQuery = String(options.query || '').trim();
+    overviewVisibleCount = OVERVIEW_RENDER_BATCH_SIZE;
     renderOverview();
     overlay.hidden = false;
     document.body.classList.add('store-service-overview-open');
@@ -1355,18 +1547,43 @@ function overviewSearchText(entry) {
       overlay.innerHTML = '';
     }
     document.body.classList.remove('store-service-overview-open');
+    overviewSuspendedForChild = false;
     if (restoreFocus) lastFocused?.focus?.();
     lastFocused = null;
   }
 
+  function suspendOverviewForChild() {
+    const overlay = document.querySelector('[data-store-service-overview-overlay]');
+    if (!overlay || overlay.hidden) return false;
+    overlay.hidden = true;
+    document.body.classList.remove('store-service-overview-open');
+    overviewSuspendedForChild = true;
+    return true;
+  }
+
+  function resumeOverviewAfterChild() {
+    const overlay = document.querySelector('[data-store-service-overview-overlay]');
+    if (!overviewSuspendedForChild || !overlay) return false;
+    overlay.hidden = false;
+    document.body.classList.add('store-service-overview-open');
+    overviewSuspendedForChild = false;
+    window.requestAnimationFrame(() => overlay.querySelector('[data-store-service-overview-close]')?.focus());
+    return true;
+  }
+
   function requestOverviewClose() {
-    if (history.state?.[HISTORY_KEY]) history.back();
-    else hideOverview();
+    const shouldGoBack = Boolean(history.state?.[HISTORY_KEY]);
+    hideOverview();
+    if (shouldGoBack) {
+      document.documentElement.dataset.daedongServiceHistoryClose = '1';
+      history.back();
+    }
   }
 
   function openStoreAfterOverview(storeId) {
     const store = storeById(storeId);
     if (store && typeof openStore === 'function') {
+      window.daedongConfirmIntentionalStoreOpen?.();
       openStore(store);
       return;
     }
@@ -1384,6 +1601,7 @@ function overviewSearchText(entry) {
   }
 
   const wait = milliseconds => new Promise(resolve => window.setTimeout(resolve, milliseconds));
+  const SERVICE_BOOT_DELAY_MS = 6000;
 
   function settleWithin(promise, milliseconds) {
     return new Promise(resolve => {
@@ -1403,9 +1621,14 @@ function overviewSearchText(entry) {
   }
 
   function refreshServiceSurfaces() {
-    ensureOverviewButtons();
-    decorateStoreCards();
-    decorateStoreDetails();
+    suppressServiceSurfaceMutations = true;
+    try {
+      ensureOverviewButtons();
+      decorateStoreCards();
+      decorateStoreDetails();
+    } finally {
+      Promise.resolve().then(() => { suppressServiceSurfaceMutations = false; });
+    }
   }
 
   async function loadServiceData() {
@@ -1435,7 +1658,6 @@ function overviewSearchText(entry) {
         }
         window.setTimeout(() => {
           if (typeof renderStores === 'function') renderStores({resetCount: false});
-          if (typeof fxRenderRails === 'function') fxRenderRails();
           if (typeof rc6RenderHero === 'function') {
             rc6HeroRenderKey = '';
             rc6RenderHero();
@@ -1474,7 +1696,10 @@ function overviewSearchText(entry) {
     }
   }
 
-  const ready = beginServiceLoad();
+  const ready = Promise.race([
+    window.daedongCatalogReady || Promise.resolve([]),
+    wait(4000)
+  ]).then(() => wait(SERVICE_BOOT_DELAY_MS)).then(() => beginServiceLoad());
   catalogReadyPromise = settleWithin(window.daedongCatalogReady || Promise.resolve([]), 26000)
     .then(result => {
       catalogLoadState = result.status === 'fulfilled' && sourceStores().length ? 'ready' : 'error';
@@ -1486,30 +1711,32 @@ function overviewSearchText(entry) {
 
   window.daedongStoreServiceInfo = Object.freeze({
     ready,
-    get: storeId => serviceData.stores?.[String(storeId)] || null,
-    status: (storeId, date) => storeStatus(serviceData.stores?.[String(storeId)], date),
+    get: storeId => serviceInfoForStore(storeId),
+    status: (storeId, date) => storeStatus(serviceInfoForStore(storeId), date),
     statusPriority: statusPriorityForStore,
     sortByStatus: sortStoresByStatusPriority,
     showOverview,
     captureSearchState
   });
 
-  document.addEventListener('compositionstart', event => {
+document.addEventListener('compositionstart', event => {
   if (!event.target.matches('[data-store-service-query]')) return;
   overviewQueryComposing = true;
+  window.clearTimeout(overviewQueryTimer);
 });
 
 document.addEventListener('compositionend', event => {
   if (!event.target.matches('[data-store-service-query]')) return;
   overviewQueryComposing = false;
   overviewQuery = event.target.value;
-  refreshOverviewQueryResults();
+  scheduleOverviewQueryRefresh({immediate: true});
 });
 
 document.addEventListener('input', event => {
   if (!event.target.matches('[data-store-service-query]')) return;
   overviewQuery = event.target.value;
-  refreshOverviewQueryResults();
+  if (overviewQueryComposing || event.isComposing) return;
+  scheduleOverviewQueryRefresh();
 });
 
   document.addEventListener('submit', event => {
@@ -1519,19 +1746,40 @@ document.addEventListener('input', event => {
     const input = form.querySelector('[data-store-service-query]');
     overviewQueryComposing = false;
     overviewQuery = input?.value || '';
-    refreshOverviewQueryResults({scrollToResults: true});
+    scheduleOverviewQueryRefresh({scrollToResults: true, immediate: true});
   });
 
   document.addEventListener('change', event => {
     if (!event.target.matches('[data-store-service-area]')) return;
     selectedArea = event.target.value;
     locationMode = 'selected';
+    overviewVisibleCount = OVERVIEW_RENDER_BATCH_SIZE;
     renderOverview();
+  });
+
+  window.installDaedongTapAction?.({
+    selector: '[data-store-service-overview-open], [data-store-service-search-open]',
+    activate(target) {
+      showOverview(target);
+      return true;
+    }
+  });
+
+  window.installDaedongTapAction?.({
+    selector: '[data-store-service-overview-close]',
+    activate(target) {
+      const overlay = target.closest('[data-store-service-overview-overlay]');
+      if (!overlay || overlay.hidden) return false;
+      requestOverviewClose();
+      return true;
+    }
   });
 
   document.addEventListener('click', event => {
     const opener = event.target.closest('[data-store-service-overview-open], [data-store-service-search-open]');
     if (opener) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
       showOverview(opener);
       return;
     }
@@ -1550,15 +1798,11 @@ document.addEventListener('input', event => {
       showOverview(quickLocation, {locationMode: quickLocation.dataset.storeServiceQuickLocation || 'all'});
       return;
     }
-    if (event.target.closest('[data-store-service-overview-close]')) {
-      requestOverviewClose();
-      return;
-    }
     if (event.target.closest('[data-store-service-query-clear]')) {
       overviewQuery = '';
       const input = document.querySelector('[data-store-service-query]');
       if (input) input.value = '';
-      refreshOverviewQueryResults();
+      scheduleOverviewQueryRefresh({immediate: true});
       input?.focus();
       return;
     }
@@ -1572,7 +1816,12 @@ document.addEventListener('input', event => {
       pendingStoreId = recentStore.dataset.storeServiceRecentStoreId || '';
       const recentRecord = readRecentSearchStores().find(item => String(item.storeId) === pendingStoreId);
       rememberRecentSearchStore(pendingStoreId, recentRecord?.query);
-      if (history.state?.[HISTORY_KEY]) history.back();
+      if (history.state?.[HISTORY_KEY]) {
+        const storeId = pendingStoreId;
+        pendingStoreId = '';
+        suspendOverviewForChild();
+        openStoreAfterOverview(storeId);
+      }
       else {
         hideOverview({restoreFocus: false});
         openStoreAfterOverview(pendingStoreId);
@@ -1583,12 +1832,14 @@ document.addEventListener('input', event => {
     const statusFilter = event.target.closest('[data-store-service-status]');
     if (statusFilter) {
       activeStatus = statusFilter.dataset.storeServiceStatus || 'all';
+      overviewVisibleCount = OVERVIEW_RENDER_BATCH_SIZE;
       renderOverview();
       return;
     }
     const benefitFilter = event.target.closest('[data-store-service-benefit]');
     if (benefitFilter) {
       activeBenefit = benefitFilter.dataset.storeServiceBenefit || 'all';
+      overviewVisibleCount = OVERVIEW_RENDER_BATCH_SIZE;
       renderOverview();
       return;
     }
@@ -1596,7 +1847,13 @@ document.addEventListener('input', event => {
     if (locationFilter) {
       locationMode = locationFilter.dataset.storeServiceLocationMode || 'nearby';
       if (locationMode === 'selected') ensureSelectedArea();
+      overviewVisibleCount = OVERVIEW_RENDER_BATCH_SIZE;
       renderOverview();
+      return;
+    }
+    if (event.target.closest('[data-store-service-load-more]')) {
+      overviewVisibleCount += OVERVIEW_RENDER_BATCH_SIZE;
+      refreshOverviewQueryResults();
       return;
     }
     const menuCard = event.target.closest('[data-store-service-menu-open]');
@@ -1607,7 +1864,12 @@ document.addEventListener('input', event => {
         menuId: menuCard.dataset.storeServiceMenuId || '',
         query: overviewQuery
       };
-      if (history.state?.[HISTORY_KEY]) history.back();
+      if (history.state?.[HISTORY_KEY]) {
+        const request = pendingMenuOpen;
+        pendingMenuOpen = null;
+        suspendOverviewForChild();
+        openMenuAfterOverview(request);
+      }
       else {
         const request = pendingMenuOpen;
         pendingMenuOpen = null;
@@ -1620,7 +1882,12 @@ document.addEventListener('input', event => {
     if (storeCard) {
       if (String(overviewQuery || '').trim()) rememberRecentSearchStore(storeCard.dataset.storeServiceStoreId, overviewQuery);
       pendingStoreId = storeCard.dataset.storeServiceStoreId || '';
-      if (history.state?.[HISTORY_KEY]) history.back();
+      if (history.state?.[HISTORY_KEY]) {
+        const storeId = pendingStoreId;
+        pendingStoreId = '';
+        suspendOverviewForChild();
+        openStoreAfterOverview(storeId);
+      }
       else {
         hideOverview({restoreFocus: false});
         openStoreAfterOverview(pendingStoreId);
@@ -1631,6 +1898,10 @@ document.addEventListener('input', event => {
 
   window.addEventListener('popstate', event => {
     const overlay = document.querySelector('[data-store-service-overview-overlay]');
+    if (event.state?.[HISTORY_KEY] && overviewSuspendedForChild) {
+      resumeOverviewAfterChild();
+      return;
+    }
     if (!overlay || overlay.hidden || event.state?.[HISTORY_KEY]) return;
     event.stopImmediatePropagation();
     hideOverview({restoreFocus: !pendingStoreId && !pendingMenuOpen});
@@ -1647,12 +1918,81 @@ document.addEventListener('input', event => {
     }
   }, true);
 
-  new MutationObserver(() => {
-    ensureOverviewButtons();
-    decorateStoreCards();
-    decorateStoreDetails();
-    const overlay = document.querySelector('[data-store-service-overview-overlay]');
-    if (overlay && !overlay.hidden && renderedSourceCount !== sourceStores().length) renderOverview();
+  document.addEventListener('daedong:menu-preview-closed', () => {
+    if (history.state?.[HISTORY_KEY] && overviewSuspendedForChild) resumeOverviewAfterChild();
+  });
+
+  const serviceSurfaceSelector = [
+    '#storeGrid',
+    '#modalContent .store-detail[data-store-id]',
+    '#recommendSection .section-head',
+    '.main-search-row',
+    '.rail-card[data-rail-card-store]',
+    '.rail-card[data-rail-store-id]',
+    '.rc5-category-card[data-rc5-store]',
+    '.channel-store-card[data-channel-store-id]',
+    '.app-browser-card[data-search-store-id]',
+    '.app-browser-card[data-app-store-id]',
+    '.phone-order-card[data-phone-store-id]',
+    '.phone-order-card[data-phone-route-store-id]',
+    '[data-app-store-order]'
+  ].join(',');
+  const serviceDecorationSelector = [
+    '[data-store-service-card-meta]',
+    '[data-store-service-card-status-only]',
+    '[data-store-service-detail]',
+    '[data-store-service-top-status]',
+    '[data-store-service-overview-open]',
+    '[data-store-finder-quick]'
+  ].join(',');
+  const SERVICE_REFRESH_CARDS = 1;
+  const SERVICE_REFRESH_DETAILS = 2;
+  let serviceSurfaceRefreshFrame = 0;
+  let pendingServiceSurfaceRefresh = 0;
+
+  function mutationServiceSurfaceKind(mutation) {
+    const target = mutation.target instanceof Element ? mutation.target : mutation.target?.parentElement;
+    if (target?.closest('[data-store-menu-overlay], ' + serviceDecorationSelector)) return 0;
+    let kind = 0;
+    if (target?.closest('#modalContent')) kind |= SERVICE_REFRESH_DETAILS;
+    if (target?.closest('#storeGrid')) kind |= SERVICE_REFRESH_CARDS;
+    for (const node of [...mutation.addedNodes, ...mutation.removedNodes]) {
+      if (!(node instanceof Element) || node.matches(serviceDecorationSelector)) continue;
+      if (node.closest('#modalContent') || node.matches('.store-detail[data-store-id]') || node.querySelector('.store-detail[data-store-id]')) {
+        kind |= SERVICE_REFRESH_DETAILS;
+      }
+      if (node.closest('#storeGrid') || node.matches(serviceSurfaceSelector) || node.querySelector(serviceSurfaceSelector)) {
+        kind |= SERVICE_REFRESH_CARDS;
+      }
+    }
+    return kind;
+  }
+
+  function scheduleServiceSurfaceRefresh(kind) {
+    pendingServiceSurfaceRefresh |= kind;
+    if (serviceSurfaceRefreshFrame) return;
+    serviceSurfaceRefreshFrame = window.requestAnimationFrame(() => {
+      serviceSurfaceRefreshFrame = 0;
+      const refreshKind = pendingServiceSurfaceRefresh;
+      pendingServiceSurfaceRefresh = 0;
+      suppressServiceSurfaceMutations = true;
+      try {
+        if (refreshKind & SERVICE_REFRESH_CARDS) {
+          decorateStoreCards();
+          const overlay = document.querySelector('[data-store-service-overview-overlay]');
+          if (overlay && !overlay.hidden && renderedSourceCount !== sourceStores().length) renderOverview();
+        }
+        if (refreshKind & SERVICE_REFRESH_DETAILS) decorateStoreDetails();
+      } finally {
+        Promise.resolve().then(() => { suppressServiceSurfaceMutations = false; });
+      }
+    });
+  }
+
+  new MutationObserver(mutations => {
+    if (suppressServiceSurfaceMutations) return;
+    const kind = mutations.reduce((value, mutation) => value | mutationServiceSurfaceKind(mutation), 0);
+    if (kind) scheduleServiceSurfaceRefresh(kind);
   }).observe(document.documentElement, {childList: true, subtree: true});
 
   window.setInterval(() => {

@@ -18,30 +18,40 @@ assert.match(app, /finishCatalogReady\(\[\]\)/,
 assert.match(app, /catalog\?\.\(\{timeoutMs: 20000\}\)/);
 assert.match(finalExperience, /fxFinishLocationRankingReady\(false\);\s*\},35000\)/,
   '위치정렬 준비 promise는 모바일에서 무한 대기하면 안 됩니다.');
-assert.match(services, /const ready = beginServiceLoad\(\)/);
+assert.match(services, /const SERVICE_BOOT_DELAY_MS = 6000/);
+assert.match(services, /const ready = Promise\.race\(\[\s*window\.daedongCatalogReady \|\| Promise\.resolve\(\[\]\),\s*wait\(4000\)\s*\]\)\.then\(\(\) => wait\(SERVICE_BOOT_DELAY_MS\)\)\.then\(\(\) => beginServiceLoad\(\)\)/,
+  '큰 영업정보 요청은 가게목록 첫 화면과 회선을 다투지 않아야 합니다.');
 assert.match(services, /catalogReadyPromise = settleWithin\([\s\S]*26000\)/);
 assert.match(services, /settleWithin\(window\.daedongLocationRankingReady[\s\S]*36000\)/);
 assert.doesNotMatch(services, /Promise\.all\(\[\s*loadServiceData\(\)/,
   '영업정보를 위치정렬 promise와 다시 결합하면 안 됩니다.');
-assert.match(services, /loadFailed \? '다시 확인' : '확인 중'/,
-  '실패 상태가 로딩 문구로 영구 위장되면 안 됩니다.');
-assert.match(html, /cloudflare-preview-api-4-curated-menu-photos-1/);
+assert.match(services, /quickStatus\.dataset\.storeServiceLoadState = countReady \? 'ready' : loadFailed \? 'error' : 'loading'/,
+  '영업정보 준비·실패 상태는 접근성 상태로 구분되어야 합니다.');
+assert.match(services, /const nextCount = countReady \? String\(count\) : loadFailed \? '다시 확인' : '확인 중'/,
+  '홈 바로가기는 전체 가게 수가 아닌 현재 영업 중 숫자만 준비 완료 후 표시해야 합니다.');
+assert.doesNotMatch(services, /data-store-finder-total-count/,
+  '고객 화면에는 전체 등록 가게 수를 노출하면 안 됩니다.');
+assert.match(html, /cloudflare-production-api-6-curated-menu-photos-1/);
 assert.match(html, /catalog-ready-watchdog-2/);
 assert.match(html, /location-ranking-watchdog-2/);
-assert.match(html, /store-service-25-menu-search-status-order-1/);
-assert.match(serviceWorker, /daedong-yeosu-app-shell-v7-bold-app-icon/);
+assert.match(html, /store-service-26-deferred-bootstrap-1-menu-search-status-order-1/);
+assert.match(serviceWorker, /daedong-yeosu-app-shell-v31-yogiyo-representative-only/);
+assert.match(app, /const catalogBootPromise = initialize\(\)/,
+  '가게목록 요청은 후속 지연 스크립트를 기다리지 않고 시작해야 합니다.');
 
-const never = new Promise(() => {});
+let resolveCatalog;
+const catalogReady = new Promise(resolve => { resolveCatalog = resolve; });
 const servicePayload = {programs: [], stores: {['a'.repeat(16)]: {hours: {}}}};
+let serviceCalls = 0;
 const runtimeWindow = {
-  daedongCatalogReady: never,
-  daedongLocationRankingReady: never,
+  daedongCatalogReady: catalogReady,
+  daedongLocationRankingReady: new Promise(() => {}),
   daedongDataApi: {
-    services: async () => servicePayload,
+    services: async () => { serviceCalls += 1; return servicePayload; },
     menuSearch: async () => ({stores: {}})
   },
-  setTimeout: () => 1,
-  clearTimeout: () => {},
+  setTimeout,
+  clearTimeout,
   setInterval: () => 1,
   addEventListener: () => {},
   location: {reload: () => {}}
@@ -73,12 +83,15 @@ const runtimeContext = {
   console
 };
 vm.createContext(runtimeContext);
-vm.runInContext(services, runtimeContext);
+vm.runInContext(services.replace('const SERVICE_BOOT_DELAY_MS = 6000;', 'const SERVICE_BOOT_DELAY_MS = 0;'), runtimeContext);
+await new Promise(resolve => setTimeout(resolve, 20));
+assert.equal(serviceCalls, 0, '가게목록 준비 전에는 큰 영업정보 요청을 시작하면 안 됩니다.');
+resolveCatalog([]);
 const independentReady = await Promise.race([
   runtimeWindow.daedongStoreServiceInfo.ready,
   new Promise((_, reject) => setTimeout(() => reject(new Error('영업정보 독립 로딩 실패')), 100))
 ]);
 assert.deepEqual(JSON.parse(JSON.stringify(independentReady)), servicePayload,
-  '가게목록·위치정렬 promise가 멈춰도 영업정보 ready는 독립적으로 끝나야 합니다.');
+  '가게목록 첫 화면 뒤에는 위치정렬과 무관하게 영업정보가 준비되어야 합니다.');
 
 console.log('PASS: 모바일 초기화 지연이 가게·영업정보 화면 전체를 막지 않습니다.');

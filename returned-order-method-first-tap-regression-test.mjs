@@ -1,0 +1,77 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+
+const rc2 = fs.readFileSync(new URL('./rc2-fixes.js', import.meta.url), 'utf8');
+const rc3 = fs.readFileSync(new URL('./rc3-fixes.js', import.meta.url), 'utf8');
+const app = fs.readFileSync(new URL('./app.js', import.meta.url), 'utf8');
+const browserCheck = fs.readFileSync(new URL('./scripts/browser-other-order-method-touch.mjs', import.meta.url), 'utf8');
+const exactReturnCheck = fs.readFileSync(new URL('./scripts/browser-all-order-app-exact-return.mjs', import.meta.url), 'utf8');
+const finalExperience = fs.readFileSync(new URL('./final-experience.js', import.meta.url), 'utf8');
+const index = fs.readFileSync(new URL('./index.html', import.meta.url), 'utf8');
+
+assert.match(rc2, /const RC2_RETURN_SETTLE_DELAY_MS = 500;/, '첫 터치 활성화가 끝난 뒤 복귀 상태를 정리할 지연 시간이 필요합니다.');
+assert.doesNotMatch(rc2, /document\.addEventListener\('pointerdown', rc2SettleRestoredReturnLease/, 'pointerdown에서 history를 변경하면 카카오 WebView가 같은 터치를 취소할 수 있습니다.');
+assert.doesNotMatch(rc2, /document\.addEventListener\('touchstart', rc2SettleRestoredReturnLease/, 'touchstart에서 복귀 상태를 동기 정리하면 안 됩니다.');
+assert.match(rc2, /document\.addEventListener\('pointerup', rc2ScheduleRestoredReturnSettlement, true\)/, 'pointerup 뒤에 복귀 상태 정리를 예약해야 합니다.');
+assert.match(rc2, /document\.addEventListener\('touchend', rc2ScheduleRestoredReturnSettlement, \{capture: true, passive: true\}\)/, 'Android 원시 touchend 뒤에도 정리를 예약해야 합니다.');
+assert.match(rc2, /function rc2ScheduleRestoredReturnSettlement\(\) \{[\s\S]*?setTimeout\([\s\S]*?rc2SettleRestoredReturnLease\(\)[\s\S]*?RC2_RETURN_SETTLE_DELAY_MS/, '정리는 현재 터치 활성화 순서 밖에서 지연 실행해야 합니다.');
+assert.match(rc2, /function rc2SettleRestoredReturnLease\(\) \{[\s\S]*?rc2ReadReturnState\(lease\.key\)[\s\S]*?current\?\.returnToken[\s\S]*?lease\.saved\.returnToken/, '지연 정리가 새 주문앱 출발 토큰을 지우지 않도록 토큰을 다시 검증해야 합니다.');
+assert.match(rc2, /function rc2WriteReturnState\(key, value\) \{[\s\S]{0,160}?rc2InvalidatePendingReturnRestores\(\);[\s\S]{0,120}?rc2CancelRestoredReturnSettlement\(\);/, '새 주문앱 출발 전에 이전 복귀 작업과 상태 정리 예약을 취소해야 합니다.');
+assert.match(rc2, /function rc2SettleRestoredReturnLeaseNow\(\) \{[\s\S]*?clearTimeout\(rc2RestoredReturnSettleTimer\)[\s\S]*?rc2SettleRestoredReturnLease\(\)/, '주문방법 창을 열기 직전에 예약을 취소하고 복귀 상태를 즉시 확정해야 합니다.');
+assert.match(rc2, /window\.daedongSettleRestoredReturnLeaseNow = rc2SettleRestoredReturnLeaseNow/, '주문방법 버튼에서 원자적으로 복귀 상태를 확정할 수 있어야 합니다.');
+assert.match(rc2, /window\.daedongConfirmIntentionalSurfaceNavigation = rc2ConfirmIntentionalStoreOpen/, '복귀 후 새 화면 이동은 남은 복귀 생명주기를 모두 취소할 수 있어야 합니다.');
+assert.match(rc2, /let rc2ReturnLifecycleEpoch = 0/, '진행 중인 카카오 복귀 작업을 세대별로 무효화해야 합니다.');
+assert.match(rc2, /function rc2InvalidatePendingReturnRestores\(\)[\s\S]*?rc2ReturnLifecycleEpoch \+= 1[\s\S]*?rc2StoreRestorePromise = null[\s\S]*?rc2SurfaceRestorePromise = null/, '새 화면 선택 시 대기 중인 모든 복귀 작업을 무효화해야 합니다.');
+assert.match(rc2, /window\.daedongInvalidatePendingReturnRestores = rc2InvalidatePendingReturnRestores/, '카카오 첫 터치에서 history 변경 없이 복귀 작업만 먼저 무효화할 수 있어야 합니다.');
+const visibleStoreBranch = rc2.slice(rc2.indexOf('if (visibleStoreMatches)'), rc2.indexOf('if (!modal?.hidden)', rc2.indexOf('if (visibleStoreMatches)')));
+assert.match(visibleStoreBranch, /daedongResetOrderMethodsTouchState\?\.\(\);[\s\S]*?daedongRebindOrderMethodsTrigger\?\.\(\);[\s\S]*?rc2StabilizeReturnPosition\(saved, \$\('#modal \.modal-card'\)\)/, '복귀한 기존 가게 상세에 터치 연결과 정확한 스크롤 복원을 다시 적용해야 합니다.');
+assert.doesNotMatch(visibleStoreBranch, /rc2ReturnRebuiltToken|rc2ReplaceNextModal|openStore\(|rc2NativeHardClose|location\.replace|rc2NavigateReturnedDocumentOnce/, '이미 보이는 상세를 재구성하거나 문서 이동하면 실기기 첫 재터치가 끊깁니다.');
+assert.match(app, /function handleKakaoOrderLinkClick\(event\)[\s\S]*?data-community-original[\s\S]*?return/, '카카오 같은 탭 처리기는 비교화면 주문앱 링크를 제외해야 합니다.');
+assert.match(rc2, /function rc2LaunchComparedExternal\(link, href\) \{[\s\S]*?window\.open\(href, '_blank', 'noopener'\)/, '비교화면 주문앱은 원본 상세 문서를 보존하는 별도 실행 경로여야 합니다.');
+assert.match(rc2, /function rc2ConfirmIntentionalStoreOpen\(\) \{[\s\S]*?rc2InvalidatePendingReturnRestores\(\)/, '첫 터치에서 지연 복귀 작업부터 취소해야 합니다.');
+assert.match(rc2, /const restoreEpoch = rc2ReturnLifecycleEpoch[\s\S]*?rc2ReturnRestoreCancelled\(restoreEpoch\)/, '비동기 복귀 작업은 화면을 바꾸기 전에 취소 세대를 확인해야 합니다.');
+assert.match(rc3, /function rc3ActivateOrderMethodsTrigger\(trigger, event\) \{[\s\S]*?preventDefault\(\)[\s\S]*?daedongInvalidatePendingReturnRestores\?\.\(\)[\s\S]*?else \{[\s\S]*?rc3OpenOrderMethods\(store, trigger\)[\s\S]*?setTimeout\(\(\) => window\.daedongSettleRestoredReturnLeaseNow\?\.\(\), 0\)/, '카카오 첫 터치는 여러 주문방법 화면을 먼저 열고 복귀표 정리는 다음 작업으로 미뤄야 합니다.');
+assert.match(rc3, /function rc3ActivateOrderMethodsFallback\(trigger, event\)[\s\S]*?rc3OrderMethodsGhostActive\(storeId\)[\s\S]*?rc3MarkOrderMethodsActivation\(storeId\)[\s\S]*?rc3ActivateOrderMethodsTrigger\(trigger, event\)/, '복원된 HTML 버튼의 클릭 대체 경로도 중복 실행을 막고 주문방법 화면을 열어야 합니다.');
+assert.match(rc3, /data-rc3-other-methods=[\s\S]*?onclick="return window\.daedongActivateOrderMethodsFallback \? window\.daedongActivateOrderMethodsFallback\(this, event\) : false"/, '카카오가 이벤트 없는 HTML만 복원해도 버튼 자체에 지속 가능한 클릭 대체 경로가 남아야 합니다.');
+assert.match(rc3, /function rc3BindOrderMethodsTrigger\(detail, \{force = false\} = \{\}\)[\s\S]*?force && trigger\.__rc3DirectOrderMethodsBound[\s\S]*?cloneNode\(true\)[\s\S]*?replaceWith\(replacement\)/, '복귀 재연결은 카카오가 남긴 오래된 바인딩 표식을 믿지 말고 버튼 노드를 교체해야 합니다.');
+assert.match(rc3, /window\.daedongRebindOrderMethodsTrigger = \(\) => \{[\s\S]*?rc3BindOrderMethodsTrigger\([\s\S]*?\{force: true\}\)/, '주문앱 복귀 재연결은 강제 모드로 실행되어야 합니다.');
+assert.match(rc3, /function rc3BindExternalOrderRoutes\(detail, \{force = false\} = \{\}\)[\s\S]*?__rc3DirectExternalRouteBound[\s\S]*?addEventListener\('pointerup'[\s\S]*?addEventListener\('touchend'[\s\S]*?addEventListener\('click'/,
+  '복원된 요기요·쿠팡이츠·배달의민족 버튼 자체가 포인터·원시 터치·클릭을 직접 처리해야 합니다.');
+assert.match(rc3, /window\.daedongRebindOrderMethodsTrigger = \(\) => \{[\s\S]*?rc3BindExternalOrderRoutes\(detail, \{force: true\}\)/,
+  '새 문서형 카카오 복귀 후 외부 주문앱 버튼도 강제로 새 터치 노드에 다시 연결해야 합니다.');
+assert.match(rc3, /new MutationObserver\(rc3QueueRestoredOrderControlsRebind\)[\s\S]*?childList: true, subtree: true[\s\S]*?rc3QueueRestoredOrderControlsRebind\(\)/,
+  '초기 스크립트보다 늦게 스냅샷 DOM이 들어와도 복원된 주문앱 버튼을 자동으로 직접 재연결해야 합니다.');
+assert.match(rc3, /window\.daedongActivateOrderMethodsTrigger = rc3ActivateOrderMethodsTrigger/, '초기 공용 터치 계층이 주문방법 버튼을 직접 열 수 있어야 합니다.');
+const earlyBridgeIndex = finalExperience.indexOf("selector:'[data-rc3-other-methods]'");
+const rc2LoaderIndex = finalExperience.indexOf("const fxRc2Script=document.createElement('script')");
+assert.ok(earlyBridgeIndex >= 0 && earlyBridgeIndex < rc2LoaderIndex, '주문방법 첫 터치 브리지는 동적 복귀 스크립트보다 먼저 등록되어야 합니다.');
+assert.match(finalExperience, /selector:'\[data-rc3-other-methods\]'[\s\S]*?window\.daedongActivateOrderMethodsFallback[\s\S]*?return typeof activate==='function'\?activate\(target,event\):false/, '공용 pointerup/touchend 계층도 중복 열림 방지 경로로 복귀 버튼을 직접 활성화해야 합니다.');
+assert.match(app, /function clearDaedongGhostClickOnNewPress\(\)[\s\S]*?daedongGhostClick = null[\s\S]*?document\.addEventListener\('pointerdown', clearDaedongGhostClickOnNewPress, true\)[\s\S]*?document\.addEventListener\('touchstart', clearDaedongGhostClickOnNewPress/, '새로운 실제 터치는 이전 화면에서 남은 가짜 클릭 방지표를 해제해야 합니다.');
+assert.match(browserCheck, /외부 주문앱 복귀 뒤 주문앱 목록 열린 상태 유지[\s\S]*목록을 다시 열지 않고 다른 주문앱 곧바로 실행/, '실제 브라우저 검사는 복귀 뒤 추가 터치 없이 다른 주문앱을 선택해야 합니다.');
+assert.match(exactReturnCheck, /dispatchEvent\('pointerup'/, '정확 복귀 검사도 고객의 완료된 상호작용으로 복귀 상태를 정리해야 합니다.');
+
+for (const [name, source] of [['final-experience.js', finalExperience], ['index.html', index]]) {
+  assert.match(source, /return-first-tap-2/, `${name} 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /return-activation-atomic-1/, `${name} 실기기 재터치 수정 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /return-intent-cancel-1/, `${name} 실기기 복귀 생명주기 취소 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /return-early-tap-bridge-1/, `${name} 카카오 복귀 첫 터치 브리지 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /order-sheet-before-history-1/, `${name} 카카오 주문방법 화면 우선 표시 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /restored-button-direct-touch-1/, `${name} 복원된 버튼 직접 터치 수정 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /visible-return-rebind-1/, `${name} 카카오 보이는 상세 복귀 재연결 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /restored-inline-fallback-1/, `${name} 카카오 복원 HTML 클릭 대체 경로 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /visible-return-detail-rebuild-1/, `${name} 카카오 복원 상세 전체 재구성 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /visible-return-modal-reset-1/, `${name} 카카오 네이티브 모달 표면 초기화 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /return-document-reload-1/, `${name} 카카오 복귀 문서 재로드 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /return-document-navigation-1/, `${name} 카카오 복귀 강제 문서 이동 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /stable-separated-order-return-[12]/, `${name} 원본 상세 DOM 보존 복귀 캐시 버전이 갱신되어야 합니다.`);
+  assert.match(source, /restored-external-route-direct-touch-1/, `${name} 복원된 외부 주문앱 버튼 직접 터치 캐시 버전이 갱신되어야 합니다.`);
+}
+assert.match(index, /real-second-tap-after-sheet-1/, '새 주문방법 화면의 정상 두 번째 터치 수정 캐시 버전이 갱신되어야 합니다.');
+assert.match(app, /function kakaoPreviewFallbackUrl\(key\)[\s\S]*?key !== 'coupang' \|\| !isKakaoInAppBrowser\(\)[\s\S]*?KAKAO_APP_FALLBACK_PARAM/, '카카오 쿠팡 fallback은 멈춘 외부 웹페이지 대신 Preview 복귀 문서를 사용해야 합니다.');
+assert.match(rc2, /const RC2_APP_FALLBACK_PARAM = '__ddappfallback'/, 'Preview fallback URL 표식을 복귀 완료 후 정리할 수 있어야 합니다.');
+assert.match(rc2, /function rc2ClearReturnState\(key, saved = null\)[\s\S]*?returnUrl\.searchParams\.delete\(RC2_APP_FALLBACK_PARAM\)/, '복귀 상태를 정리할 때 Preview fallback URL 표식도 제거해야 합니다.');
+assert.match(index, /appFallbackParam = '__ddappfallback'[\s\S]*?entryUrl\.searchParams\.delete\(appFallbackParam\)/, '유효한 복귀 상태가 없는 진입에서도 Preview fallback 표식이 남으면 안 됩니다.');
+assert.match(app, /function coupangDirectStoreIntent\(url, browserFallbackUrl\)[\s\S]*?intent:\/\/storedetail\/\?storeId=[\s\S]*?scheme=coupangeats/, '쿠팡 앱은 외부 웹 resolver를 거치지 않고 가게 상세 딥링크로 바로 열어야 합니다.');
+assert.match(index, /coupang-direct-store-deeplink-1/, '쿠팡 직접 가게 상세 딥링크 캐시 버전이 갱신되어야 합니다.');
+
+console.log('PASS 외부 주문앱 복귀 뒤 다른 주문방법 첫 터치 회귀검사');

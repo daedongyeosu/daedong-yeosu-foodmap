@@ -14,14 +14,14 @@
   "enableNotifications": true,
   "startUrl": "/?source=android-app",
   "iconUrl": "http://127.0.0.1:8765/app-icon.svg",
-  "maskableIconUrl": "https://raw.githubusercontent.com/daedongyeosu/daedong-yeosu-foodmap/agent/android-pwa-foundation-20260731/app-icon.svg",
+  "maskableIconUrl": "http://127.0.0.1:8765/app-icon-maskable.svg",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "android.keystore",
     "alias": "temporary-build"
   },
-  "appVersionName": "0.0.0",
-  "appVersionCode": 0,
+  "appVersionName": "1.0.11",
+  "appVersionCode": 14,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "http://127.0.0.1:8765/manifest.webmanifest",
@@ -51,5 +51,5 @@
     "standalone",
     "minimal-ui"
   ],
-  "appVersion": "0.0.0"
+  "appVersion": "1.0.11"
 }

@@ -9,6 +9,9 @@ const html = fs.readFileSync('index.html', 'utf8');
 assert.match(rc6, /const RC6_MAIN_SPECIAL_HERO_KEYS=new Set\(\['18','19','20'\]\);/);
 assert.match(rc6, /RC6_MAIN_SPECIAL_HERO_KEYS\.has\(String\(key\)\)/);
 assert.match(rc6, /return rc6InterleaveHeroEntries\(rc6DailyHeroOrder\(rc6ManagedStoreHeroEntries\(\)\),rc6SpecialHeroEntries\(\)\);/);
+assert.match(rc6, /const RC6_CAMPAIGN_STORE_HERO_LIMIT=14;/);
+assert.match(rc6, /const RC6_CAMPAIGN_SPECIAL_HERO_KEYS=\['18','19','20'\];/);
+assert.match(rc6, /RC6_CAMPAIGN_SPECIAL_HERO_KEYS\.map\(/);
 
 assert.equal(targets['18']?.label, '여수 소상공인 소식');
 assert.equal(targets['19']?.label, '여수 힐링요트');

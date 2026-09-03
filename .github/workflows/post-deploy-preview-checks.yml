@@ -14,7 +14,7 @@ jobs:
   verify-deployed-production:
     if: github.event.deployment_status.state == 'success'
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v6
         with:
@@ -38,15 +38,27 @@ jobs:
         env:
           BASE_URL: https://daedongmap.com
         run: node scripts/browser-rider-evergreen-banner.mjs
-      - name: Verify exact return from every order app
+      - name: Verify safe deployed Mukkebi popup on fresh home entry
         env:
           BASE_URL: https://daedongmap.com
-        run: node scripts/browser-all-order-app-exact-return.mjs
+        run: node scripts/browser-mukkebi-safe-fresh-entry.mjs
+      - name: Verify nine deployed store campaign maps
+        env:
+          BASE_URL: https://daedongmap.com
+        run: node scripts/browser-store-campaign-nine.mjs
       - name: Verify deployed other order methods mobile touch
         env:
           BASE_URL: https://daedongmap.com
         run: node scripts/browser-other-order-method-touch.mjs
-      - name: Preserve production verification reports
+      - name: Verify exact return from every order app
+        env:
+          BASE_URL: https://daedongmap.com
+        run: node scripts/browser-all-order-app-exact-return.mjs
+      - name: Enforce deployed customer mobile performance budget
+        env:
+          BASE_URL: https://daedongmap.com
+        run: node scripts/browser-customer-performance-budget.mjs
+      - name: Preserve verification reports
         if: always()
         uses: actions/upload-artifact@v7
         with:
@@ -62,11 +74,19 @@ jobs:
             browser-rider-evergreen-banner.png
             browser-rider-evergreen-popup.png
             browser-rider-evergreen-failure.png
-            browser-all-order-app-exact-return-report.json
-            browser-order-return-*.png
+            browser-mukkebi-safe-fresh-entry-report.json
+            browser-mukkebi-safe-fresh-entry-popup.png
+            browser-mukkebi-safe-fresh-entry-menu.png
+            browser-store-campaign-nine-report.json
+            browser-store-campaign-nine.png
             browser-other-order-method-touch-report.json
             browser-other-order-method-touch-vons.png
             browser-other-order-method-touch-handsu.png
             browser-other-order-method-touch-failure.png
+            browser-all-order-app-exact-return-report.json
+            browser-order-return-*.png
+            browser-customer-performance-budget-report.json
+            browser-customer-performance-budget.png
+            browser-customer-performance-budget-failure.png
           if-no-files-found: ignore
           retention-days: 14

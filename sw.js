@@ -1,13 +1,16 @@
 'use strict';
 
-const CACHE_NAME = 'daedong-yeosu-app-shell-v7-bold-app-icon';
+const CACHE_NAME = 'daedong-yeosu-app-shell-v31-yogiyo-representative-only';
+const RUNTIME_CACHE = 'daedong-yeosu-runtime-v4-yogiyo-representative-only';
+const CACHEABLE_DESTINATIONS = new Set(['image', 'style', 'script', 'font']);
 const APP_SHELL = [
   '/',
   '/manifest.webmanifest',
-  '/app-icon.svg',
-  '/assets/logo.png',
+  '/app-icon.svg?v=official-brand-20260830-1',
   '/assets/app-icons/daedong-app-icon-192.png',
+  '/assets/app-icons/daedong-app-icon-192.png?v=official-brand-20260830-1',
   '/assets/app-icons/daedong-app-icon-512.png',
+  '/assets/app-icons/daedong-app-icon-512.png?v=official-brand-20260830-1',
   '/assets/app-icons/daedong-app-icon-maskable-192.png',
   '/assets/app-icons/daedong-app-icon-maskable-512.png'
 ];
@@ -25,7 +28,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
       .then(keys => Promise.all(keys
-        .filter(key => key !== CACHE_NAME)
+        .filter(key => ![CACHE_NAME, RUNTIME_CACHE].includes(key))
         .map(key => caches.delete(key))))
       .then(() => self.clients.claim())
   );
@@ -54,6 +57,23 @@ self.addEventListener('fetch', event => {
       caches.match(event.request)
         .then(cached => cached || fetch(event.request))
     );
+    return;
+  }
+
+  if (CACHEABLE_DESTINATIONS.has(event.request.destination)) {
+    const update = caches.open(RUNTIME_CACHE)
+      .then(cache => fetch(event.request, {cache: 'default'})
+        .then(response => {
+          if (response.ok) cache.put(event.request, response.clone());
+          return response;
+        }));
+    event.respondWith(
+      caches.open(RUNTIME_CACHE)
+        .then(cache => cache.match(event.request))
+        .then(cached => cached || update)
+        .catch(() => caches.match(event.request))
+    );
+    event.waitUntil(update.catch(() => undefined));
     return;
   }
 

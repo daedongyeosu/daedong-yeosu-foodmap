@@ -6,90 +6,389 @@
       "label": "손수김밥 전용 대동여수음식지도",
       "title": "손수김밥",
       "meta": "미평·둔덕 · 김밥·분식·한식",
-      "images": [
-        "assets/campaigns/sonsugimbap-yangji/01-gimbap-set.webp",
-        "assets/campaigns/sonsugimbap-yangji/02-storefront.webp",
-        "assets/campaigns/sonsugimbap-yangji/03-gimbap.webp",
-        "assets/campaigns/sonsugimbap-yangji/04-spicy-soup-table.webp",
-        "assets/campaigns/sonsugimbap-yangji/05-yukgaejang.webp",
-        "assets/campaigns/sonsugimbap-yangji/06-spicy-noodles.webp",
-        "assets/campaigns/sonsugimbap-yangji/07-seafood-ramyeon.webp",
-        "assets/campaigns/sonsugimbap-yangji/08-pork-cutlet-set.webp",
-        "assets/campaigns/sonsugimbap-yangji/09-pork-cutlet.webp",
-        "assets/campaigns/sonsugimbap-yangji/10-tteokbokki.webp",
-        "assets/campaigns/sonsugimbap-yangji/11-fried-rice.webp",
-        "assets/campaigns/sonsugimbap-yangji/12-side-dishes-wide.webp",
-        "assets/campaigns/sonsugimbap-yangji/13-side-dishes.webp",
-        "assets/campaigns/sonsugimbap-yangji/14-seafood-soup.webp"
+      "slides": [
+        {"storeId":"67a9e4f14c8c7ea4","image":"assets/campaigns/sonsugimbap-yangji/01-gimbap-set.webp","title":"손수김밥 양지점","meta":"손수김밥"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"assets/campaigns/sonsugimbap-yangji/03-gimbap.webp","title":"손수김밥 양지점","meta":"손수김밥"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"assets/campaigns/sonsugimbap-yangji/04-spicy-soup-table.webp","title":"손수김밥 양지점","meta":"육개장"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"assets/campaigns/sonsugimbap-yangji/05-yukgaejang.webp","title":"손수김밥 양지점","meta":"육개장"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"assets/campaigns/sonsugimbap-yangji/06-spicy-noodles.webp","title":"손수김밥 양지점","meta":"쫄면"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"assets/campaigns/sonsugimbap-yangji/07-seafood-ramyeon.webp","title":"손수김밥 양지점","meta":"짬뽕라면"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"assets/campaigns/sonsugimbap-yangji/08-pork-cutlet-set.webp","title":"손수김밥 양지점","meta":"수제등심돈가스"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"assets/campaigns/sonsugimbap-yangji/09-pork-cutlet.webp","title":"손수김밥 양지점","meta":"수제등심돈가스"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"assets/campaigns/sonsugimbap-yangji/10-tteokbokki.webp","title":"손수김밥 양지점","meta":"떡볶이"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"assets/campaigns/sonsugimbap-yangji/11-fried-rice.webp","title":"손수김밥 양지점","meta":"김치볶음밥"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"assets/campaigns/sonsugimbap-yangji/14-seafood-soup.webp","title":"손수김밥 양지점","meta":"짬뽕국밥"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/12/a01e010d-7415-4f6b-bae6-ba48a3e1c43e.jpg","title":"손수김밥 양지점","meta":"참치김밥"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2024/08/bdd943c9-fd36-4b92-902a-4628d6b35b8e.jpg","title":"손수김밥 양지점","meta":"푸짐양푼이비빔밥"},
+        {"storeId":"67a9e4f14c8c7ea4","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/10/552ee7b9-0342-4e7f-880f-54643dd0e27e.jpg","title":"손수김밥 양지점","meta":"제육덮밥"}
+      ]
+    },
+    "421ecef35a879687": {
+      "storeId": "421ecef35a879687",
+      "entryStoreIds": [
+        "421ecef35a879687",
+        "2da10529e7fb987c"
       ],
-      "specialBannerKeys": [
-        "18",
-        "19",
-        "20"
-      ],
-      "copySlides": [
-        1,
-        5,
-        9,
-        13
+      "slug": "tamnaneun-pizza-yeosu",
+      "label": "탐나는피자 여수점 전용 대동여수음식지도",
+      "title": "탐나는피자 여수점",
+      "meta": "문수동 · 피자",
+      "slides": [
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/9c49604757b5dcee52b315c845402bf42273b19121b551e0349dbd58d766cd1e.jpg","title":"탐나는피자 여수점","meta":"TamNa 피자(1+1) 두판+음료 set"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/6b4f907773039925c62a37dffdea48fa9021a18f2c3db1d95ba02058acfa1a81.jpg","title":"탐나는피자 여수점","meta":"TamNa 반반"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/8105befa7b40a27957a3c02f73889f376e12de4859f6c5aac4e2325d3086f256.jpg","title":"탐나는피자 여수점","meta":"TamNa 4가지맛"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/4b2b64e46389724445d671290c2b4099fac3e9796d6216e68841577022e50dc8.jpg","title":"탐나는피자 여수점","meta":"TamNa +사이드+음료 세트"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/bb6d884e639c9bb478aa2f06e4815b9f9103f169dd09d9dbd220d8a410b12b18.jpg","title":"탐나는피자 여수점","meta":"탐나는 치즈피자"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/5820be276415b104daeeb09256e93fdd557135cf547b123192e1b2927a5b64fb.jpg","title":"탐나는피자 여수점","meta":"탐나는 고르곤졸라+꿀소스1P"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/44111ced436f84caeb9f75b918db276294e8d9c0447ca2e3179f5f39e5c652a9.jpg","title":"탐나는피자 여수점","meta":"탐나는 알로하와이안"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/54843a3cd42bc423c1e8f0bf8bd6bd28cee46d6640971e285cc16cb5c1744afb.jpg","title":"탐나는피자 여수점","meta":"탐나는 슈퍼 콤비네이션"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/62620a5bbc31d1979493220560badd690f8f60ac890939dc6f04650ea4af5efb.jpg","title":"탐나는피자 여수점","meta":"탐나는 포테이토"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/c8fb188ab362f17ff8b7aeeded8512d20c146739da6b5a0e22120478ba7024fe.jpg","title":"탐나는피자 여수점","meta":"탐나는 스위트 고구마 피자"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/737a9bfd2f8ab5ca61a3fe1a7d93c9480e4b9cf2eadc0c2097e180aedb8fbe96.jpg","title":"탐나는피자 여수점","meta":"탐나는 프렌치 핫독피자"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/8ece837dc41c99c0e4c4345fc250b0535c39e10367f7d1bf5955bf4af0681ddc.jpg","title":"탐나는피자 여수점","meta":"탐나는 소불고기 피자"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/fe8a64586e36a69c3ec2cee713ff7a805370d160cc4b6ac20ba0d9f62f182db6.jpg","title":"탐나는피자 여수점","meta":"탐나는 화이트쉬림플렉스"},
+        {"storeId":"421ecef35a879687","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/c0895dcff040753eff915522885e6f633b545d5e3aacb89fa7331a3c1199ce3c.jpg","title":"탐나는피자 여수점","meta":"탐나는 칠리치킨 쉬림프"}
+      ]
+    },
+    "068b2ae8fe32874a": {
+      "storeId": "068b2ae8fe32874a",
+      "slug": "eat-pizza-yeosu-yeoseo",
+      "label": "1인피자 피자먹다 여수여서점 전용 대동여수음식지도",
+      "title": "1인피자 피자먹다 여수여서점",
+      "meta": "여서동 · 1인 피자",
+      "slides": [
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/cd8afe10-0a22-4aa5-871d-f4fe518a8876.jpg","title":"1인피자 피자먹다 여수여서점","meta":"[1인] 피자&파스타 세트"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/0ed128cb-dc47-4c6c-b0aa-02c2cffd85cd.jpg","title":"1인피자 피자먹다 여수여서점","meta":"[2인] 둘이먹다"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/8bc7ed0e-6a0d-44b8-9457-5ba715c0154c.jpg","title":"1인피자 피자먹다 여수여서점","meta":"[국내산불고기] 스위트 불고기피자"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/bc7ebe62-e2a9-41b5-b295-aa032cd3fa2e.jpg","title":"1인피자 피자먹다 여수여서점","meta":"[1인] 혼자먹다"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/a2fc71e3-6606-45de-9f34-16d369734a3b.jpg","title":"1인피자 피자먹다 여수여서점","meta":"[오직피자] 피자만 4판"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/abe8351c-22e9-4321-bcd8-89ad277e3274.jpg","title":"1인피자 피자먹다 여수여서점","meta":"[8가지맛] 플래터 A"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/b582ef25-6969-4a25-888c-316b71eeffdd.jpg","title":"1인피자 피자먹다 여수여서점","meta":"[all치즈] 25cm 마르게리따피자"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/03d28c13-6c46-475f-b8a9-9b0b40e762d9.jpg","title":"1인피자 피자먹다 여수여서점","meta":"[오직피자] 피자만 3판"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/9425d160-3abe-4ba4-8dbb-ead87f7ce074.jpg","title":"1인피자 피자먹다 여수여서점","meta":"[8가지맛] 플래터 B"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/21315bc7-55bf-4b8a-9850-12f82580e2e1.jpg","title":"1인피자 피자먹다 여수여서점","meta":"달콤연유피자"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/0cc1d4e1-ab4e-4c18-8b8a-2a32da476d50.jpg","title":"1인피자 피자먹다 여수여서점","meta":"[4가지맛+사이드] 플래터 C"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/8a3ae8a0-5034-41f3-b760-7cb02bf1d647.jpg","title":"1인피자 피자먹다 여수여서점","meta":"톡톡옥수수피자"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/89890852-cf04-40fe-9d24-2da36482acc2.jpg","title":"1인피자 피자먹다 여수여서점","meta":"스위트고구마피자"},
+        {"storeId":"068b2ae8fe32874a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/d0bfebee-d290-4406-a607-2d3c7f120829.jpg","title":"1인피자 피자먹다 여수여서점","meta":"콤비네이션피자"}
+      ]
+    },
+    "0abd7147b7d6b1dd": {
+      "storeId": "0abd7147b7d6b1dd",
+      "slug": "bbq-mipyeong-dundeok",
+      "label": "비비큐 미평둔덕점 전용 대동여수음식지도",
+      "title": "비비큐 미평둔덕점",
+      "meta": "미평·둔덕 · 치킨",
+      "slides": [
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/f08a91dd7802dff1a8d6eace5e4cfab1e70f5add2bfdd50847c694e340226838.jpg","title":"비비큐 미평둔덕점","meta":"황금올리브치킨™"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/ccc719886c3ffec1e71529a3f98f7b50d11cdc4f502968b2157b2a1c4a2f32f0.jpg","title":"비비큐 미평둔덕점","meta":"자메이카 소떡만나치킨"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/fa07cbc4c729ec474a3934c07a888e62c5ea6d745e034a2eaeac1da04c778a53.jpg","title":"비비큐 미평둔덕점","meta":"자메이카 통다리구이"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/15097f6c3e9cab6eb6bb01a08e9ce6dc74654ff4bd59e675a94d68c10c0e0c15.jpg","title":"비비큐 미평둔덕점","meta":"[NEW] 필크런치 소스 세트"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/cf55fd5577729925c70c70272bf4911d9933da7d917410210403239cd3776e97.jpg","title":"비비큐 미평둔덕점","meta":"[NEW] 필크런치 소떡 세트"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/d2adebeb8bde187e6b751ab05b6e4f3eb2640165e519e400a227cf55a549e643.jpg","title":"비비큐 미평둔덕점","meta":"[NEW] 필크런치 떡볶이 세트"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/f4e5244e3abc06e857435395415c0a742d1ae1146c3735eaaea0c15e97968333.jpg","title":"비비큐 미평둔덕점","meta":"[NEW] 필크런치 더블 PICK 세트"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/6cd59a25497dd99fcb53b277202deffb3feda1a0b4b60c07f0b1b5cd2ef86145.jpg","title":"비비큐 미평둔덕점","meta":"[NEW] 필크런치 트리플 PICK 세트"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/25de033ed0be1467e58b3a7646889e2f0de1e1d8dec311a2e5c1109269a3b4b0.jpg","title":"비비큐 미평둔덕점","meta":"필크런치 반+황올 반"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/bd00cefc974dc1d713c864c80eea776874d9c380822c9bb5aadfccdcb939e1d1.jpg","title":"비비큐 미평둔덕점","meta":"필크런치 반+핫크리스피 반"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/085ef4f29b2c929033bf1f01187980708a8e2920d3c94c468ab6eaa8936f0790.jpg","title":"비비큐 미평둔덕점","meta":"필크런치 반+양념 반"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/928115e661bc340fe0ef59ac42237f5f25abf8c73196df358673123f23843fe5.jpg","title":"비비큐 미평둔덕점","meta":"황금올리브치킨™핫윙(VAP)"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/b73c5bf5653a9b3191bcf7d959b50a1392e4615b319faeaba8997c0b6d568d56.jpg","title":"비비큐 미평둔덕점","meta":"황금올리브치킨™핫크리스피"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/56cd60057bab6f5a31a3f778282d567e16dc4d9d254dd91e5119cdcffc030956.jpg","title":"비비큐 미평둔덕점","meta":"크런치 순살크래커"}
+      ]
+    },
+    "f8a71a5a2344ee7f": {
+      "storeId": "f8a71a5a2344ee7f",
+      "slug": "frank-burger-mipyeong",
+      "label": "프랭크버거 미평점 전용 대동여수음식지도",
+      "title": "프랭크버거 미평점",
+      "meta": "미평·둔덕 · 수제버거",
+      "slides": [
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/09/cad7a29f-3c19-4fee-bfe1-c54f712f37d8.jpg","title":"프랭크버거 미평점","meta":"치즈버거세트"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/09/7d062453-f07d-4f03-9195-7594fa2b6240.jpg","title":"프랭크버거 미평점","meta":"100%한우갈릭버거세트"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/09/01555070-96b7-4adc-b620-c5fe8c4482af.jpg","title":"프랭크버거 미평점","meta":"100%한우버거세트"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/09/89537722-45cc-4836-92e2-417e088b025b.jpg","title":"프랭크버거 미평점","meta":"프랭크버거세트"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/07/c2bbbec2-19c9-4ba0-ae72-e2fd1c03804d.jpg","title":"프랭크버거 미평점","meta":"파닭파닭치킨버거"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/07/ef9d90ae-6ef4-4e10-b45a-b39ded0b592e.jpg","title":"프랭크버거 미평점","meta":"파닭파닭치킨버거세트"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/04/03aea1b6-19eb-4377-870e-9ad8e2c82213.jpg","title":"프랭크버거 미평점","meta":"순살치킨 후라이드"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/09/aadaba81-313c-4805-823a-4d68767d9441.jpg","title":"프랭크버거 미평점","meta":"프랭크치킨팩"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/04/9778d988-b1f9-4e10-8995-fdcc3f267503.jpg","title":"프랭크버거 미평점","meta":"순살치킨 양념"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/09/ba547631-a589-4058-8783-3d98cbd783bc.jpg","title":"프랭크버거 미평점","meta":"프랭크버거팩"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/07/12ebbba9-ae69-4ca2-8740-f241350202ad.jpg","title":"프랭크버거 미평점","meta":"깐쇼새우비프버거세트"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/07/61fc2ccd-da3d-4558-acbe-ad62fa74dcb8.jpg","title":"프랭크버거 미평점","meta":"깐쇼새우비프버거"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/07/12a0ac70-9844-4c06-98ba-d9672de0a84d.jpg","title":"프랭크버거 미평점","meta":"맥앤치즈비프버거"},
+        {"storeId":"f8a71a5a2344ee7f","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/07/f05a0ec7-e6b6-4f72-9057-aaecac25007b.jpg","title":"프랭크버거 미평점","meta":"맥앤치즈비프버거세트"}
+      ]
+    },
+    "fb798d3119a28415": {
+      "storeId": "fb798d3119a28415",
+      "slug": "60chicken-yeosu-mipyeong",
+      "label": "60계치킨 여수미평점 전용 대동여수음식지도",
+      "title": "60계치킨 여수미평점",
+      "meta": "미평동 · 치킨",
+      "slides": [
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/e352255f-2895-4987-b541-0357eada7556.jpg","title":"60계치킨 여수미평점","meta":"쯔란윙봉"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2024/04/b1a6247f-c3c0-490c-8618-87724894289f.jpg","title":"60계치킨 여수미평점","meta":"크랑이치킨"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/11/2a207038-3c11-4343-bc3e-d28c9b18bc1b.jpg","title":"60계치킨 여수미평점","meta":"크크크치킨"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/11/bffdf7be-bfe3-42e6-a618-12455e864878.jpg","title":"60계치킨 여수미평점","meta":"간지치킨"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/11/0352994c-efce-42b7-88d4-e4a673beadbe.jpg","title":"60계치킨 여수미평점","meta":"고추치킨"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/11/cb58dfd6-6c35-491f-9c65-9c7925c8c616.jpg","title":"60계치킨 여수미평점","meta":"후라이드"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/06/34722c50-52b9-4a02-aac1-63a1f72de0c4.jpg","title":"60계치킨 여수미평점","meta":"참지마라치킨"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/cca90619-2f0e-4399-90ec-c3e5f4275d47.jpg","title":"60계치킨 여수미평점","meta":"윙봉 24세트"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/65b53722-6700-41bc-848a-a198c2d05e5a.jpg","title":"60계치킨 여수미평점","meta":"뼈 후라이드반+선택반"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2024/06/fff50f08-3168-4287-b253-a226810c4fd3.jpg","title":"60계치킨 여수미평점","meta":"근위튀김"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/6d0b0d98-2145-4060-b435-b510d88998a4.jpg","title":"60계치킨 여수미평점","meta":"순살 후라이드반+선택반"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/06/1c65c30e-7ebd-4dc4-beaa-a541bfbd5c2a.jpg","title":"60계치킨 여수미평점","meta":"순살 참지마라치킨"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/11/39546cf1-1e07-403e-9ea1-241ea69ddff1.jpg","title":"60계치킨 여수미평점","meta":"순살 크크크치킨"},
+        {"storeId":"fb798d3119a28415","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/c3894010-9fca-449d-9990-4aa0b853a664.jpg","title":"60계치킨 여수미평점","meta":"콤보(윙·봉·다리)"}
+      ]
+    },
+    "a089d1d54720b48e": {
+      "storeId": "a089d1d54720b48e",
+      "slug": "alien-pizza-yeosu",
+      "label": "외계인피자 여수점 전용 대동여수음식지도",
+      "title": "외계인피자 여수점",
+      "meta": "문수동 · 피자·스파게티",
+      "slides": [
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/corn-cheese.jpg","title":"외계인피자 여수점","meta":"[New] 콘치즈 (콘소메)"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/cheese.jpg","title":"외계인피자 여수점","meta":"[꾸덕꾸덕] 치즈"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/pepperoni.jpg","title":"외계인피자 여수점","meta":"[짭짤] 페퍼로니"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/half-half.jpg","title":"외계인피자 여수점","meta":"[고민말고] 반반피자"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/four-flavor.jpg","title":"외계인피자 여수점","meta":"[고민 Nono] 네가지맛피자"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/chipperoni.jpg","title":"외계인피자 여수점","meta":"치퍼로니"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/bacon-cheddar.jpg","title":"외계인피자 여수점","meta":"[짭짤꾸덕] 베이컨체다"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/bacon-potato.jpg","title":"외계인피자 여수점","meta":"[포슬포슬] 베이컨포테이토"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/meat-bomb-pizza.jpg","title":"외계인피자 여수점","meta":"[Boom] 고기폭탄"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/pulled-pork.jpg","title":"외계인피자 여수점","meta":"[아메리칸] 풀드포크"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/taco.jpg","title":"외계인피자 여수점","meta":"[멕시칸] 타코"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/shrimp-pizza.jpg","title":"외계인피자 여수점","meta":"[탱글탱글] 쉬림프"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/pumpkin.jpg","title":"외계인피자 여수점","meta":"[New] 단호박"},
+        {"storeId":"a089d1d54720b48e","image":"store-menu-content/a089d1d54720b48e/combination.jpg","title":"외계인피자 여수점","meta":"[14첩] 콤비네이션"}
+      ]
+    },
+    "aa0a00258c22f377": {
+      "storeId": "aa0a00258c22f377",
+      "slug": "ppongtteurak-pizza-yeosu-yeoseo",
+      "label": "뽕뜨락피자 여수여서점 전용 대동여수음식지도",
+      "title": "뽕뜨락피자 여수여서점",
+      "meta": "여서동 · 피자",
+      "slides": [
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/b24e7113-2db2-4469-8f60-329a861bc701.jpg","title":"뽕뜨락피자 여수여서점","meta":"스윗고구마"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/36fb8719-b7f5-4623-b2f4-7d99facbceb1.jpg","title":"뽕뜨락피자 여수여서점","meta":"포마이피자"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/5a6c6090-c9d8-4e1d-a7fb-8d80b830e3ea.jpg","title":"뽕뜨락피자 여수여서점","meta":"모모스테키"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/12/e823d685-dc6d-4765-b4f8-5bfbf0e05fd4.jpg","title":"뽕뜨락피자 여수여서점","meta":"맥앤치즈피자"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/8d37adac-d479-4d66-8468-63ca47ec95d1.jpg","title":"뽕뜨락피자 여수여서점","meta":"바베큐골드포크"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/345ac1b3-59ba-4495-877f-03d6a51b68bb.jpg","title":"뽕뜨락피자 여수여서점","meta":"관자네온새우"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/82b821fe-956a-4638-af51-ceb66b20e281.jpg","title":"뽕뜨락피자 여수여서점","meta":"쓰리고(3GO)"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/bf9e0177-fbe2-4d6b-a58e-009f443986d0.jpg","title":"뽕뜨락피자 여수여서점","meta":"스파이시치킨스테이크"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/e77a9042-fc44-4a86-bbd5-cbd4b43540c2.jpg","title":"뽕뜨락피자 여수여서점","meta":"멜팅치즈"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/6446c011-896c-4259-8a79-63ff82edb003.jpg","title":"뽕뜨락피자 여수여서점","meta":"슈프림콤비"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/1266b27a-b02d-4c23-8685-6c68e5419b09.jpg","title":"뽕뜨락피자 여수여서점","meta":"페페로니"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/70ad9b62-1b49-43e4-9dda-c2fa6f974d0d.jpg","title":"뽕뜨락피자 여수여서점","meta":"불고기"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/5894c3eb-0771-452d-acf2-660bd2031278.jpg","title":"뽕뜨락피자 여수여서점","meta":"리치킨BBQ"},
+        {"storeId":"aa0a00258c22f377","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/11/41f2297c-cf60-4a2e-bc55-8de1a21c298c.jpg","title":"뽕뜨락피자 여수여서점","meta":"스파이시쉬림프"}
+      ]
+    },
+    "10db3b0db6ebf8c5": {
+      "storeId": "10db3b0db6ebf8c5",
+      "slug": "momstouch-munsu",
+      "label": "맘스터치 문수점 전용 대동여수음식지도",
+      "title": "맘스터치 문수점",
+      "meta": "문수동 · 햄버거·치킨",
+      "slides": [
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/08/002bac60-672b-457b-bfb1-8a4808999d3d.jpg","title":"맘스터치 문수점","meta":"싸이버거 세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/08/3f3eaafd-7ee2-414e-a94a-ceba06ca143f.jpg","title":"맘스터치 문수점","meta":"언빌리버블버거 세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/08/c90f315a-cd6b-4624-9e5f-cf91297adea1.jpg","title":"맘스터치 문수점","meta":"화이트갈릭버거 세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/08/eeb67151-1a68-4c7a-9456-710b95918c64.jpg","title":"맘스터치 문수점","meta":"딥치즈버거 세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/04/d5284994-5a57-49b2-8982-2fe70f4f3a56.jpg","title":"맘스터치 문수점","meta":"매직풍싸이버거 세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/08/3b04058e-38ac-46e6-9673-fcb4efae979a.jpg","title":"맘스터치 문수점","meta":"통새우버거 세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/07/7004e4cf-81e4-4d61-932b-9f8569361f87.jpg","title":"맘스터치 문수점","meta":"갓빠삭치킨(순살)"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/05/059f02ea-7ab2-431c-9029-9318e5381007.jpg","title":"맘스터치 문수점","meta":"핫치즈치킨(순살)"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/05/86b65985-bef5-4ff4-b7c2-caba01987efd.jpg","title":"맘스터치 문수점","meta":"후라이드치킨(순살)"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/05/4cf26ffc-383c-4677-b86a-e1e2c1c103ed.jpg","title":"맘스터치 문수점","meta":"맘스양념치킨(순살)"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/05/3c88ece2-2bd3-4756-a44e-e6484b68ff36.jpg","title":"맘스터치 문수점","meta":"치킨&버거세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/06/7c090a85-450d-44be-a7d9-f0f1a14e45bb.jpg","title":"맘스터치 문수점","meta":"떡강정세트"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/05/7bff5bf4-a14d-449e-9565-e14a5dab85c0.jpg","title":"맘스터치 문수점","meta":"케이준양념감자"},
+        {"storeId":"10db3b0db6ebf8c5","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2026/05/d4da1da4-2a24-4d27-a430-ae565ff49771.jpg","title":"맘스터치 문수점","meta":"바삭크림치즈볼"}
       ]
     },
     "cfde2617224f33a0": {
       "storeId": "cfde2617224f33a0",
       "slug": "kongsanso-store-family",
-      "label": "콩산소 전용 대동여수음식지도",
-      "title": "콩산소",
-      "meta": "문수동 · 음식 연구소",
+      "label": "콩산소 (음식 연구소) 전용 대동여수음식지도",
+      "title": "콩산소 (음식 연구소)",
+      "meta": "여서동 · 고기/구이",
       "slides": [
         {
           "storeId": "cfde2617224f33a0",
           "image": "assets/campaigns/kongsanso-family/kongsanso/01-family-menu.webp",
-          "title": "콩산소",
-          "meta": "문수동 · 음식 연구소"
+          "title": "콩산소 (음식 연구소)",
+          "meta": "콩산소 추천 메뉴"
         },
         {
           "storeId": "1d691d8e74499d31",
           "image": "assets/campaigns/kongsanso-family/cho-chef-pho/01-pho-set.webp",
           "title": "조쉐프의 쌀국수",
-          "meta": "문수동 · 면요리"
+          "meta": "쌀국수·나시고랭 세트"
         },
         {
           "storeId": "2017de4f9111f3ce",
           "image": "assets/campaigns/kongsanso-family/kim-samgyeop-kimchi-jjim/01-kimchi-jjim-set.webp",
           "title": "김사장 삼겹 통김치찜",
-          "meta": "문수동 · 한식·김치찜"
+          "meta": "삼겹 통김치찜 세트"
         },
         {
           "storeId": "93ae27237a8e75c4",
           "image": "assets/campaigns/kongsanso-family/memil-makguksu/01-makguksu.webp",
           "title": "메밀꽃 필 막국수",
-          "meta": "문수동 · 면요리"
+          "meta": "속풀이 메밀 물막국수"
         },
         {
           "storeId": "3f441930b8d18783",
           "image": "assets/store-photos/2822d52b9ee44f/02.webp",
           "title": "1980밀면회관&냉면 문수점",
-          "meta": "문수동 · 면요리"
+          "meta": "비빔밀면"
         },
         {
           "storeId": "f3cb61dd45ba9b8b",
           "image": "assets/notion-store-photos/f3cb61dd45ba9b/01.webp",
           "title": "콩담은 콩나물 국밥 문수점",
-          "meta": "문수동 · 한식·국밥"
+          "meta": "콩나물국밥 한상"
         },
         {
           "storeId": "665953a0453afc52",
           "image": "assets/campaigns/kongsanso-family/kim-gukbap/01-gukbap.webp",
           "title": "김사장 국밥 문수점",
-          "meta": "문수동 · 한식·국밥"
+          "meta": "진국 돼지국밥"
         },
         {
           "storeId": "7ed65c8f086f11f2",
           "image": "assets/campaigns/kongsanso-family/kim-noodle-house/01-spicy-noodles.webp",
           "title": "김사장 대박난 국수집 문수점",
-          "meta": "문수동 · 한식·면요리"
+          "meta": "비빔국수"
         }
       ]
+    }
+  },
+  "virtualStores": {
+    "421ecef35a879687": {
+      "name": "탐나는피자 여수점",
+      "district": "문수동",
+      "category": "피자",
+      "categories": ["피자"],
+      "address": "전라남도 여수시 문수동 83-14 1층",
+      "phone": "061-652-0908",
+      "hasMenu": true,
+      "trustedDetail": true,
+      "image": "https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/9c49604757b5dcee52b315c845402bf42273b19121b551e0349dbd58d766cd1e.jpg",
+      "images": [
+        "https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/9c49604757b5dcee52b315c845402bf42273b19121b551e0349dbd58d766cd1e.jpg",
+        "https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/6b4f907773039925c62a37dffdea48fa9021a18f2c3db1d95ba02058acfa1a81.jpg",
+        "https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/8105befa7b40a27957a3c02f73889f376e12de4859f6c5aac4e2325d3086f256.jpg"
+      ],
+      "routes": [
+        {
+          "name": "먹깨비",
+          "key": "mukkebi",
+          "url": "http://mukkebi.com/shop.php?data=224116",
+          "enabled": true
+        },
+        {
+          "name": "땡겨요",
+          "key": "ddangyo",
+          "url": "https://fdofd.ddangyo.com/gateway1.html?cDMgeag",
+          "enabled": true
+        },
+        {
+          "name": "요기요",
+          "key": "yogiyo",
+          "url": "https://ws.yogiyo.co.kr/59a3je",
+          "enabled": true
+        },
+        {
+          "name": "쿠팡이츠",
+          "key": "coupang",
+          "url": "https://web.coupangeats.com/share?storeId=1051128&dishId&key=2cec49f2-20b7-4681-8d76-299ae7dd3633",
+          "enabled": true
+        },
+        {
+          "name": "배달의민족",
+          "key": "baemin",
+          "url": "https://s.baemin.com/bf000KDmCaZqf",
+          "enabled": true
+        },
+        {
+          "name": "전화주문",
+          "key": "phone",
+          "url": "tel:0616520908",
+          "enabled": true
+        }
+      ],
+      "channelKeys": ["mukkebi", "ddangyo", "yogiyo", "coupang", "baemin", "phone"]
+    },
+    "aa0a00258c22f377": {
+      "name": "뽕뜨락피자 여수여서점",
+      "district": "여서동",
+      "category": "피자",
+      "categories": ["피자"],
+      "address": "전라남도 여수시 여서동1길 46-1 2층",
+      "phone": "061-655-1082",
+      "hasMenu": true,
+      "trustedDetail": true,
+      "image": "assets/notion-recovery-180/aa0a00258c22f377/01.jpg",
+      "images": [
+        "assets/notion-recovery-180/aa0a00258c22f377/01.jpg"
+      ],
+      "routes": [
+        {
+          "name": "가게바로주문",
+          "key": "direct",
+          "url": "https://bit.ly/4dN1g4l",
+          "enabled": true
+        },
+        {
+          "name": "먹깨비",
+          "key": "mukkebi",
+          "url": "https://bit.ly/4v7f8gW",
+          "enabled": true
+        },
+        {
+          "name": "땡겨요",
+          "key": "ddangyo",
+          "url": "https://fdofd.ddangyo.com/gateway1.html?kFTAG4O",
+          "enabled": true
+        },
+        {
+          "name": "CHAK 지역상품권",
+          "key": "chak",
+          "url": "https://bit.ly/chak-yeosu",
+          "enabled": true
+        },
+        {
+          "name": "전화주문",
+          "key": "phone",
+          "url": "tel:0616551082",
+          "enabled": true
+        },
+        {
+          "name": "요기요",
+          "key": "yogiyo",
+          "url": "https://bit.ly/4nUIQn8",
+          "enabled": true
+        },
+        {
+          "name": "쿠팡이츠",
+          "key": "coupang",
+          "url": "https://bit.ly/4vhmpLp",
+          "enabled": true
+        },
+        {
+          "name": "배달의민족",
+          "key": "baemin",
+          "url": "https://bit.ly/4dJaY9r",
+          "enabled": true
+        }
+      ],
+      "channelKeys": ["direct", "mukkebi", "ddangyo", "chak", "phone", "yogiyo", "coupang", "baemin"]
     }
   }
 }

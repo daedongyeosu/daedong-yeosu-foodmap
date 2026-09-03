@@ -538,8 +538,12 @@ function applyAnalyticsOwnerMode() {
     if (mode === 'exclude') {
       localStorage.setItem(ANALYTICS_OWNER_EXCLUSION_KEY, '1');
       localStorage.removeItem(ANALYTICS_QUEUE_KEY);
+      window.daedongPostHogSetOwnerExcluded?.(true);
     }
-    else localStorage.removeItem(ANALYTICS_OWNER_EXCLUSION_KEY);
+    else {
+      localStorage.removeItem(ANALYTICS_OWNER_EXCLUSION_KEY);
+      window.daedongPostHogSetOwnerExcluded?.(false);
+    }
   } catch {}
   params.delete(ANALYTICS_OWNER_MODE_PARAM);
   const query = params.toString();
@@ -686,6 +690,15 @@ function sendAnalyticsEvent(eventType, details = {}) {
     regionSource: region.regionSource,
     clientTime: new Date().toISOString()
   };
+  window.daedongPostHogCapture?.(eventType, {
+    entrySource: payload.entrySource,
+    storeId: payload.storeId,
+    channel: payload.channel,
+    surface: payload.surface,
+    region1: payload.region1,
+    region2: payload.region2,
+    regionSource: payload.regionSource
+  });
   const queue = analyticsQueueRead();
   queue.push(payload);
   if (analyticsQueueWrite(queue)) void flushAnalyticsQueue();

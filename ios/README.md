@@ -20,4 +20,6 @@ xcodegen generate --spec ios/project.yml
 
 Mac이 없는 환경에서는 `.github/workflows/build-ios.yml`의 `simulator` 모드로 컴파일을 검증하고, 서명 자료가 등록된 뒤 `archive` 또는 `upload` 모드를 사용합니다.
 
+서명 빌드는 GitHub Actions의 실행 번호를 iOS 빌드 번호로 사용합니다. 같은 버전의 IPA를 다시 업로드해도 App Store Connect의 중복 빌드 번호 오류가 나지 않습니다.
+
 

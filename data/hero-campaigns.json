@@ -80,7 +80,20 @@
       "title": "비비큐 미평둔덕점",
       "meta": "미평·둔덕 · 치킨",
       "slides": [
-        {"storeId":"0abd7147b7d6b1dd","image":"assets/store-photos/0abd7147b7d6b1dd/01.jpg","title":"비비큐 미평둔덕점","meta":"BBQ 대표치킨"}
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/f08a91dd7802dff1a8d6eace5e4cfab1e70f5add2bfdd50847c694e340226838.jpg","title":"비비큐 미평둔덕점","meta":"황금올리브치킨™"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/ccc719886c3ffec1e71529a3f98f7b50d11cdc4f502968b2157b2a1c4a2f32f0.jpg","title":"비비큐 미평둔덕점","meta":"자메이카 소떡만나치킨"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/fa07cbc4c729ec474a3934c07a888e62c5ea6d745e034a2eaeac1da04c778a53.jpg","title":"비비큐 미평둔덕점","meta":"자메이카 통다리구이"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/15097f6c3e9cab6eb6bb01a08e9ce6dc74654ff4bd59e675a94d68c10c0e0c15.jpg","title":"비비큐 미평둔덕점","meta":"[NEW] 필크런치 소스 세트"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/cf55fd5577729925c70c70272bf4911d9933da7d917410210403239cd3776e97.jpg","title":"비비큐 미평둔덕점","meta":"[NEW] 필크런치 소떡 세트"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/d2adebeb8bde187e6b751ab05b6e4f3eb2640165e519e400a227cf55a549e643.jpg","title":"비비큐 미평둔덕점","meta":"[NEW] 필크런치 떡볶이 세트"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/f4e5244e3abc06e857435395415c0a742d1ae1146c3735eaaea0c15e97968333.jpg","title":"비비큐 미평둔덕점","meta":"[NEW] 필크런치 더블 PICK 세트"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/6cd59a25497dd99fcb53b277202deffb3feda1a0b4b60c07f0b1b5cd2ef86145.jpg","title":"비비큐 미평둔덕점","meta":"[NEW] 필크런치 트리플 PICK 세트"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/25de033ed0be1467e58b3a7646889e2f0de1e1d8dec311a2e5c1109269a3b4b0.jpg","title":"비비큐 미평둔덕점","meta":"필크런치 반+황올 반"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/bd00cefc974dc1d713c864c80eea776874d9c380822c9bb5aadfccdcb939e1d1.jpg","title":"비비큐 미평둔덕점","meta":"필크런치 반+핫크리스피 반"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/085ef4f29b2c929033bf1f01187980708a8e2920d3c94c468ab6eaa8936f0790.jpg","title":"비비큐 미평둔덕점","meta":"필크런치 반+양념 반"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/928115e661bc340fe0ef59ac42237f5f25abf8c73196df358673123f23843fe5.jpg","title":"비비큐 미평둔덕점","meta":"황금올리브치킨™핫윙(VAP)"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/b73c5bf5653a9b3191bcf7d959b50a1392e4615b319faeaba8997c0b6d568d56.jpg","title":"비비큐 미평둔덕점","meta":"황금올리브치킨™핫크리스피"},
+        {"storeId":"0abd7147b7d6b1dd","image":"https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/56cd60057bab6f5a31a3f778282d567e16dc4d9d254dd91e5119cdcffc030956.jpg","title":"비비큐 미평둔덕점","meta":"크런치 순살크래커"}
       ]
     },
     "f8a71a5a2344ee7f": {

@@ -31,11 +31,39 @@ function parse(input) {
 assert.deepEqual(
   {...parse({address: '전라남도 여수시 여서동 쌍봉로 368', type: 'postcode'})},
   {
-    region1: '전라남도',
+    region1: '전남광주통합특별시',
     region2: '여수시',
     region3: '여서동',
     regionSource: 'address_search',
   },
+);
+
+assert.deepEqual(
+  {...parse({address: '전남광주통합특별시 여수시 미평동 미평3길 42', type: 'postcode'})},
+  {
+    region1: '전남광주통합특별시',
+    region2: '여수시',
+    region3: '미평동',
+    regionSource: 'address_search',
+  },
+  '새 통합특별시 명칭을 여수시 칸으로 잘못 분류하면 안 됩니다.',
+);
+
+assert.deepEqual(
+  {...parse({
+    address: '전남광주통합특별시 여수시 문수동 허문정1길 52',
+    region1: '',
+    region2: '전남광주통합특별시',
+    region3: '문수동',
+    type: 'postcode',
+  })},
+  {
+    region1: '전남광주통합특별시',
+    region2: '여수시',
+    region3: '문수동',
+    regionSource: 'address_search',
+  },
+  '주소검색 서비스가 광역명을 시군구 칸에 보내도 바로잡아야 합니다.',
 );
 
 assert.deepEqual(
@@ -73,5 +101,6 @@ assert.match(addressMap, /data\.bname/);
 assert.match(addressMap, /nominatim\.openstreetmap\.org\/reverse/);
 assert.match(addressMap, /Math\.hypot\(latDistance, lngDistance\) <= 12/);
 assert.match(html, /anonymous-analytics-1-coarse-region-1/);
+assert.match(html, /region-current-canonical-1/);
 
 console.log('coarse region analytics regression: PASS');

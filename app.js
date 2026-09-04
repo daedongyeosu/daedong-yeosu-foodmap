@@ -358,7 +358,8 @@ const ANALYTICS_REGION_1_ALIASES = new Map([
   ['충북', '충청북도'], ['충청북도', '충청북도'],
   ['충남', '충청남도'], ['충청남도', '충청남도'],
   ['전북', '전북특별자치도'], ['전라북도', '전북특별자치도'], ['전북특별자치도', '전북특별자치도'],
-  ['전남', '전라남도'], ['전라남도', '전라남도'],
+  ['전남', '전남광주통합특별시'], ['전라남도', '전남광주통합특별시'],
+  ['전남광주', '전남광주통합특별시'], ['전남광주통합특별시', '전남광주통합특별시'],
   ['경북', '경상북도'], ['경상북도', '경상북도'],
   ['경남', '경상남도'], ['경상남도', '경상남도'],
   ['제주', '제주특별자치도'], ['제주도', '제주특별자치도'], ['제주특별자치도', '제주특별자치도']
@@ -585,11 +586,18 @@ function analyticsCoarseRegion(input = {}) {
   let region1 = analyticsRegionPart(input.region1, 1);
   let region2 = analyticsRegionPart(input.region2, 2);
   let region3 = analyticsRegionPart(input.region3, 3);
+  if (region2 === '전남광주통합특별시') {
+    region1 = '전남광주통합특별시';
+    region2 = '';
+  }
+  const firstTextPart = text.split(/\s+/)[0] || '';
+  const textProvince = ANALYTICS_REGION_1_ALIASES.get(firstTextPart) || '';
   if (!region1) {
-    region1 = ANALYTICS_REGION_1_ALIASES.get(text.split(/\s+/)[0]) || '';
+    region1 = textProvince;
   }
   if (!region2) {
-    const match = text.match(/([가-힣]+시(?:\s+[가-힣]+구)?|[가-힣]+군|[가-힣]+구)(?=\s|$)/);
+    const cityText = textProvince ? text.slice(firstTextPart.length).trim() : text;
+    const match = cityText.match(/([가-힣]+시(?:\s+[가-힣]+구)?|[가-힣]+군|[가-힣]+구)(?=\s|$)/);
     region2 = analyticsRegionPart(match?.[1], 2);
   }
   if (!region3) {
@@ -599,7 +607,7 @@ function analyticsCoarseRegion(input = {}) {
   const area = analyticsRegionPart(input.area, 3);
   if (!region3 && area) region3 = area;
   if (region3 && !region2 && (text.includes(REGION_SHORT_NAME) || input.area === region3)) {
-    region1 ||= '전라남도';
+    region1 ||= '전남광주통합특별시';
     region2 = REGION_CITY_NAME;
   }
   const rawSource = String(input.regionSource || '').trim();

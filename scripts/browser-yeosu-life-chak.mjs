@@ -18,6 +18,10 @@ const {chromium, launchOptions} = await loadBrowserRuntime();
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
 const browser = await chromium.launch(launchOptions);
 const context = await browser.newContext({viewport: {width: 390, height: 844}, locale: 'ko-KR'});
+await context.addInitScript(() => {
+  sessionStorage.setItem('daedongCommunityIntroPlayedV4', '1');
+  sessionStorage.setItem('daedongMukkebiIslandExpoEventSeenSessionV1', '1');
+});
 const page = await context.newPage();
 const pageErrors = [];
 page.on('pageerror', error => pageErrors.push(error.message));
@@ -29,7 +33,8 @@ const introClose = page.locator('#communityIntroClose');
 if (await introClose.isVisible()) await introClose.click();
 const section = page.locator('#yeosuLifeSection');
 await section.waitFor({state: 'visible', timeout: 10000});
-await section.scrollIntoViewIfNeeded();
+await section.evaluate(element => element.scrollIntoView({block: 'start'}));
+await page.keyboard.press('ArrowDown');
 await page.waitForFunction(() => document.querySelectorAll('#yeosuLifeHighlights .yeosu-life-highlight').length === 3);
 
 const homeAudit = await page.evaluate(() => ({

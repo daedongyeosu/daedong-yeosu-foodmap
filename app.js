@@ -2028,12 +2028,34 @@ function renderYeosuLifeHome() {
     hydrateHighlights();
     return;
   }
-  const observer = new IntersectionObserver(entries => {
-    if (!entries.some(entry => entry.isIntersecting)) return;
-    observer.disconnect();
+  let observer;
+  let sectionIsVisible = false;
+  let customerHasNavigated = false;
+  const navigationKeys = new Set(['ArrowDown', 'ArrowUp', 'PageDown', 'PageUp', 'Home', 'End', ' ']);
+  const hydrateAndStopWatching = () => {
+    observer?.disconnect();
+    window.removeEventListener('wheel', markCustomerNavigation);
+    window.removeEventListener('touchmove', markCustomerNavigation);
+    window.removeEventListener('keydown', markCustomerNavigation);
     hydrateHighlights();
-  }, {rootMargin: '240px 0px'});
+  };
+  const maybeHydrateHighlights = () => {
+    if (sectionIsVisible && customerHasNavigated) hydrateAndStopWatching();
+  };
+  function markCustomerNavigation(event) {
+    if (!event.isTrusted) return;
+    if (event.type === 'keydown' && !navigationKeys.has(event.key)) return;
+    customerHasNavigated = true;
+    maybeHydrateHighlights();
+  }
+  observer = new IntersectionObserver(entries => {
+    sectionIsVisible = entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.25);
+    maybeHydrateHighlights();
+  }, {rootMargin: '0px', threshold: [0.25]});
   observer.observe(section);
+  window.addEventListener('wheel', markCustomerNavigation, {passive: true});
+  window.addEventListener('touchmove', markCustomerNavigation, {passive: true});
+  window.addEventListener('keydown', markCustomerNavigation);
 }
 function openYeosuLifeNews(category = '전체') {
   const selected = YEOSU_LIFE_CATEGORIES.includes(category) ? category : '전체';

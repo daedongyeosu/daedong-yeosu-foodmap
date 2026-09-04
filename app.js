@@ -2016,11 +2016,24 @@ function renderYeosuLifeHome() {
   if (!isYeosu) return;
   const highlights = $('#yeosuLifeHighlights');
   if (!highlights) return;
-  highlights.innerHTML = YEOSU_LIFE_NEWS.filter(item => item.featured).map(item => `<button class="yeosu-life-highlight" type="button" data-life-item="${escapeHtml(item.id)}" aria-haspopup="dialog">
-    <span class="yeosu-life-highlight-icon" aria-hidden="true">${escapeHtml(item.icon)}</span>
-    <span class="yeosu-life-highlight-copy"><small>${escapeHtml(item.category)} · ${escapeHtml(item.period)}</small><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.summary)}</span></span>
-    <span class="yeosu-life-highlight-arrow" aria-hidden="true">›</span>
-  </button>`).join('');
+  const hydrateHighlights = () => {
+    if (highlights.childElementCount) return;
+    highlights.innerHTML = YEOSU_LIFE_NEWS.filter(item => item.featured).map(item => `<button class="yeosu-life-highlight" type="button" data-life-item="${escapeHtml(item.id)}" aria-haspopup="dialog">
+      <span class="yeosu-life-highlight-icon" aria-hidden="true">${escapeHtml(item.icon)}</span>
+      <span class="yeosu-life-highlight-copy"><small>${escapeHtml(item.category)} · ${escapeHtml(item.period)}</small><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.summary)}</span></span>
+      <span class="yeosu-life-highlight-arrow" aria-hidden="true">›</span>
+    </button>`).join('');
+  };
+  if (!('IntersectionObserver' in window)) {
+    hydrateHighlights();
+    return;
+  }
+  const observer = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting)) return;
+    observer.disconnect();
+    hydrateHighlights();
+  }, {rootMargin: '240px 0px'});
+  observer.observe(section);
 }
 function openYeosuLifeNews(category = '전체') {
   const selected = YEOSU_LIFE_CATEGORIES.includes(category) ? category : '전체';

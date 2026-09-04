@@ -1,6 +1,8 @@
 import {chromium} from 'playwright';
 
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
+const proxyApiOrigin = process.env.PERF_PROXY_API_ORIGIN || 'https://daedong-yeosu-data-api-preview.sisakim.workers.dev';
+const requestOrigin = process.env.PERF_REQUEST_ORIGIN || 'https://preview.daedongmap.com';
 const targetIds = ['361f855efc21c1c2', 'b8267998349b16e1', '14feb7cbd67ef7e2'];
 const browser = await chromium.launch({headless: true});
 const context = await browser.newContext({
@@ -15,13 +17,9 @@ await context.addInitScript(() => {
   sessionStorage.setItem('daedongMukkebiIslandExpoEventSeenSessionV1', '1');
 });
 await context.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
-await context.route('https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/**', async route => {
+await context.route(`${proxyApiOrigin}/api/**`, async route => {
   const response = await fetch(route.request().url(), {
-    headers: {
-      Accept: 'application/json',
-      Origin: 'https://preview.daedongmap.com',
-      'X-Daedong-Client': 'daedong-preview-web-v1-20260804'
-    }
+    headers: {...route.request().headers(), origin: requestOrigin}
   });
   await route.fulfill({
     status: response.status,

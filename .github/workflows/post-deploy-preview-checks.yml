@@ -42,6 +42,10 @@ jobs:
         env:
           BASE_URL: https://daedongmap.com
         run: node scripts/browser-mukkebi-safe-fresh-entry.mjs
+      - name: Verify deployed Yeosu life news and CHAK guide
+        env:
+          BASE_URL: https://daedongmap.com
+        run: node scripts/browser-yeosu-life-chak.mjs
       - name: Verify nine deployed store campaign maps
         env:
           BASE_URL: https://daedongmap.com
@@ -77,6 +81,8 @@ jobs:
             browser-mukkebi-safe-fresh-entry-report.json
             browser-mukkebi-safe-fresh-entry-popup.png
             browser-mukkebi-safe-fresh-entry-menu.png
+            artifacts/yeosu-life-home-390x844.png
+            artifacts/chak-guide-390x844.png
             browser-store-campaign-nine-report.json
             browser-store-campaign-nine.png
             browser-other-order-method-touch-report.json

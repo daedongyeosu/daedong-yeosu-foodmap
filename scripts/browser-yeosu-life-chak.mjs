@@ -2,12 +2,21 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 
-const runtimeModules = process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES;
-if (!runtimeModules) throw new Error('CODEX_PRIMARY_RUNTIME_NODE_MODULES is required');
-const {chromium} = await import(pathToFileURL(path.join(runtimeModules, 'playwright', 'index.mjs')).href);
+const loadBrowserRuntime = async () => {
+  try {
+    const playwright = await import('playwright');
+    return {chromium: playwright.chromium, launchOptions: {headless: true}};
+  } catch {}
+  const runtimeModules = process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES;
+  if (!runtimeModules) throw new Error('playwright 패키지를 찾을 수 없습니다.');
+  const playwright = await import(pathToFileURL(path.join(runtimeModules, 'playwright', 'index.mjs')).href);
+  const executablePath = process.env.CODEX_BROWSER_EXECUTABLE_PATH || 'C:/Program Files/Google/Chrome/Application/chrome.exe';
+  return {chromium: playwright.chromium, launchOptions: {headless: true, executablePath}};
+};
 
+const {chromium, launchOptions} = await loadBrowserRuntime();
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
-const browser = await chromium.launch({headless: true, executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe'});
+const browser = await chromium.launch(launchOptions);
 const context = await browser.newContext({viewport: {width: 390, height: 844}, locale: 'ko-KR'});
 const page = await context.newPage();
 const pageErrors = [];

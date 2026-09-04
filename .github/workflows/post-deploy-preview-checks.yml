@@ -46,6 +46,16 @@ jobs:
         env:
           BASE_URL: https://daedongmap.com
         run: node scripts/browser-yeosu-life-chak.mjs
+      - name: Verify deployed menu prices and membership labels stay hidden
+        env:
+          BASE_URL: https://daedongmap.com
+        run: node scripts/browser-global-menu-price-hide.mjs
+      - name: Verify deployed former managed stores stay behind ordinary stores
+        env:
+          BASE_URL: https://daedongmap.com
+          PERF_PROXY_API_ORIGIN: https://daedong-yeosu-data-api.sisakim.workers.dev
+          PERF_REQUEST_ORIGIN: https://daedongmap.com
+        run: node scripts/browser-former-managed-stores-bottom.mjs
       - name: Verify nine deployed store campaign maps
         env:
           BASE_URL: https://daedongmap.com
@@ -83,6 +93,9 @@ jobs:
             browser-mukkebi-safe-fresh-entry-menu.png
             artifacts/yeosu-life-home-390x844.png
             artifacts/chak-guide-390x844.png
+            browser-global-menu-price-hide-report.json
+            browser-global-menu-price-hide.png
+            browser-global-menu-price-hide-failure.png
             browser-store-campaign-nine-report.json
             browser-store-campaign-nine.png
             browser-other-order-method-touch-report.json

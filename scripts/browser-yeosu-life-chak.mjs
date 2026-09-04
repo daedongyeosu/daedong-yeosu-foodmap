@@ -33,10 +33,8 @@ const introClose = page.locator('#communityIntroClose');
 if (await introClose.isVisible()) await introClose.click();
 const section = page.locator('#yeosuLifeSection');
 await section.waitFor({state: 'visible', timeout: 10000});
-await section.evaluate(element => {
-  element.scrollIntoView({block: 'start'});
-  window.dispatchEvent(new Event('scroll'));
-});
+await section.evaluate(element => element.scrollIntoView({block: 'start'}));
+await page.keyboard.press('ArrowDown');
 await page.waitForFunction(() => document.querySelectorAll('#yeosuLifeHighlights .yeosu-life-highlight').length === 3);
 
 const homeAudit = await page.evaluate(() => ({

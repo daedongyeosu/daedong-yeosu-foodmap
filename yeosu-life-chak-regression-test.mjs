@@ -28,6 +28,8 @@ assert.match(js, /play\.google\.com\/store\/apps\/details\?id=com\.komscochak\.m
 assert.match(js, /apps\.apple\.com\/kr\/app/);
 assert.match(js, /news\.yeosu\.go\.kr\/news\/articleView\.html\?idxno=34946/);
 assert.match(js, /ACTIVE_REGION\.code === 'yeosu'/);
+assert.match(js, /IntersectionObserver/);
+assert.match(js, /hydrateHighlights/);
 assert.match(css, /\.yeosu-life-section/);
 assert.match(css, /\.chak-benefit-card/);
 assert.match(css, /@media\(max-width:700px\)/);

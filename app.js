@@ -2028,12 +2028,18 @@ function renderYeosuLifeHome() {
     hydrateHighlights();
     return;
   }
-  const observer = new IntersectionObserver(entries => {
-    if (!entries.some(entry => entry.isIntersecting)) return;
-    observer.disconnect();
+  let observer;
+  const hydrateAndStopWatching = () => {
+    observer?.disconnect();
+    window.removeEventListener('scroll', hydrateAndStopWatching);
     hydrateHighlights();
-  }, {rootMargin: '240px 0px'});
+  };
+  observer = new IntersectionObserver(entries => {
+    if (!entries.some(entry => entry.isIntersecting && entry.intersectionRatio >= 0.25)) return;
+    hydrateAndStopWatching();
+  }, {rootMargin: '0px', threshold: [0.25]});
   observer.observe(section);
+  window.addEventListener('scroll', hydrateAndStopWatching, {once: true, passive: true});
 }
 function openYeosuLifeNews(category = '전체') {
   const selected = YEOSU_LIFE_CATEGORIES.includes(category) ? category : '전체';

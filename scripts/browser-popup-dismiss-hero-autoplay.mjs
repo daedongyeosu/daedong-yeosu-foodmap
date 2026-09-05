@@ -11,7 +11,8 @@ async function loadChromium() {
 
 const chromium = await loadChromium();
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173/';
-const storeId = '421ecef35a879687';
+// Keep the existing trusted campaign fixture path without reopening a hidden store.
+const storeId = 'aa0a00258c22f377'; // 뽕뜨락피자 여수여서점
 const report = {success: false, checks: [], errors: []};
 const browser = await chromium.launch({headless: true});
 const context = await browser.newContext({

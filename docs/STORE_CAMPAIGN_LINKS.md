@@ -13,5 +13,6 @@
 | 60계치킨 여수미평점 | <https://daedongmap.com/?hero=fb798d3119a28415> | <https://preview.daedongmap.com/?hero=fb798d3119a28415> | `assets/qr/60chicken-yeosu-mipyeong.svg` |
 | 외계인피자 여수점 | <https://daedongmap.com/?hero=a089d1d54720b48e> | <https://preview.daedongmap.com/?hero=a089d1d54720b48e> | `assets/qr/alien-pizza-yeosu.svg` |
 | 뽕뜨락피자 여수여서점 | <https://daedongmap.com/?hero=aa0a00258c22f377> | <https://preview.daedongmap.com/?hero=aa0a00258c22f377> | `assets/qr/ppongtteurak-pizza-yeosu-yeoseo.svg` |
+| 등뼈감자탕 미평점 | <https://daedongmap.com/?hero=996f54c7c66ec979> | <https://preview.daedongmap.com/?hero=996f54c7c66ec979> | `assets/qr/deungppyeo-gamjatang-mipyeong.svg` |
 
 정식 목록은 `data/store-campaign-links.json`에서 관리한다. 가게명, 가게 ID 또는 운영 주소가 바뀌면 QR도 반드시 다시 생성하고 회귀검사를 실행한다.

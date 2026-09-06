@@ -61,6 +61,7 @@ const routeKeysByStoreId = new Map([
   ['068b2ae8fe32874a', ['direct', 'mukkebi', 'ddangyo', 'phone', 'yogiyo', 'baemin', 'coupang']],
   ['0abd7147b7d6b1dd', ['direct', 'mukkebi', 'ddangyo', 'phone', 'yogiyo', 'baemin', 'coupang', 'brand']],
   ['f8a71a5a2344ee7f', ['direct', 'mukkebi', 'ddangyo', 'phone', 'yogiyo', 'baemin', 'coupang']],
+  ['996f54c7c66ec979', ['direct', 'mukkebi', 'ddangyo', 'phone', 'yogiyo', 'baemin', 'coupang']],
   ['fb798d3119a28415', ['direct', 'mukkebi', 'ddangyo', 'phone', 'yogiyo', 'baemin', 'coupang']],
   ['a089d1d54720b48e', ['direct', 'mukkebi', 'ddangyo', 'phone', 'yogiyo', 'baemin', 'coupang']],
   ['aa0a00258c22f377', ['direct', 'mukkebi', 'ddangyo', 'phone', 'yogiyo', 'baemin', 'coupang']],

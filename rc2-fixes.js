@@ -637,7 +637,7 @@ hardClose = function rc2HardClose(options = {}) {
   // example after an in-app browser restores the page). Consume its one-shot
   // URL before the early history.back() branch, otherwise the underlying QR
   // entry is restored without the dismissal marker and reopens on reload.
-  const modalDepth = Number(history.state?.rc2ModalDepth || rc2ModalStack.length + 1);
+  const modalDepth = Number(globalThis.history?.state?.rc2ModalDepth || rc2ModalStack.length + 1);
   const sharedEntryConsumed = !options.fromPop && modalDepth <= 1
     ? Boolean(window.daedongConsumeSharedStoreEntry?.(
       $('#modal')?.dataset.activeStoreId

@@ -26,6 +26,11 @@ const FX_WEATHER_CACHE='daedongYeosuWeatherV1';
 const FX_HOME_SHARE_URL=FX_REGION.code==='yeosu'?'https://daedongmap.com/':new URL(window.daedongRegionUrl?.(FX_REGION.code)||window.location.href,window.location.origin).href;
 const FX_HOME_SHARE_TEXT=`${FX_REGION_NAME} 음식점과 이용 가능한 주문방법을 한눈에 확인해보세요.`;
 const FX_STORE_SHARE_PARAM='store';
+// A QR entry keeps the `hero` marker so the dedicated hero banner remains
+// visible after the detail closes.  Mobile in-app browsers can recreate the
+// document during that return; without a dismissal marker they interpret the
+// retained hero as a fresh QR entry and reopen the same store.
+const FX_STORE_DISMISSED_PARAM='storePopupDismissed';
 const FX_ORDER_METHOD_REENTRY='daedongOrderMethodReentryV1';
 const FX_ORDER_METHOD_REENTRY_PARAM='__ddom';
 const FX_APP_BROWSER_RETURN='daedongAppBrowserReturnV1';
@@ -430,11 +435,23 @@ function fxRequestedSharedStoreId(){
  const value=params.get(FX_STORE_SHARE_PARAM)||params.get('hero');
  return value?String(value).trim():'';
 }
-function fxSharedStoreHomeUrl(storeId){
+function fxCanonicalSharedStoreId(storeId){
+ const requested=String(storeId||'').trim();
+ return window.daedongResolveHeroCampaignStoreId?.(requested)||requested;
+}
+function fxSharedStoreEntryWasDismissed(storeId){
+ const requested=fxCanonicalSharedStoreId(storeId);
+ const dismissed=fxCanonicalSharedStoreId(new URLSearchParams(location.search).get(FX_STORE_DISMISSED_PARAM)||'');
+ return Boolean(requested&&dismissed&&requested===dismissed);
+}
+function fxSharedStoreHomeUrl(storeId,{dismissed=false}={}){
  const url=new URL(location.href);
  url.searchParams.delete(FX_STORE_SHARE_PARAM);
  const campaignStoreId=window.daedongResolveHeroCampaignStoreId?.(storeId)||'';
+ const markerStoreId=fxCanonicalSharedStoreId(storeId);
  if(campaignStoreId)url.searchParams.set('hero',campaignStoreId);
+ if(dismissed&&markerStoreId)url.searchParams.set(FX_STORE_DISMISSED_PARAM,markerStoreId);
+ else url.searchParams.delete(FX_STORE_DISMISSED_PARAM);
  const query=url.searchParams.toString();
  return `${url.pathname}${query?`?${query}`:''}${url.hash}`;
 }
@@ -445,14 +462,29 @@ function fxConsumeSharedStoreEntry(storeId=''){
  const activeStoreId=String(storeId||document.querySelector('#modal:not([hidden]) .store-detail')?.dataset.storeId||'').trim();
  if(activeStoreId&&String(requestedCanonical)!==activeStoreId)return false;
  try{
-  // Remove the one-shot QR/share marker before the asynchronous history.back().
+  // Replace the one-shot QR/share marker before the asynchronous history.back().
   // Some Android in-app browsers deliver that popstate late and otherwise the
   // boot code sees ?store= again and reopens the detail the customer just closed.
-  history.replaceState(history.state,'',fxSharedStoreHomeUrl(requestedStoreId));
+  // Keep the dedicated hero banner, but persist that this exact entry was
+  // dismissed so a document recreation cannot treat `hero` as a new QR scan.
+  history.replaceState(history.state,'',fxSharedStoreHomeUrl(requestedStoreId,{dismissed:true}));
+  // hardClose() may immediately history.back() to the original QR entry. Keep
+  // the canonical id until that pop completes, then stamp the entry that the
+  // mobile browser actually leaves visible as well.
+  window.__daedongPendingSharedStoreDismissal=String(requestedCanonical);
   return true;
  }catch{return false;}
 }
 window.daedongConsumeSharedStoreEntry=fxConsumeSharedStoreEntry;
+window.addEventListener('popstate',()=>{
+ const pending=String(window.__daedongPendingSharedStoreDismissal||'').trim();
+ if(!pending)return;
+ const requestedStoreId=fxRequestedSharedStoreId();
+ if(requestedStoreId&&fxCanonicalSharedStoreId(requestedStoreId)===pending){
+  try{history.replaceState(history.state,'',fxSharedStoreHomeUrl(requestedStoreId,{dismissed:true}));}catch{}
+ }
+ window.__daedongPendingSharedStoreDismissal='';
+},true);
 function fxPendingOrderMethodReentry(storeId){
  const saved=window.daedongPendingOrderMethodReentry;
  const token=new URLSearchParams(location.search).get(FX_ORDER_METHOD_REENTRY_PARAM)||'';
@@ -484,6 +516,11 @@ function fxFinishOrderMethodReentry(saved,{restorePosition=false}={}){
 async function fxOpenSharedStoreFromUrl(){
  const requestedStoreId=fxRequestedSharedStoreId();
  if(!requestedStoreId)return false;
+ // The QR detail was already closed in this browsing flow.  This guard is
+ // intentionally URL-based so it survives Samsung/Kakao WebView reloads and
+ // Android page recreation, while a fresh scan (the original QR URL without
+ // this marker) still opens the store normally.
+ if(fxSharedStoreEntryWasDismissed(requestedStoreId))return false;
  const campaignStoreId=window.daedongResolveHeroCampaignStoreId?.(requestedStoreId)||'';
  const storeId=campaignStoreId||requestedStoreId;
  const orderMethodReentry=fxPendingOrderMethodReentry(storeId);

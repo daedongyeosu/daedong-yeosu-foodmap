@@ -58,12 +58,23 @@ try {
     hidden: Boolean(document.querySelector('#modal')?.hidden),
     heroParam: new URLSearchParams(location.search).get('hero'),
     storeParam: new URLSearchParams(location.search).get('store'),
+    dismissedParam: new URLSearchParams(location.search).get('storePopupDismissed'),
     expectedStoreId,
   }), storeId);
-  if (!heroDismissal.hidden || heroDismissal.storeParam || heroDismissal.heroParam !== storeId) {
+  if (!heroDismissal.hidden || heroDismissal.storeParam || heroDismissal.heroParam !== storeId || heroDismissal.dismissedParam !== storeId) {
     throw new Error(`전용 QR 팝업을 닫은 뒤 상태가 유지되지 않았습니다: ${JSON.stringify(heroDismissal)}`);
   }
   report.checks.push('전용 QR 가게 팝업 자동 열림 및 닫은 뒤 7초간 재등장 없음');
+  await page.reload({waitUntil: 'domcontentloaded'});
+  await page.waitForTimeout(4000);
+  const reloadDismissal = await page.evaluate(() => ({
+    hidden: Boolean(document.querySelector('#modal')?.hidden),
+    dismissedParam: new URLSearchParams(location.search).get('storePopupDismissed'),
+  }));
+  if (!reloadDismissal.hidden || reloadDismissal.dismissedParam !== storeId) {
+    throw new Error(`모바일 문서 재생성 뒤 닫은 가게 팝업이 다시 나타났습니다: ${JSON.stringify(reloadDismissal)}`);
+  }
+  report.checks.push('모바일 문서 재생성 뒤에도 닫은 전용 QR 팝업 재등장 없음');
   await page.waitForFunction(() => !document.documentElement.classList.contains('daedong-fresh-entry-settling'), null, {timeout: 10000});
   await page.waitForTimeout(500);
   const scrollState = await page.evaluate(() => ({

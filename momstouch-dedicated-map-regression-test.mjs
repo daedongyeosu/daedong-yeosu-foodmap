@@ -48,7 +48,7 @@ assert.ok(existsSync(link?.qrAsset || ''), '맘스터치 전용 QR 파일이 없
 
 assert.match(
   html,
-  /daedongDedicatedEntryStoreId = String\(entryParams\.get\('hero'\) \|\| entryParams\.get\('store'\)/,
+  /dedicatedEntryStoreId = String\(entryUrl\.searchParams\.get\('hero'\) \|\| entryUrl\.searchParams\.get\('store'\)[\s\S]*daedongDedicatedEntryStoreId = dedicatedEntryStoreId/,
   '가게전용 진입값은 비동기 초기화 전에 보존되어야 합니다.',
 );
 assert.match(

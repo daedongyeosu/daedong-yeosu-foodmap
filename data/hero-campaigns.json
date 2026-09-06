@@ -1071,6 +1071,26 @@
         }
       ],
       "layout": "food14-plus3"
+    },
+    "996f54c7c66ec979": {
+      "storeId": "996f54c7c66ec979",
+      "slug": "deungppyeo-gamjatang-mipyeong",
+      "label": "등뼈감자탕 미평점 전용 대동여수음식지도",
+      "title": "등뼈감자탕 미평점",
+      "meta": "미평·둔덕 · 감자탕",
+      "slides": [
+        {"storeId":"996f54c7c66ec979","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/10/89c7bfbb-aa67-4849-ae7c-4095f98cde8d.jpg","title":"등뼈감자탕 미평점","meta":"감자탕"},
+        {"storeId":"996f54c7c66ec979","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/05/be82a6f4-b1b8-4061-89bb-6c56d8b1acc0.jpg","title":"등뼈감자탕 미평점","meta":"묵은지감자탕"},
+        {"storeId":"996f54c7c66ec979","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/11/0d72a747-0d3d-44fb-a225-12957a4cc700.jpg","title":"등뼈감자탕 미평점","meta":"간장뼈찜"},
+        {"storeId":"996f54c7c66ec979","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/04/377b67a0-a5f4-46e5-9293-659fe79fb089.jpg","title":"등뼈감자탕 미평점","meta":"묵은지감자탕"},
+        {"storeId":"996f54c7c66ec979","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/04/f1801f4c-cf37-42ed-a7b3-d11a3c8b58b2.jpg","title":"등뼈감자탕 미평점","meta":"묵은지감자탕"},
+        {"storeId":"996f54c7c66ec979","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/04/f27b0a87-9f6b-4bf8-9e4b-0be5297d9013.jpg","title":"등뼈감자탕 미평점","meta":"공기밥"},
+        {"storeId":"996f54c7c66ec979","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/04/fc0ca15f-06cb-4802-a793-983377d90e48.jpg","title":"등뼈감자탕 미평점","meta":"묵은지 추가"},
+        {"storeId":"996f54c7c66ec979","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2023/07/27080b3b-5ab4-4669-8707-4395c52c2879.jpg","title":"등뼈감자탕 미평점","meta":"라면사리"},
+        {"storeId":"996f54c7c66ec979","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/02/467af325-f9f1-40c2-9cca-44835b1a37f7.jpg","title":"등뼈감자탕 미평점","meta":"당면사리"},
+        {"storeId":"996f54c7c66ec979","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/12/e569fdf3-ad5c-4126-b436-517cf6805a82.JPG","title":"등뼈감자탕 미평점","meta":"수제비 추가"}
+      ],
+      "layout": "food14-plus3"
     }
   },
   "virtualStores": {

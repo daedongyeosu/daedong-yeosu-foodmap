@@ -134,6 +134,13 @@
       "url": "https://daedongmap.com/?hero=d9730ed96e5fbd9a",
       "previewUrl": "https://preview.daedongmap.com/?hero=d9730ed96e5fbd9a",
       "qrAsset": "assets/qr/teum-donkatsu-mipyeong.svg"
+    },
+    {
+      "storeId": "996f54c7c66ec979",
+      "name": "등뼈감자탕 미평점",
+      "url": "https://daedongmap.com/?hero=996f54c7c66ec979",
+      "previewUrl": "https://preview.daedongmap.com/?hero=996f54c7c66ec979",
+      "qrAsset": "assets/qr/deungppyeo-gamjatang-mipyeong.svg"
     }
   ]
 }

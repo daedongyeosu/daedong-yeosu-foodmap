@@ -633,6 +633,18 @@ openModal = function rc2OpenModal(html) {
 };
 
 hardClose = function rc2HardClose(options = {}) {
+  // A shared QR store can have one stale modal snapshot in the stack (for
+  // example after an in-app browser restores the page). Consume its one-shot
+  // URL before the early history.back() branch, otherwise the underlying QR
+  // entry is restored without the dismissal marker and reopens on reload.
+  const modalDepth = Number(globalThis.history?.state?.rc2ModalDepth || rc2ModalStack.length + 1);
+  const sharedEntryConsumed = !options.fromPop && modalDepth <= 1
+    ? Boolean(window.daedongConsumeSharedStoreEntry?.(
+      $('#modal')?.dataset.activeStoreId
+      || $('#modal:not([hidden]) .store-detail')?.dataset.storeId
+      || ''
+    ))
+    : false;
   if (options.fromPop) {
     const pendingReturn = rc2PendingExternalReturnState();
     if (pendingReturn) {
@@ -661,7 +673,7 @@ hardClose = function rc2HardClose(options = {}) {
     return;
   }
   rc2ModalStack.length = 0;
-  if (!options.fromPop) {
+  if (!options.fromPop && !sharedEntryConsumed) {
     window.daedongConsumeSharedStoreEntry?.(
       $('#modal')?.dataset.activeStoreId
       || $('#modal:not([hidden]) .store-detail')?.dataset.storeId

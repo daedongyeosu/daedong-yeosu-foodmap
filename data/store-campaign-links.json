@@ -148,6 +148,13 @@
       "url": "https://daedongmap.com/?hero=abb76aa470e26f7a",
       "previewUrl": "https://preview.daedongmap.com/?hero=abb76aa470e26f7a",
       "qrAsset": "assets/qr/pizzaschool-yeomun.svg"
+    },
+    {
+      "storeId": "91622c10687d56dd",
+      "name": "향미진짬뽕 여서점",
+      "url": "https://daedongmap.com/?hero=91622c10687d56dd",
+      "previewUrl": "https://preview.daedongmap.com/?hero=91622c10687d56dd",
+      "qrAsset": "assets/qr/hyangmijin-jjamppong-yeoseo.svg"
     }
   ]
 }

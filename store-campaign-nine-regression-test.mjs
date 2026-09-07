@@ -24,6 +24,7 @@ const expected = [
   ['d9730ed96e5fbd9a', '틈 돈까스 미평점'],
   ['996f54c7c66ec979', '등뼈감자탕 미평점'],
   ['abb76aa470e26f7a', '피자스쿨 여문점'],
+  ['91622c10687d56dd', '향미진짬뽕 여서점'],
 ];
 
 const kongsansoFamilyStoreIds = [
@@ -144,6 +145,7 @@ const auditedStoreSlideCounts = new Map([
   ['f8a71a5a2344ee7f', 14],
   ['996f54c7c66ec979', 10],
   ['abb76aa470e26f7a', 14],
+  ['91622c10687d56dd', 14],
   ['fb798d3119a28415', 14],
   ['a089d1d54720b48e', 14],
   ['aa0a00258c22f377', 14],

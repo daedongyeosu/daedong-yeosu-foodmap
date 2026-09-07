@@ -1091,6 +1091,30 @@
         {"storeId":"996f54c7c66ec979","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/12/e569fdf3-ad5c-4126-b436-517cf6805a82.JPG","title":"등뼈감자탕 미평점","meta":"수제비 추가"}
       ],
       "layout": "food14-plus3"
+    },
+    "abb76aa470e26f7a": {
+      "storeId": "abb76aa470e26f7a",
+      "slug": "pizzaschool-yeomun",
+      "label": "피자스쿨 여문점 전용 대동여수음식지도",
+      "title": "피자스쿨 여문점",
+      "meta": "여서·문수 · 피자",
+      "slides": [
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/069505c1-91d1-4e56-967d-217a86893237.jpg","title":"피자스쿨 여문점","meta":"불고기피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/29591281-b7e1-446d-9efa-f878e7c162f1.jpg","title":"피자스쿨 여문점","meta":"포테이토피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/b5cb0253-9370-452c-a188-bf69f1620427.jpg","title":"피자스쿨 여문점","meta":"고구마피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/6045ab1b-ebdc-4e0e-a81d-946bd4efc33f.jpg","title":"피자스쿨 여문점","meta":"콤비네이션피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/faaef8ce-759e-40ad-ad1a-64339540b59f.jpg","title":"피자스쿨 여문점","meta":"핫치킨피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/a2414974-1332-4d0b-9834-7b6edf82cae1.jpg","title":"피자스쿨 여문점","meta":"페퍼로니피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/4ddc98e7-7104-434b-8df3-602da832f292.jpg","title":"피자스쿨 여문점","meta":"치즈피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/e2920a6d-41de-4cf7-b904-85efa14e9c0d.jpg","title":"피자스쿨 여문점","meta":"나폴리피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/6f67c0d1-98bf-49b7-9071-2172ac973bcd.jpg","title":"피자스쿨 여문점","meta":"더블갈릭바베큐피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/a9e9fabd-54bf-410f-bc82-a9d147e533ce.jpg","title":"피자스쿨 여문점","meta":"프리미엄 스테이크피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/699b2cce-81b5-409e-ab94-68c276329fd5.jpg","title":"피자스쿨 여문점","meta":"까르보네피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/ade90696-d523-49bc-ac57-4a351d3a35b6.jpg","title":"피자스쿨 여문점","meta":"고르곤졸라피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/1e466f19-8827-4836-8280-6ecff65ea35e.jpg","title":"피자스쿨 여문점","meta":"아이리쉬포테이토피자"},
+        {"storeId":"abb76aa470e26f7a","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2025/05/e07af3e7-d7eb-4ebb-b13e-7004d5f4137b.jpg","title":"피자스쿨 여문점","meta":"깐쇼새우피자"}
+      ],
+      "layout": "food14-plus3"
     }
   },
   "virtualStores": {

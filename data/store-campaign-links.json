@@ -141,6 +141,13 @@
       "url": "https://daedongmap.com/?hero=996f54c7c66ec979",
       "previewUrl": "https://preview.daedongmap.com/?hero=996f54c7c66ec979",
       "qrAsset": "assets/qr/deungppyeo-gamjatang-mipyeong.svg"
+    },
+    {
+      "storeId": "abb76aa470e26f7a",
+      "name": "피자스쿨 여문점",
+      "url": "https://daedongmap.com/?hero=abb76aa470e26f7a",
+      "previewUrl": "https://preview.daedongmap.com/?hero=abb76aa470e26f7a",
+      "qrAsset": "assets/qr/pizzaschool-yeomun.svg"
     }
   ]
 }

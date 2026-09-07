@@ -59,8 +59,10 @@ try {
     if(production){
       await detail.waitFor({timeout:30000});
       const title = (await detail.locator('h2').first().innerText()).replace(/\s/g,'');
-      // The existing live catalog omits the branch suffix for this store.
-      const allowedTitles = [data.campaigns[id].title, ...(id==='04910f606ba038a6'?['오워래 수제 돈까스']:[])];
+      // Some existing live catalog names omit spacing or a branch suffix used by the dedicated campaign.
+      const allowedTitles = [data.campaigns[id].title,
+        ...(id==='04910f606ba038a6'?['오워래 수제 돈까스']:[]),
+        ...(id==='91622c10687d56dd'?['향미진짬뽕']:[])];
       assert.ok(allowedTitles.map(name=>name.replace(/\s/g,'')).includes(title),title);
       await page.locator('#modal .modal-close').tap();
       await page.waitForFunction(id=>document.querySelector('#modal')?.hidden && new URL(location.href).searchParams.get('hero')===id,id);

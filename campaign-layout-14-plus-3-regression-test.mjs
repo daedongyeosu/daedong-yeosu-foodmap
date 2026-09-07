@@ -126,6 +126,13 @@ check('More than fourteen photos are capped without reordering', () => {
   assertStandard(entries);
   assert.deepEqual(entries.filter(entry => entry.kind === 'store').map(entry => entry.banner.desktop), slides(14).map(slide => slide.image));
 });
+check('A campaign can explicitly add one supplied local advertisement without dropping its fourteen food photos', () => {
+  const input = campaign(15, {layout:'food14-plus3', storeHeroLimit:15});
+  input.slides[14].showCopy = false;
+  const entries = execute(input);
+  assertStandard(entries, 15);
+  assert.equal(entries.filter(entry => entry.kind === 'store').at(-1).campaignShowCopy, false);
+});
 check('Insufficient food photos are never duplicated to fill the target', () => {
   assertStandard(execute(campaign(8, {layout:'food14-plus3'})), 8);
 });

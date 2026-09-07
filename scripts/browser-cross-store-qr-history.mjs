@@ -99,7 +99,9 @@ try {
   page.on('pageerror', error => report.errors.push(error.message));
   await page.goto(`${baseURL}?hero=${previousStoreId}&source=android-app`, {waitUntil: 'domcontentloaded'});
   await page.locator(`#modal:not([hidden]) .store-detail[data-store-id="${previousStoreId}"]`).waitFor({timeout: 15000});
+  report.checks.push('설치 앱에서 기존 가게 팝업 표시');
   await page.waitForFunction(() => typeof window.__daedongTestLaunchConsumer === 'function');
+  report.checks.push('설치 앱의 두 번째 실행 주소 수신 준비');
   await page.evaluate(targetURL => {
     window.__daedongTestLaunchConsumer({targetURL});
   }, `${baseURL}?hero=${requestedStoreId}&source=android-app`);

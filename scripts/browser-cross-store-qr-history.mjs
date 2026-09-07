@@ -62,11 +62,14 @@ if (/^https?:\/\/(?:127\.0\.0\.1|localhost)/.test(baseURL)) {
 }
 
 await context.addInitScript(({previousStoreId, requestedStoreId}) => {
-  window.launchQueue = {
-    setConsumer(consumer) {
-      window.__daedongTestLaunchConsumer = consumer;
+  Object.defineProperty(window, 'launchQueue', {
+    configurable: true,
+    value: {
+      setConsumer(consumer) {
+        window.__daedongTestLaunchConsumer = consumer;
+      },
     },
-  };
+  });
   if (new URLSearchParams(location.search).get('hero') !== requestedStoreId) return;
   const returnToken = 'stale-previous-store-return';
   const savedAt = Date.now();

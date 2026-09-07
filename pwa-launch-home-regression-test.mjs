@@ -13,8 +13,8 @@ assert.match(app, /history\.scrollRestoration = 'manual'/,
   '브라우저가 과거 중간 스크롤을 자동 복원하지 못하게 해야 합니다.');
 assert.match(app, /window\.scrollTo\(0, 0\)/,
   '시작 주소가 다시 열리면 홈 최상단으로 이동해야 합니다.');
-assert.match(app, /window\.launchQueue\.setConsumer\(resetInstalledAppLaunch\)/,
-  '실행 중인 설치형 앱의 아이콘 재실행 이벤트를 직접 처리해야 합니다.');
+assert.match(app, /window\.launchQueue\.setConsumer\(launchParams => resetInstalledAppLaunch\(launchParams\)\)/,
+  '실행 중인 설치형 앱의 아이콘·QR 재실행 이벤트와 대상 주소를 직접 처리해야 합니다.');
 assert.match(app, /const DAEDONG_INSTALLED_APP_CONTEXT = isInstalledAppLaunchContext\(\)/,
   '일반 카카오 웹 화면과 설치형 앱의 생명주기를 명시적으로 구분해야 합니다.');
 assert.match(app, /if \(DAEDONG_INSTALLED_APP_CONTEXT && typeof window\.launchQueue/,
@@ -45,7 +45,7 @@ assert.match(app, /globalThis\.daedongPendingExternalReturn/,
   '주문앱에서 돌아오는 동작은 홈 초기화에서 제외해야 합니다.');
 assert.match(app, /resetFreshEntryScroll\(\{force: true\}\)/,
   '주문앱 복귀가 끝난 뒤 앱을 다시 열면 이전 진입 상태와 무관하게 홈을 초기화해야 합니다.');
-assert.match(serviceWorker, /CACHE_NAME = 'daedong-yeosu-app-shell-v32-cross-store-qr-history'/,
-  '기존 설치본도 새 manifest를 내려받도록 앱 셸 캐시 버전을 올려야 합니다.');
+assert.match(serviceWorker, /CACHE_NAME = 'daedong-yeosu-app-shell-v33-installed-qr-switch'/,
+  '기존 설치본도 새 QR 전환 코드를 내려받도록 앱 셸 캐시 버전을 올려야 합니다.');
 
 console.log('pwa-launch-home-regression-test: pass');

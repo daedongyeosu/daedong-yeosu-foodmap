@@ -34,6 +34,7 @@ const stores = [
     categories: ['한식'],
     image: 'assets/store-placeholder.svg',
     images: [{card: 'assets/store-placeholder.svg', detail: 'assets/store-placeholder.svg'}],
+    channelKeys: ['phone'],
     routes: [{name: '전화주문', key: 'phone', url: 'tel:0610000000', enabled: true}],
   },
   {
@@ -45,6 +46,7 @@ const stores = [
     categories: ['햄버거/샌드위치/토스트/핫도그'],
     image: 'assets/notion-recovery-180/10db3b0db6ebf8c5/01.jpg',
     images: [{card: 'assets/notion-recovery-180/10db3b0db6ebf8c5/01.jpg', detail: 'assets/notion-recovery-180/10db3b0db6ebf8c5/01.jpg'}],
+    channelKeys: ['mukkebi'],
     routes: [{name: '먹깨비', key: 'mukkebi', url: 'https://example.com/mukkebi', enabled: true}],
   },
 ];

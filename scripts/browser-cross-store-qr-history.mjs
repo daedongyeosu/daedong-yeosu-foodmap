@@ -97,7 +97,9 @@ await context.addInitScript(({previousStoreId, requestedStoreId}) => {
 try {
   const page = await context.newPage();
   page.on('pageerror', error => report.errors.push(error.message));
-  await page.goto(`${baseURL}?hero=${previousStoreId}&source=android-app`, {waitUntil: 'domcontentloaded'});
+  await page.goto(`${baseURL}?source=android-app`, {waitUntil: 'domcontentloaded'});
+  await page.waitForFunction(() => window.daedongCatalogReady && typeof window.openStore === 'function' && typeof window.fxStoreById === 'function', null, {timeout: 15000});
+  await page.evaluate(storeId => window.openStore(window.fxStoreById(storeId)), previousStoreId);
   await page.locator(`#modal:not([hidden]) .store-detail[data-store-id="${previousStoreId}"]`).waitFor({timeout: 15000});
   report.checks.push('설치 앱에서 기존 가게 팝업 표시');
   await page.waitForFunction(() => typeof window.__daedongTestLaunchConsumer === 'function');

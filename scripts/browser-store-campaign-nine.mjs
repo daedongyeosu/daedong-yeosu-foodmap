@@ -17,6 +17,9 @@ const output = process.env.OUTPUT_DIR || '.';
 fs.mkdirSync(output, { recursive: true });
 const manifest = JSON.parse(fs.readFileSync(new URL('../data/store-campaign-links.json', import.meta.url), 'utf8'));
 const heroData = JSON.parse(fs.readFileSync(new URL('../data/hero-campaigns.json', import.meta.url), 'utf8'));
+const selectedCampaigns = process.env.ONLY_STORE_ID
+  ? manifest.campaigns.filter(entry => entry.storeId === process.env.ONLY_STORE_ID)
+  : manifest.campaigns;
 const haeinineStoreId = '17d9bf1de3d671fd';
 const haeinineMenu = JSON.parse(fs.readFileSync(new URL('../data/haeinine-yeoseo-menu.json', import.meta.url), 'utf8'));
 const dataApiSource = fs.readFileSync(new URL('../data-api.js', import.meta.url), 'utf8');
@@ -173,8 +176,11 @@ async function assertFood14Plus3(page, campaign) {
     }])).values()].sort((a, b) => a.index - b.index)
   ));
   const food = entries.filter(entry => entry.storeId);
-  const expectedFood = campaign.slides.slice(0, 14).map(slide => ({
-    storeId: String(slide.storeId || campaign.storeId), image: slide.image, title: slide.title, meta: slide.meta,
+  const campaignLimit = Math.max(1, Math.min(Number(campaign.storeHeroLimit) || 14, 20));
+  const expectedFood = campaign.slides.slice(0, campaignLimit).map(slide => ({
+    storeId: String(slide.storeId || campaign.storeId), image: slide.image,
+    title: slide.showCopy === false ? '' : slide.title,
+    meta: slide.showCopy === false ? '' : slide.meta,
   }));
   const ads = entries.filter(entry => entry.url).map(({index, url, image}) => ({index, url, image}));
   const expectedAds = expectedFood14Plus3Ads(expectedFood.length);
@@ -255,7 +261,7 @@ async function assertHaeinineMenuPreview(page) {
 }
 
 try {
-  for (const entry of manifest.campaigns) {
+  for (const entry of selectedCampaigns) {
     const page = await context.newPage();
     activePage = page;
     page.on('pageerror', (error) => report.errors.push(`${entry.name}: ${error.message}`));
@@ -289,13 +295,16 @@ try {
     if (!Array.isArray(campaign.slides) || !campaign.slides.length || campaign.images?.length) {
       throw new Error(`${entry.name}: 탐나는피자 표준 slides 구조가 아닙니다.`);
     }
-    const expectedSlides = Math.min(campaign.slides.length, 14);
+    const campaignLimit = Math.max(1, Math.min(Number(campaign.storeHeroLimit) || 14, 20));
+    const expectedSlides = Math.min(campaign.slides.length, campaignLimit);
     const expectedGeneralAds = 3;
     const expectedTotalSlides = expectedSlides + expectedGeneralAds;
     const campaignSlides = page.locator('.rc6-campaign-hero');
     const slideIndexes = await campaignSlides.evaluateAll((slides) => slides.map((slide) => slide.dataset.heroIndex));
     const slideCount = new Set(slideIndexes).size;
     if (slideCount !== expectedSlides) throw new Error(`${entry.name}: 전용 배너 수가 ${slideCount}/${expectedSlides}입니다.`);
+    await campaignSlides.locator('img').evaluateAll(images => images.forEach(image => { image.loading = 'eager'; }));
+    await page.waitForFunction(() => [...document.querySelectorAll('.rc6-campaign-hero img')].every(image => image.complete), null, { timeout: 10000 });
     const renderedSlides = await campaignSlides.evaluateAll((slides) => {
       const unique = new Map();
       slides.forEach(slide => {
@@ -306,20 +315,26 @@ try {
           storeName: slide.querySelector('.rc6-store-hero-copy strong')?.textContent?.trim() || '',
           menuName: slide.querySelector('.rc6-store-hero-copy > span')?.textContent?.trim() || '',
           footer: slide.querySelector('.rc6-hero-order-footer')?.getAttribute('aria-label') || '',
+          imageLoaded: Boolean(slide.querySelector('img')?.naturalWidth && slide.querySelector('img')?.naturalHeight),
+          photoOnly: Boolean(slide.querySelector('.rc6-campaign-photo-only')),
         });
       });
       return [...unique.values()].sort((a, b) => a.index - b.index);
     });
     const expectedCopy = campaign.slides.slice(0, expectedSlides).map(slide => ({
       storeId: String(slide.storeId || campaign.storeId),
-      storeName: slide.title,
-      menuName: slide.meta,
+      storeName: slide.showCopy === false ? '' : slide.title,
+      menuName: slide.showCopy === false ? '' : slide.meta,
+      showCopy: slide.showCopy !== false,
     }));
-    if (JSON.stringify(renderedSlides.map(({storeId, storeName, menuName}) => ({storeId, storeName, menuName}))) !== JSON.stringify(expectedCopy)) {
+    if (JSON.stringify(renderedSlides.map(({storeId, storeName, menuName}) => ({storeId, storeName, menuName}))) !== JSON.stringify(expectedCopy.map(({storeId, storeName, menuName}) => ({storeId, storeName, menuName})))) {
       throw new Error(`${entry.name}: 배너의 가게명·메뉴명·연결 가게가 표준 데이터와 다릅니다.`);
     }
-    if (renderedSlides.some(item => !item.storeName || !item.menuName || !item.footer)) {
+    if (renderedSlides.some((item, index) => !item.footer || (expectedCopy[index].showCopy && (!item.storeName || !item.menuName)))) {
       throw new Error(`${entry.name}: 가게명·메뉴명·주문방법 중 비어 있는 표시가 있습니다.`);
+    }
+    if (renderedSlides.some((item, index) => !item.imageLoaded || item.photoOnly !== !expectedCopy[index].showCopy)) {
+      throw new Error(`${entry.name}: 원본 광고 이미지 표시 또는 문구 덮개 설정이 다릅니다.`);
     }
     const allowedStoreIds = new Set(campaign.slides.map(slide => String(slide.storeId || campaign.storeId)));
     const expectedAllowedCount = entry.storeId === 'cfde2617224f33a0' ? 8 : 1;
@@ -423,7 +438,7 @@ try {
     await hiddenPage.close();
   }
   report.legacyTamnaneunQr = report.hiddenTamnaneunEntries[0];
-  report.success = report.stores.length === manifest.campaigns.length
+  report.success = report.stores.length === selectedCampaigns.length
     && report.hiddenTamnaneunEntries.length === 3
     && report.errors.length === 0;
 } catch (error) {

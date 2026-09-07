@@ -13,16 +13,22 @@ assert.equal(campaign.storeId, id);
 assert.equal(campaign.title, name);
 assert.equal(campaign.slug, 'hyangmijin-jjamppong-yeoseo');
 assert.equal(campaign.layout, 'food14-plus3');
-assert.equal(campaign.slides.length, 14, '실제 메뉴 14장과 공통 광고 3장이 섞이는 표준 구성이어야 합니다.');
-assert.equal(new Set(campaign.slides.map(slide => slide.image)).size, 14, '메뉴 사진을 반복하면 안 됩니다.');
-assert.equal(new Set(campaign.slides.map(slide => slide.meta)).size, 14, '메뉴명을 반복하면 안 됩니다.');
-for (const slide of campaign.slides) {
+assert.equal(campaign.slides.length, 15, '실제 메뉴 14장, 코웨이 광고 1장과 공통 광고 3장이 섞여야 합니다.');
+assert.equal(campaign.storeHeroLimit, 15, '추가 광고가 잘리지 않고 표시되어야 합니다.');
+assert.equal(new Set(campaign.slides.map(slide => slide.image)).size, 15, '배너 사진을 반복하면 안 됩니다.');
+assert.equal(new Set(campaign.slides.map(slide => slide.meta)).size, 15, '배너 설명을 반복하면 안 됩니다.');
+for (const slide of campaign.slides.slice(0, 14)) {
   assert.equal(slide.storeId, id, '다른 가게로 연결되는 배너가 있으면 안 됩니다.');
   assert.equal(slide.title, name);
   assert.match(slide.image, /^https:\/\/dwdwaxgahvp6i\.cloudfront\.net\/shbimg\/biz\/img\//);
   assert.ok(slide.meta.trim());
   assert.doesNotMatch(slide.meta, /\d[\d,]*\s*원|와우\s*회원/);
 }
+const cowaySlide = campaign.slides[14];
+assert.equal(cowaySlide.storeId, id, '코웨이 광고도 향미진 전용 배너 안에서 표시되어야 합니다.');
+assert.equal(cowaySlide.image, 'assets/campaigns/hyangmijin-jjamppong-yeoseo/15-coway-lee-hyangmi.webp');
+assert.equal(cowaySlide.showCopy, false, '광고 원본 문구를 가리는 가게명 덮개를 표시하면 안 됩니다.');
+assert.ok(existsSync(cowaySlide.image), '전달받은 코웨이 광고 이미지가 저장소에 포함되어야 합니다.');
 for (const menu of ['해물삼선짬뽕', '우삼겹고기짬뽕', '짜장면', '미니탕수육']) {
   assert.ok(campaign.slides.some(slide => slide.meta === menu), `대표 메뉴가 빠졌습니다: ${menu}`);
 }
@@ -45,7 +51,7 @@ assert.match(svg, /M0 40\.5h7/, 'QR 아래쪽에도 넓은 흰 여백을 만들�
 
 for (const [file, asset] of [['rc6-fixes.js', 'hero-campaigns.json'], ['final-experience.js', 'rc6-fixes.js'], ['index.html', 'final-experience.js']]) {
   const source = readFileSync(file, 'utf8');
-  assert.ok(source.split('\n').some(line => line.includes(`${asset}?v=`) && line.includes('hyangmijin-jjamppong-yeoseo-1')), `새 전용 화면을 즉시 읽도록 갱신해야 합니다: ${file}`);
+  assert.ok(source.split('\n').some(line => line.includes(`${asset}?v=`) && line.includes('hyangmijin-jjamppong-yeoseo-2')), `새 전용 화면을 즉시 읽도록 갱신해야 합니다: ${file}`);
 }
 assert.ok(readFileSync('docs/STORE_CAMPAIGN_LINKS.md', 'utf8').includes(`| ${name} | <${url}>`));
 

@@ -1136,9 +1136,11 @@
         {"storeId":"91622c10687d56dd","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/11/5e4c6b53-d8fa-4382-9e02-3baeefbd2985.jpg","title":"향미진짬뽕 여서점","meta":"고추우삼겹짬뽕"},
         {"storeId":"91622c10687d56dd","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/10/9b82cab8-f73d-4dcb-bdb1-c758bbfca3dd.jpg","title":"향미진짬뽕 여서점","meta":"해물덮밥"},
         {"storeId":"91622c10687d56dd","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/05/4eda93be-65ef-4c3a-b107-098cec23ea01.jpg","title":"향미진짬뽕 여서점","meta":"잡채밥"},
-        {"storeId":"91622c10687d56dd","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/10/9fad5424-7a1c-4696-b0ce-dad031ae1e23.jpg","title":"향미진짬뽕 여서점","meta":"미니탕수육"}
+        {"storeId":"91622c10687d56dd","image":"https://dwdwaxgahvp6i.cloudfront.net/shbimg/biz/img/2022/10/9fad5424-7a1c-4696-b0ce-dad031ae1e23.jpg","title":"향미진짬뽕 여서점","meta":"미니탕수육"},
+        {"storeId":"91622c10687d56dd","image":"assets/campaigns/hyangmijin-jjamppong-yeoseo/15-coway-lee-hyangmi.webp","title":"향미진짬뽕 여서점","meta":"코웨이 이향미 광고","showCopy":false}
       ],
-      "layout": "food14-plus3"
+      "layout": "food14-plus3",
+      "storeHeroLimit": 15
     }
   },
   "virtualStores": {

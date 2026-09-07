@@ -71,7 +71,8 @@ for (const [storeId, name] of expected) {
   assert.ok(campaign, `${name}: hero campaign is missing.`);
   assert.equal(campaign.storeId, storeId, `${name}: hero campaign points at another store.`);
   assert.ok(Array.isArray(campaign.slides) && campaign.slides.length > 0, `${name}: standardized menu slides are missing.`);
-  assert.ok(campaign.slides.length <= 14, `${name}: store menu slides must not exceed the fourteen-card campaign limit.`);
+  const campaignLimit = Math.max(1, Math.min(Number(campaign.storeHeroLimit) || 14, 20));
+  assert.ok(campaign.slides.length <= campaignLimit, `${name}: campaign slides exceed their approved display limit.`);
   assert.equal(campaign.images, undefined, `${name}: legacy image-only campaigns are not allowed.`);
   assert.equal(campaign.copySlides, undefined, `${name}: legacy copy-slide selection is not allowed.`);
   assert.equal(campaign.specialBannerKeys, undefined, `${name}: the shared three-ad standard must not be duplicated per campaign.`);
@@ -145,7 +146,7 @@ const auditedStoreSlideCounts = new Map([
   ['f8a71a5a2344ee7f', 14],
   ['996f54c7c66ec979', 10],
   ['abb76aa470e26f7a', 14],
-  ['91622c10687d56dd', 14],
+  ['91622c10687d56dd', 15],
   ['fb798d3119a28415', 14],
   ['a089d1d54720b48e', 14],
   ['aa0a00258c22f377', 14],
@@ -166,7 +167,8 @@ assert.deepEqual(
 );
 assert.match(rc6, /const RC6_CAMPAIGN_STORE_HERO_LIMIT=14;/, '전용 화면의 가게·메뉴 사진은 최대 14장이어야 합니다.');
 assert.match(rc6, /const RC6_CAMPAIGN_SPECIAL_HERO_KEYS=\['18','19','20'\];/, '모든 전용 화면에 일반광고 3장이 공통 적용되어야 합니다.');
-assert.match(rc6, /\.filter\(Boolean\)\.slice\(0,RC6_CAMPAIGN_STORE_HERO_LIMIT\)/, '사진이 많아도 전용 화면 전체가 17장을 넘으면 안 됩니다.');
+assert.match(rc6, /Number\(campaign\.storeHeroLimit\)\|\|RC6_CAMPAIGN_STORE_HERO_LIMIT/, '승인된 가게만 추가 배너 한도를 지정할 수 있어야 합니다.');
+assert.match(rc6, /\.filter\(Boolean\)\.slice\(0,campaignStoreHeroLimit\)/, '승인된 배너 한도를 런타임에서 적용해야 합니다.');
 assert.match(rc6, /RC6_CAMPAIGN_SPECIAL_HERO_KEYS\.map\(/, '가게별 설정 누락과 관계없이 일반광고 3장을 붙여야 합니다.');
 assert.match(rc6, /hero-campaigns\.json\?v=store-campaign-standard-1-dedicated-hero-14-plus-3-1/, 'The standardized campaign data cache must be refreshed.');
 assert.match(loader, /rc6-fixes\.js\?v=[^'\n]*dedicated-hero-14-plus-3-1/, 'The RC6 loader cache must include the standardized campaign release.');

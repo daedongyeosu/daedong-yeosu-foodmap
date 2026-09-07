@@ -60,6 +60,11 @@ if (/^https?:\/\/(?:127\.0\.0\.1|localhost)/.test(baseURL)) {
 }
 
 await context.addInitScript(({previousStoreId, requestedStoreId}) => {
+  window.launchQueue = {
+    setConsumer(consumer) {
+      window.__daedongTestLaunchConsumer = consumer;
+    },
+  };
   if (new URLSearchParams(location.search).get('hero') !== requestedStoreId) return;
   const returnToken = 'stale-previous-store-return';
   const savedAt = Date.now();
@@ -90,8 +95,14 @@ await context.addInitScript(({previousStoreId, requestedStoreId}) => {
 try {
   const page = await context.newPage();
   page.on('pageerror', error => report.errors.push(error.message));
-  await page.goto(`${baseURL}?hero=${requestedStoreId}`, {waitUntil: 'domcontentloaded'});
+  await page.goto(`${baseURL}?hero=${previousStoreId}&source=android-app`, {waitUntil: 'domcontentloaded'});
+  await page.locator(`#modal:not([hidden]) .store-detail[data-store-id="${previousStoreId}"]`).waitFor({timeout: 15000});
+  await page.waitForFunction(() => typeof window.__daedongTestLaunchConsumer === 'function');
+  await page.evaluate(targetURL => {
+    window.__daedongTestLaunchConsumer({targetURL});
+  }, `${baseURL}?hero=${requestedStoreId}&source=android-app`);
   await page.locator(`#modal:not([hidden]) .store-detail[data-store-id="${requestedStoreId}"]`).waitFor({timeout: 15000});
+  report.checks.push('설치 앱에서 다른 가게 QR을 다시 열면 새 주소로 전환');
   const opened = await page.evaluate(({previousStoreId, requestedStoreId}) => ({
     activeStoreId: document.querySelector('#modal')?.dataset.activeStoreId,
     previousVisible: Boolean(document.querySelector(`#modal:not([hidden]) .store-detail[data-store-id="${previousStoreId}"]`)),

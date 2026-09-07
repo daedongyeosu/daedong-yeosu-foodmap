@@ -1,7 +1,7 @@
 'use strict';
 
-const CACHE_NAME = 'daedong-yeosu-app-shell-v33-installed-qr-switch';
-const RUNTIME_CACHE = 'daedong-yeosu-runtime-v6-installed-qr-switch';
+const CACHE_NAME = 'daedong-yeosu-app-shell-v32-cross-store-qr-history';
+const RUNTIME_CACHE = 'daedong-yeosu-runtime-v5-cross-store-qr-history';
 const CACHEABLE_DESTINATIONS = new Set(['image', 'style', 'script', 'font']);
 const APP_SHELL = [
   '/',

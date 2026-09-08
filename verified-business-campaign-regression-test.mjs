@@ -1,0 +1,24 @@
+import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
+const read=f=>JSON.parse(fs.readFileSync(f,'utf8'));
+const hash=x=>createHash('sha256').update(JSON.stringify(x)).digest('hex');
+const batch=read('data/verified-campaign-stores.json'),ids=new Set(batch.map(x=>x.storeId));
+assert.equal(batch.length,122);assert.equal(ids.size,122);assert.equal(hash(batch),'8ce9be923c4e591948c6a4b806a03cb411428461141060e65a101fd23216a85e');
+assert.ok(ids.has('65cc1845e542d5fb'),'Correct Yeoseo/Munsu single-brand shop must be included');
+assert.ok(!ids.has('c143aca89697f5aa'),'Unmanaged Hakdong store must never enter verified batch');
+assert.ok(!ids.has('e0c6949efb48f4b2'),'Previously hidden stores must not be republished');
+const hero=read('data/hero-campaigns.json'),links=read('data/store-campaign-links.json');
+assert.equal(hash({...hero,campaigns:Object.fromEntries(Object.entries(hero.campaigns).filter(([id])=>!ids.has(id)))}),'3f641bbd62dc714b2097f551f43be2368fee93bf092f6d5774a5ab29b3d3f0d4');
+assert.equal(hash({...links,campaigns:links.campaigns.filter(x=>!ids.has(x.storeId))}),'7057fadcaeb5bc4de72cdc010bbb642c6ca2bdd988440623f54669ca9d4ff2b8');
+for(const {storeId,name} of batch){
+ assert.match(storeId,/^[a-f0-9]{16}$/);const c=hero.campaigns[storeId],l=links.campaigns.find(x=>x.storeId===storeId);
+ assert.equal(c.storeId,storeId);assert.equal(c.title,name);assert.deepEqual(c.slides.map(x=>x.storeId),[storeId]);
+ assert.equal(l.url,`https://daedongmap.com/?hero=${storeId}`);assert.equal(l.previewUrl,`https://preview.daedongmap.com/?hero=${storeId}`);
+ const svg=fs.readFileSync(l.qrAsset,'utf8');const size=Number(svg.match(/viewBox="0 0 (\d+) \d+"/)[1]);
+ const cells=[...svg.matchAll(/M(\d+) (\d+)h1v1h-1z/g)].map(x=>[+x[1],+x[2]]);
+ assert.equal(Math.min(...cells.map(x=>x[0])),0);assert.equal(Math.min(...cells.map(x=>x[1])),0);
+ assert.equal(Math.max(...cells.map(x=>x[0])),size-1);assert.equal(Math.max(...cells.map(x=>x[1])),size-1);
+ assert.deepEqual(Object.keys(batch.find(x=>x.storeId===storeId)).sort(),['name','storeId'],'Private business numbers must not be published');
+}
+console.log('Verified business campaign additions and baseline preservation passed');

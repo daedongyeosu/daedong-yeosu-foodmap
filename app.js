@@ -1418,6 +1418,7 @@ function sortStoresByBusinessStatus(list) {
 }
 function applyCategoryPriorityOverrides(list, category) {
   const input = Array.isArray(list) ? list : [];
+  if (typeof rc6PartnerActive === 'function' && rc6PartnerActive()) return rc6ApplyPartnerPriority(input);
   const rule = categoryPriorityRule(category);
   if (!rule) return input;
   const ordered = new Map(categoryPriorityOrderedIdsForRule(rule).map((id, index) => [id, index]));

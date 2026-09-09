@@ -228,7 +228,7 @@ function rc6CampaignHeroEntries(){
   };
  }).filter(Boolean).slice(0,campaignStoreHeroLimit);
  const specialKeys=RC6_CAMPAIGN_SPECIAL_HERO_KEYS;
- const specials=specialKeys.map(key=>({key:String(key),target:rc6BannerTargets[String(key)]})).filter(item=>item.target?.status==='notion'&&item.target.notionUrl&&item.target.image).map((item,index)=>({banner:{desktop:item.target.image,mobile:item.target.image},index:HERO_BANNERS.length+index,key:`campaign-notion-${item.key}`,target:item.target,store:null,tier:3,kind:'notion'}));
+ const specials=RC6_CAMPAIGN_SPECIAL_HERO_KEYS.map(key=>({key:String(key),target:rc6BannerTargets[String(key)]})).filter(item=>item.target?.status==='notion'&&item.target.notionUrl&&item.target.image).map((item,index)=>({banner:{desktop:item.target.image,mobile:item.target.image},index:HERO_BANNERS.length+index,key:`campaign-notion-${item.key}`,target:item.target,store:null,tier:3,kind:'notion'}));
  const entries=[],slots=[3,7,11],photoQueue=[...photos],specialQueue=[...specials];
  photos.forEach((photo,index)=>{entries.push(photoQueue.shift());if(specialQueue.length&&index===slots[specials.length-specialQueue.length])entries.push(specialQueue.shift());});
  return entries.concat(specialQueue);

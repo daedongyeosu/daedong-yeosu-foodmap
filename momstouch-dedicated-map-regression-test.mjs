@@ -56,12 +56,12 @@ assert.match(
   /daedongResolveHeroCampaignStoreId\?\.\(requestedStoreId\)[\s\S]*searchParams\.set\('hero',campaignStoreId\)/,
   '기존 store형 QR을 닫은 뒤에도 해당 가게 전용 hero 주소를 유지해야 합니다.',
 );
-assert.match(intro, /const dedicatedEntryStoreId = String\(window\.daedongDedicatedEntryStoreId/);
-assert.match(intro, /if \(dedicatedEntryStoreId\) \{[\s\S]*rememberSequence\(\)[\s\S]*return;/,
-  '가게전용 QR 진입 뒤 일반 지역 안내 팝업이 끼어들면 안 됩니다.');
+assert.match(intro, /const dedicatedEntryStoreId = String\([\s\S]*window\.daedongDedicatedEntryStoreId/);
+assert.match(intro, /if \(dedicatedEntryStoreId && !dedicatedStoreDetailClosed\) return;/,
+  '가게전용 QR 진입 뒤 가게 상세를 닫기 전에는 일반 지역 안내 팝업이 끼어들면 안 됩니다.');
 assert.match(mukkebi, /RETURN_QUERY_KEYS = \['store', 'hero'/,
   'hero형 가게전용 주소는 일반 행사 자동 팝업 대상에서 제외해야 합니다.');
-assert.match(mukkebi, /!globalThis\.daedongDedicatedEntryStoreId/,
-  'store 주소가 초기화 도중 제거되어도 가게전용 진입에는 일반 행사 팝업을 띄우면 안 됩니다.');
+assert.match(mukkebi, /&& !dedicatedEntryStoreId/,
+  '가게전용 진입에는 해당 가게보다 먼저 일반 행사 팝업을 띄우면 안 됩니다.');
 
 console.log('momstouch-dedicated-map-regression-test: pass');

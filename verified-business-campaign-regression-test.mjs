@@ -13,7 +13,7 @@ assert.equal(hash({...hero,campaigns:Object.fromEntries(Object.entries(hero.camp
 assert.equal(hash({...links,campaigns:links.campaigns.filter(x=>!ids.has(x.storeId))}),'7057fadcaeb5bc4de72cdc010bbb642c6ca2bdd988440623f54669ca9d4ff2b8');
 for(const {storeId,name} of batch){
  assert.match(storeId,/^[a-f0-9]{16}$/);const c=hero.campaigns[storeId],l=links.campaigns.find(x=>x.storeId===storeId);
- assert.equal(c.storeId,storeId);assert.equal(c.title,name);assert.deepEqual(c.slides.map(x=>x.storeId),[storeId]);
+ assert.equal(c.storeId,storeId);assert.equal(c.title,name);assert.equal(c.slides.length,storeId==='dc638b23f8cf3c5b'?14:1);assert.ok(c.slides.every(x=>x.storeId===storeId));
  assert.equal(l.url,`https://daedongmap.com/?hero=${storeId}`);assert.equal(l.previewUrl,`https://preview.daedongmap.com/?hero=${storeId}`);
  const svg=fs.readFileSync(l.qrAsset,'utf8');const size=Number(svg.match(/viewBox="0 0 (\d+) \d+"/)[1]);
  const cells=[...svg.matchAll(/M(\d+) (\d+)h1v1h-1z/g)].map(x=>[+x[1],+x[2]]);

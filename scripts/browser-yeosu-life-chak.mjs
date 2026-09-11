@@ -37,8 +37,16 @@ const introClose = page.locator('#communityIntroClose');
 if (await introClose.isVisible()) await introClose.click();
 const section = page.locator('#yeosuLifeSection');
 await section.waitFor({state: 'visible', timeout: 10000});
-await section.evaluate(element => element.scrollIntoView({block: 'start', behavior: 'instant'}));
+// The normal late-restoration guard intentionally rejects programmatic scroll
+// until a real gesture occurs. Remote command latency can otherwise let that
+// guard return the fixture to the top before its subsequent ArrowDown arrives.
 await page.keyboard.press('ArrowDown');
+await page.waitForFunction(() => window.daedongEarlyHomeInteraction === true);
+await section.scrollIntoViewIfNeeded();
+await page.waitForFunction(() => {
+  const box = document.querySelector('#yeosuLifeSection').getBoundingClientRect();
+  return Math.min(box.bottom, innerHeight) - Math.max(box.top, 0) >= box.height * 0.25;
+});
 await page.waitForFunction(() => document.querySelectorAll('#yeosuLifeHighlights .yeosu-life-highlight').length === 3);
 
 const homeAudit = await page.evaluate(() => ({

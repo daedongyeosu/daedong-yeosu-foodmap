@@ -74,6 +74,9 @@ try {
 } finally {
   fs.writeFileSync('browser-global-menu-price-hide-report.json', `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report, null, 2));
+  // Drain in-flight API proxy handlers before disposing their request context.
+  // Assertions and page errors above still determine the result.
+  await context.unrouteAll({behavior: 'wait'});
   await browser.close();
 }
 

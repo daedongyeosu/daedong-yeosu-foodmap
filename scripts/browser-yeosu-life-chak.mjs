@@ -28,12 +28,16 @@ page.on('pageerror', error => pageErrors.push(error.message));
 await page.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
 
 await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
-await page.waitForTimeout(700);
+// Finish the normal fresh-entry pageshow reset and catalog layout before
+// positioning the fixture. Otherwise an early smooth scroll can be reset to
+// the home top, leaving the offscreen highlights correctly unhydrated.
+await page.waitForLoadState('load');
+await page.waitForFunction(() => window.__daedongCatalogProgress?.complete === true);
 const introClose = page.locator('#communityIntroClose');
 if (await introClose.isVisible()) await introClose.click();
 const section = page.locator('#yeosuLifeSection');
 await section.waitFor({state: 'visible', timeout: 10000});
-await section.evaluate(element => element.scrollIntoView({block: 'start'}));
+await section.evaluate(element => element.scrollIntoView({block: 'start', behavior: 'instant'}));
 await page.keyboard.press('ArrowDown');
 await page.waitForFunction(() => document.querySelectorAll('#yeosuLifeHighlights .yeosu-life-highlight').length === 3);
 
@@ -52,7 +56,7 @@ if (homeAudit.sectionWidth > 390 || homeAudit.horizontalOverflow) throw new Erro
 fs.mkdirSync('artifacts', {recursive: true});
 await page.evaluate(() => {
   window.daedongMarkHomeInteraction?.();
-  document.querySelector('#yeosuLifeSection')?.scrollIntoView({block: 'start'});
+  document.querySelector('#yeosuLifeSection')?.scrollIntoView({block: 'start', behavior: 'instant'});
 });
 await page.waitForTimeout(250);
 await page.screenshot({path: 'artifacts/yeosu-life-home-390x844.png', fullPage: false});

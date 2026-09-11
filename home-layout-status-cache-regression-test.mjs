@@ -74,3 +74,6 @@ if (fn(service, 'storeStatus').includes("serviceLoadState === 'error'")) {
   assert.equal(rank('2026-09-11T13:00:00+09:00'), 0);
 }
 console.log('PASS: active viewport anchoring and minute/snapshot-safe status ranks');
+const menuCheck = fs.readFileSync('scripts/browser-global-menu-price-hide.mjs', 'utf8');
+assert.match(menuCheck, /await context\.unrouteAll\(\{behavior: 'wait'\}\);\s*await browser\.close\(\)/,
+  'finish pending QA API handlers before destroying the browser context');

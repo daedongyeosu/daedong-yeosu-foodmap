@@ -140,6 +140,17 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'X-Daedong-Client, Content-Type',
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
 };
+// The real API client can prefetch before the fixture facade is installed.
+// Keep those requests in the same deterministic fixture instead of contacting
+// production from localhost. Console/network error checks remain strict.
+await context.route('**/api/catalog', route => route.fulfill({
+  status: 200, headers: corsHeaders, contentType: 'application/json; charset=utf-8',
+  body: JSON.stringify(stores),
+}));
+await context.route('**/api/native/public/catalog*', route => route.fulfill({
+  status: 200, headers: corsHeaders, contentType: 'application/json; charset=utf-8',
+  body: JSON.stringify({items: [], cursor: null}),
+}));
 await context.route('**/api/events', (route) => route.fulfill({ status: 204, headers: corsHeaders, body: '' }));
 await context.route('**/api/rain-mode', (route) => route.fulfill({
   status: 200,

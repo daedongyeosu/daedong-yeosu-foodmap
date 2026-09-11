@@ -93,6 +93,8 @@ jobs:
             browser-mukkebi-safe-fresh-entry-menu.png
             artifacts/yeosu-life-home-390x844.png
             artifacts/chak-guide-390x844.png
+            artifacts/yeosu-life-failure.json
+            artifacts/yeosu-life-failure.png
             browser-global-menu-price-hide-report.json
             browser-global-menu-price-hide.png
             browser-global-menu-price-hide-failure.png

@@ -27,17 +27,34 @@ const pageErrors = [];
 page.on('pageerror', error => pageErrors.push(error.message));
 await page.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
 
+let stage = 'load';
+try {
 await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
 // Finish the normal fresh-entry pageshow reset and catalog layout before
 // positioning the fixture. Otherwise an early smooth scroll can be reset to
 // the home top, leaving the offscreen highlights correctly unhydrated.
 await page.waitForLoadState('load');
+stage = 'catalog';
 await page.waitForFunction(() => window.__daedongCatalogProgress?.complete === true);
 const introClose = page.locator('#communityIntroClose');
 if (await introClose.isVisible()) await introClose.click();
 const section = page.locator('#yeosuLifeSection');
 await section.waitFor({state: 'visible', timeout: 10000});
-await section.evaluate(element => element.scrollIntoView({block: 'start', behavior: 'instant'}));
+stage = 'first-gesture';
+// The normal late-restoration guard intentionally rejects programmatic scroll
+// until a real gesture occurs. Remote command latency can otherwise let that
+// guard return the fixture to the top before its subsequent ArrowDown arrives.
+await page.keyboard.press('ArrowDown');
+await page.waitForFunction(() => window.daedongEarlyHomeInteraction === true);
+stage = 'section-position';
+await section.scrollIntoViewIfNeeded();
+await page.waitForFunction(() => {
+  const box = document.querySelector('#yeosuLifeSection').getBoundingClientRect();
+  return Math.min(box.bottom, innerHeight) - Math.max(box.top, 0) >= box.height * 0.25;
+});
+stage = 'highlights';
+// Exercise navigation while the target is in view as a customer would; fixture
+// positioning alone is not the user gesture required by this lazy section.
 await page.keyboard.press('ArrowDown');
 await page.waitForFunction(() => document.querySelectorAll('#yeosuLifeHighlights .yeosu-life-highlight').length === 3);
 
@@ -61,6 +78,7 @@ await page.evaluate(() => {
 await page.waitForTimeout(250);
 await page.screenshot({path: 'artifacts/yeosu-life-home-390x844.png', fullPage: false});
 
+stage = 'chak-guide';
 await page.locator('#chakBenefitBtn').click();
 const chakModal = page.locator('#modal:not([hidden]) .chak-guide');
 await chakModal.waitFor({state: 'visible'});
@@ -71,6 +89,7 @@ for (const text of ['주문앱이 아닙니다', '최대 20% 혜택', 'CHAK 앱�
 if (await chakModal.locator('[data-life-url]').count() !== 3) throw new Error('CHAK install/official links missing');
 await page.screenshot({path: 'artifacts/chak-guide-390x844.png', fullPage: false});
 
+stage = 'life-categories';
 await page.locator('.modal-close').click();
 await page.locator('#yeosuLifeMoreBtn').click();
 const lifeModal = page.locator('#modal:not([hidden]) .yeosu-life-modal');
@@ -82,4 +101,22 @@ if (!trafficText.includes('여객선 운임 반값') || trafficText.includes('�
 
 if (pageErrors.length) throw new Error(`page errors: ${pageErrors.join(' | ')}`);
 console.log(JSON.stringify({success: true, homeAudit, pageErrors}, null, 2));
+} catch (error) {
+  const state = await page.evaluate(() => ({
+    scrollY,
+    section: document.querySelector('#yeosuLifeSection')?.getBoundingClientRect().toJSON(),
+    highlights: document.querySelectorAll('#yeosuLifeHighlights .yeosu-life-highlight').length,
+    catalogComplete: window.__daedongCatalogProgress?.complete,
+    homeInteraction: window.daedongEarlyHomeInteraction,
+    rootClass: document.documentElement.className,
+    bodyClass: document.body.className
+  })).catch(() => null);
+  const failure = {success: false, stage, error: error.message, pageErrors, state};
+  fs.mkdirSync('artifacts', {recursive: true});
+  fs.writeFileSync('artifacts/yeosu-life-failure.json', JSON.stringify(failure, null, 2));
+  await page.screenshot({path: 'artifacts/yeosu-life-failure.png', timeout: 5000}).catch(() => {});
+  console.error(JSON.stringify(failure, null, 2));
+  throw error;
+} finally {
 await browser.close();
+}

@@ -36,7 +36,8 @@ const report = {
   viewport: {width: 390, height: 844},
   apps: [],
   checks: [],
-  errors: []
+  errors: [],
+  navigations: []
 };
 
 const appDefinitions = [
@@ -142,9 +143,26 @@ const check = async (condition, message) => {
 const readyPage = async () => {
   const page = await context.newPage();
   page.on('pageerror', error => report.errors.push(error.message));
+  page.on('framenavigated', frame => {
+    if (frame === page.mainFrame()) report.navigations.push({url: frame.url(), at: new Date().toISOString()});
+  });
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
-  await page.evaluate(() => window.daedongCatalogReady);
-  await page.waitForFunction(() => typeof window.openAppBrowser === 'function' && document.querySelectorAll('#storeGrid .store-card').length > 0, null, {timeout: 20000});
+  // Readiness belongs to the currently committed document. A one-shot evaluate
+  // is cancelled if the normal entry lifecycle navigates while catalog data is
+  // loading. waitForFunction re-runs on the new document; the same catalog,
+  // app-browser and rendered-card requirements remain mandatory within 20s.
+  await page.waitForFunction(() => {
+    const catalogPromise = window.daedongCatalogReady;
+    if (!catalogPromise) return false;
+    if (window.__orderReturnQaCatalog?.promise !== catalogPromise) {
+      const readiness = {promise: catalogPromise, settled: false};
+      window.__orderReturnQaCatalog = readiness;
+      Promise.resolve(catalogPromise).then(() => { readiness.settled = true; }, () => {});
+    }
+    return window.__orderReturnQaCatalog.settled
+      && typeof window.openAppBrowser === 'function'
+      && document.querySelectorAll('#storeGrid .store-card').length > 0;
+  }, null, {timeout: 20000});
   return page;
 };
 

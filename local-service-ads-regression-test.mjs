@@ -20,7 +20,10 @@ assert.equal(load('unapproved.example').enabled(), false);
 assert.equal(load('daedongmap.com', 'goheung').enabled(), false);
 assert.equal(load('preview.daedongmap.com', 'goheung').enabled(), false);
 assert.equal(load('unapproved.example').card(), '');
-assert.equal(load('daedongmap.com').card(), ads.card());
+const mainAds = load('daedongmap.com');
+const previewShareHost = markup => markup.replaceAll('https://daedongmap.com/services/?ad=', 'https://preview.daedongmap.com/services/?ad=');
+assert.equal(mainAds.shareUrl('hyundai-sinwansu'), 'https://daedongmap.com/services/?ad=hyundai-sinwansu');
+assert.equal(previewShareHost(mainAds.card()), ads.card(), 'Only the absolute sharing host differs between deployments');
 const stores = Array.from({length: 33}, (_, n) => ({id: `store-${n}`, name: `food-${n}`}));
 const before = JSON.stringify(stores);
 const storeCard = (s, i) => `<article class="store-card" data-id="${s.id}" data-index="${i}"></article>`;
@@ -31,7 +34,7 @@ for (const count of [0, 1, 7, 8, 9, 16, 17, 32, 33]) {
 }
 assert.equal(ads.interleave(stores, storeCard, false), stores.map(storeCard).join(''), 'Search and category lists remain ad-free');
 assert.equal(load('unapproved.example').interleave(stores, storeCard), stores.map(storeCard).join(''));
-assert.equal(load('daedongmap.com').interleave(stores, storeCard), ads.interleave(stores, storeCard));
+assert.equal(previewShareHost(mainAds.interleave(stores, storeCard)), ads.interleave(stores, storeCard));
 assert.equal(JSON.stringify(stores), before);
 assert.notEqual(ads.card(0), ads.card(1));
 assert.equal(ads.card(0), ads.card(2));

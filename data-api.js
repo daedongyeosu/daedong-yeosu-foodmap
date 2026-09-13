@@ -123,6 +123,75 @@
     '421ecef35a879687': 'data/tamnaneun-pizza-menu.json?v=tamnaneun-dedicated-2'
   });
 
+  const reviewedPhotoLinkRequests = new Map();
+  function menuPhotoNameHash(value) {
+    let hash = 2166136261;
+    for (const char of String(value || '').normalize('NFKC').trim()) hash = Math.imul(hash ^ char.codePointAt(0), 16777619);
+    return (hash >>> 0).toString(16);
+  }
+  function reviewedMenuPhotoLinks(storeId) {
+    const id = String(storeId || '');
+    if (!/^[a-f0-9]{16}$/.test(id)) return Promise.resolve(null);
+    const bucket = id[0];
+    if (!reviewedPhotoLinkRequests.has(bucket)) {
+      const abort = createRequestAbort(null, 2500);
+      const pending = Promise.resolve().then(() => fetch(`data/reviewed-menu-photo-links/${bucket}.json?v=all-menu-photos-20260913`, {
+        credentials: 'same-origin', signal: abort.signal
+      })).then(response => {
+        if (!response.ok) throw new Error('메뉴 사진 목록을 불러오지 못했습니다.');
+        return response.json();
+      })
+        .catch(() => { reviewedPhotoLinkRequests.delete(bucket); return null; })
+        .finally(() => abort.cleanup());
+      reviewedPhotoLinkRequests.set(bucket, pending);
+    }
+    return reviewedPhotoLinkRequests.get(bucket);
+  }
+  async function reviewedMenuSearchPhotoLinks(payload) {
+    const ids = [...new Map(Object.keys(payload?.stores || {})
+      .filter(id => /^[a-f0-9]{16}$/.test(id)).map(id => [id[0], id])).values()];
+    const inventory = {version: 1, stores: {}};
+    let cursor = 0;
+    // Search needs only result-store buckets. Bound fan-out and reuse detail loads.
+    await Promise.all(Array.from({length: Math.min(4, ids.length)}, async () => {
+      while (cursor < ids.length) {
+        const data = await reviewedMenuPhotoLinks(ids[cursor++]);
+        if (data?.stores) Object.assign(inventory.stores, data.stores);
+      }
+    }));
+    return inventory;
+  }
+  function applyReviewedMenuPhotos(storeId, payload, inventory) {
+    const entry = inventory?.stores?.[storeId];
+    if (!entry || !payload || String(payload.storeId) !== String(storeId)) return payload;
+    const items = (payload.items || []).map(item => {
+      const photo = entry.items?.[item.id];
+      if (!photo || photo.nameHash !== menuPhotoNameHash(item.name)) return item;
+      if (photo.descriptionHash && photo.descriptionHash !== menuPhotoNameHash(item.description)) return item;
+      // Keep newer photos; reviewed composition must still agree when guarded.
+      if (item.image && item.image !== photo.source && item.image !== photo.image) return item;
+      return {...item, image: photo.image};
+    });
+    const confirmedHero = entry.mainImage && items.some(item => item.image === entry.mainImage);
+    return {...payload, items, mainImage: payload.mainImage || (confirmedHero ? entry.mainImage : '')};
+  }
+  function restoreReviewedMenuSearchPhotos(payload, inventory) {
+    if (!payload?.stores || !inventory?.stores) return payload;
+    const stores = {...payload.stores};
+    for (const [storeId, record] of Object.entries(stores)) {
+      if (!inventory.stores[storeId] || !Array.isArray(record?.i)) continue;
+      stores[storeId] = {...record, i: record.i.map(item => {
+        if (!Array.isArray(item)) return item;
+        const photo = inventory.stores[storeId].items?.[item[0]];
+        if (!photo || photo.nameHash !== menuPhotoNameHash(item[1])
+          || (photo.descriptionHash && photo.descriptionHash !== menuPhotoNameHash(item[2]))
+          || (item[3] && item[3] !== photo.source && item[3] !== photo.image)) return item;
+        const next = item.slice(); next[3] = photo.image; return next;
+      })};
+    }
+    return {...payload, stores};
+  }
+
   function safeStoreId(value) {
     const id = String(value || '').toLowerCase();
     if (!/^[a-f0-9]{16}$/.test(id)) throw new Error('올바르지 않은 가게 식별자입니다.');
@@ -327,8 +396,9 @@
           return response.json();
         });
     }
+    const reviewedPhotos = reviewedMenuPhotoLinks(id);
     return request(`/api/store/${id}/menu`, {cacheKey: `menu:${id}`, ...options})
-      .then(payload => restoreCuratedMenuImages(id, payload));
+      .then(async payload => applyReviewedMenuPhotos(id, restoreCuratedMenuImages(id, payload), await reviewedPhotos));
   };
   const yogiyoWebRoute = (storeId, coordinates = {}, options = {}) => {
     const id = customerVisibleStoreId(storeId);
@@ -353,7 +423,8 @@
     if (IS_GOHEUNG) return Promise.resolve({stores: {}});
     return request(`/api/menu-search?q=${encodeURIComponent(value)}`, {cacheKey: `search:${key}`, ...options})
       .then(customerVisibleMenuSearch)
-      .then(restoreCuratedMenuSearchImages);
+      .then(restoreCuratedMenuSearchImages)
+      .then(async payload => restoreReviewedMenuSearchPhotos(payload, await reviewedMenuSearchPhotoLinks(payload)));
   };
 
   window.daedongDataApi = Object.freeze({

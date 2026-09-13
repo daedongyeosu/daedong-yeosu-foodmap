@@ -148,9 +148,17 @@ try {
 
   await page.waitForSelector('[data-rc3-rail-open]');
   await seedStaleReturnState();
+  // The rail is below the fold. A real customer scroll releases the deliberately
+  // armed opening lock; Playwright's programmatic scrollIntoView is not a gesture
+  // and correctly gets rejected by that guard. Keep the subsequent tap real.
+  await page.mouse.wheel(0, 300);
+  await page.waitForFunction(() => window.daedongEarlyHomeInteraction === true);
   const rc3RailCard = page.locator('[data-rc3-rail-open]').first();
-  const rc3RailStoreId = await rc3RailCard.getAttribute('data-rc3-rail-open');
   await rc3RailCard.scrollIntoViewIfNeeded();
+  // Hydration may atomically replace rails while scrolling; bind the identity
+  // being tapped, not an earlier detached card.
+  const rc3RailStoreId = await rc3RailCard.getAttribute('data-rc3-rail-open');
+  report.railTouchExpectedId = rc3RailStoreId;
   await rc3RailCard.tap();
   await page.waitForTimeout(1700);
   await check(page.evaluate(expectedId => ({
@@ -305,6 +313,13 @@ try {
     confirmedHoursText: document.querySelector('#storeGrid .store-card[data-id="pager-store-001"] [data-store-service-card-meta]')?.textContent?.replace(/\s+/g, ' ').trim() || '',
     introHidden: document.querySelector('#communityIntro')?.hidden,
     eventHidden: document.querySelector('#mukkebiSummerEvent')?.hidden
+    ,modalOpen: document.querySelector('#modal')?.hidden === false
+    ,chosenId: document.querySelector('#modal')?.dataset.activeStoreId || ''
+    ,firstRailId: document.querySelector('[data-rc3-rail-open]')?.dataset.rc3RailOpen || ''
+    ,freshEntrySettling: document.documentElement.classList.contains('daedong-fresh-entry-settling')
+    ,staleSession: Boolean(sessionStorage.getItem('daedongExternalReturnRc2'))
+    ,departureSession: Boolean(sessionStorage.getItem('daedongExternalAppDepartureV1'))
+    ,durableCookie: document.cookie.includes('daedongOrderReturnV1=')
   }));
   await check(Promise.resolve(beforeRanking.left > 20 && afterRanking.left > 20 && afterRanking.previousVisible),
     '늦은 위치 정렬 뒤에도 스와이프한 다음 가게 페이지 상태 유지', {beforeRanking, afterRanking});

@@ -257,9 +257,14 @@ function rc3SamePhysicalPlace(left, right) {
 }
 
 function rc3VerifiedPhysicalMap(store) {
+  const ownAudit = rc2NaverByStore.get(String(store?.id));
+  // A reviewed alias permits this exact place, never a later changed link.
+  if (ownAudit?.place_id) return rc2NaverAuditMatches(store) ? {
+    key: 'naver', name: '네이버지도',
+    url: 'https://map.naver.com/p/entry/place/' + ownAudit.place_id
+  } : null;
   const url = safeHref(store?.naverMap || '');
   if (url === '#') return null;
-  const ownAudit = rc2NaverByStore.get(String(store?.id));
   if (ownAudit?.status === 'verified') return {key: 'naver', name: '네이버지도', url};
   if (store?.__verifiedPhysicalMapSource) return {key: 'naver', name: '네이버지도', url};
   return null;
@@ -1094,10 +1099,23 @@ fxInstallEvents = function rc3InstallEvents() {
   });
 };
 
+function rc3RefreshActiveVerifiedMap() {
+  const detail = $('#modalContent .store-detail');
+  const store = detail?.dataset.storeId ? fxStoreById(detail.dataset.storeId) : null;
+  if (!store || detail.classList.contains('store-detail-loading')) return;
+  const map = rc3VerifiedPhysicalMap(store);
+  if (!map) return;
+  const link = detail.querySelector('a[data-detail-only="naver"]');
+  if (link) { link.href = map.url; return; }
+  // Refresh only the map slot: do not replace a customer's open order sheet.
+  detail.querySelector('.detail-meta')?.insertAdjacentHTML('afterend', rc3PopupUtilityLinks(store, {includeChak: false}));
+}
+
 const rc3InitializeBase = fxInitialize;
 fxInitialize = async function rc3Initialize() {
   rc3RefreshRailsAfterServiceReady();
   await rc3InitializeBase();
+  rc3RefreshActiveVerifiedMap();
   rc3RefreshRailsAfterServiceReady();
   const internalPhones = RC3_IS_GOHEUNG ? {stores: []} : await fetchJson(RC3_PHONE_INTERNAL_URL, {stores: []});
   rc3InternalPhoneByStore = new Map((internalPhones.stores || []).map(item => [String(item.store_id), item]));

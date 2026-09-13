@@ -50,11 +50,19 @@ try {
       const ranked = filteredStores();
       categoryChecks[category] = ids.filter(id => ranked.some(store => String(store.id) === id)).map(id => {
         const targetIndex = ranked.findIndex(store => String(store.id) === id);
-        const status = storeBusinessStatusPriority(ranked[targetIndex]);
+        const target = ranked[targetIndex];
+        const status = storeBusinessStatusPriority(target);
+        const locationBucket = target.rc6LocationBucket ?? 9;
+        const discoveryTier = rc6DiscoveryTier(target);
+        // Current policy ranks status, locality and food/order-channel evidence
+        // before management priority. Preserve the former-managed demotion among
+        // comparable stores, without rejecting the newly approved quality order.
         const lastOrdinaryIndex = ranked.reduce((last, store, index) => (
-          !store.deprioritized && storeBusinessStatusPriority(store) === status ? index : last
+          !store.deprioritized && storeBusinessStatusPriority(store) === status
+            && (store.rc6LocationBucket ?? 9) === locationBucket
+            && rc6DiscoveryTier(store) === discoveryTier ? index : last
         ), -1);
-        return {id, name: names[id], targetIndex, lastOrdinaryIndex, behindOrdinarySameStatus: targetIndex > lastOrdinaryIndex};
+        return {id, name: names[id], targetIndex, lastOrdinaryIndex, locationBucket, discoveryTier, behindComparableOrdinary: targetIndex > lastOrdinaryIndex};
       });
     }
     const nearby = fxRankStores({id: 'near', kind: 'near', title: '가까운 가게', desc: ''});
@@ -81,7 +89,8 @@ try {
   const checks = [
     [result.viewport.width === 390 && result.viewport.height === 844, '390×844 모바일 화면'],
     [result.targets.every(store => store.managed === false && store.deprioritized === true && store.tier === 3), '세 가게를 후순위 3단계로 지정'],
-    [Object.values(result.categoryChecks).flat().every(row => row.behindOrdinarySameStatus), '전체·치킨·피자 목록에서 일반 가게 뒤에 배치'],
+    [Object.values(result.categoryChecks).flat().every(row => row.behindComparableOrdinary), '전체·치킨·피자에서 영업상태·지역·사진/주문경로가 같은 일반 가게 뒤에 배치'],
+    [Object.values(result.categoryChecks).flat().some(row => row.lastOrdinaryIndex >= 0), '실제 비교 가능한 일반 가게를 포함해 후순위를 검증'],
     [result.nearbyChecks.every(row => row.behindOrdinarySameStatus), '가까운 가게 우선추천에서 제외하거나 일반 가게 뒤에 배치'],
     [result.targetInHero.length === 0, '메인 가게배너에서 세 가게 제외'],
     [errors.length === 0, '브라우저 실행 오류 없음']

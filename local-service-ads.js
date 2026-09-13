@@ -3,7 +3,8 @@
 // Independent advertisers: deliberately no restaurant IDs, names, or ordering data.
 (() => {
   const origin = location.hostname;
-  const previewEnabled = ['preview.daedongmap.com', 'localhost', '127.0.0.1'].includes(origin);
+  // Production publication approved on 2026-09-14; other regions stay isolated.
+  const approvedHost = ['daedongmap.com', 'preview.daedongmap.com', 'localhost', '127.0.0.1'].includes(origin);
   const root = '/assets/local-services/';
   const insuranceDocument = Object.freeze({
     title: '무배당 현대해상하이바이크운전자보험(Hi2601) 상품요약서',
@@ -34,7 +35,7 @@
   const find = id => advertisers.find(ad => ad.id === id);
   const href = id => '/services/?ad=' + encodeURIComponent(id);
   function enabled() {
-    return previewEnabled && (!window.DAEDONG_REGION || window.DAEDONG_REGION.code === 'yeosu')
+    return approvedHost && (!window.DAEDONG_REGION || window.DAEDONG_REGION.code === 'yeosu')
       && (typeof ACTIVE_REGION === 'undefined' || ACTIVE_REGION.code === 'yeosu');
   }
   function card(index = 0, placement = 'feed') {

@@ -15,9 +15,12 @@ function load(hostname = 'preview.daedongmap.com', region = 'yeosu') {
 const ads = load();
 assert.ok(ads.enabled());
 assert.equal(ads.advertisers.length, 2, 'Only supplied, identified advertisers may be published');
-assert.equal(load('daedongmap.com').enabled(), false, 'Preview approval must never enable production');
+assert.equal(load('daedongmap.com').enabled(), true, 'Explicit production approval enables the main site');
+assert.equal(load('unapproved.example').enabled(), false);
+assert.equal(load('daedongmap.com', 'goheung').enabled(), false);
 assert.equal(load('preview.daedongmap.com', 'goheung').enabled(), false);
-assert.equal(load('daedongmap.com').card(), '');
+assert.equal(load('unapproved.example').card(), '');
+assert.equal(load('daedongmap.com').card(), ads.card());
 const stores = Array.from({length: 33}, (_, n) => ({id: `store-${n}`, name: `food-${n}`}));
 const before = JSON.stringify(stores);
 const storeCard = (s, i) => `<article class="store-card" data-id="${s.id}" data-index="${i}"></article>`;
@@ -27,7 +30,8 @@ for (const count of [0, 1, 7, 8, 9, 16, 17, 32, 33]) {
   assert.deepEqual([...rendered.matchAll(/data-id="([^"]+)"/g)].map(m => m[1]), stores.slice(0, count).map(s => s.id));
 }
 assert.equal(ads.interleave(stores, storeCard, false), stores.map(storeCard).join(''), 'Search and category lists remain ad-free');
-assert.equal(load('daedongmap.com').interleave(stores, storeCard), stores.map(storeCard).join(''));
+assert.equal(load('unapproved.example').interleave(stores, storeCard), stores.map(storeCard).join(''));
+assert.equal(load('daedongmap.com').interleave(stores, storeCard), ads.interleave(stores, storeCard));
 assert.equal(JSON.stringify(stores), before);
 assert.notEqual(ads.card(0), ads.card(1));
 assert.equal(ads.card(0), ads.card(2));

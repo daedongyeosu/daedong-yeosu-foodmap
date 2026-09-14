@@ -3,8 +3,6 @@ import UIKit
 
 struct ContentView: View {
     @StateObject private var store = WebViewStore()
-    @State private var shareItems: [Any] = []
-    @State private var isSharing = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -18,62 +16,19 @@ struct ContentView: View {
                 }
             }
 
-            Divider()
-
-            HStack {
-                ToolbarButton(title: "홈", systemImage: "house.fill") {
-                    store.goHome()
-                }
-
-                ToolbarButton(title: "뒤로", systemImage: "chevron.left", disabled: !store.canGoBack) {
-                    store.goBack()
-                }
-
-                ToolbarButton(title: "새로고침", systemImage: "arrow.clockwise") {
-                    store.reload()
-                }
-
-                ToolbarButton(title: "공유", systemImage: "square.and.arrow.up") {
-                    shareItems = [store.currentURL ?? WebViewStore.homeURL]
-                    isSharing = true
-                }
-
-                ToolbarButton(title: "Safari", systemImage: "safari") {
-                    UIApplication.shared.open(store.currentURL ?? WebViewStore.homeURL)
-                }
-            }
-            .padding(.horizontal, 6)
-            .padding(.top, 7)
-            .padding(.bottom, 4)
-            .background(.ultraThinMaterial)
         }
-        .ignoresSafeArea(.container, edges: .top)
-        .sheet(isPresented: $isSharing) {
-            ShareSheet(items: shareItems)
+        // SwiftUI owns the safe area; the website owns the single navigation bar.
+        .sheet(item: $store.externalOrder) { destination in
+            ExternalOrderView(destination: destination)
         }
-    }
-}
-
-private struct ToolbarButton: View {
-    let title: String
-    let systemImage: String
-    var disabled = false
-    let action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            VStack(spacing: 3) {
-                Image(systemName: systemImage)
-                    .font(.system(size: 17, weight: .semibold))
-                Text(title)
-                    .font(.caption2)
-            }
-            .frame(maxWidth: .infinity)
+        .alert("연결 안내", isPresented: Binding(
+            get: { store.linkMessage != nil },
+            set: { if !$0 { store.linkMessage = nil } }
+        )) {
+            Button("확인", role: .cancel) { store.linkMessage = nil }
+        } message: {
+            Text(store.linkMessage ?? "")
         }
-        .buttonStyle(.plain)
-        .foregroundStyle(disabled ? Color.secondary.opacity(0.45) : Color.accentColor)
-        .disabled(disabled)
-        .accessibilityLabel(title)
     }
 }
 
@@ -101,14 +56,5 @@ private struct OfflineView: View {
     }
 }
 
-private struct ShareSheet: UIViewControllerRepresentable {
-    let items: [Any]
-
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: items, applicationActivities: nil)
-    }
-
-    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
-}
 
 

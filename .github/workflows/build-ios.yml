@@ -46,6 +46,11 @@ jobs:
           bash ios/scripts/generate_app_icons.sh
           xcodegen generate --spec ios/project.yml
 
+      - name: Verify iOS link routing
+        run: |
+          swiftc ios/DaedongYeosuFoodMap/LinkPolicy.swift ios/Tests/main.swift -o "$RUNNER_TEMP/ios-link-tests"
+          "$RUNNER_TEMP/ios-link-tests"
+
       - name: Build for iPhone Simulator
         if: ${{ env.BUILD_MODE == 'simulator' }}
         run: |
@@ -56,8 +61,29 @@ jobs:
             -configuration Release \
             -sdk iphonesimulator \
             -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath build/SimulatorDerived \
             CODE_SIGNING_ALLOWED=NO \
             clean build
+
+      - name: Launch simulator and capture safe-area evidence
+        if: ${{ env.BUILD_MODE == 'simulator' }}
+        run: |
+          DEVICE=$(xcrun simctl list devices available -j | python3 -c 'import json,sys; d=json.load(sys.stdin); print(next(x["udid"] for v in d["devices"].values() for x in v if "iPhone" in x["name"]))')
+          xcrun simctl boot "$DEVICE"
+          xcrun simctl bootstatus "$DEVICE" -b
+          xcrun simctl install "$DEVICE" build/SimulatorDerived/Build/Products/Release-iphonesimulator/DaedongYeosuFoodMap.app
+          xcrun simctl launch "$DEVICE" "$BUNDLE_ID"
+          sleep 25
+          mkdir -p build/ios-smoke
+          xcrun simctl io "$DEVICE" screenshot build/ios-smoke/iphone-home.png
+
+      - name: Save simulator screenshot
+        if: ${{ env.BUILD_MODE == 'simulator' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ios-safe-area-smoke
+          path: build/ios-smoke/*.png
+          if-no-files-found: error
 
       - name: Validate signing secrets
         if: ${{ env.BUILD_MODE != 'simulator' }}

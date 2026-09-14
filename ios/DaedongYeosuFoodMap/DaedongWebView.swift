@@ -10,6 +10,8 @@ final class WebViewStore: ObservableObject {
     @Published var canGoBack = false
     @Published var currentURL: URL?
     @Published var errorMessage: String?
+    @Published var linkMessage: String?
+    @Published var externalOrder: ExternalOrderDestination?
 
     weak var webView: WKWebView?
 
@@ -62,6 +64,7 @@ struct DaedongWebView: UIViewRepresentable {
         webView.uiDelegate = context.coordinator
         webView.allowsBackForwardNavigationGestures = true
         webView.scrollView.keyboardDismissMode = .interactive
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
 
         let refreshControl = UIRefreshControl()
         refreshControl.addTarget(context.coordinator, action: #selector(Coordinator.refresh(_:)), for: .valueChanged)
@@ -123,23 +126,43 @@ struct DaedongWebView: UIViewRepresentable {
                 return
             }
 
-            if let scheme = url.scheme?.lowercased(), ["tel", "sms", "mailto"].contains(scheme) {
-                UIApplication.shared.open(url)
-                decisionHandler(.cancel)
+            if navigationAction.targetFrame?.isMainFrame == false {
+                decisionHandler(LinkPolicy.isWeb(url) || url.absoluteString == "about:blank" ? .allow : .cancel)
                 return
             }
 
-            if url.scheme == "http" || url.scheme == "https" {
-                let host = url.host?.lowercased() ?? ""
-                let isDaedongMap = host == "daedongmap.com" || host.hasSuffix(".daedongmap.com")
-                if !isDaedongMap {
-                    UIApplication.shared.open(url)
+            if LinkPolicy.isInternal(url) {
+                if navigationAction.targetFrame == nil {
                     decisionHandler(.cancel)
-                    return
+                    webView.load(navigationAction.request)
+                } else {
+                    decisionHandler(.allow)
+                }
+                return
+            }
+            decisionHandler(.cancel)
+            openExternal(url)
+        }
+
+        private func openExternal(_ url: URL) {
+            guard LinkPolicy.canOpenExternally(url) else { return }
+            if LinkPolicy.isOrder(url) {
+                // Prefer an installed app. If absent, keep redirects in a dismissible
+                // child web view so unsupported schemes never reach Safari.
+                UIApplication.shared.open(url, options: [.universalLinksOnly: true]) { [weak self] opened in
+                    guard !opened else { return }
+                    DispatchQueue.main.async {
+                        self?.store.externalOrder = ExternalOrderDestination(url: url)
+                    }
+                }
+            } else {
+                UIApplication.shared.open(url, options: [:]) { [weak self] opened in
+                    guard !opened else { return }
+                    DispatchQueue.main.async {
+                        self?.store.linkMessage = "연결할 앱이 없거나 링크를 열 수 없습니다. 다른 주문방법을 선택해 주세요."
+                    }
                 }
             }
-
-            decisionHandler(.allow)
         }
 
         func webView(
@@ -148,9 +171,7 @@ struct DaedongWebView: UIViewRepresentable {
             for navigationAction: WKNavigationAction,
             windowFeatures: WKWindowFeatures
         ) -> WKWebView? {
-            if let url = navigationAction.request.url {
-                UIApplication.shared.open(url)
-            }
+            // target=_blank is handled once in decidePolicyFor.
             return nil
         }
     }

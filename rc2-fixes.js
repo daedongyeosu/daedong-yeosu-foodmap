@@ -669,7 +669,7 @@ hardClose = function rc2HardClose(options = {}) {
   // URL before the early history.back() branch, otherwise the underlying QR
   // entry is restored without the dismissal marker and reopens on reload.
   const modalDepth = Number(globalThis.history?.state?.rc2ModalDepth || rc2ModalStack.length + 1);
-  const sharedEntryConsumed = !options.fromPop && modalDepth <= 1
+  const sharedEntryConsumed = options.userInitiated === true && !options.fromPop && modalDepth <= 1
     ? Boolean(window.daedongConsumeSharedStoreEntry?.(
       $('#modal')?.dataset.activeStoreId
       || $('#modal:not([hidden]) .store-detail')?.dataset.storeId
@@ -704,7 +704,7 @@ hardClose = function rc2HardClose(options = {}) {
     return;
   }
   rc2ModalStack.length = 0;
-  if (!options.fromPop && !sharedEntryConsumed) {
+  if (options.userInitiated === true && !options.fromPop && !sharedEntryConsumed) {
     window.daedongConsumeSharedStoreEntry?.(
       $('#modal')?.dataset.activeStoreId
       || $('#modal:not([hidden]) .store-detail')?.dataset.storeId

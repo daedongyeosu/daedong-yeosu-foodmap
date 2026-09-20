@@ -2024,6 +2024,13 @@
       "place_id": "1230839526",
       "source_url": "",
       "identity_guard": "6162de1b7be29bbf"
+    },
+    {
+      "store_id": "65cc1845e542d5fb",
+      "status": "verified",
+      "place_id": "1779566510",
+      "source_url": "https://naver.me/5suYPxvn",
+      "identity_guard": "063d8847db42229d"
     }
   ]
 }

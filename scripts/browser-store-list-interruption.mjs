@@ -156,7 +156,7 @@ try {
   // The carousel can replace or move its first DOM card while Playwright is
   // waiting for locator actionability. Tap the coordinates of the card that is
   // actually visible at that instant, exactly as a customer's finger would.
-  await page.locator('[data-rc3-rail-open]').first().evaluate(node => node.closest('section')?.scrollIntoView({block: 'center'}));
+  await page.locator('[data-rc3-rail-open]').first().evaluate(node => node.scrollIntoView({block: 'center', inline: 'center'}));
   const rc3RailTouch = await page.waitForFunction(() => {
     for (const card of document.querySelectorAll('[data-rc3-rail-open]')) {
       const rect = card.getBoundingClientRect();

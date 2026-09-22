@@ -41,7 +41,7 @@ audits.set(fixture.id,{status:'verified',place_id:'123',source_url:'',identity_g
 assert.equal(rc3VerifiedPhysicalMap(fixture)?.url,'https://map.naver.com/p/entry/place/123');
 for(const changed of [{address:'전남 여수시 도원로 2 1층'},{name:'다른 가게'},{naverMap:'https://naver.me/changed'}])assert.equal(rc3VerifiedPhysicalMap({...fixture,...changed,__verifiedPhysicalMapSource:fixture.id}),null);
 assert.equal(rc2MapIdentityFingerprint({...fixture,address:'전남광주 여수시 도원로 1 1층'}),rc2MapIdentityFingerprint(fixture));
-assert.equal(data.stores.filter(r=>r.identity_guard).length,18);
+assert.equal(data.stores.filter(r=>r.identity_guard).length,19);
 assert.equal(audits.has('746e3a0c26e21661'),false,'No-order-route hidden record remains unchanged');
 console.log('Reviewed Naver identity: 24 customer records; exact destination, source URL and changed-identity guards: PASS');
 assert.match(rc3,/await rc3InitializeBase\(\);\s*rc3RefreshActiveVerifiedMap\(\);/,'late audit refreshes the active map slot');

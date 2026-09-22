@@ -3,6 +3,8 @@ import fs from 'node:fs';
 
 const read = path => fs.readFileSync(path);
 const text = path => fs.readFileSync(path, 'utf8');
+const iosIconGenerator = text('ios/scripts/generate_app_icons.sh');
+const iosWorkflow = text('.github/workflows/build-ios.yml');
 const pngSize = path => {
   const image = read(path);
   assert.equal(image.subarray(1, 4).toString('ascii'), 'PNG', `${path} must be a PNG`);
@@ -14,6 +16,8 @@ const maskableIcon = text('app-icon-maskable.svg');
 assert.match(maskableIcon, /scale\(\.72\)/, 'Android maskable icon must retain the safe zone');
 assert.match(maskableIcon, /fill="#E51B2A" stroke="#211815" stroke-width="18"/, 'Android maskable icon must use the approved logo');
 assert.equal(text('ios/AppIcon.svg').replaceAll('\r\n', '\n'), webIcon.replaceAll('\r\n', '\n'), 'iOS icon source must use the approved logo');
+assert.match(iosIconGenerator, /-alpha remove -alpha off -type TrueColor "PNG24:\$opaque_icon"/, 'generated iOS icons must not contain an alpha channel');
+assert.match(iosWorkflow, /brew install xcodegen librsvg imagemagick/, 'iOS builds must install the opaque PNG converter');
 
 const iosIcons = {
   'AppIcon-20@2x.png': 40,

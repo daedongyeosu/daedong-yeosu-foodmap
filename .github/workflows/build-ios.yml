@@ -39,7 +39,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Install XcodeGen
-        run: brew install xcodegen librsvg
+        run: brew install xcodegen librsvg imagemagick
 
       - name: Generate app icons and Xcode project
         run: |

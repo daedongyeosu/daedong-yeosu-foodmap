@@ -685,7 +685,9 @@ function analyticsEntryContext() {
   else if (explicit === 'bitly' || explicit === 'legacy-bitly') entrySource = 'legacy-bitly';
   else if (explicit === 'store_qr_legacy') entrySource = 'store_qr_legacy';
   else if (explicit === 'store_qr') entrySource = 'store_qr';
-  else if (params.has('hero')) entrySource = 'store_link';
+  // Every published per-store QR we generated uses ?hero=<storeId>.
+  // Keep those already-printed codes classified as QR visits.
+  else if (params.has('hero')) entrySource = 'store_qr';
   else if (params.has('store')) entrySource = 'shared_link';
   else {
     try {

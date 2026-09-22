@@ -22,5 +22,11 @@ AppIcon-60@2x.png 120
 AppIcon-60@3x.png 180
 SIZES
 
+for icon in "$OUTPUT_DIR"/*.png; do
+  opaque_icon="${icon%.png}.opaque.png"
+  magick "$icon" -background white -alpha remove -alpha off -type TrueColor "PNG24:$opaque_icon"
+  mv "$opaque_icon" "$icon"
+done
+
 echo "Generated iOS app icons in $OUTPUT_DIR"
 

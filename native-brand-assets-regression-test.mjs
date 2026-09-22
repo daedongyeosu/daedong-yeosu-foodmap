@@ -11,11 +11,8 @@ const pngSize = path => {
   return [image.readUInt32BE(16), image.readUInt32BE(20), image[25]];
 };
 
-const webIcon = text('app-icon.svg');
-const maskableIcon = text('app-icon-maskable.svg');
-assert.match(maskableIcon, /scale\(\.72\)/, 'Android maskable icon must retain the safe zone');
-assert.match(maskableIcon, /fill="#E51B2A" stroke="#211815" stroke-width="18"/, 'Android maskable icon must use the approved logo');
-assert.equal(text('ios/AppIcon.svg').replaceAll('\r\n', '\n'), webIcon.replaceAll('\r\n', '\n'), 'iOS icon source must use the approved logo');
+assert.deepEqual(pngSize('ios/AppIcon.png').slice(0, 2), [1024, 1024], 'iOS icon source must use the approved compact logo');
+assert.match(iosIconGenerator, /"\$IOS_DIR\/AppIcon\.png"/, 'iOS icons must be generated from the approved compact PNG');
 assert.match(iosIconGenerator, /-alpha remove -alpha off -type TrueColor "PNG24:\$opaque_icon"/, 'generated iOS icons must not contain an alpha channel');
 assert.match(iosWorkflow, /brew install xcodegen librsvg imagemagick/, 'iOS builds must install the opaque PNG converter');
 
@@ -38,8 +35,8 @@ for (const [file, size] of Object.entries(iosIcons)) {
 const android = JSON.parse(text('android/twa-manifest.json'));
 assert.equal(android.name, '대동맵');
 assert.equal(android.launcherName, '대동맵');
-assert.equal(android.appVersionName, '1.0.12');
-assert.equal(android.appVersionCode, 15);
+assert.equal(android.appVersionName, '1.0.13');
+assert.equal(android.appVersionCode, 16);
 
 assert.match(text('ios/DaedongYeosuFoodMap/Info.plist'), /<key>CFBundleDisplayName<\/key>\s*<string>대동맵<\/string>/);
 assert.match(text('ios/project.yml'), /MARKETING_VERSION: "1\.1"/);

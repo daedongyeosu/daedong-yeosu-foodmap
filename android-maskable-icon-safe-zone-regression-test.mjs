@@ -1,16 +1,15 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
-const svg = fs.readFileSync('app-icon-maskable.svg', 'utf8');
+const icon = fs.readFileSync('assets/app-icons/daedong-app-icon-512.png');
+const maskableIcon = fs.readFileSync('assets/app-icons/daedong-app-icon-maskable-512.png');
 const manifest = JSON.parse(fs.readFileSync('android/twa-manifest.json', 'utf8'));
 
-const scaleMatch = svg.match(/scale\((\.?\d+)\)/);
-assert.ok(scaleMatch, '마스커블 로고에 중앙 축소 변환이 필요합니다.');
-const scale = Number(scaleMatch[1]);
-assert.ok(scale <= 0.72, `마스커블 로고 배율 ${scale}은 안전영역 최대 0.72를 넘습니다.`);
-assert.ok(scale >= 0.68, `마스커블 로고 배율 ${scale}은 식별하기에 지나치게 작습니다.`);
-assert.match(svg, /translate\(887 443\.5\).*translate\(-887 -443\.5\)/s,
-  '로고 축소는 SVG 뷰박스 정중앙을 기준으로 적용해야 합니다.');
-assert.equal(manifest.maskableIconUrl, 'http://127.0.0.1:8765/app-icon-maskable.svg');
+for (const image of [icon, maskableIcon]) {
+  assert.equal(image.subarray(1, 4).toString('ascii'), 'PNG');
+  assert.deepEqual([image.readUInt32BE(16), image.readUInt32BE(20)], [512, 512]);
+}
+assert.notDeepEqual(maskableIcon, icon, '마스커블 로고는 중앙 축소 안전영역이 있는 별도 PNG여야 합니다.');
+assert.equal(manifest.maskableIconUrl, 'http://127.0.0.1:8765/assets/app-icons/daedong-app-icon-maskable-512.png');
 
 console.log('Android maskable icon safe-zone regression: PASS');

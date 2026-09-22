@@ -13,15 +13,15 @@
   "backgroundColor": "#FFFFFF",
   "enableNotifications": true,
   "startUrl": "/?source=android-app",
-  "iconUrl": "http://127.0.0.1:8765/app-icon.svg",
-  "maskableIconUrl": "http://127.0.0.1:8765/app-icon-maskable.svg",
+  "iconUrl": "http://127.0.0.1:8765/assets/app-icons/daedong-app-icon-512.png",
+  "maskableIconUrl": "http://127.0.0.1:8765/assets/app-icons/daedong-app-icon-maskable-512.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "android.keystore",
     "alias": "temporary-build"
   },
-  "appVersionName": "1.0.12",
-  "appVersionCode": 15,
+  "appVersionName": "1.0.13",
+  "appVersionCode": 16,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "http://127.0.0.1:8765/manifest.webmanifest",
@@ -51,5 +51,5 @@
     "standalone",
     "minimal-ui"
   ],
-  "appVersion": "1.0.12"
+  "appVersion": "1.0.13"
 }

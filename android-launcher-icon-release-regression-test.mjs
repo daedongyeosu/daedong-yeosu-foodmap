@@ -2,27 +2,26 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 
 const manifest = JSON.parse(fs.readFileSync('android/twa-manifest.json', 'utf8'));
-const icon = fs.readFileSync('app-icon.svg', 'utf8');
-const maskableIcon = fs.readFileSync('app-icon-maskable.svg', 'utf8');
+const icon = fs.readFileSync('assets/app-icons/daedong-app-icon-512.png');
+const maskableIcon = fs.readFileSync('assets/app-icons/daedong-app-icon-maskable-512.png');
 const workflow = fs.readFileSync('.github/workflows/build-android-bundle.yml', 'utf8');
 
 assert.equal(manifest.packageId, 'com.daedongmap.foodmap');
 assert.equal(manifest.appVersionName, manifest.appVersion, 'Android 표시 버전은 두 필드가 같아야 합니다.');
-assert.ok(manifest.appVersionCode >= 12, '최종 로고를 포함한 Android 번들은 versionCode 12 이상이어야 합니다.');
-assert.equal(manifest.iconUrl, 'http://127.0.0.1:8765/app-icon.svg');
-assert.equal(manifest.maskableIconUrl, 'http://127.0.0.1:8765/app-icon-maskable.svg');
+assert.equal(manifest.appVersionCode, 16, '축약형 로고 Android 번들은 versionCode 16이어야 합니다.');
+assert.equal(manifest.iconUrl, 'http://127.0.0.1:8765/assets/app-icons/daedong-app-icon-512.png');
+assert.equal(manifest.maskableIconUrl, 'http://127.0.0.1:8765/assets/app-icons/daedong-app-icon-maskable-512.png');
 assert.notEqual(manifest.maskableIconUrl, manifest.iconUrl, '마스커블 런처 아이콘은 로고가 잘리지 않도록 별도 안전영역 원본을 사용해야 합니다.');
 
-assert.match(icon, /fill="#FFFFFF"/, '최종 로고는 흰색 배경을 유지해야 합니다.');
-assert.match(icon, /fill="#E51B2A" stroke="#211815" stroke-width="18"/, '빨간 배달통의 공식 테두리를 유지해야 합니다.');
-assert.match(icon, /fill="#211815"/, '대동맵 글자색을 유지해야 합니다.');
-assert.doesNotMatch(icon, /linearGradient|radialGradient/i, '무지개 테두리나 그라데이션을 다시 넣지 않습니다.');
-assert.match(maskableIcon, /scale\(\.72\)/, '마스커블 아이콘은 삼성 런처에서도 포크가 잘리지 않는 72% 안전영역을 유지해야 합니다.');
-assert.doesNotMatch(maskableIcon, /<rect[^>]*\srx=/, '마스커블 배경은 기기 마스크가 적용하므로 자체 둥근 모서리를 넣지 않습니다.');
+for (const image of [icon, maskableIcon]) {
+  assert.equal(image.subarray(1, 4).toString('ascii'), 'PNG');
+  assert.deepEqual([image.readUInt32BE(16), image.readUInt32BE(20)], [512, 512]);
+}
+assert.notDeepEqual(maskableIcon, icon, '마스커블 런처 아이콘은 별도 안전영역 원본을 사용해야 합니다.');
 
 assert.match(workflow, /android\/twa-manifest\.json/);
-assert.match(workflow, /app-icon\.svg/);
-assert.match(workflow, /app-icon-maskable\.svg/);
+assert.match(workflow, /assets\/app-icons\/daedong-app-icon-512\.png/);
+assert.match(workflow, /assets\/app-icons\/daedong-app-icon-maskable-512\.png/);
 assert.match(workflow, /cp android\/twa-manifest\.json android-build\/twa-manifest\.json/);
 assert.match(workflow, /APP_VERSION_NAME=.*android-build\/twa-manifest\.json/,
   'Android 표시 버전은 twa-manifest.json에서 읽어야 합니다.');

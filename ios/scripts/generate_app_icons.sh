@@ -7,7 +7,7 @@ OUTPUT_DIR="$IOS_DIR/DaedongYeosuFoodMap/Assets.xcassets/AppIcon.appiconset"
 MASTER_ICON="$OUTPUT_DIR/AppIcon-1024.png"
 
 mkdir -p "$OUTPUT_DIR"
-rsvg-convert -w 1024 -h 1024 "$IOS_DIR/AppIcon.svg" -o "$MASTER_ICON"
+magick "$IOS_DIR/AppIcon.png" -resize 1024x1024 -background white -alpha remove -alpha off -type TrueColor "PNG24:$MASTER_ICON"
 
 while IFS=' ' read -r filename size; do
   sips -z "$size" "$size" "$MASTER_ICON" --out "$OUTPUT_DIR/$filename" >/dev/null

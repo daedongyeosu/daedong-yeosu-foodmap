@@ -5,8 +5,10 @@ on:
     branches: [main]
     paths:
       - "android/twa-manifest.json"
-      - "app-icon.svg"
-      - "app-icon-maskable.svg"
+      - "assets/app-icons/daedong-app-icon-192.png"
+      - "assets/app-icons/daedong-app-icon-512.png"
+      - "assets/app-icons/daedong-app-icon-maskable-192.png"
+      - "assets/app-icons/daedong-app-icon-maskable-512.png"
       - ".github/workflows/build-android-bundle.yml"
   workflow_dispatch:
 

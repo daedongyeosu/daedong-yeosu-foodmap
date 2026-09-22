@@ -13,12 +13,12 @@ assert.equal(manifest.iconUrl, 'http://127.0.0.1:8765/app-icon.svg');
 assert.equal(manifest.maskableIconUrl, 'http://127.0.0.1:8765/app-icon-maskable.svg');
 assert.notEqual(manifest.maskableIconUrl, manifest.iconUrl, '마스커블 런처 아이콘은 로고가 잘리지 않도록 별도 안전영역 원본을 사용해야 합니다.');
 
-assert.match(icon, /fill="#fff"/, '최종 로고는 흰색 배경을 유지해야 합니다.');
-assert.match(icon, /fill="#ff5a1f"/, '최종 로고는 주황색 번개를 유지해야 합니다.');
-assert.match(icon, /#0b2b57/, '최종 로고는 남색 포크를 유지해야 합니다.');
+assert.match(icon, /fill="#FFFFFF"/, '최종 로고는 흰색 배경을 유지해야 합니다.');
+assert.match(icon, /fill="#E51B2A" stroke="#211815" stroke-width="18"/, '빨간 배달통의 공식 테두리를 유지해야 합니다.');
+assert.match(icon, /fill="#211815"/, '대동맵 글자색을 유지해야 합니다.');
 assert.doesNotMatch(icon, /linearGradient|radialGradient/i, '무지개 테두리나 그라데이션을 다시 넣지 않습니다.');
 assert.match(maskableIcon, /scale\(\.72\)/, '마스커블 아이콘은 삼성 런처에서도 포크가 잘리지 않는 72% 안전영역을 유지해야 합니다.');
-assert.doesNotMatch(maskableIcon, /rx="112"/, '마스커블 배경은 기기 마스크가 적용하므로 자체 둥근 모서리를 넣지 않습니다.');
+assert.doesNotMatch(maskableIcon, /<rect[^>]*\srx=/, '마스커블 배경은 기기 마스크가 적용하므로 자체 둥근 모서리를 넣지 않습니다.');
 
 assert.match(workflow, /android\/twa-manifest\.json/);
 assert.match(workflow, /app-icon\.svg/);

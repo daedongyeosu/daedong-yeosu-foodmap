@@ -1,8 +1,8 @@
 {
   "packageId": "com.daedongmap.foodmap",
   "host": "daedongmap.com",
-  "name": "대동여수음식지도",
-  "launcherName": "대동여수음식지도",
+  "name": "대동맵",
+  "launcherName": "대동맵",
   "display": "standalone",
   "themeColor": "#FF5A1F",
   "themeColorDark": "#000000",
@@ -20,8 +20,8 @@
     "path": "android.keystore",
     "alias": "temporary-build"
   },
-  "appVersionName": "1.0.11",
-  "appVersionCode": 14,
+  "appVersionName": "1.0.12",
+  "appVersionCode": 15,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "http://127.0.0.1:8765/manifest.webmanifest",
@@ -51,5 +51,5 @@
     "standalone",
     "minimal-ui"
   ],
-  "appVersion": "1.0.11"
+  "appVersion": "1.0.12"
 }

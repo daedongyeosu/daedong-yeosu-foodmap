@@ -8,7 +8,7 @@ const workflow = fs.readFileSync('.github/workflows/build-android-bundle.yml', '
 
 assert.equal(manifest.packageId, 'com.daedongmap.foodmap');
 assert.equal(manifest.appVersionName, manifest.appVersion, 'Android 표시 버전은 두 필드가 같아야 합니다.');
-assert.equal(manifest.appVersionCode, 17, '여수맛지도 로고 Android 번들은 versionCode 17이어야 합니다.');
+assert.equal(manifest.appVersionCode, 18, '여수맛지도 로고 Android 번들은 versionCode 18이어야 합니다.');
 assert.equal(manifest.iconUrl, 'http://127.0.0.1:8765/assets/app-icons/daedong-app-icon-512.png');
 assert.equal(manifest.maskableIconUrl, 'http://127.0.0.1:8765/assets/app-icons/daedong-app-icon-maskable-512.png');
 assert.notEqual(manifest.maskableIconUrl, manifest.iconUrl, '마스커블 런처 아이콘은 로고가 잘리지 않도록 별도 안전영역 원본을 사용해야 합니다.');

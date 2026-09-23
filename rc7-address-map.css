@@ -55,6 +55,10 @@
 .topbar .brand-wordmark::before,.topbar .brand-wordmark::after{content:none!important;display:none!important}
 .topbar .brand-logo{display:block;width:100%;height:100%;max-width:none;object-fit:contain}
 
+@media(min-width:761px){
+  .topbar .brand-wordmark{width:172px;height:64px}
+}
+
 .address-modal{padding:0!important;align-items:flex-end!important}
 .address-modal .modal-card{
   width:min(600px,100%)!important;height:min(94dvh,900px);max-height:94dvh!important;

@@ -20,6 +20,6 @@ assert.match(menu, /const entryImage = photoResolver\?\.resolve\?\.\(store\)\?\.
 assert.match(service, /const matchedMenuImage = String\(menuMatches\.find\(item => item\.image[\s\S]*?\)\?\.image \|\| ''\)\.trim\(\)/);
 assert.match(service, /rawIsOfficialPlaceholder \|\| rawIsQuarantinedPhoto/);
 assert.match(index, /food-photo-promotion-1/);
-assert.match(sw, /app-shell-v32-cross-store-qr-history/);
+assert.match(sw, /app-shell-v33-yeosu-taste-map-brand/);
 
 console.log('food photo promotion regression passed');

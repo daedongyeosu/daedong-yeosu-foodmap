@@ -17,10 +17,10 @@ assert.notDeepEqual(maskableIcon, icon, 'Android 마스커블 아이콘은 안�
 assert.equal(twa.iconUrl, 'http://127.0.0.1:8765/assets/app-icons/daedong-app-icon-512.png');
 assert.equal(twa.maskableIconUrl, 'http://127.0.0.1:8765/assets/app-icons/daedong-app-icon-maskable-512.png');
 assert.notEqual(twa.maskableIconUrl, twa.iconUrl, 'Android 마스커블 아이콘은 안전 여백이 있는 별도 원본을 사용해야 합니다.');
-assert.equal(twa.name, '대동맵');
-assert.equal(twa.launcherName, '대동맵');
-assert.equal(twa.appVersionCode, 16);
-assert.equal(twa.appVersionName, '1.0.13');
-assert.equal(twa.appVersion, '1.0.13');
+assert.equal(twa.name, '여수맛지도');
+assert.equal(twa.launcherName, '여수맛지도');
+assert.equal(twa.appVersionCode, 17);
+assert.equal(twa.appVersionName, '1.0.14');
+assert.equal(twa.appVersion, '1.0.14');
 
 console.log('Android launcher icon final-design regression: PASS');

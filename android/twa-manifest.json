@@ -1,10 +1,10 @@
 {
   "packageId": "com.daedongmap.foodmap",
   "host": "daedongmap.com",
-  "name": "대동맵",
-  "launcherName": "대동맵",
+  "name": "여수맛지도",
+  "launcherName": "여수맛지도",
   "display": "standalone",
-  "themeColor": "#FF5A1F",
+  "themeColor": "#062A5E",
   "themeColorDark": "#000000",
   "navigationColor": "#000000",
   "navigationColorDark": "#000000",
@@ -20,8 +20,8 @@
     "path": "android.keystore",
     "alias": "temporary-build"
   },
-  "appVersionName": "1.0.13",
-  "appVersionCode": 16,
+  "appVersionName": "1.0.14",
+  "appVersionCode": 17,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "http://127.0.0.1:8765/manifest.webmanifest",
@@ -51,5 +51,5 @@
     "standalone",
     "minimal-ui"
   ],
-  "appVersion": "1.0.13"
+  "appVersion": "1.0.14"
 }

@@ -1,18 +1,18 @@
 'use strict';
 
-const CACHE_NAME = 'daedong-yeosu-app-shell-v32-cross-store-qr-history';
+const CACHE_NAME = 'daedong-yeosu-app-shell-v33-yeosu-taste-map-brand';
 const RUNTIME_CACHE = 'daedong-yeosu-runtime-v5-cross-store-qr-history';
 const CACHEABLE_DESTINATIONS = new Set(['image', 'style', 'script', 'font']);
 const APP_SHELL = [
   '/',
   '/manifest.webmanifest',
-  '/app-icon.svg?v=daedongmap-brand-20260922-2',
-  '/assets/brand/daedongmap-logo.svg?v=daedongmap-brand-20260922-2',
-  '/assets/brand/daedongmap-share-1200x630.png',
+  '/assets/app-icons/daedong-app-icon-192.png?v=yeosu-taste-map-20260924-1',
+  '/assets/brand/yeosu-taste-map-logo.png?v=yeosu-taste-map-20260924-1',
+  '/assets/brand/yeosu-taste-map-share-1200x630.png',
   '/assets/app-icons/daedong-app-icon-192.png',
-  '/assets/app-icons/daedong-app-icon-192.png?v=daedongmap-brand-20260922-2',
+  '/assets/app-icons/daedong-app-icon-192.png?v=yeosu-taste-map-20260924-1',
   '/assets/app-icons/daedong-app-icon-512.png',
-  '/assets/app-icons/daedong-app-icon-512.png?v=daedongmap-brand-20260922-2',
+  '/assets/app-icons/daedong-app-icon-512.png?v=yeosu-taste-map-20260924-1',
   '/assets/app-icons/daedong-app-icon-maskable-192.png',
   '/assets/app-icons/daedong-app-icon-maskable-512.png'
 ];

@@ -3491,6 +3491,18 @@
       "source": "notion-new-store-sync",
       "classification": "food",
       "blocked": false
+    },
+    {
+      "storeId": "2cccd02c50e16e55",
+      "storeName": "79대포 여수미평점",
+      "src": "assets/notion-store-photos/a0f6eb8bcf7684/01.webp",
+      "additionalSrcs": [],
+      "gallery": [
+        "assets/notion-store-photos/a0f6eb8bcf7684/01.webp"
+      ],
+      "source": "reviewed-same-brand-branch-photo",
+      "classification": "food",
+      "blocked": false
     }
   ]
 }

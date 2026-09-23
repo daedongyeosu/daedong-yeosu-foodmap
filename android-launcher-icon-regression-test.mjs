@@ -19,7 +19,7 @@ assert.equal(twa.maskableIconUrl, 'http://127.0.0.1:8765/assets/app-icons/daedon
 assert.notEqual(twa.maskableIconUrl, twa.iconUrl, 'Android 마스커블 아이콘은 안전 여백이 있는 별도 원본을 사용해야 합니다.');
 assert.equal(twa.name, '여수맛지도');
 assert.equal(twa.launcherName, '여수맛지도');
-assert.equal(twa.appVersionCode, 17);
+assert.equal(twa.appVersionCode, 18);
 assert.equal(twa.appVersionName, '1.0.14');
 assert.equal(twa.appVersion, '1.0.14');
 

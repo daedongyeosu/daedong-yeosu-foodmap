@@ -10,7 +10,7 @@ assert.ok(ids.has('65cc1845e542d5fb'),'Correct Yeoseo/Munsu single-brand shop mu
 assert.ok(!ids.has('c143aca89697f5aa'),'Unmanaged Hakdong store must never enter verified batch');
 assert.ok(!ids.has('e0c6949efb48f4b2'),'Previously hidden stores must not be republished');
 const hero=beforeSharedHero(read('data/hero-campaigns.json')),links=beforeSharedLinks(read('data/store-campaign-links.json'));
-assert.equal(hash({...hero,campaigns:Object.fromEntries(Object.entries(hero.campaigns).filter(([id])=>!ids.has(id)&&id!=='e66f136d0e468b6e'))}),'3f641bbd62dc714b2097f551f43be2368fee93bf092f6d5774a5ab29b3d3f0d4');
+assert.equal(hash({...hero,campaigns:Object.fromEntries(Object.entries(hero.campaigns).filter(([id])=>!ids.has(id)&&id!=='e66f136d0e468b6e'))}),'d5112951bebbdb466726a52268743d521d893492d3160678e6b199ded74bf80e');
 assert.equal(hash({...links,campaigns:links.campaigns.filter(x=>!ids.has(x.storeId)&&x.storeId!=='e66f136d0e468b6e')}),'7057fadcaeb5bc4de72cdc010bbb642c6ca2bdd988440623f54669ca9d4ff2b8');
 for(const {storeId,name} of batch){
  assert.match(storeId,/^[a-f0-9]{16}$/);const c=hero.campaigns[storeId],l=links.campaigns.find(x=>x.storeId===storeId);

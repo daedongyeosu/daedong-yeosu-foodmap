@@ -5,12 +5,12 @@ const source = fs.readFileSync(new URL('./store-menu-preview.js', import.meta.ur
 const index = fs.readFileSync(new URL('./index.html', import.meta.url), 'utf8');
 const serviceWorker = fs.readFileSync(new URL('./sw.js', import.meta.url), 'utf8');
 
-assert.match(source, /OFFICIAL_MENU_PLACEHOLDER_IMAGE = 'assets\/app-icons\/daedong-app-icon-512\.png\?v=daedongmap-brand-20260922-2'/);
+assert.match(source, /OFFICIAL_MENU_PLACEHOLDER_IMAGE = 'assets\/app-icons\/daedong-app-icon-512\.png\?v=yeosu-taste-map-20260924-1'/);
 assert.match(source, /assets\\\/logo\\\.png/);
 assert.match(source, /const heroImage = menuHeroImage\(menu\)/);
 assert.match(source, /escapeMenuHtml\(heroImage\)/);
 assert.doesNotMatch(source, /escapeMenuHtml\(menu\.mainImage\)/);
 assert.match(index, /store-menu-preview\.js\?v=[^"']*official-placeholder-logo-1/);
-assert.match(serviceWorker, /CACHE_NAME = 'daedong-yeosu-app-shell-v32-cross-store-qr-history'/);
+assert.match(serviceWorker, /CACHE_NAME = 'daedong-yeosu-app-shell-v33-yeosu-taste-map-brand'/);
 
 console.log('menu preview official placeholder logo regression passed');

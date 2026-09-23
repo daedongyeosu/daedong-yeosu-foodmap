@@ -100,6 +100,6 @@ assert.match(finalExperience, /fxRc3Script\.src\+='-atomic-rail-refresh-1-store-
 assert.match(html, /final-experience\.js\?v=[^"\n]*store-card-intent-2/);
 assert.match(html, /final-experience\.js\?v=[^"\n]*store-card-back-home-1/);
 assert.match(html, /store-service-info\.js\?v=[^"\n]*store-card-intent-1/);
-assert.match(serviceWorker, /CACHE_NAME = 'daedong-yeosu-app-shell-v32-cross-store-qr-history'/);
+assert.match(serviceWorker, /CACHE_NAME = 'daedong-yeosu-app-shell-v33-yeosu-taste-map-brand'/);
 
 console.log('store card intentional navigation isolation regression: PASS');

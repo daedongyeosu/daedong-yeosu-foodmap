@@ -33,16 +33,16 @@ for (const [file, size] of Object.entries(iosIcons)) {
 }
 
 const android = JSON.parse(text('android/twa-manifest.json'));
-assert.equal(android.name, '대동맵');
-assert.equal(android.launcherName, '대동맵');
-assert.equal(android.appVersionName, '1.0.13');
-assert.equal(android.appVersionCode, 16);
+assert.equal(android.name, '여수맛지도');
+assert.equal(android.launcherName, '여수맛지도');
+assert.equal(android.appVersionName, '1.0.14');
+assert.equal(android.appVersionCode, 17);
 
-assert.match(text('ios/DaedongYeosuFoodMap/Info.plist'), /<key>CFBundleDisplayName<\/key>\s*<string>대동맵<\/string>/);
+assert.match(text('ios/DaedongYeosuFoodMap/Info.plist'), /<key>CFBundleDisplayName<\/key>\s*<string>여수맛지도<\/string>/);
 assert.match(text('ios/project.yml'), /MARKETING_VERSION: "1\.1"/);
 
 const index = text('index.html');
 assert.doesNotMatch(index, /daedong-share-lightning-20260909/);
-assert.match(index, /assets\/brand\/daedongmap-share-1200x630\.png/);
+assert.match(index, /assets\/brand\/yeosu-taste-map-share-1200x630\.png/);
 
 console.log('Native and shared Daedongmap brand assets regression: PASS');

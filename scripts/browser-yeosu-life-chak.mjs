@@ -62,12 +62,23 @@ const homeAudit = await page.evaluate(() => ({
   viewport: [window.innerWidth, window.innerHeight],
   orderText: document.querySelector('.order-grid')?.textContent || '',
   highlightCount: document.querySelectorAll('#yeosuLifeHighlights .yeosu-life-highlight').length,
+  gatewayCount: document.querySelectorAll('.yeosu-life-gateways .yeosu-life-gateway').length,
+  gatewayColumns: getComputedStyle(document.querySelector('.yeosu-life-gateways')).gridTemplateColumns.split(' ').length,
+  gatewaySmallFont: parseFloat(getComputedStyle(document.querySelector('.yeosu-life-gateway small')).fontSize),
+  accidentOneLine: (() => {
+    const label = document.querySelector('#carAccidentBtn strong');
+    const style = getComputedStyle(label);
+    return label.getBoundingClientRect().height <= parseFloat(style.lineHeight) * 1.2;
+  })(),
   sectionWidth: document.querySelector('#yeosuLifeSection')?.getBoundingClientRect().width || 0,
   horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth
 }));
 if (homeAudit.viewport.join('x') !== '390x844') throw new Error(`unexpected viewport ${homeAudit.viewport.join('x')}`);
 if (/CHAK|섬섬여수페이/.test(homeAudit.orderText)) throw new Error('CHAK leaked into order methods');
 if (homeAudit.highlightCount !== 3) throw new Error(`expected 3 highlights, got ${homeAudit.highlightCount}`);
+if (homeAudit.gatewayCount !== 8 || homeAudit.gatewayColumns !== 2) throw new Error('life gateway mobile grid is incomplete');
+if (homeAudit.gatewaySmallFont < 13) throw new Error(`life gateway supporting text is too small: ${homeAudit.gatewaySmallFont}px`);
+if (!homeAudit.accidentOneLine) throw new Error('car accident contact label wrapped on mobile');
 if (homeAudit.sectionWidth > 390 || homeAudit.horizontalOverflow) throw new Error('mobile horizontal overflow detected');
 
 fs.mkdirSync('artifacts', {recursive: true});
@@ -91,7 +102,7 @@ await page.screenshot({path: 'artifacts/chak-guide-390x844.png', fullPage: false
 
 stage = 'life-categories';
 await page.locator('.modal-close').click();
-await page.locator('#yeosuLifeMoreBtn').click();
+await page.locator('#yeosuLifeNewsBtn').click();
 const lifeModal = page.locator('#modal:not([hidden]) .yeosu-life-modal');
 await lifeModal.waitFor({state: 'visible'});
 if (await lifeModal.locator('.yeosu-life-tabs button').count() !== 6) throw new Error('life news category tabs missing');

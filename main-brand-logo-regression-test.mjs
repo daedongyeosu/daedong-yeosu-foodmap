@@ -8,7 +8,7 @@ const serviceWorker = fs.readFileSync('sw.js', 'utf8');
 
 assert.match(
   html,
-  /<img class="brand-logo" src="assets\/brand\/yeosu-taste-map-logo\.png\?v=yeosu-taste-map-20260924-1" alt="여수맛지도">/,
+  /<img class="brand-logo" src="assets\/brand\/yeosu-taste-map-logo\.png\?v=yeosu-taste-map-20260925-2" alt="여수맛지도">/,
   '메인 헤더는 확정한 여수맛지도 통합 로고를 사용해야 합니다.'
 );
 assert.doesNotMatch(html, /class="brand-word(?:\s|\")|class="brand-symbol(?:\s|\")/,
@@ -18,7 +18,7 @@ assert.match(html, /<p class="brand-return-slogan">여수의 맛과 주문경로
 assert.match(css, /\.topbar \.brand-logo\{[^}]*object-fit:contain/,
   '통합 로고는 비율을 훼손하지 않고 표시해야 합니다.');
 assert.equal(logo.subarray(1, 4).toString('ascii'), 'PNG');
-assert.match(serviceWorker, /'\/assets\/brand\/yeosu-taste-map-logo\.png\?v=yeosu-taste-map-20260924-1'/,
+assert.match(serviceWorker, /'\/assets\/brand\/yeosu-taste-map-logo\.png\?v=yeosu-taste-map-20260925-2'/,
   '서비스 워커도 버전이 지정된 새 로고를 캐시해야 합니다.');
 
 console.log('Yeosu Taste Map integrated brand logo regression: PASS');

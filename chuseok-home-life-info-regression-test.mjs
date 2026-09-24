@@ -5,6 +5,7 @@ const html = fs.readFileSync("index.html", "utf8");
 const css = fs.readFileSync("app.css", "utf8");
 const icons = fs.readFileSync("assets/ui/ui-icons.svg", "utf8");
 const app = fs.readFileSync("app.js", "utf8");
+const regionBoot = fs.readFileSync("region-boot.js", "utf8");
 
 assert.match(html, /class="chuseok-seasonal-hero"/);
 assert.match(html, /마음까지 넉넉해지는 한가위/);
@@ -24,6 +25,8 @@ for (const id of ["hospital-pill","restroom","car-crash","used-exchange","news-s
 assert.match(css, /grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
 assert.match(css, /yeosu-life-gateway-copy small\{[^}]*font-size:13px/);
 assert.match(css, /is-accident \.yeosu-life-gateway-copy strong\{[^}]*white-space:nowrap/);
+assert.match(regionBoot, /assets\/seasonal\/chuseok-2026-continuous\.webp/);
+assert.doesNotMatch(regionBoot, /dolsan-day|turtle-ship-northwest/);
 for (const file of ["assets/seasonal/chuseok-2026-continuous.webp","assets/brand/yeosugage-app-icon.png"]) assert.ok(fs.existsSync(file), `missing ${file}`);
 console.log("chuseok homepage and life information regression checks passed");
 

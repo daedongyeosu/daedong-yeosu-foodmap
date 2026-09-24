@@ -375,3 +375,32 @@ html.modal-open,body.modal-open{overflow:hidden!important;overscroll-behavior:no
 .chak-guide-lead{margin:12px 0 14px;padding:12px;border-radius:14px;background:#f2f7fa;color:#3b5265;font-size:14px;line-height:1.55}.chak-special-box{padding:17px;border-radius:20px;background:linear-gradient(140deg,#063b65,#0b79a2);color:#fff;box-shadow:0 10px 25px rgba(3,55,84,.18)}.chak-special-box small{display:block;color:#bfefff;font-weight:850}.chak-special-box strong{display:block;margin:7px 0;font-size:23px;line-height:1.35}.chak-special-box em{color:#ffe259;font-style:normal;font-size:29px}.chak-special-box p{margin:6px 0 10px;color:#e3f5ff;font-size:12px;line-height:1.55}.chak-special-box>b{display:block;padding:9px;border-radius:11px;background:rgba(255,255,255,.14);font-size:11px;line-height:1.45}.chak-steps{display:grid;gap:8px;margin:15px 0;padding:0;list-style:none}.chak-steps li{display:grid;grid-template-columns:34px 1fr;gap:10px;align-items:start;padding:11px;border:1px solid #e0e7eb;border-radius:14px}.chak-steps li>span{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;background:#e6f5fb;color:#075782;font-weight:950}.chak-steps b{color:#183c5b}.chak-steps p{margin:3px 0 0;color:#657687;font-size:12px;line-height:1.45}.chak-limit-note{padding:13px;border-radius:14px;background:#fff3ed;color:#753b24}.chak-limit-note p{margin:5px 0 0;font-size:12px;line-height:1.55}.chak-guide-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:13px}.chak-guide-actions button{min-height:48px;border:0;border-radius:13px;background:#0d5b8d;color:#fff;font-weight:900}.chak-guide-actions button.secondary{border:1px solid #c9dce6;background:#fff;color:#174b6c}.notification-center h2{color:#102f50}.notification-center section+section{margin-top:18px}.notification-center h3{margin:0 0 8px;color:#3d566c;font-size:14px}.notice-life-group{display:grid;gap:8px}.notice-life-group button{display:grid;gap:4px;min-height:58px;padding:11px 13px;border:1px solid #cfe2eb;border-radius:14px;background:#f5fbfe;text-align:left;color:#143a57}.notice-life-group button small{color:#687b8b}
 @media(max-width:700px){.yeosu-life-highlights{grid-template-columns:1fr}.yeosu-life-highlight{grid-template-columns:42px minmax(0,1fr) 18px;padding:12px}.yeosu-life-highlight-icon{width:42px;height:42px}.yeosu-life-highlight-copy span{-webkit-line-clamp:1}.yeosu-life-sheet-modal{padding:0;align-items:end}.yeosu-life-sheet-modal .modal-card{width:100%;max-height:94dvh;border-radius:25px 25px 0 0;padding:19px 14px calc(18px + env(safe-area-inset-bottom))}.life-news-source-row{align-items:stretch;flex-direction:column}.life-news-source-row button{width:100%}}
 @media(max-width:380px){.chak-benefit-card{grid-template-columns:45px minmax(0,1fr);gap:10px;padding:13px}.chak-benefit-icon{width:45px;height:45px}.chak-benefit-cta{grid-column:2;text-align:left}.chak-guide-actions{grid-template-columns:1fr}.yeosu-life-head{align-items:flex-start}.yeosu-life-head h2{font-size:21px}.yeosu-life-more{font-size:12px}}
+
+/* Compact civic support message above the Yeosu Taste Map header. */
+.island-expo-support-banner{
+  min-height:52px;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:8px 12px;
+  padding:9px 16px;
+  border-bottom:3px solid #ffd34e;
+  background:#07396a;
+  color:#fff;
+  text-decoration:none;
+}
+.island-expo-support-kicker{color:#98e4ff;font-size:12px;font-weight:900;letter-spacing:0;white-space:nowrap}
+.island-expo-support-banner>strong{min-width:0;font-size:18px;line-height:1.3;letter-spacing:0;word-break:keep-all}
+.island-expo-support-action{min-height:34px;display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:0 10px;border-radius:6px;background:#ffd34e;color:#082f59;font-size:12px;font-weight:900;letter-spacing:0;white-space:nowrap}
+.island-expo-support-action span{font-size:19px;line-height:1}
+.island-expo-support-banner:focus-visible{outline:3px solid #fff;outline-offset:-5px}
+@media(max-width:520px){
+  .island-expo-support-banner{min-height:55px;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;padding:8px 12px}
+  .island-expo-support-kicker{grid-column:1;grid-row:1}
+  .island-expo-support-banner>strong{grid-column:1;grid-row:2;font-size:15px}
+  .island-expo-support-action{grid-column:2;grid-row:1/3}
+}
+@media(max-width:350px){
+  .island-expo-support-banner>strong{font-size:14px}
+  .island-expo-support-action{padding:0 7px;font-size:11px}
+}

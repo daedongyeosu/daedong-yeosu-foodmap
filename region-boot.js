@@ -9,7 +9,7 @@
         ['assets/goheung/goheung-rocket-flight-v3.webp', 'all', 'low']
       ]
     : [
-        ['assets/seasonal/chuseok-2026-continuous.webp?v=20260925', 'all', 'high']
+        ['assets/seasonal/autumn-dolsan-bridge-2026.webp', 'all', 'high']
       ];
   images.forEach(([href, media, priority]) => {
     const link = document.createElement('link');

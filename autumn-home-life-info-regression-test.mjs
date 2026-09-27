@@ -7,6 +7,7 @@ const experienceCss = fs.readFileSync("final-experience.css", "utf8");
 const messageCss = fs.readFileSync("turtle-ship-hero.css", "utf8");
 const serviceCss = fs.readFileSync("store-service-info.css", "utf8");
 const icons = fs.readFileSync("assets/ui/ui-icons.svg", "utf8");
+const regionBoot = fs.readFileSync("region-boot.js", "utf8");
 
 assert.match(html, /class="autumn-continuous-shell"/);
 assert.doesNotMatch(html, /chuseok-seasonal-hero|마음까지 넉넉해지는 한가위|여수의 맛처럼 풍성하고/);
@@ -24,6 +25,8 @@ assert.match(css, /grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
 assert.match(css, /yeosu-life-gateway-copy small\{[^}]*font-size:13px/);
 assert.match(css, /is-accident \.yeosu-life-gateway-copy strong\{[^}]*white-space:nowrap/);
 assert.match(css, /autumn-continuous-shell\{[^}]*autumn-dolsan-bridge-2026-extended\.svg/);
+assert.doesNotMatch(regionBoot, /autumn-dolsan-bridge-2026\.webp/,
+  'CSS 배경 안에 포함된 가을 사진 원본을 별도로 다시 내려받으면 첫 화면 로딩이 느려집니다.');
 assert.match(css, /autumn-continuous-shell\{[^}]*background-position:center top,center top[^}]*background-size:100% 100%,100% auto/,
   '가을 사진의 원래 크기와 상단 중앙 위치를 바꾸면 안 됩니다.');
 assert.match(css, /autumn-continuous-shell \.yeosu-night-shell\{[^}]*background:[^}]*!important/);

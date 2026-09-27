@@ -8,9 +8,7 @@
         ['assets/goheung/goheung-sunset-launchpad-v2.webp', 'all', 'high'],
         ['assets/goheung/goheung-rocket-flight-v3.webp', 'all', 'low']
       ]
-    : [
-        ['assets/seasonal/autumn-dolsan-bridge-2026.webp', 'all', 'high']
-      ];
+    : [];
   images.forEach(([href, media, priority]) => {
     const link = document.createElement('link');
     link.rel = 'preload';

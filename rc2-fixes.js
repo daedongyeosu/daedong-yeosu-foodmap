@@ -1397,7 +1397,16 @@ async function rc2LaunchComparedExternal(link, href) {
     || ''
   );
   const routeKey = rawKey === 'coupang-eats' ? 'coupang' : rawKey;
-  const androidBrowser = /Android/i.test(String(globalThis.navigator?.userAgent || ''));
+  const userAgent = String(globalThis.navigator?.userAgent || '');
+  const iosBrowser = /iPhone|iPad|iPod/i.test(userAgent) || window.__DAEDONG_IOS_APP__ === true;
+  const androidBrowser = /Android/i.test(userAgent);
+  if (iosBrowser && typeof window.daedongLaunchMobileRoute === 'function') {
+    // WKWebView may silently discard a script-created target=_blank window.
+    // Main-frame navigation is intercepted by the native iOS shell before the
+    // current store detail unloads, preserving the screen for app return.
+    await window.daedongLaunchMobileRoute(routeKey, href);
+    return true;
+  }
   if (routeKey === 'yogiyo' && androidBrowser) {
     // The Preview return snapshot was already persisted by
     // rc2RememberExternalReturn. Keep that document alive, but hand the

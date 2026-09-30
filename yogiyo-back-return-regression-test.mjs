@@ -48,6 +48,26 @@ assert.deepEqual(opened, [
   [urls.baemin, '_blank', 'noopener']
 ], '쿠팡이츠·배달의민족은 원본 Preview 상세 DOM을 보존하는 별도 실행 경로로 열어야 합니다.');
 
+const iosOpened = [];
+const iosNativeLaunches = [];
+const iosSandbox = {
+  navigator: {userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148'},
+  window: {
+    __DAEDONG_IOS_APP__: true,
+    open: (...args) => iosOpened.push(args),
+    daedongLaunchMobileRoute: async (...args) => iosNativeLaunches.push(args)
+  }
+};
+vm.runInNewContext(`${helperSource}; globalThis.launchComparedExternal = rc2LaunchComparedExternal;`, iosSandbox);
+await iosSandbox.launchComparedExternal(link('coupang'), urls.coupang);
+await iosSandbox.launchComparedExternal(link('baemin'), urls.baemin);
+assert.deepEqual(iosNativeLaunches, [
+  ['coupang', urls.coupang],
+  ['baemin', urls.baemin]
+], '아이폰에서는 팝업 대신 네이티브가 가로챌 수 있는 직접 이동으로 주문앱 링크를 전달해야 합니다.');
+assert.deepEqual(iosOpened, [], '아이폰 WKWebView에서 차단될 수 있는 새 창을 만들면 안 됩니다.');
+assert.match(finalExperience, /fxRc2Script\.src\+='-ios-external-direct-launch-1'/);
+
 const comparedStart = rc2.indexOf("const comparedExternal = event.target.closest('a[data-community-original]')");
 const comparedEnd = rc2.indexOf('const externalLink =', comparedStart);
 const comparedHandler = rc2.slice(comparedStart, comparedEnd);

@@ -8,8 +8,10 @@ const [html, js, css] = await Promise.all([
 ]);
 
 assert.match(html, /id="yeosuLifeSection"[^>]*hidden/);
-assert.match(html, /결제혜택 · 주문앱이 아닙니다/);
+assert.match(html, /오늘의 여수 생활정보/);
+assert.match(html, /혜택·행사·모집·교통 소식을 짧게 보고 공식 원문에서 확인하세요\./);
 assert.match(html, /id="chakBenefitBtn"/);
+assert.match(html, /섬섬여수페이/);
 assert.doesNotMatch(html.match(/<div class="order-grid"[\s\S]*?<\/div>/)?.[0] || '', /CHAK|섬섬여수페이/);
 
 for (const category of ['혜택', '행사', '모집', '교통', '뉴스']) {

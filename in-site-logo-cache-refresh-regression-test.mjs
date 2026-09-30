@@ -7,7 +7,7 @@ const privacyHtml = fs.readFileSync('privacy/index.html', 'utf8');
 const shareUi = fs.readFileSync('final-experience.js', 'utf8');
 const serviceWorker = fs.readFileSync('sw.js', 'utf8');
 
-const version = 'yeosu-taste-map-20260924-1';
+const version = 'yeosu-taste-map-20260925-2';
 const logoUrl = `assets/brand/yeosu-taste-map-logo.png?v=${version}`;
 const png192Url = `assets/app-icons/daedong-app-icon-192.png?v=${version}`;
 const png512Url = `assets/app-icons/daedong-app-icon-512.png?v=${version}`;

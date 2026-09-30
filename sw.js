@@ -6,13 +6,13 @@ const CACHEABLE_DESTINATIONS = new Set(['image', 'style', 'script', 'font']);
 const APP_SHELL = [
   '/',
   '/manifest.webmanifest',
-  '/assets/app-icons/daedong-app-icon-192.png?v=yeosu-taste-map-20260924-1',
-  '/assets/brand/yeosu-taste-map-logo.png?v=yeosu-taste-map-20260924-1',
+  '/assets/app-icons/daedong-app-icon-192.png?v=yeosu-taste-map-20260925-2',
+  '/assets/brand/yeosu-taste-map-logo.png?v=yeosu-taste-map-20260925-2',
   '/assets/brand/yeosu-taste-map-share-1200x630.png',
   '/assets/app-icons/daedong-app-icon-192.png',
-  '/assets/app-icons/daedong-app-icon-192.png?v=yeosu-taste-map-20260924-1',
+  '/assets/app-icons/daedong-app-icon-192.png?v=yeosu-taste-map-20260925-2',
   '/assets/app-icons/daedong-app-icon-512.png',
-  '/assets/app-icons/daedong-app-icon-512.png?v=yeosu-taste-map-20260924-1',
+  '/assets/app-icons/daedong-app-icon-512.png?v=yeosu-taste-map-20260925-2',
   '/assets/app-icons/daedong-app-icon-maskable-192.png',
   '/assets/app-icons/daedong-app-icon-maskable-512.png'
 ];

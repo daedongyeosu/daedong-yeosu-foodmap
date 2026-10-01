@@ -12,6 +12,9 @@ assert.equal(photoHeight, 1672, 'extended autumn photo height remains explicit')
 assert.equal(mirrorTranslate, photoHeight * 2, 'mirrored continuation starts exactly where the first photo ends');
 assert.doesNotMatch(asset, /translate\(0 3784\)/, 'old 440px blank band is removed');
 assert.match(css, /sea-through-order-grid/, 'continuous sea asset cache key is current');
-assert.match(index, /autumn-dolsan-20260928-6-sea-through-order-grid/, 'homepage stylesheet cache key is current');
+assert.match(css, /@media\(min-width:761px\)[\s\S]*?width:100vw/, 'desktop sea background spans the full viewport');
+assert.match(css, /background-size:100% 100%,cover/, 'desktop sea photograph covers the side gutters without letterboxing');
+assert.match(css, /20261001-sea-full-viewport/, 'desktop full-width sea asset cache key is current');
+assert.match(index, /autumn-dolsan-20260928-7-sea-full-viewport/, 'homepage stylesheet cache key is current');
 
 console.log('autumn background continuity regression: PASS');

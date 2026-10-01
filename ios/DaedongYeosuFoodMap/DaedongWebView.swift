@@ -14,6 +14,7 @@ final class WebViewStore: ObservableObject {
     @Published var externalOrder: ExternalOrderDestination?
 
     weak var webView: WKWebView?
+    private var pendingDeepLinkURL: URL?
 
     func goHome() {
         webView?.load(URLRequest(url: Self.homeURL))
@@ -31,6 +32,28 @@ final class WebViewStore: ObservableObject {
         } else {
             goHome()
         }
+    }
+
+    func openDeepLink(_ url: URL) {
+        guard url.scheme?.lowercased() == "daedongmap" else { return }
+        let components = URLComponents(url: url, resolvingAgainstBaseURL: false)
+        guard let storeId = components?.queryItems?.first(where: { $0.name == "store" })?.value,
+              !storeId.isEmpty,
+              storeId.range(of: #"^[A-Za-z0-9_-]{1,80}$"#, options: .regularExpression) != nil else { return }
+
+        var destination = URLComponents(string: "https://daedongmap.com/")!
+        destination.queryItems = [
+            URLQueryItem(name: "store", value: storeId),
+            URLQueryItem(name: "source", value: "yeosugage"),
+        ]
+        guard let destinationURL = destination.url else { return }
+        pendingDeepLinkURL = destinationURL
+        webView?.load(URLRequest(url: destinationURL))
+    }
+
+    func initialURL() -> URL {
+        defer { pendingDeepLinkURL = nil }
+        return pendingDeepLinkURL ?? Self.homeURL
     }
 
     func synchronizeNavigationState() {
@@ -71,7 +94,7 @@ struct DaedongWebView: UIViewRepresentable {
         webView.scrollView.refreshControl = refreshControl
 
         store.webView = webView
-        webView.load(URLRequest(url: WebViewStore.homeURL))
+        webView.load(URLRequest(url: store.initialURL()))
         return webView
     }
 

@@ -89,6 +89,20 @@ await page.evaluate(() => {
 await page.waitForTimeout(250);
 await page.screenshot({path: 'artifacts/yeosu-life-home-390x844.png', fullPage: false});
 
+stage = 'yeosu-gage-smart-link';
+await page.locator('#yeosuGageHomeEntry').click();
+const yeosuGageModal = page.locator('#modal:not([hidden]) .yeosu-gage-guide');
+await yeosuGageModal.waitFor({state: 'visible'});
+const yeosuGageText = await yeosuGageModal.innerText();
+if (!yeosuGageText.includes('여수가게 앱 열기')) throw new Error('Yeosu Gage smart app button missing');
+if (!yeosuGageText.includes('아이폰은 App Store, 안드로이드는 Google Play')) {
+  throw new Error('Yeosu Gage platform fallback guidance missing');
+}
+if (await yeosuGageModal.locator('[data-open-yeosu-gage]').count() !== 1) {
+  throw new Error('Yeosu Gage smart launch target missing');
+}
+await page.locator('.modal-close').click();
+
 stage = 'chak-guide';
 await page.locator('#chakBenefitBtn').click();
 const chakModal = page.locator('#modal:not([hidden]) .chak-guide');

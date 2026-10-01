@@ -27,8 +27,8 @@ assert.match(css, /is-accident \.yeosu-life-gateway-copy strong\{[^}]*white-spac
 assert.match(css, /autumn-continuous-shell\{[^}]*autumn-dolsan-bridge-2026-extended\.svg/);
 assert.doesNotMatch(regionBoot, /autumn-dolsan-bridge-2026\.webp/,
   'CSS 배경 안에 포함된 가을 사진 원본을 별도로 다시 내려받으면 첫 화면 로딩이 느려집니다.');
-assert.match(css, /autumn-continuous-shell\{[^}]*background-position:center top,center top[^}]*background-size:100% 100%,100% auto/,
-  '가을 사진의 원래 크기와 상단 중앙 위치를 바꾸면 안 됩니다.');
+assert.match(css, /autumn-continuous-shell\{[^}]*background-position:center top,center top[^}]*background-size:100% 100%,100% 100%/,
+  '연장된 가을 배경이 홈 유리 버튼 구간 전체를 정확히 덮어야 합니다.');
 assert.match(css, /autumn-continuous-shell \.yeosu-night-shell\{[^}]*background:[^}]*!important/);
 assert.doesNotMatch(css, /autumn-continuous-shell \.yeosu-night-shell\{[^}]*rgba\(242,246,244,\.96\)/,
   '주문 버튼 구역을 불투명한 흰색으로 덮으면 안 됩니다.');
@@ -49,9 +49,9 @@ assert.match(messageCss, /community-order-message p strong\{[\s\S]*?color:#17171
   '핵심 주문방법 첫 줄은 로고처럼 진회색 단색·무외곽선·약한 그림자로 보여야 합니다.');
 assert.match(messageCss, /community-order-message \.order-secondary-line\{[\s\S]*?color:#171717[\s\S]*?font-size:15px[\s\S]*?-webkit-text-stroke:0[\s\S]*?text-shadow:0 1px 0 rgba\(0,0,0,\.22\)/,
   '브랜드앱·전화주문도 진회색 단색·무외곽선·약한 그림자로 보여야 합니다.');
-assert.match(experienceCss, /autumn-continuous-shell \.order-item strong\{[^}]*color:#080b0d/,
+assert.match(experienceCss, /autumn-continuous-shell \.order-item strong\{[^}]*color:#05090c/,
   '주문 버튼 이름도 진한 검정으로 보여야 합니다.');
-assert.match(serviceCss, /store-finder-quick \{[\s\S]*?background: rgba\(255, 255, 255, \.35\)/);
+assert.match(serviceCss, /store-finder-quick \{[\s\S]*?background: rgba\(255, 255, 255, \.2\)/);
 for (const file of ["assets/seasonal/autumn-dolsan-bridge-2026.webp","assets/seasonal/autumn-dolsan-bridge-2026-extended.svg","assets/brand/yeosugage-app-icon.png"]) assert.ok(fs.existsSync(file), `missing ${file}`);
 const extendedAutumn = fs.readFileSync("assets/seasonal/autumn-dolsan-bridge-2026-extended.svg", "utf8");
 assert.match(extendedAutumn, /width="941" height="2300"/,

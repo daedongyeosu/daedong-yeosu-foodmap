@@ -29,6 +29,9 @@ struct ContentView: View {
         } message: {
             Text(store.linkMessage ?? "")
         }
+        .onOpenURL { url in
+            store.openDeepLink(url)
+        }
     }
 }
 

@@ -39,7 +39,7 @@ assert.equal(android.appVersionName, '1.0.14');
 assert.equal(android.appVersionCode, 19);
 
 assert.match(text('ios/DaedongYeosuFoodMap/Info.plist'), /<key>CFBundleDisplayName<\/key>\s*<string>여수맛지도<\/string>/);
-assert.match(text('ios/project.yml'), /MARKETING_VERSION: "1\.1"/);
+assert.match(text('ios/project.yml'), /MARKETING_VERSION: "1\.2"/);
 
 const index = text('index.html');
 assert.doesNotMatch(index, /daedong-share-lightning-20260909/);

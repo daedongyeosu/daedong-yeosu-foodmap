@@ -24,11 +24,14 @@ for (const id of ["hospital-pill","restroom","car-crash","used-exchange","news-s
 assert.match(css, /grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
 assert.match(css, /yeosu-life-gateway-copy small\{[^}]*font-size:13px/);
 assert.match(css, /is-accident \.yeosu-life-gateway-copy strong\{[^}]*white-space:nowrap/);
-assert.match(css, /autumn-continuous-shell\{[^}]*autumn-dolsan-bridge-2026-extended\.svg/);
+assert.match(css, /autumn-continuous-shell\{[^}]*autumn-dolsan-bridge-2026\.webp/,
+  '모바일 배경은 투명 띠가 없는 원본 사진을 사용해야 합니다.');
+assert.match(css, /@media\(min-width:761px\)[\s\S]*?autumn-dolsan-bridge-2026-extended\.svg/,
+  '데스크톱 전체 폭 배경은 확장 사진을 유지해야 합니다.');
 assert.doesNotMatch(regionBoot, /autumn-dolsan-bridge-2026\.webp/,
   'CSS 배경 안에 포함된 가을 사진 원본을 별도로 다시 내려받으면 첫 화면 로딩이 느려집니다.');
 assert.match(css, /autumn-continuous-shell\{[^}]*background-position:center top,center top[^}]*background-size:100% 100%,100% 100%/,
-  '연장된 가을 배경이 홈 유리 버튼 구간 전체를 정확히 덮어야 합니다.');
+  '빈 구간이 없는 가을 배경이 홈 유리 버튼 구간 전체를 정확히 덮어야 합니다.');
 assert.match(css, /autumn-continuous-shell \.yeosu-night-shell\{[^}]*background:[^}]*!important/);
 assert.doesNotMatch(css, /autumn-continuous-shell \.yeosu-night-shell\{[^}]*rgba\(242,246,244,\.96\)/,
   '주문 버튼 구역을 불투명한 흰색으로 덮으면 안 됩니다.');

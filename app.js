@@ -571,7 +571,9 @@ const CHAK_ANDROID_URL = 'https://play.google.com/store/apps/details?id=com.koms
 const CHAK_IOS_URL = 'https://apps.apple.com/kr/app/%EC%A7%80%EC%97%AD%EC%83%81%ED%92%88%EA%B6%8C-chak/id6449449658';
 const CHAK_YEOSU_GUIDE_URL = 'https://news.yeosu.go.kr/news/articleView.html?idxno=34946';
 const EGEN_HOLIDAY_MEDICAL_URL = 'https://www.e-gen.or.kr/egen/holiday_medical.do';
-const YEOSU_GAGE_URL = 'https://play.google.com/store/apps/details?id=com.yeosugage.app';
+const YEOSU_GAGE_ANDROID_URL = 'https://play.google.com/store/apps/details?id=com.yeosugage.app';
+const YEOSU_GAGE_IOS_URL = 'https://apps.apple.com/kr/app/id6814774577';
+const YEOSU_GAGE_SCHEME_URL = 'yeosugage://open?source=daedongmap';
 const USED_MARKET_LINKS = [
   { name: '당근', description: '우리 동네 중고거래와 나눔', url: 'https://www.daangn.com/' },
   { name: '번개장터', description: '전국 중고상품 검색과 안전결제', url: 'https://m.bunjang.co.kr/' },
@@ -1200,6 +1202,33 @@ const DDANGYO_RESOLVE_URL = 'https://fdofd.ddangyo.com/shorturl/view';
 const DDANGYO_ANDROID_PACKAGE = 'com.shinhan.o2o';
 const DDANGYO_RETRY_INTENT_KEY = 'daedongDdangyoRetryIntentV1';
 function isAndroidBrowser() { return /Android/i.test(String(navigator.userAgent || '')); }
+function isAppleMobileBrowser() {
+  const userAgent = String(navigator.userAgent || '');
+  return /iPad|iPhone|iPod/i.test(userAgent)
+    || (String(navigator.platform || '') === 'MacIntel' && Number(navigator.maxTouchPoints || 0) > 1);
+}
+function openYeosuGageApp() {
+  if (isAndroidBrowser()) {
+    const fallback = encodeURIComponent(YEOSU_GAGE_ANDROID_URL);
+    location.assign(`intent://open?source=daedongmap#Intent;scheme=yeosugage;package=com.yeosugage.app;S.browser_fallback_url=${fallback};end;`);
+    return;
+  }
+  if (!isAppleMobileBrowser()) {
+    location.assign(YEOSU_GAGE_ANDROID_URL);
+    return;
+  }
+
+  let appOpened = false;
+  const markOpened = () => {
+    if (document.hidden) appOpened = true;
+  };
+  document.addEventListener('visibilitychange', markOpened, {once: true});
+  window.addEventListener('pagehide', () => { appOpened = true; }, {once: true});
+  location.assign(YEOSU_GAGE_SCHEME_URL);
+  window.setTimeout(() => {
+    if (!appOpened && !document.hidden) location.assign(YEOSU_GAGE_IOS_URL);
+  }, 1200);
+}
 function ddangyoShortCode(value) {
   try {
     const url = new URL(String(value || ''));
@@ -2269,8 +2298,8 @@ function openYeosuGageGuide() {
     <h2 id="modalTitle">여수가게</h2>
     <p class="local-gateway-lead">여수 지역의 음식점뿐 아니라 숙박·미용·특산품·교육·수리 등 다양한 업체를 찾아볼 수 있습니다.</p>
     <div class="service-relationship-note"><b>여수지역 가게의 가입과 참여를 기다립니다</b><span>여수가게에 업체 정보를 등록해 지역 고객에게 가게를 알리고, 여수 상권을 함께 키워 주세요.</span></div>
-    <button class="local-gateway-primary merchant" type="button" data-life-url="${YEOSU_GAGE_URL}">Google Play에서 여수가게 보기</button>
-    <p class="local-gateway-source">현재는 정식 공개된 안드로이드 앱으로 연결합니다. 아이폰용은 App Store 출시가 완료되면 공식 링크를 추가합니다. 여수가게는 여수맛지도와 별도로 운영되는 지역상권 서비스입니다.</p>
+    <button class="local-gateway-primary merchant" type="button" data-open-yeosu-gage>여수가게 앱 열기</button>
+    <p class="local-gateway-source">설치되어 있으면 여수가게 앱을 바로 열고, 설치되어 있지 않으면 아이폰은 App Store, 안드로이드는 Google Play로 연결합니다. 여수가게는 여수맛지도와 별도로 운영되는 지역상권 서비스입니다.</p>
   </div>`);
 }
 function lifeDirectoryMarkup(items) {
@@ -3051,6 +3080,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const lifeFilter=event.target.closest('[data-life-filter]');if(lifeFilter){openYeosuLifeNews(lifeFilter.dataset.lifeFilter);return;}
     const lifeItem=event.target.closest('[data-life-item]');if(lifeItem){openYeosuLifeItem(lifeItem.dataset.lifeItem);return;}
     if(event.target.closest('[data-open-chak-benefit]')){openChakBenefitGuide();return;}
+    if(event.target.closest('[data-open-yeosu-gage]')){openYeosuGageApp();return;}
     const lifeUrl=event.target.closest('[data-life-url]');if(lifeUrl){try{const url=new URL(lifeUrl.dataset.lifeUrl,location.href);if(url.protocol==='https:')location.assign(url.href);}catch(error){console.warn('Invalid Yeosu life information URL',error);}return;}
     const noticePromo=event.target.closest('[data-notice-promo]');if(noticePromo){openPromoCarouselDetail(noticePromo.dataset.noticePromo);return;}
     const feedbackRetry=event.target.closest('[data-feedback-retry]');if(feedbackRetry){const report=feedbackQueue().find(item=>item.reportId===feedbackRetry.dataset.feedbackRetry);if(!report)return;feedbackRetry.disabled=true;feedbackRetry.textContent='다시 보내는 중…';deliverFeedbackReport(report).then(()=>feedbackSuccessModal(report)).catch(error=>feedbackFailureModal(report,error instanceof Error?error.message:'수정 요청을 접수하지 못했습니다.'));return;}

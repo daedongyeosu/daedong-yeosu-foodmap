@@ -14,6 +14,8 @@ assert.match(home, /<meta name="description" content="여수 음식점의 메뉴
 assert.match(home, /<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">/);
 assert.match(home, /<meta name="googlebot" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">/);
 assert.match(home, /<meta name="Yeti" content="index,follow">/);
+assert.match(home, /<meta name="google-site-verification" content="zOe2jMBSOTpM42gDQ_GEpuJlYXAoi4xjSE4LT2rjdb0">/);
+assert.match(home, /<meta name="naver-site-verification" content="1653d70cee24450257a5da2a72405e105415af5c">/);
 assert.match(home, /<link rel="canonical" href="https:\/\/daedongmap\.com\/">/);
 assert.match(home, /"@type": "WebSite"/);
 assert.match(home, /"name": "여수맛지도"/);

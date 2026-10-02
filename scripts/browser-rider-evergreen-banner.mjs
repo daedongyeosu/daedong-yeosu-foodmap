@@ -27,30 +27,31 @@ try {
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
   const banner = page.locator('#riderRecruitmentBanner');
   await banner.waitFor({state: 'visible', timeout: 15000});
-  await banner.scrollIntoViewIfNeeded();
-  await check(banner.getByText('배송기사님 상시모집', {exact: true}).count().then(count => count === 1), '존중 표현의 상시모집 문구 표시');
-  await check(banner.getByText('모집내용 보기', {exact: false}).count().then(count => count === 1), '모집내용 보기 버튼 표시');
+  await page.waitForFunction(() => !document.documentElement.classList.contains('daedong-fresh-entry-settling'), null, {timeout: 5000}).catch(() => {});
+  const orderSection = page.locator('.order-section');
+  await orderSection.evaluate(element => element.scrollIntoView({block: 'start'}));
+  await page.waitForTimeout(250);
+  await check(orderSection.evaluate(element => getComputedStyle(element).backgroundImage === 'none'), '주문방법 영역에 중복 돌산대교 사진 없음');
+  await check(page.locator('.autumn-continuous-shell').evaluate(element => getComputedStyle(element).backgroundImage.includes('autumn-dolsan-bridge-2026-tall.webp')), '홈 상단부터 메인배너 직전까지 실제 긴 가을 사진 한 장 적용');
+  await page.locator('.bottom-nav').evaluate(element => { element.style.display = 'none'; });
+  await orderSection.screenshot({path: 'browser-order-sea-to-hero.png'});
+  await page.locator('.bottom-nav').evaluate(element => { element.style.display = ''; });
+  await banner.evaluate(element => element.scrollIntoView({block: 'center'}));
+  await page.waitForTimeout(250);
+  await check(banner.getByText('공공주문앱 전문배송 업체', {exact: true}).count().then(count => count === 1), '공공주문앱 전문배송 정체성 표시');
+  await check(banner.getByText('맛지도 배달대행', {exact: true}).count().then(count => count === 1), '확대된 배달대행 브랜드 표시');
+  await check(banner.getByText('가게·기사님 상시 모집', {exact: true}).count().then(count => count === 1), '가게와 기사님 상시 모집 문구 표시');
+  await check(banner.getByText('자세히 보기', {exact: false}).count().then(count => count === 1), '자세히 보기 버튼 표시');
   const box = await banner.boundingBox();
-  await check(Promise.resolve(Boolean(box && box.width >= 340 && box.height >= 60)), '390px 모바일에서 누르기 쉬운 고정 배너 크기');
+  await check(Promise.resolve(Boolean(box && box.width >= 340 && box.height >= 90)), '390px 모바일에서 세 줄 정보를 담는 배너 크기');
   await page.screenshot({path: 'browser-rider-evergreen-banner.png', fullPage: false});
 
   await banner.click();
-  const modal = page.locator('#modal:not([hidden]).promo-image-only-modal');
-  await modal.waitFor({state: 'visible', timeout: 5000});
-  const image = modal.locator('img[src*="rider-recruitment-portrait-v2.webp"]');
-  await image.waitFor({state: 'visible', timeout: 5000});
-  await check(image.isVisible(), '등록된 배송기사 모집 사진을 즉시 팝업으로 표시');
-  await page.waitForFunction(
-    selector => {
-      const element = document.querySelector(selector);
-      return element instanceof HTMLImageElement && element.complete && element.naturalWidth > 0;
-    },
-    '#modal:not([hidden]).promo-image-only-modal img[src*="rider-recruitment-portrait-v2.webp"]',
-    {timeout: 10000}
-  );
-  await check(image.evaluate(element => element.complete && element.naturalWidth > 0), '배송기사 모집 사진 정상 로드');
-  await check(modal.locator('.modal-close').isVisible(), '팝업 닫기 버튼 표시');
-  await page.screenshot({path: 'browser-rider-evergreen-popup.png', fullPage: false});
+  await page.waitForURL(/\/delivery\/$/, {timeout: 5000});
+  await check(page.getByRole('heading', {name: /배달만 하지 않습니다\.\s*가게가 알려지도록\s*함께 뜁니다\./}).count().then(count => count === 1), '맛지도 배달대행 소개 페이지 표시');
+  await check(page.locator('a[href="tel:01047977803"]').count().then(count => count >= 1), '배달대행 전화 상담 연결 표시');
+  await check(page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), '390px 모바일에서 가로 넘침 없음');
+  await page.screenshot({path: 'browser-rider-evergreen-delivery-page.png', fullPage: false});
   report.success = report.errors.length === 0;
 } catch (error) {
   report.failure = error.stack || String(error);

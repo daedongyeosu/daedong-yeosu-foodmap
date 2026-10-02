@@ -292,7 +292,7 @@ html.modal-open,body.modal-open{overflow:hidden!important;overscroll-behavior:no
 }
 .rider-evergreen-button{
   width:100%;
-  min-height:68px;
+  min-height:92px;
   display:flex;
   align-items:center;
   justify-content:space-between;
@@ -317,13 +317,21 @@ html.modal-open,body.modal-open{overflow:hidden!important;overscroll-behavior:no
 }
 .rider-evergreen-copy small{
   color:#ffdc48;
-  font-size:11px;
+  font-size:12px;
   font-weight:900;
   letter-spacing:.02em;
 }
 .rider-evergreen-copy strong{
-  font-size:clamp(17px,4.6vw,21px);
-  line-height:1.2;
+  font-size:clamp(22px,6vw,29px);
+  line-height:1.08;
+  white-space:nowrap;
+}
+.rider-evergreen-copy em{
+  color:#fff;
+  font-size:14px;
+  font-style:normal;
+  font-weight:900;
+  line-height:1.25;
   white-space:nowrap;
 }
 .rider-evergreen-cta{
@@ -344,7 +352,9 @@ html.modal-open,body.modal-open{overflow:hidden!important;overscroll-behavior:no
 @media(max-width:360px){
   .rider-evergreen-strip{padding-left:12px;padding-right:12px}
   .rider-evergreen-button{gap:8px;padding-left:13px}
-  .rider-evergreen-cta{padding:0 9px;font-size:11px}
+  .rider-evergreen-copy strong{font-size:21px}
+  .rider-evergreen-copy em{font-size:12px}
+  .rider-evergreen-cta{padding:0 8px;font-size:10px}
 }
 
 

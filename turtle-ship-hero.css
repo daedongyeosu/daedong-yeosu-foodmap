@@ -268,6 +268,27 @@
   text-shadow:0 1px 2px #073653,0 3px 7px rgba(0,20,38,.78);
 }
 
+.order-section .section-head{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  column-gap:10px;
+  align-items:start;
+}
+
+.order-section .community-order-message{
+  display:contents;
+}
+
+.order-section .community-order-message h2{
+  grid-column:1;
+  grid-row:1;
+}
+
+.order-section .community-order-message p{
+  grid-column:1/-1;
+  grid-row:2;
+}
+
 .order-section .community-order-message p{
   display:inline-block;
   max-width:100%;
@@ -289,7 +310,7 @@
 
 .order-section .community-order-message p strong{
   color:#171717;
-  font-size:18px;
+  font-size:20px;
   font-weight:950;
   letter-spacing:-.02em;
   -webkit-text-stroke:0;
@@ -299,7 +320,7 @@
 
 .order-section .community-order-message .order-secondary-line{
   color:#171717;
-  font-size:15px;
+  font-size:17px;
   font-weight:950;
   letter-spacing:-.055em;
   white-space:nowrap;
@@ -309,6 +330,9 @@
 }
 
 .autumn-continuous-shell .order-section .text-btn{
+  grid-column:2;
+  grid-row:1;
+  flex:0 0 auto;
   color:#fff!important;
   font-weight:900;
   -webkit-text-stroke:1px #073653;
@@ -605,12 +629,12 @@
 .brand-domain-label b{padding:0 2px;color:#ff5a24;font:inherit}
 .order-section .community-order-message h2{
   max-width:100%;
-  font-size:clamp(18px,5.15vw,22px);
+  font-size:clamp(20px,5.6vw,24px);
   letter-spacing:-.06em;
   line-height:1.2;
   white-space:nowrap;
 }
 @media(max-width:380px){
   .brand-domain-label{bottom:2px;font-size:15px}
-  .order-section .community-order-message h2{font-size:18px;letter-spacing:-.075em}
+  .order-section .community-order-message h2{font-size:20px;letter-spacing:-.075em}
 }

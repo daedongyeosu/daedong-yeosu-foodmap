@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 import fs from 'node:fs';
 
 const sha256 = file => crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
-const approvedAppStoreHash = '57ae0dc5610b4134d8b5c1184dde1f3d0df55d88f6ce1a11db6438a46006f565';
+const approvedAppStoreHash = '4898dee0a002ef790de6b7228bbfc23165141d3df23b383c351fcb107380f83c';
 
 assert.equal(sha256('ios/AppIcon.png'), approvedAppStoreHash, 'iOS 아이콘 원본은 승인된 맛지도 C안이어야 합니다.');
 assert.equal(

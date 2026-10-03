@@ -36,7 +36,7 @@ const android = JSON.parse(text('android/twa-manifest.json'));
 assert.equal(android.name, '여수맛지도');
 assert.equal(android.launcherName, '여수맛지도');
 assert.equal(android.appVersionName, '1.0.15');
-assert.equal(android.appVersionCode, 20);
+assert.equal(android.appVersionCode, 21);
 
 assert.match(text('ios/DaedongYeosuFoodMap/Info.plist'), /<key>CFBundleDisplayName<\/key>\s*<string>여수맛지도<\/string>/);
 assert.match(text('ios/project.yml'), /MARKETING_VERSION: "1\.3"/);

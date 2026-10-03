@@ -16,7 +16,7 @@ const androidManifest = JSON.parse(fs.readFileSync('android/twa-manifest.json', 
 assert.equal(androidManifest.packageId, 'com.daedongmap.foodmap');
 assert.equal(androidManifest.appVersionName, '1.0.15');
 assert.equal(androidManifest.appVersion, '1.0.15');
-assert.equal(androidManifest.appVersionCode, 21);
+assert.equal(androidManifest.appVersionCode, 22);
 
 const iosProject = fs.readFileSync('ios/project.yml', 'utf8');
 assert.match(iosProject, /MARKETING_VERSION: "1\.3"/);

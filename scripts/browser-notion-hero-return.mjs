@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import {chromium} from 'playwright';
 
-const baseURL = process.env.BASE_URL || 'https://daedongmap.com';
+const baseURL = process.env.BASE_URL || 'https://preview.daedongmap.com';
 const report = {success: false, checks: [], errors: []};
 const browser = await chromium.launch({headless: true});
 const context = await browser.newContext({viewport: {width: 390, height: 844}, locale: 'ko-KR'});

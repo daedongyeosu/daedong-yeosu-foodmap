@@ -3,17 +3,12 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 
 const loadBrowserRuntime = async () => {
-  const executablePath = process.env.CODEX_BROWSER_EXECUTABLE_PATH || '';
   try {
-    return {
-      playwright: await import('playwright'),
-      launchOptions: {headless: true, ...(executablePath ? {executablePath} : {})}
-    };
+    return {playwright: await import('playwright'), launchOptions: {headless: true}};
   } catch {}
   const runtimeModules = process.env.CODEX_PRIMARY_RUNTIME_NODE_MODULES;
   if (!runtimeModules) throw new Error('playwright 패키지를 찾을 수 없습니다.');
   const playwright = await import(pathToFileURL(path.join(runtimeModules, 'playwright-core', 'index.mjs')).href);
-  if (executablePath) return {playwright, launchOptions: {headless: true, executablePath}};
   const sparticuz = await import(pathToFileURL(path.join(runtimeModules, '@sparticuz', 'chromium', 'build', 'esm', 'index.js')).href);
   const chromiumBinary = sparticuz.default;
   chromiumBinary.setGraphicsMode = false;
@@ -36,8 +31,7 @@ const report = {
   viewport: {width: 390, height: 844},
   apps: [],
   checks: [],
-  errors: [],
-  navigations: []
+  errors: []
 };
 
 const appDefinitions = [
@@ -107,6 +101,11 @@ await context.route('**/api/catalog', route => route.fulfill({
   contentType: 'application/json',
   body: JSON.stringify(stores)
 }));
+await context.route('**/api/catalog/bootstrap', route => route.fulfill({
+  status: 200,
+  contentType: 'application/json',
+  body: JSON.stringify(stores)
+}));
 await context.route('**/api/services', route => route.fulfill({
   status: 200,
   contentType: 'application/json',
@@ -143,25 +142,15 @@ const check = async (condition, message) => {
 const readyPage = async () => {
   const page = await context.newPage();
   page.on('pageerror', error => report.errors.push(error.message));
-  page.on('framenavigated', frame => {
-    if (frame === page.mainFrame()) report.navigations.push({url: frame.url(), at: new Date().toISOString()});
-  });
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
-  // Readiness belongs to the currently committed document. A one-shot evaluate
-  // is cancelled if the normal entry lifecycle navigates while catalog data is
-  // loading. waitForFunction re-runs on the new document; the same catalog,
-  // app-browser and rendered-card requirements remain mandatory within 20s.
   await page.waitForFunction(() => {
     const catalogPromise = window.daedongCatalogReady;
     if (!catalogPromise) return false;
-    if (window.__orderReturnQaCatalog?.promise !== catalogPromise) {
-      const readiness = {promise: catalogPromise, settled: false};
-      window.__orderReturnQaCatalog = readiness;
-      Promise.resolve(catalogPromise).then(() => { readiness.settled = true; }, () => {});
+    if (!window.__orderReturnQaCatalog) {
+      window.__orderReturnQaCatalog = {settled: false};
+      Promise.resolve(catalogPromise).then(() => { window.__orderReturnQaCatalog.settled = true; });
     }
-    return window.__orderReturnQaCatalog.settled
-      && typeof window.openAppBrowser === 'function'
-      && document.querySelectorAll('#storeGrid .store-card').length > 0;
+    return window.__orderReturnQaCatalog.settled && typeof window.openAppBrowser === 'function' && document.querySelectorAll('#storeGrid .store-card').length > 0;
   }, null, {timeout: 20000});
   return page;
 };

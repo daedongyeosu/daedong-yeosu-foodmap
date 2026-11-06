@@ -2,8 +2,8 @@ import {createRequire} from 'node:module';
 
 const {chromium} = createRequire(import.meta.url)('playwright');
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
-const yogiyoPhoto = 'https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/9eb40189ee8eab3d246ca81ddf3a04018e836691d9c925d3ef1454c0ade6afdd.jpg';
-const coupangPhoto = 'https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/coupang-menu/v1/dba72036c1e7b9ec02f0f84aa945c703412168c581ba0dd3c3a4574626fc6056.jpg';
+const yogiyoPhoto = 'https://daedong-yeosu-data-api.sisakim.workers.dev/api/media/yogiyo-menu/v1/9eb40189ee8eab3d246ca81ddf3a04018e836691d9c925d3ef1454c0ade6afdd.jpg';
+const coupangPhoto = 'https://daedong-yeosu-data-api.sisakim.workers.dev/api/media/coupang-menu/v1/dba72036c1e7b9ec02f0f84aa945c703412168c581ba0dd3c3a4574626fc6056.jpg';
 const stores = [
   {id: '9db01d4bf068da59', name: '1194번지', image: yogiyoPhoto, source: 'yogiyo'},
   {id: '6bb198cd74849680', name: '빠삭강정 여수봉산점', image: coupangPhoto, source: 'coupang'}
@@ -27,6 +27,7 @@ await context.addInitScript(() => {
 await context.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
 await context.route('**/*.woff2', route => route.abort());
 await context.route('**/api/catalog', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(catalog)}));
+await context.route('**/api/catalog/bootstrap', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(catalog)}));
 await context.route('**/api/services', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify({programs: [], stores: {}})}));
 for (const store of stores) {
   await context.route(`**/api/store/${store.id}`, route => route.fulfill({

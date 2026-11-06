@@ -3,7 +3,6 @@ import {chromium} from 'playwright';
 
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
 const proxyApiOrigin = process.env.PERF_PROXY_API_ORIGIN || '';
-const requestOrigin = process.env.PERF_REQUEST_ORIGIN || 'https://preview.daedongmap.com';
 const report = {success: false, checks: [], errors: []};
 const browser = await chromium.launch({
   headless: true,
@@ -15,7 +14,7 @@ const context = await browser.newContext({viewport: {width: 390, height: 844}, l
 if (proxyApiOrigin) {
   const localOrigin = new URL(baseURL).origin;
   await context.route(`${proxyApiOrigin}/api/**`, async route => {
-    const response = await route.fetch({headers: {...route.request().headers(), origin: requestOrigin}});
+    const response = await route.fetch({headers: {...route.request().headers(), origin: process.env.PERF_REQUEST_ORIGIN || 'https://daedongmap.com'}});
     await route.fulfill({response, headers: {...response.headers(), 'access-control-allow-origin': localOrigin}});
   });
 }
@@ -35,6 +34,7 @@ try {
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
   await page.waitForSelector('#storeGrid .store-card', {timeout: 15000});
   await page.waitForFunction(() => typeof fxStoreById === 'function' && typeof openStore === 'function');
+  await page.waitForFunction(() => Boolean(fxStoreById('0e6d7a1000b1c53b')), {timeout: 30000});
   await page.evaluate(() => openStore(fxStoreById('0e6d7a1000b1c53b')));
   await page.waitForSelector('#modal:not([hidden]) .store-detail[data-store-id="0e6d7a1000b1c53b"]', {timeout: 5000});
   await page.locator('[data-store-menu-preview="0e6d7a1000b1c53b"]').click();
@@ -59,6 +59,7 @@ try {
 
   await page.locator('[data-menu-preview-close]').first().click();
   await page.waitForSelector('[data-store-menu-overlay]', {state: 'hidden', timeout: 5000});
+  await page.waitForFunction(() => Boolean(fxStoreById('68ba9ebef219905e')), {timeout: 30000});
   await page.evaluate(() => openStore(fxStoreById('68ba9ebef219905e')));
   await page.waitForSelector('#modal:not([hidden]) .store-detail[data-store-id="68ba9ebef219905e"]', {timeout: 5000});
   await page.locator('[data-store-menu-preview="68ba9ebef219905e"]').click();
@@ -74,8 +75,6 @@ try {
 } finally {
   fs.writeFileSync('browser-global-menu-price-hide-report.json', `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report, null, 2));
-  // Drain in-flight API proxy handlers before disposing their request context.
-  // Assertions and page errors above still determine the result.
   await context.unrouteAll({behavior: 'wait'});
   await browser.close();
 }

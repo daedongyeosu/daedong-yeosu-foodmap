@@ -3,9 +3,9 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const DEFAULT_API_BASE = 'https://daedong-yeosu-data-api-preview.sisakim.workers.dev';
+const DEFAULT_API_BASE = 'https://daedong-yeosu-data-api.sisakim.workers.dev';
 const DEFAULT_ORIGIN = 'https://preview.daedongmap.com';
-const CLIENT_HEADER = 'daedong-preview-web-v1-20260804';
+const CLIENT_HEADER = 'daedong-production-web-v1-20260807';
 const STORE_ID = /^[a-f0-9]{16}$/;
 
 const text = value => String(value ?? '').normalize('NFKC').trim();

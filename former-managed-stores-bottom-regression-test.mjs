@@ -44,8 +44,8 @@ function extractFunction(source, name) {
   throw new Error(`${name} 함수 범위를 찾지 못했습니다.`);
 }
 
-const ordinary = {id: 'ordinary', name: '일반 가게', lat: 10, lng: 0, statusRank: 0};
-const former = {id: formerIds[0], name: formerStores[0][1], lat: 0.1, lng: 0, statusRank: 0};
+const ordinary = {id: 'ordinary', name: '일반 가게', lat: 10, lng: 0, statusRank: 0, rc6LocationBucket: 1};
+const former = {id: formerIds[0], name: formerStores[0][1], lat: 0.1, lng: 0, statusRank: 0, rc6LocationBucket: 0};
 const managedId = priority.managedStoreIds[0];
 const managed = {id: managedId, name: '현재 가맹점', lat: 20, lng: 0, statusRank: 0};
 const rc6Context = {
@@ -61,11 +61,11 @@ const rc6Context = {
   rc6LocationCache: {},
   rc6NearStores: () => [former, ordinary, managed],
   rc6DiscoveryTier: () => 0,
-  compareStoreBusinessStatus: () => 0,
+  storeBusinessStatusPriority: store => store.statusRank,
   Set, String, Number, Map
 };
 vm.createContext(rc6Context);
-vm.runInContext(`${extractFunction(rc6, 'rc6ApplyStorePriority')};${extractFunction(rc6, 'rc6OwnershipTier')};${extractFunction(rc6, 'rc6RankCandidatesByCustomerLocation')};this.apply=rc6ApplyStorePriority;this.tier=rc6OwnershipTier;this.rank=rc6RankCandidatesByCustomerLocation;`, rc6Context);
+vm.runInContext(`${extractFunction(app, 'compareStoreBusinessStatus')};${extractFunction(rc6, 'rc6ApplyStorePriority')};${extractFunction(rc6, 'rc6OwnershipTier')};${extractFunction(rc6, 'rc6RankCandidatesByCustomerLocation')};this.apply=rc6ApplyStorePriority;this.tier=rc6OwnershipTier;this.rank=rc6RankCandidatesByCustomerLocation;`, rc6Context);
 rc6Context.apply();
 assert.equal(former.managed, false, '가맹 종료 가게의 managed 표시는 false여야 합니다.');
 assert.equal(former.deprioritized, true, '가맹 종료 가게에 후순위 표시를 적용해야 합니다.');
@@ -73,6 +73,7 @@ assert.equal(rc6Context.tier(managed), 0, '현재 가맹점은 기존 우선순�
 assert.equal(rc6Context.tier(ordinary), 2, '일반 가게는 기존 일반 순위를 유지해야 합니다.');
 assert.equal(rc6Context.tier(former), 3, '가맹 종료 가게는 일반 가게보다 낮은 순위여야 합니다.');
 assert.deepEqual(Array.from(rc6Context.rank([former, ordinary]), store => store.id), [ordinary.id, former.id], '가까운 가게 추천에서도 가맹 종료 가게를 일반 가게 뒤에 둬야 합니다.');
+assert.ok(rc6Context.compareStoreBusinessStatus({...former, statusRank: 0}, {...ordinary, statusRank: 1}) < 0, '영업 상태 차이는 후순위보다 먼저 적용해야 합니다.');
 assert.match(rc6, /spec\.kind==='near'\)ranked=rc6RankCandidatesByCustomerLocation\(rc6NearStores\(\)\)/, '가까운 가게 rail도 후순위 정렬을 반드시 거쳐야 합니다.');
 
 const listContext = {

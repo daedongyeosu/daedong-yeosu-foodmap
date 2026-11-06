@@ -1,13 +1,13 @@
 'use strict';
 
-const CACHE_NAME = 'daedong-yeosu-app-shell-v33-yeosu-taste-map-brand';
-const RUNTIME_CACHE = 'daedong-yeosu-runtime-v5-cross-store-qr-history';
+const CACHE_NAME = 'daedong-yeosu-app-shell-v34-production-promotion-20261106';
+const RUNTIME_CACHE = 'daedong-yeosu-runtime-v6-production-promotion-20261106';
 const CACHEABLE_DESTINATIONS = new Set(['image', 'style', 'script', 'font']);
 const APP_SHELL = [
   '/',
   '/manifest.webmanifest',
-  '/assets/app-icons/daedong-app-icon-192.png?v=matjido-master-20261003-production-1',
   '/assets/brand/yeosu-taste-map-logo.png?v=yeosu-taste-map-20260925-2',
+  '/assets/brand/yeosu-taste-map-logo.display.webp?v=display-20261017-1',
   '/assets/brand/yeosu-taste-map-share-1200x630.png',
   '/assets/app-icons/daedong-app-icon-192.png',
   '/assets/app-icons/daedong-app-icon-192.png?v=matjido-master-20261003-production-1',

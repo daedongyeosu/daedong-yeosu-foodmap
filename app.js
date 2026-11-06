@@ -264,18 +264,23 @@ document.addEventListener('click', event => {
 function installDaedongTapAction({selector, activate}) {
   const pointerStarts = new Map();
   const touchStarts = new Map();
-  let activatedAt = 0;
+  let activatedAt = -Infinity;
+  let activatedTarget = null;
 
   const targetFor = event => event?.target?.closest?.(selector) || null;
   const moved = (start, point) => Math.hypot(point.x - start.x, point.y - start.y) > DAEDONG_TAP_MOVE_TOLERANCE;
   const activateOnce = (event, target) => {
     const now = performance.now();
-    if (now - activatedAt < DAEDONG_TAP_DEDUPE_WINDOW_MS) {
+    // Suppress the pointer/touch/click echoes of this control only. A native
+    // app resume can be followed immediately by a different route's click;
+    // the previous route must not swallow that new customer choice.
+    if (target === activatedTarget && now - activatedAt < DAEDONG_TAP_DEDUPE_WINDOW_MS) {
       consumeDaedongEvent(event);
       return true;
     }
     if (activate(target, event) === false) return false;
     activatedAt = now;
+    activatedTarget = target;
     rememberDaedongGhostClick(event);
     consumeDaedongEvent(event);
     return true;
@@ -353,8 +358,8 @@ const INITIAL_STORE_BATCH_SIZE = 16;
 const PHOTO_POLICY_URL = 'data/photo-policy.json';
 const NEIGHBORHOOD_URL = ACTIVE_REGION.neighborhoodUrl || 'data/yeosu-neighborhoods.json';
 const EXTERNAL_APP_KEYS = ['yogiyo', 'coupang', 'baemin'];
-const LOW_FEE_KEYS = ['direct', 'mukkebi', 'ddangyo', 'ondongne', 'brand', 'phone'];
-const LOCAL_DETAIL_KEYS = ['direct', 'mukkebi', 'ddangyo', 'ondongne', 'brand'];
+const LOW_FEE_KEYS = ['online_store', 'direct', 'mukkebi', 'ddangyo', 'ondongne', 'brand', 'phone'];
+const LOCAL_DETAIL_KEYS = ['online_store', 'direct', 'mukkebi', 'ddangyo', 'ondongne', 'brand'];
 const DETAIL_ONLY_KEYS = ['phone', 'chak'];
 const BLOCKED_STORE_ROUTE_KEYS = Object.freeze({
   '09de7c8235046632': new Set(['phone']),
@@ -416,6 +421,7 @@ let analyticsFlushPromise = null;
 let analyticsFallbackSequence = 0;
 
 const APP_META = {
+  online_store: {label: '맛지도 바로주문', icon: '🛵'},
   direct: {label: '가게바로주문', icon: '🏪'},
   mukkebi: {label: '먹깨비', icon: 'assets/mukkebi-v7.png'},
   ddangyo: {label: '땡겨요', icon: 'assets/ddangyo-v7.png'},
@@ -1541,7 +1547,9 @@ function storeBusinessStatusPriority(store) {
   return Number.isFinite(rank) ? rank : 2;
 }
 function compareStoreBusinessStatus(a, b) {
-  return storeBusinessStatusPriority(a?.store || a) - storeBusinessStatusPriority(b?.store || b);
+  const first = a?.store || a, second = b?.store || b;
+  return storeBusinessStatusPriority(first) - storeBusinessStatusPriority(second)
+    || Number(Boolean(first?.deprioritized)) - Number(Boolean(second?.deprioritized));
 }
 function sortStoresByBusinessStatus(list) {
   return (Array.isArray(list) ? list : [])
@@ -2301,6 +2309,8 @@ function lifeDirectoryMarkup(items) {
   return `<div class="life-directory-list">${items.map(item => `<button type="button" data-life-url="${escapeHtml(item.url)}"><span><b>${escapeHtml(item.name)}</b><small>${escapeHtml(item.description)}</small></span><i aria-hidden="true">›</i></button>`).join('')}</div>`;
 }
 function openUsedMarketGuide() {
+  openModal('<section class="yeosu-life-modal"><h2 id="modalTitle">중고거래</h2><p class="local-gateway-lead">오픈 예정</p></section>');
+  return;
   openModal(`<div class="yeosu-life-modal local-gateway-guide used-market-guide">
     <span class="yeosu-life-modal-kicker">중고거래 바로가기</span>
     <h2 id="modalTitle">중고거래 모아보기</h2>
@@ -2428,6 +2438,24 @@ function storeCard(store, index = 0) {
   const favorite = isFavorite(store.id);
   return `<article class="store-card" data-id="${escapeHtml(store.id)}">${photoResolver.markup(store, 'card', {deferred:index >= 4})}<div class="store-info"><h3 title="${escapeHtml(store.name)}">${escapeHtml(store.name)}</h3><p>${escapeHtml(store.area || REGION_SHORT_NAME)} · ${escapeHtml(store.cat)}</p>${distance}<div class="miniapps">${miniRoutes(store)}</div></div><button class="card-favorite ${favorite ? 'active' : ''}" type="button" data-favorite-store="${escapeHtml(store.id)}" aria-pressed="${favorite}">♥ <span data-favorite-label>${favorite ? '찜 해제' : '찜하기'}</span></button></article>`;
 }
+const storeListRenderTotals = new WeakMap();
+function storeListTotalContext() {
+  return JSON.stringify([state.category, state.query, state.brandId, state.location,
+    state.sortByDistance, state.coords?.lat, state.coords?.lng, state.addressLabel]);
+}
+function rememberStoreListRenderTotal(grid, total) {
+  storeListRenderTotals.set(grid, {catalog: stores, size: stores.length,
+    filter: filteredStores, context: storeListTotalContext(), total});
+  return total;
+}
+function storeListRenderTotal(grid) {
+  const cached = storeListRenderTotals.get(grid);
+  if (cached?.catalog === stores && cached.size === stores.length
+    && cached.filter === filteredStores && cached.context === storeListTotalContext()) return cached.total;
+  // Bootstrap can finish without replacing an actively touched grid. Invalidate
+  // against the source snapshot, not just a DOM attribute from that early paint.
+  return rememberStoreListRenderTotal(grid, filteredStores().length);
+}
 function renderStores({scroll = false, resetCount = false} = {}) {
   if (resetCount) state.visibleCount = INITIAL_STORE_BATCH_SIZE;
   const list = filteredStores(), visible = list.slice(0, state.visibleCount);
@@ -2440,8 +2468,12 @@ function renderStores({scroll = false, resetCount = false} = {}) {
   else if (state.location !== REGION_DEFAULT_AREA) title = `${state.location} 추천`;
   $('#recommendSection h2').textContent = title;
   $('#resetCategoryBtn').hidden = state.category === '전체' && !state.brandId && !state.query;
-  $('#storeGrid').innerHTML = visible.length ? (window.daedongLocalServices?.interleave(visible, storeCard, state.category === '전체' && !state.query && !state.brandId) ?? visible.map(storeCard).join('')) : '<div class="empty">조건에 맞는 가게가 아직 없습니다.</div>';
-  observeDeferredPhotos($('#storeGrid'));
+  const grid = $('#storeGrid');
+  // The pager only needs this count. Do not repeat full-catalog ranking on
+  // every geometry read, photo hydration or horizontal scroll callback.
+  rememberStoreListRenderTotal(grid, list.length);
+  grid.innerHTML = visible.length ? (window.daedongLocalServices?.interleave(visible, storeCard, state.category === '전체' && !state.query && !state.brandId) ?? visible.map(storeCard).join('')) : '<div class="empty">조건에 맞는 가게가 아직 없습니다.</div>';
+  observeDeferredPhotos(grid);
   $('#loadMoreBtn').hidden = visible.length >= list.length || !list.length;
   $('#loadMoreBtn').textContent = '더보기';
   const filters = [];
@@ -2732,12 +2764,22 @@ function routeLink(route, extraClass = '') {
   return `<a class="detail-route ${extraClass}" href="${escapeHtml(route.url)}" ${String(route.url).startsWith('http') ? 'target="_blank" rel="noopener"' : ''} data-route-key="${escapeHtml(route.key)}">${appIcon(route.key, 'detail-route-icon')}<span>${escapeHtml(route.name)}</span><b>›</b></a>`;
 }
 function orderAppContinueLabel(key, fallback = '') {
-  return ({yogiyo:'요기요로',baemin:'배달의민족으로',coupang:'쿠팡이츠로',mukkebi:'먹깨비로',ddangyo:'땡겨요로',ondongne:'온동네로',direct:'가게바로주문으로'})[key] || `${fallback} 앱으로`;
+  return ({online_store:'맛지도 바로주문으로',yogiyo:'요기요로',baemin:'배달의민족으로',coupang:'쿠팡이츠로',mukkebi:'먹깨비로',ddangyo:'땡겨요로',ondongne:'온동네로',direct:'가게바로주문으로'})[key] || `${fallback} 앱으로`;
 }
 function storeMenuPreviewEntryMarkup(store) {
   if (store?.hasMenu !== true) return '';
   const entryImage = photoResolver?.resolve?.(store)?.src || '';
   return `<button class="store-menu-preview-entry" type="button" data-store-menu-preview="${escapeHtml(store.id)}">${entryImage ? `<img src="${escapeHtml(entryImage)}" alt="" data-photo-kind="menu-entry" data-photo-store-id="${escapeHtml(store.id)}">` : ''}<span><b>음식보기</b><small>사진과 설명으로 전체 메뉴 미리보기 · 가격 미표시</small></span><strong>메뉴 보기 ›</strong></button>`;
+}
+function onlineShopEntryMarkup(store){
+  return '';
+  if(window.daedongDataApi?.regionCode!=='yeosu'||!window.MatjidoOnlineShop?.id(store?.id))return '';
+  const id=escapeHtml(store.id);
+  return `<section data-online-shop-card="${id}" aria-label="온라인 상점"><a class="online-shop-owner-link" href="${escapeHtml(window.MatjidoOnlineShop.ownerRoute(store.id,document.baseURI))}">사장님이신가요? 온라인 상점 등록하기</a></section>`;
+}
+function loadOnlineShopEntry(store){
+  const target=document.querySelector('#modalContent [data-online-shop-card]');
+  if(target?.dataset.onlineShopCard===store.id)void window.MatjidoOnlineShop?.card(target,store.id);
 }
 function feeGuideMarkup(store, selectedRoute, {fromBrowser = false} = {}) {
   const localRoutes = LOW_FEE_KEYS.map(key => routeFor(store, key)).filter(Boolean);
@@ -2756,7 +2798,7 @@ function storeDetailUnavailableMarkup(store, error) {
   const busyMessage = Number(error?.status) === 429
     ? (retryAfter > 60 ? '요청이 잠시 몰렸습니다. 가게 기본정보는 그대로 볼 수 있으며 주문방법만 다시 확인해 주세요.' : '가게 기본정보는 표시했습니다. 잠시 후 주문방법을 다시 확인해 주세요.')
     : '가게 기본정보는 표시했습니다. 주문방법 연결만 일시적으로 확인하지 못했습니다.';
-  return `<article class="store-detail store-detail-degraded" data-store-id="${escapeHtml(store.id)}"><h2 id="modalTitle">${escapeHtml(store.name)}</h2>${photoResolver.galleryMarkup(store)}<div class="detail-meta-row"><p class="detail-meta">${escapeHtml(store.area || REGION_SHORT_NAME)} · ${escapeHtml(store.cat)}</p></div>${storeMenuPreviewEntryMarkup(store)}<section class="store-detail-retry" role="status"><strong>가게 화면은 계속 이용할 수 있습니다</strong><p>${escapeHtml(busyMessage)}</p><button type="button" data-store-detail-retry="${escapeHtml(store.id)}">주문방법 다시 확인</button></section><div class="detail-personal-actions"><button type="button" class="detail-personal-btn ${favorite?'active':''}" data-favorite-store="${escapeHtml(store.id)}" aria-pressed="${favorite}">♥ <span data-favorite-label>${favorite?'찜 해제':'찜하기'}</span></button><button type="button" class="detail-personal-btn" data-feedback-store="${escapeHtml(store.id)}">정보 수정 요청</button></div></article>`;
+  return `<article class="store-detail store-detail-degraded" data-store-id="${escapeHtml(store.id)}"><h2 id="modalTitle">${escapeHtml(store.name)}</h2>${photoResolver.galleryMarkup(store)}<div class="detail-meta-row"><p class="detail-meta">${escapeHtml(store.area || REGION_SHORT_NAME)} · ${escapeHtml(store.cat)}</p></div>${storeMenuPreviewEntryMarkup(store)}${onlineShopEntryMarkup(store)}<section class="store-detail-retry" role="status"><strong>가게 화면은 계속 이용할 수 있습니다</strong><p>${escapeHtml(busyMessage)}</p><button type="button" data-store-detail-retry="${escapeHtml(store.id)}">주문방법 다시 확인</button></section><div class="detail-personal-actions"><button type="button" class="detail-personal-btn ${favorite?'active':''}" data-favorite-store="${escapeHtml(store.id)}" aria-pressed="${favorite}">♥ <span data-favorite-label>${favorite?'찜 해제':'찜하기'}</span></button><button type="button" class="detail-personal-btn" data-feedback-store="${escapeHtml(store.id)}">정보 수정 요청</button></div></article>`;
 }
 async function openStore(store) {
   if (!store) return false;
@@ -2775,6 +2817,7 @@ async function openStore(store) {
     if (!secureDetail || typeof secureDetail.enrich !== 'function') {
       if (typeof rc2ReplaceModal === 'function') rc2ReplaceModal();
       openModal(storeDetailUnavailableMarkup(store, new Error('상세정보 기능 준비 중')));
+      loadOnlineShopEntry(store);
       $('#modal').dataset.activeStoreId = store.id;
       return false;
     }
@@ -2785,6 +2828,7 @@ async function openStore(store) {
       if ($('#modal').dataset.activeStoreId === store.id && !$('#modal').hidden) {
         if (typeof rc2ReplaceModal === 'function') rc2ReplaceModal();
         openModal(storeDetailUnavailableMarkup(store, error));
+        loadOnlineShopEntry(store);
         $('#modal').dataset.activeStoreId = store.id;
       }
       return false;
@@ -2805,11 +2849,12 @@ async function openStore(store) {
   const otherMenu = otherRoutes.length ? `<div class="store-other-wrap"><button class="detail-route store-other-toggle external-text-route" type="button"><span>다른 주문방법 보기</span><b>›</b></button><div class="store-other-popover" hidden><button type="button" class="store-other-close" aria-label="다른 주문방법 닫기">×</button>${otherRoutes.map(route => route.key === 'phone' ? routeLink(route,'store-other-link') : `<button type="button" class="store-other-link external-text-route" data-external-route-key="${route.key}"><span>${escapeHtml(route.name)}</span><b>›</b></button>`).join('')}${externalAppNoticeMarkup()}</div></div>` : '';
   const selectedCta = selectedRoute ? `<a class="selected-order-cta external-text-route" href="${escapeHtml(selectedRoute.url)}" data-community-original="${selectedRoute.key}" target="_blank" rel="noopener"><span>${escapeHtml(APP_META[selectedRoute.key].label)}로 바로 주문하기</span><b>›</b></a>` : '';
   const favorite=isFavorite(store.id);
-  const menuEntry = storeMenuPreviewEntryMarkup(store);
+  const menuEntry = storeMenuPreviewEntryMarkup(store)+onlineShopEntryMarkup(store);
   if (typeof rc2ReplaceModal === 'function') rc2ReplaceModal();
 openModal(`<article class="store-detail" data-store-id="${escapeHtml(store.id)}"><h2 id="modalTitle">${escapeHtml(store.name)}</h2>${photoResolver.galleryMarkup(store)}<div class="detail-meta-row"><p class="detail-meta">${escapeHtml(store.area || REGION_SHORT_NAME)} · ${escapeHtml(store.cat)}</p>${quick.length ? `<div class="detail-quick-links">${quick.join('')}</div>` : ''}</div>${nativeStoreInformation(store)}${menuEntry}<div class="detail-routes local-detail-routes">${local.map(route=>routeLink(route,'local-order-route')).join('') || '<p class="muted">등록된 지역 주문방법을 확인 중입니다.</p>'}</div>${otherMenu}${selectedCta}<div class="detail-personal-actions"><button type="button" class="detail-personal-btn ${favorite?'active':''}" data-favorite-store="${escapeHtml(store.id)}" aria-pressed="${favorite}">♥ <span data-favorite-label>${favorite?'찜 해제':'찜하기'}</span></button><button type="button" class="detail-personal-btn" data-feedback-store="${escapeHtml(store.id)}">정보 수정 요청</button></div></article>`);
   const carouselRoot = $('#detailPhotoCarousel'); if (carouselRoot) detailCarousel = new InfiniteCarousel(carouselRoot,{interval:0});
   $('#modal').dataset.activeStoreId=store.id;
+  loadOnlineShopEntry(store);
   return true;
 }
 
@@ -2879,9 +2924,9 @@ function deferBrandFont() {
 }
 async function initialize() {
   renderHero(); renderPromos(); renderYeosuLifeHome();
-  const [rawStores, manifest, policy, neighborhoodData] = await Promise.all([
-    window.daedongDataApi?.catalog?.({timeoutMs: 20000}).catch(error => {
-      console.error('보안 데이터 API에서 가게목록을 불러오지 못했습니다.', error);
+  const [bootstrapStores, manifest, policy, neighborhoodData] = await Promise.all([
+    window.daedongDataApi?.catalogBootstrap?.({timeoutMs: 8000}).catch(error => {
+      console.warn('첫 화면 가게목록을 바로 불러오지 못했습니다.', error);
       return [];
     }) || Promise.resolve([]),
     fetchJson(PHOTO_MANIFEST_URL, {entries: []}),
@@ -2890,10 +2935,23 @@ async function initialize() {
   ]);
   yeosuNeighborhoods=neighborhoodData.neighborhoods||[];neighborhoodByName=new Map(yeosuNeighborhoods.map(item=>[item.name,item]));
   photoResolver = new PhotoResolver(manifest, policy);
+  const safeBootstrapStores = Array.isArray(bootstrapStores) ? bootstrapStores : [];
+  let bootstrapPainted = false;
+  if (safeBootstrapStores.length) {
+    const normalizedBootstrap = await normalizeStoresInBatches(safeBootstrapStores, 16);
+    if (normalizedBootstrap.length) {
+      applyNormalizedCatalog(normalizedBootstrap, normalizedBootstrap.length, false);
+      bootstrapPainted = true;
+    }
+  }
+  const rawStores = await (window.daedongDataApi?.catalog?.({timeoutMs: 20000}).catch(error => {
+    console.error('보안 데이터 API에서 전체 가게목록을 불러오지 못했습니다.', error);
+    return safeBootstrapStores;
+  }) || Promise.resolve(safeBootstrapStores));
   const safeRawStores = Array.isArray(rawStores) ? rawStores : [];
   const firstPaintCount = Math.min(32, safeRawStores.length);
   const firstStores = await normalizeStoresInBatches(safeRawStores.slice(0, firstPaintCount), 16);
-  applyNormalizedCatalog(firstStores, safeRawStores.length, firstPaintCount === safeRawStores.length);
+  applyNormalizedCatalog(firstStores, safeRawStores.length, firstPaintCount === safeRawStores.length, {refresh: !bootstrapPainted});
   if (firstPaintCount < safeRawStores.length) {
     await yieldToMainThread();
     const remainingStores = await normalizeStoresInBatches(safeRawStores.slice(firstPaintCount), 48, firstPaintCount);
@@ -3084,7 +3142,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   $('#storeGrid').addEventListener('click', event => { if(event.target.closest('button,a'))return; const card = event.target.closest('.store-card'); if (!card) return; const store = stores.find(item => item.id === card.dataset.id); if (store) { window.daedongConfirmIntentionalStoreOpen?.(); openStore(store); } });
   $('#noticeBtn').addEventListener('click', openNotifications);
-  $('#yeosuLifeMoreBtn')?.addEventListener('click', () => openYeosuLifeNews('전체'));
   $('#chakBenefitBtn')?.addEventListener('click', openChakBenefitGuide);
   $('#holidayMedicalBtn')?.addEventListener('click', openHolidayMedicalGuide);
   $('#yeosuGageBtn')?.addEventListener('click', openYeosuGageGuide);

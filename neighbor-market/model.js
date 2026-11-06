@@ -1,0 +1,77 @@
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.NeighborMarket=api;})(globalThis,function(){
+  'use strict';
+  const FORMAT='matjido-neighbor-market',DB='matjido-neighbor-market-preview-v1',KEY='owner-draft',MAX=20,TRASH_MAX=100;
+  const themes={attic:{label:'빈티지 보물창고',wall:'#ece2cd',wood:'#9b704b',accent:'#9b4b32'},bookshop:{label:'햇살 드는 책방',wall:'#e4e7d7',wood:'#a18560',accent:'#526c53'},closet:{label:'나만의 작은 옷장',wall:'#ede0dc',wood:'#b18a74',accent:'#8c5362'},blue:{label:'푸른 골목 소품방',wall:'#e0e7e5',wood:'#89938a',accent:'#3f656b'}};
+  const assets=['camera','books','bag'].map(name=>'../assets/neighbor-market/'+name+'.webp').concat(['../assets/studio-alley/blouse.webp','../assets/studio-alley/hammer.webp','../assets/studio-alley/bag.webp']);
+  const backdrops={room:'원래의 작은 방',garden:'꽃과 잔디 정원',beach:'모래사장과 바다',harbor:'배가 머무는 선착장',forest:'숲속 오두막',mountain:'산과 호수',city:'도시 골목',studio:'밝은 쇼룸',playroom:'알록달록 놀이방',stars:'별빛 우주',greenhouse:'유리 온실',workshop:'작업실 벽면'};
+  const seasons={none:'계절 장식 없음',spring:'봄 · 꽃잎',summer:'여름 · 푸른 잎',autumn:'가을 · 단풍',winter:'겨울 · 눈꽃'};
+  const displays={classic:'원래 나무 선반',metal:'철제 진열대',cubes:'칸칸이 수납장',glass:'유리 쇼케이스',rail:'옷걸이 행거',table:'벼룩시장 테이블',crates:'나무 상자 진열',pegboard:'공구 걸이 벽',stalls:'천막 장터',platforms:'전시 받침대',none:'진열가구 없이 자유롭게'};
+  const lightings={natural:'맑은 낮',warm:'따뜻한 실내',sunset:'해 질 무렵',night:'별빛 밤'};
+  const decorCatalog={basket:['바구니','생활'],flowers:['꽃병','정원·반려'],rug:['작은 러그','생활'],frame:['빈 액자','생활'],pendant:['매달린 조명','생활'],producecrate:['나무 상자','생활'],pethouse:['작은 동물집','정원·반려'],petbed:['포근한 방석','정원·반려'],paw:['발자국 간판','정원·반려'],plant:['잎이 넓은 화분','정원·반려'],blocks:['색색 블록','장난감·취미'],teddy:['곰 인형 장식','장난감·취미'],robot:['장난감 로봇','장난감·취미'],ball:['알록달록 공','장난감·취미'],mirror:['전신 거울','옷·패션'],hanger:['옷걸이 장식','옷·패션'],hatstand:['모자 거치대','옷·패션'],dressform:['옷 진열 마네킹','옷·패션'],rod:['낚싯대 거치대','바다·야외'],lifering:['구명환 장식','바다·야외'],shell:['조개 장식','바다·야외'],tent:['작은 캠핑 텐트','바다·야외'],lantern:['캠핑 랜턴','바다·야외'],surfboard:['서핑 보드','바다·야외'],toolbox:['공구 상자','공구·생활'],gears:['톱니 장식','공구·생활'],wateringcan:['물뿌리개','정원·반려'],bookstack:['포개진 책','책·소품'],record:['레코드 장식','책·소품'],clock:['탁상 시계','책·소품']};
+  const decorTypes=Object.keys(decorCatalog);
+  const worlds={
+    petgarden:{label:'반려동물의 정원',group:'정원·반려',backdrop:'garden',display:'platforms',season:'summer',lighting:'natural',wall:'#e9efdc',wood:'#9f8564',accent:'#55774b'},
+    toyroom:{label:'장난감 보물방',group:'장난감·취미',backdrop:'playroom',display:'cubes',season:'none',lighting:'natural',wall:'#fff0d3',wood:'#dfab65',accent:'#a64d4d'},
+    boutique:{label:'나만의 옷 쇼룸',group:'옷·패션',backdrop:'studio',display:'rail',season:'none',lighting:'warm',wall:'#f6e4e3',wood:'#b58f79',accent:'#9b607b'},
+    marina:{label:'바닷가 낚시상점',group:'바다·야외',backdrop:'harbor',display:'metal',season:'summer',lighting:'natural',wall:'#dceef0',wood:'#778e90',accent:'#2f6479'},
+    workbench:{label:'나의 공구 작업실',group:'공구·생활',backdrop:'workshop',display:'pegboard',season:'none',lighting:'warm',wall:'#e5e1d6',wood:'#8c7966',accent:'#496b65'},
+    bookforest:{label:'숲속 책방',group:'책·소품',backdrop:'forest',display:'classic',season:'autumn',lighting:'warm',wall:'#e0e8d2',wood:'#97734f',accent:'#496344'},
+    starcollector:{label:'별빛 수집가',group:'장난감·취미',backdrop:'stars',display:'platforms',season:'none',lighting:'night',wall:'#24344e',wood:'#8d97b2',accent:'#84663c'},
+    flowers:{label:'봄날의 꽃장터',group:'정원·반려',backdrop:'greenhouse',display:'table',season:'spring',lighting:'natural',wall:'#e8eedc',wood:'#a8a084',accent:'#8b526f'},
+    gallery:{label:'담백한 전시실',group:'책·소품',backdrop:'studio',display:'glass',season:'none',lighting:'natural',wall:'#f2f1ea',wood:'#a4a9a1',accent:'#525e5a'},
+    camping:{label:'호숫가 캠핑장터',group:'바다·야외',backdrop:'mountain',display:'crates',season:'summer',lighting:'sunset',wall:'#dfe5df',wood:'#9f7e58',accent:'#3e675f'},
+    snowmarket:{label:'겨울의 작은 장터',group:'생활',backdrop:'city',display:'stalls',season:'winter',lighting:'warm',wall:'#e6e8ef',wood:'#987f6c',accent:'#9f5555'},
+    beachmarket:{label:'여름 해변 마켓',group:'바다·야외',backdrop:'beach',display:'table',season:'summer',lighting:'natural',wall:'#e6f1ec',wood:'#c1a47d',accent:'#386d71'}
+  };
+  const clamp=(v,min,max)=>Math.max(min,Math.min(max,Number.isFinite(Number(v))?Number(v):min));
+  const text=(v,n)=>typeof v==='string'?v.slice(0,n):'';
+  const color=(v,fallback)=>/^#[\da-f]{6}$/i.test(v)?v:fallback;
+  function price(value){const raw=typeof value==='number'?String(value):typeof value==='string'?value.trim():'';if(!/^\d{1,8}$/.test(raw))return null;const n=Number(raw);return Number.isSafeInteger(n)&&n<=99999999?n:null;}
+  const image=src=>typeof src==='string'&&(assets.includes(src)||/^data:image\/(webp|jpeg|png);base64,[a-z\d+/=]+$/i.test(src)&&src.length<=1500000);
+  function blank(){return{format:FORMAT,version:1,name:'나의 이웃장터',theme:'attic',wall:themes.attic.wall,wood:themes.attic.wood,accent:themes.attic.accent,finish:'wood',brightness:100,tags:true,backdrop:'room',season:'none',display:'classic',lighting:'natural',items:[],decor:[]};}
+  function position(item){const width=clamp(item.size,12,36);return{...item,size:width,x:clamp(item.x,0,100-width),y:clamp(item.y,19,96-width*.9)};}
+  function clean(raw,child=false){
+    if(raw?.format!==FORMAT||![1,2,3].includes(raw.version)||child&&raw.version!==1||raw.version===2&&(!Array.isArray(raw.surfaces)||!raw.surfaces.length)||raw.version===3&&(!Array.isArray(raw.trash)||!raw.trash.length)||!Array.isArray(raw.items)||raw.items.length>MAX||!Array.isArray(raw.decor)||raw.decor.length>12)throw Error('이웃장터 시안 형식이 다릅니다. 기존 자료는 바꾸지 않았습니다.');
+    const theme=Object.hasOwn(themes,raw.theme)?raw.theme:'attic',base=themes[theme],ids=new Set();
+    const items=raw.items.map((item,index)=>{if(!item||!image(item.src)||item.fullSrc!==undefined&&!image(item.fullSrc)||typeof item.id!=='string'||!/^[a-z\d_-]{1,80}$/i.test(item.id)||ids.has(item.id)||price(item.price)===null)throw Error('사진·가격·물건 번호를 확인해 주세요.');ids.add(item.id);return position({id:item.id,name:text(item.name,40).trim()||'내 물건 '+(index+1),src:item.src,...(item.fullSrc?{fullSrc:item.fullSrc}:{}),price:price(item.price),note:text(item.note,300),condition:['good','used','worn'].includes(item.condition)?item.condition:'unspecified',sample:item.sample===true,sold:item.sold===true,locked:item.locked===true,size:item.size??24,x:item.x??8,y:item.y??30});});
+    const decor=raw.decor.map(d=>{if(!decorTypes.includes(d?.type)||typeof d.id!=='string'||!/^[a-z\d_-]{1,80}$/i.test(d.id)||ids.has(d.id))throw Error('장식 번호를 확인해 주세요.');ids.add(d.id);const size=clamp(d.size,12,36);return{id:d.id,type:d.type,size,x:clamp(d.x,0,100-size),y:clamp(d.y,19,96-size*.9),locked:d.locked===true};});
+    const result={...blank(),name:text(raw.name,40).trim()||'나의 이웃장터',theme,wall:color(raw.wall,base.wall),wood:color(raw.wood,base.wood),accent:color(raw.accent,base.accent),finish:['wood','plain','linen'].includes(raw.finish)?raw.finish:'wood',brightness:clamp(raw.brightness??100,80,115),tags:raw.tags!==false,backdrop:Object.hasOwn(backdrops,raw.backdrop)?raw.backdrop:'room',season:Object.hasOwn(seasons,raw.season)?raw.season:'none',display:Object.hasOwn(displays,raw.display)?raw.display:'classic',lighting:Object.hasOwn(lightings,raw.lighting)?raw.lighting:'natural',items,decor};
+    if(raw.surfaces!==undefined){
+      if(child||!Array.isArray(raw.surfaces)||raw.surfaces.length>4)throw Error('진열면은 최대 5면이며 겹쳐 넣을 수 없습니다.');
+      const faceIds=new Set(['main']);result.surfaces=raw.surfaces.map(face=>{if(!face||typeof face.id!=='string'||!/^[a-z\d_-]{1,80}$/i.test(face.id)||faceIds.has(face.id))throw Error('진열면 번호를 확인해 주세요.');faceIds.add(face.id);const scene=clean(face.scene,true);for(const item of [...scene.items,...scene.decor]){if(ids.has(item.id))throw Error('다른 진열면과 물건 번호가 중복됩니다.');ids.add(item.id);}return{id:face.id,scene};});if(result.surfaces.length)result.version=2;
+    }
+    if(raw.trash!==undefined){
+      if(child||!Array.isArray(raw.trash)||raw.trash.length>TRASH_MAX||raw.trash.length&&raw.version!==3)throw Error('휴지통 형식이나 보관 한도를 확인해 주세요. 기존 자료는 바꾸지 않았습니다.');
+      const faceIds=new Set(['main',...(result.surfaces||[]).map(entry=>entry.id)]);
+      result.trash=raw.trash.map(entry=>{if(!entry||!['photo','decor'].includes(entry.kind)||!faceIds.has(entry.faceId)||!Number.isInteger(entry.index)||entry.index<0||entry.index>=(entry.kind==='photo'?MAX:12))throw Error('휴지통의 원래 진열면·물건 위치를 확인해 주세요.');const key=entry.kind==='photo'?'items':'decor',holder=clean({...blank(),[key]:[entry.item]},true),item=holder[key][0];if(ids.has(item.id))throw Error('휴지통과 진열면의 물건 번호가 중복됩니다.');ids.add(item.id);return{kind:entry.kind,faceId:entry.faceId,index:entry.index,item};});
+      if(result.trash.length)result.version=3;
+    }
+    return result;
+  }
+  const faces=scene=>[{id:'main',scene},...(scene.surfaces||[])];
+  const face=(scene,id)=>faces(scene).find(entry=>entry.id===id)?.scene||scene;
+  const allItems=scene=>faces(scene).flatMap(entry=>entry.scene.items);
+  function replaceFace(scene,id,next){if(id==='main')return{...next,...(scene.surfaces?{surfaces:scene.surfaces}:{}),...(scene.trash?{trash:scene.trash,version:scene.trash.length?3:next.version}:{})};return{...scene,surfaces:scene.surfaces.map(entry=>entry.id===id?{...entry,scene:next}:entry)};}
+  function addFace(scene,id,template=scene){if(faces(scene).length>=5)throw Error('진열면은 최대 5면입니다. 한 면에는 사진 20장을 놓을 수 있어요.');if(id==='main'||faces(scene).some(entry=>entry.id===id))throw Error('진열면 번호가 중복됩니다.');const next={...template,version:1,items:[],decor:[],name:'진열면 '+(faces(scene).length+1)};delete next.surfaces;delete next.trash;return clean({...scene,surfaces:[...(scene.surfaces||[]),{id,scene:next}]});}
+  function trashItem(scene,faceId,id){const source=faces(scene).find(entry=>entry.id===faceId)?.scene,key=source?.items.some(item=>item.id===id)?'items':'decor',index=source?.[key].findIndex(item=>item.id===id);if(index===undefined||index<0)throw Error('휴지통에 보낼 사진·소품을 선택해 주세요.');if(source[key][index].locked)throw Error('잠긴 물건은 잠금을 해제한 뒤 휴지통에 보내 주세요.');if((scene.trash||[]).length>=TRASH_MAX)throw Error('휴지통이 100개로 가득 찼습니다. 기존 물건을 먼저 복구해 주세요. 자동 삭제하지 않습니다.');const entry={kind:key==='items'?'photo':'decor',faceId,index,item:{...source[key][index]}};return clean({...replaceFace(scene,faceId,{...source,[key]:source[key].filter(item=>item.id!==id)}),version:3,trash:[...(scene.trash||[]),entry]});}
+  function restoreItem(scene,id,targetId){const entry=scene.trash?.find(entry=>entry.item.id===id);if(!entry)throw Error('복구할 물건을 휴지통에서 선택해 주세요.');const faceId=targetId||entry.faceId,target=faces(scene).find(value=>value.id===faceId)?.scene,key=entry.kind==='photo'?'items':'decor';if(!target)throw Error('복구할 진열면을 선택해 주세요.');if(target[key].length>=(key==='items'?MAX:12))throw Error('이 진열면이 가득 찼습니다. 다른 면을 선택하거나 공간을 만든 뒤 복구해 주세요. 휴지통의 물건은 그대로입니다.');const list=[...target[key]];list.splice(Math.min(entry.index,list.length),0,{...entry.item});const trash=scene.trash.filter(value=>value.item.id!==id),next=replaceFace(scene,faceId,{...target,[key]:list});return clean({...next,trash,version:trash.length?3:next.surfaces?.length?2:1});}
+  function moveToFace(scene,from,to,id){if(from===to)return scene;const source=face(scene,from),target=faces(scene).find(entry=>entry.id===to)?.scene,item=[...source.items,...source.decor].find(entry=>entry.id===id);if(!target||!item)throw Error('옮길 물건과 진열면을 선택해 주세요.');if(item.locked)throw Error('잠긴 물건은 잠금을 해제한 뒤 옮겨 주세요.');const key=source.items.includes(item)?'items':'decor';if(target[key].length>=(key==='items'?MAX:12))throw Error('선택한 진열면이 가득 찼습니다.');let next=replaceFace(scene,from,{...source,[key]:source[key].filter(entry=>entry.id!==id)});next=replaceFace(next,to,{...target,[key]:[...target[key],item]});return clean(next);}
+  function deleteTrash(scene,ids){
+    const valid=clean(scene);if(!Array.isArray(ids)||!ids.length||ids.length>TRASH_MAX||new Set(ids).size!==ids.length||ids.some(id=>!valid.trash?.some(entry=>entry.item.id===id)))throw Error('삭제할 휴지통 물건을 다시 확인해 주세요.');
+    const trash=valid.trash.filter(entry=>!ids.includes(entry.item.id));return clean({...valid,trash,version:trash.length?3:valid.surfaces?.length?2:1});
+  }
+  function resize(item,corner,dx,dy){const west=corner.includes('w'),north=corner.includes('n'),ratio=1/1.15,ax=item.x+(west?item.size:0),ay=item.y+(north?item.size*ratio:0);let size=clamp(item.size+((west?-dx:dx)+(north?-dy:dy)/ratio)/2,12,36);size=Math.min(size,west?ax:100-ax,north?(ay-19)/ratio:(96-ay)/.9);size=Math.max(12,size);return position({...item,size,x:west?ax-size:ax,y:north?ay-size*ratio:ay});}
+  function arrange(scene){const moving=scene.items.filter(item=>!item.locked);if(!moving.length)return scene;const fixed=scene.items.filter(item=>item.locked);let slots=[];
+    const overlaps=(a,b)=>a.x<b.x+b.size+1&&a.x+a.size+1>b.x&&a.y<b.y+b.size*.9+1&&a.y+a.size*.9+1>b.y;
+    for(const y of [31,66])for(const x of [6,38,70]){const slot={x,y,size:24};if(!fixed.some(item=>overlaps(slot,item)))slots.push(slot);}
+    if(slots.length<moving.length){slots=[];for(const y of [24,42,60,77])for(const x of [2,22,42,62,82]){const slot={x,y,size:16};if(!fixed.some(item=>overlaps(slot,item)))slots.push(slot);}}
+    if(slots.length<moving.length)throw Error('잠근 물건을 그대로 두고 정리할 공간이 부족합니다. 잠금을 풀거나 직접 옮겨 주세요.');
+    let index=0;return{...scene,items:scene.items.map(item=>item.locked?{...item}:{...item,...slots[index++]})};
+  }
+  function applyTheme(scene,id){if(!Object.hasOwn(themes,id))return scene;return{...scene,theme:id,...Object.fromEntries(['wall','wood','accent'].map(key=>[key,themes[id][key]]))};}
+  function applyWorld(scene,id){if(!Object.hasOwn(worlds,id))return scene;const {label,group,...settings}=worlds[id];return clean({...scene,...settings});}
+  function example(){const scene=blank();scene.name='모퉁이 보물상자';scene.items=[['camera','작은 필름카메라',38000,'레트로한 분위기의 카메라입니다. 작동·흠집 설명을 적는 위치의 예시예요.'],['books','다시 읽는 책 세 권',9000,'책 세 권을 한 묶음으로 올린 견본입니다.'],['bag','손때 묻은 캔버스백',12000,'가벼운 사용감이 있는 가방을 표현한 견본입니다.'],['blouse','햇살빛 리넨 셔츠',15000,'옷의 치수·오염·수선 여부를 적어보세요.'],['hammer','아버지의 작은 망치',6000,'공구의 상태와 사용 흔적을 설명하는 예시입니다.'],['leatherbag','갈색 크로스백',18000,'소품도 내 취향대로 진열할 수 있어요.']].map(([asset,name,price,note],index)=>({id:'sample-'+index,name,price,note,src:assets[index],condition:'used',sample:true,sold:false,locked:false,size:24,x:[6,38,70][index%3],y:index<3?31:66}));return scene;}
+  function validateEntries(entries){if(!entries.length||entries.length>MAX)throw Error('사진을 1~20장 선택해 주세요.');return entries.map((item,index)=>{const p=price(item.price);if(p===null)throw Error((index+1)+'번째 물건의 가격을 원 단위 숫자로 입력해 주세요. 0원은 무료 나눔입니다.');return{...item,price:p,name:text(item.name,40).trim()||'내 물건 '+(index+1)};});}
+  function basket(scene,ids){const items=allItems(scene).filter(item=>ids.has(item.id)&&!item.sold);return{items,total:items.reduce((sum,item)=>sum+item.price,0)};}
+  return Object.freeze({FORMAT,DB,KEY,MAX,TRASH_MAX,themes,assets,decorTypes,decorCatalog,backdrops,seasons,displays,lightings,worlds,price,image,blank,position,resize,clean,faces,face,allItems,replaceFace,addFace,moveToFace,trashItem,restoreItem,deleteTrash,arrange,applyTheme,applyWorld,example,validateEntries,basket});
+});

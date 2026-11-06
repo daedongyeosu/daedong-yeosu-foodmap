@@ -134,6 +134,8 @@ await context.route('**/data-api.js*', (route) => route.fulfill({
   body: `${dataApiSource}\nwindow.daedongDataApi=Object.freeze({
     ...window.daedongDataApi,
     baseUrl:'fixture',regionCode:'yeosu',
+    catalogBootstrap:()=>Promise.resolve(${JSON.stringify(stores)}),
+
     catalog:()=>Promise.resolve(${JSON.stringify(stores)}),
     services:()=>Promise.resolve({programs:[],stores:{}}),
     detail:(id)=>Promise.resolve(${JSON.stringify(storeById)}[id]||{}),
@@ -149,6 +151,10 @@ const corsHeaders = {
 // Keep those requests in the same deterministic fixture instead of contacting
 // production from localhost. Console/network error checks remain strict.
 await context.route('**/api/catalog', route => route.fulfill({
+  status: 200, headers: corsHeaders, contentType: 'application/json; charset=utf-8',
+  body: JSON.stringify(stores),
+}));
+await context.route('**/api/catalog/bootstrap', route => route.fulfill({
   status: 200, headers: corsHeaders, contentType: 'application/json; charset=utf-8',
   body: JSON.stringify(stores),
 }));

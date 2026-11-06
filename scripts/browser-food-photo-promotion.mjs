@@ -4,21 +4,21 @@ const require = createRequire(import.meta.url);
 const {chromium} = require('playwright');
 
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
-const placeholder = 'assets/app-icons/daedong-app-icon-512.png?v=matjido-master-20261003-production-1';
+const placeholder = 'assets/app-icons/daedong-app-icon-512.png?v=matjido-master-20261003-preview-1';
 const targets = [
   {
     id: '576b5087e69e7d1c',
     name: '부영통닭',
     district: '신기동',
     category: '치킨',
-    image: 'https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/1098725a7b2f219bd60094284b630d2bb6b8c6217a078a175291cc6a08ed8d2b.jpg'
+    image: 'https://daedong-yeosu-data-api.sisakim.workers.dev/api/media/yogiyo-menu/v1/1098725a7b2f219bd60094284b630d2bb6b8c6217a078a175291cc6a08ed8d2b.jpg'
   },
   {
     id: '508a76b426a6dc38',
     name: '생생연어-여천점',
     district: '신기동',
     category: '회/초밥/선어/해산물',
-    image: 'https://daedong-yeosu-data-api-preview.sisakim.workers.dev/api/media/yogiyo-menu/v1/240a51b296d22c98eeb386b03346fc3adabf77b2204a78a2dae5e650dd3c252f.jpg'
+    image: 'https://daedong-yeosu-data-api.sisakim.workers.dev/api/media/yogiyo-menu/v1/240a51b296d22c98eeb386b03346fc3adabf77b2204a78a2dae5e650dd3c252f.jpg'
   }
 ];
 
@@ -48,6 +48,7 @@ await context.addInitScript(() => {
 await context.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
 await context.route('**/*.woff2', route => route.abort());
 await context.route('**/api/catalog', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(catalog)}));
+await context.route('**/api/catalog/bootstrap', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(catalog)}));
 await context.route('**/api/services', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify({programs: [], stores: {}})}));
 for (const target of targets) {
   const detail = catalog.find(store => store.store_id === target.id);

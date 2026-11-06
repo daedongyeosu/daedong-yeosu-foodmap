@@ -1,0 +1,63 @@
+import fs from 'node:fs';
+
+const page=fs.readFileSync('online-store/index.html','utf8');
+const script=fs.readFileSync('online-store/app.js','utf8');
+const deliveryStyle=fs.readFileSync('online-store/delivery-quote.css','utf8');
+const merchant=fs.readFileSync('store-partner/index.html','utf8');
+
+for(const text of [
+  '고객 화면 프리뷰',
+  '매장 판매가격 그대로',
+  '이 상점에서 상품 찾기',
+  '장바구니',
+  '상점 배송비 지원',
+  '기사 배송료',
+  '고객 배송비',
+  '맛지도 이용금액',
+  '직선거리가 아닌 실제 도로거리',
+  '공식 주소를 선택해 주세요',
+  '총 결제예정금액',
+  '주문내용 확인',
+  '결제 전에 상품과 배송정보를 확인하세요',
+  '테스트 주문 보내기',
+  '실제 결제·환불·고객 알림·젠딜리 배송요청은 발생하지 않습니다.'
+])if(!page.includes(text))throw new Error(`고객 온라인 상점 필수 문구 누락: ${text}`);
+
+for(const contract of [
+  "const ONBOARD_KEY='matjido-store-onboarding-preview-v1'",
+  'function demoMode',
+  'function renderProducts',
+  'function addToCart',
+  'function changeQuantity',
+  'function loadPostcode',
+  'function selectDeliveryAddress',
+  'function requestDeliveryQuote',
+  'function renderOrderReview',
+  '수량 ${quantity} · ${product.unit}',
+  "const DELIVERY_QUOTE_ENDPOINT='https://daedong-yeosu-admin.sisakim.chatgpt.site/api/store-delivery-quote'",
+  "const STORE_ORDER_ENDPOINT='https://daedong-yeosu-admin.sisakim.chatgpt.site/api/store-orders/preview'",
+  "const PREVIEW_ORDER_KEY='matjido-customer-store-preview-order-v1'",
+  "const MATJIDO_PUBLIC_CLIENT='daedong-production-web-v1-20260807'",
+  "'X-Daedong-Client':MATJIDO_PUBLIC_CLIENT",
+  "credentials:'omit'",
+  "deliveryClass:'standard'",
+  "source:'daum_postcode'",
+  'roadDistanceMeters',
+  '배송비 별도',
+  '실제 도로거리 배송비가 확정된 뒤 주문내용을 확인할 수 있습니다.',
+  'function sendPreviewOrder',
+  'function refreshTracking',
+  'previewOnly:true'
+])if(!script.includes(contract))throw new Error(`고객 온라인 상점 기능 계약 누락: ${contract}`);
+
+if(!page.includes('id="orderReviewPanel"')||!page.includes('id="closeOrderReview"'))throw new Error('결제 전 주문서 화면 또는 닫기 동작이 없습니다.');
+if(!page.includes('id="orderTracking"')||!page.includes('id="reviewRequest"'))throw new Error('테스트 주문 추적 또는 상점 요청 입력 화면이 없습니다.');
+if(!page.includes('delivery-quote.css?v=20261012-1'))throw new Error('결제 전 주문서 CSS 캐시 버전이 갱신되지 않았습니다.');
+if(!deliveryStyle.includes('.order-review-panel')||!deliveryStyle.includes('.review-total'))throw new Error('결제 전 주문서 모바일 화면 스타일이 없습니다.');
+
+if(!merchant.includes('href="../online-store/"'))throw new Error('상점주 최종 미리보기에서 고객 상점으로 연결되지 않습니다.');
+if(/기사 배송료<\/dt><dd>\s*[0-9,]+원/.test(page))throw new Error('도로거리 계산 전 기사 배송료를 임의 금액으로 표시했습니다.');
+if(!deliveryStyle.includes('.postcode-panel')||!deliveryStyle.includes('.quote-status.is-error'))throw new Error('공식 주소검색 또는 견적 실패 화면이 없습니다.');
+if(/블록요금|고산지대|회피구역/.test(page))throw new Error('고객 화면에 내부 배송비 계산근거가 노출됐습니다.');
+
+console.log('PASS 고객 온라인 상점·장바구니 프리뷰 계약');

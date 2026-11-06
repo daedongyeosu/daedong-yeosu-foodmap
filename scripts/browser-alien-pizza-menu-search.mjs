@@ -20,7 +20,7 @@ if (proxyApiOrigin) {
   const localOrigin = new URL(baseURL).origin;
   await context.route(`${proxyApiOrigin}/api/**`, async route => {
     const response = await route.fetch({
-      headers: {...route.request().headers(), origin: 'https://preview.daedongmap.com'}
+      headers: {...route.request().headers(), origin: process.env.PERF_REQUEST_ORIGIN || 'https://daedongmap.com'}
     });
     await route.fulfill({
       response,

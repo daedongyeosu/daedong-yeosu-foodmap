@@ -22,7 +22,7 @@ const context = await browser.newContext({viewport: {width: 390, height: 844}, i
 if (proxyApiOrigin) {
   const localOrigin = new URL(baseURL).origin;
   await context.route(`${proxyApiOrigin}/api/**`, async route => {
-    const response = await route.fetch({headers: {...route.request().headers(), origin: 'https://preview.daedongmap.com'}});
+    const response = await route.fetch({headers: {...route.request().headers(), origin: process.env.PERF_REQUEST_ORIGIN || 'https://daedongmap.com'}});
     await route.fulfill({response, headers: {...response.headers(), 'access-control-allow-origin': localOrigin}});
   });
 }

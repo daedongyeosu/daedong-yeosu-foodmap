@@ -34,6 +34,7 @@ try {
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
   await page.waitForSelector('#storeGrid .store-card', {timeout: 15000});
   await page.waitForFunction(() => typeof fxStoreById === 'function' && typeof openStore === 'function');
+  await page.waitForFunction(() => Boolean(fxStoreById('0e6d7a1000b1c53b')), {timeout: 30000});
   await page.evaluate(() => openStore(fxStoreById('0e6d7a1000b1c53b')));
   await page.waitForSelector('#modal:not([hidden]) .store-detail[data-store-id="0e6d7a1000b1c53b"]', {timeout: 5000});
   await page.locator('[data-store-menu-preview="0e6d7a1000b1c53b"]').click();
@@ -58,6 +59,7 @@ try {
 
   await page.locator('[data-menu-preview-close]').first().click();
   await page.waitForSelector('[data-store-menu-overlay]', {state: 'hidden', timeout: 5000});
+  await page.waitForFunction(() => Boolean(fxStoreById('68ba9ebef219905e')), {timeout: 30000});
   await page.evaluate(() => openStore(fxStoreById('68ba9ebef219905e')));
   await page.waitForSelector('#modal:not([hidden]) .store-detail[data-store-id="68ba9ebef219905e"]', {timeout: 5000});
   await page.locator('[data-store-menu-preview="68ba9ebef219905e"]').click();

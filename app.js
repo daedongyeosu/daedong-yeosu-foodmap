@@ -1547,7 +1547,9 @@ function storeBusinessStatusPriority(store) {
   return Number.isFinite(rank) ? rank : 2;
 }
 function compareStoreBusinessStatus(a, b) {
-  return storeBusinessStatusPriority(a?.store || a) - storeBusinessStatusPriority(b?.store || b);
+  const first = a?.store || a, second = b?.store || b;
+  return storeBusinessStatusPriority(first) - storeBusinessStatusPriority(second)
+    || Number(Boolean(first?.deprioritized)) - Number(Boolean(second?.deprioritized));
 }
 function sortStoresByBusinessStatus(list) {
   return (Array.isArray(list) ? list : [])

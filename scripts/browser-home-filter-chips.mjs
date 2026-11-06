@@ -74,7 +74,6 @@ try {
 } finally {
   fs.writeFileSync('browser-home-filter-chips-report.json', `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report, null, 2));
-  await context.unrouteAll({behavior: 'wait'});
   await browser.close();
 }
 

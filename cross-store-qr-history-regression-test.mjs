@@ -41,7 +41,7 @@ assert.match(
 
 assert.match(index, /final-experience\.js\?v=[^"']*cross-store-qr-history-1/);
 assert.match(finalExperience, /rc2-fixes\.js\?v=[^"']*cross-store-qr-history-1/);
-assert.match(serviceWorker, /daedong-yeosu-app-shell-v33-yeosu-taste-map-brand/);
-assert.match(serviceWorker, /daedong-yeosu-runtime-v5-cross-store-qr-history/);
+assert.match(serviceWorker, /daedong-yeosu-app-shell-v34-production-promotion-20261106/);
+assert.match(serviceWorker, /daedong-yeosu-runtime-v6-production-promotion-20261106/);
 
 console.log('cross-store-qr-history-regression-test: pass');

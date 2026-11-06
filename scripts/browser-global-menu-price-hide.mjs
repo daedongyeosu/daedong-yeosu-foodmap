@@ -3,7 +3,6 @@ import {chromium} from 'playwright';
 
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
 const proxyApiOrigin = process.env.PERF_PROXY_API_ORIGIN || '';
-const requestOrigin = process.env.PERF_REQUEST_ORIGIN || 'https://preview.daedongmap.com';
 const report = {success: false, checks: [], errors: []};
 const browser = await chromium.launch({
   headless: true,
@@ -15,7 +14,7 @@ const context = await browser.newContext({viewport: {width: 390, height: 844}, l
 if (proxyApiOrigin) {
   const localOrigin = new URL(baseURL).origin;
   await context.route(`${proxyApiOrigin}/api/**`, async route => {
-    const response = await route.fetch({headers: {...route.request().headers(), origin: requestOrigin}});
+    const response = await route.fetch({headers: {...route.request().headers(), origin: 'https://preview.daedongmap.com'}});
     await route.fulfill({response, headers: {...response.headers(), 'access-control-allow-origin': localOrigin}});
   });
 }
@@ -74,8 +73,6 @@ try {
 } finally {
   fs.writeFileSync('browser-global-menu-price-hide-report.json', `${JSON.stringify(report, null, 2)}\n`);
   console.log(JSON.stringify(report, null, 2));
-  // Drain in-flight API proxy handlers before disposing their request context.
-  // Assertions and page errors above still determine the result.
   await context.unrouteAll({behavior: 'wait'});
   await browser.close();
 }

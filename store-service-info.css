@@ -129,9 +129,10 @@ body.store-service-overview-open {
 }
 
 .store-finder-quick nav button:first-child {
-  color: #17643a;
+  color: #062f1e;
   background: rgba(255, 255, 255, .1);
-  border-color: rgba(168, 224, 190, .78);
+  border-color: rgba(114, 185, 142, .94);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .98), 0 0 5px rgba(255, 255, 255, .9);
 }
 
 .store-finder-location,
@@ -1144,7 +1145,7 @@ body.store-service-overview-open {
 @media (max-width: 520px) {
   .store-finder-quick nav {
     display: grid;
-    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, .8fr);
+    grid-template-columns: minmax(0, 1.5fr) max-content minmax(0, .8fr);
     gap: 5px;
     overflow-x: visible;
   }
@@ -1152,8 +1153,11 @@ body.store-service-overview-open {
   .store-finder-quick nav button {
     width: 100%;
     min-width: 0;
-    padding: 0 6px;
-    font-size: 11px;
+    min-height: 48px;
+    padding: 0 5px;
+    font-size: 15px;
+    line-height: 1.18;
+    white-space: normal;
   }
 
   .store-finder-quick nav button:first-child {
@@ -1185,7 +1189,7 @@ body.store-service-overview-open {
 
   .store-finder-quick nav button {
     padding: 0 4px;
-    font-size: 10px;
+    font-size: 14px;
   }
 }
 
@@ -1202,6 +1206,14 @@ body.store-service-overview-open {
   align-items: center;
   gap: 10px;
   text-decoration: none;
+}
+
+/* Keep the complete benefit label on one line, including narrow phones. */
+.store-finder-quick nav [data-store-service-quick-benefit] {
+  white-space: nowrap;
+  padding-inline: 6px;
+  font-size: clamp(13px, 3.6vw, 15px);
+  letter-spacing: -.03em;
 }
 
 .store-service-gift-app-link b {

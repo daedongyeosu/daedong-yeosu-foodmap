@@ -84,6 +84,7 @@ await context.addInitScript(() => {
 await context.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
 await context.route('**/*.woff2', route => route.abort());
 await context.route('**/api/catalog', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify([store])}));
+await context.route('**/api/catalog/bootstrap', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify([store])}));
 await context.route('**/api/services', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify({programs: [], stores: {}})}));
 await context.route('**/api/store/*', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(store)}));
 await context.route('https://orders.example.test/**', route => route.fulfill({

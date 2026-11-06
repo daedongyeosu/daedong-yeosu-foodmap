@@ -65,3 +65,4 @@ try {
 }
 
 if (!report.success) process.exit(1);
+

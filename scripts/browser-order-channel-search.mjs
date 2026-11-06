@@ -9,16 +9,13 @@ await context.route('https://daedong-yeosu-admin.sisakim.chatgpt.site/api/native
   contentType: 'application/json',
   body: JSON.stringify({items: [], cursor: null})
 }));
-await context.route(/^https:\/\/daedong-yeosu-data-api(?:-preview)?\.sisakim\.workers\.dev\//, async route => {
-  const requestUrl = route.request().url();
-  const isPreviewApi = requestUrl.includes('data-api-preview.');
-  const siteOrigin = isPreviewApi ? 'https://preview.daedongmap.com' : 'https://daedongmap.com';
-  const response = await fetch(requestUrl, {
+await context.route('https://daedong-yeosu-data-api.sisakim.workers.dev/**', async route => {
+  const response = await fetch(route.request().url(), {
     headers: {
       Accept: 'application/json',
-      'X-Daedong-Client': isPreviewApi ? 'daedong-preview-web-v1-20260804' : 'daedong-production-web-v1-20260807',
-      Origin: siteOrigin,
-      Referer: `${siteOrigin}/`
+      'X-Daedong-Client': 'daedong-production-web-v1-20260807',
+      Origin: 'https://preview.daedongmap.com',
+      Referer: 'https://preview.daedongmap.com/'
     }
   });
   await route.fulfill({

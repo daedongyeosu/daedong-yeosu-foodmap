@@ -34,6 +34,7 @@ const corsHeaders = {
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
 };
 await context.route('**/api/catalog', route => route.fulfill({status: 200, headers: corsHeaders, contentType: 'application/json', body: '[]'}));
+await context.route('**/api/catalog/bootstrap', route => route.fulfill({status: 200, headers: corsHeaders, contentType: 'application/json', body: '[]'}));
 await context.route('**/api/services', route => route.fulfill({status: 200, headers: corsHeaders, contentType: 'application/json', body: '{"programs":[],"stores":{}}'}));
 await context.route('**/api/events', route => route.fulfill({status: 204, headers: corsHeaders, body: ''}));
 await context.route('**/api/rain-mode', route => route.fulfill({status: 200, headers: corsHeaders, contentType: 'application/json', body: '{"mode":"normal"}'}));
@@ -91,4 +92,3 @@ try {
 }
 
 if (!report.success) process.exit(1);
-

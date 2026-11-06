@@ -53,6 +53,11 @@ const newContext = async ({introPlayed = true} = {}) => {
     contentType: 'application/json',
     body: JSON.stringify([store])
   }));
+await context.route('**/api/catalog/bootstrap', route => route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify([store])
+  }));
   await context.route('**/api/services', route => route.fulfill({
     status: 200,
     contentType: 'application/json',

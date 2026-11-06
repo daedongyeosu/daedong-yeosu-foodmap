@@ -42,6 +42,11 @@ await context.route('**/api/catalog', route => route.fulfill({
   contentType: 'application/json',
   body: JSON.stringify(stores)
 }));
+await context.route('**/api/catalog/bootstrap', route => route.fulfill({
+  status: 200,
+  contentType: 'application/json',
+  body: JSON.stringify(stores)
+}));
 await context.route('**/api/services', async route => {
   await new Promise(resolve => setTimeout(resolve, 3500));
   await route.fulfill({
@@ -156,7 +161,7 @@ try {
   // The carousel can replace or move its first DOM card while Playwright is
   // waiting for locator actionability. Tap the coordinates of the card that is
   // actually visible at that instant, exactly as a customer's finger would.
-  await page.locator('[data-rc3-rail-open]').first().evaluate(node => node.scrollIntoView({block: 'center', inline: 'center'}));
+  await page.locator('[data-rc3-rail-open]').first().evaluate(node => node.closest('section')?.scrollIntoView({block: 'center'}));
   // The homepage intentionally uses smooth scrolling. Seasonal content makes
   // this trip longer, so wait until the viewport has actually stopped before
   // taking the customer's tap coordinates. This keeps the check strict while

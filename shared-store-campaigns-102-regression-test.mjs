@@ -19,7 +19,12 @@ const production=fs.readFileSync('data-api.js','utf8').includes("const BASE_URL 
 const baseline=fixture.baselines[production?'production':'preview'];
 assert.equal(hash(beforeSharedHero(hero)),production?'47df769a3ddfbb9b8605fb5e60f15cd4017f98279f323badecccb2cb3e109443':baseline.hero,'All non-target campaigns and virtual store records preserved');
 assert.equal(hash(beforeSharedLinks(links)),baseline.links,'All original QR destinations, order and manifest metadata preserved');
-assert.equal(hash(priority),baseline.priority,'Shared ranking, managed ranking and hidden-store rules unchanged');
+const historicalPriority=structuredClone(priority);
+// The approved Lotteria Emart restoration has a separate regression check.
+const historicalBurger=historicalPriority.categoryPriorityOverrides['햄버거/샌드위치/토스트/핫도그'];
+historicalBurger.bottomStoreIds.push('e0c6949efb48f4b2');
+historicalBurger.labels['e0c6949efb48f4b2']='롯데리아 이마트점';
+assert.equal(hash(historicalPriority),baseline.priority,'Shared ranking, managed ranking and hidden-store rules unchanged except approved Lotteria restoration');
 assert.equal(hash(ads),baseline.ads,'All three original general advertisements unchanged');
 const rc6=fs.readFileSync('rc6-fixes.js','utf8');
 const render=rc6.slice(rc6.indexOf('function rc6CampaignHeroEntries(){'),rc6.indexOf('\nfunction rc6HeroEntries()'));

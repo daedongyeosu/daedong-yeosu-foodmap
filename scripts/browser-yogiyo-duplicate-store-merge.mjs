@@ -51,6 +51,7 @@ await context.addInitScript(() => {
 await context.route('**/api/events', route => route.fulfill({status: 204, body: ''}));
 await context.route('**/*.woff2', route => route.abort());
 await context.route('**/api/catalog', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(catalog)}));
+await context.route('**/api/catalog/bootstrap', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify(catalog)}));
 await context.route('**/api/services', route => route.fulfill({status: 200, contentType: 'application/json', body: JSON.stringify({
   programs: [], deliveryBenefits: [], stores: {[collectorId]: {hours: {displayLines: ['2026-08-17 확인 12:00–24:00']}}}
 })}));

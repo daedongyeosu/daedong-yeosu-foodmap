@@ -3,6 +3,7 @@
 (() => {
   const ACTIVE_REGION = window.DAEDONG_REGION || {code: 'yeosu'};
   const IS_GOHEUNG = ACTIVE_REGION.code === 'goheung';
+  const IS_OWNER_HOST = typeof location !== 'undefined' && location.origin === 'https://daedong-yeosu-admin.sisakim.chatgpt.site';
   const BASE_URL = IS_GOHEUNG ? '' : 'https://daedong-yeosu-data-api.sisakim.workers.dev';
   const GOHEUNG_CATALOG_URL = 'data/goheung-catalog.json';
   const CLIENT_HEADER = 'daedong-production-web-v1-20260807';
@@ -138,7 +139,7 @@
     const bucket = id[0];
     if (!reviewedPhotoLinkRequests.has(bucket)) {
       const abort = createRequestAbort(null, 2500);
-      const pending = Promise.resolve().then(() => fetch(`data/reviewed-menu-photo-links/${bucket}.json?v=all-menu-photos-20260913-norang-20260914-wehalmae-20260920-brand-safe-fill-20260920`, {
+      const pending = Promise.resolve().then(() => fetch(`data/reviewed-menu-photo-links/${bucket}.json?v=all-menu-photos-20260913-norang-20260914-wehalmae-20260920-brand-safe-fill-20260920-coupang-exact-20261024`, {
         credentials: 'same-origin', signal: abort.signal
       })).then(response => {
         if (!response.ok) throw new Error('메뉴 사진 목록을 불러오지 못했습니다.');
@@ -281,10 +282,11 @@
     if (recentFailure && recentFailure.until > Date.now()) throw recentFailure.error;
     if (cacheKey) requestFailures.delete(cacheKey);
     const requestAbort = createRequestAbort(signal, timeoutMs);
-    const pending = fetch(`${BASE_URL}${path}`, {
+    const ownerPath=IS_OWNER_HOST&&/^\/api\/store\/[a-f0-9]{16}(?:\/menu)?$/i.test(path)?'/api/online-shops/source/'+path.slice('/api/store/'.length):'';
+    const pending = fetch(ownerPath||`${BASE_URL}${path}`, {
       method: 'GET',
       mode: 'cors',
-      credentials: 'omit',
+      credentials: ownerPath?'same-origin':'omit',
       cache: 'no-store',
       priority: cacheKey === 'catalog' ? 'high' : 'auto',
       headers: JSON_HEADERS,
@@ -381,6 +383,9 @@
   const catalog = options => IS_GOHEUNG
     ? goheungCatalog().then(payload => customerVisibleStores(payload.stores))
     : Promise.all([request('/api/catalog', {cacheKey: 'catalog', ...options}),nativeCatalog()]).then(([stores,published])=>customerVisibleStores(mergeNativeCatalog(stores,published)));
+  const catalogBootstrap = options => IS_GOHEUNG
+    ? goheungCatalog().then(payload => customerVisibleStores(payload.stores))
+    : request('/api/catalog/bootstrap', {cacheKey: 'catalog-bootstrap', ...options}).then(customerVisibleStores);
   const services = options => IS_GOHEUNG
     ? goheungCatalog().then(payload => customerVisibleServices(payload.services || {}))
     : request('/api/services', {cacheKey: 'services', ...options}).then(customerVisibleServices);
@@ -448,6 +453,7 @@
     baseUrl: BASE_URL,
     regionCode: ACTIVE_REGION.code,
     isCustomerHiddenStoreId,
+    catalogBootstrap,
     catalog,
     services,
     detail,
@@ -456,15 +462,13 @@
     menuSearch
   });
 
-  // Start the same region-scoped request while the larger UI scripts download.
-  // The in-flight request cache lets initialize() join it without duplicate
-  // traffic. Only warm network data here: publication merges stay at the caller,
-  // and failures keep the normal retry/backoff path (no cached empty catalogue).
+  // Warm only the small first-paint catalog while the larger UI scripts download.
+  // initialize() joins it, paints real cards, and starts the complete catalog
+  // afterwards so the 2,000+ record transfer cannot delay the first useful view.
   const warmCatalog = typeof document !== 'undefined'
     && document.currentScript?.hasAttribute('data-catalog-warmup');
   if (warmCatalog && IS_GOHEUNG) goheungCatalog().catch(() => {});
   else if (warmCatalog) {
-    request('/api/catalog', {cacheKey: 'catalog', timeoutMs: 20000}).catch(() => {});
-    nativeCatalog();
+    request('/api/catalog/bootstrap', {cacheKey: 'catalog-bootstrap', timeoutMs: 8000}).catch(() => {});
   }
 })();

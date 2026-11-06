@@ -9,7 +9,7 @@ const serviceWorker = fs.readFileSync('sw.js', 'utf8');
 
 const brandVersion = 'yeosu-taste-map-20260925-2';
 const iconVersion = 'matjido-master-20261003-production-1';
-const logoUrl = `assets/brand/yeosu-taste-map-logo.png?v=${brandVersion}`;
+const logoUrl = 'assets/brand/yeosu-taste-map-logo.display.webp?v=display-20261017-1';
 const png192Url = `assets/app-icons/daedong-app-icon-192.png?v=${iconVersion}`;
 const png512Url = `assets/app-icons/daedong-app-icon-512.png?v=${iconVersion}`;
 const shareImageUrl = 'assets/brand/yeosu-taste-map-share-1200x630.png';

@@ -4,7 +4,6 @@ import {reviewedMenuPhotoEvidence} from './reviewed-menu-photo-evidence.mjs';
 
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
 const proxyApiOrigin = process.env.PERF_PROXY_API_ORIGIN || '';
-const requestOrigin = process.env.PERF_REQUEST_ORIGIN || 'https://daedongmap.com';
 const storeId = 'a089d1d54720b48e';
 const report = {success: false, checks: [], errors: []};
 const browser = await chromium.launch({
@@ -21,7 +20,7 @@ if (proxyApiOrigin) {
   const localOrigin = new URL(baseURL).origin;
   await context.route(`${proxyApiOrigin}/api/**`, async route => {
     const response = await route.fetch({
-      headers: {...route.request().headers(), origin: requestOrigin}
+      headers: {...route.request().headers(), origin: 'https://preview.daedongmap.com'}
     });
     await route.fulfill({
       response,
@@ -77,8 +76,9 @@ try {
   await page.goto(baseURL, {waitUntil: 'domcontentloaded'});
   await page.waitForSelector('#storeGrid .store-card', {timeout: 15000});
   await page.waitForFunction(() => typeof fxStoreById === 'function' && typeof openStore === 'function');
-  await page.evaluate(() => openStore(fxStoreById('a089d1d54720b48e')));
-  await page.waitForSelector('#modal:not([hidden]) .store-detail[data-store-id="a089d1d54720b48e"]', {timeout: 5000});
+  await page.waitForFunction(targetStoreId => Boolean(fxStoreById(targetStoreId)), storeId, {timeout: 30000});
+  await page.evaluate(targetStoreId => openStore(fxStoreById(targetStoreId)), storeId);
+  await page.waitForSelector('#modal:not([hidden]) .store-detail[data-store-id="a089d1d54720b48e"]', {timeout: 10000});
   await page.locator('[data-store-menu-preview="a089d1d54720b48e"]').click();
   await page.waitForSelector('.store-menu-preview', {timeout: 5000});
   const menuResponse = await menuResponsePending;
@@ -246,7 +246,7 @@ try {
   await page.waitForFunction(() => document.querySelector('[data-menu-order-sheet]')?.hidden === true);
   await check(page.locator('[data-menu-order-sheet]').evaluate(node => node.hidden), '주문방법 선택창 닫기');
   await check(page.locator('.store-menu-preview').isVisible(), '휴대폰 뒤로가기 후 음식 미리보기 유지');
-  await check(page.locator('#modal:not([hidden]) .store-detail[data-store-id="a089d1d54720b48e"]').isVisible(), '휴대폰 뒤로가기 후 대동여수음식지도 가게화면 유지');
+  await check(page.locator('#modal:not([hidden]) .store-detail[data-store-id="a089d1d54720b48e"]').isVisible(), '휴대폰 뒤로가기 후 여수맛지도 가게화면 유지');
   await check(preview.evaluate(node => node.classList.contains('menu-search-active')), '주문방법 선택창을 닫아도 검색 결과 유지');
 
   await page.locator('[data-menu-search-clear]').click();

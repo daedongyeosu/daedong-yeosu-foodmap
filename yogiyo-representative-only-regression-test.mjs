@@ -18,6 +18,6 @@ assert.match(menu, /if \(isQuarantinedMenuImage\(next\.image\)\) next\.image = '
 assert.match(service, /isQuarantinedCollectedPhoto\(item\.image\)/);
 assert.match(service, /rawIsOfficialPlaceholder \|\| rawIsQuarantinedPhoto/);
 assert.match(index, /yogiyo-representative-only-1/);
-assert.match(sw, /app-shell-v33-yeosu-taste-map-brand/);
+assert.match(sw, /app-shell-v34-production-promotion-20261106/);
 
 console.log('Yogiyo representative-only photo regression passed');

@@ -19,13 +19,13 @@ await context.route('https://daedong-yeosu-data-api.sisakim.workers.dev/api/**',
   const response = await fetch(route.request().url(), {
     headers: {
       Accept: 'application/json',
-      Origin: 'https://preview.daedongmap.com',
+      Origin: process.env.PERF_REQUEST_ORIGIN || 'https://daedongmap.com',
       'X-Daedong-Client': 'daedong-production-web-v1-20260807'
     }
   });
   await route.fulfill({
     status: response.status,
-    headers: {'content-type': response.headers.get('content-type') || 'application/json'},
+    headers: {'content-type': response.headers.get('content-type') || 'application/json', 'access-control-allow-origin': new URL(baseURL).origin},
     body: Buffer.from(await response.arrayBuffer())
   });
 });

@@ -51,6 +51,8 @@ jobs:
           npx playwright install --with-deps chromium
       - name: Verify production opening notices and existing store flow
         run: node scripts/browser-production-promotion.mjs
+      - name: Verify approved Ondongne and direct-order stores
+        run: node scripts/browser-four-store-direct-order.mjs
       - name: Verify reviewed Naver identities on mobile
         run: |
           python3 -m http.server 4173 >/tmp/daedong-reviewed-identity-server.log 2>&1 &
@@ -235,6 +237,7 @@ jobs:
         with:
           name: production-pr-verification
           path: |
+            artifacts/four-direct/
             browser-reviewed-identity/
             browser-installed-qr/
             static-validation-report.json

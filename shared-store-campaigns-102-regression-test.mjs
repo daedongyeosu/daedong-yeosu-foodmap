@@ -1,3 +1,4 @@
+// 2026-11-10: refresh the snapshot after the six approved legacy-route replacements; photo and issued-QR checks are unchanged.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -17,7 +18,7 @@ assert.equal(Object.keys(fixture.originalCampaigns).length,11);
 assert.deepEqual(read('data/shared-campaign-stores.json'),fixture.stores.filter(x=>x.added).map(({storeId,name})=>({storeId,name})));
 const production=fs.readFileSync('data-api.js','utf8').includes("const BASE_URL = IS_GOHEUNG ? '' : 'https://daedong-yeosu-data-api.sisakim.workers.dev'");
 const baseline=fixture.baselines[production?'production':'preview'];
-assert.equal(hash(beforeSharedHero(hero)),production?'47df769a3ddfbb9b8605fb5e60f15cd4017f98279f323badecccb2cb3e109443':baseline.hero,'All non-target campaigns and virtual store records preserved');
+assert.equal(hash(beforeSharedHero(hero)),production?'cedad45ac20423da0bcdbe4f7043808b6b968adf52b7fb051792849dd89f8d40':baseline.hero,'All non-target campaigns and virtual store records preserved');
 assert.equal(hash(beforeSharedLinks(links)),baseline.links,'All original QR destinations, order and manifest metadata preserved');
 const historicalPriority=structuredClone(priority);
 // The approved Lotteria Emart restoration has a separate regression check.

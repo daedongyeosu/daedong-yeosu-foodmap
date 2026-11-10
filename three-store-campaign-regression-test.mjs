@@ -1,3 +1,4 @@
+// 2026-11-10: refresh the snapshot after the six approved legacy-route replacements; photo and issued-QR checks are unchanged.
 import assert from 'node:assert/strict';
 import {readFileSync, existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
@@ -42,7 +43,7 @@ const approved = [
 assert.equal(data.campaigns.cfde2617224f33a0.slides.length, 8);
 assert.equal(hash(data.campaigns.cfde2617224f33a0), '6b3f3ca5d573cf99c121b9e35469dc45b4ea12fbdb89f37f36f29796d045732d');
 assert.equal(hash(data.virtualStores), production
-  ? '24a766e6d06eabe45598fedf09e2b1c426296683caff19d877f2acc548ebab87'
+  ? '0f3b4d6ff490c94ab6024d3a01509c4918d89f2fdcd58aa879c5612560591733'
   : '88eb6fcedc47abfe3601ff841934f2a4d2e60efd0826e805de20614949dfd254');
 // Only the approved destinations change; pin every original advertisement field.
 const legacyAdUrls = {'18':'https://bit.ly/여수시소상공인연합회공지','19':'https://bit.ly/여수힐링요트','20':'https://app.notion.com/p/3a6da158dd2a81dca351fa710f81d705'};

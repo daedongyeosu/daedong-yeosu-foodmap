@@ -14098,13 +14098,13 @@
         {
           "name": "가게바로주문",
           "key": "direct",
-          "url": "https://bit.ly/4dN1g4l",
+          "url": "https://daedongmap.com/info/order-preparing/?store=aa0a00258c22f377",
           "enabled": true
         },
         {
           "name": "먹깨비",
           "key": "mukkebi",
-          "url": "https://bit.ly/4v7f8gW",
+          "url": "http://mukkebi.com/shop.php?data=68966",
           "enabled": true
         },
         {
@@ -14116,7 +14116,7 @@
         {
           "name": "CHAK 지역상품권",
           "key": "chak",
-          "url": "https://bit.ly/chak-yeosu",
+          "url": "https://play.google.com/store/apps/details?id=com.komscochak.m2.client",
           "enabled": true
         },
         {
@@ -14128,19 +14128,19 @@
         {
           "name": "요기요",
           "key": "yogiyo",
-          "url": "https://bit.ly/4nUIQn8",
+          "url": "https://ws.yogiyo.co.kr/mas5t1",
           "enabled": true
         },
         {
           "name": "쿠팡이츠",
           "key": "coupang",
-          "url": "https://bit.ly/4vhmpLp",
+          "url": "https://web.coupangeats.com/share?storeId=654172&dishId&key=53d857e6-916a-4164-be50-68976109f799",
           "enabled": true
         },
         {
           "name": "배달의민족",
           "key": "baemin",
-          "url": "https://bit.ly/4dJaY9r",
+          "url": "https://s.baemin.com/Bh000msRxs9EX",
           "enabled": true
         }
       ],

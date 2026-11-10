@@ -1,3 +1,4 @@
+// 2026-11-10: refresh the snapshot after the six approved legacy-route replacements; photo and issued-QR checks are unchanged.
 import {beforeSharedHero,beforeSharedLinks} from './scripts/shared-campaign-baseline.mjs';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
@@ -10,7 +11,7 @@ assert.ok(ids.has('65cc1845e542d5fb'),'Correct Yeoseo/Munsu single-brand shop mu
 assert.ok(!ids.has('c143aca89697f5aa'),'Unmanaged Hakdong store must never enter verified batch');
 assert.ok(!ids.has('e0c6949efb48f4b2'),'Previously hidden stores must not be republished');
 const hero=beforeSharedHero(read('data/hero-campaigns.json')),links=beforeSharedLinks(read('data/store-campaign-links.json'));
-assert.equal(hash({...hero,campaigns:Object.fromEntries(Object.entries(hero.campaigns).filter(([id])=>!ids.has(id)&&id!=='e66f136d0e468b6e'))}),'d5112951bebbdb466726a52268743d521d893492d3160678e6b199ded74bf80e');
+assert.equal(hash({...hero,campaigns:Object.fromEntries(Object.entries(hero.campaigns).filter(([id])=>!ids.has(id)&&id!=='e66f136d0e468b6e'))}),'4739c4fe4b5bf8f616289b5f4396749307730519696132c7c7a86bd3ee497d81');
 assert.equal(hash({...links,campaigns:links.campaigns.filter(x=>!ids.has(x.storeId)&&x.storeId!=='e66f136d0e468b6e')}),'7057fadcaeb5bc4de72cdc010bbb642c6ca2bdd988440623f54669ca9d4ff2b8');
 for(const {storeId,name} of batch){
  assert.match(storeId,/^[a-f0-9]{16}$/);const c=hero.campaigns[storeId],l=links.campaigns.find(x=>x.storeId===storeId);

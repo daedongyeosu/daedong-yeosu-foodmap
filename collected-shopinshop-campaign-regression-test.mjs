@@ -1,3 +1,4 @@
+// 2026-11-10: refresh the snapshot after the six approved legacy-route replacements; photo and issued-QR checks are unchanged.
 import {beforeSharedHero,beforeSharedLinks} from './scripts/shared-campaign-baseline.mjs';
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
@@ -13,7 +14,7 @@ addedIds.add('e66f136d0e468b6e'); // Later user-approved standalone campaign; gu
 const h=beforeSharedHero(read('data/hero-campaigns.json')),m=beforeSharedLinks(read('data/store-campaign-links.json'));
 const baselineHero={...h,campaigns:Object.fromEntries(Object.entries(h.campaigns).filter(([id])=>!ids.has(id)&&!addedIds.has(id)))};
 const baselineManifest={...m,campaigns:m.campaigns.filter(x=>!ids.has(x.storeId)&&!addedIds.has(x.storeId))};
-assert.equal(hash(baselineHero),'2ea0d096324125e7d60472c7d9e1d0bd79f5852a9e97ca54e6f9c4148ccca223','Existing campaigns and virtual stores unchanged');
+assert.equal(hash(baselineHero),'2d6b3c95a8c83ef200a222f248f208757a824643289fa99077fb89ea70f89204','Existing campaigns and virtual stores unchanged');
 assert.equal(hash(baselineManifest),'8337af5189b5ef0ff60891685cee2c6415ece1e814da98450f1108078fed04c5','Existing links unchanged');
 let textBanners=0;
 for(const {storeId,name} of batch){
